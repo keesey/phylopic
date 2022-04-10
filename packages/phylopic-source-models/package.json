@@ -44,5 +44,5 @@
         "version": "git add -A src"
     },
     "typings": "dist/index.d.ts",
-    "version": "0.0.0"
+    "version": "2.0.0-alpha.1"
 }

@@ -41,5 +41,5 @@
     "prebuild": "yarn test && rm -rf ./dist && cp -r ./public ./dist",
     "test": "swagger-cli validate ./openapi.yaml"
   },
-  "version": "2.0.0-alpha"
+  "version": "2.0.0-alpha.1"
 }

@@ -31,14 +31,14 @@
     "files": [
         "dist/**/*"
     ],
-    "homepage": "https://github.com/keesey/phylopic-api-types#readme",
+    "homepage": "https://github.com/keesey/phylopic-api-models#readme",
     "license": "MIT",
     "main": "dist/index.js",
     "name": "phylopic-api-models",
     "private": false,
     "repository": {
         "type": "git",
-        "url": "https://github.com/keesey/phylopic-api-types.git"
+        "url": "https://github.com/keesey/phylopic-api-models.git"
     },
     "resolutions": {
         "@types/node": "*"
@@ -55,5 +55,5 @@
         "version": "git add -A src"
     },
     "types": "dist/index.d.ts",
-    "version": "2.0.0-alpha"
+    "version": "2.0.0-alpha.1"
 }

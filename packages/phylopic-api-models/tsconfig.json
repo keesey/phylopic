@@ -11,9 +11,13 @@
         "strict": true,
         "target": "ESNext"
     },
-    "exclude": ["src/**/*.spec.ts"],
-    "include": ["src/**/*.ts"],
+    "exclude": [
+        "src/**/*.spec.ts"
+    ],
+    "include": [
+        "src/**/*.ts"
+    ],
     "paths": {
-        "phylopic-api-types": "."
+        "phylopic-api-models": "."
     }
 }
