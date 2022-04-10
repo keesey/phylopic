@@ -1,0 +1,12 @@
+{
+  "author": "Mike Keesey <keesey@gmail.com>",
+  "description": "An open database of freely reusable silhouettes of life forms.",
+  "license": "MIT",
+  "name": "phylopic",
+  "private": true,
+  "repository": "https://github.com/keesey/phylopic",
+  "version": "2.0.0-alpha",
+  "workspaces": [
+    "packages/*"
+  ]
+}

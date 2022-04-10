@@ -1,20 +1,23 @@
 # PhyloPic
 
-*[PhyloPic](https://www.phylopic.org)* is an open database of freely reusable silhouettes of life forms. Code for *PhyloPic* resides in several repositories, documented here.
+*[PhyloPic](https://www.phylopic.org)* is an open database of freely reusable silhouettes of life forms. Code for *PhyloPic* resides in this [monorepo](https://classic.yarnpkg.com/blog/2017/08/02/introducing-workspaces/).
 
-## Repositories
+## Projects
 
-| Project Name | Repository URL | Description |
-| ------------ | -------------- | ----------- |
-| API | https://github.com/keesey/phylopic-api | Serverless API for accessing *PhyloPic* data. |
-| API Documentation | https://github.com/keesey/phylopic-api-docs | Documentation for the *PhyloPic* API. |
-| API Types | https://github.com/keesey/phylopic-api-types | Type declarations and utility files for data models used by the API. |
-| Editor | https://github.com/keesey/phylopic-editor | Web app (run locally) for managing *PhyloPic*, including contribution review and data editing. |
-| Models | https://github.com/keesey/phylopic-models | Type declarations and utility files for source data models. |
-| Publisher | https://github.com/keesey/phylopic-publisher | Code for administrating *PhyloPic*, including publishing releases and managing source files. |
-| Web App | https://github.com/keesey/phylopic-editor | Public website. |
+| Project Path | Description |
+| ------------ | ----------- |
+| [api](./api) | Serverless API for accessing *PhyloPic* data. |
+| [api-docs](./api-docs) | Documentation for the *PhyloPic* API. |
+| [api-models](./api-models) | Type declarations and utility files for data models used by the API. |
+| [source-models](./source-models) | Type declarations and utility files for data models used in the source bucket. |
+| [publish](./publish) | Code for administrating *PhyloPic*, including publishing releases and managing source files. |
+| [ui](./ui) | Commonly-used React components for user interface. |
+| [utils](./utils) | Common code. |
+| [webapp](./webapp) | Public website for searching for and viewing silhouette images. |
+| [webapp-contribute](./webapp-contribute) | Public website for contributing silhouette images. |
+| [webapp-edit](./webapp-edit) | Private website (run locally) for managing *PhyloPic*, including contribution review and data editing. |
 
 
 ## Contributing
 
-To contribute to the development of *PhyloPic*, please contact Mike Keesey ([keesey+phylopic@gmail.com](keesey+phylopic@gmail.com)). All repositories are open and may be forked, with pull requests made back into the original repository.
+To contribute to the development of *PhyloPic*, please contact Mike Keesey ([keesey+phylopic@gmail.com](keesey+phylopic@gmail.com)). The repository is open and may be forked, with pull requests made back into the original repository.
