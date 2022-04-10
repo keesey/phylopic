@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "declaration": true,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "incremental": true,
+        "lib": ["esnext"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "outDir": "dist",
+        "resolveJsonModule": true,
+        "skipLibCheck": false,
+        "strict": true,
+        "target": "esnext",
+        "typeRoots": ["./node_modules/@types", "./custom_typings"]
+    },
+    "exclude": ["./src/**/*.spec.ts"],
+    "include": ["./src/**/*.ts"]
+}
