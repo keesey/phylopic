@@ -1,8 +1,7 @@
 import { Link, Node, TitledLink } from "phylopic-api-models/src"
 import { Entity, Image, UUID } from "phylopic-source-models/src"
+import { isDefined, isString } from "phylopic-utils/src/types"
 import { immediateSuccessors } from "simple-digraph"
-import isDefined from "../utils/isDefined"
-import isString from "../utils/isString"
 import type { SourceData } from "./getSourceData"
 const getChildNodes = (vertex: number, data: SourceData): readonly Link[] => {
     const childVertices = immediateSuccessors(data.phylogeny, new Set([vertex]))
@@ -97,10 +96,10 @@ const getExternal = (uuid: UUID, data: SourceData) => {
         .sort(([pathA], [pathB]) => (pathA < pathB ? -1 : pathA > pathB ? 1 : 0))
         .map(
             ([path, link]) =>
-            ({
-                href: `/resolve/${path}`,
-                title: link.title,
-            } as TitledLink),
+                ({
+                    href: `/resolve/${path}`,
+                    title: link.title,
+                } as TitledLink),
         )
 }
 const getNodeJSON = async (uuid: UUID, data: SourceData): Promise<Node> => {

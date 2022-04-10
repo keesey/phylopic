@@ -3,6 +3,7 @@
     "dependencies": {
         "email-validator": "^2.0.4",
         "parse-nomen": "^2.1.2",
+        "phylopic-utils": "2.0.0-alpha.1",
         "uuid": "^8.3.2"
     },
     "description": "Types, validation, and normalization for PhyloPic model objects.",

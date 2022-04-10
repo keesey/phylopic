@@ -6,30 +6,30 @@ import cleanEntities from "./build/cleanEntities"
 import getBuild from "./build/getBuild"
 import updateParameters from "./build/updateParameters"
 import readJSON from "./fsutils/readJSON"
-    ; (async () => {
-        const pgClient = new Client({
-            database: "phylopic-entities",
-        })
-        const s3Client = new S3Client({})
-        try {
-            const [, build, main] = await Promise.all([
-                pgClient.connect(),
-                getBuild(),
-                readJSON<Main>("./s3/source.phylopic.org/meta.json"),
-            ])
-            console.info("Releasing build ", build, "...")
-            await updateParameters(build, main.root)
-            console.info("Cleaning up search database...")
-            await cleanEntities(pgClient, build)
-            console.info("Cleaned up search.")
-            console.info("Build", build, "complete.")
-        } catch (e) {
-            console.info("ERROR!")
-            console.error(e)
-            process.exit(1)
-        } finally {
-            s3Client.destroy()
-            pgClient.end()
-        }
-        process.exit(0)
-    })()
+;(async () => {
+    const pgClient = new Client({
+        database: "phylopic-entities",
+    })
+    const s3Client = new S3Client({})
+    try {
+        const [, build, main] = await Promise.all([
+            pgClient.connect(),
+            getBuild(),
+            readJSON<Main>("./s3/source.phylopic.org/meta.json"),
+        ])
+        console.info("Releasing build ", build, "...")
+        await updateParameters(build, main.root)
+        console.info("Cleaning up search database...")
+        await cleanEntities(pgClient, build)
+        console.info("Cleaned up search.")
+        console.info("Build", build, "complete.")
+    } catch (e) {
+        console.info("ERROR!")
+        console.error(e)
+        process.exit(1)
+    } finally {
+        s3Client.destroy()
+        pgClient.end()
+    }
+    process.exit(0)
+})()

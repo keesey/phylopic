@@ -1,6 +1,6 @@
+import { stringifyNormalized } from "phylopic-utils/src/json"
 import { Node } from "../models/Node"
 import { normalizeNames } from "../normalization/normalizeNames"
-import { stringifyNormalized } from "../normalization/stringifyNormalized"
 import { validateISODateTime } from "./validateISODateTime"
 import { validateName } from "./validateName"
 import { validateUUID } from "./validateUUID"

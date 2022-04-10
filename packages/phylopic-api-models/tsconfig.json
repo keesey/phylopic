@@ -7,16 +7,15 @@
         "noImplicitAny": true,
         "noImplicitThis": true,
         "outDir": "dist",
+        "paths": {
+            "~/*": ["./src/*"]
+        },
         "rootDir": "src",
         "strict": true,
         "target": "ESNext"
     },
-    "exclude": [
-        "src/**/*.spec.ts"
-    ],
-    "include": [
-        "src/**/*.ts"
-    ],
+    "exclude": ["src/**/*.spec.ts"],
+    "include": ["src/**/*.ts"],
     "paths": {
         "phylopic-api-models": "."
     }

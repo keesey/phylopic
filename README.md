@@ -19,4 +19,4 @@ _[PhyloPic](https://www.phylopic.org)_ is an open database of freely reusable si
 
 ## Contributing
 
-To contribute to the development of _PhyloPic_, please contact Mike Keesey ([keesey+phylopic@gmail.com](keesey+phylopic@gmail.com)). The repository is open and may be forked, with pull requests made back into the original repository.
+To contribute to the development of _PhyloPic_, please read the guidelines in [`CONTRIBUTING.md`](./CONTRIBUTING.md) contact Mike Keesey ([`keesey+phylopic@gmail.com`](keesey+phylopic@gmail.com)). The repository is open and may be forked, with pull requests made back into the original repository.

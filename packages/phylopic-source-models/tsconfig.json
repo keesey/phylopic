@@ -13,6 +13,9 @@
         "noImplicitAny": true,
         "noImplicitThis": true,
         "outDir": "dist",
+        "paths": {
+            "~/*": ["./src/*"]
+        },
         "resolveJsonModule": true,
         "skipLibCheck": false,
         "strict": true,

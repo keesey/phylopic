@@ -1,6 +1,6 @@
+import { stringifyNormalized } from "phylopic-utils/src/json"
 import { Name } from "../models/Name"
 import { normalizeName } from "./normalizeName"
-import { stringifyNormalized } from "./stringifyNormalized"
 
 const getNameText = (name: Name) => name.map(({ text }) => text).join(" ")
 const compareNames = (a: Name, b: Name) => {

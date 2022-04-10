@@ -1,4 +1,4 @@
-export { }
+export {}
 /*
 import fetch, { Request } from "node-fetch"
 import { URI } from "phylopic-source-models/src"

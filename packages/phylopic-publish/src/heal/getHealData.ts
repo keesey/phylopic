@@ -14,7 +14,7 @@ import {
     validateNode,
 } from "phylopic-source-models/src"
 import { Digraph } from "simple-digraph"
-import getPhylogeny from "../phylopicv2/getPhylogeny"
+import getPhylogeny from "../phylopic/getPhylogeny"
 import getJSON from "../s3utils/getJSON"
 const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]
 export type HealData = Readonly<{
