@@ -6,16 +6,16 @@
 
 | Project Path | Description |
 | ------------ | ----------- |
-| [api](./api) | Serverless API for accessing *PhyloPic* data. |
-| [api-docs](./api-docs) | Documentation for the *PhyloPic* API. |
-| [api-models](./api-models) | Type declarations and utility files for data models used by the API. |
-| [source-models](./source-models) | Type declarations and utility files for data models used in the source bucket. |
-| [publish](./publish) | Code for administrating *PhyloPic*, including publishing releases and managing source files. |
-| [ui](./ui) | Commonly-used React components for user interface. |
-| [utils](./utils) | Common code. |
-| [webapp](./webapp) | Public website for searching for and viewing silhouette images. |
-| [webapp-contribute](./webapp-contribute) | Public website for contributing silhouette images. |
-| [webapp-edit](./webapp-edit) | Private website (run locally) for managing *PhyloPic*, including contribution review and data editing. |
+| [phylopic-api](./phylopic-api) | Serverless API for accessing *PhyloPic* data. |
+| [phylopic-api-docs](./phylopic-api-docs) | Documentation for the *PhyloPic* API. |
+| [phylopic-api-models](./phylopic-api-models) | Type declarations and utility files for data models used by the API. |
+| [phylopic-publish](./phylopic-publish) | Code for administrating *PhyloPic*, including publishing releases and managing source files. |
+| [phylopic-source-models](./phylopic-source-models) | Type declarations and utility files for data models used in the source bucket. |
+| [phylopic-ui](./phylopic-ui) | Commonly-used React components for user interface. |
+| [phylopic-utils](./phylopic-utils) | Common code. |
+| [phylopic-webapp](./phylopic-webapp) | Public website for searching for and viewing silhouette images. |
+| [phylopic-webapp-contribute](./phylopic-webapp-contribute) | Public website for contributing silhouette images. |
+| [phylopic-webapp-edit](./phylopic-webapp-edit) | Private website (run locally) for managing *PhyloPic*, including contribution review and data editing. |
 
 
 ## Contributing

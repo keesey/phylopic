@@ -1,0 +1,59 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "dependencies": {
+        "email-validator": "^2.0.4",
+        "is-uuid": "^1.0.2",
+        "normalize-diacritics": "^3.0.8",
+        "parse-nomen": "^2.1.2"
+    },
+    "description": "Type declarations and validation for PhyloPic API value objects.",
+    "devDependencies": {
+        "@types/chai": "^4.2.21",
+        "@types/is-uuid": "^1.0.0",
+        "@types/mocha": "^9.0.0",
+        "@typescript-eslint/eslint-plugin": "^5.10.1",
+        "@typescript-eslint/parser": "^5.10.1",
+        "chai": "^4.3.4",
+        "copyfiles": "^2.4.1",
+        "eslint": "^8.6.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-import-resolver-alias": "^1.1.2",
+        "eslint-plugin-import": "^2.25.4",
+        "mocha": "^9.0.3",
+        "prettier": "^2.5.1",
+        "ts-node": "^10.1.0",
+        "typescript": "^4.3.5",
+        "yarn": "^1.22.18"
+    },
+    "files": [
+        "dist/**/*"
+    ],
+    "homepage": "https://github.com/keesey/phylopic-api-types#readme",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "name": "phylopic-api-models",
+    "private": false,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/keesey/phylopic-api-types.git"
+    },
+    "resolutions": {
+        "@types/node": "*"
+    },
+    "scripts": {
+        "build": "rm -rf dist && tsc && copyfiles -u 1 \"src/**/*.d.ts\" dist",
+        "format": "prettier -w . && eslint --ext .js,.ts --fix .",
+        "lint": "eslint --ext .js,.ts .",
+        "postversion": "git push && git push --tags",
+        "prepare": "yarn build",
+        "prepublishOnly": "yarn test && yarn lint",
+        "preversion": "yarn lint --fix && yarn test",
+        "test": "mocha -r ts-node/register \"./src/**/*.spec.ts\"",
+        "version": "git add -A src"
+    },
+    "types": "dist/index.d.ts",
+    "version": "2.0.0-alpha"
+}

@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "outDir": "dist",
+        "rootDir": "src",
+        "strict": true,
+        "target": "ESNext"
+    },
+    "exclude": ["src/**/*.spec.ts"],
+    "include": ["src/**/*.ts"],
+    "paths": {
+        "phylopic-api-types": "."
+    }
+}
