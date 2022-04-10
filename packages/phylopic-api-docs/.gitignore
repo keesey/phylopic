@@ -1,0 +1,4 @@
+dist
+node_modules
+.swagger.yaml
+yarn-error.log
