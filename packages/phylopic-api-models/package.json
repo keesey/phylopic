@@ -50,7 +50,7 @@
         "postversion": "git push && git push --tags",
         "prepare": "yarn build",
         "prepublishOnly": "yarn test && yarn lint",
-        "preversion": "yarn lint --fix && yarn test",
+        "preversion": "yarn lint && yarn test",
         "test": "mocha -r ts-node/register \"./src/**/*.spec.ts\"",
         "version": "git add -A src"
     },
