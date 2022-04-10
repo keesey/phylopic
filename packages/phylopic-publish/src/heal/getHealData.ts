@@ -11,11 +11,11 @@ import {
     UUID,
     validateImage,
     validateMain,
-    validateNode,
+    validateNode
 } from "phylopic-source-models/src"
+import { getJSON } from "phylopic-utils/src/aws/s3"
 import { Digraph } from "simple-digraph"
-import getPhylogeny from "../phylopic/getPhylogeny"
-import getJSON from "../s3utils/getJSON"
+import getPhylogeny from "../models/getPhylogeny"
 const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]
 export type HealData = Readonly<{
     externals: ReadonlyMap<string, Readonly<{ uuid: UUID; title: string }>>

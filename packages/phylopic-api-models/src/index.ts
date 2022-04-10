@@ -1,6 +1,6 @@
 export * from "./licenses"
 export * from "./mediaTypes"
-export {
+export type {
     API,
     APILinks,
     Authority,

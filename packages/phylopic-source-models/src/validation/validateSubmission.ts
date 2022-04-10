@@ -1,4 +1,4 @@
-import { Submission } from "src"
+import { Submission } from "../models/Submission"
 import { validateEmailAddress } from "./validateEmailAddress"
 import { validateISODateTime } from "./validateISODateTime"
 import { validateLicenseURL } from "./validateLicenseURL"

@@ -2,11 +2,11 @@ import { S3Client } from "@aws-sdk/client-s3"
 import "dotenv/config"
 import { Client } from "pg"
 import { Main } from "phylopic-source-models/src"
-import cleanEntities from "./build/cleanEntities"
-import getBuild from "./build/getBuild"
-import updateParameters from "./build/updateParameters"
 import readJSON from "./fsutils/readJSON"
-;(async () => {
+import cleanEntities from "./make/cleanEntities"
+import getBuild from "./make/getBuild"
+import updateParameters from "./make/updateParameters"
+(async () => {
     const pgClient = new Client({
         database: "phylopic-entities",
     })

@@ -1,6 +1,7 @@
 {
     "author": "T. Michael Keesey <keesey@gmail.com>",
     "dependencies": {
+        "parse-nomen": "^2.1.2",
         "raw-body": "^2.5.1",
         "stream": "^0.0.2"
     },

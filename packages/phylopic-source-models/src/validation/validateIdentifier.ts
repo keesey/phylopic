@@ -1,4 +1,4 @@
-import { AuthorizedNamespace } from "src"
+import { AuthorizedNamespace } from "../models/AuthorizedNamespace"
 import { Identifier } from "../models/Identifier"
 import { validateAuthorizedNamespace } from "./validateAuthorizedNamespace"
 export const validateIdentifier = (value: Identifier) => {

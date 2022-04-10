@@ -2,7 +2,7 @@ import { GetObjectCommand, GetObjectCommandInput, GetObjectCommandOutput, S3Clie
 import { Readable } from "stream"
 import streamToString from "./streamToString"
 export type Validator<T> = (object: T) => void
-const getJSON = async <T>(client: S3Client, input: GetObjectCommandInput, validate?: Validator<T>) => {
+export const getJSON = async <T>(client: S3Client, input: GetObjectCommandInput, validate?: Validator<T>) => {
     const command = new GetObjectCommand(input)
     const output = await client.send(command)
     if (output.$metadata.httpStatusCode !== 200) {

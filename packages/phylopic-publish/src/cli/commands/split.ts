@@ -1,7 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { Entity, Name, Node, normalizeNames, UUID, validateNode } from "phylopic-source-models/src"
 import { stringifyNormalized } from "phylopic-utils/src/json"
-import stringifyName from "../../phylopic/stringifyName"
+import { stringifyNomen } from "phylopic-utils/src/nomina"
 import { ClientData } from "../getClientData"
 import { CommandResult } from "./CommandResult"
 import checkNewUUID from "./utils/checkNewUUID"
@@ -23,8 +23,8 @@ const split = (
     // Put together data for new node.
     names = normalizeNames([canonical, ...names])
     // Put together data for comparisons.
-    const originalNameStrings = original.value.names.map(stringifyName)
-    const nameStrings = names.map(stringifyName)
+    const originalNameStrings = original.value.names.map(stringifyNomen)
+    const nameStrings = names.map(stringifyNomen)
     // Do not move original's canonical name.
     if (nameStrings.includes(originalNameStrings[0])) {
         throw new Error("Cannot move canonical name to new node.")
@@ -36,7 +36,7 @@ const split = (
     // Create and validate updated original node.
     const updatedOriginal: Node = {
         ...original.value,
-        names: original.value.names.filter(name => !nameStrings.includes(stringifyName(name))),
+        names: original.value.names.filter(name => !nameStrings.includes(stringifyNomen(name))),
     }
     validateNode(updatedOriginal, true)
     // Create and validate new node.

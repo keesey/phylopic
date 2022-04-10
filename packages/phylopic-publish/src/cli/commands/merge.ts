@@ -1,7 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { Entity, Image, Node, normalizeNames, UUID, validateImage, validateNode } from "phylopic-source-models/src"
 import { stringifyNormalized } from "phylopic-utils/src/json"
-import stringifyName from "../../phylopic/stringifyName"
+import { stringifyNomen } from "phylopic-utils/src/nomina"
 import { ClientData } from "../getClientData"
 import { CommandResult } from "./CommandResult"
 const merge = (clientData: ClientData, conserved: Entity<Node>, suppressed: Entity<Node>): CommandResult => {
@@ -74,7 +74,7 @@ const merge = (clientData: ClientData, conserved: Entity<Node>, suppressed: Enti
     // Update node and synonym map for conserved and suppressed.
     nodes.delete(suppressed.uuid)
     nodes.set(conserved.uuid, updatedNode)
-    const link = { uuid: conserved.uuid, title: stringifyName(suppressed.value.names[0]) }
+    const link = { uuid: conserved.uuid, title: stringifyNomen(suppressed.value.names[0]) }
     externalsToPut.set(`phylopic.org/nodes/${suppressed.uuid}`, link)
     externals.set(`phylopic.org/nodes/${suppressed.uuid}`, link)
     // Return result.

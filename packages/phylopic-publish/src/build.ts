@@ -1,11 +1,11 @@
 import "dotenv/config"
 import { Client } from "pg"
 import { normalizeUUID } from "phylopic-source-models/src"
-import getBuild from "./build/getBuild"
-import getSourceData from "./build/getSourceData"
-import getImageJSON from "./build/getImageJSON"
-import getNodeJSON from "./build/getNodeJSON"
-import updateEntities from "./build/updateEntities"
+import getBuild from "./make/getBuild"
+import getSourceData from "./make/getSourceData"
+import getImageJSON from "./make/getImageJSON"
+import getNodeJSON from "./make/getNodeJSON"
+import updateEntities from "./make/updateEntities"
 import writeJSON from "./fsutils/writeJSON"
 ;(async () => {
     try {
