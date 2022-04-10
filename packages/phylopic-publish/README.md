@@ -8,15 +8,16 @@ Publishing scripts for _[PhyloPic](https://www.phylopic.org)_ builds.
 
 Make sure you have the following installed on your system and reachable via the system path:
 
--   [Node.js](https://nodejs.org/en/download/) (v16 or higher)
--   [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
+-   [AWS CLI](https://aws.amazon.com/cli/) (v2.4.20 or higher)
 -   [Image Magick](https://imagemagick.org/script/download.php) (v7.1 or higher)
 -   [Inkscape](https://inkscape.org/release/inkscape-1.1.2/) (v1.1 or higher)
+-   [Node.js](https://nodejs.org/en/download/) (v16 or higher)
 -   [potrace](http://potrace.sourceforge.net/#downloading) (v1.16 or higher)
+-   [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
 
 ### Dependencies
 
-To install dependencies, run:
+To install dependencies, run this from the monorepo root:
 
 ```sh
 yarn
@@ -60,9 +61,9 @@ To find errors in the `source.phylopic.org` bucket and try to auto-correct them,
 yarn heal
 ```
 
-### Client
+### CLI
 
-The _PhyloPic_ client is a way to perform some maintenance and editing tasks. To start it, run:
+The _PhyloPic_ Command Line Interface is a way to perform some maintenance and editing tasks. To start it, run:
 
 ```sh
 yarn cli
