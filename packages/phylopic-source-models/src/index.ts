@@ -1,6 +1,6 @@
 export * from "./constants"
 export * from "./detection"
-export * from "./models"
+export * from "./types"
 export * from "./normalization"
 export * from "./s3"
 export * from "./validation"

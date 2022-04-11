@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "outDir": "dist",
+        "paths": {
+            "*": ["node_modules/*", "custom_typings/*"]
+        },
+        "sourceMap": false,
+        "rootDir": "./src/",
+        "strict": true,
+        "target": "ESNext",
+        "typeRoots": ["node_modules/@types", "custom_typings"],
+        "types": ["node"]
+    },
+    "exclude": ["node_modules", "src/**/*.spec.ts"],
+    "include": ["src/**/*.ts"]
+}

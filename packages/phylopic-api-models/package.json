@@ -4,10 +4,8 @@
         "name": "T. Michael Keesey"
     },
     "dependencies": {
-        "email-validator": "^2.0.4",
-        "is-uuid": "^1.0.2",
         "normalize-diacritics": "^3.0.8",
-        "parse-nomen": "^2.1.2"
+        "phylopic-utils": "2.0.0-alpha.1"
     },
     "description": "Type declarations and validation for PhyloPic API value objects.",
     "devDependencies": {

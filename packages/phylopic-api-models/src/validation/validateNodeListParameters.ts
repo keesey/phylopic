@@ -1,4 +1,4 @@
-import { NodeEmbedded } from "../models"
+import { NodeEmbedded } from "../types"
 import { NodeListParameters } from "../queryParameters"
 import { validateListParameters } from "./validateListParameters"
 import validateQueryText from "./validateQueryText"

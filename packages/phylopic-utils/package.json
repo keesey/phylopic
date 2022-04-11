@@ -1,9 +1,11 @@
 {
     "author": "T. Michael Keesey <keesey@gmail.com>",
     "dependencies": {
+        "email-validator": "^2.0.4",
         "parse-nomen": "^2.1.2",
         "raw-body": "^2.5.1",
-        "stream": "^0.0.2"
+        "stream": "^0.0.2",
+        "uuid": "^8.3.2"
     },
     "description": "Common code for *PhyloPic* project.",
     "devDependencies": {},

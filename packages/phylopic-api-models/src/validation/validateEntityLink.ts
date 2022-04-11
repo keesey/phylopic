@@ -1,5 +1,5 @@
 import { v4 } from "is-uuid"
-import { Link } from "../models/Link"
+import { Link } from "../types/Link"
 import validateLink from "./validateLink"
 import { ValidationFault } from "./ValidationFault"
 export const validateEntityLink = (

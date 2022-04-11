@@ -1,4 +1,4 @@
-import { TitledLink } from "../models/TitledLink"
+import { TitledLink } from "../types/TitledLink"
 import validateLink from "./validateLink"
 import { ValidationFault } from "./ValidationFault"
 export const validateTitledLink = (link: TitledLink | null, property: string, required = false) => {

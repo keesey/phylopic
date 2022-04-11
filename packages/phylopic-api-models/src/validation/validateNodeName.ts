@@ -1,5 +1,5 @@
 import { NOMEN_PART_CLASSES } from "parse-nomen"
-import { NodeName } from "../models/NodeName"
+import { NodeName } from "../types/NodeName"
 import { ValidationFault } from "./ValidationFault"
 export const validateNodeName = (name: NodeName, index: number, field = "names") => {
     const faults: ValidationFault[] = []

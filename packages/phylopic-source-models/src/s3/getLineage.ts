@@ -1,7 +1,8 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import getJSON from "phylopic-utils/src/aws/s3/getJSON"
-import { Entity, Node, UUID } from "../models"
-import { validateNode } from "../validation"
+import { UUID } from "phylopic-utils/src/models/types"
+import isNode from "src/detection/isNode"
+import { Entity, Node } from "../types"
 import SOURCE_BUCKET_NAME from "./SOURCE_BUCKET_NAME"
 const getLineage = async (
     client: S3Client,
@@ -11,13 +12,13 @@ const getLineage = async (
     if (!specificUUID) {
         return []
     }
-    const [specificValue] = await getJSON<Node>(
+    const [specificValue] = await getJSON(
         client,
         {
             Bucket: SOURCE_BUCKET_NAME,
             Key: `nodes/${specificUUID}/meta.json`,
         },
-        validateNode,
+        isNode,
     )
     const specific: Entity<Node> = {
         uuid: specificUUID,

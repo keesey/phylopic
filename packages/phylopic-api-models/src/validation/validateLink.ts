@@ -1,4 +1,4 @@
-import { Link } from "../models/Link"
+import { Link } from "../types/Link"
 import { ValidationFault } from "./ValidationFault"
 export const validateLink = (link: Link | null, property: string, required = false) => {
     const faults: ValidationFault[] = []

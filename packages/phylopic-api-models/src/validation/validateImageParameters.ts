@@ -1,4 +1,4 @@
-import { ImageEmbedded } from "../models"
+import { ImageEmbedded } from "../types"
 import { EntityParameters } from "../queryParameters/EntityParameters"
 import validateEntityParameters from "./validateEntityParameters"
 const VALID_EMBEDS: ReadonlySet<keyof ImageEmbedded> = new Set(["generalNode", "nodes", "specificNode"])

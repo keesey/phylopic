@@ -1,0 +1,2 @@
+export const MAX_AUTOCOMPLETE_RESULTS = 16
+export default MAX_AUTOCOMPLETE_RESULTS

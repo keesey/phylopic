@@ -1,4 +1,4 @@
-import { Main, Node, UUID } from "phylopic-source-models/src/models"
+import { Main, Node, UUID } from "phylopic-source-models/src/types"
 import { Arc, createAcyclicGraph, Digraph, sources } from "simple-digraph"
 export interface PhylogenySourceData {
     main: Main

@@ -6,7 +6,7 @@ import readJSON from "./fsutils/readJSON"
 import cleanEntities from "./make/cleanEntities"
 import getBuild from "./make/getBuild"
 import updateParameters from "./make/updateParameters"
-(async () => {
+;(async () => {
     const pgClient = new Client({
         database: "phylopic-entities",
     })

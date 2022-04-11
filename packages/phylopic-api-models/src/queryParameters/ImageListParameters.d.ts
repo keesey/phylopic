@@ -1,6 +1,5 @@
-import { ImageEmbedded } from "../models"
-import { EmailAddress } from "../models/EmailAddress"
-import { UUID } from "../models/UUID"
+import { EmailAddress, UUID } from "phylopic-utils/src/models/types"
+import { ImageEmbedded } from "../types"
 import { ListParameters } from "./ListParameters"
 export interface ImageListParameters extends ListParameters<ImageEmbedded> {
     clade?: UUID

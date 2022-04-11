@@ -1,7 +1,7 @@
-import { LicenseURL } from "../licenses/LicenseURL"
+import { LicenseURL } from "phylopic-utils/src/models/types/LicenseURL"
 import LICENSE_URLS from "../licenses/LICENSE_URLS"
 import VALID_LICENSE_URLS from "../licenses/VALID_LICENSE_URLS"
-import { Link } from "../models/Link"
+import { Link } from "../types/Link"
 import validateLink from "./validateLink"
 import { ValidationFault } from "./ValidationFault"
 export const validateLicenseLink = (

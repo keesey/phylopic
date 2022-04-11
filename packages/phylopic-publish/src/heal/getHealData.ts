@@ -11,7 +11,7 @@ import {
     UUID,
     validateImage,
     validateMain,
-    validateNode
+    validateNode,
 } from "phylopic-source-models/src"
 import { getJSON } from "phylopic-utils/src/aws/s3"
 import { Digraph } from "simple-digraph"

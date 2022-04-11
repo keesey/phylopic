@@ -1,9 +1,9 @@
-import { LicenseComponent } from "./LicenseComponent"
-import { LicenseComponentFilter } from "./LicenseComponentFilter"
-import LICENSE_COMPONENTS_BY_URL from "./LICENSE_COMPONENTS_BY_URL"
-import ALL_LICENSES from "./LICENSE_URLS"
+import LICENSE_URLS from "phylopic-utils/src/models/constants/LICENSE_URLS"
+import LICENSE_COMPONENTS_BY_URL from "../constants/LICENSE_COMPONENTS_BY_URL"
+import { LicenseComponent } from "../types/LicenseComponent"
+import { LicenseComponentFilter } from "../types/LicenseComponentFilter"
 export const filterLicenses = (filters: readonly LicenseComponentFilter[]) => {
-    let licenses = [...ALL_LICENSES]
+    let licenses = [...LICENSE_URLS]
     filters.forEach(filter => {
         if (!licenses.length) {
             return

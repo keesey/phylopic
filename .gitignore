@@ -1,6 +1,9 @@
 node_modules
-**/dist
-**/node_modules
 **/*.log
+**/.editorconfig
 **/.env
 **/.env.local
+**/.vscode
+**/.webpack
+**/dist
+**/node_modules

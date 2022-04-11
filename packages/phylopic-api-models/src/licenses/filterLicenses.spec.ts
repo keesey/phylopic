@@ -1,8 +1,8 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
+import { LicenseURL } from "phylopic-utils/src/models/types"
+import { LicenseComponentFilter } from "../types/LicenseComponentFilter"
 import filterLicenses from "./filterLicenses"
-import { LicenseComponentFilter } from "./LicenseComponentFilter"
-import { LicenseURL } from "./LicenseURL"
 describe("licenses/filterLicenses", () => {
     const TESTS: [LicenseComponentFilter[], LicenseURL[]][] = [
         [["by", "nc", "sa"], ["https://creativecommons.org/licenses/by-nc-sa/3.0/"]],

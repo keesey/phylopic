@@ -1,5 +1,5 @@
 import { validateBoolean } from "."
-import { ImageEmbedded } from "../models"
+import { ImageEmbedded } from "../types"
 import { ImageListParameters } from "../queryParameters/ImageListParameters"
 import validateEmailAddress from "./validateEmailAddress"
 import { validateListParameters } from "./validateListParameters"
