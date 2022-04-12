@@ -7,7 +7,7 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
         "incremental": true,
-        "lib": ["esnext"],
+        "lib": ["esnext", "dom"],
         "module": "commonjs",
         "moduleResolution": "node",
         "noImplicitAny": true,
@@ -23,9 +23,5 @@
         "typeRoots": ["./node_modules/@types", "./custom_typings"]
     },
     "exclude": ["./src/**/*.spec.ts"],
-    "include": [
-        "./src/**/*.ts",
-        "../phylopic-source-models/src/s3/getLineage.ts",
-        "../phylopic-source-models/src/s3/findImageSourceFile.ts"
-    ]
+    "include": ["./src/**/*.ts"]
 }
