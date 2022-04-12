@@ -1,7 +1,7 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import getJSON from "phylopic-utils/src/aws/s3/getJSON"
 import { UUID } from "phylopic-utils/src/models/types"
-import isNode from "src/detection/isNode"
+import isNode from "../detection/isNode"
 import { Entity, Node } from "../types"
 import SOURCE_BUCKET_NAME from "./SOURCE_BUCKET_NAME"
 const getLineage = async (

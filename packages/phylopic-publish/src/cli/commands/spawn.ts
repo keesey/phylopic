@@ -1,28 +1,31 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, Name, Node, normalizeNames, UUID, validateNode } from "phylopic-source-models/src"
+import { Entity, isNode, Node } from "phylopic-source-models"
 import { stringifyNormalized } from "phylopic-utils/src/json"
-import { ClientData } from "../getClientData"
+import { Nomen, normalizeNomina, UUID } from "phylopic-utils/src/models"
+import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import checkNewUUID from "./utils/checkNewUUID"
 import putToMap from "./utils/putToMap"
 const spawn = (
-    clientData: ClientData,
+    clientData: CLIData,
     original: Entity<Node>,
     uuid: UUID,
-    canonical: Name,
-    ...names: readonly Name[]
+    canonical: Nomen,
+    ...names: readonly Nomen[]
 ): CommandResult => {
     // Check if UUID is not already in use.
     checkNewUUID(clientData, uuid)
     // Put together data for new node.
-    names = normalizeNames([canonical, ...names])
+    names = normalizeNomina([canonical, ...names])
     // Create and validate new node.
     const newNode: Node = {
         created: new Date().toISOString(),
         names,
         parent: original.uuid,
     }
-    validateNode(newNode, true)
+    if (!isNode(newNode)) {
+        throw new Error("Invalid new node.")
+    }
     // Return result.
     return {
         clientData: {

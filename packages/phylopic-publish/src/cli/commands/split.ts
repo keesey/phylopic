@@ -1,27 +1,29 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, Name, Node, normalizeNames, UUID, validateNode } from "phylopic-source-models/src"
+import { isNode } from "phylopic-source-models"
+import { Entity, Node } from "phylopic-source-models"
 import { stringifyNormalized } from "phylopic-utils/src/json"
+import { Nomen, normalizeNomina, UUID } from "phylopic-utils/src/models"
 import { stringifyNomen } from "phylopic-utils/src/nomina"
-import { ClientData } from "../getClientData"
+import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import checkNewUUID from "./utils/checkNewUUID"
 import putToMap from "./utils/putToMap"
 const split = (
-    clientData: ClientData,
+    clientData: CLIData,
     original: Entity<Node>,
     uuid: UUID,
-    canonical: Name,
-    ...names: ReadonlyArray<Name>
+    canonical: Nomen,
+    ...names: readonly Nomen[]
 ): CommandResult => {
     // Check if UUID is not already in use.
     checkNewUUID(clientData, uuid)
     // Check if original is the root node.
     const { parent } = original.value
-    if (!parent || original.uuid === clientData.main.root) {
+    if (!parent || original.uuid === clientData.source.root) {
         throw new Error("Cannot split the root node.")
     }
     // Put together data for new node.
-    names = normalizeNames([canonical, ...names])
+    names = normalizeNomina([canonical, ...names])
     // Put together data for comparisons.
     const originalNameStrings = original.value.names.map(stringifyNomen)
     const nameStrings = names.map(stringifyNomen)
@@ -38,14 +40,18 @@ const split = (
         ...original.value,
         names: original.value.names.filter(name => !nameStrings.includes(stringifyNomen(name))),
     }
-    validateNode(updatedOriginal, true)
+    if (!isNode(updatedOriginal)) {
+        throw new Error("Invalid update for original node.")
+    }
     // Create and validate new node.
     const newNode: Node = {
         ...original.value,
         created: new Date().toISOString(),
         names,
     }
-    validateNode(newNode, true)
+    if (!isNode(newNode)) {
+        throw new Error("Invalid new node.")
+    }
     // Return result.
     return {
         clientData: {

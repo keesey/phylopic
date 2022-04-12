@@ -1,7 +1,7 @@
 export {}
 /*
 import fetch, { Request } from "node-fetch"
-import { URI } from "phylopic-source-models/src"
+import { URI } from "phylopic-source-models"
 
 const PENDING: Promise<unknown>[] = []
 interface SPARQLResponse {

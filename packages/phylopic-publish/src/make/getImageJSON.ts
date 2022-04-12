@@ -1,7 +1,7 @@
 import { createReadStream } from "fs"
 import { join } from "path"
 import { Image, isImageMediaType, Link, MediaLink, RasterMediaType, VectorMediaType } from "phylopic-api-models/src"
-import { normalizeUUID, UUID } from "phylopic-source-models/src"
+import { normalizeUUID, UUID } from "phylopic-source-models"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir"
 import type { SourceData } from "./getSourceData"

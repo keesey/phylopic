@@ -1,5 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { Name } from "phylopic-source-models/src"
+import { Name } from "phylopic-source-models"
 import approve from "./commands/approve"
 import autolink from "./commands/autolink"
 import { CommandResult } from "./commands/CommandResult"
@@ -14,7 +14,7 @@ import spawn from "./commands/spawn"
 import split from "./commands/split"
 import succeed from "./commands/succeed"
 import unlink from "./commands/unlink"
-import { ClientData } from "./getClientData"
+import { CLIData } from "./getCLIData"
 import LineReader from "./LineReader"
 export const QUIT = Symbol()
 export type Args = {
@@ -22,7 +22,7 @@ export type Args = {
 }
 type Command = {
     description: string
-    execute(clientData: ClientData, reader: LineReader, args: Args): () => CommandResult | Promise<CommandResult>
+    execute(clientData: CLIData, reader: LineReader, args: Args): () => CommandResult | Promise<CommandResult>
     usage: string
 }
 const COMMANDS: Readonly<Record<string, Command>> = {
@@ -94,7 +94,7 @@ const COMMANDS: Readonly<Record<string, Command>> = {
             reader.expectEnd()
             return () => link(clientData, identifer, entity, title)
         },
-        usage: "link <identifier> <node> ?<title>",
+        usage: "link <authority>/<namespace>/<objectid> <node> ?<title>",
     },
     main: {
         description: "Shows metadata for the site.",
@@ -181,7 +181,7 @@ const COMMANDS: Readonly<Record<string, Command>> = {
     },
 }
 const parseCommand = (
-    clientData: ClientData,
+    clientData: CLIData,
     line: string,
     args: Args,
 ): (() => CommandResult | Promise<CommandResult>) | typeof QUIT | null => {

@@ -1,11 +1,12 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { TitledLink } from "phylopic-api-models/src"
-import { Entity, Identifier, Node } from "phylopic-source-models/src"
-import { ClientData } from "../getClientData"
+import { Entity, Node } from "phylopic-source-models"
+import { Identifier } from "phylopic-utils/src/models"
+import { stringifyNomen } from "phylopic-utils/src/nomina"
+import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
-const link = (clientData: ClientData, identifier: Identifier, entity: Entity<Node>, title?: string): CommandResult => {
-    const key = identifier.map(encodeURIComponent).join("/")
-    const existing = clientData.externals.get(key)
+const link = (clientData: CLIData, identifier: Identifier, entity: Entity<Node>, title?: string): CommandResult => {
+    const existing = clientData.externals.get(identifier)
     if (existing) {
         if (existing.uuid === entity.uuid) {
             console.warn("No change required.")
@@ -18,10 +19,10 @@ const link = (clientData: ClientData, identifier: Identifier, entity: Entity<Nod
     }
     const externals = new Map(clientData.externals.entries())
     if (!title) {
-        title = entity.value.names[0].map(({ text }) => text).join(" ")
+        title = stringifyNomen(entity.value.names[0])
     }
     const newValue = { uuid: entity.uuid, title }
-    externals.set(key, newValue)
+    externals.set(identifier, newValue)
     const newLink: TitledLink = { href: `/nodes/${encodeURIComponent(entity.uuid)}`, title }
     return {
         clientData: {
@@ -33,7 +34,7 @@ const link = (clientData: ClientData, identifier: Identifier, entity: Entity<Nod
                 Body: JSON.stringify(newLink),
                 Bucket: "source.phylopic.org",
                 ContentType: "application/json",
-                Key: `externals/${key}/meta.json`,
+                Key: `externals/${identifier}/meta.json`,
             }),
         ],
     }

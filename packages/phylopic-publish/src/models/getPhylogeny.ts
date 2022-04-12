@@ -1,7 +1,8 @@
-import { Main, Node, UUID } from "phylopic-source-models/src/types"
+import { Node, Source } from "phylopic-source-models/src/types"
+import { UUID } from "phylopic-utils/src/models"
 import { Arc, createAcyclicGraph, Digraph, sources } from "simple-digraph"
 export interface PhylogenySourceData {
-    main: Main
+    source: Source
     nodes: ReadonlyMap<UUID, Node>
 }
 export interface PhylogenyOptions {
@@ -14,8 +15,8 @@ export interface PhylogenyResult {
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>
 }
 const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): PhylogenyResult => {
-    if (!data.main) {
-        throw new Error("Main metadata is missing!")
+    if (!data.source) {
+        throw new Error("Source metadata is missing!")
     }
     let nextVertex = 1
     const nodeUUIDsToVertices = new Map<UUID, number>()
@@ -27,7 +28,7 @@ const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): Ph
     }
     const phylogenyArcs = [] as Arc[]
     const vertices = [] as number[]
-    const rootVertex = nodeUUIDsToVertices.get(data.main.root)
+    const rootVertex = nodeUUIDsToVertices.get(data.source.root)
     if (!rootVertex) {
         throw new Error("Invalid root node.")
     }

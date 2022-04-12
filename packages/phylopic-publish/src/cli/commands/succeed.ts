@@ -1,11 +1,11 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, Node, validateNode } from "phylopic-source-models/src"
+import { Entity, isNode, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
 import { stringifyNormalized } from "phylopic-utils/src/json"
-import { ClientData } from "../getClientData"
+import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import precedes from "./utils/precedes"
 import putToMap from "./utils/putToMap"
-const succeed = (clientData: ClientData, parent: Entity<Node>, child: Entity<Node>): CommandResult => {
+const succeed = (clientData: CLIData, parent: Entity<Node>, child: Entity<Node>): CommandResult => {
     // Check if parent and child are the same.
     if (parent.uuid === child.value.parent) {
         console.warn("No change needed.")
@@ -20,7 +20,9 @@ const succeed = (clientData: ClientData, parent: Entity<Node>, child: Entity<Nod
         ...child.value,
         parent: parent.uuid,
     }
-    validateNode(updatedChild, true)
+    if (!isNode(updatedChild)) {
+        throw new Error("Invalid update for child node.")
+    }
     // Update nodes map.
     const nodes = putToMap(clientData.nodes, child.uuid, updatedChild)
     // See any any image identifications are rendered inapplicable by this.
@@ -42,7 +44,7 @@ const succeed = (clientData: ClientData, parent: Entity<Node>, child: Entity<Nod
         },
         sourceUpdates: [
             new PutObjectCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Body: stringifyNormalized(updatedChild),
                 ContentType: "application/json",
                 Key: `nodes/${child.uuid}/meta.json`,

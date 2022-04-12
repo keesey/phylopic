@@ -1,7 +1,7 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import "dotenv/config"
 import { Client } from "pg"
-import { Main } from "phylopic-source-models/src"
+import { Source } from "phylopic-source-models"
 import readJSON from "./fsutils/readJSON"
 import cleanEntities from "./make/cleanEntities"
 import getBuild from "./make/getBuild"
@@ -12,13 +12,13 @@ import updateParameters from "./make/updateParameters"
     })
     const s3Client = new S3Client({})
     try {
-        const [, build, main] = await Promise.all([
+        const [, build, source] = await Promise.all([
             pgClient.connect(),
             getBuild(),
-            readJSON<Main>("./s3/source.phylopic.org/meta.json"),
+            readJSON<Source>("./s3/source.phylopic.org/meta.json"),
         ])
         console.info("Releasing build ", build, "...")
-        await updateParameters(build, main.root)
+        await updateParameters(build, source.root)
         console.info("Cleaning up search database...")
         await cleanEntities(pgClient, build)
         console.info("Cleaned up search.")

@@ -1,8 +1,8 @@
-import { Name } from "phylopic-source-models/src"
-import { ClientData } from "../getClientData"
+import { Nomen } from "phylopic-utils/src/models"
+import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import nameMatches from "./utils/nameMatches"
-const search = (clientData: ClientData, name: Name): CommandResult => {
+const search = (clientData: CLIData, name: Nomen): CommandResult => {
     const nameText = name.map(({ text }) => text).join(" ")
     const entries = [...clientData.nodes.entries()].filter(([, node]) =>
         node.names.some(nodeName => nameMatches(nameText, nodeName)),

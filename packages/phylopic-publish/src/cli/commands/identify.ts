@@ -1,12 +1,12 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, Image, Node, validateImage } from "phylopic-source-models/src"
+import { Entity, Image, isImage, Node } from "phylopic-source-models"
 import { stringifyNormalized } from "phylopic-utils/src/json"
-import { ClientData } from "../getClientData"
+import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import precedes from "./utils/precedes"
 import putToMap from "./utils/putToMap"
 const identify = (
-    clientData: ClientData,
+    clientData: CLIData,
     image: Entity<Image>,
     specific: Entity<Node>,
     general?: Entity<Node>,
@@ -31,7 +31,9 @@ const identify = (
         specific: specific.uuid,
         general: general?.uuid,
     }
-    validateImage(updatedImage, true)
+    if (!isImage(updatedImage)) {
+        throw new Error("Invalid image update.")
+    }
     // Return result.
     return {
         clientData: {

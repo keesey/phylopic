@@ -1,9 +1,9 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import "dotenv/config"
 import * as readline from "readline"
-import getClientData, { ClientData } from "./cli/getClientData"
+import getCLIData, { CLIData } from "./cli/getCLIData"
 import parseCommand, { QUIT } from "./cli/parseCommand"
-const takeCommands = (client: S3Client, data: ClientData) =>
+const takeCommands = (client: S3Client, data: CLIData) =>
     new Promise<void>(resolve => {
         const rl = readline.createInterface({
             input: process.stdin,
@@ -37,7 +37,7 @@ const takeCommands = (client: S3Client, data: ClientData) =>
     try {
         console.info("PhyloPic Client")
         console.info("Loading client data...")
-        const clientData = await getClientData(client)
+        const clientData = await getCLIData(client)
         console.info("Client data loaded.")
         await takeCommands(client, clientData)
     } catch (e) {

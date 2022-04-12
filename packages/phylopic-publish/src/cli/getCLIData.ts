@@ -1,31 +1,22 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
-import {
-    Image,
-    Main,
-    Node,
-    normalizeUUID,
-    UUID,
-    validateImage,
-    validateMain,
-    validateNode,
-    validateUUID,
-} from "phylopic-source-models/src"
+import { Image, isImage, isNode, isSource, Node, Source, SOURCE_BUCKET_NAME } from "phylopic-source-models"
 import { getJSON } from "phylopic-utils/src/aws/s3"
-export type ClientData = Readonly<{
+import { isUUID, normalizeUUID, UUID } from "phylopic-utils/src/models"
+export type CLIData = Readonly<{
     externals: ReadonlyMap<string, Readonly<{ uuid: UUID; title: string }>>
     imageFileKeys: ReadonlyMap<UUID, string>
     images: ReadonlyMap<UUID, Image>
-    main: Main
+    source: Source
     nodes: ReadonlyMap<UUID, Node>
 }>
-const getMain = async (client: S3Client): Promise<Main> => {
-    const [main] = await getJSON<Main>(
+const getSource = async (client: S3Client): Promise<Source> => {
+    const [main] = await getJSON<Source>(
         client,
         {
-            Bucket: "source.phylopic.org",
+            Bucket: SOURCE_BUCKET_NAME,
             Key: "meta.json",
         },
-        validateMain,
+        isSource,
     )
     return main
 }
@@ -96,7 +87,9 @@ const getExternals = async (client: S3Client) => {
                                 Key: object.Key,
                             })
                             const uuid = href?.replace(/^\/nodes\//, "")
-                            validateUUID(uuid, true)
+                            if (!isUUID(uuid) || uuid !== normalizeUUID(uuid)) {
+                                throw new Error(`Invalid UUID: ${uuid}`)
+                            }
                             result.set(parts.join("/"), { uuid, title })
                         }
                     })(),
@@ -126,20 +119,20 @@ const getImageFileKeys = async (client: S3Client, uuids: readonly UUID[]): Promi
     )
     return new Map(entries)
 }
-const getClientData = async (client: S3Client): Promise<ClientData> => {
-    const [externals, images, main, nodes] = await Promise.all([
+const getCLIData = async (client: S3Client): Promise<CLIData> => {
+    const [externals, images, source, nodes] = await Promise.all([
         getExternals(client),
-        getEntities<Image>(client, "images", validateImage),
-        getMain(client),
-        getEntities<Node>(client, "nodes", validateNode),
+        getEntities<Image>(client, "images", isImage),
+        getSource(client),
+        getEntities<Node>(client, "nodes", isNode),
     ])
     const imageFileKeys = await getImageFileKeys(client, [...images.keys()])
     return {
         externals,
         imageFileKeys,
         images,
-        main,
+        source,
         nodes,
     }
 }
-export default getClientData
+export default getCLIData

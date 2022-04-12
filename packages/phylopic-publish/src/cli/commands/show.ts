@@ -1,9 +1,9 @@
-import { Entity, Image, Node } from "phylopic-source-models/src"
-import { ClientData } from "../getClientData"
+import { Entity, Image, Node } from "phylopic-source-models"
+import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import getLineage from "./utils/getLineage"
 import precedes from "./utils/precedes"
-const show = (clientData: ClientData, entity: Entity<Image | Node>): CommandResult => {
+const show = (clientData: CLIData, entity: Entity<Image | Node>): CommandResult => {
     console.info("--------------------------------------------------------------------------------")
     console.info(JSON.stringify(entity, undefined, "\t"))
     console.info("--------------------------------------------------------------------------------")

@@ -1,8 +1,9 @@
 import { GetObjectCommand, GetObjectCommandInput, GetObjectCommandOutput, S3Client } from "@aws-sdk/client-s3"
 import { Readable } from "stream"
+import { FaultDetector } from "../../detection"
+import { ValidationFaultCollector } from "../../validation"
 import streamToString from "./streamToString"
-export type Detector<T> = (x: unknown) => x is T
-export const getJSON = async <T>(client: S3Client, input: GetObjectCommandInput, detect?: Detector<T>) => {
+export const getJSON = async <T>(client: S3Client, input: GetObjectCommandInput, detect?: FaultDetector<T>) => {
     const command = new GetObjectCommand(input)
     const output = await client.send(command)
     if (output.$metadata.httpStatusCode !== 200) {
@@ -10,8 +11,9 @@ export const getJSON = async <T>(client: S3Client, input: GetObjectCommandInput,
     }
     const json = await streamToString(output.Body as Readable)
     const object = JSON.parse(json) as T
-    if (!detect?.(object)) {
-        throw new Error("JSON does not represent the expected model.")
+    const faultCollector = detect ? new ValidationFaultCollector() : undefined
+    if (detect && !detect(object, faultCollector)) {
+        throw new Error(faultCollector?.list().join("\n\n") || "Invalid object.")
     }
     return [object, output] as Readonly<[T, GetObjectCommandOutput]>
 }

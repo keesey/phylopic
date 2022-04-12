@@ -1,14 +1,6 @@
 import { TitledLink } from "phylopic-api-models/src"
-import {
-    Image,
-    Main,
-    Node,
-    normalizeUUID,
-    UUID,
-    validateImage,
-    validateMain,
-    validateNode,
-} from "phylopic-source-models/src"
+import { Image, isSource, Node, Source } from "phylopic-source-models"
+import { normalizeUUID, UUID } from "phylopic-utils"
 import { Arc, Digraph } from "simple-digraph"
 import listDir from "../fsutils/listDir"
 import readJSON from "../fsutils/readJSON"
@@ -19,11 +11,11 @@ export type SourceData = Readonly<{
     externals: ReadonlyMap<string, TitledLink>
     illustration: ReadonlyMap<UUID, readonly UUID[]>
     images: ReadonlyMap<UUID, Image>
-    main: Main
     nodeUUIDsToVertices: ReadonlyMap<UUID, number>
     nodes: ReadonlyMap<UUID, Node>
     phylogeny: Digraph
     sortIndices: ReadonlyMap<UUID, number>
+    source: Source
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>
 }>
 export type Args = Readonly<{
@@ -42,8 +34,8 @@ type ProcessArgs = Args &
     }> & {
         nextVertex: number
     }
-const loadMain = async (): Promise<Main> => {
-    return await readJSON<Main>(".s3/source.phylopic.org/meta.json", validateMain)
+const loadMain = async (): Promise<Source> => {
+    return await readJSON<Source>(".s3/source.phylopic.org/meta.json", isSource)
 }
 const loadImage = async (uuid: UUID, args: Pick<ProcessArgs, "images">): Promise<void> => {
     const path = `images/${normalizeUUID(uuid)}/meta.json`
@@ -129,14 +121,14 @@ const processClade = (
     }
     args.depths.set(uuid, depth)
     args.sortIndices.set(uuid, args.sortIndex++)
-    ;[...args.phylogeny[1].values()]
-        .filter(([head]) => head === vertex)
-        .map(
-            ([, tail]) =>
-                [tail, args.sizes.get(tail) ?? 0, args.verticesToNodeUUIDs.get(tail)] as [number, number, UUID],
-        )
-        .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
-        .forEach(([vertex]) => processClade(args, vertex, depth + 1))
+        ;[...args.phylogeny[1].values()]
+            .filter(([head]) => head === vertex)
+            .map(
+                ([, tail]) =>
+                    [tail, args.sizes.get(tail) ?? 0, args.verticesToNodeUUIDs.get(tail)] as [number, number, UUID],
+            )
+            .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
+            .forEach(([vertex]) => processClade(args, vertex, depth + 1))
 }
 const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, vertex: number): number => {
     const arcs = [...phylogeny[1].values()].filter(([head]) => head === vertex)
@@ -151,7 +143,7 @@ const getPhylogenyDerivedData = (
 ): Pick<SourceData, "depths" | "sortIndices"> => {
     const depths = new Map<UUID, number>()
     const sortIndices = new Map<UUID, number>()
-    const rootVertex = args.nodeUUIDsToVertices.get(args.main.root)
+    const rootVertex = args.nodeUUIDsToVertices.get(args.source.root)
     if (typeof rootVertex !== "number") {
         throw new Error("No vertex for root UUID.")
     }
@@ -234,12 +226,12 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
             nodes,
         }),
         images,
-        main,
+        source: main,
         nodeUUIDsToVertices,
         nodes,
         phylogeny,
         verticesToNodeUUIDs,
-        ...getPhylogenyDerivedData({ main, nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
+        ...getPhylogenyDerivedData({ source: main, nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
     }
 }
 export default getSourceData

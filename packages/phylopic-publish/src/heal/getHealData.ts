@@ -12,7 +12,7 @@ import {
     validateImage,
     validateMain,
     validateNode,
-} from "phylopic-source-models/src"
+} from "phylopic-source-models"
 import { getJSON } from "phylopic-utils/src/aws/s3"
 import { Digraph } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny"

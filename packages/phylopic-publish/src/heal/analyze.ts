@@ -1,5 +1,5 @@
 import { parseNomen } from "parse-nomen"
-import { Image, isUUID, Node, normalizeText, UUID } from "phylopic-source-models/src"
+import { Image, isUUID, Node, normalizeText, UUID } from "phylopic-source-models"
 import { stringifyNormalized } from "phylopic-utils/src/json"
 import nameMatches from "../cli/commands/utils/nameMatches"
 import nameToText from "../cli/commands/utils/nameToText"

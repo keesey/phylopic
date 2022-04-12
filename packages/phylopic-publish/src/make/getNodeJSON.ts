@@ -1,5 +1,5 @@
 import { Link, Node, TitledLink } from "phylopic-api-models/src"
-import { Entity, Image, UUID } from "phylopic-source-models/src"
+import { Entity, Image, UUID } from "phylopic-source-models"
 import { isDefined, isString } from "phylopic-utils/src/types"
 import { immediateSuccessors } from "simple-digraph"
 import type { SourceData } from "./getSourceData"
@@ -104,7 +104,7 @@ const getExternal = (uuid: UUID, data: SourceData) => {
 }
 const getNodeJSON = async (uuid: UUID, data: SourceData): Promise<Node> => {
     uuid = uuid.toLowerCase()
-    const root = uuid === data.main.root
+    const root = uuid === data.source.root
     const sourceNode = data.nodes.get(uuid)
     if (!sourceNode) {
         throw new Error(`Source node not found! (UUID=${uuid})`)

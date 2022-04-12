@@ -1,10 +1,12 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, Image, Node, normalizeNames, UUID, validateImage, validateNode } from "phylopic-source-models/src"
+import { isImage, isNode } from "phylopic-source-models"
+import { Entity, Image, Node } from "phylopic-source-models"
 import { stringifyNormalized } from "phylopic-utils/src/json"
+import { normalizeNomina, UUID } from "phylopic-utils/src/models"
 import { stringifyNomen } from "phylopic-utils/src/nomina"
-import { ClientData } from "../getClientData"
+import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
-const merge = (clientData: ClientData, conserved: Entity<Node>, suppressed: Entity<Node>): CommandResult => {
+const merge = (clientData: CLIData, conserved: Entity<Node>, suppressed: Entity<Node>): CommandResult => {
     // Check if these already match.
     if (conserved.uuid === suppressed.uuid) {
         console.warn("No change needed.")
@@ -31,7 +33,9 @@ const merge = (clientData: ClientData, conserved: Entity<Node>, suppressed: Enti
                     general: general === specific ? undefined : general,
                     specific,
                 }
-                validateImage(updated, true)
+                if (!isImage(updated)) {
+                    throw new Error("Invalid update.")
+                }
                 imagesToPut.set(uuid, updated)
                 console.info(`Updating image: ${JSON.stringify(uuid)}.`)
                 return [uuid, updated]
@@ -49,7 +53,9 @@ const merge = (clientData: ClientData, conserved: Entity<Node>, suppressed: Enti
                 ...childNode,
                 parent: conserved.uuid,
             }
-            validateNode(updated, true)
+            if (!isNode(updated)) {
+                throw new Error("Invalid update.")
+            }
             nodesToPut.set(childUUID, updated)
             nodes.set(childUUID, updated)
         }
@@ -67,10 +73,12 @@ const merge = (clientData: ClientData, conserved: Entity<Node>, suppressed: Enti
     // Create and validate updated node.
     const updatedNode: Node = {
         ...conserved.value,
-        names: normalizeNames([...conserved.value.names, ...suppressed.value.names]),
+        names: normalizeNomina([...conserved.value.names, ...suppressed.value.names]),
         parent: conserved.value.parent === suppressed.uuid ? suppressed.value.parent : conserved.value.parent,
     }
-    validateNode(updatedNode, true)
+    if (!isNode(updatedNode)) {
+        throw new Error("Invalid update.")
+    }
     // Update node and synonym map for conserved and suppressed.
     nodes.delete(suppressed.uuid)
     nodes.set(conserved.uuid, updatedNode)

@@ -1,23 +1,22 @@
 import { parseNomen } from "parse-nomen"
-import { EmailAddress } from "phylopic-api-models/src"
+import { Entity, Image, Node } from "phylopic-source-models"
 import {
-    Entity,
+    EmailAddress,
     Identifier,
-    Image,
     isEmailAddress,
+    isIdentifier,
     isUUID,
-    Name,
-    Node,
+    Nomen,
     normalizeUUID,
     UUID,
-} from "phylopic-source-models/src"
+} from "phylopic-utils/src/models"
 import { v4, version } from "uuid"
 import nameMatches from "./commands/utils/nameMatches"
-import { ClientData } from "./getClientData"
+import { CLIData } from "./getCLIData"
 export default class LineReader {
     private index = 0
     private readonly parts: readonly string[]
-    constructor(private clientData: ClientData, line: string) {
+    constructor(private clientData: CLIData, line: string) {
         this.parts = line
             .trim()
             .split(/"/g)
@@ -99,7 +98,7 @@ export default class LineReader {
         }
     }
     protected findRoot(): Entity<Node> {
-        const uuid = this.clientData.main.root
+        const uuid = this.clientData.source.root
         const root = this.clientData.nodes.get(uuid)
         if (!root) {
             throw new Error("Cannot find root node!")
@@ -149,11 +148,10 @@ export default class LineReader {
     }
     public readIdentifier(): Identifier {
         const value = this.read()
-        if (!value || !/^[^/]+\/[^/]+\/[^/]+$/.test(value)) {
+        if (!isIdentifier(value)) {
             throw new Error("Expected identifier.")
         }
-        const [authority, namespace, objectID] = value.split(/\//g, 3).map(decodeURIComponent)
-        return [authority, namespace, objectID] as Identifier
+        return value
     }
     public readImage(): Entity<Image> {
         const uuidPartial = this.read()?.toLowerCase()
@@ -169,7 +167,7 @@ export default class LineReader {
         }
         throw new Error(`Cannot find image: ${uuidPartial}`)
     }
-    public readName(): Name {
+    public readName(): Nomen {
         const value = this.read()
         if (value && /^"[^"]+"$/.test(value)) {
             return parseNomen(value.slice(1, value.length - 1))

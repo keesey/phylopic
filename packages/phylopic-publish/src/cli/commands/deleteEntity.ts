@@ -1,10 +1,11 @@
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3"
-import { Entity, Image, Node, UUID } from "phylopic-source-models/src"
-import { ClientData } from "../getClientData"
+import { Entity, Image, Node } from "phylopic-source-models"
+import { UUID } from "phylopic-utils/src/models"
+import { CLIData } from "../getCLIData"
 import { CommandResult, SourceUpdate } from "./CommandResult"
 import succeed from "./succeed"
 import deleteFromMap from "./utils/deleteFromMap"
-const deleteImage = (clientData: ClientData, uuid: UUID): CommandResult => {
+const deleteImage = (clientData: CLIData, uuid: UUID): CommandResult => {
     return {
         clientData: {
             ...clientData,
@@ -21,7 +22,7 @@ const deleteImage = (clientData: ClientData, uuid: UUID): CommandResult => {
         ],
     }
 }
-const deleteNode = (clientData: ClientData, uuid: UUID): CommandResult => {
+const deleteNode = (clientData: CLIData, uuid: UUID): CommandResult => {
     // Retrieve node.
     const node = clientData.nodes.get(uuid)
     if (!node) {
@@ -31,7 +32,7 @@ const deleteNode = (clientData: ClientData, uuid: UUID): CommandResult => {
     const parentUUID = node.parent
     const parent = parentUUID ? clientData.nodes.get(node.parent) : undefined
     // Make sure this isn't the root.
-    if (uuid === clientData.main.root) {
+    if (uuid === clientData.source.root) {
         throw new Error("Cannot delete the root node.")
     }
     // Collect results from reassigning child nodes to parent node.
@@ -74,7 +75,7 @@ const deleteNode = (clientData: ClientData, uuid: UUID): CommandResult => {
         ],
     }
 }
-const deleteEntity = (clientData: ClientData, entity: Entity<Image | Node>): CommandResult => {
+const deleteEntity = (clientData: CLIData, entity: Entity<Image | Node>): CommandResult => {
     if (clientData.images.has(entity.uuid)) {
         return deleteImage(clientData, entity.uuid)
     }

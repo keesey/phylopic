@@ -1,11 +1,11 @@
-import { Name } from "phylopic-source-models/src"
-import nameToText from "./nameToText"
-const nameMatches = (s: string, name: Name, caseInsensitive?: boolean): boolean => {
-    const full = nameToText(name)
+import { Nomen } from "phylopic-utils/src/models"
+import { shortenNomen, stringifyNomen } from "phylopic-utils/src/nomina"
+const nameMatches = (s: string, name: Nomen, caseInsensitive?: boolean): boolean => {
+    const full = stringifyNomen(name)
     if (caseInsensitive ? s.toLowerCase() === full.toLowerCase() : s === full) {
         return true
     }
-    const short = nameToText(name, true)
+    const short = stringifyNomen(shortenNomen(name))
     if (caseInsensitive ? s.toLowerCase() === short.toLowerCase() : s === short) {
         return true
     }

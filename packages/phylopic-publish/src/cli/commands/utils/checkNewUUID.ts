@@ -1,6 +1,6 @@
-import { UUID } from "phylopic-source-models/src"
-import { ClientData } from "../../getClientData"
-const checkNewUUID = (clientData: Pick<ClientData, "images" | "nodes">, uuid: UUID) => {
+import { UUID } from "phylopic-utils/src/models"
+import { CLIData } from "../../getCLIData"
+const checkNewUUID = (clientData: Pick<CLIData, "images" | "nodes">, uuid: UUID) => {
     if (clientData.nodes.has(uuid)) {
         throw new Error("Not a new node UUID.")
     }
