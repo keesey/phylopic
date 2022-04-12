@@ -1,8 +1,7 @@
 export const createQueryString = (
     params: Record<string, string | number | boolean | undefined>,
-    encoder?: (s: string) => string,
+    encode: (s: string) => string = encodeURIComponent,
 ) => {
-    const encode = encoder ?? encodeURIComponent
     return Object.keys(params)
         .filter(key => params[key] !== undefined)
         .sort()

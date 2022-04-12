@@ -1,16 +1,17 @@
-import { isNonnegativeInteger, isPositiveInteger, isString } from "phylopic-utils/src/types"
+import { isNonnegativeInteger, isNormalizedText, isNullOr, isPositiveInteger } from "phylopic-utils/src/detection"
+import { ValidationFaultCollector } from "phylopic-utils/src/validation"
 import { List } from "../types"
 import isData from "./isData"
-import isLinkOrNull from "./isLinkOrNull"
+import isLink from "./isLink"
 import isLinks from "./isLinks"
-const isListLinks = (x: unknown): x is List["_links"] =>
+const isListLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is List["_links"] =>
     isLinks(x) &&
-    isLinkOrNull((x as List["_links"]).firstPage, isString) &&
-    isLinkOrNull((x as List["_links"]).lastPage, isString)
-export const isList = (x: unknown): x is List =>
-    isData(x) &&
-    isListLinks((x as List)._links) &&
-    isPositiveInteger((x as List).itemsPerPage) &&
-    isNonnegativeInteger((x as List).totalItems) &&
-    isNonnegativeInteger((x as List).totalPages)
+    isNullOr(isLink(isNormalizedText))((x as List["_links"]).firstPage, faultCollector?.sub("firstPage")) &&
+    isNullOr(isLink(isNormalizedText))((x as List["_links"]).lastPage, faultCollector?.sub("lastPage"))
+export const isList = (x: unknown, faultCollector?: ValidationFaultCollector): x is List =>
+    isData(x, faultCollector) &&
+    isListLinks((x as List)._links, faultCollector?.sub("_links")) &&
+    isPositiveInteger((x as List).itemsPerPage, faultCollector?.sub("itemsPerPage")) &&
+    isNonnegativeInteger((x as List).totalItems, faultCollector?.sub("totalItems")) &&
+    isNonnegativeInteger((x as List).totalPages, faultCollector?.sub("totalPages"))
 export default isList

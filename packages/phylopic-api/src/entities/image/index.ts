@@ -1,7 +1,8 @@
+import { ImageEmbedded } from "phylopic-api-models"
 import { EntityType } from "../EntityType"
-const image: EntityType = {
+const image: EntityType<ImageEmbedded> = {
+    embeds: ["generalNode", "nodes", "specificNode"],
     path: "images",
-    sortFields: ["created", "modified"],
     tableName: "image",
     userLabel: "silhouette image",
 }

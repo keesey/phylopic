@@ -1,35 +1,33 @@
-import {
-    isImageMediaType,
-    isLicenseURL,
-    isNormalizedText,
-    isRasterMediaType,
-    isVectorMediaType,
-} from "phylopic-utils/src/models"
+import { isArray, isNormalizedText, isNullOr } from "phylopic-utils/src/detection"
+import { isImageMediaType, isLicenseURL, isRasterMediaType, isVectorMediaType } from "phylopic-utils/src/models"
 import isURL from "phylopic-utils/src/models/detection/isURL"
-import { isString, isTypeOrUndefined } from "phylopic-utils/src/types"
+import { ValidationFaultCollector } from "phylopic-utils/src/validation"
 import { Image } from "../types"
 import isEntity from "./isEntity"
 import isLink from "./isLink"
-import isLinkArray from "./isLinkArray"
-import isLinkOrNull from "./isLinkOrNull"
 import isLinks from "./isLinks"
 import isMediaLink from "./isMediaLink"
-import isMediaLinkArray from "./isMediaLinkArray"
-const isImageLinks = (x: unknown): x is Image["_links"] =>
-    isLinks(x) &&
-    isLink((x as Image["_links"]).contributor, isString) &&
-    isLinkOrNull((x as Image["_links"]).generalNode, isString) &&
-    isLink((x as Image["_links"])["http://ogp.me/ns#image"], isURL) &&
-    isLink((x as Image["_links"]).license, isLicenseURL) &&
-    isLinkArray((x as Image["_links"]).nodes, isString) &&
-    isMediaLinkArray((x as Image["_links"]).rasterFiles, isURL, isRasterMediaType) &&
-    isMediaLink((x as Image["_links"]).sourceFile, isURL, isImageMediaType) &&
-    isLink((x as Image["_links"]).specificNode, isString) &&
-    isMediaLinkArray((x as Image["_links"]).thumbnailFiles, isURL, isRasterMediaType) &&
-    isLink((x as Image["_links"])["twitter:image"], isURL) &&
-    isMediaLink((x as Image["_links"]).vectorFile, isURL, isVectorMediaType)
-export const isImage = (x: unknown): x is Image =>
-    isEntity(x, isImageLinks) &&
-    isNormalizedText((x as Image).attribution) &&
-    isTypeOrUndefined((x as Image).sponsor, isNormalizedText)
+const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image["_links"] =>
+    isLinks(x, faultCollector) &&
+    isLink(isNormalizedText)((x as Image["_links"]).contributor, faultCollector?.sub("contributor")) &&
+    isNullOr(isLink(isNormalizedText))((x as Image["_links"]).generalNode, faultCollector?.sub("general")) &&
+    isLink(isURL)((x as Image["_links"])["http://ogp.me/ns#image"], faultCollector?.sub("http://ogp.me/ns#image")) &&
+    isLink(isLicenseURL)((x as Image["_links"]).license, faultCollector?.sub("license")) &&
+    isArray(isLink(isNormalizedText))((x as Image["_links"]).nodes, faultCollector?.sub("nodes")) &&
+    isArray(isMediaLink(isURL, isRasterMediaType))(
+        (x as Image["_links"]).rasterFiles,
+        faultCollector?.sub("rasterFiles"),
+    ) &&
+    isMediaLink(isURL, isImageMediaType)((x as Image["_links"]).sourceFile, faultCollector?.sub("sourceFile")) &&
+    isLink(isNormalizedText)((x as Image["_links"]).specificNode, faultCollector?.sub("specificNode")) &&
+    isArray(isMediaLink(isURL, isRasterMediaType))(
+        (x as Image["_links"]).thumbnailFiles,
+        faultCollector?.sub("thumbnailFiles"),
+    ) &&
+    isLink(isURL)((x as Image["_links"])["twitter:image"], faultCollector?.sub("twitter:image")) &&
+    isMediaLink(isURL, isVectorMediaType)((x as Image["_links"]).vectorFile, faultCollector?.sub("vectorFile"))
+export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
+    isEntity(x, isImageLinks, faultCollector) &&
+    isNormalizedText((x as Image).attribution, faultCollector?.sub("attribution")) &&
+    isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor"))
 export default isImage

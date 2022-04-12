@@ -1,5 +1,3 @@
 export * from "./DATA_MEDIA_TYPE"
 export * from "./ERROR_TYPES"
-export * from "./LICENSE_COMPONENTS"
-export * from "./LICENSE_COMPONENTS_BY_URL"
 export * from "./PERMITTED_LICENSE_CHANGES"

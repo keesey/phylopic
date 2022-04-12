@@ -1,25 +1,22 @@
+import { isNormalizedText, isObject, isUndefinedOr } from "phylopic-utils/src/detection"
 import {
     isEmailAddress,
     isISOTimestamp,
     isLicenseURL,
-    isNormalizedText,
     isPublicDomainLicenseURL,
     isUUID,
 } from "phylopic-utils/src/models"
-import isObject from "phylopic-utils/src/models/detection/isObject"
-import { isTypeOrUndefined } from "phylopic-utils/src/detection"
-import invalidate from "phylopic-utils/src/validation/invalidate"
-import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
+import { invalidate, ValidationFaultCollector } from "phylopic-utils/src/validation"
 import { Image } from "../types"
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isObject(x, faultCollector) &&
-    isTypeOrUndefined((x as Image).attribution, isNormalizedText, faultCollector?.sub("attribution")) &&
+    isUndefinedOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&
     isEmailAddress((x as Image).contributor, faultCollector?.sub("contributor")) &&
     isISOTimestamp((x as Image).created, faultCollector?.sub("created")) &&
-    isTypeOrUndefined((x as Image).general, isUUID, faultCollector?.sub("general")) &&
+    isUndefinedOr(isUUID)((x as Image).general, faultCollector?.sub("general")) &&
     isLicenseURL((x as Image).license, faultCollector?.sub("license")) &&
     isUUID((x as Image).specific, faultCollector?.sub("specific")) &&
-    isTypeOrUndefined((x as Image).sponsor, isNormalizedText, faultCollector?.sub("sponsor")) &&
+    isUndefinedOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor")) &&
     Boolean(
         (x as Image).attribution ||
             isPublicDomainLicenseURL((x as Image).license) ||

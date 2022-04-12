@@ -1,7 +1,6 @@
-import invalidate from "../../validation/invalidate"
-import { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
+import { invalidate, ValidationFaultCollector } from "../../validation"
 import { IMAGE_MEDIA_TYPES } from "../constants"
-import { ImageMediaType } from "../types/ImageMediaType"
+import { ImageMediaType } from "../types"
 const VALIDATION_MESSAGE = `Expected one of the following image media types: ${[...IMAGE_MEDIA_TYPES]
     .sort()
     .join(", ")}.`

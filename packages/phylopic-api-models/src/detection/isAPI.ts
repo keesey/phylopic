@@ -1,21 +1,21 @@
-import { isISOTimestamp, isNormalizedText } from "phylopic-utils/src/models"
-import { isPositiveInteger, isString } from "phylopic-utils/src/types"
+import { isArray, isNormalizedText } from "phylopic-utils/src/detection"
+import { isISOTimestamp } from "phylopic-utils/src/models"
+import { isURL } from "phylopic-utils/src/models/detection"
+import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
 import { API } from "../types"
+import isData from "./isData"
 import isLink from "./isLink"
 import isLinks from "./isLinks"
 import isTitledLink from "./isTitledLink"
-const isAPILinks = (x: unknown): x is API["_links"] =>
-    isLinks(x) &&
-    isTitledLink((x as API["_links"]).contact, isString) &&
-    isLink((x as API["_links"]).documentation, isString) &&
-    Array.isArray((x as API["_links"]).resources) &&
-    (x as API["_links"]).resources.every(link => isTitledLink(link, isString))
-export const isAPI = (x: unknown): x is API =>
-    typeof x === "object" &&
-    x !== null &&
-    isAPILinks((x as API)._links) &&
-    isPositiveInteger((x as API).build) &&
-    isISOTimestamp((x as API).buildTimestamp) &&
-    isNormalizedText((x as API).title) &&
-    isNormalizedText((x as API).version)
+const isAPILinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is API["_links"] =>
+    isLinks(x, faultCollector) &&
+    isTitledLink(isNormalizedText)((x as API["_links"]).contact, faultCollector?.sub("contact")) &&
+    isLink(isURL)((x as API["_links"]).documentation, faultCollector?.sub("documentation")) &&
+    isArray(isTitledLink(isNormalizedText))((x as API["_links"]).resources, faultCollector?.sub("resources"))
+export const isAPI = (x: unknown, faultCollector?: ValidationFaultCollector): x is API =>
+    isData(x, faultCollector) &&
+    isAPILinks((x as API)._links, faultCollector?.sub("_links")) &&
+    isISOTimestamp((x as API).buildTimestamp, faultCollector?.sub("buildTimestamp")) &&
+    isNormalizedText((x as API).title, faultCollector?.sub("title")) &&
+    isNormalizedText((x as API).version, faultCollector?.sub("version"))
 export default isAPI

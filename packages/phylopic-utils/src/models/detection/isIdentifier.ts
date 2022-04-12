@@ -1,10 +1,13 @@
-import invalidate from "../../validation/invalidate"
-import { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
+import { FaultDetector } from "../../detection"
+import { invalidate, ValidationFaultCollector } from "../../validation"
 import { Identifier } from "../types"
 import isAuthority from "./isAuthority"
 import isNamespace from "./isNamespace"
 import isObjectID from "./isObjectID"
-export const isIdentifier = (x: unknown, faultCollector?: ValidationFaultCollector): x is Identifier => {
+export const isIdentifier: FaultDetector<Identifier> = (
+    x: unknown,
+    faultCollector?: ValidationFaultCollector,
+): x is Identifier => {
     if (typeof x === "string") {
         const parts = x.split(/\//g)
         if (parts.length === 3) {

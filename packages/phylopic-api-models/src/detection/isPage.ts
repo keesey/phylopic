@@ -1,16 +1,17 @@
-import { isNonnegativeInteger, isString } from "phylopic-utils/src/types"
+import { isArray, isNonnegativeInteger, isNormalizedText, isNullOr } from "phylopic-utils/src/detection"
+import { ValidationFaultCollector } from "phylopic-utils/src/validation"
 import { Page } from "../types"
 import isData from "./isData"
 import isLink from "./isLink"
-import isLinkArray from "./isLinkArray"
-import isLinkOrNull from "./isLinkOrNull"
 import isLinks from "./isLinks"
-const isPageLinks = (x: unknown): x is Page["_links"] =>
-    isLinks(x) &&
-    isLinkArray((x as Page["_links"]).items, isString) &&
-    isLink((x as Page["_links"]).list, isString) &&
-    isLinkOrNull((x as Page["_links"]).next, isString) &&
-    isLinkOrNull((x as Page["_links"]).previous, isString)
-export const isPage = (x: unknown): x is Page =>
-    isData(x) && isPageLinks((x as Page)._links) && isNonnegativeInteger((x as Page).index)
+const isPageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Page["_links"] =>
+    isLinks(x, faultCollector) &&
+    isArray(isLink(isNormalizedText))((x as Page["_links"]).items, faultCollector?.sub("items")) &&
+    isLink(isNormalizedText)((x as Page["_links"]).list, faultCollector?.sub("list")) &&
+    isNullOr(isLink(isNormalizedText))((x as Page["_links"]).next, faultCollector?.sub("next")) &&
+    isNullOr(isLink(isNormalizedText))((x as Page["_links"]).previous, faultCollector?.sub("previous"))
+export const isPage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Page =>
+    isData(x, faultCollector) &&
+    isPageLinks((x as Page)._links, faultCollector?.sub("_links")) &&
+    isNonnegativeInteger((x as Page).index, faultCollector?.sub("index"))
 export default isPage

@@ -1,6 +1,6 @@
-import { isUUID } from "phylopic-utils/src/models"
-import isObject from "phylopic-utils/src/models/detection/isObject"
-import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
+import { isObject } from "phylopic-utils/src/detection"
+import { isUUID } from "phylopic-utils/src/models/detection"
+import { ValidationFaultCollector } from "phylopic-utils/src/validation"
 import { Entity } from "../types"
 export const isEntity = <T>(
     x: unknown,

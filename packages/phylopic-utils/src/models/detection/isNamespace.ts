@@ -1,5 +1,5 @@
-import { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
+import { isNormalizedText } from "../../detection"
+import { ValidationFaultCollector } from "../../validation"
 import { Namespace } from "../types"
-import { isNormalizedText } from "./isNormalizedText"
 const isNamespace: (x: unknown, faultCollector?: ValidationFaultCollector) => x is Namespace = isNormalizedText
 export default isNamespace

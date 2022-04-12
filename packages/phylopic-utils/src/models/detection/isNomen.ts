@@ -1,8 +1,7 @@
-import { Nomen } from "../types"
 import { NomenPart, NomenPartClass, NOMEN_PART_CLASSES } from "parse-nomen"
-import { isNormalizedText } from "./isNormalizedText"
-import { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
-import invalidate from "../../validation/invalidate"
+import { isNonemptyArray, isNormalizedText } from "../../detection"
+import { invalidate, ValidationFaultCollector } from "../../validation"
+import { Nomen } from "../types"
 const NOMEN_PART_CLASS_VALIDATION_MESSAGE = `Must be one of these values: "${NOMEN_PART_CLASSES.join('", "')}".`
 const isNomenPartClass = (x: unknown, faultCollector?: ValidationFaultCollector): x is NomenPartClass =>
     NOMEN_PART_CLASSES.includes(x as NomenPartClass) || invalidate(faultCollector, NOMEN_PART_CLASS_VALIDATION_MESSAGE)
@@ -24,6 +23,5 @@ const isNomenPart = (x: unknown, faultCollector?: ValidationFaultCollector): x i
     return invalidate(faultCollector, "All parts of a nomen must be non-null objects.")
 }
 export const isNomen = (x: unknown, faultCollector?: ValidationFaultCollector): x is Nomen =>
-    ((Array.isArray(x) && x.length >= 1) || invalidate(faultCollector, "Nomen must be a nonempty array.")) &&
-    (x as readonly unknown[]).every((part, index) => isNomenPart(part, faultCollector?.sub(index.toString())))
+    isNonemptyArray(isNomenPart)(x, faultCollector)
 export default isNomen

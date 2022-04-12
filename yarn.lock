@@ -6800,16 +6800,6 @@ pgtest@^0.2.3:
     escape-string-regexp "^1.0.5"
     lodash "^4.17.11"
 
-phylopic-api-types@2.0.0-beta.16:
-  version "2.0.0-beta.16"
-  resolved "https://registry.yarnpkg.com/phylopic-api-types/-/phylopic-api-types-2.0.0-beta.16.tgz#bf63d20289d6a142eb01cdf5d2932c1b5a52c053"
-  integrity sha512-+J5Gsf6x0F2tDZPgbDTChuKi8iwobm2i1hsDHBYJutcCJOUhPz34fLewElyimtNhi2lPCNGGms6RDjM/sTWUcw==
-  dependencies:
-    email-validator "^2.0.4"
-    is-uuid "^1.0.2"
-    normalize-diacritics "^2.14.0"
-    parse-nomen "^2.1.2"
-
 picocolors@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"

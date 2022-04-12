@@ -1,6 +1,5 @@
-import invalidate from "../../validation/invalidate"
-import { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
-import { ISOTimestamp } from "../types/ISOTimestamp"
+import { invalidate, ValidationFaultCollector } from "../../validation"
+import { ISOTimestamp } from "../types"
 export const isISOTimestamp = (value: unknown, faultCollector?: ValidationFaultCollector): value is ISOTimestamp => {
     if (typeof value !== "string") {
         return invalidate(faultCollector, "Expected an ISO datetime string.")

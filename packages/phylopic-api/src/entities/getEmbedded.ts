@@ -1,17 +1,16 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import type { Link } from "phylopic-api-types"
+import { Link } from "phylopic-api-models"
 import { EntityType } from "../entities/EntityType"
 import APIError from "../errors/APIError"
 import readJSON from "./readJSON"
-const getLinkErrorMessage = (type: EntityType) =>
+const getLinkErrorMessage = (type: EntityType<unknown>) =>
     `Certain data associated with the specified ${type.userLabel} cannot be found.`
 const getEmbedded = async (
-    embed: string,
+    embeddedProperties: readonly string[],
     links: { [name: string]: Link[] | Link | null },
-    type: EntityType,
+    type: EntityType<unknown>,
     s3Client: S3Client,
 ): Promise<string[]> => {
-    const embeddedProperties = embed.split(" ").sort()
     const embedPromises = embeddedProperties.map(async (property): Promise<string> => {
         const propertyLink = links[property]
         const propertyJSON = `"${property}":`

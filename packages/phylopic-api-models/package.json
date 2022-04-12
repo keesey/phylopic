@@ -42,7 +42,8 @@
         "@types/node": "*"
     },
     "scripts": {
-        "build": "rm -rf dist && tsc && copyfiles -u 1 \"src/**/*.d.ts\" dist",
+        "build": "rm -rf dist && yarn compile && copyfiles -u 1 \"src/**/*.d.ts\" dist",
+        "compile": "tsc",
         "format": "prettier -w . && eslint --ext .js,.ts --fix .",
         "lint": "eslint --ext .js,.ts .",
         "postversion": "git push && git push --tags",

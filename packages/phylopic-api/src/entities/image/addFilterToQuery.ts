@@ -1,8 +1,8 @@
-import { ImageListParameters } from "phylopic-api-types"
+import { ImageListParameters } from "phylopic-api-models/src/queryParameters"
 import QueryConfigBuilder from "../../utils/postgres/QueryConfigBuilder"
 const addFilterToQuery = (params: ImageListParameters, builder: QueryConfigBuilder) => {
     if (params.contributor !== undefined) {
-        builder.add("AND image.contributor=$::character varying", [params.contributor])
+        builder.add("AND image.contributor=$::uuid", [params.contributor])
     }
     if (params.license_by !== undefined) {
         builder.add("AND image.license_by=$::bit", [params.license_by === "false" ? 0 : 1])

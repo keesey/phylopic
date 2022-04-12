@@ -1,18 +1,19 @@
-import { isEmailAddress, isNormalizedText } from "phylopic-utils/src/models"
-import { isPositiveInteger, isString } from "phylopic-utils/src/types"
+import { isNormalizedText, isNullOr } from "phylopic-utils/src/detection"
+import { isEmailAddress } from "phylopic-utils/src/models/detection"
+import invalidate from "phylopic-utils/src/validation/invalidate"
+import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
 import { Contributor } from "../types"
 import isEntity from "./isEntity"
 import isLink from "./isLink"
-import isLinkOrNull from "./isLinkOrNull"
 import isLinks from "./isLinks"
-const isMailToHRef = (x: unknown): x is string =>
-    typeof x === "string" && x.startsWith("mailto:") && isEmailAddress(x.slice("mailto:".length))
-const isContributorLinks = (x: unknown): x is Contributor["_links"] =>
-    isLinks(x) &&
-    isLinkOrNull((x as Contributor["_links"]).email, isMailToHRef) &&
-    isLink((x as Contributor["_links"]).images, isString)
-export const isContributor = (x: unknown): x is Contributor =>
-    isEntity(x, isContributorLinks) &&
-    isPositiveInteger((x as Contributor).count) &&
-    isNormalizedText((x as Contributor).name)
+const isMailToHRef = (x: unknown, faultCollector?: ValidationFaultCollector): x is string =>
+    (typeof x === "string" && x.startsWith("mailto:") && isEmailAddress(x.slice("mailto:".length))) ||
+    invalidate(faultCollector, "Not a valid `mailto:` link.")
+const isContributorLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contributor["_links"] =>
+    isLinks(x, faultCollector) &&
+    isNullOr(isLink(isMailToHRef))((x as Contributor["_links"]).contact, faultCollector?.sub("contact")) &&
+    isLink(isNormalizedText)((x as Contributor["_links"]).images, faultCollector?.sub("images"))
+export const isContributor = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contributor =>
+    isEntity(x, isContributorLinks, faultCollector) &&
+    isNormalizedText((x as Contributor).name, faultCollector?.sub("name"))
 export default isContributor

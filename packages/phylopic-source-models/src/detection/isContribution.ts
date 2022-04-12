@@ -1,26 +1,23 @@
+import { isNormalizedText, isObject, isUndefinedOr } from "phylopic-utils/src/detection"
 import {
     isEmailAddress,
     isISOTimestamp,
     isLicenseURL,
-    isNormalizedText,
     isPublicDomainLicenseURL,
     isUUID,
-} from "phylopic-utils/src/models"
-import { isTypeOrUndefined } from "phylopic-utils/src/detection"
-import invalidate from "phylopic-utils/src/validation/invalidate"
-import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
+} from "phylopic-utils/src/models/detection"
+import { invalidate, ValidationFaultCollector } from "phylopic-utils/src/validation"
 import { Contribution } from "../types"
 import isNodeIdentifier from "./isNodeIdentifier"
-import isObject from "phylopic-utils/src/models/detection/isObject"
 export const isContribution = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contribution =>
     isObject(x, faultCollector) &&
-    isTypeOrUndefined((x as Contribution).attribution, isNormalizedText, faultCollector?.sub("attribution")) &&
+    isUndefinedOr(isNormalizedText)((x as Contribution).attribution, faultCollector?.sub("attribution")) &&
     isEmailAddress((x as Contribution).contributor, faultCollector?.sub("contributor")) &&
     isISOTimestamp((x as Contribution).created, faultCollector?.sub("created")) &&
-    isTypeOrUndefined((x as Contribution).general, isNodeIdentifier, faultCollector?.sub("general")) &&
+    isUndefinedOr(isNodeIdentifier)((x as Contribution).general, faultCollector?.sub("general")) &&
     isLicenseURL((x as Contribution).license, faultCollector?.sub("license")) &&
     isNodeIdentifier((x as Contribution).specific, faultCollector?.sub("specific")) &&
-    isTypeOrUndefined((x as Contribution).sponsor, isNormalizedText, faultCollector?.sub("sponsor")) &&
+    isUndefinedOr(isNormalizedText)((x as Contribution).sponsor, faultCollector?.sub("sponsor")) &&
     isUUID((x as Contribution).uuid, faultCollector?.sub("uuid")) &&
     Boolean(
         (x as Contribution).attribution ||

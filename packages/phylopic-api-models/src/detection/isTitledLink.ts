@@ -1,8 +1,13 @@
-import { isNormalizedText } from "phylopic-utils/src/models"
-import { TitledLink } from "~/types/TitledLink"
+import { isNormalizedText } from "phylopic-utils/src/detection"
+import { FaultDetector } from "phylopic-utils/src/detection/FaultDetector"
+import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
+import { TitledLink } from ".."
 import isLink from "./isLink"
-export const isTitledLink = <THRef extends string>(
-    x: unknown,
-    isHRef: (x: unknown) => x is THRef,
-): x is TitledLink<THRef> => isLink(x, isHRef) && isNormalizedText((x as TitledLink<THRef>).title)
+export const isTitledLink =
+    <THRef extends string>(
+        isHRef: (x: unknown, faultCollector?: ValidationFaultCollector) => x is THRef,
+    ): FaultDetector<TitledLink<THRef>> =>
+    (x: unknown, faultCollector?: ValidationFaultCollector): x is TitledLink<THRef> =>
+        isLink(isHRef)(x, faultCollector) &&
+        isNormalizedText((x as TitledLink<THRef>).title, faultCollector?.sub("title"))
 export default isTitledLink
