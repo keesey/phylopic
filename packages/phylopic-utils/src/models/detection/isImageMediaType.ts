@@ -1,4 +1,10 @@
+import invalidate from "../../validation/invalidate"
+import { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
 import { IMAGE_MEDIA_TYPES } from "../constants"
 import { ImageMediaType } from "../types/ImageMediaType"
-export const isImageMediaType = (x: unknown): x is ImageMediaType => IMAGE_MEDIA_TYPES.has(x as ImageMediaType)
+const VALIDATION_MESSAGE = `Expected one of the following image media types: ${[...IMAGE_MEDIA_TYPES]
+    .sort()
+    .join(", ")}.`
+export const isImageMediaType = (x: unknown, faultCollector?: ValidationFaultCollector): x is ImageMediaType =>
+    IMAGE_MEDIA_TYPES.has(x as ImageMediaType) || invalidate(faultCollector, VALIDATION_MESSAGE)
 export default isImageMediaType
