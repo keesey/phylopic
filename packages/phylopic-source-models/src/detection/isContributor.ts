@@ -1,11 +1,13 @@
-import { EmailAddress, isEmailAddress, isISOTimestamp, isNormalizedText } from "phylopic-utils/src/models"
+import { isEmailAddress, isISOTimestamp, isNormalizedText } from "phylopic-utils/src/models"
+import { isTypeOrUndefined } from "phylopic-utils/src/types"
+import invalidate from "phylopic-utils/src/validation/invalidate"
+import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
 import { Contributor } from "../types"
-const isEmailAddressOrUndefined = (x: unknown): x is EmailAddress | undefined => x === undefined || isEmailAddress(x)
-export const isContributor = (x: unknown): x is Contributor =>
-    typeof x === "object" &&
-    x !== null &&
-    isISOTimestamp((x as Contributor).created) &&
-    isEmailAddressOrUndefined((x as Contributor).emailAddress) &&
-    isNormalizedText((x as Contributor).name) &&
-    typeof (x as Contributor).showEmailAddress === "boolean"
+export const isContributor = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contributor =>
+    ((typeof x === "object" && x !== null) || invalidate(faultCollector, "Expected an object.")) &&
+    isISOTimestamp((x as Contributor).created, faultCollector?.sub("created")) &&
+    isTypeOrUndefined((x as Contributor).emailAddress, isEmailAddress, faultCollector?.sub("emailAddress")) &&
+    isNormalizedText((x as Contributor).name, faultCollector?.sub("name")) &&
+    (typeof (x as Contributor).showEmailAddress === "boolean" ||
+        invalidate(faultCollector?.sub("showEmailAddress"), "Expected true or false."))
 export default isContributor

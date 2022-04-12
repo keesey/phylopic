@@ -6,21 +6,24 @@ import {
     isPublicDomainLicenseURL,
     isUUID,
 } from "phylopic-utils/src/models"
-import { Contribution, NodeIdentifier } from "../types"
+import { isTypeOrUndefined } from "phylopic-utils/src/types"
+import invalidate from "phylopic-utils/src/validation/invalidate"
+import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
+import { Contribution } from "../types"
 import isNodeIdentifier from "./isNodeIdentifier"
-const isNormalizedTextOrUndefined = (x: unknown): x is string | undefined => x === undefined || isNormalizedText(x)
-const isNodeIdentiferOrUndefined = (x: unknown): x is NodeIdentifier | undefined =>
-    x === undefined || isNodeIdentifier(x)
-export const isContribution = (x: unknown): x is Contribution =>
-    typeof x === "object" &&
-    x !== null &&
-    isNormalizedTextOrUndefined((x as Contribution).attribution) &&
-    isEmailAddress((x as Contribution).contributor) &&
-    isISOTimestamp((x as Contribution).created) &&
-    isNodeIdentiferOrUndefined((x as Contribution).general) &&
-    isLicenseURL((x as Contribution).license) &&
-    isNodeIdentifier((x as Contribution).specific) &&
-    isNormalizedTextOrUndefined((x as Contribution).sponsor) &&
-    isUUID((x as Contribution).uuid) &&
-    Boolean((x as Contribution).attribution || isPublicDomainLicenseURL((x as Contribution).license))
+export const isContribution = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contribution =>
+    ((typeof x === "object" && x !== null) || invalidate(faultCollector, "Expected an object.")) &&
+    isTypeOrUndefined((x as Contribution).attribution, isNormalizedText, faultCollector?.sub("attribution")) &&
+    isEmailAddress((x as Contribution).contributor, faultCollector?.sub("contributor")) &&
+    isISOTimestamp((x as Contribution).created, faultCollector?.sub("created")) &&
+    isTypeOrUndefined((x as Contribution).general, isNodeIdentifier, faultCollector?.sub("general")) &&
+    isLicenseURL((x as Contribution).license, faultCollector?.sub("license")) &&
+    isNodeIdentifier((x as Contribution).specific, faultCollector?.sub("specific")) &&
+    isTypeOrUndefined((x as Contribution).sponsor, isNormalizedText, faultCollector?.sub("sponsor")) &&
+    isUUID((x as Contribution).uuid, faultCollector?.sub("uuid")) &&
+    Boolean(
+        (x as Contribution).attribution ||
+            isPublicDomainLicenseURL((x as Contribution).license) ||
+            invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
+    )
 export default isContribution
