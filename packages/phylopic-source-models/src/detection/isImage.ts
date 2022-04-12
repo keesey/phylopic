@@ -6,12 +6,13 @@ import {
     isPublicDomainLicenseURL,
     isUUID,
 } from "phylopic-utils/src/models"
-import { isTypeOrUndefined } from "phylopic-utils/src/types"
+import isObject from "phylopic-utils/src/models/detection/isObject"
+import { isTypeOrUndefined } from "phylopic-utils/src/detection"
 import invalidate from "phylopic-utils/src/validation/invalidate"
 import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
 import { Image } from "../types"
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
-    ((typeof x === "object" && x !== null) || invalidate(faultCollector, "Expected an object.")) &&
+    isObject(x, faultCollector) &&
     isTypeOrUndefined((x as Image).attribution, isNormalizedText, faultCollector?.sub("attribution")) &&
     isEmailAddress((x as Image).contributor, faultCollector?.sub("contributor")) &&
     isISOTimestamp((x as Image).created, faultCollector?.sub("created")) &&

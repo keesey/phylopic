@@ -7,7 +7,7 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
         "incremental": true,
-        "lib": ["esnext", "dom"],
+        "lib": ["dom", "esnext"],
         "module": "commonjs",
         "moduleResolution": "node",
         "noImplicitAny": true,
