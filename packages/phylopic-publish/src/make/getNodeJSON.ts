@@ -1,5 +1,6 @@
-import { Link, Node, TitledLink } from "phylopic-api-models/src"
-import { Entity, Image, UUID } from "phylopic-source-models"
+import { Link, Node, TitledLink } from "phylopic-api-models"
+import { Entity, Image } from "phylopic-source-models"
+import { UUID } from "phylopic-utils/src/models"
 import { isDefined, isString } from "phylopic-utils/src/types"
 import { immediateSuccessors } from "simple-digraph"
 import type { SourceData } from "./getSourceData"

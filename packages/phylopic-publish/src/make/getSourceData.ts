@@ -1,5 +1,5 @@
-import { TitledLink } from "phylopic-api-models/src"
-import { Image, isSource, Node, Source } from "phylopic-source-models"
+import { TitledLink } from "phylopic-api-models"
+import { Image, isImage, isNode, isSource, Node, Source } from "phylopic-source-models"
 import { normalizeUUID, UUID } from "phylopic-utils"
 import { Arc, Digraph } from "simple-digraph"
 import listDir from "../fsutils/listDir"
@@ -34,12 +34,12 @@ type ProcessArgs = Args &
     }> & {
         nextVertex: number
     }
-const loadMain = async (): Promise<Source> => {
+const loadSource = async (): Promise<Source> => {
     return await readJSON<Source>(".s3/source.phylopic.org/meta.json", isSource)
 }
 const loadImage = async (uuid: UUID, args: Pick<ProcessArgs, "images">): Promise<void> => {
     const path = `images/${normalizeUUID(uuid)}/meta.json`
-    const image = await readJSON<Image>(`.s3/source.phylopic.org/${path}`, validateImage)
+    const image = await readJSON<Image>(`.s3/source.phylopic.org/${path}`, isImage)
     args.images.set(uuid, image)
 }
 const loadImages = async (args: Pick<ProcessArgs, "images">): Promise<void> => {
@@ -52,7 +52,9 @@ const loadImages = async (args: Pick<ProcessArgs, "images">): Promise<void> => {
 const loadNode = async (uuid: UUID, args: Pick<ProcessArgs, "nodes">): Promise<void> => {
     const path = `nodes/${normalizeUUID(uuid)}/meta.json`
     const node = await readJSON<Node>(`.s3/source.phylopic.org/${path}`)
-    validateNode(node, true)
+    if (!isNode(node)) {
+        throw new Error(`Invalid node (UUID: "${uuid}").`)
+    }
     args.nodes.set(uuid, node)
 }
 const loadNodes = async (args: Pick<ProcessArgs, "nodes">): Promise<void> => {
@@ -121,14 +123,14 @@ const processClade = (
     }
     args.depths.set(uuid, depth)
     args.sortIndices.set(uuid, args.sortIndex++)
-        ;[...args.phylogeny[1].values()]
-            .filter(([head]) => head === vertex)
-            .map(
-                ([, tail]) =>
-                    [tail, args.sizes.get(tail) ?? 0, args.verticesToNodeUUIDs.get(tail)] as [number, number, UUID],
-            )
-            .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
-            .forEach(([vertex]) => processClade(args, vertex, depth + 1))
+    ;[...args.phylogeny[1].values()]
+        .filter(([head]) => head === vertex)
+        .map(
+            ([, tail]) =>
+                [tail, args.sizes.get(tail) ?? 0, args.verticesToNodeUUIDs.get(tail)] as [number, number, UUID],
+        )
+        .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
+        .forEach(([vertex]) => processClade(args, vertex, depth + 1))
 }
 const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, vertex: number): number => {
     const arcs = [...phylogeny[1].values()].filter(([head]) => head === vertex)
@@ -139,7 +141,7 @@ const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, verte
     return size
 }
 const getPhylogenyDerivedData = (
-    args: Pick<SourceData, "main" | "nodeUUIDsToVertices" | "phylogeny" | "verticesToNodeUUIDs">,
+    args: Pick<SourceData, "nodeUUIDsToVertices" | "phylogeny" | "source" | "verticesToNodeUUIDs">,
 ): Pick<SourceData, "depths" | "sortIndices"> => {
     const depths = new Map<UUID, number>()
     const sortIndices = new Map<UUID, number>()
@@ -208,14 +210,14 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
     const externals = new Map<string, TitledLink>()
     const images = new Map<UUID, Image>()
     const nodes = new Map<UUID, Node>()
-    const [main] = await Promise.all([
-        loadMain(),
+    const [source] = await Promise.all([
+        loadSource(),
         loadNodes({ ...args, nodes }),
         loadImages({ ...args, images }),
         loadExternals(externals),
     ])
     const { nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs } = getPhylogeny({
-        main,
+        source,
         nodes,
     })
     return {
@@ -226,12 +228,12 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
             nodes,
         }),
         images,
-        source: main,
+        source,
         nodeUUIDsToVertices,
         nodes,
         phylogeny,
         verticesToNodeUUIDs,
-        ...getPhylogenyDerivedData({ source: main, nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
+        ...getPhylogenyDerivedData({ source, nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
     }
 }
 export default getSourceData

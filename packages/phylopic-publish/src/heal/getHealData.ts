@@ -1,19 +1,10 @@
 import { ListObjectsV2Command, S3Client, _Object } from "@aws-sdk/client-s3"
 import { TitledLink } from "phylopic-api-models/src"
-import {
-    Image,
-    isUUID,
-    Main,
-    Node,
-    normalizeNames,
-    normalizeText,
-    normalizeUUID,
-    UUID,
-    validateImage,
-    validateMain,
-    validateNode,
-} from "phylopic-source-models"
+import { Image, isImage, isNode, isSource, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
+import { Source } from "phylopic-source-models/src/types"
+import { isUUID, normalizeUUID } from "phylopic-utils"
 import { getJSON } from "phylopic-utils/src/aws/s3"
+import { UUID } from "phylopic-utils/src/models"
 import { Digraph } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny"
 const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]
@@ -24,11 +15,11 @@ export type HealData = Readonly<{
     images: ReadonlyMap<UUID, Image>
     imagesToPut: ReadonlySet<UUID>
     keysToDelete: ReadonlySet<string>
-    main: Main
     nodeUUIDsToVertices: ReadonlyMap<UUID, number>
     nodes: Map<UUID, Node>
     nodesToPut: ReadonlySet<UUID>
     phylogeny: Digraph
+    source: Source
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>
 }>
 type BucketResult = {
@@ -38,16 +29,19 @@ type BucketResult = {
     images: Map<UUID, Image>
     imagesToPut: Set<UUID>
     keysToDelete: Set<string>
-    main: Main | undefined
+    source: Source | undefined
     nodes: Map<UUID, Node>
     nodesToPut: Set<UUID>
 }
-const readMain = async (client: S3Client, result: Pick<BucketResult, "main">): Promise<void> => {
-    ;[result.main] = await getJSON<Main>(client, {
-        Bucket: "source.phylopic.org",
-        Key: "meta.json",
-    })
-    validateMain(result.main)
+const readMain = async (client: S3Client, result: Pick<BucketResult, "source">): Promise<void> => {
+    ;[result.source] = await getJSON<Source>(
+        client,
+        {
+            Bucket: SOURCE_BUCKET_NAME,
+            Key: "meta.json",
+        },
+        isSource,
+    )
 }
 const readImageMeta = async (
     client: S3Client,
@@ -69,30 +63,13 @@ const readImageMeta = async (
         Bucket: "source.phylopic.org",
         Key,
     })
-    try {
-        validateImage(image)
-    } catch (e) {
+    if (!isImage(image)) {
         console.warn(`Could not validate image metadata: ${uuid}`)
         result.keysToDelete.add(Key)
         return
     }
-    try {
-        validateImage(image, true)
-    } catch (e) {
-        console.info(`Normalizing image: ${uuid}`)
-        const normalizedImage: Image = {
-            created: image.created,
-            attribution: image.attribution ? normalizeText(image.attribution) : undefined,
-            contributor: normalizeText(image.contributor),
-            general: image.general ? normalizeUUID(image.general) : undefined,
-            license: image.license,
-            specific: normalizeUUID(image.specific),
-            sponsor: image.sponsor ? normalizeText(image.sponsor) : undefined,
-        }
-        result.images.set(uuid, normalizedImage)
-        result.imagesToPut.add(uuid)
-        return
-    }
+    result.images.set(uuid, image)
+    result.imagesToPut.add(uuid)
     result.images.set(uuid, image)
 }
 const readImageSource = async (
@@ -145,24 +122,9 @@ const readNodeMeta = async (
         Bucket: "source.phylopic.org",
         Key,
     })
-    try {
-        validateNode(node)
-    } catch (e) {
-        console.warn(`Deleting invalid node metadata: <${uuid}>. (${e})`)
+    if (!isNode(node)) {
+        console.warn(`Deleting invalid node metadata: <${uuid}>.`)
         result.keysToDelete.add(Key)
-        return
-    }
-    try {
-        validateNode(node, true)
-    } catch (e) {
-        console.warn(`Normalizing node: ${uuid}`)
-        const normalizedNode: Node = {
-            created: node.created,
-            names: normalizeNames(node.names),
-            parent: node.parent ? normalizeUUID(node.parent) : undefined,
-        }
-        result.nodes.set(uuid, normalizedNode)
-        result.nodesToPut.add(uuid)
         return
     }
     result.nodes.set(uuid, node)
@@ -227,17 +189,17 @@ const readFromBucket = async (client: S3Client, result: BucketResult, Continuati
     await Promise.all(promises)
 }
 const getPhylogenyResult = (data: BucketResult) => {
-    const { main } = data
-    if (!main) {
-        throw new Error("Cannot read phylogeny without main metadata.")
+    const { source } = data
+    if (!source) {
+        throw new Error("Cannot read phylogeny without source metadata.")
     }
     return getPhylogeny(
-        { ...data, main },
+        { ...data, source },
         {
             handleOrphan: (uuid, node) => {
                 data.nodes.set(uuid, {
                     ...node,
-                    parent: main.root,
+                    parent: source.root,
                 })
                 data.nodesToPut.add(uuid)
             },
@@ -260,19 +222,19 @@ const getHealData = async (client: S3Client): Promise<HealData> => {
         images: new Map<UUID, Image>(),
         imagesToPut: new Set<UUID>(),
         keysToDelete: new Set<string>(),
-        main: undefined as Main | undefined,
         nodes: new Map<UUID, Node>(),
         nodesToPut: new Set<UUID>(),
+        source: undefined as Source | undefined,
     }
     await readFromBucket(client, bucketResult)
-    const { main } = bucketResult
-    if (!main) {
-        throw new Error("Main metadata is missing!")
+    const { source } = bucketResult
+    if (!source) {
+        throw new Error("Source metadata is missing!")
     }
     return {
         ...bucketResult,
         ...getPhylogenyResult(bucketResult),
-        main,
+        source,
     }
 }
 export default getHealData
