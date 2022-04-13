@@ -1,6 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { isNode } from "phylopic-source-models"
-import { Entity, Node } from "phylopic-source-models"
+import { isNode } from "phylopic-source-models/src/detection"
+import { Entity, Node } from "phylopic-source-models/src/types"
 import { stringifyNormalized } from "phylopic-utils/src/json"
 import { Nomen, normalizeNomina, UUID } from "phylopic-utils/src/models"
 import { stringifyNomen } from "phylopic-utils/src/nomina"

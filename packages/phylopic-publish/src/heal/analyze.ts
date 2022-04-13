@@ -1,8 +1,11 @@
 import { parseNomen } from "parse-nomen"
-import { Image, isUUID, Node, normalizeText, UUID } from "phylopic-source-models"
+import { Image, Node } from "phylopic-source-models/src/types"
+import { shortenNomen } from "phylopic-utils"
 import { stringifyNormalized } from "phylopic-utils/src/json"
+import { isUUID, UUID } from "phylopic-utils/src/models"
+import { stringifyNomen } from "phylopic-utils/src/nomina"
+import { normalizeText } from "phylopic-utils/src/normalization"
 import nameMatches from "../cli/commands/utils/nameMatches"
-import nameToText from "../cli/commands/utils/nameToText"
 import precedes from "../cli/commands/utils/precedes"
 import { HealData } from "./getHealData"
 const analyze = (data: HealData): HealData => {
@@ -71,7 +74,7 @@ const analyze = (data: HealData): HealData => {
                         externals.set(identifier, { ...external, uuid: synonym.uuid })
                         externalsToPut.add(identifier)
                     } else {
-                        const parsedTitle = nameToText(parseNomen(external.title), true)
+                        const parsedTitle = stringifyNomen(shortenNomen(parseNomen(external.title)))
                         console.warn(
                             `No canonical node could be found. Matching against title (${JSON.stringify(
                                 external.title,

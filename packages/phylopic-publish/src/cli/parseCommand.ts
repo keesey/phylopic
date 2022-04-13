@@ -1,12 +1,12 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { Name } from "phylopic-source-models"
+import { Nomen } from "phylopic-utils/src/models"
 import approve from "./commands/approve"
 import autolink from "./commands/autolink"
 import { CommandResult } from "./commands/CommandResult"
 import deleteEntity from "./commands/deleteEntity"
 import identify from "./commands/identify"
 import link from "./commands/link"
-import main from "./commands/main"
+import source from "./commands/source"
 import merge from "./commands/merge"
 import search from "./commands/search"
 import show from "./commands/show"
@@ -96,14 +96,6 @@ const COMMANDS: Readonly<Record<string, Command>> = {
         },
         usage: "link <authority>/<namespace>/<objectid> <node> ?<title>",
     },
-    main: {
-        description: "Shows metadata for the site.",
-        execute: (clientData, reader) => {
-            reader.expectEnd()
-            return () => main(clientData)
-        },
-        usage: "main",
-    },
     merge: {
         description: "Merges two nodes into one.",
         execute: (clientData, reader) => {
@@ -132,13 +124,21 @@ const COMMANDS: Readonly<Record<string, Command>> = {
         },
         usage: "show <entity>",
     },
+    source: {
+        description: "Shows metadata for the source data.",
+        execute: (clientData, reader) => {
+            reader.expectEnd()
+            return () => source(clientData)
+        },
+        usage: "source",
+    },
     spawn: {
         description: "Creates a new node with the specified parent node.",
         execute: (clientData, reader) => {
             const parent = reader.readNode()
             const newUUID = reader.readUUID4()
             const newCanonical = reader.readName()
-            const newNames: Name[] = []
+            const newNames: Nomen[] = []
             while (!reader.atEnd) {
                 newNames.push(reader.readName())
             }
@@ -152,7 +152,7 @@ const COMMANDS: Readonly<Record<string, Command>> = {
             const existing = reader.readNode()
             const newUUID = reader.readUUID4()
             const newCanonical = reader.readName()
-            const newNames: Array<Name> = []
+            const newNames: Nomen[] = []
             while (!reader.atEnd) {
                 newNames.push(reader.readName())
             }

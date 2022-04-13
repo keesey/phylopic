@@ -33,7 +33,7 @@
         "@types/node": "*"
     },
     "scripts": {
-        "build": "rm -rf dist && mkdir dist && mkdir dist/models && cp src/models/*.d.ts dist/models && yarn compile",
+        "build": "rm -rf dist && mkdir dist && mkdir dist/types && cp src/types/*.d.ts dist/types && yarn compile",
         "compile": "tsc",
         "format": "prettier -w . && yarn lint --fix",
         "lint": "eslint --ext .js,.ts .",

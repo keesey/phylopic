@@ -1,5 +1,5 @@
 import { parseNomen } from "parse-nomen"
-import { Entity, Image, Node } from "phylopic-source-models"
+import { Entity, Image, Node } from "phylopic-source-models/src/types"
 import {
     EmailAddress,
     Identifier,
@@ -87,8 +87,8 @@ export default class LineReader {
         return { uuid, value }
     }
     protected findNodeByName(name: string): Entity<Node> | undefined {
-        const matches = [...this.clientData.nodes.entries()].filter(([, node]) =>
-            node.names.some(n => nameMatches(name, n)),
+        const matches = [...this.clientData.nodes.entries()].filter(([, { names }]) =>
+            names.some(nodeName => nameMatches(name, nodeName)),
         )
         if (matches.length > 1) {
             throw new Error(`Ambiguous name: ${JSON.stringify(name)}.`)
