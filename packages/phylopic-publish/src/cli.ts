@@ -35,10 +35,10 @@ const takeCommands = (client: S3Client, data: CLIData) =>
 ;(async () => {
     const client = new S3Client({})
     try {
-        console.info("PhyloPic Client")
-        console.info("Loading client data...")
+        console.info("PhyloPic CLI")
+        console.info("Loading data...")
         const cliData = await getCLIData(client)
-        console.info("Client data loaded.")
+        console.info("Data loaded.")
         await takeCommands(client, cliData)
     } catch (e) {
         console.error(String(e))

@@ -2,7 +2,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3"
 import axios from "axios"
 import fetch, { Request } from "node-fetch"
 import { Entity, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
-import { createSearch, isScientific, shortenNomen, stringifyNomen, UUID } from "phylopic-utils"
+import { createSearch, isScientific, Nomen, shortenNomen, stringifyNomen, UUID } from "phylopic-utils"
 import type { CLIData } from "../../getCLIData"
 import { CommandResult, SourceUpdate } from "../CommandResult"
 import succeeds from "../utils/succeeds"
@@ -99,6 +99,23 @@ const getParentEOLPageIDs = (cliData: CLIData, node: Node): readonly number[] =>
     }
     return getParentEOLPageIDs(cliData, parentNode)
 }
+const getFirstEOLSearchMatch = async (names: readonly Nomen[], parentEOLPageID?: number) => {
+    const scientificNames = names.filter(isScientific)
+    for (const name of scientificNames) {
+        const query = {
+            exact: true,
+            filter_by_taxon_concept_id: parentEOLPageID,
+            key: process.env.EOL_API_KEY,
+            q: stringifyNomen(shortenNomen(name)),
+        }
+        const response = await axios.get<EOLSearchResults>(`https://eol.org/api/search/1.0.json${createSearch(query)}`)
+        const results = response.data.results.filter(result => result.title === query.q)
+        if (results.length > 0) {
+            return results
+        }
+    }
+    return []
+}
 const processEOLEntry = async (
     cliData: CLIData,
     externals: Map<UUID, Readonly<{ uuid: UUID; title: string }>>,
@@ -107,40 +124,30 @@ const processEOLEntry = async (
 ) => {
     const [uuid, node] = entry
     const parentID = getParentEOLPageIDs(cliData, node)[0]
-    const responses = await Promise.all(
-        node.names.filter(isScientific).map(async name => {
-            const query = {
-                exact: true,
-                filter_by_taxon_concept_id: parentID,
-                key: process.env.EOL_API_KEY,
-                q: stringifyNomen(shortenNomen(name)),
-            }
-            const response = await axios.get<EOLSearchResults>(
-                `https://eol.org/api/search/1.0.json${createSearch(query)}`,
-            )
-            return response.data.results
-        }),
-    )
-    const results = responses.filter(value => value.length > 0)[0]
-    if (results?.length === 1) {
-        const { id, title } = results[0]
+    const matches = await getFirstEOLSearchMatch(node.names, parentID)
+    if (matches?.length === 1) {
+        const { id, title } = matches[0]
         const body = JSON.stringify({
             href: `/nodes/${uuid}`,
             title,
         })
         const path = `eol.org/pages/${id}`
-        externals.set(path, {
-            title,
-            uuid,
-        })
-        sourceUpdates.push(
-            new PutObjectCommand({
-                Bucket: SOURCE_BUCKET_NAME,
-                Body: body,
-                ContentType: "application/json",
-                Key: `externals/${path}/meta.json`,
-            }),
-        )
+        if (externals.has(path) && externals.get(path)?.uuid !== uuid) {
+            console.warn(`Match found for EOL ID ${id} (${title}), but it is already assigned to another node.`)
+        } else {
+            externals.set(path, {
+                title,
+                uuid,
+            })
+            sourceUpdates.push(
+                new PutObjectCommand({
+                    Bucket: SOURCE_BUCKET_NAME,
+                    Body: body,
+                    ContentType: "application/json",
+                    Key: `externals/${path}/meta.json`,
+                }),
+            )
+        }
     }
 }
 const processEOL = async (
@@ -175,15 +182,21 @@ const processNamebank = async (
                     title: external.title,
                 })
                 for (const path of paths) {
-                    externals.set(path, external)
-                    sourceUpdates.push(
-                        new PutObjectCommand({
-                            Bucket: SOURCE_BUCKET_NAME,
-                            Body: body,
-                            ContentType: "application/json",
-                            Key: `externals/${path}/meta.json`,
-                        }),
-                    )
+                    if (externals.has(path) && externals.get(path)?.uuid !== uuid) {
+                        console.warn(
+                            `Match found for ${path} (${external.title}), but it is already assigned to another node.`,
+                        )
+                    } else {
+                        externals.set(path, external)
+                        sourceUpdates.push(
+                            new PutObjectCommand({
+                                Bucket: SOURCE_BUCKET_NAME,
+                                Body: body,
+                                ContentType: "application/json",
+                                Key: `externals/${path}/meta.json`,
+                            }),
+                        )
+                    }
                 }
             }
         } catch (e) {
