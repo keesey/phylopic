@@ -5,19 +5,19 @@ import { Identifier } from "phylopic-utils/src/models"
 import { stringifyNomen } from "phylopic-utils/src/nomina"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
-const link = (clientData: CLIData, identifier: Identifier, entity: Entity<Node>, title?: string): CommandResult => {
-    const existing = clientData.externals.get(identifier)
+const link = (cliData: CLIData, identifier: Identifier, entity: Entity<Node>, title?: string): CommandResult => {
+    const existing = cliData.externals.get(identifier)
     if (existing) {
         if (existing.uuid === entity.uuid) {
             console.warn("No change required.")
             return {
-                clientData,
+                cliData,
                 sourceUpdates: [],
             }
         }
         console.warn(`Overwriting previous link: ${JSON.stringify(existing)}`)
     }
-    const externals = new Map(clientData.externals.entries())
+    const externals = new Map(cliData.externals.entries())
     if (!title) {
         title = stringifyNomen(entity.value.names[0])
     }
@@ -25,8 +25,8 @@ const link = (clientData: CLIData, identifier: Identifier, entity: Entity<Node>,
     externals.set(identifier, newValue)
     const newLink: TitledLink = { href: `/nodes/${encodeURIComponent(entity.uuid)}`, title }
     return {
-        clientData: {
-            ...clientData,
+        cliData: {
+            ...cliData,
             externals,
         },
         sourceUpdates: [

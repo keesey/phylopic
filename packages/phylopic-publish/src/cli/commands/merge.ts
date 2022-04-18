@@ -6,11 +6,11 @@ import { normalizeNomina, UUID } from "phylopic-utils/src/models"
 import { stringifyNomen } from "phylopic-utils/src/nomina"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
-const merge = (clientData: CLIData, conserved: Entity<Node>, suppressed: Entity<Node>): CommandResult => {
+const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Node>): CommandResult => {
     // Check if these already match.
     if (conserved.uuid === suppressed.uuid) {
         console.warn("No change needed.")
-        return { clientData, sourceUpdates: [] }
+        return { cliData, sourceUpdates: [] }
     }
     // Check if these are mergeable. Must be siblings or adjacent.
     if (
@@ -24,7 +24,7 @@ const merge = (clientData: CLIData, conserved: Entity<Node>, suppressed: Entity<
     const imagesToPut = new Map<UUID, Image>()
     // Create updated image map.
     const images = new Map(
-        [...clientData.images.entries()].map(([uuid, image]) => {
+        [...cliData.images.entries()].map(([uuid, image]) => {
             if (image.specific === suppressed.uuid || image.general === suppressed.uuid) {
                 const general = image.general === suppressed.uuid ? conserved.uuid : image.general
                 const specific = image.specific === suppressed.uuid ? conserved.uuid : image.specific
@@ -46,8 +46,8 @@ const merge = (clientData: CLIData, conserved: Entity<Node>, suppressed: Entity<
     // Collect child nodes to update.
     const nodesToPut = new Map<UUID, Node>()
     // Create updated node map.
-    const nodes = new Map([...clientData.nodes.entries()])
-    for (const [childUUID, childNode] of clientData.nodes.entries()) {
+    const nodes = new Map([...cliData.nodes.entries()])
+    for (const [childUUID, childNode] of cliData.nodes.entries()) {
         if (childNode.parent === suppressed.uuid) {
             const updated: Node = {
                 ...childNode,
@@ -63,8 +63,8 @@ const merge = (clientData: CLIData, conserved: Entity<Node>, suppressed: Entity<
     // Collect externals to update.
     const externalsToPut = new Map<string, Readonly<{ uuid: UUID; title: string }>>()
     // Create updated externals map.
-    const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>(clientData.externals)
-    for (const [path, external] of clientData.externals.entries()) {
+    const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>(cliData.externals)
+    for (const [path, external] of cliData.externals.entries()) {
         if (external.uuid === suppressed.uuid) {
             externalsToPut.set(path, { ...external, uuid: conserved.uuid })
             externals.set(path, { ...external, uuid: conserved.uuid })
@@ -87,8 +87,8 @@ const merge = (clientData: CLIData, conserved: Entity<Node>, suppressed: Entity<
     externals.set(`phylopic.org/nodes/${suppressed.uuid}`, link)
     // Return result.
     return {
-        clientData: {
-            ...clientData,
+        cliData: {
+            ...cliData,
             images,
             nodes,
         },

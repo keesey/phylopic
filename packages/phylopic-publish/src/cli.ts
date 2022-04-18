@@ -19,9 +19,9 @@ const takeCommands = (client: S3Client, data: CLIData) =>
                     rl.close()
                 } else {
                     if (command) {
-                        const { clientData, sourceUpdates } = await command()
+                        const { cliData, sourceUpdates } = await command()
                         await Promise.all([...sourceUpdates].map(command => client.send(command)))
-                        data = clientData
+                        data = cliData
                     }
                     rl.prompt()
                 }
@@ -37,9 +37,9 @@ const takeCommands = (client: S3Client, data: CLIData) =>
     try {
         console.info("PhyloPic Client")
         console.info("Loading client data...")
-        const clientData = await getCLIData(client)
+        const cliData = await getCLIData(client)
         console.info("Client data loaded.")
-        await takeCommands(client, clientData)
+        await takeCommands(client, cliData)
     } catch (e) {
         console.error(String(e))
     } finally {

@@ -16,7 +16,7 @@ import { CLIData } from "./getCLIData"
 export default class LineReader {
     private index = 0
     private readonly parts: readonly string[]
-    constructor(private clientData: CLIData, line: string) {
+    constructor(private cliData: CLIData, line: string) {
         this.parts = line
             .trim()
             .split(/"/g)
@@ -35,8 +35,8 @@ export default class LineReader {
         return [...dict.entries()].filter(([key]) => key.startsWith(uuidPartial))
     }
     protected findEntityByPartialUUID(uuidPartial: string): Entity<Image | Node> | undefined {
-        const imageEntries = this.findEntriesByPartialUUID(this.clientData.images, uuidPartial)
-        const nodeEntries = this.findEntriesByPartialUUID(this.clientData.nodes, uuidPartial)
+        const imageEntries = this.findEntriesByPartialUUID(this.cliData.images, uuidPartial)
+        const nodeEntries = this.findEntriesByPartialUUID(this.cliData.nodes, uuidPartial)
         // :TOOD: Look through externals?
         const entries = [...imageEntries, ...nodeEntries]
         if (entries.length > 1) {
@@ -47,7 +47,7 @@ export default class LineReader {
             const uuid = typeof valueOrCanonicalUUID === "string" ? valueOrCanonicalUUID : entries[0][0]
             const value =
                 typeof valueOrCanonicalUUID === "string"
-                    ? this.clientData.nodes.get(valueOrCanonicalUUID)
+                    ? this.cliData.nodes.get(valueOrCanonicalUUID)
                     : valueOrCanonicalUUID
             if (!value) {
                 throw new Error("Invalid synonym.")
@@ -56,7 +56,7 @@ export default class LineReader {
         }
     }
     protected findNodeByPartialUUID(uuidPartial: string): Entity<Node> | undefined {
-        const entries = this.findEntriesByPartialUUID(this.clientData.nodes, uuidPartial)
+        const entries = this.findEntriesByPartialUUID(this.cliData.nodes, uuidPartial)
         // :TOOD: Look through externals?
         if (entries.length > 1) {
             throw new Error(`Partial UUID is ambiguous: ${JSON.stringify(uuidPartial)}`)
@@ -66,7 +66,7 @@ export default class LineReader {
             const valueOrCanonicalUUID = entries[0][1]
             const value =
                 typeof valueOrCanonicalUUID === "string"
-                    ? this.clientData.nodes.get(valueOrCanonicalUUID)
+                    ? this.cliData.nodes.get(valueOrCanonicalUUID)
                     : valueOrCanonicalUUID
             if (!value) {
                 throw new Error("Invalid synonym.")
@@ -75,19 +75,19 @@ export default class LineReader {
         }
     }
     protected findNodeByExternal(identifier: string): Entity<Node> | undefined {
-        const link = this.clientData.externals.get(identifier)
+        const link = this.cliData.externals.get(identifier)
         if (!link) {
             return undefined
         }
         const uuid = link.uuid
-        const value = this.clientData.nodes.get(uuid)
+        const value = this.cliData.nodes.get(uuid)
         if (!value) {
             return undefined
         }
         return { uuid, value }
     }
     protected findNodeByName(name: string): Entity<Node> | undefined {
-        const matches = [...this.clientData.nodes.entries()].filter(([, { names }]) =>
+        const matches = [...this.cliData.nodes.entries()].filter(([, { names }]) =>
             names.some(nodeName => nameMatches(name, nodeName)),
         )
         if (matches.length > 1) {
@@ -98,8 +98,8 @@ export default class LineReader {
         }
     }
     protected findRoot(): Entity<Node> {
-        const uuid = this.clientData.source.root
-        const root = this.clientData.nodes.get(uuid)
+        const uuid = this.cliData.source.root
+        const root = this.cliData.nodes.get(uuid)
         if (!root) {
             throw new Error("Cannot find root node!")
         }
@@ -158,7 +158,7 @@ export default class LineReader {
         if (!uuidPartial) {
             throw new Error("Expected image.")
         }
-        const entries = this.findEntriesByPartialUUID(this.clientData.images, uuidPartial)
+        const entries = this.findEntriesByPartialUUID(this.cliData.images, uuidPartial)
         if (entries.length > 1) {
             throw new Error(`Partial UUID is ambiguous: ${JSON.stringify(uuidPartial)}`)
         }

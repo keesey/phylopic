@@ -2,19 +2,19 @@ import { DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { Identifier } from "phylopic-utils/src/models"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
-const unlink = (clientData: CLIData, identifier: Identifier): CommandResult => {
-    if (!clientData.externals.has(identifier)) {
+const unlink = (cliData: CLIData, identifier: Identifier): CommandResult => {
+    if (!cliData.externals.has(identifier)) {
         console.warn("No external with that identifier.")
         return {
-            clientData,
+            cliData,
             sourceUpdates: [],
         }
     }
-    const externals = new Map(clientData.externals.entries())
+    const externals = new Map(cliData.externals.entries())
     externals.delete(identifier)
     return {
-        clientData: {
-            ...clientData,
+        cliData: {
+            ...cliData,
             externals,
         },
         sourceUpdates: [

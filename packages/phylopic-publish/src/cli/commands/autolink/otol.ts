@@ -1,7 +1,8 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import axios from "axios"
-import { Entity, Node } from "phylopic-source-models"
+import { Entity, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
 import { Nomen, UUID } from "phylopic-utils/src/models"
+import { isScientific } from "phylopic-utils/src/nomina"
 import type { CLIData } from "../../getCLIData"
 import { CommandResult, SourceUpdate } from "../CommandResult"
 interface OTOLTaxon {
@@ -20,11 +21,9 @@ interface OTOLMatchedNames {
     results: OTOLMatchedNamesResult[]
     unambiguous_names: string[]
 }
-const isScientificName = (name: Nomen) =>
-    name.some(part => part.class === "scientific") && name.every(part => part.class !== "operator")
 const hasOTOLLink = (externals: CLIData["externals"], nodeUUID: UUID) => {
     return [...externals.entries()].some(
-        ([path, { uuid }]) => path.startsWith("opentreeoflife.org/taxonomy/") && uuid === nodeUUID,
+        ([path, { uuid }]) => uuid === nodeUUID && path.startsWith("opentreeoflife.org/taxonomy/"),
     )
 }
 const succeeds = (nodes: CLIData["nodes"], predecessorUUID: UUID, entity: Entity<Node>): boolean => {
@@ -41,17 +40,17 @@ const succeeds = (nodes: CLIData["nodes"], predecessorUUID: UUID, entity: Entity
     }
     return succeeds(nodes, predecessorUUID, { uuid: parentUUID, value: parent })
 }
-const findContext = (clientData: CLIData, entity: Entity<Node>): string | undefined => {
-    const external = [...clientData.externals.entries()].find(
-        ([path, { uuid }]) => path.startsWith("opentreeoflife.org/contexts/") && uuid === entity.uuid,
+const findContext = (cliData: CLIData, entity: Entity<Node>): string | undefined => {
+    const external = [...cliData.externals.entries()].find(
+        ([path, { uuid }]) => uuid === entity.uuid && path.startsWith("opentreeoflife.org/contexts/"),
     )
     if (external) {
         return decodeURIComponent(external[0].split("/", 3)[2])
     }
     if (entity.value.parent) {
-        const parent = clientData.nodes.get(entity.value.parent)
+        const parent = cliData.nodes.get(entity.value.parent)
         if (parent) {
-            return findContext(clientData, { uuid: entity.value.parent, value: parent })
+            return findContext(cliData, { uuid: entity.value.parent, value: parent })
         }
     }
 }
@@ -77,25 +76,25 @@ const getExternalEntries = (taxon: OTOLTaxon, uuid: UUID) => {
     return [...map.entries()]
 }
 const getScientificNames = (names: readonly Nomen[]) =>
-    names.filter(isScientificName).map(name =>
+    names.filter(isScientific).map(name =>
         name
             .filter(part => part.class === "scientific")
             .map(part => part.text)
             .join(" "),
     )
-const autolinkOTOL = async (clientData: CLIData, root: Entity<Node>): Promise<CommandResult> => {
+const autolinkOTOL = async (cliData: CLIData, root: Entity<Node>): Promise<CommandResult> => {
     const sourceUpdates: SourceUpdate[] = []
-    const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>([...clientData.externals.entries()])
-    const nodeEntries = [...clientData.nodes.entries()].filter(
+    const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>([...cliData.externals.entries()])
+    const nodeEntries = [...cliData.nodes.entries()].filter(
         ([uuid, node]) =>
-            node.names.some(isScientificName) &&
-            !hasOTOLLink(clientData.externals, uuid) &&
-            succeeds(clientData.nodes, root.uuid, { uuid, value: node }),
+            node.names.some(isScientific) &&
+            !hasOTOLLink(cliData.externals, uuid) &&
+            succeeds(cliData.nodes, root.uuid, { uuid, value: node }),
     )
     console.info(`Processing ${nodeEntries.length} node${nodeEntries.length === 1 ? "" : "s"}...`)
     await Promise.all(
         nodeEntries.map(async ([nodeUUID, node]) => {
-            const context = findContext(clientData, { uuid: nodeUUID, value: node })
+            const context = findContext(cliData, { uuid: nodeUUID, value: node })
             const names = getScientificNames(node.names)
             try {
                 const response = await axios.post<OTOLMatchedNames>(
@@ -119,7 +118,7 @@ const autolinkOTOL = async (clientData: CLIData, root: Entity<Node>): Promise<Co
                                 externals.set(path, external)
                                 sourceUpdates.push(
                                     new PutObjectCommand({
-                                        Bucket: "source.phylopic.org",
+                                        Bucket: SOURCE_BUCKET_NAME,
                                         Body: JSON.stringify({
                                             href: `/nodes/${external.uuid}`,
                                             title: external.title,
@@ -140,8 +139,8 @@ const autolinkOTOL = async (clientData: CLIData, root: Entity<Node>): Promise<Co
     )
     console.info(`Processed ${nodeEntries.length} node${nodeEntries.length === 1 ? "" : "s"}.`)
     return {
-        clientData: {
-            ...clientData,
+        cliData: {
+            ...cliData,
             externals,
         },
         sourceUpdates,

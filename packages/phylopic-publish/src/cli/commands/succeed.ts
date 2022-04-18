@@ -5,14 +5,14 @@ import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import precedes from "./utils/precedes"
 import putToMap from "./utils/putToMap"
-const succeed = (clientData: CLIData, parent: Entity<Node>, child: Entity<Node>): CommandResult => {
+const succeed = (cliData: CLIData, parent: Entity<Node>, child: Entity<Node>): CommandResult => {
     // Check if parent and child are the same.
     if (parent.uuid === child.value.parent) {
         console.warn("No change needed.")
-        return { clientData, sourceUpdates: [] }
+        return { cliData, sourceUpdates: [] }
     }
     // Check if child is a predecessor of parent.
-    if (precedes(clientData.nodes, child.uuid, parent.uuid)) {
+    if (precedes(cliData.nodes, child.uuid, parent.uuid)) {
         throw new Error("This would create a cycle.")
     }
     // Create and validate updated child node.
@@ -24,9 +24,9 @@ const succeed = (clientData: CLIData, parent: Entity<Node>, child: Entity<Node>)
         throw new Error("Invalid update for child node.")
     }
     // Update nodes map.
-    const nodes = putToMap(clientData.nodes, child.uuid, updatedChild)
+    const nodes = putToMap(cliData.nodes, child.uuid, updatedChild)
     // See any any image identifications are rendered inapplicable by this.
-    const conflicts = [...clientData.images.entries()].filter(
+    const conflicts = [...cliData.images.entries()].filter(
         ([, image]) => image.general && !precedes(nodes, image.general, image.specific),
     )
     if (conflicts.length > 0) {
@@ -38,8 +38,8 @@ const succeed = (clientData: CLIData, parent: Entity<Node>, child: Entity<Node>)
     }
     // Return result.
     return {
-        clientData: {
-            ...clientData,
+        cliData: {
+            ...cliData,
             nodes,
         },
         sourceUpdates: [

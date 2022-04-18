@@ -22,45 +22,45 @@ export type Args = {
 }
 type Command = {
     description: string
-    execute(clientData: CLIData, reader: LineReader, args: Args): () => CommandResult | Promise<CommandResult>
+    execute(cliData: CLIData, reader: LineReader, args: Args): () => CommandResult | Promise<CommandResult>
     usage: string
 }
 const COMMANDS: Readonly<Record<string, Command>> = {
     approve: {
         description: "Approves a submission, or all submissions",
-        execute: (clientData, reader, args) => {
+        execute: (cliData, reader, args) => {
             if (reader.atEnd) {
-                return () => approve(args.s3Client, clientData)
+                return () => approve(args.s3Client, cliData)
             }
             const contributor = reader.readEmailAddress()
             const uuid = reader.readUUID4()
             reader.expectEnd()
-            return () => approve(args.s3Client, clientData, contributor, uuid)
+            return () => approve(args.s3Client, cliData, contributor, uuid)
         },
         usage: "approve ?<uuid>",
     },
     autolink: {
         description: "Automatically pulls external links from an external source within a given clade",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const source = reader.readPattern<"eol" | "otol">(/^eol|otol$/, "either `eol` or `otol`")
             const node = reader.readNode()
             reader.expectEnd()
-            return () => autolink(clientData, source, node)
+            return () => autolink(cliData, source, node)
         },
         usage: "autolink <eol|otol> <node>",
     },
     delete: {
         description: "Deletes an image or node",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const entity = reader.readEntity()
             reader.expectEnd()
-            return () => deleteEntity(clientData, entity)
+            return () => deleteEntity(cliData, entity)
         },
         usage: "delete <entity>",
     },
     help: {
         description: "Lists all commands",
-        execute: (clientData, reader) => () => {
+        execute: (cliData, reader) => () => {
             reader.expectEnd()
             console.info()
             Object.values(COMMANDS).forEach(({ description, usage }) => {
@@ -70,71 +70,71 @@ const COMMANDS: Readonly<Record<string, Command>> = {
             })
             console.info("\t> quit")
             console.info("\tQuit the app.")
-            return { clientData, sourceUpdates: [] }
+            return { cliData, sourceUpdates: [] }
         },
         usage: "help",
     },
     identify: {
         description: "Assigns an image to a specific node and, optionally, a general node.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const image = reader.readImage()
             const specific = reader.readNode()
             const general = reader.atEnd ? undefined : reader.readNode()
             reader.expectEnd()
-            return () => identify(clientData, image, specific, general)
+            return () => identify(cliData, image, specific, general)
         },
         usage: "identify <image> <node> ?<node>",
     },
     link: {
         description: "Creates or overwrites an external link to a node.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const identifer = reader.readIdentifier()
             const entity = reader.readNode()
             const title = reader.atEnd ? undefined : reader.readText()
             reader.expectEnd()
-            return () => link(clientData, identifer, entity, title)
+            return () => link(cliData, identifer, entity, title)
         },
         usage: "link <authority>/<namespace>/<objectid> <node> ?<title>",
     },
     merge: {
         description: "Merges two nodes into one.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const conserved = reader.readNode()
             const suppressed = reader.readNode()
             reader.expectEnd()
-            return () => merge(clientData, conserved, suppressed)
+            return () => merge(cliData, conserved, suppressed)
         },
         usage: "merge <node> <node>",
     },
     search: {
         description: "Searches for a node by its name.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const name = reader.readName()
             reader.expectEnd()
-            return () => search(clientData, name)
+            return () => search(cliData, name)
         },
         usage: "search <name>",
     },
     show: {
         description: "Displays metadata for an image or node.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const entity = reader.readEntity()
             reader.expectEnd()
-            return () => show(clientData, entity)
+            return () => show(cliData, entity)
         },
         usage: "show <entity>",
     },
     source: {
         description: "Shows metadata for the source data.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             reader.expectEnd()
-            return () => source(clientData)
+            return () => source(cliData)
         },
         usage: "source",
     },
     spawn: {
         description: "Creates a new node with the specified parent node.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const parent = reader.readNode()
             const newUUID = reader.readUUID4()
             const newCanonical = reader.readName()
@@ -142,13 +142,13 @@ const COMMANDS: Readonly<Record<string, Command>> = {
             while (!reader.atEnd) {
                 newNames.push(reader.readName())
             }
-            return () => spawn(clientData, parent, newUUID, newCanonical, ...newNames)
+            return () => spawn(cliData, parent, newUUID, newCanonical, ...newNames)
         },
         usage: "spawn <node> <UUID-new> <name> ?<names>",
     },
     split: {
         description: "Creates a new node with the specified parent node.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const existing = reader.readNode()
             const newUUID = reader.readUUID4()
             const newCanonical = reader.readName()
@@ -156,36 +156,36 @@ const COMMANDS: Readonly<Record<string, Command>> = {
             while (!reader.atEnd) {
                 newNames.push(reader.readName())
             }
-            return () => split(clientData, existing, newUUID, newCanonical, ...newNames)
+            return () => split(cliData, existing, newUUID, newCanonical, ...newNames)
         },
         usage: "split <node> <UUID-new> <name> ?<names>",
     },
     succeed: {
         description: "Makes a node a child of another node.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const parent = reader.readNode()
             const child = reader.readNode()
             reader.expectEnd()
-            return () => succeed(clientData, parent, child)
+            return () => succeed(cliData, parent, child)
         },
         usage: "succeed <node> <node>",
     },
     unlink: {
         description: "Removes an external link to a node.",
-        execute: (clientData, reader) => {
+        execute: (cliData, reader) => {
             const identifer = reader.readIdentifier()
             reader.expectEnd()
-            return () => unlink(clientData, identifer)
+            return () => unlink(cliData, identifer)
         },
         usage: "unlink <identifier>",
     },
 }
 const parseCommand = (
-    clientData: CLIData,
+    cliData: CLIData,
     line: string,
     args: Args,
 ): (() => CommandResult | Promise<CommandResult>) | typeof QUIT | null => {
-    const reader = new LineReader(clientData, line)
+    const reader = new LineReader(cliData, line)
     const commandName = reader.read()?.toLowerCase()
     if (!commandName) {
         return null
@@ -197,6 +197,6 @@ const parseCommand = (
     if (!command) {
         throw new Error(`Unrecognized command: ${JSON.stringify(commandName)}.`)
     }
-    return command.execute(clientData, reader, args)
+    return command.execute(cliData, reader, args)
 }
 export default parseCommand

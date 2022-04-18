@@ -9,17 +9,17 @@ import { CommandResult } from "./CommandResult"
 import checkNewUUID from "./utils/checkNewUUID"
 import putToMap from "./utils/putToMap"
 const split = (
-    clientData: CLIData,
+    cliData: CLIData,
     original: Entity<Node>,
     uuid: UUID,
     canonical: Nomen,
     ...names: readonly Nomen[]
 ): CommandResult => {
     // Check if UUID is not already in use.
-    checkNewUUID(clientData, uuid)
+    checkNewUUID(cliData, uuid)
     // Check if original is the root node.
     const { parent } = original.value
-    if (!parent || original.uuid === clientData.source.root) {
+    if (!parent || original.uuid === cliData.source.root) {
         throw new Error("Cannot split the root node.")
     }
     // Put together data for new node.
@@ -54,9 +54,9 @@ const split = (
     }
     // Return result.
     return {
-        clientData: {
-            ...clientData,
-            nodes: putToMap(putToMap(clientData.nodes, uuid, newNode), original.uuid, updatedOriginal),
+        cliData: {
+            ...cliData,
+            nodes: putToMap(putToMap(cliData.nodes, uuid, newNode), original.uuid, updatedOriginal),
         },
         sourceUpdates: [
             new PutObjectCommand({

@@ -1,7 +1,7 @@
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
-const source = (clientData: CLIData): CommandResult => {
-    console.info(JSON.stringify(clientData.source, undefined, "\t"))
-    return { clientData, sourceUpdates: [] }
+const source = (cliData: CLIData): CommandResult => {
+    console.info(JSON.stringify(cliData.source, undefined, "\t"))
+    return { cliData, sourceUpdates: [] }
 }
 export default source

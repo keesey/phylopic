@@ -6,7 +6,7 @@ import { CommandResult } from "./CommandResult"
 import precedes from "./utils/precedes"
 import putToMap from "./utils/putToMap"
 const identify = (
-    clientData: CLIData,
+    cliData: CLIData,
     image: Entity<Image>,
     specific: Entity<Node>,
     general?: Entity<Node>,
@@ -19,10 +19,10 @@ const identify = (
     // Check if any change is needed.
     if (image.value.specific === specific.uuid && image.value.general === general?.uuid) {
         console.warn("No change needed.")
-        return { clientData, sourceUpdates: [] }
+        return { cliData, sourceUpdates: [] }
     }
     // Check that general precedes specific, if present.
-    if (general && !precedes(clientData.nodes, general.uuid, specific.uuid)) {
+    if (general && !precedes(cliData.nodes, general.uuid, specific.uuid)) {
         throw new Error("General node does not precede specific node.")
     }
     // Create and validate updated image.
@@ -36,9 +36,9 @@ const identify = (
     }
     // Return result.
     return {
-        clientData: {
-            ...clientData,
-            images: putToMap(clientData.images, image.uuid, updatedImage),
+        cliData: {
+            ...cliData,
+            images: putToMap(cliData.images, image.uuid, updatedImage),
         },
         sourceUpdates: [
             new PutObjectCommand({

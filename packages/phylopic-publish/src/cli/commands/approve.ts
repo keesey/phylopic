@@ -2,9 +2,9 @@ import { S3Client } from "@aws-sdk/client-s3"
 import { EmailAddress, UUID } from "phylopic-utils/src/models"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
-const approve = (_client: S3Client, clientData: CLIData, _contributor?: EmailAddress, _uuid?: UUID): CommandResult => {
+const approve = (_client: S3Client, cliData: CLIData, _contributor?: EmailAddress, _uuid?: UUID): CommandResult => {
     return {
-        clientData,
+        cliData,
         sourceUpdates: [],
     }
     // :TODO:

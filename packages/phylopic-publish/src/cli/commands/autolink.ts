@@ -3,12 +3,12 @@ import { CLIData } from "../getCLIData"
 import autolinkEOL from "./autolink/eol"
 import autolinkOTOL from "./autolink/otol"
 import { CommandResult } from "./CommandResult"
-const autolink = (clientData: CLIData, source: "eol" | "otol", root: Entity<Node>): Promise<CommandResult> => {
+const autolink = (cliData: CLIData, source: "eol" | "otol", root: Entity<Node>): Promise<CommandResult> => {
     switch (source) {
         case "eol":
-            return autolinkEOL(clientData, root)
+            return autolinkEOL(cliData, root)
         case "otol":
-            return autolinkOTOL(clientData, root)
+            return autolinkOTOL(cliData, root)
         default:
             throw new Error(`Unrecognized autolink source: ${JSON.stringify(source)}.`)
     }

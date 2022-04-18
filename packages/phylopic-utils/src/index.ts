@@ -1,5 +1,6 @@
 export * from "./aws"
 export * from "./detection"
+export * from "./http"
 export * from "./identification"
 export * from "./json"
 export * from "./models"
