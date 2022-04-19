@@ -70,9 +70,6 @@ const getPathsFromNamebank = async (namebankIDs?: ReadonlySet<number>): Promise<
     // console.debug(`Found ${result.length} link${result.length === 1 ? "" : "s"}.`)
     return result
 }
-const hasEOLLink = (externals: CLIData["externals"], nodeUUID: UUID) => {
-    return [...externals.entries()].some(([path, { uuid }]) => uuid === nodeUUID && path.startsWith("eol.org/pages/"))
-}
 const hasNamebankLink = (externals: CLIData["externals"], nodeUUID: UUID) => {
     return [...externals.entries()].some(
         ([path, { uuid }]) => uuid === nodeUUID && path.startsWith("ubio.org/namebank/"),
@@ -204,15 +201,22 @@ const processNamebank = async (
         }
     }
 }
+const getCandidates = (cliData: CLIData, root: Entity<Node>) => {
+    const uuidsWithEOLLinks = new Set(
+        [...cliData.externals.entries()]
+            .filter(([path]) => path.startsWith("eol.org/pages/"))
+            .map(([, external]) => external.uuid),
+    )
+    const candidates = [...cliData.nodes.entries()]
+        .filter(([uuid]) => !uuidsWithEOLLinks.has(uuid))
+        .filter(([uuid, node]) => succeeds(cliData.nodes, root.uuid, { uuid, value: node }))
+        .filter(([, node]) => node.names.some(isScientific))
+    return candidates
+}
 const autolinkEOL = async (cliData: CLIData, root: Entity<Node>): Promise<CommandResult> => {
     const sourceUpdates: SourceUpdate[] = []
     const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>([...cliData.externals.entries()])
-    const candidates = [...cliData.nodes.entries()].filter(
-        ([uuid, node]) =>
-            node.names.some(isScientific) &&
-            !hasEOLLink(cliData.externals, uuid) &&
-            succeeds(cliData.nodes, root.uuid, { uuid, value: node }),
-    )
+    const candidates = getCandidates(cliData, root)
     console.info(`Processing ${candidates.length} node${candidates.length === 1 ? "" : "s"}...`)
     const [namebankCandidates, otherCandidates] = candidates.reduce<[[UUID, Node][], [UUID, Node][]]>(
         ([namebank, other], entry) =>
