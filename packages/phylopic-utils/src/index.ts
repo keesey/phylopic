@@ -1,4 +1,5 @@
 export * from "./aws"
+export * from "./comparison"
 export * from "./detection"
 export * from "./http"
 export * from "./identification"
