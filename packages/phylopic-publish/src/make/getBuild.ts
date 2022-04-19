@@ -15,8 +15,8 @@ const getBuild = async () => {
         if (!isFinite(build) || build < 0 || Math.floor(build) !== build) {
             throw new Error(
                 "Expected build index to be a positive integer. Found: " +
-                JSON.stringify(response.Parameter.Value) +
-                ".",
+                    JSON.stringify(response.Parameter.Value) +
+                    ".",
             )
         }
     } finally {

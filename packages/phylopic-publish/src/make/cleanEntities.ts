@@ -6,6 +6,7 @@ export const cleanTables = async (client: ClientBase, build: number, operator: "
     await client.query(`DELETE FROM node_name WHERE build${operator}$1::bigint`, [build])
     await client.query(`DELETE FROM node WHERE build${operator}$1::bigint`, [build])
     await client.query(`DELETE FROM image WHERE build${operator}$1::bigint`, [build])
+    await client.query(`DELETE FROM contributor WHERE build${operator}$1::bigint`, [build])
     await client.query("COMMIT")
 }
 const cleanEntities = async (client: ClientBase, build: number) => {

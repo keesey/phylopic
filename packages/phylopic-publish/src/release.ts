@@ -19,7 +19,7 @@ import updateParameters from "./make/updateParameters"
         ])
         console.info("Releasing build ", build, "...")
         await updateParameters(build, source.root)
-        console.info("Cleaning up search database...")
+        console.info("Cleaning up entities database...")
         await cleanEntities(pgClient, build)
         console.info("Cleaned up search.")
         console.info("Build", build, "complete.")

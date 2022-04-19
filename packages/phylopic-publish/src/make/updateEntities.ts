@@ -1,10 +1,10 @@
 import { normalizeSync as normalizeDiacritics } from "normalize-diacritics"
 import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
-import { TitledLink } from "phylopic-api-models/src"
-import { LicenseURL, UUID } from "phylopic-utils/src/models"
-import { chunk } from "phylopic-utils/src/processing"
+import { Contributor, TitledLink } from "phylopic-api-models"
+import { chunk, compareStrings, LicenseURL, UUID } from "phylopic-utils"
 import { cleanTables } from "./cleanEntities"
+import getContributorJSON from "./getContributorJSON"
 import getImageJSON from "./getImageJSON"
 import getNodeJSON from "./getNodeJSON"
 import type { SourceData } from "./getSourceData"
@@ -65,7 +65,7 @@ const processNodeExternals = (
         queryConfig.values.push(authority, namespace, objectID, build, nodeUUID, link.title)
     }
 }
-const processNode = async (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryConfigs) => {
+const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryConfigs) => {
     const node = data.nodes.get(nodeUUID)
     if (!node) {
         throw new Error(`Cannot find node! (UUID=${nodeUUID})`)
@@ -73,7 +73,7 @@ const processNode = async (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQ
     if (!queryConfigs.nodes.values) {
         throw new Error("No values array!")
     }
-    const json = await getNodeJSON(nodeUUID, data)
+    const json = getNodeJSON(nodeUUID, data)
     let index = queryConfigs.nodes.values.length + 1
     queryConfigs.nodes.text += index === 1 ? " " : ","
     queryConfigs.nodes.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::text)`
@@ -98,7 +98,7 @@ const tryQuery = async <T extends unknown[]>(client: ClientBase, config: QueryCo
     }
 }
 const insertNodes = async (client: ClientBase, data: SourceData) => {
-    console.info("Adding node data to search database...")
+    console.info("Adding node data to entities database...")
     const sorted = [...data.nodes.keys()].sort(
         (a, b) => (data.depths.get(a) ?? 0) - (data.depths.get(b) ?? 0) || (a < b ? -1 : b < a ? 1 : 0),
     )
@@ -117,7 +117,7 @@ const insertNodes = async (client: ClientBase, data: SourceData) => {
             values: [],
         }
         const configs = { externals, names, nodes }
-        await Promise.all(c.map(nodeUUID => processNode(data, nodeUUID, configs)))
+        c.forEach(nodeUUID => processNode(data, nodeUUID, configs))
         if (nodes.values?.length) {
             await tryQuery(client, nodes)
         }
@@ -128,7 +128,7 @@ const insertNodes = async (client: ClientBase, data: SourceData) => {
             await tryQuery(client, externals)
         }
     }
-    console.info("Added node data to search database.")
+    console.info("Added node data to entities database.")
 }
 const isBy = (license: LicenseURL) =>
     license !== "https://creativecommons.org/publicdomain/mark/1.0/" &&
@@ -140,7 +140,7 @@ const isSA = (license: LicenseURL) =>
     license === "https://creativecommons.org/licenses/by-nc-sa/3.0/" ||
     license === "https://creativecommons.org/licenses/by-sa/3.0/"
 const insertImages = async (client: ClientBase, data: SourceData) => {
-    console.info("Adding image data to search database...")
+    console.info("Adding image data to entities database...")
     if (data.images.size > 0) {
         const chunks = chunk(data.images.entries(), 1024)
         for (const c of chunks) {
@@ -154,7 +154,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
             let index = 1
             for (const [uuid, image] of c) {
                 config.text += index === 1 ? " " : ","
-                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::character varying,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::text)`
+                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::text)`
                 config.values.push(
                     uuid,
                     data.build,
@@ -170,10 +170,58 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
             await tryQuery(client, config)
         }
     }
-    console.info("Added image data to search database.")
+    console.info("Added image data to entities database.")
+}
+const getContributorCount = (data: SourceData, uuid: UUID): number => {
+    return [...data.images.values()].filter(({ contributor }) => contributor === uuid).length
+}
+const compareContributorEntries = (
+    a: Readonly<[UUID, Contributor, number]>,
+    b: Readonly<[UUID, Contributor, number]>,
+) => a[2] - b[2] || compareStrings(a[1].created, b[1].created) || compareStrings(a[0], b[0])
+const insertContributors = async (client: ClientBase, data: SourceData) => {
+    console.info("Adding contributor data to entities database...")
+    const contributors = [...data.contributors.entries()]
+        .map(
+            ([uuid, contributor]) =>
+                [uuid, contributor, getContributorCount(data, uuid)] as Readonly<[UUID, Contributor, number]>,
+        )
+        .filter(([, , count]) => count > 0)
+        .sort(compareContributorEntries)
+    if (contributors.length > 0) {
+        const chunks = chunk(contributors, 1024)
+        let sortIndex = 0
+        for (const c of chunks) {
+            const config: QueryConfig = {
+                text: 'INSERT INTO contributor ("uuid",build,created,json,sort_index) VALUES',
+                values: [],
+            }
+            if (!config.values) {
+                throw new Error("No values array!")
+            }
+            let index = 1
+            for (const [uuid, contributor, count] of c) {
+                config.text += index === 1 ? " " : ","
+                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::bigint)`
+                config.values.push(
+                    uuid,
+                    data.build,
+                    contributor.created,
+                    JSON.stringify(getContributorJSON(uuid, data, count)),
+                    sortIndex++,
+                )
+            }
+            await tryQuery(client, config)
+        }
+    }
+    console.info("Added contributor data to entities database.")
+}
+const insertContributorsAndImages = async (client: ClientBase, data: SourceData) => {
+    await insertContributors(client, data)
+    await insertImages(client, data)
 }
 const insertIllustrations = async (client: ClientBase, data: SourceData) => {
-    console.info("Adding image-node assigments to search database...")
+    console.info("Adding image-node assigments to entities database...")
     if (data.illustration.size > 0) {
         const chunks = chunk(data.illustration.entries(), 1024)
         for (const c of chunks) {
@@ -195,18 +243,18 @@ const insertIllustrations = async (client: ClientBase, data: SourceData) => {
             await tryQuery(client, config)
         }
     }
-    console.info("Added image-node assigments to search database...")
+    console.info("Added image-node assigments to entities database...")
 }
 const updateEntities = async (client: ClientBase, data: SourceData) => {
-    console.info("Updating search database...")
+    console.info("Updating entities database...")
     // Clean anything from an aborted build.
     await cleanTables(client, data.build, "=")
     await client.query("BEGIN")
     // Insert entities and adjunct data
-    await Promise.all([insertImages(client, data), insertNodes(client, data)])
+    await Promise.all([insertContributorsAndImages(client, data), insertNodes(client, data)])
     // Insert node-image links
     await insertIllustrations(client, data)
     await client.query("COMMIT")
-    console.info("Updated search database.")
+    console.info("Updated entities database.")
 }
 export default updateEntities

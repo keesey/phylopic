@@ -103,7 +103,7 @@ const getExternal = (uuid: UUID, data: SourceData) => {
                 } as TitledLink),
         )
 }
-const getNodeJSON = async (uuid: UUID, data: SourceData): Promise<Node> => {
+const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     uuid = uuid.toLowerCase()
     const root = uuid === data.source.root
     const sourceNode = data.nodes.get(uuid)

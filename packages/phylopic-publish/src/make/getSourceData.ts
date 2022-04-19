@@ -1,12 +1,13 @@
 import { TitledLink } from "phylopic-api-models"
-import { Image, isImage, isNode, isSource, Node, Source } from "phylopic-source-models"
-import { normalizeUUID, UUID } from "phylopic-utils"
+import { Contributor, Image, isContributor, isImage, isNode, isSource, Node, Source } from "phylopic-source-models"
+import { compareStrings, normalizeUUID, UUID } from "phylopic-utils"
 import { Arc, Digraph } from "simple-digraph"
 import listDir from "../fsutils/listDir"
 import readJSON from "../fsutils/readJSON"
 import getPhylogeny from "../models/getPhylogeny"
 export type SourceData = Readonly<{
     build: number
+    contributors: ReadonlyMap<UUID, Contributor>
     depths: ReadonlyMap<UUID, number>
     externals: ReadonlyMap<string, TitledLink>
     illustration: ReadonlyMap<UUID, readonly UUID[]>
@@ -23,6 +24,7 @@ export type Args = Readonly<{
 }>
 type ProcessArgs = Args &
     Readonly<{
+        contributors: Map<UUID, Contributor>
         depths: Map<UUID, number>
         illustration: Map<UUID, Set<UUID>>
         images: Map<UUID, Image>
@@ -63,6 +65,21 @@ const loadNodes = async (args: Pick<ProcessArgs, "nodes">): Promise<void> => {
     console.info(`Loading ${uuids.length} nodes...`)
     await Promise.all(uuids.map(uuid => loadNode(uuid, args)))
     console.info(`Loaded ${uuids.length} nodes.`)
+}
+const loadContributor = async (uuid: UUID, args: Pick<ProcessArgs, "contributors">): Promise<void> => {
+    const path = `contributors/${normalizeUUID(uuid)}/meta.json`
+    const contributor = await readJSON<Contributor>(`.s3/source.phylopic.org/${path}`)
+    if (!isContributor(contributor)) {
+        throw new Error(`Invalid contributor (UUID: "${uuid}").`)
+    }
+    args.contributors.set(uuid, contributor)
+}
+const loadContributors = async (args: Pick<ProcessArgs, "contributors">): Promise<void> => {
+    console.info("Looking up contributors...")
+    const uuids = await listDir(".s3/source.phylopic.org/contributors/")
+    console.info(`Loading ${uuids.length} contributors...`)
+    await Promise.all(uuids.map(uuid => loadContributor(uuid, args)))
+    console.info(`Loaded ${uuids.length} contributors.`)
 }
 const getNodeUUIDsInLineage = (
     args: Pick<SourceData, "nodes">,
@@ -110,7 +127,6 @@ const getIllustration = (args: Pick<SourceData, "images" | "nodes">): ReadonlyMa
     }
     return map
 }
-const compareStrings = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
 const processClade = (
     args: Pick<SourceData, "phylogeny" | "verticesToNodeUUIDs"> &
         Pick<ProcessArgs, "depths" | "sortIndices"> & { sizes: ReadonlyMap<number, number>; sortIndex: number },
@@ -207,11 +223,13 @@ const loadExternals = async (externals: Map<string, TitledLink>): Promise<void> 
     console.info(`Loaded ${objectPromises.length} externals.`)
 }
 const getSourceData = async (args: Args): Promise<SourceData> => {
+    const contributors = new Map<UUID, Contributor>()
     const externals = new Map<string, TitledLink>()
     const images = new Map<UUID, Image>()
     const nodes = new Map<UUID, Node>()
     const [source] = await Promise.all([
         loadSource(),
+        loadContributors({ ...args, contributors }),
         loadNodes({ ...args, nodes }),
         loadImages({ ...args, images }),
         loadExternals(externals),
@@ -222,6 +240,7 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
     })
     return {
         build: args.build,
+        contributors,
         externals,
         illustration: getIllustration({
             images,
