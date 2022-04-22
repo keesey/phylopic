@@ -9,8 +9,8 @@ export const isMediaLink =
         isHRef: FaultDetector<THRef>,
         isType: FaultDetector<TType>,
     ): FaultDetector<MediaLink<THRef, TType>> =>
-        (x: unknown, faultCollector?: ValidationFaultCollector): x is MediaLink<THRef, TType> =>
-            isLink(isHRef)(x, faultCollector) &&
-            isSizes((x as MediaLink<THRef, TType>).sizes, faultCollector?.sub("sizes")) &&
-            isType((x as MediaLink<THRef, TType>).type, faultCollector?.sub("type"))
+    (x: unknown, faultCollector?: ValidationFaultCollector): x is MediaLink<THRef, TType> =>
+        isLink(isHRef)(x, faultCollector) &&
+        isSizes((x as MediaLink<THRef, TType>).sizes, faultCollector?.sub("sizes")) &&
+        isType((x as MediaLink<THRef, TType>).type, faultCollector?.sub("type"))
 export default isMediaLink

@@ -1,7 +1,7 @@
 import { createReadStream } from "fs"
 import { join } from "path"
 import { Image, Link, MediaLink } from "phylopic-api-models/src/types"
-import { normalizeUUID } from "phylopic-utils"
+import { normalizeUUID } from "phylopic-utils/src"
 import { isImageMediaType, RasterMediaType, UUID, VectorMediaType } from "phylopic-utils/src/models"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir"
@@ -115,8 +115,8 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
             },
             generalNode: sourceImage.general
                 ? {
-                      href: `/nodes/${encodeURIComponent(sourceImage.general)}`,
-                  }
+                    href: `/nodes/${encodeURIComponent(sourceImage.general)}`,
+                }
                 : null,
             "http://ogp.me/ns#image": socialFile,
             license: {

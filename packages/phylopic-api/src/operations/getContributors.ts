@@ -1,92 +1,79 @@
-import { PoolClient } from "pg"
-import { Contributor, ContributorListParameters, validateContributorListParameters } from "phylopic-api-types"
-import { DataRequestHeaders } from "../headers/DataRequestHeader"
+import { ClientBase } from "pg"
+import { ContributorListParameters, isContributorListParameters, Link } from "phylopic-api-models/src"
+import { UUID } from "phylopic-utils/src"
+import checkIfMatchBuild from "../build/checkIfMatchBuild"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import matchesBuildETag from "../build/matchesBuildETag"
+import { ListRequestHeaders } from "../headers/requests/ListRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
-import { PoolService } from "../services/PoolService"
+import { PoolClientService } from "../services/PoolClientService"
 import create304 from "../utils/aws/create304"
 import QueryConfigBuilder from "../utils/postgres/QueryConfigBuilder"
-import checkValidation from "../validation/checkValidation"
+import validate from "../validation/validate"
 import { Operation } from "./Operation"
-export type GetContributorsParameters = DataRequestHeaders & ContributorListParameters
-export type GetContributorsService = PoolService
+export type GetContributorsParameters = ListRequestHeaders & ContributorListParameters
+export type GetContributorsService = PoolClientService
 const ITEMS_PER_PAGE = 96
-const USER_MESSAGE = "There was a problem with a request to find contributors."
-const getTotalItems = async (client: PoolClient) => {
-    const builder = new QueryConfigBuilder(
-        "SELECT COUNT(DISTINCT contributor) as total FROM image WHERE build=$::bigint",
-        [BUILD],
-    )
+const USER_MESSAGE = "There was a problem with a request to list contributors."
+const getTotalItems = async (client: ClientBase) => {
+    const builder = new QueryConfigBuilder("SELECT COUNT(uuid) as total FROM contributor WHERE build=$::bigint", [
+        BUILD,
+    ])
     const result = await client.query<{ total: number }>(builder.build())
     return result.rows[0].total
 }
-// :TODO: /contributors/<uuid>?embed=latestImage
-const getLinkFromItem = (item: Pick<Contributor, "email">, _embed: readonly string[]) => ({
-    href: `mailto:${item.email}`,
-})
-const getItemLinks = async (client: PoolClient, offset: number, limit: number, embed: readonly string[]) => {
-    const builder = new QueryConfigBuilder(
-        'SELECT contributor as email FROM image WHERE build=$::bigint GROUP BY email ORDER BY "count" DESC, email OFFSET $::bigint LIMIT $::bigint',
-        [BUILD, offset, limit],
-    )
-    const queryResult = await client.query<Pick<Contributor, "email">>(builder.build())
-    return queryResult.rows.map(row => getLinkFromItem(row, embed))
+const getItemLinks = async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
+    const queryResult = await client.query<{ uuid: UUID }>({
+        text: "SELECT uuid from contributor WHERE build=$::bigint ORDER BY sort_index OFFSET $::bigint LIMIT $::bigint",
+        values: [BUILD, offset, limit],
+    })
+    return queryResult.rows.map(({ uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}` }))
 }
 // :TODO: /contributors/<uuid>?embed=latestImage
-const getItems = async (
-    client: PoolClient,
+const getItemLinksAndJSON = async (
+    client: ClientBase,
     offset: number,
     limit: number,
-    _embed: readonly string[],
-): Promise<readonly Contributor[]> => {
-    const builder = new QueryConfigBuilder(
-        'SELECT contributor as email, COUNT("uuid") AS "count" FROM image WHERE build=$::bigint GROUP BY email ORDER BY "count" DESC, email OFFSET $::bigint LIMIT $::bigint',
-        [BUILD, offset, limit],
-    )
-    const queryResult = await client.query<Pick<Contributor, "count" | "email">>(builder.build())
-    return queryResult.rows.map(row => ({
-        ...row,
-        _links: {
-            images: { href: `/images?build=${BUILD}&contributor=${encodeURIComponent(row.email)}` },
-            self: { href: `mailto:${row.email}` },
-        },
-        build: BUILD,
-        created: "0000-00-00T00:00:00.000Z",
-        uuid: "00000000-0000-0000-0000-000000000000",
-    }))
+    /*embed: ReadonlyArray<string & keyof ContributorEmbedded>,*/
+): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
+    const queryResult = await client.query<{ json: string; uuid: UUID }>({
+        text: "SELECT json,uuid from contributor WHERE build=$::bigint ORDER BY sort_index OFFSET $::bigint LIMIT $::bigint",
+        values: [BUILD, offset, limit],
+    })
+    return queryResult.rows.map(({ json, uuid }) => [{ href: `/contributors/${uuid}?build=${BUILD}` }, json])
 }
 export const getContributors: Operation<GetContributorsParameters, GetContributorsService> = async (
-    { accept, build, "if-none-match": ifNoneMatch, page },
+    { accept, "if-match": ifMatch, "if-none-match": ifNoneMatch, ...queryParameters },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
+    checkIfMatchBuild(ifMatch)
     if (matchesBuildETag(ifNoneMatch)) {
         return create304()
     }
-    checkValidation(validateContributorListParameters({ build, page }), USER_MESSAGE)
-    if (checkListRedirect({ build, page }, [], USER_MESSAGE)) {
-        return createBuildRedirect("/contributors", {
-            ...(page ? { page } : null),
-        })
+    if (!queryParameters.build) {
+        return createBuildRedirect("/contributors")
     }
-    checkBuild(build, USER_MESSAGE)
+    validate(queryParameters, isContributorListParameters, USER_MESSAGE)
+    if (checkListRedirect(queryParameters, [], USER_MESSAGE)) {
+        return createBuildRedirect("/contributors", queryParameters)
+    }
+    checkBuild(queryParameters.build, USER_MESSAGE)
     return await getListResult({
         embed: [],
         getItemLinks,
-        getItems,
-        getLinkFromItem,
+        getItemLinksAndJSON,
         getTotalItems,
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/contributors",
         service,
         listQuery: {},
-        page,
+        page: queryParameters.page,
         userMessage: USER_MESSAGE,
     })
 }

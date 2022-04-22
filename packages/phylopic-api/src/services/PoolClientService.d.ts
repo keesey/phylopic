@@ -1,4 +1,4 @@
 import { PoolClient } from "pg"
-export declare interface PoolService {
+export interface PoolClientService {
     getPoolClient(): Promise<PoolClient>
 }

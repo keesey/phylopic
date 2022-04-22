@@ -1,8 +1,8 @@
 import { APIGatewayProxyResult } from "aws-lambda"
-import { Link } from "phylopic-api-types"
-import CACHE_PER_BUILD_HEADERS from "../headers/CACHE_PER_BUILD_HEADERS"
-import CORS_HEADERS from "../headers/CORS_HEADERS"
-import DATA_HEADERS from "../headers/DATA_HEADERS"
+import { Link } from "phylopic-api-models/src"
+import CACHE_PER_BUILD_HEADERS from "../headers/responses/CACHE_PER_BUILD_HEADERS"
+import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
+import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 const formatNumber = (n: number) => (isFinite(n) ? JSON.stringify(n) : '"*"')
 const getRange = (
     start: number,

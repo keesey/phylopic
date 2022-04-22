@@ -1,6 +1,6 @@
 import { TitledLink } from "phylopic-api-models"
 import { Contributor, Image, isContributor, isImage, isNode, isSource, Node, Source } from "phylopic-source-models"
-import { compareStrings, normalizeUUID, UUID } from "phylopic-utils"
+import { compareStrings, normalizeUUID, UUID } from "phylopic-utils/src"
 import { Arc, Digraph } from "simple-digraph"
 import listDir from "../fsutils/listDir"
 import readJSON from "../fsutils/readJSON"
@@ -139,14 +139,14 @@ const processClade = (
     }
     args.depths.set(uuid, depth)
     args.sortIndices.set(uuid, args.sortIndex++)
-    ;[...args.phylogeny[1].values()]
-        .filter(([head]) => head === vertex)
-        .map(
-            ([, tail]) =>
-                [tail, args.sizes.get(tail) ?? 0, args.verticesToNodeUUIDs.get(tail)] as [number, number, UUID],
-        )
-        .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
-        .forEach(([vertex]) => processClade(args, vertex, depth + 1))
+        ;[...args.phylogeny[1].values()]
+            .filter(([head]) => head === vertex)
+            .map(
+                ([, tail]) =>
+                    [tail, args.sizes.get(tail) ?? 0, args.verticesToNodeUUIDs.get(tail)] as [number, number, UUID],
+            )
+            .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
+            .forEach(([vertex]) => processClade(args, vertex, depth + 1))
 }
 const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, vertex: number): number => {
     const arcs = [...phylogeny[1].values()].filter(([head]) => head === vertex)

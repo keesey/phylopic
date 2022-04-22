@@ -1,4 +1,4 @@
-import { EntityParameters, ListParameters } from "phylopic-api-types"
+import { EntityParameters, ListParameters } from "phylopic-api-models/src/queryParameters"
 import APIError from "../errors/APIError"
 const isValidEmbedField = (value: unknown, validEmbedValues: readonly string[]): value is string => {
     return typeof value === "string" && validEmbedValues.includes(value)
@@ -7,14 +7,16 @@ const checkListRedirect = <TEmbedded>(
     parameters: ListParameters<TEmbedded>,
     entityEmbedFields: ReadonlyArray<string & keyof EntityParameters<TEmbedded>> = [],
     userMessage = "There was a problem with a request for data.",
-): parameters is ListParameters<TEmbedded> & { build: undefined } => {
+): parameters is ListParameters<TEmbedded> &
+    Readonly<{ build: undefined }> &
+    Readonly<Record<string, string | number | boolean | undefined>> => {
     const { build, page } = parameters
     if (!build) {
         if (page) {
             throw new APIError(400, [
                 {
                     developerMessage:
-                        "Cannot pass `page` without also specifying a build. You may omit it to find the latest build. Or, check the body of this response.",
+                        "Cannot pass `page` without also specifying a build. You may omit `page`` to find the latest build. Or, check the body of this response.",
                     field: "build",
                     type: "BAD_REQUEST_PARAMETERS",
                     userMessage,

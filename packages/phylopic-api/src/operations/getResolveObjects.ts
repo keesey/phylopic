@@ -10,20 +10,20 @@ import {
 } from "phylopic-api-types"
 import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
-import createRedirectHeaders from "../headers/createRedirectHeaders"
-import DATA_HEADERS from "../headers/DATA_HEADERS"
+import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
+import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
-import { PoolService } from "../services/PoolService"
+import { PoolClientService } from "../services/PoolClientService"
 import checkValidation from "../validation/checkValidation"
 import { Operation } from "./Operation"
 export interface GetResolveObjectsParameters extends Partial<Omit<ResolveParameters, "objectID">> {
     readonly accept?: string
     readonly body: string | null
 }
-export type GetResolveObjectsService = PoolService
+export type GetResolveObjectsService = PoolClientService
 const getRedirect = async (
-    service: PoolService,
+    service: PoolClientService,
     authority: Authority | undefined,
     namespace: Namespace | undefined,
     objectIDs: ObjectID[],

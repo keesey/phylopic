@@ -1,6 +1,6 @@
 import APIError from "../errors/APIError"
 import BUILD from "./BUILD"
-import { isPositiveInteger } from "phylopic-utils/src/types"
+import { isPositiveInteger } from "phylopic-utils/src"
 const getDeveloperMessage = (buildStatus: string) =>
     `${buildStatus} \`build\` index. Should be the current build index (${BUILD}). The current value can always be gotten by omitting the parameter and following the redirect. Or, see the body of this response.`
 const checkBuild = (build: string | undefined, userMessage = "There was a problem with a request for data.") => {
@@ -45,7 +45,7 @@ const checkBuild = (build: string | undefined, userMessage = "There was a proble
                     userMessage,
                 },
             ]),
-                { "cache-control": "no-cache" })
+            { "cache-control": "no-cache" })
         )
     }
 }

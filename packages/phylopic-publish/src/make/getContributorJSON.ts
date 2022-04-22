@@ -1,5 +1,5 @@
 import { Contributor } from "phylopic-api-models/src/types"
-import { normalizeUUID } from "phylopic-utils"
+import { normalizeUUID } from "phylopic-utils/src"
 import { UUID } from "phylopic-utils/src/models"
 import type { SourceData } from "./getSourceData"
 const getContributorJSON = (uuid: UUID, data: SourceData, count: number): Contributor => {
@@ -13,8 +13,8 @@ const getContributorJSON = (uuid: UUID, data: SourceData, count: number): Contri
             contact:
                 sourceContributor.emailAddress && sourceContributor.showEmailAddress
                     ? {
-                          href: `mailto:${sourceContributor.emailAddress}`,
-                      }
+                        href: `mailto:${sourceContributor.emailAddress}`,
+                    }
                     : null,
             images: {
                 href: `/images?contributor=${encodeURIComponent(uuid)}`,

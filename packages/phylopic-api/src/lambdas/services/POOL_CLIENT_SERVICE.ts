@@ -1,7 +1,7 @@
 import { Pool } from "pg"
-import { PoolService } from "../../services/PoolService"
+import { PoolClientService } from "../../services/PoolClientService"
 let pool: Pool | undefined
-const POOL_SERVICE: PoolService = {
+const POOL_CLIENT_SERVICE: PoolClientService = {
     getPoolClient() {
         return (
             pool ??
@@ -14,4 +14,4 @@ const POOL_SERVICE: PoolService = {
         ).connect()
     },
 }
-export default POOL_SERVICE
+export default POOL_CLIENT_SERVICE

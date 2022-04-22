@@ -1,4 +1,4 @@
-import type { Error as ErrorData } from "phylopic-api-types"
+import type { Error as ErrorModel } from "phylopic-api-models/src"
 import APIError from "../errors/APIError"
 const DEFAULT_START = 0
 const DEFAULT_LENGTH = 16
@@ -6,7 +6,7 @@ const MAXIMUM_LENGTH = 64
 const normalizeRange = (params: { start?: string; length?: string }, entityLabel = "item") => {
     const start = typeof params.start === "string" ? parseInt(params.start, 10) : null
     const length = typeof params.length === "string" ? parseInt(params.length, 10) : null
-    const errors: ErrorData[] = []
+    const errors: ErrorModel[] = []
     if (typeof length === "number" && (isNaN(length) || length > MAXIMUM_LENGTH || length <= 0)) {
         errors.push({
             developerMessage: `Invalid \`length\` property. Must be an integer from 1 to ${MAXIMUM_LENGTH}.`,

@@ -1,5 +1,12 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
-import { ImageListParameters, NodeListParameters } from "phylopic-api-types"
+import {
+    CONTRIBUTOR_EMBEDDED_PARAMETERS,
+    ImageListParameters,
+    IMAGE_EMBEDDED_PARAMETERS,
+    NodeListParameters,
+    NODE_EMBEDDED_PARAMETERS,
+} from "phylopic-api-models/src"
+import getContributor from "src/operations/getContributor"
 import APIError from "../errors/APIError"
 import create405 from "../errors/create405"
 import errorToResult from "../errors/errorToResult"
@@ -12,21 +19,18 @@ import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
 import getResolveObjects from "../operations/getResolveObjects"
-import { PoolService } from "../services/PoolService"
-import { RedisService } from "../services/RedisService"
+import { PoolClientService } from "../services/PoolClientService"
 import { S3Service } from "../services/S3Service"
 import getParameters from "./parameters/getParameters"
 import getUUID from "./parameters/getUUID"
-import POOL_SERVICE from "./services/POOL_SERVICE"
-import REDIS_SERVICE from "./services/REDIS_SERVICE"
+import POOL_CLIENT_SERVICE from "./services/POOL_CLIENT_SERVICE"
 import S3_SERVICE from "./services/S3_SERVICE"
-const SERVICE: PoolService & RedisService & S3Service = {
-    ...POOL_SERVICE,
-    ...REDIS_SERVICE,
+const SERVICE: PoolClientService & S3Service = {
+    ...POOL_CLIENT_SERVICE,
     ...S3_SERVICE,
 }
-const NODE_FILTER_PARAMS: ReadonlyArray<keyof NodeListParameters> = ["name"]
-const IMAGE_FILTER_PARAMS: ReadonlyArray<keyof ImageListParameters> = [
+const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["name"]
+const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [
     "clade",
     "contributor",
     "license_by",
@@ -35,9 +39,9 @@ const IMAGE_FILTER_PARAMS: ReadonlyArray<keyof ImageListParameters> = [
     "name",
     "node",
 ]
-const getEntityParameters = (event: APIGatewayProxyEvent) => ({
+const getEntityParameters = (event: APIGatewayProxyEvent, embeddedParameters: readonly string[]) => ({
     ...getParameters(event.headers, ["accept", "if-none-match"]),
-    ...getParameters(event.queryStringParameters, ["embed"]),
+    ...getParameters(event.queryStringParameters, embeddedParameters),
     ...getUUID(event.pathParameters),
 })
 const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (event: APIGatewayProxyEvent) => {
@@ -50,7 +54,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return getAutocomplete(
                         {
                             ...getParameters(event.headers, ["accept", "if-none-match"]),
-                            ...getParameters(event.queryStringParameters, ["query"]),
+                            ...getParameters(event.queryStringParameters, ["build", "query"]),
                         },
                         SERVICE,
                     )
@@ -67,7 +71,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return getContributors(
                         {
                             ...getParameters(event.headers, ["accept", "if-match", "if-none-match"]),
-                            ...getParameters(event.queryStringParameters, ["length", "start"]),
+                            ...getParameters(event.queryStringParameters, ["build", "page"]),
                         },
                         SERVICE,
                     )
@@ -85,10 +89,10 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             ...getParameters(event.headers, ["accept", "if-match", "if-none-match"]),
                             ...getParameters(event.queryStringParameters, [
-                                ...IMAGE_FILTER_PARAMS,
-                                "embed",
-                                "length",
-                                "start",
+                                "build",
+                                "page",
+                                ...IMAGE_FILTER_PARAMETERS,
+                                ...IMAGE_EMBEDDED_PARAMETERS,
                             ]),
                         },
                         SERVICE,
@@ -107,10 +111,10 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             ...getParameters(event.headers, ["accept", "if-match", "if-none-match"]),
                             ...getParameters(event.queryStringParameters, [
-                                ...NODE_FILTER_PARAMS,
-                                "embed",
-                                "length",
-                                "start",
+                                "build",
+                                "page",
+                                ...NODE_FILTER_PARAMETERS,
+                                ...NODE_EMBEDDED_PARAMETERS,
                             ]),
                         },
                         SERVICE,
@@ -122,10 +126,20 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
             }
         }
     }
+    if (path.startsWith("/contributors/")) {
+        switch (event.httpMethod) {
+            case "GET": {
+                return getContributor(getEntityParameters(event, CONTRIBUTOR_EMBEDDED_PARAMETERS), SERVICE)
+            }
+            default: {
+                throw create405()
+            }
+        }
+    }
     if (path.startsWith("/images/")) {
         switch (event.httpMethod) {
             case "GET": {
-                return getImage(getEntityParameters(event), SERVICE)
+                return getImage(getEntityParameters(event, IMAGE_EMBEDDED_PARAMETERS), SERVICE)
             }
             default: {
                 throw create405()
@@ -139,7 +153,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return getNodeLineage(
                         {
                             ...getParameters(event.headers, ["accept", "if-match", "if-none-match"]),
-                            ...getParameters(event.queryStringParameters, ["embed", "length", "start"]),
+                            ...getParameters(event.queryStringParameters, ["embed", "build", "page"]),
                             ...getUUID(event.pathParameters),
                         },
                         SERVICE,
@@ -152,7 +166,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
         } else {
             switch (event.httpMethod) {
                 case "GET": {
-                    return getNode(getEntityParameters(event), SERVICE)
+                    return getNode(getEntityParameters(event, NODE_EMBEDDED_PARAMETERS), SERVICE)
                 }
                 default: {
                     throw create405()

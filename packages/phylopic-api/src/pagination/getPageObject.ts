@@ -1,8 +1,8 @@
-import { Link } from "phylopic-api-types"
-import createSearch from "../utils/http/createSearch"
+import { Link } from "phylopic-api-models/src/types"
+import { createSearch } from "phylopic-utils/src"
 const getPageObject = (
     listEndpoint: string,
-    listQuery: Readonly<Record<string, string>>,
+    listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
     pageIndex: number,
     lastPage: boolean,
     items: readonly Link[],

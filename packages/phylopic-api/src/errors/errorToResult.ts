@@ -1,8 +1,8 @@
 import { APIGatewayProxyResult } from "aws-lambda"
-import type { Error as PhyloPicError } from "phylopic-api-types"
+import type { Error as ErrorModel } from "phylopic-api-models/src"
 import BUILD from "../build/BUILD"
-import CORS_HEADERS from "../headers/CORS_HEADERS"
-import DATA_HEADERS from "../headers/DATA_HEADERS"
+import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
+import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import APIError from "./APIError"
 const fromAPIError = (e: APIError, stack: string | null): APIGatewayProxyResult => ({
     body: JSON.stringify({ build: BUILD, errors: e.data, stack }),
@@ -18,7 +18,7 @@ const errorToResult = (e: unknown): APIGatewayProxyResult => {
     if (e instanceof APIError) {
         return fromAPIError(e, stack)
     }
-    const errors: readonly PhyloPicError[] = [
+    const errors: readonly ErrorModel[] = [
         {
             developerMessage: String(e) || "Unknown error.",
             type: "DEFAULT_5XX",

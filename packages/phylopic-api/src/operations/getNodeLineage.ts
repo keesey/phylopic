@@ -8,7 +8,7 @@ import normalizeRange from "../lists/normalizeRange"
 import queryUUIDs from "../lists/queryUUIDs"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
-import { PoolService } from "../services/PoolService"
+import { PoolClientService } from "../services/PoolClientService"
 import { RedisService } from "../services/RedisService"
 import { S3Service } from "../services/S3Service"
 import create304 from "../utils/aws/create304"
@@ -25,7 +25,7 @@ export interface GetNodeLineageParameters extends Partial<ListParameters> {
     "if-match"?: string
     uuid?: string
 }
-export type GetNodeLineageService = PoolService & RedisService & S3Service
+export type GetNodeLineageService = PoolClientService & RedisService & S3Service
 const getHRef = (uuid: string, { embed }: Pick<GetNodeLineageParameters, "embed">) => {
     const query = createQueryString({ embed })
     return `/nodes/${encodeURIComponent(uuid)}/lineage${query ? `?${query}` : ""}`

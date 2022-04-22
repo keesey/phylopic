@@ -1,44 +1,62 @@
-import { EntityParameters, ImageEmbedded, UUID, validateImageParameters } from "phylopic-api-types"
-import { DataRequestHeaders } from "../headers/DataRequestHeader"
+import {
+    EmbeddableParameters,
+    EntityParameters,
+    Image,
+    ImageEmbedded,
+    ImageLinks,
+    IMAGE_EMBEDDED_PARAMETERS,
+    isEntityParameters,
+    isImage,
+} from "phylopic-api-models/src"
+import { normalizeUUID, UUID } from "phylopic-utils/src"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import matchesBuildETag from "../build/matchesBuildETag"
-import getEntityJSON from "../entities/get"
-import imageType from "../entities/image"
-import STANDARD_HEADERS from "../headers/STANDARD_HEADERS"
+import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"
+import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import STANDARD_HEADERS from "../headers/responses/STANDARD_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
-import { S3Service } from "../services/S3Service"
+import { PoolClientService } from "../services/PoolClientService"
 import create304 from "../utils/aws/create304"
-import normalizeUUIDv4 from "../utils/uuid/normalizeUUIDv4"
-import checkValidation from "../validation/checkValidation"
+import validate from "../validation/validate"
 import { Operation } from "./Operation"
-export type GetImageParameters = DataRequestHeaders & EntityParameters<ImageEmbedded> & {
-    uuid: UUID
-}
-export type GetImageService = S3Service
+export type GetImageParameters = DataRequestHeaders & Partial<EntityParameters<ImageEmbedded>>
+export type GetImageService = PoolClientService
 const USER_MESSAGE = "There was a problem with an attempt to load silhouette data."
+const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParameters<ImageEmbedded> =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    IMAGE_EMBEDDED_PARAMETERS.includes(x as any)
 export const getImage: Operation<GetImageParameters, GetImageService> = async (
-    { accept, build, embed_generalNode, embed_nodes, embed_specificNode, "if-none-match": ifNoneMatch, uuid },
+    { accept, "if-none-match": ifNoneMatch, ...queryParameters },
     service: GetImageService,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     if (matchesBuildETag(ifNoneMatch)) {
         return create304()
     }
-    uuid = normalizeUUIDv4(uuid, imageType.userLabel)
-    const query = { embed_generalNode, embed_nodes, embed_specificNode }
-    checkValidation(validateImageParameters(query), USER_MESSAGE)
-    if (!build) {
-        return createBuildRedirect(`/images/${encodeURIComponent(uuid)}`, query)
+    validate(queryParameters, isEntityParameters(IMAGE_EMBEDDED_PARAMETERS), USER_MESSAGE)
+    const uuid = normalizeUUID(queryParameters.uuid as UUID)
+    if (!queryParameters.build) {
+        return createBuildRedirect(`/image/${encodeURIComponent(uuid)}`, queryParameters)
     }
-    checkBuild(build, USER_MESSAGE)
-    const client = service.getS3Client()
+    checkBuild(queryParameters.build, USER_MESSAGE)
+    const embeds = Object.keys(queryParameters)
+        .filter(isEmbeddedParameter)
+        .map(key => key.slice("embed_".length) as string & keyof ImageEmbedded)
+    const client = await service.getPoolClient()
     let body: string
     try {
-        body = await getEntityJSON(client, query, uuid, imageType)
+        body = await selectEntityJSONWithEmbedded<Image, ImageLinks>(
+            client,
+            "image",
+            uuid,
+            embeds,
+            isImage,
+            "silhouette image",
+        )
     } finally {
-        client.destroy()
+        client.release()
     }
     return {
         body,

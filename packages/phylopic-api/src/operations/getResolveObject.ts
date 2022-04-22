@@ -8,21 +8,21 @@ import {
     validateResolveParameters,
 } from "phylopic-api-types"
 import APIError from "../errors/APIError"
-import createRedirectHeaders from "../headers/createRedirectHeaders"
-import DATA_HEADERS from "../headers/DATA_HEADERS"
+import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
+import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import getExternalLink from "../search/getExternalLink"
 import getInternalLink from "../search/getInternalLink"
-import { PoolService } from "../services/PoolService"
+import { PoolClientService } from "../services/PoolClientService"
 import checkValidation from "../validation/checkValidation"
 import { Operation } from "./Operation"
 export interface GetResolveObjectParameters extends Partial<ResolveParameters> {
     readonly accept?: string
 }
-export type GetResolveObjectsService = PoolService
+export type GetResolveObjectsService = PoolClientService
 const getRedirect = async (
-    service: PoolService,
+    service: PoolClientService,
     authority: Authority | undefined,
     namespace: Namespace | undefined,
     objectID: ObjectID | undefined,

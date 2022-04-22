@@ -1,22 +1,26 @@
 {
     "compilerOptions": {
         "declaration": true,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "module": "CommonJS",
-        "moduleResolution": "Node",
+        "isolatedModules": true,
+        "incremental": true,
+        "lib": ["dom", "esnext"],
+        "module": "commonjs",
+        "moduleResolution": "node",
         "noImplicitAny": true,
         "noImplicitThis": true,
         "outDir": "dist",
         "paths": {
             "~/*": ["./src/*"]
         },
-        "rootDir": "src",
+        "resolveJsonModule": true,
+        "skipLibCheck": false,
         "strict": true,
-        "target": "ESNext"
+        "target": "esnext",
+        "typeRoots": ["./node_modules/@types", "./custom_typings"]
     },
-    "exclude": ["src/**/*.spec.ts"],
-    "include": ["src/**/*.ts"],
-    "paths": {
-        "phylopic-api-models": "."
-    }
+    "exclude": ["./src/**/*.spec.ts"],
+    "include": ["./src/**/*.ts"]
 }

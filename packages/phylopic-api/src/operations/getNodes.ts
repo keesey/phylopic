@@ -8,7 +8,7 @@ import normalizeRange from "../lists/normalizeRange"
 import queryUUIDs from "../lists/queryUUIDs"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
-import { PoolService } from "../services/PoolService"
+import { PoolClientService } from "../services/PoolClientService"
 import { RedisService } from "../services/RedisService"
 import { S3Service } from "../services/S3Service"
 import checkIfMatchBuild from "../build/checkIfMatchBuild"
@@ -21,7 +21,7 @@ export type GetNodesParameters = Partial<NodeListParameters> & {
     "if-none-match"?: string
     "if-match"?: string
 }
-export type GetNodesService = PoolService & RedisService & S3Service
+export type GetNodesService = PoolClientService & RedisService & S3Service
 const getHRef = ({ embed, length = "16", name, start = "0" }: NodeListParameters) => {
     const query = createQueryString({
         embed,

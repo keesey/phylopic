@@ -101,7 +101,9 @@ functions:
                   request:
                       parameters:
                           querystrings:
-                              embed: false
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
     dynamic:
         handler: src/lambdas/dynamic.onAPIGatewayProxy
         memorySize: 1024
@@ -139,6 +141,7 @@ functions:
                               accept: false
                               if-none-match: false
                           querystrings:
+                              build: false
                               query: true
             - http:
                   cors:
@@ -163,9 +166,33 @@ functions:
                               if-match: false
                               if-none-match: false
                           querystrings:
-                              length: false
-                              sort: false
-                              start: false
+                              build: false
+                              page: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - If-Match
+                          - If-None-Match
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: "contributors/{uuid}"
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                              if-none-match: false
+                          paths:
+                              uuid: true
+                          querystrings:
+                              build: false
             - http:
                   cors:
                       allowCredentials: true
@@ -189,19 +216,18 @@ functions:
                               if-match: false
                               if-none-match: false
                           querystrings:
-                              clade: false
-                              contributor: false
-                              created_lt: false
-                              created_gt: false
-                              embed: false
-                              length: false
-                              licensecomponents: false
-                              modified_lt: false
-                              modified_gt: false
-                              name: false
-                              node: false
-                              sort: false
-                              start: false
+                              build: false
+                              filter_clade: false
+                              filter_contributor: false
+                              filter_license_by: false
+                              filter_license_nc: false
+                              filter_license_sa: false
+                              filter_name: false
+                              filter_node: false
+                              embed_generalNode: false
+                              embed_nodes: false
+                              embed_specificNode: false
+                              page: false
             - http:
                   cors:
                       allowCredentials: true
@@ -226,7 +252,10 @@ functions:
                           paths:
                               uuid: true
                           querystrings:
-                              embed: false
+                              build: false
+                              embed_generalNode: false
+                              embed_nodes: false
+                              embed_specificNode: false
             - http:
                   cors:
                       allowCredentials: true
@@ -250,16 +279,12 @@ functions:
                               if-match: false
                               if-none-match: false
                           querystrings:
-                              contributor: false
-                              created_lt: false
-                              created_gt: false
-                              embed: false
-                              length: false
-                              modified_lt: false
-                              modified_gt: false
+                              build: false
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
                               name: false
-                              sort: false
-                              start: false
+                              page: false
             - http:
                   cors:
                       allowCredentials: true

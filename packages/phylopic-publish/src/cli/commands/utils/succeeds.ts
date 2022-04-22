@@ -1,5 +1,5 @@
 import { Entity, Node } from "phylopic-source-models"
-import { UUID } from "phylopic-utils"
+import { UUID } from "phylopic-utils/src"
 import { CLIData } from "~/cli/getCLIData"
 const succeeds = (nodes: CLIData["nodes"], predecessorUUID: UUID, entity: Entity<Node>): boolean => {
     if (entity.uuid === predecessorUUID) {

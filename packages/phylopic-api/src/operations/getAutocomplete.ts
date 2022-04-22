@@ -1,24 +1,21 @@
-import { SearchParameters } from "phylopic-api-types"
+import { SearchParameters } from "phylopic-api-models/src/queryParameters"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import matchesBuildETag from "../build/matchesBuildETag"
-import createRedirectHeaders from "../headers/createRedirectHeaders"
-import STANDARD_HEADERS from "../headers/STANDARD_HEADERS"
+import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
+import STANDARD_HEADERS from "../headers/responses/STANDARD_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import MAX_AUTOCOMPLETE_RESULTS from "../search/MAX_AUTOCOMPLETE_RESULTS"
 import normalizeQuery from "../search/normalizeQuery"
-import { PoolService } from "../services/PoolService"
+import { PoolClientService } from "../services/PoolClientService"
 import create304 from "../utils/aws/create304"
 import { Operation } from "./Operation"
-interface GetAutocompleteParameters extends Partial<SearchParameters> {
-    accept?: string
-    build?: string
-    "if-none-match"?: string
-}
-type GetAutocompleteService = PoolService
-const findMatches = async (service: PoolService, query: string): Promise<readonly string[]> => {
+import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+type GetAutocompleteParameters = DataRequestHeaders & Partial<SearchParameters>
+type GetAutocompleteService = PoolClientService
+const findMatches = async (service: PoolClientService, query: string): Promise<readonly string[]> => {
     if (query.length < 2) {
         return []
     }
@@ -44,7 +41,7 @@ export const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocomple
         return create304()
     }
     if (!build) {
-        return createBuildRedirect("/autocomplete", query ? { query } : {})
+        return createBuildRedirect("/autocomplete", { query })
     }
     checkBuild(build, "There was a problem with a request to find search suggestions.")
     const normalizedQuery = await normalizeQuery(query ?? "")

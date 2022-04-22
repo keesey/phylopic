@@ -1,4 +1,5 @@
-import type { Error, ValidationFault } from "phylopic-api-types"
+import type { Error } from "phylopic-api-models"
+import type { ValidationFault } from "phylopic-utils/src"
 const convertValidationFaultsToErrors = (faults: readonly ValidationFault[], userMessage: string) =>
     faults.map(
         fault =>
