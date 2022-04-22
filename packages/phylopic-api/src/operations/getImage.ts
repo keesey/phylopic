@@ -5,20 +5,19 @@ import {
     ImageEmbedded,
     ImageLinks,
     IMAGE_EMBEDDED_PARAMETERS,
-    isEntityParameters,
     isImage,
+    isImageParameters,
 } from "phylopic-api-models/src"
 import { normalizeUUID, UUID } from "phylopic-utils/src"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import matchesBuildETag from "../build/matchesBuildETag"
 import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
-import STANDARD_HEADERS from "../headers/responses/STANDARD_HEADERS"
+import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
+import createPermanentRedirect from "../results/createPermanentRedirect"
 import { PoolClientService } from "../services/PoolClientService"
-import create304 from "../utils/aws/create304"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetImageParameters = DataRequestHeaders & Partial<EntityParameters<ImageEmbedded>>
@@ -28,17 +27,18 @@ const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParamete
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     IMAGE_EMBEDDED_PARAMETERS.includes(x as any)
 export const getImage: Operation<GetImageParameters, GetImageService> = async (
-    { accept, "if-none-match": ifNoneMatch, ...queryParameters },
+    { accept, ...queryParameters },
     service: GetImageService,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    if (matchesBuildETag(ifNoneMatch)) {
-        return create304()
-    }
-    validate(queryParameters, isEntityParameters(IMAGE_EMBEDDED_PARAMETERS), USER_MESSAGE)
-    const uuid = normalizeUUID(queryParameters.uuid as UUID)
+    validate(queryParameters, isImageParameters, USER_MESSAGE)
+    const normalizedUUID = normalizeUUID(queryParameters.uuid as UUID)
+    const path = `/images/${encodeURIComponent(normalizedUUID)}`
     if (!queryParameters.build) {
-        return createBuildRedirect(`/image/${encodeURIComponent(uuid)}`, queryParameters)
+        return createBuildRedirect(path, queryParameters)
+    }
+    if (queryParameters.uuid !== normalizedUUID) {
+        return createPermanentRedirect(path, queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
     const embeds = Object.keys(queryParameters)
@@ -50,7 +50,7 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
         body = await selectEntityJSONWithEmbedded<Image, ImageLinks>(
             client,
             "image",
-            uuid,
+            normalizedUUID,
             embeds,
             isImage,
             "silhouette image",
@@ -60,7 +60,7 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
     }
     return {
         body,
-        headers: STANDARD_HEADERS,
+        headers: DATA_HEADERS,
         statusCode: 200,
     }
 }

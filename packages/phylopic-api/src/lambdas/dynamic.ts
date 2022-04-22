@@ -6,11 +6,11 @@ import {
     NodeListParameters,
     NODE_EMBEDDED_PARAMETERS,
 } from "phylopic-api-models/src"
-import getContributor from "src/operations/getContributor"
 import APIError from "../errors/APIError"
 import create405 from "../errors/create405"
 import errorToResult from "../errors/errorToResult"
 import getAutocomplete from "../operations/getAutocomplete"
+import getContributor from "../operations/getContributor"
 import getContributors from "../operations/getContributors"
 import getImage from "../operations/getImage"
 import getImages from "../operations/getImages"
