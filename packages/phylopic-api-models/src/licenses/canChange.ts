@@ -1,5 +1,4 @@
-import { ValidLicenseURL } from "phylopic-utils/src/models/types"
-import { LicenseURL } from "phylopic-utils/src/models/types/LicenseURL"
+import { LicenseURL, ValidLicenseURL } from "phylopic-utils/src"
 import PERMITTED_LICENSE_CHANGES from "../constants/PERMITTED_LICENSE_CHANGES"
 export const canChange = (a: LicenseURL, b: ValidLicenseURL) => {
     if (a === b) {

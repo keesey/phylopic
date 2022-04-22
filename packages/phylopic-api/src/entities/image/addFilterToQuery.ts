@@ -1,4 +1,4 @@
-import { ImageListParameters } from "phylopic-api-models/src/queryParameters"
+import { ImageListParameters } from "phylopic-api-models/src"
 import QueryConfigBuilder from "../../utils/postgres/QueryConfigBuilder"
 const addFilterToQuery = (params: ImageListParameters, builder: QueryConfigBuilder) => {
     if (params.contributor !== undefined) {

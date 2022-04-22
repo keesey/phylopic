@@ -1,8 +1,7 @@
 import { createReadStream } from "fs"
 import { join } from "path"
-import { Image, Link, MediaLink } from "phylopic-api-models/src/types"
-import { normalizeUUID } from "phylopic-utils/src"
-import { isImageMediaType, RasterMediaType, UUID, VectorMediaType } from "phylopic-utils/src/models"
+import { Image, Link, MediaLink } from "phylopic-api-models/src"
+import { isImageMediaType, normalizeUUID, RasterMediaType, UUID, VectorMediaType } from "phylopic-utils/src"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir"
 import type { SourceData } from "./getSourceData"
@@ -13,7 +12,7 @@ const getNodes = (uuid: string, data: SourceData): readonly Link[] => {
     if (!nodeUUIDs) {
         return []
     }
-    return nodeUUIDs.map(nodeUUID => ({ href: `/nodes/${encodeURIComponent(nodeUUID)}` }))
+    return nodeUUIDs.map(nodeUUID => ({ href: `/nodes/${encodeURIComponent(nodeUUID)}?build=${data.build}` }))
 }
 const getFileMetadata = (filename: string) => {
     const stream = createReadStream(filename)
@@ -111,12 +110,12 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
     return {
         _links: {
             contributor: {
-                href: `/contributors/${encodeURIComponent(sourceImage.contributor)}`,
+                href: `/contributors/${encodeURIComponent(sourceImage.contributor)}?build=${data.build}`,
             },
             generalNode: sourceImage.general
                 ? {
-                    href: `/nodes/${encodeURIComponent(sourceImage.general)}`,
-                }
+                      href: `/nodes/${encodeURIComponent(sourceImage.general)}?build=${data.build}`,
+                  }
                 : null,
             "http://ogp.me/ns#image": socialFile,
             license: {
@@ -125,11 +124,11 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
             nodes: getNodes(uuid, data),
             rasterFiles,
             self: {
-                href: `/images/${encodeURIComponent(uuid)}`,
+                href: `/images/${encodeURIComponent(uuid)}?build=${data.build}`,
             },
             sourceFile,
             specificNode: {
-                href: `/nodes/${encodeURIComponent(sourceImage.specific)}`,
+                href: `/nodes/${encodeURIComponent(sourceImage.specific)}?build=${data.build}`,
             },
             thumbnailFiles,
             "twitter:image": socialFile,

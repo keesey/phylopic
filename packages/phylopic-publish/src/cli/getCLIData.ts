@@ -1,7 +1,7 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
-import { Image, isImage, isNode, isSource, Node, Source, SOURCE_BUCKET_NAME } from "phylopic-source-models"
-import { getJSON } from "phylopic-utils/src/aws/s3"
-import { isUUID, normalizeUUID, UUID } from "phylopic-utils/src/models"
+import { Image, isImage, isNode, isSource, Node, Source, SOURCE_BUCKET_NAME } from "phylopic-source-models/src"
+import { getJSON } from "phylopic-utils/src"
+import { isUUID, normalizeUUID, UUID } from "phylopic-utils/src"
 export type CLIData = Readonly<{
     externals: ReadonlyMap<string, Readonly<{ uuid: UUID; title: string }>>
     imageFileKeys: ReadonlyMap<UUID, string>

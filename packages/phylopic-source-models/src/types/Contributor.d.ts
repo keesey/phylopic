@@ -1,4 +1,4 @@
-import { EmailAddress, ISOTimestamp } from "phylopic-utils/src/models/types"
+import { EmailAddress, ISOTimestamp } from "phylopic-utils/src"
 export type Contributor = Readonly<{
     emailAddress: EmailAddress | null
     created: ISOTimestamp

@@ -1,5 +1,4 @@
-import { isISOTimestamp, isUUID } from "phylopic-utils/src/models/detection"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import { isISOTimestamp, isUUID, ValidationFaultCollector } from "phylopic-utils/src"
 import { Entity, Links } from "../types"
 import isData from "./isData"
 export const isEntity = <TLinks extends Links>(

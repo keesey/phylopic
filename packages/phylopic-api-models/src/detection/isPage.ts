@@ -1,5 +1,4 @@
-import { isArray, isNonnegativeInteger, isNormalizedText, isNullOr } from "phylopic-utils/src/detection"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import { isArray, isNonnegativeInteger, isNormalizedText, isNullOr, ValidationFaultCollector } from "phylopic-utils/src"
 import { Page } from "../types"
 import isData from "./isData"
 import isLink from "./isLink"

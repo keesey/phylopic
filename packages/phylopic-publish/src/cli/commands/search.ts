@@ -1,4 +1,4 @@
-import { Nomen } from "phylopic-utils/src/models"
+import { Nomen } from "phylopic-utils/src"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import nameMatches from "./utils/nameMatches"

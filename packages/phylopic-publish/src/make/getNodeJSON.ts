@@ -1,7 +1,6 @@
-import { Link, Node, TitledLink } from "phylopic-api-models"
-import { Entity, Image } from "phylopic-source-models"
-import { UUID } from "phylopic-utils/src/models"
-import { isDefined, isString } from "phylopic-utils/src/types"
+import { Link, Node, TitledLink } from "phylopic-api-models/src"
+import { Entity, Image } from "phylopic-source-models/src"
+import { isDefined, isString, UUID } from "phylopic-utils/src"
 import { immediateSuccessors } from "simple-digraph"
 import type { SourceData } from "./getSourceData"
 const getChildNodes = (vertex: number, data: SourceData): readonly Link[] => {
@@ -120,13 +119,13 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     return {
         _links: {
             childNodes: getChildNodes(vertex, data),
-            cladeImages: { href: `/images?clade=${uuid}` },
+            cladeImages: { href: `/images?build=${data.build}&clade=${uuid}` },
             external: getExternal(uuid, data),
-            images: { href: `/images/?node=${uuid}` },
-            lineage: { href: `/nodes/${uuid}/lineage` },
-            parentNode: sourceNode.parent ? { href: `/nodes/${sourceNode.parent}` } : null,
+            images: { href: `/images?build=${data.build}&node=${uuid}` },
+            lineage: { href: `/nodes/${uuid}/lineage?build=${data.build}` },
+            parentNode: sourceNode.parent ? { href: `/nodes/${sourceNode.parent}?build=${data.build}` } : null,
             primaryImage: getPrimaryImage(uuid, data),
-            self: { href: `/nodes/${uuid}` },
+            self: { href: `/nodes/${uuid}?build=${data.build}` },
         },
         build: data.build,
         created: sourceNode.created,

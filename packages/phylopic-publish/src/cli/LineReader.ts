@@ -1,5 +1,5 @@
 import { parseNomen } from "parse-nomen"
-import { Entity, Image, Node } from "phylopic-source-models/src/types"
+import { Entity, Image, Node } from "phylopic-source-models/src"
 import {
     EmailAddress,
     Identifier,
@@ -9,7 +9,7 @@ import {
     Nomen,
     normalizeUUID,
     UUID,
-} from "phylopic-utils/src/models"
+} from "phylopic-utils/src"
 import { v4, version } from "uuid"
 import nameMatches from "./commands/utils/nameMatches"
 import { CLIData } from "./getCLIData"

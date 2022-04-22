@@ -1,4 +1,4 @@
-import { UUID } from "phylopic-utils/src/models"
+import { UUID } from "phylopic-utils/src"
 import { CLIData } from "../../getCLIData"
 const checkNewUUID = (cliData: Pick<CLIData, "images" | "nodes">, uuid: UUID) => {
     if (cliData.nodes.has(uuid)) {

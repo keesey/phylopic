@@ -1,7 +1,7 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import "dotenv/config"
 import { Client } from "pg"
-import { Source } from "phylopic-source-models"
+import { Source } from "phylopic-source-models/src"
 import readJSON from "./fsutils/readJSON"
 import cleanEntities from "./make/cleanEntities"
 import getBuild from "./make/getBuild"

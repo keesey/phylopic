@@ -1,9 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { isImage, isNode } from "phylopic-source-models"
-import { Entity, Image, Node } from "phylopic-source-models"
-import { stringifyNormalized } from "phylopic-utils/src/json"
-import { normalizeNomina, UUID } from "phylopic-utils/src/models"
-import { stringifyNomen } from "phylopic-utils/src/nomina"
+import { Entity, Image, isImage, isNode, Node } from "phylopic-source-models/src"
+import { normalizeNomina, stringifyNomen, stringifyNormalized, UUID } from "phylopic-utils/src"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Node>): CommandResult => {

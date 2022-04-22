@@ -1,10 +1,7 @@
 import { ListObjectsV2Command, S3Client, _Object } from "@aws-sdk/client-s3"
 import { TitledLink } from "phylopic-api-models/src"
-import { Image, isImage, isNode, isSource, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
-import { Source } from "phylopic-source-models/src/types"
-import { isUUID, normalizeUUID } from "phylopic-utils/src"
-import { getJSON } from "phylopic-utils/src/aws/s3"
-import { UUID } from "phylopic-utils/src/models"
+import { Image, isImage, isNode, isSource, Node, Source, SOURCE_BUCKET_NAME } from "phylopic-source-models/src"
+import { getJSON, isUUID, normalizeUUID, UUID } from "phylopic-utils/src"
 import { Digraph } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny"
 const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]

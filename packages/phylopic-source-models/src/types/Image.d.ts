@@ -1,4 +1,4 @@
-import { EmailAddress, ISOTimestamp, LicenseURL, UUID } from "phylopic-utils/src/models"
+import { EmailAddress, ISOTimestamp, LicenseURL, UUID } from "phylopic-utils/src"
 export type Image = Readonly<{
     attribution?: string
     created: ISOTimestamp

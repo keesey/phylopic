@@ -1,4 +1,4 @@
-import { Entity, Node } from "phylopic-source-models"
+import { Entity, Node } from "phylopic-source-models/src"
 import { CLIData } from "../getCLIData"
 import autolinkEOL from "./autolink/eol"
 import autolinkOTOL from "./autolink/otol"

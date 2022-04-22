@@ -1,7 +1,6 @@
 import { ClientBase } from "pg"
 import { Link } from "phylopic-api-models/src"
-import { isDefined } from "phylopic-utils"
-import { UUID } from "phylopic-utils/src"
+import { isDefined, UUID } from "phylopic-utils/src"
 import BUILD from "../build/BUILD"
 import QueryConfigBuilder from "../utils/postgres/QueryConfigBuilder"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"

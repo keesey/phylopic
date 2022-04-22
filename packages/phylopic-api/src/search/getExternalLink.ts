@@ -1,5 +1,6 @@
 import { PoolClient } from "pg"
-import { Authority, Namespace, ObjectID, TitledLink, UUID } from "phylopic-api-types"
+import { TitledLink } from "phylopic-api-models/src"
+import { Authority, Namespace, ObjectID, UUID } from "phylopic-utils/src"
 import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
 const getExternalLink = async (

@@ -1,8 +1,9 @@
-import { SearchParameters } from "phylopic-api-models/src/queryParameters"
+import { SearchParameters } from "phylopic-api-models/src"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import matchesBuildETag from "../build/matchesBuildETag"
+import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import STANDARD_HEADERS from "../headers/responses/STANDARD_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
@@ -12,7 +13,6 @@ import normalizeQuery from "../search/normalizeQuery"
 import { PoolClientService } from "../services/PoolClientService"
 import create304 from "../utils/aws/create304"
 import { Operation } from "./Operation"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 type GetAutocompleteParameters = DataRequestHeaders & Partial<SearchParameters>
 type GetAutocompleteService = PoolClientService
 const findMatches = async (service: PoolClientService, query: string): Promise<readonly string[]> => {

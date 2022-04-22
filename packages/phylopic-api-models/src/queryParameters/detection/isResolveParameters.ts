@@ -1,7 +1,4 @@
-import isAuthority from "phylopic-utils/src/models/detection/isAuthority"
-import isNamespace from "phylopic-utils/src/models/detection/isNamespace"
-import isObjectID from "phylopic-utils/src/models/detection/isObjectID"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import { isAuthority, isNamespace, isObjectID, ValidationFaultCollector } from "phylopic-utils/src"
 import { NodeEmbedded } from "../../types/NodeWithEmbedded"
 import { NODE_EMBEDDED_PARAMETERS } from "../constants"
 import { ResolveParameters } from "../types"

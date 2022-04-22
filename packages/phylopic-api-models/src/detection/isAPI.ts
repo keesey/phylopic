@@ -1,7 +1,4 @@
-import { isArray, isNormalizedText } from "phylopic-utils/src/detection"
-import { isISOTimestamp } from "phylopic-utils/src/models"
-import { isURL } from "phylopic-utils/src/models/detection"
-import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
+import { isArray, isISOTimestamp, isNormalizedText, isURL, ValidationFaultCollector } from "phylopic-utils/src"
 import { API } from "../types"
 import isData from "./isData"
 import isLink from "./isLink"

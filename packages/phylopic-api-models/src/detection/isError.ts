@@ -1,7 +1,12 @@
-import { isNormalizedText, isObject, isUndefinedOr } from "phylopic-utils/src/detection"
-import { isURL } from "phylopic-utils/src/models/detection"
-import { isString } from "phylopic-utils/src/types"
-import { invalidate, ValidationFaultCollector } from "phylopic-utils/src/validation"
+import {
+    invalidate,
+    isNormalizedText,
+    isObject,
+    isString,
+    isUndefinedOr,
+    isURL,
+    ValidationFaultCollector,
+} from "phylopic-utils/src"
 import { Error } from "../types/Error"
 import isErrorType from "./isErrorType"
 export const isError = (x: unknown, faultCollector?: ValidationFaultCollector): x is Error =>

@@ -1,5 +1,5 @@
-import { Node } from "phylopic-source-models"
-import { UUID } from "phylopic-utils/src/models"
+import { Node } from "phylopic-source-models/src"
+import { UUID } from "phylopic-utils/src"
 const precedes = (nodes: ReadonlyMap<UUID, Node>, predecessor: UUID, successor: UUID): boolean => {
     if (predecessor === successor) {
         return true

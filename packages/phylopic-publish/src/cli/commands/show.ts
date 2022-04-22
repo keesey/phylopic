@@ -1,4 +1,4 @@
-import { Entity, Image, Node } from "phylopic-source-models"
+import { Entity, Image, Node } from "phylopic-source-models/src"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import getLineage from "./utils/getLineage"

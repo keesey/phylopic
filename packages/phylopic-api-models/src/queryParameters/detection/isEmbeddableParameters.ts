@@ -1,5 +1,4 @@
-import { FaultDetector } from "phylopic-utils/src/detection"
-import { invalidate, ValidationFaultCollector } from "phylopic-utils/src/validation"
+import { FaultDetector, invalidate, ValidationFaultCollector } from "phylopic-utils/src"
 import { EmbeddableParameters } from "../types/EmbeddableParameters"
 export const isEmbeddableParameters =
     <TEmbedded>(

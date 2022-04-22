@@ -1,7 +1,7 @@
 import { ClientBase } from "pg"
-import { Image } from "phylopic-api-models"
 import {
     EmbeddableParameters,
+    Image,
     ImageEmbedded,
     ImageLinks,
     ImageListParameters,

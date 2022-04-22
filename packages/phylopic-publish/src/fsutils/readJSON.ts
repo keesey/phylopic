@@ -1,5 +1,4 @@
-import { FaultDetector } from "phylopic-utils/src/detection"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import { FaultDetector, ValidationFaultCollector } from "phylopic-utils/src"
 import readBuffer from "./readBuffer"
 export type Validator<T> = (object: T) => void
 const readJSON = async <T>(filePath: string, detect?: FaultDetector<T>) => {

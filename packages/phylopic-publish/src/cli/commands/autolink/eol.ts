@@ -1,7 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import axios from "axios"
 import fetch, { Request } from "node-fetch"
-import { Entity, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
+import { Entity, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models/src"
 import { createSearch, isScientific, Nomen, shortenNomen, stringifyNomen, UUID } from "phylopic-utils/src"
 import type { CLIData } from "../../getCLIData"
 import { CommandResult, SourceUpdate } from "../CommandResult"

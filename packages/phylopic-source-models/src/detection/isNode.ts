@@ -1,6 +1,12 @@
-import { isNonemptyArray, isObject, isUndefinedOr } from "phylopic-utils/src/detection"
-import { isISOTimestamp, isNomen, isUUID } from "phylopic-utils/src/models/detection"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import {
+    isISOTimestamp,
+    isNomen,
+    isNonemptyArray,
+    isObject,
+    isUndefinedOr,
+    isUUID,
+    ValidationFaultCollector,
+} from "phylopic-utils/src"
 import { Node } from "../types"
 export const isNode = (x: unknown, faultCollector?: ValidationFaultCollector): x is Node =>
     isObject(x, faultCollector) &&

@@ -1,6 +1,4 @@
-import { isObject } from "phylopic-utils/src/detection"
-import { FaultDetector } from "phylopic-utils/src/detection/FaultDetector"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import { FaultDetector, isObject, ValidationFaultCollector } from "phylopic-utils/src"
 import { Link } from "../types/Link"
 export const isLink =
     <THRef extends string>(isHRef: FaultDetector<THRef>): FaultDetector<Link<THRef>> =>

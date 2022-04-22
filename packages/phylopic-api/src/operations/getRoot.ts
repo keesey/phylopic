@@ -1,11 +1,9 @@
-import { isEntityParameters } from "phylopic-api-models"
+import { isEntityParameters } from "phylopic-api-models/src"
 import { NodeEmbedded } from "phylopic-api-models/src/types/NodeWithEmbedded"
-import APIError from "../errors/APIError"
-import nodeType from "../entities/node"
-import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
-import checkValidation from "../validation/checkValidation"
-import { Operation } from "./Operation"
 import { ValidationFaultCollector } from "phylopic-utils/src"
+import APIError from "../errors/APIError"
+import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
+import { Operation } from "./Operation"
 export interface GetRootNodeParameters {
     readonly build?: string
     readonly embed?: string

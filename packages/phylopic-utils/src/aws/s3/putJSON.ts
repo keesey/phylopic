@@ -1,5 +1,5 @@
 import { PutObjectCommand, PutObjectCommandInput, S3Client } from "@aws-sdk/client-s3"
-import { stringifyNormalized } from "phylopic-utils/src/json"
+import { stringifyNormalized } from "phylopic-utils/src"
 export const putJSON = async (
     client: S3Client,
     input: Omit<PutObjectCommandInput, "Body" | "ContentType">,

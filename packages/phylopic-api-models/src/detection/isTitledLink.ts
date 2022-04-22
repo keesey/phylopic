@@ -1,6 +1,4 @@
-import { isNormalizedText } from "phylopic-utils/src/detection"
-import { FaultDetector } from "phylopic-utils/src/detection/FaultDetector"
-import ValidationFaultCollector from "phylopic-utils/src/validation/ValidationFaultCollector"
+import { FaultDetector, isNormalizedText, ValidationFaultCollector } from "phylopic-utils/src"
 import { TitledLink } from ".."
 import isLink from "./isLink"
 export const isTitledLink =

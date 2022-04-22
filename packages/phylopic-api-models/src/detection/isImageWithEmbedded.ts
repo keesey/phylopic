@@ -1,7 +1,6 @@
-import { isArray, isNullOr, isObject, isUndefinedOr } from "phylopic-utils/src/detection"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
-import { ImageEmbedded } from "../types/ImageWithEmbedded"
+import { isArray, isNullOr, isObject, isUndefinedOr, ValidationFaultCollector } from "phylopic-utils/src"
 import { ImageWithEmbedded } from "../types"
+import { ImageEmbedded } from "../types/ImageWithEmbedded"
 import isImage from "./isImage"
 import isNode from "./isNode"
 const isImageEmbedded = (x: unknown, faultCollector?: ValidationFaultCollector): x is ImageEmbedded =>

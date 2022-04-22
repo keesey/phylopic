@@ -1,4 +1,4 @@
-import { UUID } from "phylopic-utils/src/models/types"
+import { UUID } from "phylopic-utils/src"
 import { DataParameters } from "./DataParameters"
 import { EmbeddableParameters } from "./EmbeddableParameters"
 export type EntityParameters<TEmbedded> = DataParameters &

@@ -1,6 +1,6 @@
 import { APIGatewayProxyResult } from "aws-lambda"
 import { ClientBase } from "pg"
-import { Link } from "phylopic-api-models/src/types"
+import { Link } from "phylopic-api-models/src"
 import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
 import STANDARD_HEADERS from "../headers/responses/STANDARD_HEADERS"

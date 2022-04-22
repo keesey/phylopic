@@ -1,7 +1,14 @@
-import { isArray, isNormalizedText, isNullOr } from "phylopic-utils/src/detection"
-import { isImageMediaType, isLicenseURL, isRasterMediaType, isVectorMediaType } from "phylopic-utils/src/models"
-import isURL from "phylopic-utils/src/models/detection/isURL"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import {
+    isArray,
+    isImageMediaType,
+    isLicenseURL,
+    isNormalizedText,
+    isNullOr,
+    isRasterMediaType,
+    isURL,
+    isVectorMediaType,
+    ValidationFaultCollector,
+} from "phylopic-utils/src"
 import { Image } from "../types"
 import isEntity from "./isEntity"
 import isLink from "./isLink"

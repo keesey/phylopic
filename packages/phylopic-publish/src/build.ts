@@ -1,6 +1,6 @@
 import "dotenv/config"
 import { Client } from "pg"
-import { normalizeUUID } from "phylopic-utils/src/models"
+import { normalizeUUID } from "phylopic-utils/src"
 import writeJSON from "./fsutils/writeJSON"
 import getBuild from "./make/getBuild"
 import getImageJSON from "./make/getImageJSON"

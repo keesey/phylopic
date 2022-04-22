@@ -1,4 +1,5 @@
-import { Namespace, ObjectID, TitledLink, validateEmailAddress, validateUUIDv4 } from "phylopic-api-types"
+import { TitledLink } from "phylopic-api-models/src"
+import { Namespace, ObjectID, isEmailAddress, isUUIDv4 } from "phylopic-utils/src"
 import APIError from "../errors/APIError"
 import normalizeUUIDv4 from "../utils/uuid/normalizeUUIDv4"
 import checkValidation from "../validation/checkValidation"

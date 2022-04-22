@@ -1,6 +1,4 @@
-import { isNormalizedText, isUndefinedOr } from "phylopic-utils/src/detection"
-import { isUUID } from "phylopic-utils/src/models/detection"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import { isNormalizedText, isUndefinedOr, isUUID, ValidationFaultCollector } from "phylopic-utils/src"
 import { ImageEmbedded } from "../../types/ImageWithEmbedded"
 import { IMAGE_EMBEDDED_PARAMETERS } from "../constants"
 import { ImageListParameters } from "../types"

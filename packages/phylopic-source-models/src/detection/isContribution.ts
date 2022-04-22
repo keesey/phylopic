@@ -1,12 +1,15 @@
-import { isNormalizedText, isObject, isUndefinedOr } from "phylopic-utils/src/detection"
 import {
+    invalidate,
     isEmailAddress,
     isISOTimestamp,
     isLicenseURL,
+    isNormalizedText,
+    isObject,
     isPublicDomainLicenseURL,
+    isUndefinedOr,
     isUUID,
-} from "phylopic-utils/src/models/detection"
-import { invalidate, ValidationFaultCollector } from "phylopic-utils/src/validation"
+    ValidationFaultCollector,
+} from "phylopic-utils/src"
 import { Contribution } from "../types"
 import isNodeIdentifier from "./isNodeIdentifier"
 export const isContribution = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contribution =>

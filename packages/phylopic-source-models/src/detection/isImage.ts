@@ -1,12 +1,15 @@
-import { isNormalizedText, isObject, isUndefinedOr } from "phylopic-utils/src/detection"
 import {
+    invalidate,
     isEmailAddress,
     isISOTimestamp,
     isLicenseURL,
+    isNormalizedText,
+    isObject,
     isPublicDomainLicenseURL,
+    isUndefinedOr,
     isUUID,
-} from "phylopic-utils/src/models"
-import { invalidate, ValidationFaultCollector } from "phylopic-utils/src/validation"
+    ValidationFaultCollector,
+} from "phylopic-utils/src"
 import { Image } from "../types"
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isObject(x, faultCollector) &&

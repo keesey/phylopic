@@ -1,4 +1,4 @@
-import { UUID } from "phylopic-utils/src/models/types"
+import { UUID } from "phylopic-utils/src"
 import { Image } from "./Image"
 import { NodeIdentifier } from "./NodeIdentifier"
 export type Contribution = Pick<Image, "attribution" | "created" | "contributor" | "license" | "sponsor"> &

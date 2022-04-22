@@ -4,7 +4,7 @@ import {
     UpdateFunctionConfigurationCommand,
 } from "@aws-sdk/client-lambda"
 import { PutParameterCommand, SSMClient } from "@aws-sdk/client-ssm"
-import { UUID } from "phylopic-utils/src/models"
+import { UUID } from "phylopic-utils/src"
 const updateLambdaEnvironmentVariables = async (
     client: LambdaClient,
     FunctionName: string,

@@ -1,6 +1,4 @@
-import { isArray, isNormalizedText, isNullOr } from "phylopic-utils/src/detection"
-import { isNomen, isURL } from "phylopic-utils/src/models/detection"
-import { ValidationFaultCollector } from "phylopic-utils/src/validation"
+import { isArray, isNomen, isNormalizedText, isNullOr, isURL, ValidationFaultCollector } from "phylopic-utils/src"
 import { Node } from "../types"
 import isEntity from "./isEntity"
 import isLink from "./isLink"
