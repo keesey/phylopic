@@ -24,8 +24,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -48,8 +46,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -60,7 +56,8 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-none-match: false
+                          querystrings:
+                              build: false
             - http:
                   cors:
                       allowCredentials: true
@@ -69,8 +66,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -81,7 +76,8 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-none-match: false
+                          querystrings:
+                              build: false
             - http:
                   cors:
                       allowCredentials: true
@@ -90,8 +86,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -100,7 +94,10 @@ functions:
                   method: get
                   request:
                       parameters:
+                          headers:
+                              accept: false
                           querystrings:
+                              build: false
                               embed_childNodes: false
                               embed_parentNode: false
                               embed_primaryImage: false
@@ -116,8 +113,6 @@ functions:
             PGDATABASE: "${ssm:PGDATABASE}"
             PHYLOPIC_API_ENDPOINT: "${ssm:PHYLOPIC_API_ENDPOINT}"
             PHYLOPIC_BUILD: "${ssm:PHYLOPIC_BUILD}"
-            REDIS_SEARCH_HOST: "${ssm:REDIS_SEARCH_HOST}"
-            REDIS_SEARCH_PORT: "${ssm:REDIS_SEARCH_PORT}"
         events:
             - http:
                   cors:
@@ -127,8 +122,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -139,7 +132,6 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-none-match: false
                           querystrings:
                               build: false
                               query: true
@@ -151,8 +143,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -163,10 +153,9 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-match: false
-                              if-none-match: false
                           querystrings:
                               build: false
+                              embed_items: false
                               page: false
             - http:
                   cors:
@@ -176,8 +165,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -188,7 +175,6 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-none-match: false
                           paths:
                               uuid: true
                           querystrings:
@@ -201,8 +187,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -213,8 +197,6 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-match: false
-                              if-none-match: false
                           querystrings:
                               build: false
                               filter_clade: false
@@ -224,7 +206,9 @@ functions:
                               filter_license_sa: false
                               filter_name: false
                               filter_node: false
+                              embed_contributor: false
                               embed_generalNode: false
+                              embed_items: false
                               embed_nodes: false
                               embed_specificNode: false
                               page: false
@@ -236,8 +220,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -248,11 +230,11 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-none-match: false
                           paths:
                               uuid: true
                           querystrings:
                               build: false
+                              embed_contributor: false
                               embed_generalNode: false
                               embed_nodes: false
                               embed_specificNode: false
@@ -264,8 +246,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -276,14 +256,13 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-match: false
-                              if-none-match: false
                           querystrings:
                               build: false
                               embed_childNodes: false
+                              embed_items: false
                               embed_parentNode: false
                               embed_primaryImage: false
-                              name: false
+                              filter_name: false
                               page: false
             - http:
                   cors:
@@ -293,8 +272,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -305,11 +282,12 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-none-match: false
                           paths:
                               uuid: true
                           querystrings:
-                              embed: false
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
             - http:
                   cors:
                       allowCredentials: true
@@ -318,8 +296,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -330,12 +306,13 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              if-match: false
-                              if-none-match: false
                           paths:
                               uuid: true
                           querystrings:
-                              embed: false
+                              embed_childNodes: false
+                              embed_items: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
             - http:
                   cors:
                       allowCredentials: true
@@ -344,8 +321,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -361,7 +336,9 @@ functions:
                               namespace: true
                               objectID: true
                           querystrings:
-                              embed: false
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
             - http:
                   cors:
                       allowCredentials: true
@@ -370,8 +347,6 @@ functions:
                           - Accept
                           - Authorization
                           - Content-Type
-                          - If-Match
-                          - If-None-Match
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
@@ -386,4 +361,6 @@ functions:
                               authority: true
                               namespace: true
                           querystrings:
-                              embed: false
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
