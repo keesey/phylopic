@@ -1,9 +1,4 @@
-import type {
-    APIGatewayProxyEvent,
-    APIGatewayProxyEventQueryStringParameters,
-    APIGatewayProxyHandler,
-    APIGatewayProxyResult,
-} from "aws-lambda"
+import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
 import {
     CONTRIBUTOR_EMBEDDED_PARAMETERS,
     ImageListParameters,
@@ -25,6 +20,7 @@ import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
 import getResolveObjects from "../operations/getResolveObjects"
+import getEmbedParameters from "./parameters/getEmbedParameters"
 import { PoolClientService } from "../services/PoolClientService"
 import { S3Service } from "../services/S3Service"
 import getParameters from "./parameters/getParameters"
@@ -45,19 +41,9 @@ const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [
     "filter_name",
     "filter_node",
 ]
-const getEmbedParameters = <T extends string>(
-    parameters: APIGatewayProxyEventQueryStringParameters | null,
-    embeddedParameters: readonly T[],
-) => {
-    if (!parameters) {
-        return {} as Record<T, never>
-    }
-    return embeddedParameters
-        .filter(embed => parameters[embed] === "true")
-        .reduce((prev, embed) => ({ ...prev, [embed]: "true" }), {} as Record<T, "true">)
-}
 const getEntityParameters = (event: APIGatewayProxyEvent, embeddedParameters: readonly string[]) => ({
     ...getParameters(event.headers, ["accept"]),
+    ...getParameters(event.queryStringParameters, ["build"]),
     ...getEmbedParameters(event.queryStringParameters, embeddedParameters),
     ...getUUID(event.pathParameters),
 })
@@ -89,7 +75,10 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.queryStringParameters, ["build", "page"]),
-                            ...getEmbedParameters(event.queryStringParameters, ["embed_items" as const]),
+                            ...getEmbedParameters(event.queryStringParameters, [
+                                "embed_items" as const,
+                                ...CONTRIBUTOR_EMBEDDED_PARAMETERS,
+                            ]),
                         },
                         SERVICE,
                     )
@@ -111,7 +100,10 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                                 "page",
                                 ...IMAGE_FILTER_PARAMETERS,
                             ]),
-                            ...getEmbedParameters(event.queryStringParameters, IMAGE_EMBEDDED_PARAMETERS),
+                            ...getEmbedParameters(event.queryStringParameters, [
+                                "embed_items" as const,
+                                ...IMAGE_EMBEDDED_PARAMETERS,
+                            ]),
                         },
                         SERVICE,
                     )
@@ -129,7 +121,10 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.queryStringParameters, ["build", "page", ...NODE_FILTER_PARAMETERS]),
-                            ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
+                            ...getEmbedParameters(event.queryStringParameters, [
+                                "embed_items" as const,
+                                ...NODE_EMBEDDED_PARAMETERS,
+                            ]),
                         },
                         SERVICE,
                     )
@@ -168,7 +163,10 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.queryStringParameters, ["build", "page"]),
-                            ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
+                            ...getEmbedParameters(event.queryStringParameters, [
+                                "embed_items" as const,
+                                ...NODE_EMBEDDED_PARAMETERS,
+                            ]),
                         },
                         SERVICE,
                     )
@@ -196,6 +194,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.pathParameters, ["authority", "namespace", "objectID"]),
+                            ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },
                         SERVICE,
                     )
@@ -209,9 +208,10 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "POST": {
                     return getResolveObjects(
                         {
-                            body: event.body,
+                            body: event.body ?? undefined,
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.pathParameters, ["authority", "namespace"]),
+                            ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },
                         SERVICE,
                     )

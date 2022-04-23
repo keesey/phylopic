@@ -16,7 +16,7 @@ import { Operation } from "./Operation"
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 export type GetResolveObjectsParameters = DataRequestHeaders &
     Partial<Omit<ResolveParameters, "objectID">> & {
-        readonly body: string | null
+        readonly body?: string
     }
 export type GetResolveObjectsService = PoolClientService
 const getRedirect = async (
