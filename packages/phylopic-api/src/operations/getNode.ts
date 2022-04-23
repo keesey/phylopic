@@ -1,24 +1,24 @@
 import {
     EmbeddableParameters,
     EntityParameters,
-    isEntityParameters,
     isNode,
+    isNodeParameters,
     Node,
     NodeEmbedded,
     NodeLinks,
     NODE_EMBEDDED_PARAMETERS,
 } from "phylopic-api-models/src"
-import { normalizeUUID, UUID } from "phylopic-utils/src"
+import { normalizeUUID } from "phylopic-utils/src"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import matchesBuildETag from "../build/matchesBuildETag"
 import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
-import STANDARD_HEADERS from "../headers/responses/STANDARD_HEADERS"
+import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
+import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
+import createPermanentRedirect from "../results/createPermanentRedirect"
 import { PoolClientService } from "../services/PoolClientService"
-import create304 from "../utils/aws/create304"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
@@ -28,17 +28,19 @@ const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParamete
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     NODE_EMBEDDED_PARAMETERS.includes(x as any)
 export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
-    { accept, "if-none-match": ifNoneMatch, ...queryParameters },
+    { accept, ...queryAndPathParameters },
     service: GetNodeService,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    if (matchesBuildETag(ifNoneMatch)) {
-        return create304()
-    }
-    validate(queryParameters, isEntityParameters(NODE_EMBEDDED_PARAMETERS), USER_MESSAGE)
-    const uuid = normalizeUUID(queryParameters.uuid as UUID)
+    validate(queryAndPathParameters, isNodeParameters, USER_MESSAGE)
+    const { uuid, ...queryParameters } = queryAndPathParameters
+    const normalizedUUID = normalizeUUID(uuid)
+    const path = `/nodes/${encodeURIComponent(normalizedUUID)}`
     if (!queryParameters.build) {
-        return createBuildRedirect(`/node/${encodeURIComponent(uuid)}`, queryParameters)
+        return createBuildRedirect(path, queryParameters)
+    }
+    if (uuid !== normalizedUUID) {
+        return createPermanentRedirect(path, queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
     const embeds = Object.keys(queryParameters)
@@ -50,17 +52,17 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
         body = await selectEntityJSONWithEmbedded<Node, NodeLinks>(
             client,
             "node",
-            uuid,
+            normalizedUUID,
             embeds,
             isNode,
-            "taxonomic node",
+            "taxonomic group",
         )
     } finally {
         client.release()
     }
     return {
         body,
-        headers: STANDARD_HEADERS,
+        headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
         statusCode: 200,
     }
 }

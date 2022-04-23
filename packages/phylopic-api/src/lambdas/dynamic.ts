@@ -1,4 +1,9 @@
-import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
+import type {
+    APIGatewayProxyEvent,
+    APIGatewayProxyEventQueryStringParameters,
+    APIGatewayProxyHandler,
+    APIGatewayProxyResult,
+} from "aws-lambda"
 import {
     CONTRIBUTOR_EMBEDDED_PARAMETERS,
     ImageListParameters,
@@ -9,6 +14,7 @@ import {
 import APIError from "../errors/APIError"
 import create405 from "../errors/create405"
 import errorToResult from "../errors/errorToResult"
+import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import getAutocomplete from "../operations/getAutocomplete"
 import getContributor from "../operations/getContributor"
 import getContributors from "../operations/getContributors"
@@ -29,19 +35,30 @@ const SERVICE: PoolClientService & S3Service = {
     ...POOL_CLIENT_SERVICE,
     ...S3_SERVICE,
 }
-const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["name"]
+const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["filter_name"]
 const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [
-    "clade",
-    "contributor",
-    "license_by",
-    "license_nc",
-    "license_sa",
-    "name",
-    "node",
+    "filter_clade",
+    "filter_contributor",
+    "filter_license_by",
+    "filter_license_nc",
+    "filter_license_sa",
+    "filter_name",
+    "filter_node",
 ]
+const getEmbedParameters = <T extends string>(
+    parameters: APIGatewayProxyEventQueryStringParameters | null,
+    embeddedParameters: readonly T[],
+) => {
+    if (!parameters) {
+        return {} as Record<T, never>
+    }
+    return embeddedParameters
+        .filter(embed => parameters[embed] === "true")
+        .reduce((prev, embed) => ({ ...prev, [embed]: "true" }), {} as Record<T, "true">)
+}
 const getEntityParameters = (event: APIGatewayProxyEvent, embeddedParameters: readonly string[]) => ({
-    ...getParameters(event.headers, ["accept", "if-none-match"]),
-    ...getParameters(event.queryStringParameters, embeddedParameters),
+    ...getParameters(event.headers, ["accept"]),
+    ...getEmbedParameters(event.queryStringParameters, embeddedParameters),
     ...getUUID(event.pathParameters),
 })
 const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (event: APIGatewayProxyEvent) => {
@@ -53,7 +70,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "GET": {
                     return getAutocomplete(
                         {
-                            ...getParameters(event.headers, ["accept", "if-none-match"]),
+                            ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.queryStringParameters, ["build", "query"]),
                         },
                         SERVICE,
@@ -70,8 +87,9 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "GET": {
                     return getContributors(
                         {
-                            ...getParameters(event.headers, ["accept", "if-match", "if-none-match"]),
+                            ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.queryStringParameters, ["build", "page"]),
+                            ...getEmbedParameters(event.queryStringParameters, ["embed_items" as const]),
                         },
                         SERVICE,
                     )
@@ -87,13 +105,13 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "GET": {
                     return getImages(
                         {
-                            ...getParameters(event.headers, ["accept", "if-match", "if-none-match"]),
+                            ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.queryStringParameters, [
                                 "build",
                                 "page",
                                 ...IMAGE_FILTER_PARAMETERS,
-                                ...IMAGE_EMBEDDED_PARAMETERS,
                             ]),
+                            ...getEmbedParameters(event.queryStringParameters, IMAGE_EMBEDDED_PARAMETERS),
                         },
                         SERVICE,
                     )
@@ -109,13 +127,9 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "GET": {
                     return getNodes(
                         {
-                            ...getParameters(event.headers, ["accept", "if-match", "if-none-match"]),
-                            ...getParameters(event.queryStringParameters, [
-                                "build",
-                                "page",
-                                ...NODE_FILTER_PARAMETERS,
-                                ...NODE_EMBEDDED_PARAMETERS,
-                            ]),
+                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.queryStringParameters, ["build", "page", ...NODE_FILTER_PARAMETERS]),
+                            ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },
                         SERVICE,
                     )
@@ -152,9 +166,9 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "GET": {
                     return getNodeLineage(
                         {
-                            ...getParameters(event.headers, ["accept", "if-match", "if-none-match"]),
-                            ...getParameters(event.queryStringParameters, ["embed", "build", "page"]),
-                            ...getUUID(event.pathParameters),
+                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.queryStringParameters, ["build", "page"]),
+                            ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },
                         SERVICE,
                     )
@@ -180,7 +194,6 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "GET": {
                     return getResolveObject(
                         {
-                            ...getParameters(event.queryStringParameters, ["embed"]),
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.pathParameters, ["authority", "namespace", "objectID"]),
                         },
@@ -197,7 +210,6 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return getResolveObjects(
                         {
                             body: event.body,
-                            ...getParameters(event.queryStringParameters, ["embed"]),
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.pathParameters, ["authority", "namespace"]),
                         },
@@ -226,5 +238,11 @@ export const onAPIGatewayProxy: APIGatewayProxyHandler = async (event, context) 
     } catch (e) {
         result = errorToResult(e)
     }
-    return result
+    return {
+        ...result,
+        headers: {
+            ...CORS_HEADERS,
+            ...result.headers,
+        },
+    }
 }

@@ -8,12 +8,13 @@ import {
     isImage,
     isImageParameters,
 } from "phylopic-api-models/src"
-import { normalizeUUID, UUID } from "phylopic-utils/src"
+import { normalizeUUID } from "phylopic-utils/src"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
+import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import createPermanentRedirect from "../results/createPermanentRedirect"
@@ -27,17 +28,18 @@ const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParamete
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     IMAGE_EMBEDDED_PARAMETERS.includes(x as any)
 export const getImage: Operation<GetImageParameters, GetImageService> = async (
-    { accept, ...queryParameters },
+    { accept, ...queryAndPathParameters },
     service: GetImageService,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    validate(queryParameters, isImageParameters, USER_MESSAGE)
-    const normalizedUUID = normalizeUUID(queryParameters.uuid as UUID)
+    validate(queryAndPathParameters, isImageParameters, USER_MESSAGE)
+    const { uuid, ...queryParameters } = queryAndPathParameters
+    const normalizedUUID = normalizeUUID(uuid)
     const path = `/images/${encodeURIComponent(normalizedUUID)}`
     if (!queryParameters.build) {
         return createBuildRedirect(path, queryParameters)
     }
-    if (queryParameters.uuid !== normalizedUUID) {
+    if (uuid !== normalizedUUID) {
         return createPermanentRedirect(path, queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
@@ -60,7 +62,7 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
     }
     return {
         body,
-        headers: DATA_HEADERS,
+        headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
         statusCode: 200,
     }
 }

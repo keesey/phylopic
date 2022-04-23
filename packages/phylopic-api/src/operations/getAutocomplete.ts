@@ -46,10 +46,7 @@ export const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocomple
     if (query !== normalizedQuery) {
         return {
             body: "",
-            headers: {
-                ...createRedirectHeaders(href),
-                ...PERMANENT_HEADERS,
-            },
+            headers: createRedirectHeaders(href, true),
             statusCode: 308,
         }
     }
@@ -59,7 +56,7 @@ export const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocomple
     )}}`
     return {
         body,
-        headers: DATA_HEADERS,
+        headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
         statusCode: 200,
     }
 }

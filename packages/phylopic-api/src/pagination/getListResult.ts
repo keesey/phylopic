@@ -1,16 +1,15 @@
 import { APIGatewayProxyResult } from "aws-lambda"
 import { ClientBase } from "pg"
 import { Link } from "phylopic-api-models/src"
-import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
-import STANDARD_HEADERS from "../headers/responses/STANDARD_HEADERS"
+import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
+import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import { PoolClientService } from "../services/PoolClientService"
 import getListObject from "./getListObject"
 import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
 export interface Parameters<TEmbedded = Record<string, never>> {
-    embed: ReadonlyArray<keyof TEmbedded>
     getItemLinks: (client: ClientBase, offset: number, limit: number) => Promise<readonly Link[]>
     getItemLinksAndJSON: (
         client: ClientBase,
@@ -21,55 +20,65 @@ export interface Parameters<TEmbedded = Record<string, never>> {
     getTotalItems: (client: ClientBase) => Promise<number>
     itemsPerPage: number
     listPath: string
-    listQuery?: Readonly<Record<string, string>>
+    listQuery: Readonly<Record<string, string | number | boolean | undefined>>
     page?: string
     service: PoolClientService
     userMessage?: string
+    validEmbeds: ReadonlyArray<string & keyof TEmbedded>
 }
 const OK_RESULT: Pick<APIGatewayProxyResult, "headers" | "statusCode"> = {
-    headers: STANDARD_HEADERS,
+    headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
     statusCode: 200,
 }
 const getListResult = async <TEmbedded = Record<string, never>>({
-    embed,
     getItemLinks,
     getItemLinksAndJSON,
     getTotalItems,
     itemsPerPage,
     listPath,
-    listQuery = {},
+    listQuery,
     page,
     service,
     userMessage = "There was an error in a request for data.",
+    validEmbeds,
 }: Parameters<TEmbedded>) => {
     let result: APIGatewayProxyResult
-    const create404 = () =>
-        new APIError(404, [
-            {
-                developerMessage: "The requested page is out of bounds.",
-                field: "page",
-                type: "RESOURCE_NOT_FOUND",
-                userMessage,
-            },
-        ])
-    const listQueryWithBuild = { ...listQuery, build: BUILD.toString(10) }
     if (!page) {
         const client = await service.getPoolClient()
         try {
             const totalItems = await getTotalItems(client)
             result = {
                 ...OK_RESULT,
-                body: JSON.stringify(getListObject(listPath, listQueryWithBuild, totalItems, itemsPerPage)),
+                body: JSON.stringify(getListObject(listPath, listQuery, totalItems, itemsPerPage)),
             }
         } finally {
             client.release()
         }
     } else {
         const pageIndex = getPageIndex(page)
-        if (embed.length > 0) {
+        const create404 = () =>
+            new APIError(
+                404,
+                [
+                    {
+                        developerMessage: "The requested page is out of bounds.",
+                        field: "page",
+                        type: "RESOURCE_NOT_FOUND",
+                        userMessage,
+                    },
+                ],
+                PERMANENT_HEADERS,
+            )
+        if (listQuery.embed_items === "true") {
+            const isValidEmbed = (x: unknown): x is string & keyof TEmbedded =>
+                validEmbeds.includes(x as string & keyof TEmbedded)
+            const embeds = Object.keys(listQuery)
+                .filter(key => key.startsWith("embed_"))
+                .map(key => key.slice("embed_".length))
+                .filter(isValidEmbed)
             const client = await service.getPoolClient()
             try {
-                const rawItems = await getItemLinksAndJSON(client, pageIndex * itemsPerPage, itemsPerPage + 1, embed)
+                const rawItems = await getItemLinksAndJSON(client, pageIndex * itemsPerPage, itemsPerPage + 1, embeds)
                 if (rawItems.length === 0) {
                     throw create404()
                 }
@@ -82,7 +91,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                     body: JSON.stringify(
                         getPageObjectJSONWithEmbedded(
                             listPath,
-                            { ...listQueryWithBuild, embed: [...embed].sort().join(" "), page },
+                            { ...listQuery, page },
                             pageIndex,
                             lastPage,
                             itemLinks,
@@ -105,7 +114,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 result = {
                     ...OK_RESULT,
                     body: JSON.stringify(
-                        getPageObject(listPath, { ...listQueryWithBuild, page }, pageIndex, lastPage, itemLinks),
+                        getPageObject(listPath, { ...listQuery, page }, pageIndex, lastPage, itemLinks),
                     ),
                 }
             } finally {

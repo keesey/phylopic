@@ -1,8 +1,10 @@
-import APIError from "../errors/APIError"
-import BUILD from "./BUILD"
 import { isPositiveInteger } from "phylopic-utils/src"
+import APIError from "../errors/APIError"
+import NO_STORE_HEADERS from "../headers/responses/NO_STORE_HEADERS"
+import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
+import BUILD from "./BUILD"
 const getDeveloperMessage = (buildStatus: string) =>
-    `${buildStatus} \`build\` index. Should be the current build index (${BUILD}). The current value can always be gotten by omitting the parameter and following the redirect. Or, see the body of this response.`
+    `${buildStatus} \`build\` index. Should be the current build index (${BUILD}). The current value can always be gotten by omitting the \`build\` parameter and following the redirect. Or, see the body of this response.`
 const checkBuild = (build: string | undefined, userMessage = "There was a problem with a request for data.") => {
     if (typeof build !== "string") {
         throw new APIError(400, [
@@ -26,26 +28,31 @@ const checkBuild = (build: string | undefined, userMessage = "There was a proble
         ])
     }
     if (n < BUILD) {
-        throw new APIError(410, [
-            {
-                developerMessage: getDeveloperMessage("Outdated"),
-                field: "build",
-                type: "RESOURCE_NOT_FOUND",
-                userMessage,
-            },
-        ])
+        throw new APIError(
+            410,
+            [
+                {
+                    developerMessage: getDeveloperMessage("Outdated"),
+                    field: "build",
+                    type: "RESOURCE_NOT_FOUND",
+                    userMessage,
+                },
+            ],
+            PERMANENT_HEADERS,
+        )
     }
     if (n !== BUILD) {
-        throw (
-            (new APIError(404, [
+        throw new APIError(
+            404,
+            [
                 {
                     developerMessage: getDeveloperMessage("Unknown or future"),
                     field: "build",
                     type: "RESOURCE_NOT_FOUND",
                     userMessage,
                 },
-            ]),
-            { "cache-control": "no-cache" })
+            ],
+            NO_STORE_HEADERS,
         )
     }
 }

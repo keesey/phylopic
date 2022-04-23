@@ -1,18 +1,18 @@
-import createSearch from "../utils/http/createSearch"
+import { createSearch } from "phylopic-utils"
 const getListObject = (
     endpoint: string,
-    query: Readonly<Record<string, string>>,
+    query: Readonly<Record<string, string | number | boolean | undefined>>,
     totalItems: number,
     itemsPerPage: number,
 ) => {
     const totalPages = Math.floor(totalItems / itemsPerPage)
     return {
         _links: {
-            firstPage: totalItems > 0 ? { href: endpoint + createSearch({ ...query, page: "0" }) } : null,
+            firstPage: totalItems > 0 ? { href: endpoint + createSearch({ ...query, page: 0 }) } : null,
             lastPage:
                 totalItems > 0
                     ? {
-                          href: endpoint + createSearch({ ...query, page: (totalPages - 1).toString(10) }),
+                          href: endpoint + createSearch({ ...query, page: totalPages - 1 }),
                       }
                     : null,
             self: { href: endpoint + createSearch(query) },

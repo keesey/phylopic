@@ -2,7 +2,7 @@ import { ClientBase } from "pg"
 import { Link } from "phylopic-api-models/src"
 import { isDefined, UUID } from "phylopic-utils/src"
 import BUILD from "../build/BUILD"
-import QueryConfigBuilder from "../utils/postgres/QueryConfigBuilder"
+import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 const selectEntitiesJSONFromLinks = async (client: ClientBase, links: readonly Link[]): Promise<string> => {
     if (!links.length) {

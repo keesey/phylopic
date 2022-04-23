@@ -1,7 +1,9 @@
 import CORS_HEADERS from "./CORS_HEADERS"
-const createRedirectHeaders = (href: string) => ({
+import PERMANENT_HEADERS from "./PERMANENT_HEADERS"
+import TEMPORARY_HEADERS from "./TEMPORARY_HEADERS"
+const createRedirectHeaders = (href: string, permanent: boolean) => ({
     ...CORS_HEADERS,
-    "cache-control": "public, max-age=60, stale-while-revalidate=86400",
+    ...(permanent ? PERMANENT_HEADERS : TEMPORARY_HEADERS),
     location: (process.env.PHYLOPIC_API_ENDPOINT ?? "") + href,
 })
 export default createRedirectHeaders

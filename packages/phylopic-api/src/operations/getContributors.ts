@@ -1,5 +1,10 @@
 import { ClientBase } from "pg"
-import { ContributorListParameters, isContributorListParameters, Link } from "phylopic-api-models/src"
+import {
+    ContributorListParameters,
+    CONTRIBUTOR_EMBEDDED_PARAMETERS,
+    isContributorListParameters,
+    Link,
+} from "phylopic-api-models/src"
 import { UUID } from "phylopic-utils/src"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
@@ -10,7 +15,7 @@ import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
 import { PoolClientService } from "../services/PoolClientService"
-import QueryConfigBuilder from "../utils/postgres/QueryConfigBuilder"
+import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetContributorsParameters = DataRequestHeaders & ContributorListParameters
@@ -18,7 +23,7 @@ export type GetContributorsService = PoolClientService
 const ITEMS_PER_PAGE = 96
 const USER_MESSAGE = "There was a problem with a request to list contributors."
 const getTotalItems = async (client: ClientBase) => {
-    const builder = new QueryConfigBuilder("SELECT COUNT(uuid) as total FROM contributor WHERE build=$::bigint", [
+    const builder = new QueryConfigBuilder('SELECT COUNT("uuid") AS total FROM contributor WHERE build=$::bigint', [
         BUILD,
     ])
     const result = await client.query<{ total: number }>(builder.build())
@@ -26,7 +31,7 @@ const getTotalItems = async (client: ClientBase) => {
 }
 const getItemLinks = async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
     const queryResult = await client.query<{ uuid: UUID }>({
-        text: "SELECT uuid from contributor WHERE build=$::bigint ORDER BY sort_index OFFSET $::bigint LIMIT $::bigint",
+        text: 'SELECT "uuid" FROM contributor WHERE build=$::bigint ORDER BY sort_index OFFSET $ LIMIT $',
         values: [BUILD, offset, limit],
     })
     return queryResult.rows.map(({ uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}` }))
@@ -39,7 +44,7 @@ const getItemLinksAndJSON = async (
     /*embed: ReadonlyArray<string & keyof ContributorEmbedded>,*/
 ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
     const queryResult = await client.query<{ json: string; uuid: UUID }>({
-        text: "SELECT json,uuid from contributor WHERE build=$::bigint ORDER BY sort_index OFFSET $::bigint LIMIT $::bigint",
+        text: "SELECT json,uuid FROM contributor WHERE build=$::bigint ORDER BY sort_index OFFSET $ LIMIT $",
         values: [BUILD, offset, limit],
     })
     return queryResult.rows.map(({ json, uuid }) => [{ href: `/contributors/${uuid}?build=${BUILD}` }, json])
@@ -50,21 +55,21 @@ export const getContributors: Operation<GetContributorsParameters, GetContributo
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryParameters, isContributorListParameters, USER_MESSAGE)
-    if (checkListRedirect(queryParameters, [], USER_MESSAGE)) {
+    if (checkListRedirect(queryParameters, CONTRIBUTOR_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
         return createBuildRedirect("/contributors", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
     return await getListResult({
-        embed: [],
         getItemLinks,
         getItemLinksAndJSON,
         getTotalItems,
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/contributors",
         service,
-        listQuery: {},
+        listQuery: queryParameters,
         page: queryParameters.page,
         userMessage: USER_MESSAGE,
+        validEmbeds: [],
     })
 }
 export default getContributors

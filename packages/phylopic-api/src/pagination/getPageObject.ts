@@ -11,14 +11,10 @@ const getPageObject = (
         _links: {
             items,
             list: { href: listEndpoint + createSearch(listQuery) },
-            next: lastPage
-                ? null
-                : { href: listEndpoint + createSearch({ ...listQuery, page: (pageIndex + 1).toString(10) }) },
+            next: lastPage ? null : { href: listEndpoint + createSearch({ ...listQuery, page: pageIndex + 1 }) },
             previous:
-                pageIndex > 0
-                    ? { href: listEndpoint + createSearch({ ...listQuery, page: (pageIndex - 1).toString(10) }) }
-                    : null,
-            self: { href: listEndpoint + createSearch({ ...listQuery, page: pageIndex.toString(10) }) },
+                pageIndex > 0 ? { href: listEndpoint + createSearch({ ...listQuery, page: pageIndex - 1 }) } : null,
+            self: { href: listEndpoint + createSearch({ ...listQuery, page: pageIndex }) },
         },
         pageIndex,
     }

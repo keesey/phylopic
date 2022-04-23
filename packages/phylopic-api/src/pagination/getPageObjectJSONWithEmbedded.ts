@@ -2,7 +2,7 @@ import { Link } from "phylopic-api-models/src"
 import getPageObject from "./getPageObject"
 const getPageObjectJSONWithEmbedded = (
     listEndpoint: string,
-    listQuery: Readonly<Record<string, string>>,
+    listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
     pageIndex: number,
     lastPage: boolean,
     itemLinks: readonly Link[],

@@ -1,10 +1,11 @@
 import { ContributorParameters, isContributorParameters } from "phylopic-api-models/src"
-import { normalizeUUID, UUID } from "phylopic-utils/src"
+import { normalizeUUID } from "phylopic-utils/src"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSON from "../entities/selectEntityJSON"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
+import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import createPermanentRedirect from "../results/createPermanentRedirect"
@@ -15,17 +16,18 @@ export type GetContributorParameters = DataRequestHeaders & Partial<ContributorP
 export type GetContributorService = PoolClientService
 const USER_MESSAGE = "There was a problem with an attempt to load contributor data."
 export const getContributor: Operation<GetContributorParameters, GetContributorService> = async (
-    { accept, ...queryParameters },
+    { accept, ...queryAndPathParameters },
     service: GetContributorService,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    validate(queryParameters, isContributorParameters, USER_MESSAGE)
-    const normalizedUUID = normalizeUUID(queryParameters.uuid as UUID)
+    validate(queryAndPathParameters, isContributorParameters, USER_MESSAGE)
+    const { uuid, ...queryParameters } = queryAndPathParameters
+    const normalizedUUID = normalizeUUID(uuid)
     const path = `/contributors/${encodeURIComponent(normalizedUUID)}`
     if (!queryParameters.build) {
         return createBuildRedirect(path, queryParameters)
     }
-    if (queryParameters.uuid !== normalizedUUID) {
+    if (uuid !== normalizedUUID) {
         return createPermanentRedirect(path, queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
@@ -38,7 +40,7 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
     }
     return {
         body,
-        headers: DATA_HEADERS,
+        headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
         statusCode: 200,
     }
 }

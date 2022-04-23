@@ -1,30 +1,20 @@
-import { isEntityParameters } from "phylopic-api-models/src"
-import { NodeEmbedded } from "phylopic-api-models/src/types/NodeWithEmbedded"
-import { ValidationFaultCollector } from "phylopic-utils/src"
-import APIError from "../errors/APIError"
-import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
+import { DataParameters } from "phylopic-api-models"
+import { EmbeddableParameters, NodeEmbedded } from "phylopic-api-models/src"
+import { UUID } from "phylopic-utils/src"
+import createBuildRedirect from "../build/createBuildRedirect"
+import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import checkAccept from "../mediaTypes/checkAccept"
+import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
+import createPermanentRedirect from "../results/createPermanentRedirect"
 import { Operation } from "./Operation"
-export interface GetRootNodeParameters {
-    readonly build?: string
-    readonly embed?: string
-}
-export const getRoot: Operation<GetRootNodeParameters> = async ({
-    build,
-    embed_childNodes,
-    embed_parentNode,
-    embed_primaryImage,
-}) => {
-    const faultCollector = new ValidationFaultCollector()
-    if (!isEntityParameters<NodeEmbedded>({ embed_childNodes, embed_parentNode, embed_primaryImage }, faultCollector)) {
-        throw new APIError()
+export type GetRootParameters = DataRequestHeaders & DataParameters & EmbeddableParameters<NodeEmbedded>
+const ROOT_NODE_UUID: UUID = process.env.PHYLOPIC_ROOT_UUID ?? "00000000-0000-0000-0000-000000000000"
+const ROOT_NODE_PATH = `/nodes/${encodeURIComponent(ROOT_NODE_UUID)}`
+export const getRoot: Operation<GetRootParameters> = async ({ accept, ...queryParameters }) => {
+    checkAccept(accept, DATA_MEDIA_TYPE)
+    if (!queryParameters.build) {
+        return createBuildRedirect(ROOT_NODE_PATH, queryParameters)
     }
-    checkValidation(isNodeParameters({ embed }), `Invalid attempt to load ${nodeType.userLabel} data.`)
-    return {
-        body: "",
-        headers: createRedirectHeaders(
-            `/nodes/${process.env.PHYLOPIC_ROOT_UUID}${embed ? `?embed=${encodeURIComponent(embed)}` : ""}`,
-        ),
-        statusCode: 307,
-    }
+    return createPermanentRedirect(ROOT_NODE_PATH, queryParameters)
 }
 export default getRoot
