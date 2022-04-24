@@ -6,7 +6,7 @@ import updateEntities from "./make/updateEntities"
 ;(async () => {
     try {
         const build = (await getBuild()) + 1
-        console.info("Creating files for build:", build)
+        console.info("Updating entities for build:", build)
         console.info("Loading source data...")
         const sourceData = await getSourceData({ build })
         console.info("Loaded source data.")

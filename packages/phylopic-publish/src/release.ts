@@ -15,7 +15,7 @@ import updateParameters from "./make/updateParameters"
         const [, build, source] = await Promise.all([
             pgClient.connect(),
             getBuild(),
-            readJSON<Source>("./s3/source.phylopic.org/meta.json", isSource),
+            readJSON<Source>("./.s3/source.phylopic.org/meta.json", isSource),
         ])
         console.info("Releasing build ", build, "...")
         await updateParameters(build, source.root)

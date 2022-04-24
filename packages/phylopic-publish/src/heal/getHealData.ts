@@ -1,11 +1,13 @@
 import { ListObjectsV2Command, S3Client, _Object } from "@aws-sdk/client-s3"
 import { TitledLink } from "phylopic-api-models/src"
-import { Image, isImage, isNode, isSource, Node, Source, SOURCE_BUCKET_NAME } from "phylopic-source-models/src"
+import { Contributor, Image, isSource, Node, Source, SOURCE_BUCKET_NAME } from "phylopic-source-models/src"
 import { getJSON, isUUID, normalizeUUID, UUID } from "phylopic-utils/src"
 import { Digraph } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny"
 const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]
 export type HealData = Readonly<{
+    contributors: ReadonlyMap<UUID, Contributor>
+    contributorsToPut: ReadonlySet<UUID>
     externals: ReadonlyMap<string, Readonly<{ uuid: UUID; title: string }>>
     externalsToPut: ReadonlySet<string>
     imageFileKeys: ReadonlyMap<UUID, string>
@@ -20,6 +22,8 @@ export type HealData = Readonly<{
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>
 }>
 type BucketResult = {
+    contributors: Map<UUID, Contributor>
+    contributorsToPut: Set<UUID>
     externals: Map<string, Readonly<{ uuid: UUID; title: string }>>
     externalsToPut: Set<string>
     imageFileKeys: Map<UUID, string>
@@ -42,7 +46,7 @@ const readMain = async (client: S3Client, result: Pick<BucketResult, "source">):
 }
 const readImageMeta = async (
     client: S3Client,
-    result: Pick<BucketResult, "images" | "imagesToPut" | "keysToDelete">,
+    result: Pick<BucketResult, "images" | "keysToDelete">,
     uuid: UUID,
 ): Promise<void> => {
     const Key = `images/${uuid}/meta.json`
@@ -60,13 +64,6 @@ const readImageMeta = async (
         Bucket: "source.phylopic.org",
         Key,
     })
-    if (!isImage(image)) {
-        console.warn(`Could not validate image metadata: ${uuid}`)
-        result.keysToDelete.add(Key)
-        return
-    }
-    result.images.set(uuid, image)
-    result.imagesToPut.add(uuid)
     result.images.set(uuid, image)
 }
 const readImageSource = async (
@@ -99,9 +96,31 @@ const readImageSource = async (
     // :TODO: Validate image file?
     result.imageFileKeys.set(uuid, Key)
 }
+const readContributorMeta = async (
+    client: S3Client,
+    result: Pick<BucketResult, "contributors" | "keysToDelete">,
+    uuid: UUID,
+): Promise<void> => {
+    const Key = `contributors/${uuid}/meta.json`
+    if (!isUUID(uuid)) {
+        console.warn(`Invalid contributors metadata UUID: <${uuid}>.`)
+        result.keysToDelete.add(Key)
+        return
+    }
+    if (uuid !== normalizeUUID(uuid)) {
+        console.warn(`Contributors metadata UUID is not normalized and will be deleted: <${uuid}>.`)
+        result.keysToDelete.add(Key)
+        return
+    }
+    const [contributor] = await getJSON<Contributor>(client, {
+        Bucket: "source.phylopic.org",
+        Key,
+    })
+    result.contributors.set(uuid, contributor)
+}
 const readNodeMeta = async (
     client: S3Client,
-    result: Pick<BucketResult, "keysToDelete" | "nodes" | "nodesToPut">,
+    result: Pick<BucketResult, "keysToDelete" | "nodes">,
     uuid: UUID,
 ): Promise<void> => {
     const Key = `nodes/${uuid}/meta.json`
@@ -119,11 +138,6 @@ const readNodeMeta = async (
         Bucket: "source.phylopic.org",
         Key,
     })
-    if (!isNode(node)) {
-        console.warn(`Deleting invalid node metadata: <${uuid}>.`)
-        result.keysToDelete.add(Key)
-        return
-    }
     result.nodes.set(uuid, node)
 }
 const readExternal = async (
@@ -158,6 +172,10 @@ const addToResult = async (client: S3Client, result: BucketResult, object: _Obje
     match = object.Key?.match(/^nodes\/([^/]+)\/meta.json$/)
     if (match) {
         return readNodeMeta(client, result, match[1])
+    }
+    match = object.Key?.match(/^contributors\/([^/]+)\/meta.json$/)
+    if (match) {
+        return readContributorMeta(client, result, match[1])
     }
     match = object.Key?.match(/^externals\/([^/]+)\/([^/]+)\/([^/]+)\/meta.json$/)
     if (match) {
@@ -214,7 +232,9 @@ const getPhylogenyResult = (data: BucketResult) => {
 // :TODO: Add externals
 const getHealData = async (client: S3Client): Promise<HealData> => {
     const bucketResult: BucketResult = {
-        externals: new Map<string, Readonly<{ uuid: UUID; title: string }>>(),
+        contributors: new Map<UUID, Contributor>(),
+        contributorsToPut: new Set<UUID>(),
+        externals: new Map<string, Readonly<{ title: string; uuid: UUID }>>(),
         externalsToPut: new Set<string>(),
         imageFileKeys: new Map<UUID, string>(),
         images: new Map<UUID, Image>(),

@@ -3,11 +3,15 @@ import readBuffer from "./readBuffer"
 export type Validator<T> = (object: T) => void
 const readJSON = async <T>(filePath: string, detect?: FaultDetector<T>) => {
     const buffer = await readBuffer(filePath)
-    const object = JSON.parse(buffer.toString()) as T
+    const json = buffer.toString()
+    const object = JSON.parse(json)
     const faultCollector = new ValidationFaultCollector()
     if (detect && !detect(object, faultCollector)) {
-        throw new Error(faultCollector?.list().join("\n\n") || "Invalid object.")
+        console.error("Faults detected in object read from JSON.")
+        console.error("JSON: ", json)
+        console.error("Faults: ", faultCollector.list())
+        throw new Error()
     }
-    return object
+    return object as T
 }
 export default readJSON

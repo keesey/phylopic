@@ -1,10 +1,20 @@
 import { parseNomen } from "parse-nomen"
-import { Image, Node } from "phylopic-source-models/src"
-import { isUUID, normalizeText, shortenNomen, stringifyNomen, stringifyNormalized, UUID } from "phylopic-utils/src"
+import { Contributor, Image, isContributor, isImage, isNode, Node } from "phylopic-source-models/src"
+import {
+    isUUID,
+    normalizeText,
+    shortenNomen,
+    stringifyNomen,
+    stringifyNormalized,
+    UUID,
+    ValidationFaultCollector,
+} from "phylopic-utils/src"
 import nameMatches from "../cli/commands/utils/nameMatches"
 import precedes from "../cli/commands/utils/precedes"
 import { HealData } from "./getHealData"
 const analyze = (data: HealData): HealData => {
+    const contributors = new Map<UUID, Contributor>(data.contributors)
+    const contributorsToPut = new Set<UUID>(data.contributorsToPut)
     const keysToDelete = new Set(data.keysToDelete)
     const nodes = new Map<UUID, Node>(data.nodes)
     const nodesToPut = new Set<UUID>(data.nodesToPut)
@@ -13,11 +23,41 @@ const analyze = (data: HealData): HealData => {
     const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>(data.externals)
     const externalsToPut = new Set<string>(data.externalsToPut)
     let error = false
+    for (const [uuid, contributor] of data.contributors.entries()) {
+        try {
+            const modified = contributor
+            const collector = new ValidationFaultCollector()
+            if (!isContributor(modified, collector)) {
+                console.error("Invalid contributor: " + stringifyNormalized(modified))
+                console.error(collector.list())
+                throw new Error(`Invalid contributor <${uuid}>.`)
+            }
+            if (modified !== contributor) {
+                contributors.set(uuid, JSON.parse(stringifyNormalized(modified)))
+                contributorsToPut.add(uuid)
+            }
+        } catch (e) {
+            console.error(e)
+            error = true
+        }
+    }
     for (const [uuid, node] of data.nodes.entries()) {
         try {
-            const modified = node
+            let modified = node
             if (modified.parent && !nodes.has(modified.parent)) {
                 throw `Node has invalid parent: <${uuid}>.`
+            }
+            if (!node.parent && node.parent !== null) {
+                modified = {
+                    ...modified,
+                    parent: null,
+                }
+            }
+            const collector = new ValidationFaultCollector()
+            if (!isNode(modified, collector)) {
+                console.error("Invalid node: " + stringifyNormalized(modified))
+                console.error(collector.list())
+                throw new Error(`Invalid node <${uuid}>.`)
             }
             if (modified !== node) {
                 nodes.set(uuid, JSON.parse(stringifyNormalized(modified)))
@@ -142,6 +182,12 @@ const analyze = (data: HealData): HealData => {
             if (!nodes.has(modified.specific)) {
                 throw `Cannot find specific node for image: <${uuid}>.`
             }
+            if (!isUUID(modified.contributor)) {
+                throw `Invalid contributor UUID (<${modified.contributor}>) in image: <${uuid}>.`
+            }
+            if (!contributors.has(modified.contributor)) {
+                throw `Cannot find contributor (UUID: <${modified.contributor}>) for image: <${uuid}>.`
+            }
             if (modified.general) {
                 if (!nodes.has(modified.general)) {
                     throw `Cannot find general node for image: <${uuid}>.`
@@ -156,6 +202,29 @@ const analyze = (data: HealData): HealData => {
                         general: null,
                     }
                 }
+            } else if (modified.general !== null) {
+                modified = {
+                    ...modified,
+                    general: null,
+                }
+            }
+            if (!modified.attribution && modified.attribution !== null) {
+                modified = {
+                    ...modified,
+                    attribution: null,
+                }
+            }
+            if (!modified.sponsor && modified.sponsor !== null) {
+                modified = {
+                    ...modified,
+                    sponsor: null,
+                }
+            }
+            const collector = new ValidationFaultCollector()
+            if (!isImage(modified, collector)) {
+                console.error("Invalid image: " + stringifyNormalized(modified))
+                console.error(collector.list())
+                throw new Error(`Invalid image <${uuid}>.`)
             }
             if (modified !== image) {
                 images.set(uuid, JSON.parse(stringifyNormalized(modified)))
@@ -177,6 +246,8 @@ const analyze = (data: HealData): HealData => {
     }
     return {
         ...data,
+        contributors,
+        contributorsToPut,
         externals,
         externalsToPut,
         images,

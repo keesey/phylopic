@@ -6,10 +6,28 @@ const enact = async (
     client: S3Client,
     data: Pick<
         HealData,
-        "externals" | "externalsToPut" | "images" | "imagesToPut" | "keysToDelete" | "nodes" | "nodesToPut"
+        | "contributors"
+        | "contributorsToPut"
+        | "externals"
+        | "externalsToPut"
+        | "images"
+        | "imagesToPut"
+        | "keysToDelete"
+        | "nodes"
+        | "nodesToPut"
     >,
 ): Promise<unknown> => {
     const promises: Promise<unknown>[] = [
+        ...[...data.contributorsToPut].map(uuid =>
+            putJSON(
+                client,
+                {
+                    Bucket: "source.phylopic.org",
+                    Key: `contributors/${uuid}/meta.json`,
+                },
+                data.contributors.get(uuid),
+            ),
+        ),
         ...[...data.imagesToPut].map(uuid =>
             putJSON(
                 client,

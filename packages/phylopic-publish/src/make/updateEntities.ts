@@ -146,7 +146,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
         const chunks = chunk(data.images.entries(), 1024)
         for (const c of chunks) {
             const config: QueryConfig = {
-                text: 'INSERT INTO image ("uuid",build,contributor,depth,license_by,license_nc,license_sa,created,json) VALUES',
+                text: 'INSERT INTO image ("uuid",build,contributor_uuid,depth,license_by,license_nc,license_sa,created,json) VALUES',
                 values: [],
             }
             if (!config.values) {
