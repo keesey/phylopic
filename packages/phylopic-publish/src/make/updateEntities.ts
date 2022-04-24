@@ -3,7 +3,7 @@ import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
 import { TitledLink } from "phylopic-api-models/src"
 import { Contributor } from "phylopic-source-models/src"
-import { chunk, compareStrings, LicenseURL, UUID } from "phylopic-utils/src"
+import { chunk, compareStrings, LicenseURL, stringifyNormalized, UUID } from "phylopic-utils/src"
 import { cleanTables } from "./cleanEntities"
 import getContributorJSON from "./getContributorJSON"
 import getImageJSON from "./getImageJSON"
@@ -83,7 +83,7 @@ const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryCo
         data.build,
         node.parent ?? null,
         data.sortIndices.get(nodeUUID) ?? 0,
-        JSON.stringify(json),
+        stringifyNormalized(json),
     )
     processNodeNames(data.build, nodeUUID, node.names, queryConfigs.names)
     const nodeHRef = `/nodes/${nodeUUID}`
@@ -165,7 +165,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
                     isNC(image.license) ? 1 : 0,
                     isSA(image.license) ? 1 : 0,
                     image.created,
-                    JSON.stringify(await getImageJSON(uuid, data)),
+                    stringifyNormalized(await getImageJSON(uuid, data)),
                 )
             }
             await tryQuery(client, config)
@@ -208,7 +208,7 @@ const insertContributors = async (client: ClientBase, data: SourceData) => {
                     uuid,
                     data.build,
                     contributor.created,
-                    JSON.stringify(getContributorJSON(uuid, data, count)),
+                    stringifyNormalized(getContributorJSON(uuid, data, count)),
                     sortIndex++,
                 )
             }

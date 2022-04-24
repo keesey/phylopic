@@ -4,9 +4,9 @@ import {
     isISOTimestamp,
     isLicenseURL,
     isNormalizedText,
+    isNullOr,
     isObject,
     isPublicDomainLicenseURL,
-    isUndefinedOr,
     isUUID,
     ValidationFaultCollector,
 } from "phylopic-utils/src"
@@ -14,13 +14,13 @@ import { Contribution } from "../types"
 import isNodeIdentifier from "./isNodeIdentifier"
 export const isContribution = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contribution =>
     isObject(x, faultCollector) &&
-    isUndefinedOr(isNormalizedText)((x as Contribution).attribution, faultCollector?.sub("attribution")) &&
+    isNullOr(isNormalizedText)((x as Contribution).attribution, faultCollector?.sub("attribution")) &&
     isEmailAddress((x as Contribution).contributor, faultCollector?.sub("contributor")) &&
     isISOTimestamp((x as Contribution).created, faultCollector?.sub("created")) &&
-    isUndefinedOr(isNodeIdentifier)((x as Contribution).general, faultCollector?.sub("general")) &&
+    isNullOr(isNodeIdentifier)((x as Contribution).general, faultCollector?.sub("general")) &&
     isLicenseURL((x as Contribution).license, faultCollector?.sub("license")) &&
     isNodeIdentifier((x as Contribution).specific, faultCollector?.sub("specific")) &&
-    isUndefinedOr(isNormalizedText)((x as Contribution).sponsor, faultCollector?.sub("sponsor")) &&
+    isNullOr(isNormalizedText)((x as Contribution).sponsor, faultCollector?.sub("sponsor")) &&
     isUUID((x as Contribution).uuid, faultCollector?.sub("uuid")) &&
     Boolean(
         (x as Contribution).attribution ||

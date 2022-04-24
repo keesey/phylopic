@@ -5,8 +5,8 @@ import { Entity, Node } from "../types"
 import SOURCE_BUCKET_NAME from "./SOURCE_BUCKET_NAME"
 const getLineage = async (
     client: S3Client,
-    specificUUID?: UUID,
-    generalUUID?: UUID,
+    specificUUID: UUID | null,
+    generalUUID: UUID | null,
 ): Promise<readonly Entity<Node>[]> => {
     if (!specificUUID) {
         return []

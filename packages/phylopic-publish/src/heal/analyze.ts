@@ -153,7 +153,7 @@ const analyze = (data: HealData): HealData => {
                     )
                     modified = {
                         ...modified,
-                        general: undefined,
+                        general: null,
                     }
                 }
             }

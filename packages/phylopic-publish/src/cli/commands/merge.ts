@@ -27,7 +27,7 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
                 const specific = image.specific === suppressed.uuid ? conserved.uuid : image.specific
                 const updated: Image = {
                     ...image,
-                    general: general === specific ? undefined : general,
+                    general: general === specific ? null : general,
                     specific,
                 }
                 if (!isImage(updated)) {

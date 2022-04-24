@@ -204,6 +204,7 @@ const getPhylogenyResult = (data: BucketResult) => {
                 data.nodes.set(uuid, {
                     created: node.created,
                     names: node.names,
+                    parent: null,
                 })
                 data.nodesToPut.add(uuid)
             },

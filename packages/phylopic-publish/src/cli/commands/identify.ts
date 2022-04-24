@@ -29,7 +29,7 @@ const identify = (
     const updatedImage: Image = {
         ...image.value,
         specific: specific.uuid,
-        general: general?.uuid,
+        general: general?.uuid ?? null,
     }
     if (!isImage(updatedImage)) {
         throw new Error("Invalid image update.")

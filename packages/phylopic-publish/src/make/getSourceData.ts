@@ -85,7 +85,7 @@ const getNodeUUIDsInLineage = (
     args: Pick<SourceData, "nodes">,
     imageUUID: UUID,
     specific: UUID,
-    general?: UUID,
+    general: UUID | null,
 ): readonly UUID[] => {
     if (general) {
         let current = specific

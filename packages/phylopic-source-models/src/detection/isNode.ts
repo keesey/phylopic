@@ -2,8 +2,8 @@ import {
     isISOTimestamp,
     isNomen,
     isNonemptyArray,
+    isNullOr,
     isObject,
-    isUndefinedOr,
     isUUID,
     ValidationFaultCollector,
 } from "phylopic-utils/src"
@@ -12,5 +12,5 @@ export const isNode = (x: unknown, faultCollector?: ValidationFaultCollector): x
     isObject(x, faultCollector) &&
     isISOTimestamp((x as Node).created, faultCollector?.sub("created")) &&
     isNonemptyArray(isNomen)((x as Node).names, faultCollector?.sub("names")) &&
-    isUndefinedOr(isUUID)((x as Node).parent, faultCollector?.sub("parent"))
+    isNullOr(isUUID)((x as Node).parent, faultCollector?.sub("parent"))
 export default isNode

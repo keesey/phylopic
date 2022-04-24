@@ -1,5 +1,5 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, isNode, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
+import { Entity, isNode, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models/src"
 import { stringifyNormalized } from "phylopic-utils/src/json"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
@@ -18,7 +18,7 @@ const succeed = (cliData: CLIData, parent: Entity<Node>, child: Entity<Node>): C
     // Create and validate updated child node.
     const updatedChild: Node = {
         ...child.value,
-        parent: parent.uuid,
+        parent: parent.uuid ?? null,
     }
     if (!isNode(updatedChild)) {
         throw new Error("Invalid update for child node.")
