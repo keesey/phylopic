@@ -1,4 +1,4 @@
-import { Entity, Image, Node } from "phylopic-source-models/src"
+import { Entity, Image, Node } from "phylopic-source-models"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import getLineage from "./utils/getLineage"
@@ -30,8 +30,7 @@ const show = (cliData: CLIData, entity: Entity<Image | Node>): CommandResult => 
         children.forEach(([uuid]) => console.info(`\t- ${uuid}`))
         const externalEntries = [...cliData.externals.entries()].filter(([, link]) => link.uuid === entity.uuid)
         console.info(
-            `Node has ${externalEntries.length} external identifier${externalEntries.length === 1 ? "" : "s"}${
-                externalEntries.length ? ":" : "."
+            `Node has ${externalEntries.length} external identifier${externalEntries.length === 1 ? "" : "s"}${externalEntries.length ? ":" : "."
             }`,
         )
         externalEntries.forEach(([path, { title }]) => console.info(`\t- <${path}> ${JSON.stringify(title)}`))

@@ -1,6 +1,6 @@
 import { DeleteObjectsCommand, S3Client } from "@aws-sdk/client-s3"
-import { TitledLink } from "phylopic-api-models/src"
-import { chunk, putJSON } from "phylopic-utils/src"
+import { TitledLink } from "phylopic-api-models"
+import { chunk, putJSON } from "phylopic-utils"
 import { HealData } from "./getHealData"
 const enact = async (
     client: S3Client,

@@ -1,4 +1,4 @@
-import { isArray, isISOTimestamp, isNormalizedText, isURL, ValidationFaultCollector } from "phylopic-utils/src"
+import { isArray, isISOTimestamp, isNormalizedText, isURL, ValidationFaultCollector } from "phylopic-utils"
 import { API } from "../types"
 import isData from "./isData"
 import isLink from "./isLink"

@@ -1,4 +1,4 @@
-import { isPositiveInteger } from "phylopic-utils/src"
+import { isPositiveInteger } from "phylopic-utils"
 import APIError from "../errors/APIError"
 import NO_STORE_HEADERS from "../headers/responses/NO_STORE_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"

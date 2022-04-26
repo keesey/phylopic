@@ -1,6 +1,6 @@
 import { ClientBase } from "pg"
-import { Entity, Links } from "phylopic-api-models/src"
-import { FaultDetector, UUID } from "phylopic-utils/src"
+import { Entity, Links } from "phylopic-api-models"
+import { FaultDetector, UUID } from "phylopic-utils"
 import parseEntityJSONAndEmbed from "./parseEntityJSONAndEmbed"
 import selectEntityJSON from "./selectEntityJSON"
 import { TableName } from "./TableName"

@@ -1,12 +1,12 @@
-import { isNullOr } from "phylopic-utils"
 import {
     invalidate,
     isEmailAddress,
     isISOTimestamp,
     isNormalizedText,
+    isNullOr,
     isObject,
     ValidationFaultCollector,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { Contributor } from "../types"
 export const isContributor = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contributor =>
     isObject(x, faultCollector) &&

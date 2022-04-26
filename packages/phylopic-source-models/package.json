@@ -29,11 +29,12 @@
     "license": "MIT",
     "main": "dist/index.js",
     "name": "phylopic-source-models",
+    "private": false,
     "resolutions": {
         "@types/node": "*"
     },
     "scripts": {
-        "build": "rm -rf dist && mkdir dist && mkdir dist/types && cp src/types/*.d.ts dist/types && yarn compile",
+        "build": "rm -rf dist && mkdir dist && yarn compile",
         "compile": "tsc",
         "format": "prettier -w . && yarn lint --fix",
         "lint": "eslint --ext .js,.ts .",
@@ -44,6 +45,7 @@
         "test": "mocha -r ts-node/register \"./src/**/*.spec.ts\"",
         "version": "git add -A src"
     },
-    "typings": "dist/index.d.ts",
+    "type": "module",
+    "types": "dist/index.d.ts",
     "version": "2.0.0-alpha.1"
 }

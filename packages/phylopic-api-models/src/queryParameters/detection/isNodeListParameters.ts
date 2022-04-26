@@ -1,4 +1,4 @@
-import { isNormalizedText, isUndefinedOr, ValidationFaultCollector } from "phylopic-utils/src"
+import { isNormalizedText, isUndefinedOr, ValidationFaultCollector } from "phylopic-utils"
 import { NodeEmbedded } from "../../types/NodeWithEmbedded"
 import NODE_EMBEDDED_PARAMETERS from "../constants/NODE_EMBEDDED_PARAMETERS"
 import { NodeListParameters } from "../types"

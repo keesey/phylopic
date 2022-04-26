@@ -1,5 +1,5 @@
-import { Entity, Node } from "phylopic-source-models/src"
-import { UUID } from "phylopic-utils/src"
+import { Entity, Node } from "phylopic-source-models"
+import { UUID } from "phylopic-utils"
 const getLineage = (nodes: ReadonlyMap<UUID, Node>, sink: UUID, source?: UUID): ReadonlyArray<Entity<Node>> => {
     const value = nodes.get(sink)
     if (!value) {

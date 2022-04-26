@@ -1,4 +1,4 @@
-import { LicenseURL, ValidLicenseURL } from "phylopic-utils/src"
+import { LicenseURL, ValidLicenseURL } from "phylopic-utils"
 export const PERMITTED_LICENSE_CHANGES: Readonly<Record<LicenseURL, readonly ValidLicenseURL[]>> = {
     "https://creativecommons.org/licenses/by-nc-sa/3.0/": [
         "https://creativecommons.org/licenses/by/4.0/",

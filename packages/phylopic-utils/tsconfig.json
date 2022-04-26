@@ -4,23 +4,35 @@
         "downlevelIteration": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "isolatedModules": true,
+        "isolatedModules": false,
         "incremental": true,
-        "lib": ["dom", "esnext"],
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "lib": [
+            "dom",
+            "esnext"
+        ],
+        "module": "CommonJS",
+        "moduleResolution": "Node",
         "noImplicitAny": true,
         "noImplicitThis": true,
         "outDir": "dist",
         "paths": {
-            "~/*": ["./src/*"]
+            "~/*": [
+                "./src/*"
+            ]
         },
         "resolveJsonModule": true,
         "skipLibCheck": false,
         "strict": true,
-        "target": "esnext",
-        "typeRoots": ["./node_modules/@types", "./custom_typings"]
+        "target": "ESNext",
+        "typeRoots": [
+            "./node_modules/@types",
+            "./custom_typings"
+        ]
     },
-    "exclude": ["./src/**/*.spec.ts"],
-    "include": ["./src/**/*.ts"]
+    "exclude": [
+        "./src/**/*.spec.ts"
+    ],
+    "include": [
+        "./src/**/*.ts"
+    ]
 }

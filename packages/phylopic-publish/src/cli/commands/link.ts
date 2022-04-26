@@ -1,7 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { TitledLink } from "phylopic-api-models/src"
-import { Entity, Node } from "phylopic-source-models/src"
-import { Identifier, stringifyNomen } from "phylopic-utils/src"
+import { TitledLink } from "phylopic-api-models"
+import { Entity, Node } from "phylopic-source-models"
+import { Identifier, stringifyNomen } from "phylopic-utils"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 const link = (cliData: CLIData, identifier: Identifier, entity: Entity<Node>, title?: string): CommandResult => {

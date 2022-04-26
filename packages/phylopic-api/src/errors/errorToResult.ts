@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from "aws-lambda"
-import type { Error as ErrorModel } from "phylopic-api-models/src"
+import type { Error as ErrorModel } from "phylopic-api-models"
 import BUILD from "../build/BUILD"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"

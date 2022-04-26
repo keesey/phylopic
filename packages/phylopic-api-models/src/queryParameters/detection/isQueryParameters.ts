@@ -1,4 +1,4 @@
-import { isNormalizedText, ValidationFaultCollector } from "phylopic-utils/src"
+import { isNormalizedText, ValidationFaultCollector } from "phylopic-utils"
 import { SearchParameters } from "../types"
 import isDataParameters from "./isDataParameters"
 export const isQueryParameters = (x: unknown, faultCollector?: ValidationFaultCollector) =>

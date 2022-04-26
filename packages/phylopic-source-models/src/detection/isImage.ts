@@ -8,7 +8,7 @@ import {
     isPublicDomainLicenseURL,
     isUUID,
     ValidationFaultCollector,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { Image } from "../types"
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isObject(x, faultCollector) &&

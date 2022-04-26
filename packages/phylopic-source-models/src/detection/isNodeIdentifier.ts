@@ -1,4 +1,4 @@
-import { isIdentifier, isNomen, isNullOr, isObject, ValidationFaultCollector } from "phylopic-utils/src"
+import { isIdentifier, isNomen, isNullOr, isObject, ValidationFaultCollector } from "phylopic-utils"
 import { NodeIdentifier } from "../types"
 export const isNodeIdentifier = (x: unknown, faultCollector?: ValidationFaultCollector): x is NodeIdentifier =>
     isObject(x, faultCollector) &&

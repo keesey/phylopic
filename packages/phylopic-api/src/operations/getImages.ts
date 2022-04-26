@@ -8,8 +8,8 @@ import {
     isImage,
     isImageListParameters,
     Link,
-} from "phylopic-api-models/src"
-import { UUID } from "phylopic-utils/src"
+} from "phylopic-api-models"
+import { UUID } from "phylopic-utils"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
@@ -34,8 +34,8 @@ const getQueryBuilder = (parameters: ImageListParameters, results: "total" | "uu
         results === "total"
             ? 'COUNT(image."uuid") as total'
             : results === "uuid"
-            ? 'image."uuid" AS "uuid"'
-            : 'image.json AS json,image."uuid" AS "uuid"'
+                ? 'image."uuid" AS "uuid"'
+                : 'image.json AS json,image."uuid" AS "uuid"'
     if (parameters.filter_node) {
         builder.add(
             `
@@ -82,14 +82,12 @@ SELECT ${selection} AS "uuid" FROM node_name
         builder.add('GROUP BY image."uuid"')
     } else if (parameters.filter_clade) {
         builder.add(
-            `GROUP BY image."uuid",image.depth${
-                results === "json" ? ",image.json" : ""
+            `GROUP BY image."uuid",image.depth${results === "json" ? ",image.json" : ""
             } ORDER BY image.depth,image."uuid"`,
         )
     } else if (parameters.filter_name || parameters.filter_node) {
         builder.add(
-            `GROUP BY image."uuid",image.created${
-                results === "json" ? ",image.json" : ""
+            `GROUP BY image."uuid",image.created${results === "json" ? ",image.json" : ""
             } ORDER BY image.created DESC,image."uuid"`,
         )
     } else {
@@ -104,35 +102,35 @@ const getTotalItems = (parameters: ImageListParameters) => async (client: Client
 }
 const getItemLinks =
     (parameters: ImageListParameters) =>
-    async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
-        const queryBuilder = getQueryBuilder(parameters, "uuid")
-        queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ uuid: UUID }>(queryBuilder.build())
-        return queryResult.rows.map(({ uuid }) => ({ href: `/images/${uuid}?build=${BUILD}` }))
-    }
+        async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
+            const queryBuilder = getQueryBuilder(parameters, "uuid")
+            queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
+            const queryResult = await client.query<{ uuid: UUID }>(queryBuilder.build())
+            return queryResult.rows.map(({ uuid }) => ({ href: `/images/${uuid}?build=${BUILD}` }))
+        }
 const getItemLinksAndJSON =
     (parameters: ImageListParameters) =>
-    async (
-        client: ClientBase,
-        offset: number,
-        limit: number,
-        embeds: ReadonlyArray<string & keyof ImageEmbedded>,
-    ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
-        const queryBuilder = getQueryBuilder(parameters, "json")
-        queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ json: string; uuid: UUID }>(queryBuilder.build())
-        if (!embeds.length) {
-            return queryResult.rows.map(({ json, uuid }) => [{ href: `/images/${uuid}?build=${BUILD}` }, json])
+        async (
+            client: ClientBase,
+            offset: number,
+            limit: number,
+            embeds: ReadonlyArray<string & keyof ImageEmbedded>,
+        ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
+            const queryBuilder = getQueryBuilder(parameters, "json")
+            queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
+            const queryResult = await client.query<{ json: string; uuid: UUID }>(queryBuilder.build())
+            if (!embeds.length) {
+                return queryResult.rows.map(({ json, uuid }) => [{ href: `/images/${uuid}?build=${BUILD}` }, json])
+            }
+            return await Promise.all(
+                queryResult.rows.map(async ({ json, uuid }) => {
+                    return [
+                        { href: `/images/${uuid}?build=${BUILD}` },
+                        await parseEntityJSONAndEmbed<Image, ImageLinks>(client, json, embeds, isImage, "silhouette image"),
+                    ]
+                }),
+            )
         }
-        return await Promise.all(
-            queryResult.rows.map(async ({ json, uuid }) => {
-                return [
-                    { href: `/images/${uuid}?build=${BUILD}` },
-                    await parseEntityJSONAndEmbed<Image, ImageLinks>(client, json, embeds, isImage, "silhouette image"),
-                ]
-            }),
-        )
-    }
 export const getImages: Operation<GetImagesParameters, GetImagesService> = async (
     { accept, ...queryParameters },
     service,

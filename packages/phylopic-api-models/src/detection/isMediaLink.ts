@@ -1,4 +1,4 @@
-import { FaultDetector, ImageMediaType, ValidationFaultCollector } from "phylopic-utils/src"
+import { FaultDetector, ImageMediaType, ValidationFaultCollector } from "phylopic-utils"
 import { MediaLink } from "../types/MediaLink"
 import isLink from "./isLink"
 import isSizes from "./isSizes"

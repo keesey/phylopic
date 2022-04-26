@@ -1,4 +1,4 @@
-import { UUID } from "phylopic-utils/src"
+import { UUID } from "phylopic-utils"
 export type Source = Readonly<{
     root: UUID
 }>

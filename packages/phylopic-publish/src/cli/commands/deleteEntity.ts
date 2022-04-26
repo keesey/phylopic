@@ -1,6 +1,6 @@
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3"
-import { Entity, Image, Node } from "phylopic-source-models/src"
-import { UUID } from "phylopic-utils/src"
+import { Entity, Image, Node } from "phylopic-source-models"
+import { UUID } from "phylopic-utils"
 import { CLIData } from "../getCLIData"
 import { CommandResult, SourceUpdate } from "./CommandResult"
 import succeed from "./succeed"

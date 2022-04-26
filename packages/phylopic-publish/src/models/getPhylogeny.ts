@@ -1,5 +1,5 @@
-import { Node, Source } from "phylopic-source-models/src"
-import { UUID } from "phylopic-utils/src"
+import { Node, Source } from "phylopic-source-models"
+import { UUID } from "phylopic-utils"
 import { Arc, createAcyclicGraph, Digraph, sources } from "simple-digraph"
 export interface PhylogenySourceData {
     source: Source

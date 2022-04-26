@@ -4,7 +4,7 @@ import {
     isNullOr,
     isPositiveInteger,
     ValidationFaultCollector,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { List } from "../types"
 import isData from "./isData"
 import isLink from "./isLink"

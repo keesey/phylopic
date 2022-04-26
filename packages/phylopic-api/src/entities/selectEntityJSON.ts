@@ -1,5 +1,5 @@
 import { ClientBase } from "pg"
-import { UUID } from "phylopic-utils/src"
+import { UUID } from "phylopic-utils"
 import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
 import { TableName } from "./TableName"

@@ -1,4 +1,4 @@
-import { ValidationFaultCollector } from "phylopic-utils/src"
+import { ValidationFaultCollector } from "phylopic-utils"
 import { CONTRIBUTOR_EMBEDDED_PARAMETERS } from "../constants"
 import { ContributorListParameters } from "../types"
 import isListParameters from "./isListParameters"

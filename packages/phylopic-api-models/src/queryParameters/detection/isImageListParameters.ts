@@ -5,7 +5,7 @@ import {
     isUndefinedOr,
     isUUID,
     ValidationFaultCollector,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { ImageEmbedded } from "../../types/ImageWithEmbedded"
 import { IMAGE_EMBEDDED_PARAMETERS } from "../constants"
 import { ImageListParameters } from "../types"

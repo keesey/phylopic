@@ -4,8 +4,8 @@ import {
     CONTRIBUTOR_EMBEDDED_PARAMETERS,
     isContributorListParameters,
     Link,
-} from "phylopic-api-models/src"
-import { UUID } from "phylopic-utils/src"
+} from "phylopic-api-models"
+import { UUID } from "phylopic-utils"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"

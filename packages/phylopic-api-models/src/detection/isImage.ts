@@ -8,7 +8,7 @@ import {
     isURL,
     isVectorMediaType,
     ValidationFaultCollector,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { Image } from "../types"
 import isEntity from "./isEntity"
 import isLink from "./isLink"

@@ -1,6 +1,6 @@
 import { DataParameters } from "phylopic-api-models"
-import { EmbeddableParameters, NodeEmbedded } from "phylopic-api-models/src"
-import { UUID } from "phylopic-utils/src"
+import { EmbeddableParameters, NodeEmbedded } from "phylopic-api-models"
+import { UUID } from "phylopic-utils"
 import createBuildRedirect from "../build/createBuildRedirect"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"

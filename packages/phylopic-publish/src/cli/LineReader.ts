@@ -1,5 +1,5 @@
 import { parseNomen } from "parse-nomen"
-import { Entity, Image, Node } from "phylopic-source-models/src"
+import { Entity, Image, Node } from "phylopic-source-models"
 import {
     EmailAddress,
     Identifier,
@@ -9,7 +9,7 @@ import {
     Nomen,
     normalizeUUID,
     UUID,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { v4, version } from "uuid"
 import nameMatches from "./commands/utils/nameMatches"
 import { CLIData } from "./getCLIData"
@@ -137,10 +137,10 @@ export default class LineReader {
             value === "root"
                 ? this.findRoot()
                 : /^[^/]+\/[^/]+\/[^/]+$/.test(value)
-                ? this.findNodeByExternal(value)
-                : /^"[^"]+"$/.test(value)
-                ? this.findNodeByName(value.slice(1, value.length - 1))
-                : this.findEntityByPartialUUID(value?.toLowerCase())
+                    ? this.findNodeByExternal(value)
+                    : /^"[^"]+"$/.test(value)
+                        ? this.findNodeByName(value.slice(1, value.length - 1))
+                        : this.findEntityByPartialUUID(value?.toLowerCase())
         if (!entity) {
             throw new Error(`Cannot find entity: ${value}`)
         }
@@ -183,8 +183,8 @@ export default class LineReader {
             value === "root"
                 ? this.findRoot()
                 : /^"[^"]+"$/.test(value)
-                ? this.findNodeByName(value.slice(1, value.length - 1))
-                : this.findNodeByPartialUUID(value?.toLowerCase())
+                    ? this.findNodeByName(value.slice(1, value.length - 1))
+                    : this.findNodeByPartialUUID(value?.toLowerCase())
         if (!node) {
             throw new Error(`Cannot find node: ${value}`)
         }

@@ -1,5 +1,5 @@
-import { Link } from "phylopic-api-models/src"
-import { createSearch } from "phylopic-utils/src"
+import { Link } from "phylopic-api-models"
+import { createSearch } from "phylopic-utils"
 const getPageObject = (
     listEndpoint: string,
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>,

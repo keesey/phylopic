@@ -1,5 +1,5 @@
-import { ContributorParameters, isContributorParameters } from "phylopic-api-models/src"
-import { normalizeUUID } from "phylopic-utils/src"
+import { ContributorParameters, isContributorParameters } from "phylopic-api-models"
+import { normalizeUUID } from "phylopic-utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSON from "../entities/selectEntityJSON"

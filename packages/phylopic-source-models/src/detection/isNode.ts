@@ -6,7 +6,7 @@ import {
     isObject,
     isUUID,
     ValidationFaultCollector,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { Node } from "../types"
 export const isNode = (x: unknown, faultCollector?: ValidationFaultCollector): x is Node =>
     isObject(x, faultCollector) &&

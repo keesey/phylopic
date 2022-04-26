@@ -1,6 +1,6 @@
 import { APIGatewayProxyResult } from "aws-lambda"
-import { isResolveParameters, ResolveParameters, TitledLink } from "phylopic-api-models/src"
-import { Authority, Namespace, ObjectID } from "phylopic-utils/src"
+import { isResolveParameters, ResolveParameters, TitledLink } from "phylopic-api-models"
+import { Authority, Namespace, ObjectID } from "phylopic-utils"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import APIError from "../errors/APIError"

@@ -1,6 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, isNode, Node } from "phylopic-source-models/src"
-import { Nomen, normalizeNomina, stringifyNormalized, UUID } from "phylopic-utils/src"
+import { Entity, isNode, Node } from "phylopic-source-models"
+import { Nomen, normalizeNomina, stringifyNormalized, UUID } from "phylopic-utils"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import checkNewUUID from "./utils/checkNewUUID"

@@ -1,6 +1,6 @@
 import { ClientBase } from "pg"
-import { isLink, Links } from "phylopic-api-models/src"
-import { isString } from "phylopic-utils/src"
+import { isLink, Links } from "phylopic-api-models"
+import { isString } from "phylopic-utils"
 import APIError from "../errors/APIError"
 import selectEntitiesJSONFromLinks from "./selectEntitiesJSONFromLinks"
 import selectEntityJSONFromHRef from "./selectEntityJSONFromHRef"

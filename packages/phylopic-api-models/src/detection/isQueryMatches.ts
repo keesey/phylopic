@@ -1,4 +1,4 @@
-import { isArray, isNormalizedText, isObject, ValidationFaultCollector } from "phylopic-utils/src"
+import { isArray, isNormalizedText, isObject, ValidationFaultCollector } from "phylopic-utils"
 import { QueryMatches } from ".."
 import isLinks from "./isLinks"
 export const isQueryMatches = (x: unknown, faultCollector?: ValidationFaultCollector): x is QueryMatches =>

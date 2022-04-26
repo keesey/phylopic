@@ -1,4 +1,4 @@
-import { FaultDetector, ValidationFaultCollector } from "phylopic-utils/src"
+import { FaultDetector, ValidationFaultCollector } from "phylopic-utils"
 import APIError from "../errors/APIError"
 import convertValidationFaultsToErrors from "./convertValidationFaultsToErrors"
 const validate = <T>(

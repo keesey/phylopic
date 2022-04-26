@@ -6,7 +6,7 @@ import {
     isUndefinedOr,
     isURL,
     ValidationFaultCollector,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { Error } from "../types/Error"
 import isErrorType from "./isErrorType"
 export const isError = (x: unknown, faultCollector?: ValidationFaultCollector): x is Error =>

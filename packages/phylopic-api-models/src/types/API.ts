@@ -1,4 +1,4 @@
-import { ISOTimestamp, URL } from "phylopic-utils/src"
+import { ISOTimestamp, URL } from "phylopic-utils"
 import { Data } from "./Data"
 import { Link } from "./Link"
 import { Links } from "./Links"

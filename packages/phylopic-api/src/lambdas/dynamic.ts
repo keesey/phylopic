@@ -5,7 +5,7 @@ import {
     IMAGE_EMBEDDED_PARAMETERS,
     NodeListParameters,
     NODE_EMBEDDED_PARAMETERS,
-} from "phylopic-api-models/src"
+} from "phylopic-api-models"
 import APIError from "../errors/APIError"
 import create405 from "../errors/create405"
 import errorToResult from "../errors/errorToResult"

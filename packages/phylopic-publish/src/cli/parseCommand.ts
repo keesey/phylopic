@@ -1,5 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { Nomen } from "phylopic-utils/src"
+import { Nomen } from "phylopic-utils"
 import approve from "./commands/approve"
 import autolink from "./commands/autolink"
 import { CommandResult } from "./commands/CommandResult"

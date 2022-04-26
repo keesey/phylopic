@@ -1,5 +1,5 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, isNode, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models/src"
+import { Entity, isNode, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
 import { stringifyNormalized } from "phylopic-utils/src/json"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
@@ -31,8 +31,7 @@ const succeed = (cliData: CLIData, parent: Entity<Node>, child: Entity<Node>): C
     )
     if (conflicts.length > 0) {
         throw new Error(
-            `The following image${conflicts.length === 1 ? "" : "s"} need${
-                conflicts.length === 1 ? "s" : ""
+            `The following image${conflicts.length === 1 ? "" : "s"} need${conflicts.length === 1 ? "s" : ""
             } to be reidentified first:${conflicts.map(([uuid]) => `\n\t- ${JSON.stringify(uuid)}`).join("")}`,
         )
     }

@@ -1,5 +1,5 @@
 import { DeleteObjectCommand } from "@aws-sdk/client-s3"
-import { Identifier } from "phylopic-utils/src"
+import { Identifier } from "phylopic-utils"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 const unlink = (cliData: CLIData, identifier: Identifier): CommandResult => {

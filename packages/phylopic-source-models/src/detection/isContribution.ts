@@ -9,7 +9,7 @@ import {
     isPublicDomainLicenseURL,
     isUUID,
     ValidationFaultCollector,
-} from "phylopic-utils/src"
+} from "phylopic-utils"
 import { Contribution } from "../types"
 import isNodeIdentifier from "./isNodeIdentifier"
 export const isContribution = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contribution =>

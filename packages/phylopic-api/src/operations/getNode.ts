@@ -7,8 +7,8 @@ import {
     NodeEmbedded,
     NodeLinks,
     NODE_EMBEDDED_PARAMETERS,
-} from "phylopic-api-models/src"
-import { normalizeUUID } from "phylopic-utils/src"
+} from "phylopic-api-models"
+import { normalizeUUID } from "phylopic-utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"

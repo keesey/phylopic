@@ -1,5 +1,5 @@
-import { SearchParameters } from "phylopic-api-models/src"
-import { createSearch } from "phylopic-utils/src"
+import { SearchParameters } from "phylopic-api-models"
+import { createSearch } from "phylopic-utils"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"

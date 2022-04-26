@@ -1,4 +1,4 @@
-import { EntityParameters, ListParameters } from "phylopic-api-models/src"
+import { EntityParameters, ListParameters } from "phylopic-api-models"
 import APIError from "../errors/APIError"
 const isValidEmbedField = (value: unknown, validEmbedValues: readonly string[]): value is string => {
     return typeof value === "string" && validEmbedValues.includes(value)
@@ -8,8 +8,8 @@ const checkListRedirect = <TEmbedded>(
     entityEmbedFields: ReadonlyArray<string & keyof EntityParameters<TEmbedded>> = [],
     userMessage = "There was a problem with a request for data.",
 ): parameters is ListParameters<TEmbedded> &
-    Readonly<{ build: undefined }> &
-    Readonly<Record<string, string | number | boolean | undefined>> => {
+Readonly<{ build: undefined }> &
+Readonly<Record<string, string | number | boolean | undefined>> => {
     const { build, page } = parameters
     if (!build) {
         if (page) {

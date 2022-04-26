@@ -1,4 +1,4 @@
-import { FaultDetector } from "phylopic-utils/src"
+import { FaultDetector } from "phylopic-utils"
 import APIError from "../errors/APIError"
 import validate from "../validation/validate"
 const parseEntityJSON = <T>(json: string, detector: FaultDetector<T>): T => {

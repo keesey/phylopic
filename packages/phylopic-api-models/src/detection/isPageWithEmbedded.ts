@@ -1,4 +1,4 @@
-import { FaultDetector, isArray, isObject, isUndefinedOr, ValidationFaultCollector } from "phylopic-utils/src"
+import { FaultDetector, isArray, isObject, isUndefinedOr, ValidationFaultCollector } from "phylopic-utils"
 import { PageWithEmbedded } from "../types"
 import { PageEmbedded } from "../types/PageWithEmbedded"
 import isPage from "./isPage"

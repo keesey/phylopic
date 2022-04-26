@@ -1,4 +1,4 @@
-import { UUID } from "phylopic-utils/src"
+import { UUID } from "phylopic-utils"
 import { ImageEmbedded } from "../../types"
 import { ListParameters } from "./ListParameters"
 export interface ImageListParameters extends ListParameters<ImageEmbedded> {

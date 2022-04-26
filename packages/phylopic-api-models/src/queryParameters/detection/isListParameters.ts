@@ -1,4 +1,4 @@
-import { FaultDetector, invalidate, ValidationFaultCollector } from "phylopic-utils/src"
+import { FaultDetector, invalidate, ValidationFaultCollector } from "phylopic-utils"
 import { ListParameters } from "../types"
 import { EmbeddableParameters } from "../types/EmbeddableParameters"
 import isDataParameters from "./isDataParameters"

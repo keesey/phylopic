@@ -1,4 +1,4 @@
-import { Nomen, shortenNomen, stringifyNomen } from "phylopic-utils/src"
+import { Nomen, shortenNomen, stringifyNomen } from "phylopic-utils"
 const nameMatches = (s: string, name: Nomen, caseInsensitive?: boolean): boolean => {
     const full = stringifyNomen(name)
     if (caseInsensitive ? s.toLowerCase() === full.toLowerCase() : s === full) {

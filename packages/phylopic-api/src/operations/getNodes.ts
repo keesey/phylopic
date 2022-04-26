@@ -8,8 +8,8 @@ import {
     NodeEmbedded,
     NodeLinks,
     NodeListParameters,
-} from "phylopic-api-models/src"
-import { UUID } from "phylopic-utils/src"
+} from "phylopic-api-models"
+import { UUID } from "phylopic-utils"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
@@ -33,8 +33,8 @@ const getQueryBuilder = (parameters: NodeListParameters, results: "total" | "uui
         results === "total"
             ? 'COUNT(node."uuid") as total'
             : results === "uuid"
-            ? 'node."uuid" AS "uuid"'
-            : 'node.json AS json,node."uuid" AS "uuid"'
+                ? 'node."uuid" AS "uuid"'
+                : 'node.json AS json,node."uuid" AS "uuid"'
     if (parameters.filter_name) {
         builder.add(
             `
@@ -65,35 +65,35 @@ const getTotalItems = (parameters: NodeListParameters) => async (client: ClientB
 }
 const getItemLinks =
     (parameters: NodeListParameters) =>
-    async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
-        const queryBuilder = getQueryBuilder(parameters, "uuid")
-        queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ uuid: UUID }>(queryBuilder.build())
-        return queryResult.rows.map(({ uuid }) => ({ href: `/nodes/${uuid}?build=${BUILD}` }))
-    }
+        async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
+            const queryBuilder = getQueryBuilder(parameters, "uuid")
+            queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
+            const queryResult = await client.query<{ uuid: UUID }>(queryBuilder.build())
+            return queryResult.rows.map(({ uuid }) => ({ href: `/nodes/${uuid}?build=${BUILD}` }))
+        }
 const getItemLinksAndJSON =
     (parameters: NodeListParameters) =>
-    async (
-        client: ClientBase,
-        offset: number,
-        limit: number,
-        embeds: ReadonlyArray<string & keyof NodeEmbedded>,
-    ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
-        const queryBuilder = getQueryBuilder(parameters, "json")
-        queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ json: string; uuid: UUID }>(queryBuilder.build())
-        if (!embeds.length) {
-            return queryResult.rows.map(({ json, uuid }) => [{ href: `/nodes/${uuid}?build=${BUILD}` }, json])
+        async (
+            client: ClientBase,
+            offset: number,
+            limit: number,
+            embeds: ReadonlyArray<string & keyof NodeEmbedded>,
+        ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
+            const queryBuilder = getQueryBuilder(parameters, "json")
+            queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
+            const queryResult = await client.query<{ json: string; uuid: UUID }>(queryBuilder.build())
+            if (!embeds.length) {
+                return queryResult.rows.map(({ json, uuid }) => [{ href: `/nodes/${uuid}?build=${BUILD}` }, json])
+            }
+            return await Promise.all(
+                queryResult.rows.map(async ({ json, uuid }) => {
+                    return [
+                        { href: `/nodes/${uuid}?build=${BUILD}` },
+                        await parseEntityJSONAndEmbed<Node, NodeLinks>(client, json, embeds, isNode, "taxonomic group"),
+                    ]
+                }),
+            )
         }
-        return await Promise.all(
-            queryResult.rows.map(async ({ json, uuid }) => {
-                return [
-                    { href: `/nodes/${uuid}?build=${BUILD}` },
-                    await parseEntityJSONAndEmbed<Node, NodeLinks>(client, json, embeds, isNode, "taxonomic group"),
-                ]
-            }),
-        )
-    }
 export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
     { accept, ...queryParameters },
     service,

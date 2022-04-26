@@ -1,4 +1,4 @@
-import { isAuthority, isNamespace, isObjectID, ValidationFaultCollector } from "phylopic-utils/src"
+import { isAuthority, isNamespace, isObjectID, ValidationFaultCollector } from "phylopic-utils"
 import { NodeEmbedded } from "../../types/NodeWithEmbedded"
 import { NODE_EMBEDDED_PARAMETERS } from "../constants"
 import { ResolveParameters } from "../types"

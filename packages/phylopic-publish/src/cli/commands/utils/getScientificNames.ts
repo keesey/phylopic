@@ -1,4 +1,4 @@
-import { isScientific, Nomen } from "phylopic-utils/src"
+import { isScientific, Nomen } from "phylopic-utils"
 const getScientificNames = (names: readonly Nomen[]) =>
     names.filter(isScientific).map(name =>
         name
