@@ -5461,10 +5461,10 @@ forever-agent@~0.6.1:
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
 
-fork-ts-checker-webpack-plugin@^7.2.1:
-  version "7.2.3"
-  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-7.2.3.tgz#978dbc0b601556552a5a274a8984ec5dd8de56a3"
-  integrity sha512-9v308zIFTIFkWJBN/4N1A5oqm/ed9hWG6GH+KYTCBjYCEJOmHoVtDIWpfrJ0eD6cPB7V53HEVoJ6bL2In8QRaw==
+fork-ts-checker-webpack-plugin@^7.2.7:
+  version "7.2.7"
+  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-7.2.7.tgz#19a7801e3dd628f32634a2db52ec5286e3cf9e02"
+  integrity sha512-ona/4AGDJ3Rls7AAbkZDfvHfiAu431k4rFndL4ZGRjVtuOYPY4amud/Y+jySsaz+FI/Z9cUrad1MRUGKIm41tg==
   dependencies:
     "@babel/code-frame" "^7.16.7"
     chalk "^4.1.2"
@@ -8801,7 +8801,7 @@ pgtest@^0.2.3:
   version "2.0.0-alpha.1"
   dependencies:
     normalize-diacritics "^3.0.8"
-    phylopic-utils "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-api-models-2.0.0-alpha.1-a2edc720-9037-40d2-b90b-214f15adbbbb-1650991934466/node_modules/phylopic-utils"
+    phylopic-utils "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-api-models-2.0.0-alpha.1-785ca23f-f795-4082-a38f-966c5ec54284-1650992441739/node_modules/phylopic-utils"
 
 "phylopic-api@file:packages/phylopic-api":
   version "2.0.0-alpha"
@@ -8811,8 +8811,8 @@ pgtest@^0.2.3:
     is-uuid "^1.0.2"
     normalize-diacritics "^2.14.0"
     pg "^8.7.3"
-    phylopic-api-models "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-api-2.0.0-alpha-c779b3dc-2856-4d31-ba0d-818f4e57f691-1650991934416/node_modules/phylopic-api-models"
-    phylopic-utils "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-api-2.0.0-alpha-c779b3dc-2856-4d31-ba0d-818f4e57f691-1650991934416/node_modules/phylopic-utils"
+    phylopic-api-models "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-api-2.0.0-alpha-14aeacc6-234d-4c06-a71d-1656c5bb0f5a-1650992441684/node_modules/phylopic-api-models"
+    phylopic-utils "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-api-2.0.0-alpha-14aeacc6-234d-4c06-a71d-1656c5bb0f5a-1650992441684/node_modules/phylopic-utils"
 
 "phylopic-publisher@file:packages/phylopic-publish":
   version "2.0.0-alpha.1"
@@ -8829,9 +8829,9 @@ pgtest@^0.2.3:
     parse-nomen "^2.1.2"
     path "^0.12.7"
     pg "^8.7.3"
-    phylopic-api-models "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-publisher-2.0.0-alpha.1-20195c40-b2af-4142-a8f9-b9c31cde6acd-1650991934478/node_modules/phylopic-api-models"
-    phylopic-source-models "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-publisher-2.0.0-alpha.1-20195c40-b2af-4142-a8f9-b9c31cde6acd-1650991934478/node_modules/phylopic-source-models"
-    phylopic-utils "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-publisher-2.0.0-alpha.1-20195c40-b2af-4142-a8f9-b9c31cde6acd-1650991934478/node_modules/phylopic-utils"
+    phylopic-api-models "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-publisher-2.0.0-alpha.1-a789de14-9cfb-4437-9182-49ff0af4495a-1650992441746/node_modules/phylopic-api-models"
+    phylopic-source-models "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-publisher-2.0.0-alpha.1-a789de14-9cfb-4437-9182-49ff0af4495a-1650992441746/node_modules/phylopic-source-models"
+    phylopic-utils "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-publisher-2.0.0-alpha.1-a789de14-9cfb-4437-9182-49ff0af4495a-1650992441746/node_modules/phylopic-utils"
     probe-image-size "^7.2.3"
     raw-body "^2.4.2"
     readline "^1.3.0"
@@ -8847,7 +8847,7 @@ pgtest@^0.2.3:
   dependencies:
     email-validator "^2.0.4"
     parse-nomen "^2.1.2"
-    phylopic-utils "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-source-models-2.0.0-alpha.1-e59f40bf-434a-4791-af51-8fb94448a99a-1650991934500/node_modules/phylopic-utils"
+    phylopic-utils "file:../../../../Library/Caches/Yarn/v6/npm-phylopic-source-models-2.0.0-alpha.1-20f35b55-e653-403a-91a4-fd3b8bd52420-1650992441768/node_modules/phylopic-utils"
     uuid "^8.3.2"
 
 "phylopic-utils@file:packages/phylopic-utils":
