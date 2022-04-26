@@ -96,10 +96,10 @@ const getExternal = (uuid: UUID, data: SourceData) => {
         .sort(([pathA], [pathB]) => (pathA < pathB ? -1 : pathA > pathB ? 1 : 0))
         .map(
             ([path, link]) =>
-            ({
-                href: `/resolve/${path}`,
-                title: link.title,
-            } as TitledLink),
+                ({
+                    href: `/resolve/${path}`,
+                    title: link.title,
+                } as TitledLink),
         )
 }
 const getNodeJSON = (uuid: UUID, data: SourceData): Node => {

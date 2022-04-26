@@ -8,8 +8,8 @@ const checkListRedirect = <TEmbedded>(
     entityEmbedFields: ReadonlyArray<string & keyof EntityParameters<TEmbedded>> = [],
     userMessage = "There was a problem with a request for data.",
 ): parameters is ListParameters<TEmbedded> &
-Readonly<{ build: undefined }> &
-Readonly<Record<string, string | number | boolean | undefined>> => {
+    Readonly<{ build: undefined }> &
+    Readonly<Record<string, string | number | boolean | undefined>> => {
     const { build, page } = parameters
     if (!build) {
         if (page) {

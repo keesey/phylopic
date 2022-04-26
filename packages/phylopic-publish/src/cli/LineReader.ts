@@ -137,10 +137,10 @@ export default class LineReader {
             value === "root"
                 ? this.findRoot()
                 : /^[^/]+\/[^/]+\/[^/]+$/.test(value)
-                    ? this.findNodeByExternal(value)
-                    : /^"[^"]+"$/.test(value)
-                        ? this.findNodeByName(value.slice(1, value.length - 1))
-                        : this.findEntityByPartialUUID(value?.toLowerCase())
+                ? this.findNodeByExternal(value)
+                : /^"[^"]+"$/.test(value)
+                ? this.findNodeByName(value.slice(1, value.length - 1))
+                : this.findEntityByPartialUUID(value?.toLowerCase())
         if (!entity) {
             throw new Error(`Cannot find entity: ${value}`)
         }
@@ -183,8 +183,8 @@ export default class LineReader {
             value === "root"
                 ? this.findRoot()
                 : /^"[^"]+"$/.test(value)
-                    ? this.findNodeByName(value.slice(1, value.length - 1))
-                    : this.findNodeByPartialUUID(value?.toLowerCase())
+                ? this.findNodeByName(value.slice(1, value.length - 1))
+                : this.findNodeByPartialUUID(value?.toLowerCase())
         if (!node) {
             throw new Error(`Cannot find node: ${value}`)
         }

@@ -114,8 +114,8 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
             },
             generalNode: sourceImage.general
                 ? {
-                    href: `/nodes/${encodeURIComponent(sourceImage.general)}?build=${data.build}`,
-                }
+                      href: `/nodes/${encodeURIComponent(sourceImage.general)}?build=${data.build}`,
+                  }
                 : null,
             "http://ogp.me/ns#image": socialFile,
             license: {

@@ -6,33 +6,21 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": false,
         "incremental": true,
-        "lib": [
-            "dom",
-            "esnext"
-        ],
+        "lib": ["dom", "esnext"],
         "module": "CommonJS",
         "moduleResolution": "Node",
         "noImplicitAny": true,
         "noImplicitThis": true,
         "outDir": "dist",
         "paths": {
-            "~/*": [
-                "./src/*"
-            ]
+            "~/*": ["./src/*"]
         },
         "resolveJsonModule": true,
         "skipLibCheck": false,
         "strict": true,
         "target": "ESNext",
-        "typeRoots": [
-            "./node_modules/@types",
-            "./custom_typings"
-        ]
+        "typeRoots": ["./node_modules/@types", "./custom_typings"]
     },
-    "exclude": [
-        "./src/**/*.spec.ts"
-    ],
-    "include": [
-        "./src/**/*.ts"
-    ]
+    "exclude": ["./src/**/*.spec.ts"],
+    "include": ["./src/**/*.ts"]
 }

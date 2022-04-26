@@ -31,7 +31,8 @@ const succeed = (cliData: CLIData, parent: Entity<Node>, child: Entity<Node>): C
     )
     if (conflicts.length > 0) {
         throw new Error(
-            `The following image${conflicts.length === 1 ? "" : "s"} need${conflicts.length === 1 ? "s" : ""
+            `The following image${conflicts.length === 1 ? "" : "s"} need${
+                conflicts.length === 1 ? "s" : ""
             } to be reidentified first:${conflicts.map(([uuid]) => `\n\t- ${JSON.stringify(uuid)}`).join("")}`,
         )
     }

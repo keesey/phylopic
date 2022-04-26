@@ -2,11 +2,11 @@ import "dotenv/config"
 import { Client } from "pg"
 import getBuild from "./make/getBuild"
 import getSourceData from "./make/getSourceData"
-import updateEntities from "./make/updateEntities"
+import insertEntities from "./make/insertEntities"
 ;(async () => {
     try {
         const build = (await getBuild()) + 1
-        console.info("Updating entities for build:", build)
+        console.info("Inserting entities for build:", build)
         console.info("Loading source data...")
         const sourceData = await getSourceData({ build })
         console.info("Loaded source data.")
@@ -16,12 +16,12 @@ import updateEntities from "./make/updateEntities"
             })
             try {
                 await client.connect()
-                await updateEntities(client, sourceData)
+                await insertEntities(client, sourceData)
             } finally {
                 client.end()
             }
         })()
-        console.info("Created all files for build: ", build)
+        console.info("Inserted all entities for build: ", build)
         process.exit(0)
     } catch (e) {
         console.info("ERROR!")

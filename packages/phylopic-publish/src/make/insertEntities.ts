@@ -246,7 +246,7 @@ const insertIllustrations = async (client: ClientBase, data: SourceData) => {
     }
     console.info("Added image-node assigments to entities database...")
 }
-const updateEntities = async (client: ClientBase, data: SourceData) => {
+const insertEntities = async (client: ClientBase, data: SourceData) => {
     console.info("Updating entities database...")
     // Clean anything from an aborted build.
     await cleanTables(client, data.build, "=")
@@ -258,4 +258,4 @@ const updateEntities = async (client: ClientBase, data: SourceData) => {
     await client.query("COMMIT")
     console.info("Updated entities database.")
 }
-export default updateEntities
+export default insertEntities

@@ -3,26 +3,10 @@
     "dependencies": {
         "email-validator": "^2.0.4",
         "parse-nomen": "^2.1.2",
-        "phylopic-utils": "2.0.0-alpha.1",
+        "phylopic-utils": "file:../phylopic-utils",
         "uuid": "^8.3.2"
     },
     "description": "Types, validation, and normalization for PhyloPic model objects.",
-    "devDependencies": {
-        "@types/chai": "^4.3.0",
-        "@types/mocha": "^9.0.0",
-        "@types/uuid": "^8.3.4",
-        "@typescript-eslint/eslint-plugin": "^5.10.1",
-        "@typescript-eslint/parser": "^5.10.1",
-        "chai": "^4.3.4",
-        "eslint": "^8.6.0",
-        "eslint-config-prettier": "^8.3.0",
-        "eslint-plugin-import": "^2.25.4",
-        "mocha": "^9.1.4",
-        "prettier": "^2.5.1",
-        "ts-node": "^10.4.0",
-        "typescript": "^4.5.5",
-        "yarn": "^1.22.18"
-    },
     "files": [
         "dist/**/*"
     ],

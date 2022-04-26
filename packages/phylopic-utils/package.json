@@ -8,7 +8,6 @@
         "uuid": "^8.3.2"
     },
     "description": "Common code for *PhyloPic* project.",
-    "devDependencies": {},
     "files": [
         "dist/**/*"
     ],

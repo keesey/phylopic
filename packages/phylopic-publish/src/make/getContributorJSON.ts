@@ -12,8 +12,8 @@ const getContributorJSON = (uuid: UUID, data: SourceData, count: number): Contri
             contact:
                 sourceContributor.emailAddress && sourceContributor.showEmailAddress
                     ? {
-                        href: `mailto:${sourceContributor.emailAddress}`,
-                    }
+                          href: `mailto:${sourceContributor.emailAddress}`,
+                      }
                     : null,
             images: {
                 href: `/images?build=${data.build}&filter_contributor=${encodeURIComponent(uuid)}`,

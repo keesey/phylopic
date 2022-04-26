@@ -72,7 +72,8 @@ const analyze = (data: HealData): HealData => {
         try {
             if (!isUUID(external.uuid)) {
                 console.warn(
-                    `Invalid UUID for external identifier (${JSON.stringify(identifier)}): <${external.uuid
+                    `Invalid UUID for external identifier (${JSON.stringify(identifier)}): <${
+                        external.uuid
                     }>. Deleting.`,
                 )
                 keysToDelete.add(`/externals/${identifier}/meta.json`)
@@ -93,7 +94,8 @@ const analyze = (data: HealData): HealData => {
             }
             if (!nodes.has(external.uuid)) {
                 console.warn(
-                    `External identifier (${JSON.stringify(identifier)}) is linked to a non-canonical node: <${external.uuid
+                    `External identifier (${JSON.stringify(identifier)}) is linked to a non-canonical node: <${
+                        external.uuid
                     }>. Deleting.`,
                 )
                 const synonymIdentifier = `phylopic.org/nodes/${external.uuid}`
@@ -122,15 +124,15 @@ const analyze = (data: HealData): HealData => {
                                 matches =
                                     external.title !== parsedTitle
                                         ? [...nodes.entries()].filter(([, { names }]) =>
-                                            names.some(name => nameMatches(external.title, name)),
-                                        )
+                                              names.some(name => nameMatches(external.title, name)),
+                                          )
                                         : matches
                                 if (matches.length !== 1) {
                                     matches =
                                         external.title.toLowerCase() !== parsedTitle.toLowerCase()
                                             ? [...nodes.entries()].filter(([, { names }]) =>
-                                                names.some(name => nameMatches(external.title, name, true)),
-                                            )
+                                                  names.some(name => nameMatches(external.title, name, true)),
+                                              )
                                             : matches
                                     if (matches.length !== 1) {
                                         console.warn("Could not find an unambiguous match. Deleting.")

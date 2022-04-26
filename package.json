@@ -1,11 +1,61 @@
 {
   "author": "Mike Keesey <keesey@gmail.com>",
   "description": "An open database of freely reusable silhouettes of life forms.",
+  "dependencies": {
+    "phylopic-api": "file:packages/phylopic-api",
+    "phylopic-api-docs": "file:packages/phylopic-api-docs",
+    "phylopic-api-models": "file:packages/phylopic-api-models",
+    "phylopic-publisher": "file:packages/phylopic-publish",
+    "phylopic-source-models": "file:packages/phylopic-source-models",
+    "phylopic-utils": "file:packages/phylopic-utils"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.92",
+    "@types/chai": "^4.3.0",
+    "@types/is-uuid": "^1.0.0",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.13",
+    "@types/node-fetch": "^2.1.4",
+    "@types/pg": "^8.6.4",
+    "@types/probe-image-size": "^7.0.1",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "api-spec-converter": "^2.12.0",
+    "bootprint": "^4.0.4",
+    "bootprint-json-schema": "^4.0.4",
+    "bootprint-openapi": "^4.0.4",
+    "chai": "^4.3.4",
+    "copyfiles": "^2.4.1",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.25.4",
+    "fork-ts-checker-webpack-plugin": "^7.2.1",
+    "handlebars": "^4.7.7",
+    "lerna": "^4.0.0",
+    "mocha": "^9.1.4",
+    "openapi-types": "^10.0.0",
+    "pgtest": "^0.2.3",
+    "prettier": "^2.5.1",
+    "serverless": "^3.0.1",
+    "serverless-offline": "^8.4.0",
+    "serverless-webpack": "^5.6.1",
+    "sinon": "^13.0.0",
+    "swagger-cli": "^4.0.4",
+    "ts-loader": "^9.2.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.5",
+    "webpack": "^5.70.0",
+    "yarn": "^1.22.18"
+  },
   "license": "MIT",
   "name": "phylopic",
   "private": true,
   "repository": "https://github.com/keesey/phylopic",
-  "workspaces": [
-    "packages/*"
-  ]
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "format": "lerna run format"
+  }
 }
