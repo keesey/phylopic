@@ -1,15 +1,12 @@
 import { ClientBase } from "pg"
-import { NODE_EMBEDDED_PARAMETERS } from "phylopic-api-models"
-import {
-    isNode,
-    isNodeListParameters,
-    Link,
-    Node,
-    NodeEmbedded,
-    NodeLinks,
-    NodeListParameters,
-} from "phylopic-api-models"
-import { UUID } from "phylopic-utils"
+import isNode from "phylopic-api-models/dist/detection/isNode"
+import NODE_EMBEDDED_PARAMETERS from "phylopic-api-models/dist/queryParameters/constants/NODE_EMBEDDED_PARAMETERS"
+import isNodeListParameters from "phylopic-api-models/dist/queryParameters/detection/isNodeListParameters"
+import { NodeListParameters } from "phylopic-api-models/dist/queryParameters/types/NodeListParameters"
+import { Link } from "phylopic-api-models/dist/types/Link"
+import { Node, NodeLinks } from "phylopic-api-models/dist/types/Node"
+import { NodeEmbedded } from "phylopic-api-models/dist/types/NodeWithEmbedded"
+import { UUID } from "phylopic-utils/dist/models/types/UUID"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"

@@ -1,14 +1,11 @@
-import {
-    EmbeddableParameters,
-    EntityParameters,
-    Image,
-    ImageEmbedded,
-    ImageLinks,
-    IMAGE_EMBEDDED_PARAMETERS,
-    isImage,
-    isImageParameters,
-} from "phylopic-api-models"
-import { normalizeUUID } from "phylopic-utils"
+import { isImage } from "phylopic-api-models/dist/detection/isImage"
+import { IMAGE_EMBEDDED_PARAMETERS } from "phylopic-api-models/dist/queryParameters/constants/IMAGE_EMBEDDED_PARAMETERS"
+import { isImageParameters } from "phylopic-api-models/dist/queryParameters/detection/isImageParameters"
+import { EmbeddableParameters } from "phylopic-api-models/dist/queryParameters/types/EmbeddableParameters"
+import { EntityParameters } from "phylopic-api-models/dist/queryParameters/types/EntityParameters"
+import { Image, ImageLinks } from "phylopic-api-models/dist/types/Image"
+import { ImageEmbedded } from "phylopic-api-models/dist/types/ImageWithEmbedded"
+import { normalizeUUID } from "phylopic-utils/dist/models/normalization/normalizeUUID"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"

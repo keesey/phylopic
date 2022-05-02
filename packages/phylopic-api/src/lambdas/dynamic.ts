@@ -1,11 +1,9 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
-import {
-    CONTRIBUTOR_EMBEDDED_PARAMETERS,
-    ImageListParameters,
-    IMAGE_EMBEDDED_PARAMETERS,
-    NodeListParameters,
-    NODE_EMBEDDED_PARAMETERS,
-} from "phylopic-api-models"
+import IMAGE_EMBEDDED_PARAMETERS from "phylopic-api-models/dist/queryParameters/constants/IMAGE_EMBEDDED_PARAMETERS"
+import NODE_EMBEDDED_PARAMETERS from "phylopic-api-models/dist/queryParameters/constants/NODE_EMBEDDED_PARAMETERS"
+import CONTRIBUTOR_EMBEDDED_PARAMETERS from "phylopic-api-models/dist/queryParameters/constants/CONTRIBUTOR_EMBEDDED_PARAMETERS"
+import { ImageListParameters } from "phylopic-api-models/dist/queryParameters/types/ImageListParameters"
+import { NodeListParameters } from "phylopic-api-models/dist/queryParameters/types/NodeListParameters"
 import APIError from "../errors/APIError"
 import create405 from "../errors/create405"
 import errorToResult from "../errors/errorToResult"
@@ -20,9 +18,9 @@ import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
 import getResolveObjects from "../operations/getResolveObjects"
-import getEmbedParameters from "./parameters/getEmbedParameters"
 import { PoolClientService } from "../services/PoolClientService"
 import { S3Service } from "../services/S3Service"
+import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
 import getUUID from "./parameters/getUUID"
 import POOL_CLIENT_SERVICE from "./services/POOL_CLIENT_SERVICE"

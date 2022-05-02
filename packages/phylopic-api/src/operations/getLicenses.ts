@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from "aws-lambda"
-import { DataParameters } from "phylopic-api-models"
+import { DataParameters } from "phylopic-api-models/dist/queryParameters/types/DataParameters"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"

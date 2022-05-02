@@ -1,4 +1,4 @@
-import { Link } from "phylopic-api-models"
+import { Link } from "phylopic-api-models/dist/types/Link"
 import getPageObject from "./getPageObject"
 const getPageObjectJSONWithEmbedded = (
     listEndpoint: string,

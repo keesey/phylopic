@@ -1,5 +1,5 @@
 import { invalidate } from "../validation"
-import { ValidationFaultCollector } from "../validation/ValidationFaultCollector"
+import type ValidationFaultCollector from "../validation/ValidationFaultCollector"
 import isArray from "./isArray"
 export const isNonemptyArray =
     <T>(isType: (x: unknown, faultCollector?: ValidationFaultCollector) => x is T) =>

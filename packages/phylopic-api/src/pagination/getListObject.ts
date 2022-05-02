@@ -1,4 +1,4 @@
-import { createSearch } from "phylopic-utils"
+import createSearch from "phylopic-utils/dist/http/createSearch"
 const getListObject = (
     endpoint: string,
     query: Readonly<Record<string, string | number | boolean | undefined>>,

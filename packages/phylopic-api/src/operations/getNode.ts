@@ -1,14 +1,11 @@
-import {
-    EmbeddableParameters,
-    EntityParameters,
-    isNode,
-    isNodeParameters,
-    Node,
-    NodeEmbedded,
-    NodeLinks,
-    NODE_EMBEDDED_PARAMETERS,
-} from "phylopic-api-models"
-import { normalizeUUID } from "phylopic-utils"
+import isNode from "phylopic-api-models/dist/detection/isNode"
+import NODE_EMBEDDED_PARAMETERS from "phylopic-api-models/dist/queryParameters/constants/NODE_EMBEDDED_PARAMETERS"
+import isNodeParameters from "phylopic-api-models/dist/queryParameters/detection/isNodeParameters"
+import { EmbeddableParameters } from "phylopic-api-models/dist/queryParameters/types/EmbeddableParameters"
+import { EntityParameters } from "phylopic-api-models/dist/queryParameters/types/EntityParameters"
+import { Node, NodeLinks } from "phylopic-api-models/dist/types/Node"
+import { NodeEmbedded } from "phylopic-api-models/dist/types/NodeWithEmbedded"
+import { normalizeUUID } from "phylopic-utils/dist/models/normalization/normalizeUUID"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"

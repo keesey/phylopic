@@ -1,4 +1,4 @@
-import { ValidationFaultCollector } from "../validation"
+import type ValidationFaultCollector from "../validation/ValidationFaultCollector"
 import { FaultDetector } from "./FaultDetector"
 export const isNullOr =
     <T>(isType: FaultDetector<T>): FaultDetector<T | null> =>

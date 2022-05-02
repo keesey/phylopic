@@ -1,5 +1,5 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
-import { NODE_EMBEDDED_PARAMETERS } from "phylopic-api-models"
+import NODE_EMBEDDED_PARAMETERS from "phylopic-api-models/dist/queryParameters/constants/NODE_EMBEDDED_PARAMETERS"
 import APIError from "../errors/APIError"
 import errorToResult from "../errors/errorToResult"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"

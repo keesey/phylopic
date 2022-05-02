@@ -1,6 +1,7 @@
 import { ClientBase } from "pg"
-import { Entity, Links } from "phylopic-api-models"
-import { FaultDetector } from "phylopic-utils"
+import { Entity } from "phylopic-api-models/dist/types/Entity"
+import { Links } from "phylopic-api-models/dist/types/Links"
+import { FaultDetector } from "phylopic-utils/dist/detection/FaultDetector"
 import parseEntityJSON from "./parseEntityJSON"
 import selectEntityEmbeds from "./selectEntityEmbeds"
 const parseEntityJSONAndEmbed = async <TEntity extends Entity<TLinks>, TLinks extends Links>(

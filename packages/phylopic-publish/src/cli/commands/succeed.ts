@@ -1,6 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { Entity, isNode, Node, SOURCE_BUCKET_NAME } from "phylopic-source-models"
-import { stringifyNormalized } from "phylopic-utils/src/json"
+import { stringifyNormalized } from "phylopic-utils/dist/json"
 import { CLIData } from "../getCLIData"
 import { CommandResult } from "./CommandResult"
 import precedes from "./utils/precedes"

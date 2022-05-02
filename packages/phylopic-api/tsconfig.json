@@ -4,7 +4,7 @@
         "downlevelIteration": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "module": "CommonJS",
+        "module": "ESNext",
         "moduleResolution": "Node",
         "noImplicitAny": true,
         "noImplicitThis": true,

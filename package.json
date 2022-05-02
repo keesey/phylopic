@@ -26,7 +26,6 @@
     "bootprint-json-schema": "^4.0.4",
     "bootprint-openapi": "^4.0.4",
     "chai": "^4.3.4",
-    "copyfiles": "^2.4.1",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -56,6 +55,13 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
-    "format": "lerna run format"
+    "format": "lerna run format",
+    "lint": "lerna run lint",
+    "postversion": "git push && git push --tags",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test && yarn lint",
+    "preversion": "yarn format",
+    "test": "lerna run test",
+    "version": "git add -A src"
   }
 }

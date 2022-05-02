@@ -1,11 +1,9 @@
 import { ClientBase } from "pg"
-import {
-    ContributorListParameters,
-    CONTRIBUTOR_EMBEDDED_PARAMETERS,
-    isContributorListParameters,
-    Link,
-} from "phylopic-api-models"
-import { UUID } from "phylopic-utils"
+import CONTRIBUTOR_EMBEDDED_PARAMETERS from "phylopic-api-models/dist/queryParameters/constants/CONTRIBUTOR_EMBEDDED_PARAMETERS"
+import isContributorListParameters from "phylopic-api-models/dist/queryParameters/detection/isContributorListParameters"
+import { ContributorListParameters } from "phylopic-api-models/dist/queryParameters/types/ContributorListParameters"
+import { Link } from "phylopic-api-models/dist/types/Link"
+import { UUID } from "phylopic-utils/dist/models/types/UUID"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
@@ -54,7 +52,7 @@ export const getContributors: Operation<GetContributorsParameters, GetContributo
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    validate(queryParameters, isContributorListParameters, USER_MESSAGE)
+    validate<ContributorListParameters>(queryParameters, isContributorListParameters, USER_MESSAGE)
     if (checkListRedirect(queryParameters, CONTRIBUTOR_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
         return createBuildRedirect("/contributors", queryParameters)
     }

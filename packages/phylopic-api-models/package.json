@@ -11,7 +11,7 @@
     "files": [
         "dist/**/*"
     ],
-    "homepage": "https://github.com/keesey/phylopic-api-models#readme",
+    "homepage": "https://github.com/keesey/phylopic/packages/phylopic-api-models#readme",
     "license": "MIT",
     "main": "dist/index.js",
     "name": "phylopic-api-models",
@@ -20,11 +20,11 @@
         "@types/node": "*"
     },
     "scripts": {
-        "build": "rm -rf dist && yarn compile && copyfiles -u 1 \"src/**/*.d.ts\" dist",
-        "compile": "tsc",
+        "build": "tsc",
         "format": "prettier -w . && eslint --ext .js,.ts --fix .",
         "lint": "eslint --ext .js,.ts .",
         "postversion": "git push && git push --tags",
+        "prebuild": "rm -rf dist",
         "prepare": "yarn build",
         "prepublishOnly": "yarn test && yarn lint",
         "preversion": "yarn lint && yarn test",

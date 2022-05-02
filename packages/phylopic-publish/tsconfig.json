@@ -14,7 +14,6 @@
         "noImplicitThis": true,
         "outDir": "./dist/",
         "paths": {
-            "~/*": ["./src/*"],
             "*": ["node_modules/*", "custom_typings/*"]
         },
         "resolveJsonModule": true,
@@ -28,7 +27,7 @@
     "include": ["src/**/*.ts"],
     "ts-node": {
         "compilerOptions": {
-            "module": "CommonJS"
+            "module": "ESNext"
         }
     }
 }

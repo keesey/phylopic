@@ -18,11 +18,11 @@
         "@types/node": "*"
     },
     "scripts": {
-        "build": "rm -rf dist && mkdir dist && yarn compile",
-        "compile": "tsc",
+        "build": "tsc",
         "format": "prettier -w . && yarn lint --fix",
         "lint": "eslint --ext .js,.ts .",
         "postversion": "git push && git push --tags",
+        "prebuild": "rm -rf dist",
         "prepare": "yarn build",
         "prepublishOnly": "yarn test && yarn lint",
         "preversion": "yarn format",

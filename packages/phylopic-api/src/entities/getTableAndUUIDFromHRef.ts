@@ -1,4 +1,5 @@
-import { isUUID, UUID } from "phylopic-utils"
+import { UUID } from "phylopic-utils/dist/models/types/UUID"
+import { isUUID } from "phylopic-utils/dist/models/detection/isUUID"
 import { TableName } from "./TableName"
 const TABLE_FOR_PATH: Readonly<Record<string, TableName | undefined>> = {
     contributors: "contributor",
