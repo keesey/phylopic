@@ -1,9 +1,10 @@
+dist
 node_modules
+packages/*/dist
 **/*.log
 **/.editorconfig
 **/.env
 **/.env.local
 **/.vscode
 **/.webpack
-**/dist
 **/node_modules

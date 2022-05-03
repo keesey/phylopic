@@ -1,0 +1,35 @@
+{
+  "author": {
+    "email": "keesey+phylopic@gmail.com",
+    "name": "T. Michael Keesey"
+  },
+  "bugs": {
+    "url": "https://github.com/keesey/@phylopic/api-docs/issues"
+  },
+  "description": "Documentation for PhyloPic's Application Programming Interface",
+  "homepage": "https://github.com/keesey/@phylopic/api-docs#readme",
+  "keywords": [
+    "api",
+    "documentation",
+    "openapi",
+    "phylopic",
+    "swagger"
+  ],
+  "license": "CC0-1.0",
+  "name": "@phylopic/api-docs",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keesey/@phylopic/api-docs.git"
+  },
+  "scripts": {
+    "build": "yarn build:swagger && yarn build:html",
+    "build:html": "bootprint openapi ./.swagger.yaml ./dist/2.0",
+    "build:swagger": "api-spec-converter --from=openapi_3 --to=swagger_2 --syntax=yaml openapi.yaml > .swagger.yaml",
+    "deploy": "aws s3 sync --acl public-read --delete ./dist s3://api-docs.phylopic.org",
+    "predeploy": "yarn build",
+    "prebuild": "yarn test && rm -rf ./dist && cp -r ./public ./dist",
+    "test": "swagger-cli validate ./openapi.yaml"
+  },
+  "version": "2.0.0-alpha"
+}

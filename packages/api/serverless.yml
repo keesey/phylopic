@@ -1,0 +1,366 @@
+service: phylopic-api
+useDotenv: true
+provider:
+    iam:
+        role: arn:aws:iam::960039257217:role/@phylopic/api-executor
+    name: aws
+    runtime: nodejs14.x
+    region: us-west-2
+    stage: prod
+    versionFunctions: false
+plugins:
+    - serverless-offline
+    - serverless-webpack
+functions:
+    ping:
+        handler: src/lambdas/ping.onAPIGatewayProxy
+        memorySize: 128
+        events:
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: ping
+                  method: get
+    static:
+        handler: src/lambdas/static.onAPIGatewayProxy
+        memorySize: 128
+        environment:
+            PHYLOPIC_BUILD: "${ssm:PHYLOPIC_BUILD}"
+            PHYLOPIC_BUILD_TIMESTAMP: "${ssm:PHYLOPIC_BUILD_TIMESTAMP}"
+            PHYLOPIC_ROOT_UUID: "${ssm:PHYLOPIC_ROOT_UUID}"
+        events:
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: ""
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          querystrings:
+                              build: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: licenses
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          querystrings:
+                              build: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: root
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          querystrings:
+                              build: false
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
+    dynamic:
+        handler: src/lambdas/dynamic.onAPIGatewayProxy
+        memorySize: 1024
+        timeout: 30
+        environment:
+            PGHOST: "${ssm:PGHOST}"
+            PGPORT: "${ssm:PGPORT}"
+            PGUSER: "${ssm:PGUSER}"
+            PGPASSWORD: "${ssm:PGPASSWORD}"
+            PGDATABASE: "${ssm:PGDATABASE}"
+            PHYLOPIC_API_ENDPOINT: "${ssm:PHYLOPIC_API_ENDPOINT}"
+            PHYLOPIC_BUILD: "${ssm:PHYLOPIC_BUILD}"
+        events:
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: autocomplete
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          querystrings:
+                              build: false
+                              query: true
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: contributors
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          querystrings:
+                              build: false
+                              embed_items: false
+                              page: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: "contributors/{uuid}"
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              uuid: true
+                          querystrings:
+                              build: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: images
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          querystrings:
+                              build: false
+                              filter_clade: false
+                              filter_contributor: false
+                              filter_license_by: false
+                              filter_license_nc: false
+                              filter_license_sa: false
+                              filter_name: false
+                              filter_node: false
+                              embed_contributor: false
+                              embed_generalNode: false
+                              embed_items: false
+                              embed_nodes: false
+                              embed_specificNode: false
+                              page: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: "images/{uuid}"
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              uuid: true
+                          querystrings:
+                              build: false
+                              embed_contributor: false
+                              embed_generalNode: false
+                              embed_nodes: false
+                              embed_specificNode: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: nodes
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          querystrings:
+                              build: false
+                              embed_childNodes: false
+                              embed_items: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
+                              filter_name: false
+                              page: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: "nodes/{uuid}"
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              uuid: true
+                          querystrings:
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: "nodes/{uuid}/lineage"
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              uuid: true
+                          querystrings:
+                              embed_childNodes: false
+                              embed_items: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: resolve/{authority}/{namespace}/{objectID}
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              authority: true
+                              namespace: true
+                              objectID: true
+                          querystrings:
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: resolve/{authority}/{namespace}
+                  method: post
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              authority: true
+                              namespace: true
+                          querystrings:
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false

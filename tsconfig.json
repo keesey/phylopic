@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "downlevelIteration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "incremental": true,
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noLib": false,
+        "outDir": "dist",
+        "resolveJsonModule": true,
+        "skipLibCheck": false,
+        "strict": true,
+        "target": "ESNext",
+        "typeRoots": [
+            "./node_modules/@types",
+            "./custom_typings"
+        ]
+    },
+    "exclude": [
+        "**/node_modules",
+        "**/*.spec.ts"
+    ]
+}

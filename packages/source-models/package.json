@@ -1,0 +1,54 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.82.0",
+        "@phylopic/utils": "^2.0.0-alpha",
+        "email-validator": "^2.0.4",
+        "parse-nomen": "^2.1.2",
+        "uuid": "^8.3.2"
+    },
+    "description": "Types, validation, and normalization for PhyloPic source model objects.",
+    "files": [
+        "dist"
+    ],
+    "homepage": "https://github.com/keesey/phylopic/packages/source-models#readme",
+    "keywords": [
+        "PhyloPic"
+    ],
+    "license": "MIT",
+    "main": "dist/index.js",
+    "name": "@phylopic/source-models",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/keesey/phylopic.git"
+    },
+    "resolutions": {
+        "@types/node": "*"
+    },
+    "scripts": {
+        "build": "tsc",
+        "format": "prettier -w . && yarn lint --fix",
+        "lint": "eslint --ext .js,.ts .",
+        "postversion": "git push && git push --tags",
+        "prebuild": "rm -rf dist",
+        "prepare": "yarn build",
+        "prepublishOnly": "yarn test && yarn lint",
+        "preversion": "yarn format",
+        "test": "mocha -r ts-node/register \"./src/**/*.spec.ts\"",
+        "version": "git add -A src"
+    },
+    "types": "dist/index.d.ts",
+    "version": "2.0.0-alpha",
+    "devDependencies": {
+        "typescript": "^4.6.4"
+    }
+}
