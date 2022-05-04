@@ -49,7 +49,6 @@ const getEntityParameters = (event: APIGatewayProxyEvent, embeddedParameters: re
 })
 const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (event: APIGatewayProxyEvent) => {
     const { path } = event
-    console.debug("PATH: ", path)
     switch (path) {
         case "/autocomplete":
         case "/autocomplete/": {
@@ -168,6 +167,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                                 "embed_items" as const,
                                 ...NODE_EMBEDDED_PARAMETERS,
                             ]),
+                            ...getUUID(event.pathParameters),
                         },
                         SERVICE,
                     )

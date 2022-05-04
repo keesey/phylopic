@@ -31,7 +31,7 @@ const getTotalItems = async (client: ClientBase) => {
 }
 const getItemLinks = async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
     const queryResult = await client.query<{ uuid: UUID }>({
-        text: 'SELECT "uuid" FROM contributor WHERE build=$::bigint ORDER BY sort_index OFFSET $ LIMIT $',
+        text: 'SELECT "uuid" FROM contributor WHERE build=$1::bigint ORDER BY sort_index OFFSET $2 LIMIT $3',
         values: [BUILD, offset, limit],
     })
     return queryResult.rows.map(({ uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}` }))
@@ -44,7 +44,7 @@ const getItemLinksAndJSON = async (
     /*embed: ReadonlyArray<string & keyof ContributorEmbedded>,*/
 ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
     const queryResult = await client.query<{ json: string; uuid: UUID }>({
-        text: "SELECT json,uuid FROM contributor WHERE build=$::bigint ORDER BY sort_index OFFSET $ LIMIT $",
+        text: "SELECT json,uuid FROM contributor WHERE build=$1::bigint ORDER BY sort_index OFFSET $2 LIMIT $3",
         values: [BUILD, offset, limit],
     })
     return queryResult.rows.map(({ json, uuid }) => [{ href: `/contributors/${uuid}?build=${BUILD}` }, json])

@@ -30,15 +30,17 @@ const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list taxonomic groups."
 const getQueryBuilder = (uuid: UUID, results: "total" | "uuid" | "json") => {
     const builder = new QueryConfigBuilder()
-    const selection = results === "total" ? 'COUNT("uuid") as total' : results === "uuid" ? '"uuid"' : 'json,"uuid"'
+    const selection = results === "total" ? 'COUNT("uuid") as total' : results === "uuid" ? '"uuid"' : '"json","uuid"'
+    const additional = results === "json" ? '"json",' : ""
+    const additionalN = results === "json" ? 'n."json",' : ""
     builder.add(
         `
 WITH RECURSIVE predecessors AS (
-    SELECT "uuid",parent_uuid,build,0 as lineage_index
+    SELECT ${additional}"uuid",parent_uuid,build,0 as lineage_index
         FROM node
         WHERE "uuid"=$::uuid AND build=$::bigint
     UNION
-    SELECT n."uuid",n.parent_uuid,n.build,suc.lineage_index + 1
+    SELECT ${additionalN}n."uuid",n.parent_uuid,n.build,suc.lineage_index + 1
         FROM node n
         INNER JOIN predecessors suc ON suc.parent_uuid=n."uuid" AND suc.build=n.build
 )
@@ -47,7 +49,7 @@ SELECT ${selection} FROM predecessors
         [uuid, BUILD],
     )
     if (results !== "total") {
-        builder.add('GROUP BY "uuid",lineage_index ORDER BY lineage_index')
+        builder.add(`GROUP BY ${additional}"uuid",lineage_index ORDER BY lineage_index`)
     }
     return builder
 }
@@ -97,10 +99,10 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
     const normalizedUUID = normalizeUUID(uuid)
     const path = `/nodes/${encodeURIComponent(normalizedUUID)}/lineage`
     if (checkListRedirect(queryParameters, NODE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
-        return createBuildRedirect(path, queryParameters)
+        return createBuildRedirect(path, { ...queryParameters, uuid: normalizedUUID })
     }
     if (uuid !== normalizedUUID) {
-        return createPermanentRedirect(path, queryParameters)
+        return createPermanentRedirect(path, { ...queryParameters, uuid: normalizedUUID })
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
     return await getListResult({
@@ -110,7 +112,7 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: path,
         service,
-        listQuery: {},
+        listQuery: queryParameters,
         page: queryParameters.page,
         userMessage: USER_MESSAGE,
         validEmbeds: ["childNodes", "parentNode", "primaryImage"],

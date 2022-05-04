@@ -179,7 +179,7 @@ const getContributorCount = (data: SourceData, uuid: UUID): number => {
 const compareContributorEntries = (
     a: Readonly<[UUID, Contributor, number]>,
     b: Readonly<[UUID, Contributor, number]>,
-) => a[2] - b[2] || compareStrings(a[1].created, b[1].created) || compareStrings(a[0], b[0])
+) => b[2] - a[2] || compareStrings(a[1].created, b[1].created) || compareStrings(a[0], b[0])
 const insertContributors = async (client: ClientBase, data: SourceData) => {
     console.info("Adding contributor data to entities database...")
     const contributors = [...data.contributors.entries()]
