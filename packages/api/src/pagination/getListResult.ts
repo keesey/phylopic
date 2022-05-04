@@ -1,6 +1,6 @@
+import { Link } from "@phylopic/api-models"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { ClientBase } from "pg"
-import { Link } from "@phylopic/api-models"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
@@ -112,7 +112,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 result = {
                     ...OK_RESULT,
                     body: JSON.stringify(
-                        getPageObject(listPath, { ...listQuery, page }, pageIndex, lastPage, itemLinks),
+                        getPageObject(listPath, listQuery, pageIndex, lastPage, itemLinks),
                     ),
                 }
             } finally {
