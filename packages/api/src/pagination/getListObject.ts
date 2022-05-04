@@ -5,12 +5,12 @@ const getListObject = (
     totalItems: number,
     itemsPerPage: number,
 ) => {
-    const totalPages = Math.floor(totalItems / itemsPerPage)
+    const totalPages = Math.ceil(totalItems / itemsPerPage)
     return {
         _links: {
-            firstPage: totalItems > 0 ? { href: endpoint + createSearch({ ...query, page: 0 }) } : null,
+            firstPage: totalPages > 0 ? { href: endpoint + createSearch({ ...query, page: 0 }) } : null,
             lastPage:
-                totalItems > 0
+                totalPages > 0
                     ? {
                           href: endpoint + createSearch({ ...query, page: totalPages - 1 }),
                       }
