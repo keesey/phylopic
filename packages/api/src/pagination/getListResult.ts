@@ -88,15 +88,13 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 const itemsJSON = items.map(([, json]) => json)
                 result = {
                     ...OK_RESULT,
-                    body: JSON.stringify(
-                        getPageObjectJSONWithEmbedded(
-                            listPath,
-                            { ...listQuery, page },
-                            pageIndex,
-                            lastPage,
-                            itemLinks,
-                            itemsJSON,
-                        ),
+                    body: getPageObjectJSONWithEmbedded(
+                        listPath,
+                        { ...listQuery, page },
+                        pageIndex,
+                        lastPage,
+                        itemLinks,
+                        itemsJSON,
                     ),
                 }
             } finally {

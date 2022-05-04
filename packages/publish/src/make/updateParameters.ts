@@ -53,12 +53,12 @@ const updateParameters = async (build: number, rootUUID: UUID) => {
                 Value: rootUUID,
             }),
         ),
-        updateLambdaEnvironmentVariables(lambdaClient, "@phylopic/api-prod-static", {
+        updateLambdaEnvironmentVariables(lambdaClient, "phylopic-api-prod-static", {
             PHYLOPIC_BUILD: buildValue,
             PHYLOPIC_BUILD_TIMESTAMP: buildTimestamp,
             PHYLOPIC_ROOT_UUID: rootUUID,
         }),
-        updateLambdaEnvironmentVariables(lambdaClient, "@phylopic/api-prod-dynamic", {
+        updateLambdaEnvironmentVariables(lambdaClient, "phylopic-api-prod-dynamic", {
             PHYLOPIC_BUILD: buildValue,
         }),
     ])

@@ -21,7 +21,7 @@ import insertEntities from "./make/insertEntities"
                 client.end()
             }
         })()
-        console.info("Inserted all entities for build: ", build)
+        console.info("Inserted all entities for build:", build)
         process.exit(0)
     } catch (e) {
         console.info("ERROR!")

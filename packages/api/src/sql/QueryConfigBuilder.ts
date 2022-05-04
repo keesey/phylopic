@@ -36,7 +36,7 @@ export class QueryConfigBuilder {
             )
             .join(" ")
         const values = [...this.values]
-        // console.debug("[QUERY]", text, values)
+        console.debug("[QUERY]", text, values)
         return { text, values }
     }
 }

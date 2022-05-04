@@ -11,7 +11,7 @@ const selectEntityJSON = async (
 ): Promise<string> => {
     try {
         const result = await client.query<{ json: string }>({
-            text: `SELECT json FROM ${tableName} WHERE build=$::bigint AND uuid=$::uuid LIMIT 1`,
+            text: `SELECT json FROM ${tableName} WHERE build=$1::bigint AND uuid=$2::uuid LIMIT 1`,
             values: [BUILD, uuid],
         })
         if (result.rows.length === 1) {

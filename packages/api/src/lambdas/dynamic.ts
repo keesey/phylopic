@@ -49,6 +49,7 @@ const getEntityParameters = (event: APIGatewayProxyEvent, embeddedParameters: re
 })
 const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (event: APIGatewayProxyEvent) => {
     const { path } = event
+    console.debug("PATH: ", path)
     switch (path) {
         case "/autocomplete":
         case "/autocomplete/": {

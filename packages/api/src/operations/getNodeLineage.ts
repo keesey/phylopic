@@ -46,17 +46,15 @@ SELECT ${selection} FROM predecessors
 `,
         [uuid, BUILD],
     )
-    if (results === "total") {
-        builder.add('GROUP BY "uuid"')
-    } else {
+    if (results !== "total") {
         builder.add('GROUP BY "uuid",lineage_index ORDER BY lineage_index')
     }
     return builder
 }
 const getTotalItems = (uuid: UUID) => async (client: ClientBase) => {
     const query = getQueryBuilder(uuid, "total").build()
-    const queryResult = await client.query<{ total: number }>(query)
-    return queryResult.rows[0].total ?? 0
+    const queryResult = await client.query<{ total: string }>(query)
+    return parseInt(queryResult.rows[0].total, 10) || 0
 }
 const getItemLinks =
     (uuid: UUID) =>

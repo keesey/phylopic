@@ -79,7 +79,7 @@ SELECT ${selection} AS "uuid" FROM node_name
     }
     addFilterToQuery(parameters, builder)
     if (results === "total") {
-        builder.add('GROUP BY image."uuid"')
+        // Add nothing
     } else if (parameters.filter_clade) {
         builder.add(
             `GROUP BY image."uuid",image.depth${
@@ -99,8 +99,8 @@ SELECT ${selection} AS "uuid" FROM node_name
 }
 const getTotalItems = (parameters: ImageListParameters) => async (client: ClientBase) => {
     const query = getQueryBuilder(parameters, "total").build()
-    const queryResult = await client.query<{ total: number }>(query)
-    return queryResult.rows[0].total ?? 0
+    const queryResult = await client.query<{ total: string }>(query)
+    return parseInt(queryResult.rows[0].total, 10) || 0
 }
 const getItemLinks =
     (parameters: ImageListParameters) =>

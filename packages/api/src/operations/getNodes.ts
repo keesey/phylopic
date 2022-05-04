@@ -38,7 +38,7 @@ const getQueryBuilder = (parameters: NodeListParameters, results: "total" | "uui
     if (parameters.filter_name) {
         builder.add(
             `
-SELECT ${selection} AS "uuid" FROM node_name
+SELECT ${selection} FROM node_name
     LEFT JOIN node ON node_name.node_uuid=node."uuid" AND node_name.build=node.build
     WHERE node_name.normalized=$::character varying AND node_name.build=$::bigint AND node."uuid" IS NOT NULL
 `,
@@ -48,7 +48,7 @@ SELECT ${selection} AS "uuid" FROM node_name
         builder.add(`SELECT ${selection} FROM node WHERE build=$::bigint`, [BUILD])
     }
     if (results === "total") {
-        builder.add('GROUP BY node."uuid"')
+        // Add nothing
     } else if (parameters.filter_name) {
         builder.add(
             `GROUP BY node."uuid",node.sort_index${results === "json" ? ",node.json" : ""} ORDER BY node.sort_index`,
@@ -60,8 +60,8 @@ SELECT ${selection} AS "uuid" FROM node_name
 }
 const getTotalItems = (parameters: NodeListParameters) => async (client: ClientBase) => {
     const query = getQueryBuilder(parameters, "total").build()
-    const queryResult = await client.query<{ total: number }>(query)
-    return queryResult.rows[0].total ?? 0
+    const queryResult = await client.query<{ total: string }>(query)
+    return parseInt(queryResult.rows[0].total, 10) || 0
 }
 const getItemLinks =
     (parameters: NodeListParameters) =>

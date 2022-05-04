@@ -13,7 +13,7 @@ const getChildNodes = (vertex: number, data: SourceData): readonly Link[] => {
                 (data.sortIndices.get(a) ?? Number.MAX_SAFE_INTEGER) -
                 (data.sortIndices.get(b) ?? Number.MAX_SAFE_INTEGER),
         )
-        .map(childUUID => ({ href: `/nodes/${childUUID}` }))
+        .map(childUUID => ({ href: `/nodes/${childUUID}?build=${data.build}` }))
 }
 const compareImageEntitiesByCreated = (a: Entity<Image>, b: Entity<Image>) => {
     const aValue = a.value.created + a.uuid
@@ -86,7 +86,7 @@ const getPrimaryImage = (uuid: UUID, data: SourceData): Link | null => {
         return null
     }
     return {
-        href: `/images/${imageEntity.uuid}`,
+        href: `/images/${imageEntity.uuid}?build=${data.build}`,
     }
 }
 const getExternal = (uuid: UUID, data: SourceData) => {
@@ -97,7 +97,7 @@ const getExternal = (uuid: UUID, data: SourceData) => {
         .map(
             ([path, link]) =>
                 ({
-                    href: `/resolve/${path}`,
+                    href: `/resolve/${path}?build=${data.build}`,
                     title: link.title,
                 } as TitledLink),
         )

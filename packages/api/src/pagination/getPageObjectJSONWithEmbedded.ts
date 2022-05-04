@@ -9,8 +9,8 @@ const getPageObjectJSONWithEmbedded = (
     itemsJSON: readonly string[],
 ) => {
     const o = {
-        ...getPageObject(listEndpoint, listQuery, pageIndex, lastPage, itemLinks),
         _embedded: {},
+        ...getPageObject(listEndpoint, listQuery, pageIndex, lastPage, itemLinks),
     }
     const json = JSON.stringify(o)
     return json.replace('"_embedded":{}', `"_embedded":{"items":[${itemsJSON.join(",")}]}`)

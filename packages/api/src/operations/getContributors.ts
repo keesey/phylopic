@@ -26,8 +26,8 @@ const getTotalItems = async (client: ClientBase) => {
     const builder = new QueryConfigBuilder('SELECT COUNT("uuid") AS total FROM contributor WHERE build=$::bigint', [
         BUILD,
     ])
-    const result = await client.query<{ total: number }>(builder.build())
-    return result.rows[0].total
+    const result = await client.query<{ total: string }>(builder.build())
+    return parseInt(result.rows[0].total, 10) ?? 0
 }
 const getItemLinks = async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
     const queryResult = await client.query<{ uuid: UUID }>({
