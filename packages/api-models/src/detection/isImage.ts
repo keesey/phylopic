@@ -35,6 +35,6 @@ const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x 
     isMediaLink(isURL, isVectorMediaType)((x as Image["_links"]).vectorFile, faultCollector?.sub("vectorFile"))
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isEntity(x, isImageLinks, faultCollector) &&
-    isNormalizedText((x as Image).attribution, faultCollector?.sub("attribution")) &&
+    isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&
     isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor"))
 export default isImage
