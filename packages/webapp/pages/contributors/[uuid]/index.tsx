@@ -1,15 +1,6 @@
-import {
-    Contributor,
-    ContributorListParameters,
-    ImageListParameters,
-    ImageWithEmbedded,
-    List,
-    Page,
-    PageWithEmbedded,
-} from "@phylopic/api-models"
-import { createSearch, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
-import type { GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage } from "next"
-import { ParsedUrlQuery } from "querystring"
+import { Contributor, ImageListParameters, ImageWithEmbedded, List, PageWithEmbedded } from "@phylopic/api-models"
+import { createSearch, isUUIDv4, Query } from "@phylopic/utils"
+import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import { SWRConfig, unstable_serialize } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
@@ -24,10 +15,11 @@ import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PageHead from "~/metadata/PageHead"
 import getContributorName from "~/models/getContributorName"
-import extractUUIDv4 from "~/routes/extractUUID"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
-import DataContainer from "~/swr/data/DataContainer"
+import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
+import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import ContributorContainer from "~/swr/data/ContributorContainer"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Loader from "~/ui/Loader"
 import PageLoader from "~/ui/PageLoader"
@@ -47,7 +39,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
     return (
         <SWRConfig value={{ fallback }}>
             <BuildContainer initialValue={build}>
-                <DataContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid}>
+                <ContributorContainer uuid={uuid}>
                     {contributor => (
                         <LicenseTypeFilterContainer>
                             <PageLoader />
@@ -58,9 +50,9 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                             (images[0] as ImageWithEmbedded)._links["http://ogp.me/ns#image"] ?? null
                                         }
                                         title={`PhyloPic: Silhouette Images Contributed by ${getContributorName(
-                                            contributor as Contributor | undefined,
+                                            contributor,
                                         )}`}
-                                        url={`https://www.phylopic.org/contributors/${encodeURIComponent(uuid)}`}
+                                        url={`https://www.phylopic.org/contributors/${uuid}`}
                                     />
                                 )}
                             </ImageLicensePaginator>
@@ -78,9 +70,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                     {
                                                         children: (
                                                             <strong>
-                                                                <ContributorNameView
-                                                                    value={contributor as Contributor | undefined}
-                                                                />
+                                                                <ContributorNameView value={contributor} />
                                                             </strong>
                                                         ),
                                                     },
@@ -88,9 +78,9 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                             />
                                             <h1>
                                                 Silhouette Images Contributed by{" "}
-                                                <ContributorNameView value={contributor as Contributor | undefined} />
+                                                <ContributorNameView value={contributor} />
                                             </h1>
-                                            <ContributorDetailsView value={contributor as Contributor | undefined} />
+                                            <ContributorDetailsView value={contributor} />
                                         </header>
                                         <ImageLicensePaginator query={imagesQuery}>
                                             {(images, totalImages) => (
@@ -108,36 +98,14 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                             </SearchContainer>
                         </LicenseTypeFilterContainer>
                     )}
-                </DataContainer>
+                </ContributorContainer>
             </BuildContainer>
         </SWRConfig>
     )
 }
 export default PageComponent
-type PageQuery = ParsedUrlQuery & { uuid: UUID }
-export const getStaticPaths: GetStaticPaths<PageQuery> = async () => {
-    const parameters: ContributorListParameters & Query = { page: "0" }
-    const response = await fetchData<Page>(process.env.NEXT_PUBLIC_API_URL + "/contributors" + createSearch(parameters))
-    if (!response.ok) {
-        console.error(response)
-        return {
-            fallback: "blocking",
-            paths: [],
-        }
-    }
-    const paths: GetStaticPathsResult<PageQuery>["paths"] =
-        response.data._links.items
-            .map(link => extractUUIDv4(link.href))
-            .filter(isDefined)
-            .map(uuid => ({
-                params: { uuid },
-            })) ?? []
-    return {
-        fallback: "blocking",
-        paths,
-    }
-}
-export const getStaticProps: GetStaticProps<Props, PageQuery> = async context => {
+export const getStaticPaths = createStaticPathsGetter("/contributors")
+export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
         return { notFound: true }

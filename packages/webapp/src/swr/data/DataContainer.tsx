@@ -5,7 +5,7 @@ import BuildContext from "~/builds/BuildContext"
 import Loader from "~/ui/Loader"
 import useAPIFetcher from "../api/useAPIFetcher"
 export type Props<T extends Readonly<{ build: number }> = Readonly<{ build: number }>> = {
-    children: (value?: T) => ReactNode
+    children?: (value?: T) => ReactNode
     endpoint: URL
     hideLoader?: boolean
     onError?: (error: Error) => void
@@ -24,7 +24,7 @@ const DataContainer: FC<Props> = ({ children, endpoint, hideLoader, onError, que
     }, [error, onError])
     return (
         <>
-            <Fragment key="items">{children(data)}</Fragment>
+            <Fragment key="items">{children?.(data)}</Fragment>
             {!data && isValidating && !hideLoader && <Loader />}
             {error && (
                 <p key="error">

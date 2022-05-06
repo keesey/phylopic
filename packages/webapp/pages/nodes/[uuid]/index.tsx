@@ -3,15 +3,12 @@ import {
     ImageWithEmbedded,
     List,
     Node,
-    NodeListParameters,
     NodeParameters,
     NodeWithEmbedded,
-    Page,
     PageWithEmbedded,
 } from "@phylopic/api-models"
 import { createSearch, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
-import type { GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage } from "next"
-import { ParsedUrlQuery } from "querystring"
+import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import { SWRConfig, unstable_serialize } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
@@ -30,7 +27,9 @@ import getShortName from "~/models/getShortName"
 import extractUUIDv4 from "~/routes/extractUUID"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
-import DataContainer from "~/swr/data/DataContainer"
+import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
+import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import NodeContainer from "~/swr/data/NodeContainer"
 import AnchorLink from "~/ui/AnchorLink"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import Loader from "~/ui/Loader"
@@ -46,35 +45,23 @@ export type Props = {
 } & Pick<Node, "build" | "uuid">
 const createImagesQuery = (uuid: UUID) =>
     ({ embed_specificNode: "true", filter_clade: uuid } as ImageListParameters & Query)
-const Page: NextPage<Props> = ({ build, fallback, uuid }) => {
+const NODE_QUERY: Omit<NodeParameters, "uuid"> & Query = {
+    embed_childNodes: "true",
+    embed_parentNode: "true",
+    embed_primaryImage: "true",
+}
+const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
     const imagesQuery = useMemo(() => createImagesQuery(uuid), [uuid])
-    const nodeEndpoint = useMemo(
-        () =>
-            process.env.NEXT_PUBLIC_API_URL +
-            "/nodes/" +
-            uuid +
-            createSearch({
-                embed_childNodes: "true",
-                embed_parentNode: "true",
-                embed_primaryImage: "true",
-            }),
-        [uuid],
-    )
-    // const hasChildNodes = node._embedded?.childNodes && node._embedded.childNodes.length > 0
     return (
         <SWRConfig value={{ fallback }}>
             <BuildContainer initialValue={build}>
-                <DataContainer endpoint={nodeEndpoint}>
+                <NodeContainer uuid={uuid} query={NODE_QUERY}>
                     {node => (
                         <LicenseTypeFilterContainer>
                             <PageLoader />
                             <PageHead
-                                socialImage={
-                                    (node as NodeWithEmbedded | undefined)?._embedded.primaryImage?._links[
-                                        "http://ogp.me/ns#image"
-                                    ]
-                                }
-                                title={`PhyloPic: ${getShortName((node as NodeWithEmbedded | undefined)?.names[0])}`}
+                                socialImage={node?._embedded.primaryImage?._links["http://ogp.me/ns#image"]}
+                                title={`PhyloPic: ${getShortName(node?.names[0])}`}
                                 url={`https://www.phylopic.org/nodes/${uuid}`}
                             />
                             <SearchContainer>
@@ -87,44 +74,34 @@ const Page: NextPage<Props> = ({ build, fallback, uuid }) => {
                                             <ExpandableLineageBreadcrumbs
                                                 key={uuid}
                                                 afterItems={[
-                                                    (node as NodeWithEmbedded | undefined)?._links.parentNode?.href
+                                                    node?._links.parentNode?.href
                                                         ? {
                                                               children: (
                                                                   <NameView
-                                                                      value={
-                                                                          (node as NodeWithEmbedded | undefined)
-                                                                              ?._embedded?.parentNode?.names?.[0]
-                                                                      }
+                                                                      value={node?._embedded?.parentNode?.names?.[0]}
                                                                       short
                                                                       defaultText="Parent Node"
                                                                   />
                                                               ),
-                                                              href: (node as NodeWithEmbedded | undefined)?._links
-                                                                  .parentNode?.href,
+                                                              href: node?._links.parentNode?.href,
                                                           }
                                                         : null,
                                                     {
                                                         children: (
                                                             <strong>
                                                                 <NameView
-                                                                    value={
-                                                                        (node as NodeWithEmbedded | undefined)?.names[0]
-                                                                    }
+                                                                    value={node?.names[0]}
                                                                     defaultText="[Unnamed]"
                                                                 />
                                                             </strong>
                                                         ),
                                                     },
-                                                    ...((node as NodeWithEmbedded | undefined)?._embedded.childNodes
-                                                        ?.length
+                                                    ...(node?._embedded.childNodes?.length
                                                         ? [
                                                               {
                                                                   children: (
                                                                       <NodeListView
-                                                                          value={
-                                                                              (node as NodeWithEmbedded | undefined)
-                                                                                  ?._embedded.childNodes ?? []
-                                                                          }
+                                                                          value={node?._embedded.childNodes ?? []}
                                                                           short
                                                                       />
                                                                   ),
@@ -137,19 +114,14 @@ const Page: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                     { children: "Taxonomic Groups", href: "/nodes" },
                                                 ]}
                                                 uuid={extractUUIDv4(
-                                                    (node as NodeWithEmbedded | undefined)?._embedded.parentNode?._links
-                                                        .parentNode?.href,
+                                                    node?._embedded.parentNode?._links.parentNode?.href,
                                                 )}
                                             />
                                             <h1>
-                                                <NameView
-                                                    value={(node as NodeWithEmbedded | undefined)?.names[0]}
-                                                    short
-                                                    defaultText="[Unnamed]"
-                                                />
+                                                <NameView value={node?.names[0]} short defaultText="[Unnamed]" />
                                             </h1>
                                         </header>
-                                        <NodeDetailsView value={node as NodeWithEmbedded | undefined} />
+                                        <NodeDetailsView value={node} />
                                         <section>
                                             <h2>Silhouette Images</h2>
                                             <ImageLicensePaginator query={imagesQuery}>
@@ -160,14 +132,10 @@ const Page: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                         {isNaN(totalImages) && <Loader key="loader" />}
                                                         {totalImages === 0 && (
                                                             <>
-                                                                {(node as NodeWithEmbedded | undefined)?._links
-                                                                    .lineage && (
+                                                                {node?._links.lineage && (
                                                                     <p>
                                                                         <AnchorLink
-                                                                            href={
-                                                                                (node as NodeWithEmbedded | undefined)
-                                                                                    ?._links.lineage.href ?? "."
-                                                                            }
+                                                                            href={node?._links.lineage.href ?? "."}
                                                                         >
                                                                             Look through the ancestors of{" "}
                                                                             <NameView
@@ -179,7 +147,7 @@ const Page: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                                                     )?.names[0]
                                                                                 }
                                                                                 short
-                                                                                defaultText="this taxon"
+                                                                                defaultText="this taxonomic group"
                                                                             />{" "}
                                                                             to find an approximation.
                                                                         </AnchorLink>
@@ -190,10 +158,7 @@ const Page: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                                     <AnchorLink href="/contribute">
                                                                         be the first to contribute a silhouette of{" "}
                                                                         <NameView
-                                                                            value={
-                                                                                (node as NodeWithEmbedded | undefined)
-                                                                                    ?.names[0]
-                                                                            }
+                                                                            value={node?.names[0]}
                                                                             short
                                                                             defaultText="this taxon"
                                                                         />
@@ -213,36 +178,14 @@ const Page: NextPage<Props> = ({ build, fallback, uuid }) => {
                             </SearchContainer>
                         </LicenseTypeFilterContainer>
                     )}
-                </DataContainer>
+                </NodeContainer>
             </BuildContainer>
         </SWRConfig>
     )
 }
-export default Page
-type PageQuery = { uuid: UUID } & ParsedUrlQuery
-export const getStaticPaths: GetStaticPaths<PageQuery> = async () => {
-    const parameters: NodeListParameters & Query = { page: "0" }
-    const response = await fetchData<Page>(process.env.NEXT_PUBLIC_API_URL + "/nodes" + createSearch(parameters))
-    if (!response.ok) {
-        console.error(response)
-        return {
-            fallback: "blocking",
-            paths: [],
-        }
-    }
-    const paths: GetStaticPathsResult<PageQuery>["paths"] =
-        response.data._links.items
-            .map(link => extractUUIDv4(link.href))
-            .filter(isDefined)
-            .map(uuid => ({
-                params: { uuid },
-            })) ?? []
-    return {
-        fallback: "blocking",
-        paths,
-    }
-}
-export const getStaticProps: GetStaticProps<Props, { uuid: UUID }> = async context => {
+export default PageComponent
+export const getStaticPaths = createStaticPathsGetter("/nodes")
+export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const uuid = context.params?.uuid
     if (!isUUIDv4(uuid)) {
         return { notFound: true }

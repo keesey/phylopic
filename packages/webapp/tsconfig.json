@@ -2,6 +2,7 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "allowJs": true,
+        "baseUrl": ".",
         "isolatedModules": true,
         "jsx": "preserve",
         "noEmit": true,

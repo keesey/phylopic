@@ -1,18 +1,17 @@
-import { ImageListParameters, ImageParameters, ImageWithEmbedded, Page as PageComponent } from "@phylopic/api-models"
-import { createSearch, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
-import type { GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage } from "next"
-import { ParsedUrlQuery } from "querystring"
+import { ImageParameters, ImageWithEmbedded, Page as PageComponent } from "@phylopic/api-models"
+import { createSearch, isUUIDv4, Query } from "@phylopic/utils"
+import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import BuildContainer from "~/builds/BuildContainer"
-import fetchData from "~/fetch/fetchData"
 import fetchResult from "~/fetch/fetchResult"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useLicenseText from "~/hooks/useLicenseText"
 import useNameText from "~/hooks/useNameText"
 import PageHead from "~/metadata/PageHead"
-import extractUUIDv4 from "~/routes/extractUUID"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
+import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
+import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import AnchorLink from "~/ui/AnchorLink"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import PageLoader from "~/ui/PageLoader"
@@ -158,32 +157,8 @@ const PageComponent: NextPage<Props> = ({ image }) => {
     )
 }
 export default PageComponent
-type PageQuery = ParsedUrlQuery & { uuid: UUID }
-export const getStaticPaths: GetStaticPaths<PageQuery> = async () => {
-    const parameters: ImageListParameters & Query = { page: "0" }
-    const response = await fetchData<PageComponent>(
-        process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(parameters),
-    )
-    if (!response.ok) {
-        console.error(response)
-        return {
-            fallback: "blocking",
-            paths: [],
-        }
-    }
-    const paths: GetStaticPathsResult<PageQuery>["paths"] =
-        response.data._links.items
-            .map(link => extractUUIDv4(link.href))
-            .filter(isDefined)
-            .map(uuid => ({
-                params: { uuid },
-            })) ?? []
-    return {
-        fallback: "blocking",
-        paths,
-    }
-}
-export const getStaticProps: GetStaticProps<Props, PageQuery> = async context => {
+export const getStaticPaths = createStaticPathsGetter("/images")
+export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
@@ -193,7 +168,7 @@ export const getStaticProps: GetStaticProps<Props, PageQuery> = async context =>
         embed_specificNode: "true",
     }
     const result = await fetchResult<ImageWithEmbedded>(
-        process.env.NEXT_PUBLIC_API_URL + "/images/" + encodeURIComponent(uuid) + createSearch(parameters),
+        process.env.NEXT_PUBLIC_API_URL + "/images/" + uuid + createSearch(parameters),
     )
     if (result.status !== "success") {
         return getStaticPropsResult(result)

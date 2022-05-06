@@ -33,15 +33,12 @@ const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hide
         [endpoint, list.data, queryWithBuild],
     )
     const pages = useSWRInfinite(getPageKey, fetcher as BareFetcher<PageWithEmbedded<unknown>>, SWR_INFINITE_CONFIG)
-    const loadNextPage = useCallback(() => pages.setSize(pages.size + 1), [pages.setSize, pages.size])
+    const { data, setSize, size } = pages
+    const loadNextPage = useCallback(() => setSize(size + 1), [setSize, size])
     const total = list.data?.totalItems ?? NaN
-    const { data: pagesData } = pages
     const value = useMemo(
-        () =>
-            pagesData
-                ? pagesData.reduce<unknown[]>((prev, page) => [...prev, ...(page._embedded.items ?? [])], [])
-                : [],
-        [pagesData],
+        () => (data ? data.reduce<unknown[]>((prev, page) => [...prev, ...(page._embedded.items ?? [])], []) : []),
+        [data],
     )
     const error = list.error ?? pages.error
     useEffect(() => {

@@ -1,18 +1,13 @@
-import { Contributor, List, Page } from "@phylopic/api-models"
-import { createSearch } from "@phylopic/utils"
-import type { GetStaticProps, NextPage } from "next"
+import { Contributor, List } from "@phylopic/api-models"
+import type { NextPage } from "next"
 import React, { Fragment } from "react"
-import { SWRConfig, unstable_serialize } from "swr"
+import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
-import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
-import addBuildToURL from "~/builds/addBuildToURL"
 import BuildContainer from "~/builds/BuildContainer"
-import fetchData from "~/fetch/fetchData"
-import fetchResult from "~/fetch/fetchResult"
-import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import PageHead from "~/metadata/PageHead"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
+import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import AnchorLink from "~/ui/AnchorLink"
 import Board from "~/ui/Board"
@@ -76,23 +71,4 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
     </SWRConfig>
 )
 export default PageComponent
-export const getStaticProps: GetStaticProps<Props, Record<string, never>> = async () => {
-    const listKey = process.env.NEXT_PUBLIC_API_URL + "/contributors"
-    const listResult = await fetchResult<List>(listKey)
-    if (listResult.status !== "success") {
-        return getStaticPropsResult(listResult)
-    }
-    const build = listResult.data.build
-    const props: Props = {
-        build,
-        fallback: { [unstable_serialize(addBuildToURL(listKey, build))]: listResult.data },
-    }
-    if (listResult.data.totalPages > 0) {
-        const getPageKey = (page: number) => listKey + createSearch({ build, page })
-        const pageResponse = await fetchData<Page>(getPageKey(0))
-        if (pageResponse.ok) {
-            props.fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
-        }
-    }
-    return { props }
-}
+export const getStaticProps = createListStaticPropsGetter<Contributor>("/contributors")

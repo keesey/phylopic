@@ -1,21 +1,16 @@
-import { ImageListParameters, ImageWithEmbedded, List, PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch } from "@phylopic/utils"
-import type { GetStaticProps, NextPage } from "next"
+import { ImageListParameters, ImageWithEmbedded, List } from "@phylopic/api-models"
+import type { NextPage } from "next"
 import React from "react"
-import { SWRConfig, unstable_serialize } from "swr"
+import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
-import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
-import addBuildToURL from "~/builds/addBuildToURL"
 import BuildContainer from "~/builds/BuildContainer"
-import fetchData from "~/fetch/fetchData"
-import fetchResult from "~/fetch/fetchResult"
-import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PageHead from "~/metadata/PageHead"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
+import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Loader from "~/ui/Loader"
 import PageLoader from "~/ui/PageLoader"
@@ -68,32 +63,4 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => {
     )
 }
 export default PageComponent
-export const getStaticProps: GetStaticProps<Props, {}> = async () => {
-    const listKey = process.env.NEXT_PUBLIC_API_URL + "/images"
-    const listResponse = await fetchResult<List>(listKey)
-    if (listResponse.status !== "success") {
-        return getStaticPropsResult(listResponse)
-    }
-    const build = listResponse.data.build
-    const props: Props = {
-        build,
-        fallback: {
-            [unstable_serialize(addBuildToURL(listKey, build))]: listResponse.data,
-        },
-    }
-    if (listResponse.data.totalPages > 0) {
-        const getPageKey = (page: number) =>
-            listKey +
-            createSearch({
-                build,
-                embed_items: true,
-                embed_specificNode: true,
-                page,
-            })
-        const pageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getPageKey(0))
-        if (pageResponse.ok) {
-            props.fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
-        }
-    }
-    return { props }
-}
+export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images", { embed_specificNode: true })
