@@ -1,6 +1,6 @@
 import { normalizeQuery } from "@phylopic/api-models"
+import { compareStrings } from "@phylopic/utils"
 import { Reducer } from "react"
-import compareStrings from "~/utils/compareStrings"
 import { Action } from "../context/actions"
 import { State } from "../context/State"
 import getMatchingText from "../utils/getMatchingText"

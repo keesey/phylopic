@@ -4,7 +4,7 @@ import { FC, useMemo } from "react"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import AnchorLink from "~/ui/AnchorLink"
 import ImageListView from "~/views/ImageListView"
-import NameView from "~/views/NameView"
+import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
 export interface Props {
     pageSize?: number
@@ -29,7 +29,7 @@ const LineageNodeView: FC<Props> = ({ value }) => {
             </PaginationContainer>
             <header className={styles.header} key="header">
                 <AnchorLink href={`/nodes/${value.uuid}`}>
-                    <NameView value={value.names[0]} short />
+                    <NomenView value={value.names[0]} short />
                 </AnchorLink>
             </header>
         </section>

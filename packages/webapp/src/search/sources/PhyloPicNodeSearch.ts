@@ -1,9 +1,11 @@
-import { List, NodeWithEmbedded } from "@phylopic/api-models"
-import { useContext, useEffect, useMemo, FC } from "react"
-import useSWR from "swr"
+import { NodeListParameters, NodeWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
+import { createSearch, extractQueryString, parseQueryString, Query } from "@phylopic/utils"
+import { FC, useContext, useEffect, useMemo } from "react"
+import useSWR from "swr/immutable"
 import useAPIFetcher from "~/swr/api/useAPIFetcher"
 import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
+import { SetNodeResultsAction } from "../context/actions"
 import getMatchingText from "../utils/getMatchingText"
 export interface Props {
     maxResults?: number
@@ -14,28 +16,29 @@ const PhyloPicNodeSearch: FC<Props> = ({ maxResults = 24 }) => {
         () => getMatchingText(state?.internalMatches, state?.text),
         [state?.internalMatches, state?.text],
     )
-    const href = useMemo(
+    const endpoint = useMemo(
         () =>
             matchingText
-                ? `${process.env.NEXT_PUBLIC_API_URL}/nodes?embed=primaryImage&length=${encodeURIComponent(
-                      maxResults,
-                  )}&name=${encodeURIComponent(matchingText)}&start=0`
+                ? process.env.NEXT_PUBLIC_API_URL +
+                "/images" +
+                createSearch({
+                    embed_primaryImage: "true",
+                    filter_name: matchingText,
+                    page: "0",
+                } as NodeListParameters & Query)
                 : null,
         [matchingText, maxResults],
     )
-    const fetcher = useAPIFetcher<List<NodeWithEmbedded>>()
-    const key = useAPISWRKey(href)
-    const response = useSWR(key, fetcher)
+    const fetcher = useAPIFetcher<PageWithEmbedded<NodeWithEmbedded>>()
+    const key = useAPISWRKey(endpoint)
+    const { data } = useSWR(key, fetcher)
     useEffect(() => {
-        if (dispatch && response.data) {
-            const basis = response.data._links.self.href
-                .split("?", 2)[1]
-                .split("&")
-                .map(part => part.split("=").map(decodeURIComponent))
-                .filter(([name]) => name === "name")[0][1]
-            dispatch({ type: "SET_NODE_RESULTS", payload: response.data._embedded.items, meta: { basis } })
+        if (dispatch && data) {
+            const parsedQuery = parseQueryString(extractQueryString(data._links.self.href))
+            const basis = parsedQuery.filter_name ?? ""
+            dispatch({ type: "SET_NODE_RESULTS", payload: data._embedded.items, meta: { basis } } as SetNodeResultsAction)
         }
-    }, [dispatch, response.data, state?.text])
+    }, [data, dispatch])
     return null
 }
 export default PhyloPicNodeSearch

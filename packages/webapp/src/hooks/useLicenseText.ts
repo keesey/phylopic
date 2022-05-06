@@ -1,4 +1,5 @@
-import { LicenseURL } from "@phylopic/api-models"
+import { LicenseURL } from "@phylopic/utils"
+import { useMemo } from "react"
 const NAMES: Readonly<Record<LicenseURL, string>> = {
     "https://creativecommons.org/licenses/by-nc-sa/3.0/":
         "Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported",
@@ -19,6 +20,6 @@ const SHORT_NAMES: Readonly<Record<LicenseURL, string>> = {
     "https://creativecommons.org/publicdomain/zero/1.0/": "CC0 1.0",
 }
 const useLicenseText = (licenseURL: LicenseURL, short = false) => {
-    return (short ? SHORT_NAMES[licenseURL] : NAMES[licenseURL]) ?? null
+    return useMemo(() => (short ? SHORT_NAMES[licenseURL] : NAMES[licenseURL]) ?? null, [licenseURL, short])
 }
 export default useLicenseText

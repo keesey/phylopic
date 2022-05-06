@@ -1,21 +1,21 @@
-import { NodeName } from "@phylopic/api-models"
+import { Nomen } from "@phylopic/utils"
 import React, { Fragment, useMemo, FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {
     defaultText?: string
     illustrated?: boolean
     short?: boolean
-    value?: NodeName
+    value?: Nomen
 }
-const NameView: FC<Props> = ({ defaultText = "", short, value }) => {
+const NomenView: FC<Props> = ({ defaultText = "", short, value }) => {
     const parts = useMemo(
         () =>
             value
                 ? short
                     ? value.filter(
-                          part =>
-                              part.class === "scientific" || part.class === "vernacular" || part.class === "operator",
-                      )
+                        part =>
+                            part.class === "scientific" || part.class === "vernacular" || part.class === "operator",
+                    )
                     : value
                 : [],
         [value, short],
@@ -43,4 +43,4 @@ const NameView: FC<Props> = ({ defaultText = "", short, value }) => {
         </span>
     )
 }
-export default NameView
+export default NomenView

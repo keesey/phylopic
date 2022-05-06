@@ -1,4 +1,4 @@
-import { ImageParameters, ImageWithEmbedded, Page as PageComponent } from "@phylopic/api-models"
+import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, isUUIDv4, Query } from "@phylopic/utils"
 import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
@@ -6,7 +6,7 @@ import BuildContainer from "~/builds/BuildContainer"
 import fetchResult from "~/fetch/fetchResult"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useLicenseText from "~/hooks/useLicenseText"
-import useNameText from "~/hooks/useNameText"
+import useNomenText from "~/hooks/useNomenText"
 import PageHead from "~/metadata/PageHead"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
@@ -21,14 +21,14 @@ import ImageFilesView from "~/views/ImageFilesView"
 import ImageRasterView from "~/views/ImageRasterView"
 import LicenseDetailsView from "~/views/LicenseDetailsView"
 import LicenseView from "~/views/LicenseView"
-import NameView from "~/views/NameView"
 import NodeListView from "~/views/NodeListView"
+import NomenView from "~/views/NomenView"
 import TimestampView from "~/views/TimestampView"
 export interface Props {
     image: ImageWithEmbedded
 }
 const PageComponent: NextPage<Props> = ({ image }) => {
-    const nameShort = useNameText(image._embedded.specificNode?.names[0], true)
+    const nameShort = useNomenText(image._embedded.specificNode?.names[0], true)
     const licenseShort = useLicenseText(image._links.license.href, true)
     const title = useMemo(
         () => `PhyloPic: ${nameShort} by ${image.attribution ?? "Anonymous"} (${licenseShort})`,
@@ -69,7 +69,7 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                                     {
                                         children: (
                                             <strong>
-                                                <NameView
+                                                <NomenView
                                                     value={image._embedded.specificNode?.names?.[0]}
                                                     short
                                                     defaultText="Silhouette"
@@ -82,7 +82,7 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                                 ]}
                             />
                             <h1>
-                                <NameView
+                                <NomenView
                                     value={image._embedded.specificNode?.names?.[0]}
                                     short
                                     defaultText="Silhouette"

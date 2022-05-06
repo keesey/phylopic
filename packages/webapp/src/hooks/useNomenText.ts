@@ -1,7 +1,7 @@
-import { NodeName } from "@phylopic/api-models"
+import { Nomen } from "@phylopic/utils"
 import { useMemo } from "react"
-const EMPTY: NodeName = []
-const useNameText = (name: NodeName = EMPTY, short = false, defaultText = "") => {
+const EMPTY: Nomen = []
+const useNomenText = (name: Nomen = EMPTY, short = false, defaultText = "") => {
     const text = useMemo(
         () =>
             (short
@@ -16,4 +16,4 @@ const useNameText = (name: NodeName = EMPTY, short = false, defaultText = "") =>
     )
     return text || defaultText
 }
-export default useNameText
+export default useNomenText

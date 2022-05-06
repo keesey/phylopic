@@ -1,6 +1,5 @@
-import { UUID } from "@phylopic/api-models"
+import { compareStrings, UUID } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
-import compareStrings from "~/utils/compareStrings"
 import SearchContext from "../context"
 import { ExternalResolution } from "../models/ExternalResolution"
 const useExternalResolutions = (maxResults = Infinity) => {

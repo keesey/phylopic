@@ -1,4 +1,4 @@
-import { LicenseURL } from "@phylopic/api-models"
+import { LicenseURL } from "@phylopic/utils"
 import { FC } from "react"
 import LicenseTextView from "../LicenseTextView"
 export interface Props {

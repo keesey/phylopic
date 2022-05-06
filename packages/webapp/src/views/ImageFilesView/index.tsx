@@ -1,10 +1,10 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
-import React, { useMemo, FC } from "react"
+import { isString } from "@phylopic/utils"
+import React, { FC, useMemo } from "react"
 import slugify from "slugify"
 import useLicenseText from "~/hooks/useLicenseText"
-import useNameText from "~/hooks/useNameText"
+import useNomenText from "~/hooks/useNomenText"
 import compareMediaLinks from "~/models/compareMediaLinks"
-import isString from "~/utils/isString"
 import getImageFileExtension from "../../files/getImageFileExtension"
 import DownLoadLink from "./DownloadLink"
 import styles from "./index.module.scss"
@@ -16,7 +16,7 @@ const EXTENSION_LINKS: Readonly<Record<string, string>> = {
     svg: "https://www.w3.org/TR/SVG/",
 }
 const ImageFilesView: FC<Props> = ({ value }) => {
-    const specificNameShort = useNameText(value._embedded.specificNode?.names[0], true, "incertae sedis")
+    const specificNameShort = useNomenText(value._embedded.specificNode?.names[0], true, "incertae sedis")
     const licenseShort = useLicenseText(value._links.license.href, true)
     const filenamePrefix = useMemo(
         () =>

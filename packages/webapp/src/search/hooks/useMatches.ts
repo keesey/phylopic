@@ -1,5 +1,5 @@
+import { compareStrings } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
-import compareStrings from "~/utils/compareStrings"
 import SearchContext from "../context"
 import getSortIndex from "../utils/getSortIndex"
 const useMatches = (maxLength: number) => {

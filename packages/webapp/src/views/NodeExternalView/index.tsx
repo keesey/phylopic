@@ -1,8 +1,8 @@
 import { TitledLink } from "@phylopic/api-models"
-import { useMemo, FC } from "react"
-import compareStrings from "~/utils/compareStrings"
-import LinkedAuthorizedNamespaceView from "../LinkedAuthorizedNamespaceView"
+import { compareStrings } from "@phylopic/utils"
+import { FC, useMemo } from "react"
 import ExternalTitledLinkView from "../ExternalTitledLinkView"
+import LinkedAuthorizedNamespaceView from "../LinkedAuthorizedNamespaceView"
 import styles from "./index.module.scss"
 export interface Props {
     value: readonly TitledLink[]

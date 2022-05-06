@@ -2,10 +2,10 @@ import { NodeWithEmbedded } from "@phylopic/api-models"
 import React, { useState, FC } from "react"
 import AnchorLink from "~/ui/AnchorLink"
 import InlineSections from "~/ui/InlineSections"
-import NameListView from "~/views/NameListView"
+import NomenListView from "~/views/NomenListView"
 import NodeExternalView from "~/views/NodeExternalView"
 import NodeListView from "~/views/NodeListView"
-import NameView from "../NameView"
+import NomenView from "../NomenView"
 import styles from "./index.module.scss"
 export interface Props {
     value?: NodeWithEmbedded
@@ -41,13 +41,13 @@ const NodeDetailsView: FC<Props> = ({ value }) => {
     return (
         <section>
             <h2>
-                Details about <NameView value={value.names[0]} />
+                Details about <NomenView value={value.names[0]} />
             </h2>
             <InlineSections key="info">
                 {hasNames && (
                     <section key="names">
                         <h3>Synonym{value.names.length > 2 ? "s" : ""}</h3>
-                        <NameListView value={value.names.slice(1)} />
+                        <NomenListView value={value.names.slice(1)} />
                     </section>
                 )}
                 {hasChildNodes && (

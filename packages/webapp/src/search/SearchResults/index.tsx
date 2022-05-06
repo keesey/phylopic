@@ -1,13 +1,13 @@
-import { NodeName } from "@phylopic/api-models"
-import { useContext, useMemo, FC } from "react"
+import { Nomen } from "@phylopic/utils"
+import { FC, useContext, useMemo } from "react"
 import IllustratedNodeView from "~/views/IllustratedNodeView"
-import NameView from "~/views/NameView"
+import NomenView from "~/views/NomenView"
 import SearchContext from "../context"
 import useExternalResults from "../hooks/useExternalResolutions"
 import ExternalResolutionCaption from "./ExternalResolutionCaption"
 import styles from "./index.module.scss"
-const EXAMPLE_SCIENTIFIC_NAME: NodeName = [{ class: "scientific", text: "Homo sapiens" }]
-const EXAMPLE_VERNACULAR_NAME: NodeName = [{ class: "vernacular", text: "humans" }]
+const EXAMPLE_SCIENTIFIC_NAME: Nomen = [{ class: "scientific", text: "Homo sapiens" }]
+const EXAMPLE_VERNACULAR_NAME: Nomen = [{ class: "vernacular", text: "humans" }]
 export interface Props {
     maxResults?: number
 }
@@ -25,8 +25,8 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
             <aside>
                 <p>Use the search bar at the top of the page to search for a group of life forms.</p>
                 <p>
-                    Names may be scientific (e.g., <NameView value={EXAMPLE_SCIENTIFIC_NAME} />) or informal (e.g.,{" "}
-                    <NameView value={EXAMPLE_VERNACULAR_NAME} />
+                    Names may be scientific (e.g., <NomenView value={EXAMPLE_SCIENTIFIC_NAME} />) or informal (e.g.,{" "}
+                    <NomenView value={EXAMPLE_VERNACULAR_NAME} />
                     ).
                 </p>
             </aside>

@@ -1,5 +1,6 @@
+import { ImageWithEmbedded, NodeWithEmbedded } from "@phylopic/api-models"
+import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import { FSA, FSAWithPayload, FSAWithPayloadAndMeta } from "flux-standard-action"
-import { Authority, ImageWithEmbedded, Namespace, NodeWithEmbedded, ObjectID } from "@phylopic/api-models"
 export type TextBasedMeta = Readonly<{ basis: string }>
 export type NamespaceMeta = Readonly<{ authority: Authority; namespace: Namespace }>
 export type ObjectMeta = NamespaceMeta & Readonly<{ objectID: ObjectID }>

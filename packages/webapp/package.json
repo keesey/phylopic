@@ -34,7 +34,7 @@
         "@babel/core": "^7.0.0"
     },
     "scripts": {
-        "build2": "next build",
+        "build": "next build",
         "dev": "next dev",
         "format": "prettier -w . && eslint --ext .ts,.tsx --fix .",
         "lint": "eslint --ext .ts,.tsx .",

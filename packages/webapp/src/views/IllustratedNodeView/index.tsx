@@ -2,7 +2,7 @@ import { NodeWithEmbedded } from "@phylopic/api-models"
 import { ReactNode, FC } from "react"
 import AnchorLink from "~/ui/AnchorLink"
 import ImageThumbnailView from "../ImageThumbnailView"
-import NameView from "../NameView"
+import NomenView from "../NomenView"
 import EmptyImage from "./EmptyImage"
 import styles from "./index.module.scss"
 export interface Props {
@@ -20,7 +20,7 @@ const IllustratedNodeView: FC<Props> = ({ caption, value, short }) => {
                     />
                 )}
                 {!value._embedded.primaryImage && <EmptyImage />}
-                <figcaption>{caption || <NameView value={value.names[0]} short={short} />}</figcaption>
+                <figcaption>{caption || <NomenView value={value.names[0]} short={short} />}</figcaption>
             </figure>
         </AnchorLink>
     )

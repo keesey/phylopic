@@ -1,21 +1,21 @@
-import { NodeName } from "@phylopic/api-models"
+import { Nomen } from "@phylopic/utils"
 import { FC } from "react"
-import NameView from "../NameView"
+import NomenView from "../NomenView"
 import styles from "./index.module.scss"
 export interface Props {
     defaultText?: string
     short?: boolean
-    value: readonly NodeName[]
+    value: readonly Nomen[]
 }
-const NameListView: FC<Props> = ({ defaultText, short, value }) => {
+const NomenListView: FC<Props> = ({ defaultText, short, value }) => {
     return (
         <ul className={styles.main}>
             {value.map((name, index) => (
                 <li key={index} className={styles.item}>
-                    <NameView value={name} defaultText={defaultText} short={short} />
+                    <NomenView value={name} defaultText={defaultText} short={short} />
                 </li>
             ))}
         </ul>
     )
 }
-export default NameListView
+export default NomenListView

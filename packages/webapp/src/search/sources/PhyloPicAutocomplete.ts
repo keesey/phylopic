@@ -1,20 +1,22 @@
 import { QueryMatches } from "@phylopic/api-models"
-import { useContext, useEffect, useMemo, FC } from "react"
-import useSWR from "swr"
+import { createSearch } from "@phylopic/utils"
+import { FC, useContext, useEffect, useMemo } from "react"
+import useSWR from "swr/immutable"
 import useAPIFetcher from "~/swr/api/useAPIFetcher"
 import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
 const PhyloPicAutocomplete: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
-    const href = useMemo(
+    const { text } = state ?? {}
+    const endpoint = useMemo(
         () =>
-            state?.text
-                ? `${process.env.NEXT_PUBLIC_API_URL}/autocomplete?query=${encodeURIComponent(state.text)}`
+            text && text.length >= 2
+                ? process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ query: text })
                 : null,
-        [state?.text],
+        [text],
     )
     const fetcher = useAPIFetcher<QueryMatches>()
-    const key = useAPISWRKey(href)
+    const key = useAPISWRKey(endpoint)
     const response = useSWR(key, fetcher)
     useEffect(() => {
         if (dispatch && response.data) {

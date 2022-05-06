@@ -1,6 +1,6 @@
-import { parseQueryString, URL } from "@phylopic/utils"
+import { extractQueryString, parseQueryString, URL } from "@phylopic/utils"
 const getBuildFromURL = (url: URL) => {
     const { build } = parseQueryString(extractQueryString(url))
-    return parseInt(build, 10) || null
+    return (build && parseInt(build, 10)) || null
 }
 export default getBuildFromURL

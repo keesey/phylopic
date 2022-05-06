@@ -1,5 +1,6 @@
+import { MediaLink } from "@phylopic/api-models"
+import { RasterMediaType, URL } from "@phylopic/utils"
 import { ImageLoader } from "next/image"
-import { MediaLink, RasterMediaType, URL } from "@phylopic/api-models"
 import { useCallback, useContext, useMemo } from "react"
 import BuildContext from "~/builds/BuildContext"
 const findBestSize = (links: readonly MediaLink<URL, RasterMediaType>[], width: number) => {

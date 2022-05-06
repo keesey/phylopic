@@ -1,6 +1,7 @@
 import axios from "axios"
-import { useContext, useEffect, FC } from "react"
-import useSWR, { Fetcher } from "swr"
+import { FC, useContext, useEffect } from "react"
+import { Fetcher } from "swr"
+import useSWR from "swr/immutable"
 import SearchContext from "../context"
 import OTOL_URL from "./OTOL_URL"
 interface OTOLAutocompleteName {

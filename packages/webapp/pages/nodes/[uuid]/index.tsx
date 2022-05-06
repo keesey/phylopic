@@ -23,7 +23,7 @@ import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import LicenseQualifier from "~/licenses/LicenseQualifier"
 import PageHead from "~/metadata/PageHead"
-import getShortName from "~/models/getShortName"
+import getShortNomen from "~/models/getShortNomen"
 import extractUUIDv4 from "~/routes/extractUUID"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
@@ -37,7 +37,7 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import ImageListView from "~/views/ImageListView"
-import NameView from "~/views/NameView"
+import NomenView from "~/views/NomenView"
 import NodeDetailsView from "~/views/NodeDetailsView"
 import NodeListView from "~/views/NodeListView"
 export type Props = {
@@ -61,7 +61,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                             <PageLoader />
                             <PageHead
                                 socialImage={node?._embedded.primaryImage?._links["http://ogp.me/ns#image"]}
-                                title={`PhyloPic: ${getShortName(node?.names[0])}`}
+                                title={`PhyloPic: ${getShortNomen(node?.names[0])}`}
                                 url={`https://www.phylopic.org/nodes/${uuid}`}
                             />
                             <SearchContainer>
@@ -76,20 +76,20 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                 afterItems={[
                                                     node?._links.parentNode?.href
                                                         ? {
-                                                              children: (
-                                                                  <NameView
-                                                                      value={node?._embedded?.parentNode?.names?.[0]}
-                                                                      short
-                                                                      defaultText="Parent Node"
-                                                                  />
-                                                              ),
-                                                              href: node?._links.parentNode?.href,
-                                                          }
+                                                            children: (
+                                                                <NomenView
+                                                                    value={node?._embedded?.parentNode?.names?.[0]}
+                                                                    short
+                                                                    defaultText="Parent Node"
+                                                                />
+                                                            ),
+                                                            href: node?._links.parentNode?.href,
+                                                        }
                                                         : null,
                                                     {
                                                         children: (
                                                             <strong>
-                                                                <NameView
+                                                                <NomenView
                                                                     value={node?.names[0]}
                                                                     defaultText="[Unnamed]"
                                                                 />
@@ -98,15 +98,15 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                     },
                                                     ...(node?._embedded.childNodes?.length
                                                         ? [
-                                                              {
-                                                                  children: (
-                                                                      <NodeListView
-                                                                          value={node?._embedded.childNodes ?? []}
-                                                                          short
-                                                                      />
-                                                                  ),
-                                                              },
-                                                          ]
+                                                            {
+                                                                children: (
+                                                                    <NodeListView
+                                                                        value={node?._embedded.childNodes ?? []}
+                                                                        short
+                                                                    />
+                                                                ),
+                                                            },
+                                                        ]
                                                         : []),
                                                 ].filter(isDefined)}
                                                 beforeItems={[
@@ -115,10 +115,10 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                 ]}
                                                 uuid={extractUUIDv4(
                                                     node?._embedded.parentNode?._links.parentNode?.href,
-                                                )}
+                                                ) ?? undefined}
                                             />
                                             <h1>
-                                                <NameView value={node?.names[0]} short defaultText="[Unnamed]" />
+                                                <NomenView value={node?.names[0]} short defaultText="[Unnamed]" />
                                             </h1>
                                         </header>
                                         <NodeDetailsView value={node} />
@@ -138,12 +138,12 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                                             href={node?._links.lineage.href ?? "."}
                                                                         >
                                                                             Look through the ancestors of{" "}
-                                                                            <NameView
+                                                                            <NomenView
                                                                                 value={
                                                                                     (
                                                                                         node as
-                                                                                            | NodeWithEmbedded
-                                                                                            | undefined
+                                                                                        | NodeWithEmbedded
+                                                                                        | undefined
                                                                                     )?.names[0]
                                                                                 }
                                                                                 short
@@ -157,7 +157,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                                     Or,{" "}
                                                                     <AnchorLink href="/contribute">
                                                                         be the first to contribute a silhouette of{" "}
-                                                                        <NameView
+                                                                        <NomenView
                                                                             value={node?.names[0]}
                                                                             short
                                                                             defaultText="this taxon"

@@ -11,7 +11,7 @@ import fetchData from "~/fetch/fetchData"
 import fetchResult from "~/fetch/fetchResult"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import PageHead from "~/metadata/PageHead"
-import getShortName from "~/models/getShortName"
+import getShortNomen from "~/models/getShortNomen"
 import extractUUIDv4 from "~/routes/extractUUID"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
@@ -24,7 +24,7 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import LineageView from "~/views/LineageView"
-import NameView from "~/views/NameView"
+import NomenView from "~/views/NomenView"
 export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Pick<Node, "build" | "uuid">
@@ -38,7 +38,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                             <PageLoader />
                             <PageHead
                                 socialImage={node?._embedded?.primaryImage?._links["http://ogp.me/ns#image"]}
-                                title={`PhyloPic: Lineage of ${getShortName(node?.names[0])}`}
+                                title={`PhyloPic: Lineage of ${getShortNomen(node?.names[0])}`}
                                 url={`https://www.phylopic.org/nodes/${uuid}/lineage`}
                             />
                             <SearchContainer>
@@ -54,7 +54,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                     {
                                                         children: (
                                                             <strong>
-                                                                <NameView
+                                                                <NomenView
                                                                     value={node?.names[0]}
                                                                     defaultText="[Unnamed]"
                                                                 />
@@ -69,11 +69,11 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                     { children: "Home", href: "/" },
                                                     { children: "Taxonomic Groups", href: "/nodes" },
                                                 ]}
-                                                uuid={extractUUIDv4(node?._links.parentNode?.href)}
+                                                uuid={extractUUIDv4(node?._links.parentNode?.href) ?? undefined}
                                             />
                                             <h1>
                                                 Lineage of{" "}
-                                                <NameView value={node?.names[0]} defaultText="[Unnamed]" short />
+                                                <NomenView value={node?.names[0]} defaultText="[Unnamed]" short />
                                             </h1>
                                         </header>
                                         <PaginationContainer
