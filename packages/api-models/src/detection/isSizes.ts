@@ -1,4 +1,6 @@
-import { invalidate, isPositiveInteger, ValidationFaultCollector } from "@phylopic/utils"
+import { isPositiveInteger } from "@phylopic/utils/dist/detection"
+import type { ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import { invalidate } from "@phylopic/utils/dist/validation"
 import { Sizes } from ".."
 export const isSizes = (x: unknown, faultCollector?: ValidationFaultCollector): x is Sizes => {
     if (typeof x === "string") {

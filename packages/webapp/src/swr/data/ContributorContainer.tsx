@@ -1,5 +1,5 @@
 import { Contributor, ContributorParameters } from "@phylopic/api-models"
-import { UUID } from "@phylopic/utils"
+import { UUID } from "@phylopic/utils/dist/models/types"
 import { FC, useMemo } from "react"
 import DataContainer, { Props as DataContainerProps } from "./DataContainer"
 export type Props = Omit<DataContainerProps<Contributor>, "endpoint"> & {

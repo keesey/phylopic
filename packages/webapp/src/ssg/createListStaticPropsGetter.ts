@@ -1,5 +1,5 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, Query } from "@phylopic/utils"
+import { createSearch, Query } from "@phylopic/utils/dist/http"
 import type { GetStaticProps } from "next"
 import { unstable_serialize } from "swr"
 import { PublicConfiguration } from "swr/dist/types"

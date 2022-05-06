@@ -1,5 +1,6 @@
 import { List, Node, NodeParameters, NodeWithEmbedded, Page } from "@phylopic/api-models"
-import { createSearch, isUUIDv4, Query } from "@phylopic/utils"
+import { createSearch, Query } from "@phylopic/utils/dist/http"
+import { isUUIDv4 } from "@phylopic/utils/dist/models/detection"
 import type { GetStaticProps, NextPage } from "next"
 import React from "react"
 import { SWRConfig, unstable_serialize } from "swr"

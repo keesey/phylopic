@@ -1,4 +1,4 @@
-import { isAuthority, isNamespace, isObjectID } from "@phylopic/utils"
+import { isAuthority, isNamespace, isObjectID } from "@phylopic/utils/dist/models/detection"
 import fetch from "cross-fetch"
 import { GetServerSideProps, NextPage } from "next"
 import { ParsedUrlQuery } from "querystring"

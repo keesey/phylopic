@@ -1,4 +1,4 @@
-import { Nomen } from "@phylopic/utils"
+import { Nomen } from "@phylopic/utils/dist/models/types"
 import React, { Fragment, useMemo, FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {
@@ -13,9 +13,9 @@ const NomenView: FC<Props> = ({ defaultText = "", short, value }) => {
             value
                 ? short
                     ? value.filter(
-                        part =>
-                            part.class === "scientific" || part.class === "vernacular" || part.class === "operator",
-                    )
+                          part =>
+                              part.class === "scientific" || part.class === "vernacular" || part.class === "operator",
+                      )
                     : value
                 : [],
         [value, short],

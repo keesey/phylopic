@@ -1,4 +1,4 @@
-import { FaultDetector } from "@phylopic/utils"
+import { FaultDetector } from "@phylopic/utils/dist/detection"
 import fetchData, { HTTPRelatedDataResponse } from "./fetchData"
 export type SuccessfulFetchResult<T> = {
     data: T

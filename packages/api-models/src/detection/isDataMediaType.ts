@@ -1,4 +1,5 @@
-import { invalidate, ValidationFaultCollector } from "@phylopic/utils"
+import type { ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import { invalidate } from "@phylopic/utils/dist/validation"
 import DATA_MEDIA_TYPE from "../constants/DATA_MEDIA_TYPE"
 import { DataMediaType } from "../types/DataMediaType"
 const VALIDATION_MESSAGE = `Expected "${DATA_MEDIA_TYPE}".`

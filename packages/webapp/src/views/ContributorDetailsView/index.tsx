@@ -1,5 +1,5 @@
 import { Contributor } from "@phylopic/api-models"
-import { createSearch } from "@phylopic/utils"
+import { createSearch } from "@phylopic/utils/dist/http"
 import { FC, useMemo } from "react"
 export interface Props {
     value?: Contributor

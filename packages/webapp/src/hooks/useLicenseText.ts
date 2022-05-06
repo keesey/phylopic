@@ -1,4 +1,4 @@
-import { LicenseURL } from "@phylopic/utils"
+import { LicenseURL } from "@phylopic/utils/dist/models/types"
 import { useMemo } from "react"
 const NAMES: Readonly<Record<LicenseURL, string>> = {
     "https://creativecommons.org/licenses/by-nc-sa/3.0/":

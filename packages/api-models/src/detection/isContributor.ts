@@ -1,4 +1,7 @@
-import { invalidate, isEmailAddress, isNormalizedText, isNullOr, ValidationFaultCollector } from "@phylopic/utils"
+import { isNormalizedText, isNullOr } from "@phylopic/utils/dist/detection"
+import { isEmailAddress } from "@phylopic/utils/dist/models/detection"
+import type { ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import { invalidate } from "@phylopic/utils/dist/validation"
 import { Contributor } from "../types"
 import isEntity from "./isEntity"
 import isLink from "./isLink"

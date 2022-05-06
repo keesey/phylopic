@@ -1,4 +1,4 @@
-import { UUID } from "@phylopic/utils"
+import { UUID } from "@phylopic/utils/dist/models/types"
 import { Entity } from "./Entity"
 import { Link } from "./Link"
 import { Links } from "./Links"

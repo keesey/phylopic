@@ -1,4 +1,4 @@
-import { Nomen } from "@phylopic/utils"
+import { Nomen } from "@phylopic/utils/dist/models/types"
 import { FC } from "react"
 import NomenView from "../NomenView"
 import styles from "./index.module.scss"

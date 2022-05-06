@@ -7,7 +7,10 @@ import {
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"
-import { createSearch, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
+import { createSearch, Query } from "@phylopic/utils/dist/http"
+import { isUUIDv4 } from "@phylopic/utils/dist/models/detection"
+import { UUID } from "@phylopic/utils/dist/models/types"
+import { isDefined } from "@phylopic/utils/dist/types"
 import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -37,9 +40,9 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import ImageListView from "~/views/ImageListView"
-import NomenView from "~/views/NomenView"
 import NodeDetailsView from "~/views/NodeDetailsView"
 import NodeListView from "~/views/NodeListView"
+import NomenView from "~/views/NomenView"
 export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Pick<Node, "build" | "uuid">
@@ -76,15 +79,15 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                 afterItems={[
                                                     node?._links.parentNode?.href
                                                         ? {
-                                                            children: (
-                                                                <NomenView
-                                                                    value={node?._embedded?.parentNode?.names?.[0]}
-                                                                    short
-                                                                    defaultText="Parent Node"
-                                                                />
-                                                            ),
-                                                            href: node?._links.parentNode?.href,
-                                                        }
+                                                              children: (
+                                                                  <NomenView
+                                                                      value={node?._embedded?.parentNode?.names?.[0]}
+                                                                      short
+                                                                      defaultText="Parent Node"
+                                                                  />
+                                                              ),
+                                                              href: node?._links.parentNode?.href,
+                                                          }
                                                         : null,
                                                     {
                                                         children: (
@@ -98,24 +101,26 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                     },
                                                     ...(node?._embedded.childNodes?.length
                                                         ? [
-                                                            {
-                                                                children: (
-                                                                    <NodeListView
-                                                                        value={node?._embedded.childNodes ?? []}
-                                                                        short
-                                                                    />
-                                                                ),
-                                                            },
-                                                        ]
+                                                              {
+                                                                  children: (
+                                                                      <NodeListView
+                                                                          value={node?._embedded.childNodes ?? []}
+                                                                          short
+                                                                      />
+                                                                  ),
+                                                              },
+                                                          ]
                                                         : []),
                                                 ].filter(isDefined)}
                                                 beforeItems={[
                                                     { children: "Home", href: "/" },
                                                     { children: "Taxonomic Groups", href: "/nodes" },
                                                 ]}
-                                                uuid={extractUUIDv4(
-                                                    node?._embedded.parentNode?._links.parentNode?.href,
-                                                ) ?? undefined}
+                                                uuid={
+                                                    extractUUIDv4(
+                                                        node?._embedded.parentNode?._links.parentNode?.href,
+                                                    ) ?? undefined
+                                                }
                                             />
                                             <h1>
                                                 <NomenView value={node?.names[0]} short defaultText="[Unnamed]" />
@@ -142,8 +147,8 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                                                 value={
                                                                                     (
                                                                                         node as
-                                                                                        | NodeWithEmbedded
-                                                                                        | undefined
+                                                                                            | NodeWithEmbedded
+                                                                                            | undefined
                                                                                     )?.names[0]
                                                                                 }
                                                                                 short

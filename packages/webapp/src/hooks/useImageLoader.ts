@@ -1,5 +1,5 @@
 import { MediaLink } from "@phylopic/api-models"
-import { RasterMediaType, URL } from "@phylopic/utils"
+import { RasterMediaType, URL } from "@phylopic/utils/dist/models/types"
 import { ImageLoader } from "next/image"
 import { useCallback, useContext, useMemo } from "react"
 import BuildContext from "~/builds/BuildContext"

@@ -1,4 +1,4 @@
-import { isUUIDv4 } from "@phylopic/utils"
+import { isUUIDv4 } from "@phylopic/utils/dist/models/detection"
 const extractUUIDv4 = (href?: string) => {
     if (!href) {
         return null

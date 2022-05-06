@@ -1,4 +1,5 @@
-import { createSearch, Query, URL } from "@phylopic/utils"
+import { createSearch, Query } from "@phylopic/utils/dist/http"
+import { URL } from "@phylopic/utils/dist/models/types"
 import { FC, Fragment, ReactNode, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import BuildContext from "~/builds/BuildContext"

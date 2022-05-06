@@ -1,4 +1,4 @@
-import { createSearch } from "@phylopic/utils"
+import { createSearch } from "@phylopic/utils/dist/http"
 import axios from "axios"
 import { FC, useContext, useEffect } from "react"
 import { Fetcher } from "swr"
@@ -23,10 +23,10 @@ const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, 
     }
     const response = await axios.get<EOLSearch>(
         url +
-        createSearch({
-            key: process.env.NEXT_PUBLIC_EOL_API_KEY,
-            q: query,
-        }),
+            createSearch({
+                key: process.env.NEXT_PUBLIC_EOL_API_KEY,
+                q: query,
+            }),
     )
     return [response.data.results, query]
 }

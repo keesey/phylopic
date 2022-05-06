@@ -1,5 +1,5 @@
 import { ErrorResponse } from "@phylopic/api-models"
-import { isDefined } from "@phylopic/utils"
+import { isDefined } from "@phylopic/utils/dist/types"
 export default class APISWRError extends Error {
     constructor(
         public readonly statusCode: number,

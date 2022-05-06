@@ -12,14 +12,14 @@ const Expanded: FC<Props> = ({ afterItems, beforeItems, values }) => {
         () =>
             values.length > 0
                 ? [...values].reverse().map(({ names, uuid }) => ({
-                    children: <NomenView value={names[0]} short />,
-                    href: `/nodes/${uuid}`,
-                }))
+                      children: <NomenView value={names[0]} short />,
+                      href: `/nodes/${uuid}`,
+                  }))
                 : [
-                    {
-                        children: "...",
-                    },
-                ],
+                      {
+                          children: "...",
+                      },
+                  ],
         [values],
     )
     const items = useMemo(() => [...beforeItems, ...valueItems, ...afterItems], [afterItems, beforeItems, valueItems])

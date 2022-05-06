@@ -1,4 +1,4 @@
-import { Authority, Namespace, ObjectID } from "@phylopic/utils"
+import { Authority, Namespace, ObjectID } from "@phylopic/utils/dist/models/types"
 import { EntityParameters } from "."
 import { NodeEmbedded } from "../../types/NodeWithEmbedded"
 export interface ResolveParameters extends EntityParameters<NodeEmbedded> {

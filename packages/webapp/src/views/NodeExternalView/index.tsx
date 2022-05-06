@@ -1,5 +1,5 @@
 import { TitledLink } from "@phylopic/api-models"
-import { compareStrings } from "@phylopic/utils"
+import { compareStrings } from "@phylopic/utils/dist/comparison"
 import { FC, useMemo } from "react"
 import ExternalTitledLinkView from "../ExternalTitledLinkView"
 import LinkedAuthorizedNamespaceView from "../LinkedAuthorizedNamespaceView"
