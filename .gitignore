@@ -1,10 +1,17 @@
 dist
 node_modules
+packages/*/.next
+packages/*/.vercel
 packages/*/dist
+packages/*/out
 **/*.log
 **/.editorconfig
 **/.env
+**/.env.development.local
 **/.env.local
+**/.env.production.local
+**/.env.test.local
 **/.vscode
 **/.webpack
 **/node_modules
+**/*/*.tsbuildinfo

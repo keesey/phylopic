@@ -1,11 +1,12 @@
 import {
-    IMAGE_EMBEDDED_PARAMETERS,
-    isImage,
-    isImageListParameters,
+    DATA_MEDIA_TYPE,
     Image,
     ImageEmbedded,
     ImageLinks,
     ImageListParameters,
+    IMAGE_EMBEDDED_PARAMETERS,
+    isImage,
+    isImageListParameters,
     Link,
 } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
@@ -17,7 +18,6 @@ import addFilterToQuery from "../entities/image/addFilterToQuery"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
-import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
 import { PoolClientService } from "../services/PoolClientService"

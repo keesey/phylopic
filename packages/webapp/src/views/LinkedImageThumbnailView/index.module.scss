@@ -1,0 +1,10 @@
+@use "../../styles/colors.scss";
+.main {
+    &:hover,
+    &:active {
+        img {
+            filter: invert(26%) sepia(94%) saturate(1845%) hue-rotate(170deg) brightness(93%) contrast(103%);
+            transition: 0.5s all;
+        }
+    }
+}

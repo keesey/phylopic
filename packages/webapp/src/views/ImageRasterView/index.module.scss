@@ -1,0 +1,13 @@
+@use "../../styles/colors.scss";
+.main {
+    display: flex;
+    justify-content: center;
+}
+.figure {
+    background-color: colors.$white;
+    border: 2px solid colors.$cerulean;
+    border-radius: 2rem;
+    max-width: calc(100vw - 2rem);
+    overflow: hidden;
+    padding: 2rem;
+}

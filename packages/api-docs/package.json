@@ -7,7 +7,13 @@
     "url": "https://github.com/keesey/@phylopic/api-docs/issues"
   },
   "description": "Documentation for PhyloPic's Application Programming Interface",
-  "homepage": "https://github.com/keesey/@phylopic/api-docs#readme",
+  "devDependencies": {
+    "api-spec-converter": "^2.12.0",
+    "bootprint": "^4.0.4",
+    "swagger-cli": "^4.0.4",
+    "yarn": "^1.22.18"
+  },
+  "homepage": "https://github.com/keesey/phylopic/packages/api-docs#readme",
   "keywords": [
     "api",
     "documentation",
@@ -20,7 +26,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/keesey/@phylopic/api-docs.git"
+    "url": "git+https://github.com/keesey/phylopic.git"
   },
   "scripts": {
     "build": "yarn build:swagger && yarn build:html",

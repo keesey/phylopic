@@ -1,6 +1,7 @@
 import {
     ContributorListParameters,
     CONTRIBUTOR_EMBEDDED_PARAMETERS,
+    DATA_MEDIA_TYPE,
     isContributorListParameters,
     Link,
 } from "@phylopic/api-models"
@@ -11,7 +12,6 @@ import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
-import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
 import { PoolClientService } from "../services/PoolClientService"

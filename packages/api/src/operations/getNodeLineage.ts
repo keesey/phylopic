@@ -1,12 +1,13 @@
 import {
+    DATA_MEDIA_TYPE,
     isNode,
     isNodeLineageParameters,
-    NODE_EMBEDDED_PARAMETERS,
     Link,
     Node,
     NodeEmbedded,
     NodeLineageParameters,
     NodeLinks,
+    NODE_EMBEDDED_PARAMETERS,
 } from "@phylopic/api-models"
 import { normalizeUUID, UUID } from "@phylopic/utils"
 import { ClientBase } from "pg"
@@ -16,7 +17,6 @@ import createBuildRedirect from "../build/createBuildRedirect"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
-import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
 import createPermanentRedirect from "../results/createPermanentRedirect"

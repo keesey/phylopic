@@ -1,0 +1,18 @@
+@use "../../styles/colors.scss";
+@use "../../styles/mixins/bullet.scss";
+@use "../../styles/mixins/hierarchy.scss";
+.main {
+    display: inline-flex;
+    flex-wrap: wrap;
+}
+.lineage {
+    .item {
+        @include hierarchy.item;
+    }
+}
+.list {
+    justify-content: center;
+    .item {
+        @include bullet.item;
+    }
+}

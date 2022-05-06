@@ -1,4 +1,4 @@
-import DATA_MEDIA_TYPE from "../../mediaTypes/DATA_MEDIA_TYPE"
+import { DATA_MEDIA_TYPE } from "@phylopic/api-models"
 const DATA_HEADERS = {
     "content-type": DATA_MEDIA_TYPE,
 }

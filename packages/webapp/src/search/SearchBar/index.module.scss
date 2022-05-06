@@ -1,0 +1,25 @@
+@use "../../styles/colors.scss";
+.main {
+    max-width: calc(100vw - 2rem);
+    width: 11in;
+    text-align: center;
+    @media (max-width: 1295px) {
+        order: 2;
+    }
+    > input {
+        background-color: colors.$vellum;
+        border-radius: 1rem;
+        border: none;
+        color: colors.$ink;
+        font-size: large;
+        width: 100%;
+        padding: 0.5rem;
+        &::placeholder {
+            color: colors.$wash;
+        }
+    }
+}
+.focused {
+    background-color: colors.$white;
+    color: colors.$black;
+}

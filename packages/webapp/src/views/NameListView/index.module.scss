@@ -1,0 +1,9 @@
+@use "../../styles/colors.scss";
+@use "../../styles/mixins/bullet.scss";
+.main {
+    display: flex;
+    flex-wrap: wrap;
+}
+.item {
+    @include bullet.item;
+}

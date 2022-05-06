@@ -1,5 +1,6 @@
 import createQueryString from "./createQueryString"
-export const createSearch = (query: Readonly<Record<string, string | number | boolean | undefined>>) => {
+import { Query } from "./Query"
+export const createSearch = (query: Query) => {
     const queryString = createQueryString(query)
     return queryString ? `?${queryString}` : ""
 }

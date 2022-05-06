@@ -3,5 +3,5 @@
         "outDir": "./dist"
     },
     "extends": "../../tsconfig.json",
-    "include": ["src"]
+    "include": ["src", "../api-models/src/mediaTypes/DATA_MEDIA_TYPE.ts"]
 }

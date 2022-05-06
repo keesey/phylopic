@@ -1,0 +1,10 @@
+.main {
+    align-items: flex-start;
+    column-gap: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 1rem;
+    > * {
+        flex-grow: 1;
+    }
+}

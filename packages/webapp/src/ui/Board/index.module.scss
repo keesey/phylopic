@@ -1,0 +1,12 @@
+@use "../../styles/colors.scss";
+.item {
+    align-items: baseline;
+    gap: 0.25em;
+    display: flex;
+}
+.spacer {
+    content: " ";
+    flex-grow: 1;
+    border-bottom: 2pt dotted colors.$ink;
+    opacity: 0.2;
+}

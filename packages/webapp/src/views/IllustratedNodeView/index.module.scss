@@ -1,0 +1,4 @@
+@use "../../styles/mixins/figures.scss";
+.figure {
+    @include figures.node;
+}

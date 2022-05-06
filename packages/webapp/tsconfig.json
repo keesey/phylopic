@@ -1,0 +1,15 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "allowJs": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "noEmit": true,
+        "outDir": "./dist",
+        "paths": {
+            "~/*": ["src/*"]
+        },
+        "lib": ["dom", "dom.iterable", "esnext"]
+    },
+    "include": ["./pages/**/*.ts", "./pages/**/*.tsx", "./src/**/*.ts", "./src/**/*.tsx"]
+}

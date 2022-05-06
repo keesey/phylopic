@@ -111,9 +111,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 const itemLinks = rawItemLinks.slice(0, itemsPerPage)
                 result = {
                     ...OK_RESULT,
-                    body: JSON.stringify(
-                        getPageObject(listPath, listQuery, pageIndex, lastPage, itemLinks),
-                    ),
+                    body: JSON.stringify(getPageObject(listPath, listQuery, pageIndex, lastPage, itemLinks)),
                 }
             } finally {
                 client.release()

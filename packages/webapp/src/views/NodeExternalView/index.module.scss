@@ -1,0 +1,11 @@
+@use "../../styles/mixins/bullet.scss";
+.header {
+    white-space: nowrap;
+}
+.list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.item {
+    @include bullet.item;
+}

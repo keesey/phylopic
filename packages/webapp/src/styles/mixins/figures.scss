@@ -1,0 +1,21 @@
+@use "../colors.scss";
+@mixin node {
+    align-items: center;
+    background-color: colors.$white;
+    border: 2pt solid colors.$cerulean;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    text-align: center;
+    figcaption {
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        box-orient: vertical;
+        display: -webkit-box;
+        line-clamp: 3;
+        overflow: hidden;
+        max-width: 14em;
+    }
+}

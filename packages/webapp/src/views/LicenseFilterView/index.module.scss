@@ -1,0 +1,23 @@
+.main {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    transition: all 0.3s;
+}
+.option {
+    align-items: baseline;
+    display: inline-flex;
+    gap: 0.5em;
+    input,
+    label {
+        cursor: pointer;
+        &:disabled {
+            cursor: inherit;
+        }
+    }
+}
+.pending {
+    cursor: progress;
+    opacity: 0.5;
+}

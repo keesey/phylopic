@@ -15,6 +15,13 @@
         "uuid": "^8.3.2"
     },
     "description": "Common code for *PhyloPic* project.",
+    "devDependencies": {
+        "eslint": "^8.6.0",
+        "mocha": "^9.1.4",
+        "prettier": "^2.5.1",
+        "typescript": "^4.6.4",
+        "yarn": "^1.22.18"
+    },
     "files": [
         "dist"
     ],
@@ -23,8 +30,9 @@
         "phylopic"
     ],
     "license": "MIT",
-    "name": "@phylopic/utils",
     "main": "dist/index.js",
+    "module": "",
+    "name": "@phylopic/utils",
     "publishConfig": {
         "access": "public"
     },
@@ -45,8 +53,5 @@
         "version": "git add -A src"
     },
     "types": "dist/index.d.ts",
-    "version": "2.0.0-alpha",
-    "devDependencies": {
-        "typescript": "^4.6.4"
-    }
+    "version": "2.0.0-alpha"
 }

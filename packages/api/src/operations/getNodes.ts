@@ -1,12 +1,13 @@
 import {
+    DATA_MEDIA_TYPE,
     isNode,
     isNodeListParameters,
-    NODE_EMBEDDED_PARAMETERS,
     Link,
     Node,
     NodeEmbedded,
     NodeLinks,
     NodeListParameters,
+    NODE_EMBEDDED_PARAMETERS,
 } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
 import { ClientBase } from "pg"
@@ -16,7 +17,6 @@ import createBuildRedirect from "../build/createBuildRedirect"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
-import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
 import { PoolClientService } from "../services/PoolClientService"

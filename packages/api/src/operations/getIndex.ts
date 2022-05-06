@@ -1,4 +1,4 @@
-import { DataParameters } from "@phylopic/api-models"
+import { DataParameters, DATA_MEDIA_TYPE } from "@phylopic/api-models"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
@@ -7,7 +7,6 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import { Operation } from "./Operation"
 export type GetRootParameters = DataRequestHeaders & DataParameters
 const BODY = `{"_links":{"contact":{"href":"mailto:keesey+phylopic@gmail.com","title":"Mike Keesey"},"documentation":{"href":"https://api-docs.phylopic.org/versions/2.0"},"resources":[{"href":"/autocomplete?build=${BUILD}","title":"Autocomplete for Phylogenetic Nodes"},{"href":"/contributors?build=${BUILD}","title":"Image Contributors"},{"href":"/images?build=${BUILD}","title":"Silhouette Images"},{"href":"/licenses?build=${BUILD}","title":"Licenses for New Submissions"},{"href":"/nodes?build=${BUILD}","title":"Phylogenetic Nodes"},{"href":"/ping","title":"API Check"},{"href":"/root?build=${BUILD}","title":"Phylogenetic Root Node"}],"self":{"href":"/?build=${BUILD}"}},"build":${BUILD},"buildTimestamp":${JSON.stringify(

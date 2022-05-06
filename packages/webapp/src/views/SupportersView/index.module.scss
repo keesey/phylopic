@@ -1,0 +1,32 @@
+@use "../../styles/mixins/bullet.scss";
+.main {
+    text-align: center;
+}
+.highlighted {
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
+}
+.imageLink {
+    transition: all 0.3s;
+    vertical-align: baseline;
+    &:hover,
+    &:active {
+        opacity: 0.5;
+    }
+    img {
+        margin: 0 0.35rem -1pt;
+    }
+    .imageTextWithTail {
+        margin-bottom: -6px;
+    }
+}
+.list {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    > li {
+        @include bullet.item;
+    }
+}

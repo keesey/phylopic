@@ -7,10 +7,17 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
-        "@phylopic/utils": "^2.0.0-alpha",
+        "@phylopic/utils": "file:../utils",
         "normalize-diacritics": "^3.0.8"
     },
     "description": "Type declarations and validation for PhyloPic API value objects.",
+    "devDependencies": {
+        "eslint": "^8.6.0",
+        "mocha": "^9.1.4",
+        "prettier": "^2.5.1",
+        "typescript": "^4.6.4",
+        "yarn": "^1.22.18"
+    },
     "files": [
         "dist"
     ],

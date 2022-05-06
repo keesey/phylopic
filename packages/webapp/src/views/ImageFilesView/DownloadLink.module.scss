@@ -1,0 +1,4 @@
+@use "../../styles/mixins/bullet.scss";
+.main {
+    @include bullet.item;
+}

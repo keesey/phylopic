@@ -1,0 +1,16 @@
+.columns {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    @media (min-width: 769px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+.ctaList {
+    margin-block-start: 1em;
+    margin-inline-start: 1em;
+    > li {
+        list-style-type: disc;
+    }
+}

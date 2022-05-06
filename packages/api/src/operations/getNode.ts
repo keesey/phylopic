@@ -1,12 +1,13 @@
 import {
-    isNode,
-    isNodeParameters,
-    NODE_EMBEDDED_PARAMETERS,
+    DATA_MEDIA_TYPE,
     EmbeddableParameters,
     EntityParameters,
+    isNode,
+    isNodeParameters,
     Node,
     NodeEmbedded,
     NodeLinks,
+    NODE_EMBEDDED_PARAMETERS,
 } from "@phylopic/api-models"
 import { normalizeUUID } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
@@ -16,7 +17,6 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import { PoolClientService } from "../services/PoolClientService"
 import validate from "../validation/validate"

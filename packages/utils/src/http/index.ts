@@ -1,2 +1,5 @@
 export * from "./createQueryString"
 export * from "./createSearch"
+export * from "./extractQueryString"
+export * from "./parseQueryString"
+export type { ParsedQuery, Query } from "./Query"

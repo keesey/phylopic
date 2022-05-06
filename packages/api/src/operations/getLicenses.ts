@@ -1,4 +1,4 @@
-import { DataParameters } from "@phylopic/api-models"
+import { DataParameters, DATA_MEDIA_TYPE } from "@phylopic/api-models"
 import { APIGatewayProxyResult } from "aws-lambda"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
@@ -6,7 +6,6 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import DATA_MEDIA_TYPE from "../mediaTypes/DATA_MEDIA_TYPE"
 import { Operation } from "./Operation"
 export type GetLicensesParameters = DataRequestHeaders & DataParameters
 const BODY =

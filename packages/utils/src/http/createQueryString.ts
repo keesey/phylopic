@@ -1,4 +1,5 @@
-export const createQueryString = (params: Readonly<Record<string, string | number | boolean | undefined>>) => {
+import { Query } from "./Query"
+export const createQueryString = (params: Query) => {
     return Object.keys(params)
         .filter(key => params[key] !== undefined)
         .sort()
