@@ -70,7 +70,7 @@
   "private": true,
   "repository": "https://github.com/keesey/phylopic",
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --force-local",
     "build": "lerna run build",
     "format": "lerna run format",
     "lint": "lerna run lint",
