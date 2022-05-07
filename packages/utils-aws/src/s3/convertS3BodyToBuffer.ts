@@ -1,4 +1,4 @@
-import getRawBody from "raw-body"
+import rawBody from "raw-body"
 import { Readable } from "stream"
 export const convertS3BodyToBuffer = async (body: unknown): Promise<Buffer> => {
     if (body instanceof Buffer) {
@@ -8,7 +8,7 @@ export const convertS3BodyToBuffer = async (body: unknown): Promise<Buffer> => {
         return Buffer.from(body)
     }
     if (body instanceof Readable) {
-        return convertS3BodyToBuffer(await getRawBody(body, {}))
+        return convertS3BodyToBuffer(await rawBody(body, {}))
     }
     throw new Error("Unsupported body type.")
 }
