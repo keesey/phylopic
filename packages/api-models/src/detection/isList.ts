@@ -1,5 +1,10 @@
-import { isNonnegativeInteger, isNormalizedText, isNullOr, isPositiveInteger } from "@phylopic/utils/dist/detection"
-import type { ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import {
+    isNonnegativeInteger,
+    isNormalizedText,
+    isNullOr,
+    isPositiveInteger,
+    ValidationFaultCollector,
+} from "@phylopic/utils"
 import { List } from "../types"
 import isData from "./isData"
 import isLink from "./isLink"

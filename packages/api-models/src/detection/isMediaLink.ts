@@ -1,6 +1,4 @@
-import { FaultDetector } from "@phylopic/utils/dist/detection"
-import { ImageMediaType } from "@phylopic/utils/dist/models/types"
-import type { ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import { FaultDetector, ImageMediaType, ValidationFaultCollector } from "@phylopic/utils"
 import { MediaLink } from "../types/MediaLink"
 import isLink from "./isLink"
 import isSizes from "./isSizes"

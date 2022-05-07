@@ -1,6 +1,5 @@
 import { DATA_MEDIA_TYPE, ErrorResponse } from "@phylopic/api-models"
-import { FaultDetector } from "@phylopic/utils/dist/detection"
-import { ValidationFault, ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import { FaultDetector, ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
 import fetch from "cross-fetch"
 export type HTTPRelatedDataResponse = {
     headers: Headers

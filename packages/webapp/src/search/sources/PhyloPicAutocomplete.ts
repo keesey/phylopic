@@ -1,5 +1,5 @@
 import { QueryMatches } from "@phylopic/api-models"
-import { createSearch } from "@phylopic/utils/dist/http"
+import { createSearch } from "@phylopic/utils"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWR from "swr/immutable"
 import useAPIFetcher from "~/swr/api/useAPIFetcher"

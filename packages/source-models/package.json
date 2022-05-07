@@ -54,7 +54,6 @@
         "test": "mocha -r ts-node/register \"./src/**/*.spec.ts\"",
         "version": "git add -A src"
     },
-    "type": "commonjs",
     "types": "dist/index.d.ts",
     "version": "2.0.0-alpha"
 }

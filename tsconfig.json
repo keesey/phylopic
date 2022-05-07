@@ -8,7 +8,7 @@
         "forceConsistentCasingInFileNames": true,
         "incremental": true,
         "module": "CommonJS",
-        "moduleResolution": "Node",
+        "moduleResolution": "NodeNext",
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noLib": false,

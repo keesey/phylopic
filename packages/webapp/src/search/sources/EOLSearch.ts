@@ -1,4 +1,4 @@
-import { createSearch } from "@phylopic/utils/dist/http"
+import { createSearch } from "@phylopic/utils"
 import axios from "axios"
 import { FC, useContext, useEffect } from "react"
 import { Fetcher } from "swr"

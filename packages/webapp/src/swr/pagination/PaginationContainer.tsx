@@ -1,6 +1,5 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, Query } from "@phylopic/utils/dist/http"
-import { URL } from "@phylopic/utils/dist/models/types"
+import { createSearch, Query, URL } from "@phylopic/utils"
 import { FC, Fragment, ReactNode, useCallback, useContext, useEffect, useMemo } from "react"
 import { BareFetcher } from "swr"
 import useSWRImmutable from "swr/immutable"

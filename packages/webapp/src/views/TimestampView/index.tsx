@@ -1,4 +1,4 @@
-import { ISOTimestamp } from "@phylopic/utils/dist/models/types"
+import { ISOTimestamp } from "@phylopic/utils"
 import React, { FC, useMemo } from "react"
 export interface Props {
     format?: "date" | "datetime" | "year"

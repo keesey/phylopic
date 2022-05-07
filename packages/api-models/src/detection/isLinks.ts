@@ -1,5 +1,4 @@
-import { isObject, isNormalizedText } from "@phylopic/utils/dist/detection"
-import type { ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import { isNormalizedText, isObject, ValidationFaultCollector } from "@phylopic/utils"
 import { Links } from "../types"
 import isLink from "./isLink"
 export const isLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Links =>

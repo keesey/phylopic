@@ -1,3 +1,3 @@
-import { ImageMediaType } from "@phylopic/utils/dist/models/types"
+import { ImageMediaType } from "@phylopic/utils"
 const getImageFileExtension = (type: ImageMediaType) => type.replace("image/", "").replace("+xml", "")
 export default getImageFileExtension

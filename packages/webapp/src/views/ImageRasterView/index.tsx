@@ -1,5 +1,5 @@
 import { ImageWithEmbedded, MediaLink } from "@phylopic/api-models"
-import { ImageMediaType, URL } from "@phylopic/utils/dist/models/types"
+import { ImageMediaType, URL } from "@phylopic/utils"
 import Image from "next/image"
 import { FC, useMemo } from "react"
 import useImageAlt from "~/hooks/useImageAlt"

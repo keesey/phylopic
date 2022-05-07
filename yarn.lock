@@ -2434,18 +2434,17 @@
 "@phylopic/api-models@file:packages/api-models":
   version "2.0.0-alpha"
   dependencies:
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-models-2.0.0-alpha-dfc8f624-1ab0-40f4-a614-2da445bc57dc-1651881716056/node_modules/@phylopic/utils"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-models-2.0.0-alpha-3cca8834-739e-4fc3-95de-ad98d8d09a82-1651885580165/node_modules/@phylopic/utils"
     normalize-diacritics "^3.0.8"
 
 "@phylopic/api@file:packages/api":
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-73a1a1de-9c74-46c9-bd47-296cec6ecd92-1651881716001/node_modules/@phylopic/api-models"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-73a1a1de-9c74-46c9-bd47-296cec6ecd92-1651881716001/node_modules/@phylopic/utils"
+    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-815d41c6-be6c-418c-9d7e-0981ba3bd0c2-1651885580110/node_modules/@phylopic/api-models"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-815d41c6-be6c-418c-9d7e-0981ba3bd0c2-1651885580110/node_modules/@phylopic/utils"
     aws-lambda "^1.0.7"
     is-uuid "^1.0.2"
-    normalize-diacritics "^2.14.0"
     pg "^8.7.3"
 
 "@phylopic/publish@file:packages/publish":
@@ -2463,7 +2462,7 @@
     cross-fetch "^3.1.5"
     dotenv "^16.0.0"
     metadata-scraper "^0.2.49"
-    normalize-diacritics "^2.14.0"
+    normalize-diacritics "^3.0.8"
     parse-nomen "^2.1.2"
     path "^0.12.7"
     pg "^8.7.3"
@@ -2475,8 +2474,8 @@
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-d95921f6-ea0c-4603-9763-ee40f9097990-1651881716105/node_modules/@phylopic/utils"
-    "@phylopic/utils-aws" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-d95921f6-ea0c-4603-9763-ee40f9097990-1651881716105/node_modules/@phylopic/utils-aws"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-d892f8e6-24fd-4515-835f-131b2bee9738-1651885580212/node_modules/@phylopic/utils"
+    "@phylopic/utils-aws" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-d892f8e6-24fd-4515-835f-131b2bee9738-1651885580212/node_modules/@phylopic/utils-aws"
     email-validator "^2.0.4"
     parse-nomen "^2.1.2"
     uuid "^8.3.2"
@@ -2485,7 +2484,7 @@
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-utils-aws-2.0.0-alpha-7fb5c215-fff6-4f5d-a913-6e53afbb4e38-1651881716103/node_modules/@phylopic/utils"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-utils-aws-2.0.0-alpha-3be672c5-47eb-4c77-9695-80a934252e09-1651885580210/node_modules/@phylopic/utils"
     raw-body "^2.5.1"
     stream "^0.0.2"
 
@@ -2499,8 +2498,8 @@
 "@phylopic/webapp@file:packages/webapp":
   version "2.0.0-alpha"
   dependencies:
-    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-09b79c8a-7222-4cc8-a7a2-15a1680d1e51-1651881716107/node_modules/@phylopic/api-models"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-09b79c8a-7222-4cc8-a7a2-15a1680d1e51-1651881716107/node_modules/@phylopic/utils"
+    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-7ccfe7f7-76a4-4bc1-8b34-975dc62b7fc7-1651885580214/node_modules/@phylopic/api-models"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-7ccfe7f7-76a4-4bc1-8b34-975dc62b7fc7-1651885580214/node_modules/@phylopic/utils"
     clsx "^1.1.1"
     cross-fetch "^3.1.5"
     next "^12.1.6"
@@ -8932,13 +8931,6 @@ nopt@^5.0.0:
   integrity sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==
   dependencies:
     abbrev "1"
-
-normalize-diacritics@^2.14.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/normalize-diacritics/-/normalize-diacritics-2.14.0.tgz#8f25602887d0e111dd50c9b399ccc3f11547d4dc"
-  integrity sha512-8VRFMqjFvAMJpIloYQvNXF5ZMcs5JqHMYvbP+04FPjGCWvQo5PybsfFt1wCztyBW0xXfRPsux1tGe7bERaRLZg==
-  dependencies:
-    tslib "^2.1.0"
 
 normalize-diacritics@^3.0.8:
   version "3.0.8"

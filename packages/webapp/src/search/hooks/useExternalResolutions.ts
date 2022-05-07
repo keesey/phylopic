@@ -1,5 +1,4 @@
-import { compareStrings } from "@phylopic/utils/dist/comparison"
-import { UUID } from "@phylopic/utils/dist/models/types"
+import { compareStrings, UUID } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
 import SearchContext from "../context"
 import { ExternalResolution } from "../models/ExternalResolution"

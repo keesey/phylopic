@@ -1,5 +1,5 @@
 import { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
-import { Query } from "@phylopic/utils/dist/http"
+import { Query } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import AnchorLink from "~/ui/AnchorLink"

@@ -1,5 +1,4 @@
-import { isArray, isNullOr, isObject, isUndefinedOr } from "@phylopic/utils/dist/detection"
-import type { ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import { isArray, isNullOr, isObject, isUndefinedOr, ValidationFaultCollector } from "@phylopic/utils"
 import { NodeWithEmbedded } from "../types"
 import { NodeEmbedded } from "../types/NodeWithEmbedded"
 import isImage from "./isImage"

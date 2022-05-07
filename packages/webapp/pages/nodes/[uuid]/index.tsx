@@ -7,10 +7,7 @@ import {
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"
-import { createSearch, Query } from "@phylopic/utils/dist/http"
-import { isUUIDv4 } from "@phylopic/utils/dist/models/detection"
-import { UUID } from "@phylopic/utils/dist/models/types"
-import { isDefined } from "@phylopic/utils/dist/types"
+import { createSearch, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -40,9 +37,9 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import ImageListView from "~/views/ImageListView"
+import NomenView from "~/views/NomenView"
 import NodeDetailsView from "~/views/NodeDetailsView"
 import NodeListView from "~/views/NodeListView"
-import NomenView from "~/views/NomenView"
 export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Pick<Node, "build" | "uuid">

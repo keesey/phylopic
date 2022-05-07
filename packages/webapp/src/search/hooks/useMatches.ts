@@ -1,4 +1,4 @@
-import { compareStrings } from "@phylopic/utils/dist/comparison"
+import { compareStrings } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
 import SearchContext from "../context"
 import getSortIndex from "../utils/getSortIndex"

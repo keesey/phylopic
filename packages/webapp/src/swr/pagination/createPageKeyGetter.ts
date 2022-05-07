@@ -1,6 +1,5 @@
 import { PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, Query } from "@phylopic/utils/dist/http"
-import { URL } from "@phylopic/utils/dist/models/types"
+import { createSearch, Query, URL } from "@phylopic/utils"
 const createPageKeyGetter =
     <T = unknown>(endpoint: URL, query?: Query) =>
     (page: number, previousPageData: PageWithEmbedded<T>) => {

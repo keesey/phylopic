@@ -1,5 +1,5 @@
 import { NodeListParameters, NodeWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, extractQueryString, parseQueryString, Query } from "@phylopic/utils/dist/http"
+import { createSearch, extractQueryString, parseQueryString, Query } from "@phylopic/utils"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWR from "swr/immutable"
 import useAPIFetcher from "~/swr/api/useAPIFetcher"
@@ -7,7 +7,10 @@ import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
 import { SetNodeResultsAction } from "../context/actions"
 import getMatchingText from "../utils/getMatchingText"
-const PhyloPicNodeSearch: FC = () => {
+export interface Props {
+    maxResults?: number
+}
+const PhyloPicNodeSearch: FC<Props> = ({ maxResults = 24 }) => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const matchingText = useMemo(
         () => getMatchingText(state?.internalMatches, state?.text),
@@ -24,7 +27,7 @@ const PhyloPicNodeSearch: FC = () => {
                       page: "0",
                   } as NodeListParameters & Query)
                 : null,
-        [matchingText],
+        [matchingText, maxResults],
     )
     const fetcher = useAPIFetcher<PageWithEmbedded<NodeWithEmbedded>>()
     const key = useAPISWRKey(endpoint)

@@ -1,6 +1,5 @@
 import { ListParameters, Page } from "@phylopic/api-models"
-import { createSearch, Query } from "@phylopic/utils/dist/http"
-import { isDefined } from "@phylopic/utils/dist/types"
+import { createSearch, isDefined, Query } from "@phylopic/utils"
 import { GetStaticPaths, GetStaticPathsResult } from "next"
 import fetchData from "~/fetch/fetchData"
 import extractUUIDv4 from "~/routes/extractUUID"

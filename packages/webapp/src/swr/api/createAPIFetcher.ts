@@ -1,5 +1,5 @@
 import { DATA_MEDIA_TYPE, ErrorResponse } from "@phylopic/api-models"
-import { URL } from "@phylopic/utils/dist/models/types"
+import { URL } from "@phylopic/utils"
 import fetch from "cross-fetch"
 import { Dispatch, SetStateAction } from "react"
 import { Fetcher } from "swr"

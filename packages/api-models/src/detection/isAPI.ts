@@ -1,6 +1,4 @@
-import { isArray, isNormalizedText } from "@phylopic/utils/dist/detection"
-import { isISOTimestamp, isURL } from "@phylopic/utils/dist/models/detection"
-import type { ValidationFaultCollector } from "@phylopic/utils/dist/validation"
+import { isArray, isISOTimestamp, isNormalizedText, isURL, ValidationFaultCollector } from "@phylopic/utils"
 import { API } from "../types"
 import isData from "./isData"
 import isLink from "./isLink"

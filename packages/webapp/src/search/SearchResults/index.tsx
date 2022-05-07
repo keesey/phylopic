@@ -1,4 +1,4 @@
-import { Nomen } from "@phylopic/utils/dist/models/types"
+import { Nomen } from "@phylopic/utils"
 import { FC, useContext, useMemo } from "react"
 import IllustratedNodeView from "~/views/IllustratedNodeView"
 import NomenView from "~/views/NomenView"

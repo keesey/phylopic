@@ -1,4 +1,4 @@
-import { URL } from "@phylopic/utils/dist/models/types"
+import { URL } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
 import BuildContext from "~/builds/BuildContext"
 import addBuildToURL from "../../builds/addBuildToURL"

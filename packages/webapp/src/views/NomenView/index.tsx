@@ -1,4 +1,4 @@
-import { Nomen } from "@phylopic/utils/dist/models/types"
+import { Nomen } from "@phylopic/utils"
 import React, { Fragment, useMemo, FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {

@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/api-models"
-import { UUID } from "@phylopic/utils/dist/models/types"
+import { UUID } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import { BreadcrumbItem } from "../Breadcrumbs"
