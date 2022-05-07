@@ -1,5 +1,5 @@
 import { isArray, isNomen, isNormalizedText, isNullOr, isURL, ValidationFaultCollector } from "@phylopic/utils"
-import { Node } from "../types"
+import { Node } from "../types/Node"
 import isEntity from "./isEntity"
 import isLink from "./isLink"
 import isLinks from "./isLinks"

@@ -1,4 +1,4 @@
-import { invalidate } from "../validation"
+import { invalidate } from "../validation/invalidate"
 import type ValidationFaultCollector from "../validation/ValidationFaultCollector"
 import isArray from "./isArray"
 export const isNonemptyArray =

@@ -10,7 +10,7 @@ import {
     isUUID,
     ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Contribution } from "../types"
+import { Contribution } from "../types/Contribution"
 import isNodeIdentifier from "./isNodeIdentifier"
 export const isContribution = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contribution =>
     isObject(x, faultCollector) &&

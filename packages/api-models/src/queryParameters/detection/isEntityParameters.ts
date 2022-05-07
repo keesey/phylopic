@@ -1,5 +1,6 @@
 import { FaultDetector, isUUID, ValidationFaultCollector } from "@phylopic/utils"
-import { EmbeddableParameters, EntityParameters } from "../types"
+import { EmbeddableParameters } from "../types/EmbeddableParameters"
+import { EntityParameters } from "../types/EntityParameters"
 import isDataParameters from "./isDataParameters"
 import isEmbeddableParameters from "./isEmbeddableParameters"
 export const isEntityParameters =

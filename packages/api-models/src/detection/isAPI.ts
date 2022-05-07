@@ -1,5 +1,5 @@
 import { isArray, isISOTimestamp, isNormalizedText, isURL, ValidationFaultCollector } from "@phylopic/utils"
-import { API } from "../types"
+import { API } from "../types/API"
 import isData from "./isData"
 import isLink from "./isLink"
 import isLinks from "./isLinks"

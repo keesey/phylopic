@@ -5,7 +5,7 @@ import {
     isPositiveInteger,
     ValidationFaultCollector,
 } from "@phylopic/utils"
-import { List } from "../types"
+import { List } from "../types/List"
 import isData from "./isData"
 import isLink from "./isLink"
 import isLinks from "./isLinks"

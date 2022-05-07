@@ -9,7 +9,7 @@ import {
     isVectorMediaType,
     ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Image } from "../types"
+import { Image } from "../types/Image"
 import isEntity from "./isEntity"
 import isLink from "./isLink"
 import isLinks from "./isLinks"

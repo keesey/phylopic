@@ -1,5 +1,5 @@
 import { isArray, isNullOr, isObject, isUndefinedOr, ValidationFaultCollector } from "@phylopic/utils"
-import { NodeWithEmbedded } from "../types"
+import { NodeWithEmbedded } from "../types/NodeWithEmbedded"
 import { NodeEmbedded } from "../types/NodeWithEmbedded"
 import isImage from "./isImage"
 import isNode from "./isNode"

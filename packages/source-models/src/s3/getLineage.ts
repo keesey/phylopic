@@ -2,7 +2,8 @@ import { S3Client } from "@aws-sdk/client-s3"
 import { UUID } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import isNode from "../detection/isNode"
-import { Entity, Node } from "../types"
+import { Entity } from "../types/Entity"
+import { Node } from "../types/Node"
 import SOURCE_BUCKET_NAME from "./SOURCE_BUCKET_NAME"
 const getLineage = async (
     client: S3Client,
@@ -12,7 +13,7 @@ const getLineage = async (
     if (!specificUUID) {
         return []
     }
-    const [specificValue] = await getJSON(
+    const [specificValue] = await getJSON<Node>(
         client,
         {
             Bucket: SOURCE_BUCKET_NAME,

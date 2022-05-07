@@ -1,7 +1,7 @@
 import type { FaultDetector, ValidationFaultCollector } from "@phylopic/utils"
 import { invalidate } from "@phylopic/utils"
-import { ListParameters } from "../types"
 import { EmbeddableParameters } from "../types/EmbeddableParameters"
+import { ListParameters } from "../types/ListParameters"
 import isDataParameters from "./isDataParameters"
 import isEmbeddableParameters from "./isEmbeddableParameters"
 export const isListParameters =

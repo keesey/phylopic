@@ -1,5 +1,5 @@
-import { stringifyNormalized } from "../../json"
-import { stringifyNomen } from "../../nomina"
+import { stringifyNormalized } from "../../json/stringifyNormalized"
+import { stringifyNomen } from "../../nomina/stringifyNomen"
 import { Nomen } from "../types/Nomen"
 import normalizeNomen from "./normalizeNomen"
 const compare = (a: Nomen, b: Nomen) => {

@@ -1,4 +1,4 @@
-import { invalidate } from "../validation"
+import { invalidate } from "../validation/invalidate"
 import { FaultDetector } from "./FaultDetector"
 export const isArray =
     <T>(isType: FaultDetector<T>): FaultDetector<readonly T[]> =>

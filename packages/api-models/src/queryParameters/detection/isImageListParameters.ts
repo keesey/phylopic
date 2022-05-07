@@ -7,8 +7,8 @@ import {
     ValidationFaultCollector,
 } from "@phylopic/utils"
 import { ImageEmbedded } from "../../types/ImageWithEmbedded"
-import { IMAGE_EMBEDDED_PARAMETERS } from "../constants"
-import { ImageListParameters } from "../types"
+import { IMAGE_EMBEDDED_PARAMETERS } from "../constants/IMAGE_EMBEDDED_PARAMETERS"
+import { ImageListParameters } from "../types/ImageListParameters"
 import isListParameters from "./isListParameters"
 const isBoolean = (x: unknown, collector?: ValidationFaultCollector): x is "true" | "false" => {
     if (x !== "true" && x !== "false") {

@@ -1,5 +1,5 @@
 import { invalidate, isPositiveInteger, isUndefinedOr, ValidationFaultCollector } from "@phylopic/utils"
-import { DataParameters } from "../types"
+import { DataParameters } from "../types/DataParameters"
 const isPositiveIntegerString = (x: unknown, faultCollector?: ValidationFaultCollector): x is string =>
     (typeof x === "string" && isPositiveInteger(parseFloat(x))) ||
     invalidate(faultCollector, "Expected a positive integer.")
