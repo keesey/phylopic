@@ -1,5 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { getJSON, UUID } from "@phylopic/utils"
+import { UUID } from "@phylopic/utils"
+import { getJSON } from "@phylopic/utils-aws"
 import isNode from "../detection/isNode"
 import { Entity, Node } from "../types"
 import SOURCE_BUCKET_NAME from "./SOURCE_BUCKET_NAME"

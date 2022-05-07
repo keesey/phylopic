@@ -3,6 +3,9 @@
         "email": "keesey+phylopic@gmail.com",
         "name": "T. Michael Keesey"
     },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
     "dependencies": {
         "@phylopic/api-models": "file:../api-models",
         "@phylopic/utils": "file:../utils",

@@ -9,6 +9,7 @@
     "dependencies": {
         "@aws-sdk/client-s3": "^3.82.0",
         "@phylopic/utils": "file:../utils",
+        "@phylopic/utils-aws": "file:../utils-aws",
         "email-validator": "^2.0.4",
         "parse-nomen": "^2.1.2",
         "uuid": "^8.3.2"

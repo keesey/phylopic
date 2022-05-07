@@ -2434,15 +2434,15 @@
 "@phylopic/api-models@file:packages/api-models":
   version "2.0.0-alpha"
   dependencies:
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-models-2.0.0-alpha-b71e055b-9616-4934-b5da-6ec663726658-1651877021307/node_modules/@phylopic/utils"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-models-2.0.0-alpha-dfc8f624-1ab0-40f4-a614-2da445bc57dc-1651881716056/node_modules/@phylopic/utils"
     normalize-diacritics "^3.0.8"
 
 "@phylopic/api@file:packages/api":
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-843e558d-2431-4e72-88ff-58d91af9b90a-1651877021252/node_modules/@phylopic/api-models"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-843e558d-2431-4e72-88ff-58d91af9b90a-1651877021252/node_modules/@phylopic/utils"
+    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-73a1a1de-9c74-46c9-bd47-296cec6ecd92-1651881716001/node_modules/@phylopic/api-models"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-73a1a1de-9c74-46c9-bd47-296cec6ecd92-1651881716001/node_modules/@phylopic/utils"
     aws-lambda "^1.0.7"
     is-uuid "^1.0.2"
     normalize-diacritics "^2.14.0"
@@ -2457,47 +2457,50 @@
     "@phylopic/api-models" "^2.0.0-alpha"
     "@phylopic/source-models" "^2.0.0-alpha"
     "@phylopic/utils" "^2.0.0-alpha"
+    "@phylopic/utils-aws" "^2.0.0-alpha"
     axios "^0.26.0"
     concurrently "^7.0.0"
+    cross-fetch "^3.1.5"
     dotenv "^16.0.0"
     metadata-scraper "^0.2.49"
-    node-fetch "^2.3.0"
     normalize-diacritics "^2.14.0"
     parse-nomen "^2.1.2"
     path "^0.12.7"
     pg "^8.7.3"
     probe-image-size "^7.2.3"
-    raw-body "^2.4.2"
     readline "^1.3.0"
     simple-digraph "^1.0.1"
-    slugify "^1.6.5"
-    stream "^0.0.2"
-    uuid "^8.3.2"
 
 "@phylopic/source-models@file:packages/source-models":
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-117d5de8-f7d0-4d61-bf13-2413f6f8a1c3-1651877021354/node_modules/@phylopic/utils"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-d95921f6-ea0c-4603-9763-ee40f9097990-1651881716105/node_modules/@phylopic/utils"
+    "@phylopic/utils-aws" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-d95921f6-ea0c-4603-9763-ee40f9097990-1651881716105/node_modules/@phylopic/utils-aws"
     email-validator "^2.0.4"
     parse-nomen "^2.1.2"
     uuid "^8.3.2"
 
-"@phylopic/utils@file:packages/utils":
+"@phylopic/utils-aws@file:packages/utils-aws":
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    email-validator "^2.0.4"
-    parse-nomen "^2.1.2"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-utils-aws-2.0.0-alpha-7fb5c215-fff6-4f5d-a913-6e53afbb4e38-1651881716103/node_modules/@phylopic/utils"
     raw-body "^2.5.1"
     stream "^0.0.2"
+
+"@phylopic/utils@file:packages/utils":
+  version "2.0.0-alpha"
+  dependencies:
+    email-validator "^2.0.4"
+    parse-nomen "^2.1.2"
     uuid "^8.3.2"
 
 "@phylopic/webapp@file:packages/webapp":
   version "2.0.0-alpha"
   dependencies:
-    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-54baf23c-908c-498f-a476-d3f866558da9-1651877021355/node_modules/@phylopic/api-models"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-54baf23c-908c-498f-a476-d3f866558da9-1651877021355/node_modules/@phylopic/utils"
+    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-09b79c8a-7222-4cc8-a7a2-15a1680d1e51-1651881716107/node_modules/@phylopic/api-models"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-09b79c8a-7222-4cc8-a7a2-15a1680d1e51-1651881716107/node_modules/@phylopic/utils"
     clsx "^1.1.1"
     cross-fetch "^3.1.5"
     next "^12.1.6"
@@ -8819,7 +8822,7 @@ node-dir@^0.1.17:
   dependencies:
     minimatch "^3.0.2"
 
-node-fetch@2.6.7, node-fetch@^2.3.0, node-fetch@^2.6.1, node-fetch@^2.6.7:
+node-fetch@2.6.7, node-fetch@^2.6.1, node-fetch@^2.6.7:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
@@ -10127,7 +10130,7 @@ range-parser@~1.2.1:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
-raw-body@^2.4.2, raw-body@^2.5.1:
+raw-body@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.5.1.tgz#fe1b1628b181b700215e5fd42389f98b71392857"
   integrity sha512-qqJBtEyVgS0ZmPGdCFPWJ3FreoqvG4MVQln/kCgF7Olq95IbOp0/BWyMwbdtn4VTvkM8Y7khCQ2Xgk/tcrCXig==

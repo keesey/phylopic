@@ -1,6 +1,6 @@
-import { normalizeSync as normalizeDiacritics } from "normalize-diacritics"
+import { normalizeSync } from "normalize-diacritics"
 export const normalizeQuery = (query: string) => {
-    return normalizeDiacritics(query ?? "")
+    return normalizeSync(query ?? "")
         .toLowerCase()
         .replace(/\s+/g, " ")
         .replace(/[^a-z -]+/g, " ")

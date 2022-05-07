@@ -13,6 +13,7 @@
     "@phylopic/publish": "file:packages/publish",
     "@phylopic/source-models": "file:packages/source-models",
     "@phylopic/utils": "file:packages/utils",
+    "@phylopic/utils-aws": "file:packages/utils-aws",
     "@phylopic/webapp": "file:packages/webapp"
   },
   "description": "An open database of freely reusable silhouettes of life forms.",
