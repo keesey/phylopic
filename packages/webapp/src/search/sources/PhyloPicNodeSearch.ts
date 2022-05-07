@@ -7,10 +7,7 @@ import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
 import { SetNodeResultsAction } from "../context/actions"
 import getMatchingText from "../utils/getMatchingText"
-export interface Props {
-    maxResults?: number
-}
-const PhyloPicNodeSearch: FC<Props> = ({ maxResults = 24 }) => {
+const PhyloPicNodeSearch: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const matchingText = useMemo(
         () => getMatchingText(state?.internalMatches, state?.text),
@@ -27,7 +24,7 @@ const PhyloPicNodeSearch: FC<Props> = ({ maxResults = 24 }) => {
                       page: "0",
                   } as NodeListParameters & Query)
                 : null,
-        [matchingText, maxResults],
+        [matchingText],
     )
     const fetcher = useAPIFetcher<PageWithEmbedded<NodeWithEmbedded>>()
     const key = useAPISWRKey(endpoint)

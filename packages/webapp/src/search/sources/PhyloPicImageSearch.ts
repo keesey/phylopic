@@ -7,10 +7,7 @@ import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
 import { SetImageResultsAction } from "../context/actions"
 import getMatchingText from "../utils/getMatchingText"
-export interface Props {
-    maxResults?: number
-}
-const PhyloPicImageSearch: FC<Props> = ({ maxResults = 24 }) => {
+const PhyloPicImageSearch: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const matchingText = useMemo(
         () => getMatchingText(state?.internalMatches, state?.text),
@@ -27,7 +24,7 @@ const PhyloPicImageSearch: FC<Props> = ({ maxResults = 24 }) => {
                       page: "0",
                   } as ImageListParameters & Query)
                 : null,
-        [matchingText, maxResults],
+        [matchingText],
     )
     const fetcher = useAPIFetcher<PageWithEmbedded<ImageWithEmbedded>>()
     const key = useAPISWRKey(endpoint)
