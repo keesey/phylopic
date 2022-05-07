@@ -5,12 +5,12 @@
         "baseUrl": ".",
         "isolatedModules": true,
         "jsx": "preserve",
-        "module": "ESNext",
+        "lib": ["dom", "dom.iterable", "esnext"],
         "noEmit": true,
         "paths": {
             "~/*": ["src/*"]
         },
-        "lib": ["dom", "dom.iterable", "esnext"]
+        "target": "ESNext"
     },
     "include": ["./pages/**/*.ts", "./pages/**/*.tsx", "./src/**/*.ts", "./src/**/*.tsx"]
 }
