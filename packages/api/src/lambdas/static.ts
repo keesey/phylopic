@@ -1,5 +1,6 @@
 import { NODE_EMBEDDED_PARAMETERS } from "@phylopic/api-models"
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
+import TEMPORARY_HEADERS from "src/headers/responses/TEMPORARY_HEADERS"
 import APIError from "../errors/APIError"
 import errorToResult from "../errors/errorToResult"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
@@ -43,13 +44,17 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
             )
         }
         default: {
-            throw new APIError(404, [
-                {
-                    developerMessage: `Invalid path: "${path}".`,
-                    type: "RESOURCE_NOT_FOUND",
-                    userMessage: "An invalid request was made.",
-                },
-            ])
+            throw new APIError(
+                404,
+                [
+                    {
+                        developerMessage: `Invalid path: "${path}".`,
+                        type: "RESOURCE_NOT_FOUND",
+                        userMessage: "An invalid request was made.",
+                    },
+                ],
+                TEMPORARY_HEADERS,
+            )
         }
     }
 }

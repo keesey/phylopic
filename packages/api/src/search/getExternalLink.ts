@@ -1,6 +1,7 @@
 import { TitledLink } from "@phylopic/api-models"
 import { Authority, createSearch, Namespace, ObjectID, Query, UUID } from "@phylopic/utils"
 import { PoolClient } from "pg"
+import PERMANENT_HEADERS from "src/headers/responses/PERMANENT_HEADERS"
 import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
 const getExternalLink = async (
@@ -15,13 +16,17 @@ const getExternalLink = async (
         [authority, namespace, objectID, BUILD],
     )
     if (result.rowCount !== 1) {
-        throw new APIError(404, [
-            {
-                developerMessage: "Could not resolve.",
-                type: "RESOURCE_NOT_FOUND",
-                userMessage: "There was a problem in a request to find a taxonomic group.",
-            },
-        ])
+        throw new APIError(
+            404,
+            [
+                {
+                    developerMessage: "Could not resolve.",
+                    type: "RESOURCE_NOT_FOUND",
+                    userMessage: "There was a problem in a request to find a taxonomic group.",
+                },
+            ],
+            PERMANENT_HEADERS,
+        )
     }
     return {
         href: `/nodes/${encodeURIComponent(result.rows[0].node_uuid)}` + createSearch(queryParameters),
