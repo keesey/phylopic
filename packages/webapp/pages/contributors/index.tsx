@@ -30,7 +30,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                 </header>
                 <main>
                     <SearchOverlay>
-                        <PaginationContainer endpoint={`${process.env.NEXT_PUBLIC_API_URL}/contributors`}>
+                        <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>
                             {(contributors, totalContributors) => (
                                 <>
                                     <header>

@@ -1,5 +1,5 @@
 import { MediaLink } from "@phylopic/api-models"
-import { RasterMediaType, URL } from "@phylopic/utils"
+import { createSearch, RasterMediaType, URL } from "@phylopic/utils"
 import { ImageLoader } from "next/image"
 import { useCallback, useContext, useMemo } from "react"
 import BuildContext from "~/builds/BuildContext"
@@ -14,8 +14,8 @@ const findBestSize = (links: readonly MediaLink<URL, RasterMediaType>[], width: 
     return linksByWidth[linksByWidth.length - 1].link.href
 }
 const useImageLoader = (links: readonly MediaLink<URL, RasterMediaType>[]) => {
-    const [ifMatch] = useContext(BuildContext) ?? []
-    const query = useMemo(() => (ifMatch ? `?build=${encodeURIComponent(ifMatch)}` : ""), [ifMatch])
+    const [build] = useContext(BuildContext) ?? []
+    const query = useMemo(() => (build ? createSearch({ build }) : ""), [build])
     return useCallback<ImageLoader>(props => findBestSize(links, props.width) + query, [links, query])
 }
 export default useImageLoader

@@ -40,7 +40,11 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                         </header>
                         <section>
                             <h2>Latest Contributions</h2>
-                            <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"} hideControls>
+                            <PaginationContainer
+                                endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
+                                hideControls
+                                query={{ embed_specificNode: true }}
+                            >
                                 {(images, totalImages) => (
                                     <>
                                         <ImageListView value={images as readonly ImageWithEmbedded[]} />
@@ -66,6 +70,5 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
 )
 export default PageComponent
 export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images", {
-    embed_items: true,
     embed_specificNode: true,
 })

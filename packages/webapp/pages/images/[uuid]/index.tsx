@@ -137,7 +137,9 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                         <br key="br" />
                         {lineageNodeHRef && (
                             <div key="controls">
-                                <AnchorLink href={lineageNodeHRef + "/lineage"}>View Lineage</AnchorLink>
+                                <AnchorLink href={lineageNodeHRef.split("?", 2)[0] + "/lineage"}>
+                                    View Lineage
+                                </AnchorLink>
                             </div>
                         )}
                         <ImageRasterView key="raster" value={image} />

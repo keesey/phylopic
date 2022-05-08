@@ -14,7 +14,7 @@ export type Props<T extends Readonly<{ build: number }> = Readonly<{ build: numb
 const DataContainer: FC<Props> = ({ children, endpoint, hideLoader, onError, query }) => {
     const [build] = useContext(BuildContext) ?? []
     const fetcher = useAPIFetcher()
-    const queryWithBuild = useMemo(() => ({ ...query, build }), [build, query])
+    const queryWithBuild = useMemo(() => (build ? { ...query, build } : query ?? {}), [build, query])
     const key = useMemo(() => endpoint + createSearch(queryWithBuild), [endpoint, queryWithBuild])
     const { data, error, isValidating } = useSWRImmutable(key, fetcher)
     useEffect(() => {

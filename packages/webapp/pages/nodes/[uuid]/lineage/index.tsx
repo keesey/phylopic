@@ -19,6 +19,7 @@ import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import NodeContainer from "~/swr/data/NodeContainer"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
+import AnchorLink from "~/ui/AnchorLink"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
@@ -53,16 +54,16 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                 afterItems={[
                                                     {
                                                         children: (
-                                                            <strong>
+                                                            <AnchorLink href={`/nodes/` + uuid}>
                                                                 <NomenView
                                                                     value={node?.names[0]}
                                                                     defaultText="[Unnamed]"
                                                                 />
-                                                            </strong>
+                                                            </AnchorLink>
                                                         ),
                                                     },
                                                     {
-                                                        children: "Lineage",
+                                                        children: <strong>Lineage</strong>,
                                                     },
                                                 ]}
                                                 beforeItems={[
@@ -77,7 +78,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                             </h1>
                                         </header>
                                         <PaginationContainer
-                                            endpoint={`${process.env.NEXT_PUBLIC_API_URL}/nodes/${uuid}/lineage`}
+                                            endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + "/lineage"}
                                         >
                                             {lineageNodes => (
                                                 <LineageView

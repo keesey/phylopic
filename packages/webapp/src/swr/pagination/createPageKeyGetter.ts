@@ -6,6 +6,6 @@ const createPageKeyGetter =
         if (previousPageData && !previousPageData._links.next) {
             return null
         }
-        return process.env.NEXT_PUBLIC_API_URL + endpoint + createSearch({ ...query, page })
+        return endpoint + createSearch({ ...query, page })
     }
 export default createPageKeyGetter

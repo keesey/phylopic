@@ -29,7 +29,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                 </header>
                 <main>
                     <SearchOverlay>
-                        <PaginationContainer endpoint={`${process.env.NEXT_PUBLIC_API_URL}/nodes`}>
+                        <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}>
                             {(nodes, totalNodes) => (
                                 <>
                                     <header>

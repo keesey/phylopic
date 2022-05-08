@@ -26,7 +26,7 @@ export interface Props {
     initialText?: string
 }
 const SearchContainer: FC<Props> = ({ children, initialText = "" }) => {
-    const [ifMatch] = useContext(BuildContext) ?? []
+    const [build] = useContext(BuildContext) ?? []
     const contextValue = useReducer(reducer, [initialText], () => createInitialState(initialText))
     const [, dispatch] = contextValue
     const { events } = useRouter()
@@ -37,7 +37,7 @@ const SearchContainer: FC<Props> = ({ children, initialText = "" }) => {
     }, [dispatch, events])
     useEffect(() => {
         dispatch({ type: "RESET_INTERNAL" })
-    }, [dispatch, ifMatch])
+    }, [dispatch, build])
     return (
         <SearchContext.Provider value={contextValue}>
             <PhyloPicAutocomplete />

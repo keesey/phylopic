@@ -24,7 +24,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                 </a>
             </p>
             <p className={styles.highlighted} id="patreon">
-                My patrons on{" "}
+                All patrons on{" "}
                 <a
                     className={styles.imageLink}
                     href="https://www.patreon.com/tmkeesey"

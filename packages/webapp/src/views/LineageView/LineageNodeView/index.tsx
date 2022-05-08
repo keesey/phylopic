@@ -13,7 +13,7 @@ export interface Props {
 }
 const LineageNodeView: FC<Props> = ({ value }) => {
     const query = useMemo<ImageListParameters & Query>(
-        () => ({ node: value.uuid, embed_items: "true", embed_specificNode: "true" }),
+        () => ({ filter_node: value.uuid, embed_items: "true", embed_specificNode: "true" }),
         [value.uuid],
     )
     return (

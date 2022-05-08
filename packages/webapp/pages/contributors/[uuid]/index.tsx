@@ -47,7 +47,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                 {images => (
                                     <PageHead
                                         socialImage={
-                                            (images[0] as ImageWithEmbedded)._links["http://ogp.me/ns#image"] ?? null
+                                            (images[0] as ImageWithEmbedded)?._links["http://ogp.me/ns#image"] ?? null
                                         }
                                         title={`PhyloPic: Silhouette Images Contributed by ${getContributorName(
                                             contributor,
@@ -114,7 +114,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     const listImagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
     const [listImagesResponse, contributorResult] = await Promise.all([
         fetchData<List>(listImagesKey),
-        fetchResult<Contributor>(process.env.NEXT_PUBLIC_API_URL + "/contributor/" + uuid),
+        fetchResult<Contributor>(process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid),
     ])
     if (contributorResult.status !== "success") {
         return getStaticPropsResult(contributorResult)

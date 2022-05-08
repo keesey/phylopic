@@ -25,12 +25,25 @@ const SWR_INFINITE_CONFIG = {
 const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hideLoader, onError, query }) => {
     const [build] = useContext(BuildContext) ?? []
     const fetcher = useAPIFetcher<List | PageWithEmbedded<unknown>>()
-    const queryWithBuild = useMemo(() => ({ ...query, build }), [build, query])
-    const listKey = useMemo(() => endpoint + createSearch(queryWithBuild), [endpoint, queryWithBuild])
+    const queryWithoutEmbeds = useMemo(
+        () =>
+            Object.entries(query ?? {})
+                .filter(([key]) => !key.startsWith("embed_"))
+                .reduce<Query>((prev, [key, value]) => ({ ...prev, [key]: value }), {}),
+        [query],
+    )
+    const listQuery = useMemo(
+        () => (build ? { ...queryWithoutEmbeds, build } : queryWithoutEmbeds),
+        [build, queryWithoutEmbeds],
+    )
+    const listKey = useMemo(() => endpoint + createSearch(listQuery), [endpoint, listQuery])
     const list = useSWRImmutable<List>(listKey, fetcher as BareFetcher<List>)
     const getPageKey = useMemo(
-        () => (list.data ? createPageKeyGetter(endpoint, queryWithBuild) : () => null),
-        [endpoint, list.data, queryWithBuild],
+        () =>
+            list.data?.totalPages
+                ? createPageKeyGetter(endpoint, { ...query, embed_items: true, build, page: 0 })
+                : () => null,
+        [endpoint, list.data, query],
     )
     const pages = useSWRInfinite(getPageKey, fetcher as BareFetcher<PageWithEmbedded<unknown>>, SWR_INFINITE_CONFIG)
     const { data, setSize, size } = pages

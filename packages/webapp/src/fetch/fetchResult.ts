@@ -59,7 +59,11 @@ const fetchResult = async <T>(
                     status: "notFound",
                 }
             }
-            if (init?.redirect === "error" && response.status >= 300 && response.status < 400) {
+            if (
+                (init?.redirect === "error" || init?.redirect === "manual") &&
+                response.status >= 300 &&
+                response.status < 400
+            ) {
                 return getRedirectResult(response)
             }
             return {
