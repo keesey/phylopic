@@ -31,8 +31,8 @@ const createListStaticPropsGetter =
                 listKey +
                 createSearch({
                     ...entityEmbedsQuery,
-                    embed_items: true,
                     build,
+                    embed_items: true,
                     page,
                 })
             const pageResponse = await fetchData<PageWithEmbedded<TEntity>>(getPageKey(0))

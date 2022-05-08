@@ -15,10 +15,13 @@ const ImageLicenseControls: FC<Props> = ({ total }) => {
             setLastValidTotal(total)
         }
     }, [total])
+    const totalDisplayed = useMemo(
+        () => (typeof total !== "number" || isNaN(total) ? lastValidTotal : total),
+        [lastValidTotal, total],
+    )
     if (typeof total !== "number") {
         return null
     }
-    const totalDisplayed = useMemo(() => isNaN(total) ? lastValidTotal : total, [lastValidTotal, total])
     return (
         <>
             <p className={clsx(isNaN(total) && styles.pending)}>
