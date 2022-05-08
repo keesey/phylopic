@@ -16,7 +16,7 @@ const checkListRedirect = <TEmbedded>(
             throw new APIError(400, [
                 {
                     developerMessage:
-                        "Cannot pass `page` without also specifying a build. You may omit `page`` to find the latest build. Or, check the body of this response.",
+                        "Cannot pass `page` without also specifying a build. You may omit `page` to find the latest build. Or, check the body of this response.",
                     field: "build",
                     type: "BAD_REQUEST_PARAMETERS",
                     userMessage,

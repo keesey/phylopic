@@ -16,6 +16,7 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import SiteTitle from "~/ui/SiteTitle"
+import NumberView from "~/views/NumberView"
 export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Partial<Pick<List, "build">>
@@ -42,7 +43,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                                         />
                                         <h1>Contributors</h1>
                                         <p>
-                                            <strong>{totalContributors}</strong> people have contributed silhouette
+                                            <NumberView value={totalContributors} /> people have contributed silhouette
                                             images to <SiteTitle />.
                                         </p>
                                     </header>

@@ -40,17 +40,16 @@ const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hide
     const list = useSWRImmutable<List>(listKey, fetcher as BareFetcher<List>)
     const getPageKey = useMemo(
         () =>
-            list.data?.totalPages
-                ? createPageKeyGetter(endpoint, { ...query, embed_items: true, build, page: 0 })
-                : () => null,
-        [endpoint, list.data, query],
+            list.data?.totalPages ? createPageKeyGetter(endpoint, { ...query, embed_items: true, build }) : () => null,
+        [build, endpoint, list.data, query],
     )
     const pages = useSWRInfinite(getPageKey, fetcher as BareFetcher<PageWithEmbedded<unknown>>, SWR_INFINITE_CONFIG)
     const { data, setSize, size } = pages
     const loadNextPage = useCallback(() => setSize(size + 1), [setSize, size])
-    const total = list.data?.totalItems ?? NaN
-    const value = useMemo(
-        () => (data ? data.reduce<unknown[]>((prev, page) => [...prev, ...(page._embedded.items ?? [])], []) : []),
+    const totalItems = list.data?.totalItems ?? NaN
+    const totalPages = list.data?.totalPages ?? NaN
+    const items = useMemo(
+        () => (data ? data.reduce<unknown[]>((prev, page) => [...prev, ...(page._embedded?.items ?? [])], []) : []),
         [data],
     )
     const error = list.error ?? pages.error
@@ -61,8 +60,8 @@ const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hide
     }, [error, onError])
     return (
         <>
-            <Fragment key="items">{children(value, total)}</Fragment>
-            {value.length < total && !error && !hideControls && (
+            <Fragment key="items">{children(items, totalItems)}</Fragment>
+            {size < totalPages && !error && !hideControls && (
                 <InfiniteScroll
                     hideLoader={hideLoader}
                     key="infinite-scroll"

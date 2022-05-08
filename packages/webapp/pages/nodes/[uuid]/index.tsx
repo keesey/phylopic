@@ -7,7 +7,7 @@ import {
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"
-import { createSearch, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
+import { createSearch, isDefined, isUUIDv4, Query } from "@phylopic/utils"
 import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -37,21 +37,22 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import ImageListView from "~/views/ImageListView"
-import NomenView from "~/views/NomenView"
 import NodeDetailsView from "~/views/NodeDetailsView"
 import NodeListView from "~/views/NodeListView"
+import NomenView from "~/views/NomenView"
 export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Pick<Node, "build" | "uuid">
-const createImagesQuery = (uuid: UUID) =>
-    ({ embed_specificNode: "true", filter_clade: uuid } as ImageListParameters & Query)
 const NODE_QUERY: Omit<NodeParameters, "uuid"> & Query = {
     embed_childNodes: "true",
     embed_parentNode: "true",
     embed_primaryImage: "true",
 }
 const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
-    const imagesQuery = useMemo(() => createImagesQuery(uuid), [uuid])
+    const imagesQuery = useMemo(
+        () => ({ embed_specificNode: "true", filter_clade: uuid } as ImageListParameters & Query),
+        [uuid],
+    )
     return (
         <SWRConfig value={{ fallback }}>
             <BuildContainer initialValue={build}>
@@ -76,15 +77,15 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                 afterItems={[
                                                     node?._links.parentNode?.href
                                                         ? {
-                                                            children: (
-                                                                <NomenView
-                                                                    value={node?._embedded?.parentNode?.names?.[0]}
-                                                                    short
-                                                                    defaultText="Parent Node"
-                                                                />
-                                                            ),
-                                                            href: node?._links.parentNode?.href,
-                                                        }
+                                                              children: (
+                                                                  <NomenView
+                                                                      value={node?._embedded?.parentNode?.names?.[0]}
+                                                                      short
+                                                                      defaultText="Parent Node"
+                                                                  />
+                                                              ),
+                                                              href: node?._links.parentNode?.href,
+                                                          }
                                                         : null,
                                                     {
                                                         children: (
@@ -98,15 +99,15 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                     },
                                                     ...(node?._embedded.childNodes?.length
                                                         ? [
-                                                            {
-                                                                children: (
-                                                                    <NodeListView
-                                                                        value={node?._embedded.childNodes ?? []}
-                                                                        short
-                                                                    />
-                                                                ),
-                                                            },
-                                                        ]
+                                                              {
+                                                                  children: (
+                                                                      <NodeListView
+                                                                          value={node?._embedded.childNodes ?? []}
+                                                                          short
+                                                                      />
+                                                                  ),
+                                                              },
+                                                          ]
                                                         : []),
                                                 ].filter(isDefined)}
                                                 beforeItems={[
@@ -144,8 +145,8 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                                                 value={
                                                                                     (
                                                                                         node as
-                                                                                        | NodeWithEmbedded
-                                                                                        | undefined
+                                                                                            | NodeWithEmbedded
+                                                                                            | undefined
                                                                                     )?.names[0]
                                                                                 }
                                                                                 short
@@ -198,12 +199,11 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         embed_primaryImage: "true",
     } as NodeParameters & Query
     const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + createSearch(nodeQuery)
-    const imagesQuery = createImagesQuery(uuid)
+    const imagesQuery = { filter_clade: uuid } as ImageListParameters & Query
     const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
-    const [nodeResult, imagesResponse] = await Promise.all([
-        fetchResult<NodeWithEmbedded>(nodeKey),
-        fetchData<List>(imagesKey),
-    ])
+    const nodeResultPromise = fetchResult<NodeWithEmbedded>(nodeKey)
+    const imagesResponsePromise = fetchData<List>(imagesKey)
+    const nodeResult = await nodeResultPromise
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
     }
@@ -212,7 +212,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             redirect: {
                 destination: "/nodes/" + nodeResult.data.uuid,
                 permanent: false,
-            }
+            },
         }
     }
     const build = nodeResult.data.build
@@ -221,6 +221,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         fallback: { [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data },
         uuid,
     }
+    const imagesResponse = await imagesResponsePromise
     if (imagesResponse.ok) {
         props.fallback[unstable_serialize(addBuildToURL(imagesKey, build))] = imagesResponse.data
         if (imagesResponse.data.totalPages) {

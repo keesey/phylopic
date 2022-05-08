@@ -1,8 +1,6 @@
 import { GetStaticPropsResult } from "next"
 import { ErrorFetchResult, NotFoundFetchResult } from "./fetchResult"
-const getStaticPropsResult = (
-    result: ErrorFetchResult | NotFoundFetchResult,
-): GetStaticPropsResult<never> => {
+const getStaticPropsResult = (result: ErrorFetchResult | NotFoundFetchResult): GetStaticPropsResult<never> => {
     switch (result.status) {
         case "error": {
             throw result.error

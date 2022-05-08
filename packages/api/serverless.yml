@@ -111,7 +111,6 @@ functions:
             PGUSER: "${ssm:PGUSER}"
             PGPASSWORD: "${ssm:PGPASSWORD}"
             PGDATABASE: "${ssm:PGDATABASE}"
-            PHYLOPIC_API_ENDPOINT: "${ssm:PHYLOPIC_API_ENDPOINT}"
             PHYLOPIC_BUILD: "${ssm:PHYLOPIC_BUILD}"
         events:
             - http:

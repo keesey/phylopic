@@ -49,15 +49,15 @@ SELECT ${selection} FROM image_node
         builder.add(
             `
 WITH RECURSIVE clade AS (
-    SELECT "uuid", parent_uuid, build
+    SELECT "uuid",parent_uuid,build
         FROM node
         WHERE "uuid"=$::uuid AND build=$::bigint
     UNION
-        SELECT n."uuid", n.parent_uuid, n.build
+        SELECT n."uuid",n.parent_uuid,n.build
             FROM node n
             INNER JOIN clade cl ON cl."uuid"=n.parent_uuid AND cl.build=n.build
 )
-SELECT ${selection} AS "uuid" FROM clade
+SELECT ${selection} FROM clade
     LEFT JOIN image_node ON clade."uuid"=image_node.node_uuid AND clade.build=image_node.build
     LEFT JOIN image ON image_node.image_uuid=image."uuid" AND image_node.build=image.build
     WHERE image."uuid" IS NOT NULL
@@ -67,7 +67,7 @@ SELECT ${selection} AS "uuid" FROM clade
     } else if (parameters.filter_name) {
         builder.add(
             `
-SELECT ${selection} AS "uuid" FROM node_name
+SELECT ${selection} FROM node_name
     LEFT JOIN image_node ON node_name.node_uuid=image_node.node_uuid AND node_name.build=image_node.build
     LEFT JOIN image ON image_node.image_uuid=image."uuid" AND image_node.build=image.build
     WHERE node_name.normalized=$::character varying AND node_name.build=$::bigint AND image."uuid" IS NOT NULL

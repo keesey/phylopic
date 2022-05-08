@@ -14,6 +14,7 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import NodeListView from "~/views/NodeListView"
+import NumberView from "~/views/NumberView"
 export interface Props {
     build: number
     fallback: PublicConfiguration["fallback"]
@@ -41,7 +42,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                                         />
                                         <h1>Taxonomic Groups</h1>
                                         <p>
-                                            <strong>{totalNodes}</strong> taxonomic groups in the database.
+                                            <NumberView value={totalNodes} /> taxonomic groups in the database.
                                         </p>
                                     </header>
                                     <NodeListView short value={nodes as readonly Node[]} />

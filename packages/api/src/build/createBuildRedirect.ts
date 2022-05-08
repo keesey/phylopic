@@ -8,7 +8,10 @@ const createBuildRedirect = (
 ) => {
     return {
         body: "",
-        headers: createRedirectHeaders(path.replace(/\/$/, "") + createSearch({ ...query, build: BUILD }), false),
+        headers: createRedirectHeaders(
+            (path.replace(/\/$/, "") || "/") + createSearch({ ...query, build: BUILD }),
+            false,
+        ),
         statusCode: 307,
     } as APIGatewayProxyResult
 }

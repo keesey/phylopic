@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import { FC, useContext, useEffect, useState } from "react"
 import LicenseFilterView from "~/views/LicenseFilterView"
+import NumberView from "~/views/NumberView"
 import LicenseFilterTypeContext from "../LicenseFilterTypeContext"
 import styles from "./index.module.scss"
 export interface Props {
@@ -21,7 +22,7 @@ const ImageLicenseControls: FC<Props> = ({ total }) => {
     return (
         <>
             <p className={clsx(isNaN(total) && styles.pending)}>
-                <strong>{totalDisplayed}</strong> {licenses ? "matching " : ""}silhouette image
+                <NumberView value={totalDisplayed} /> {licenses ? "matching " : ""}silhouette image
                 {totalDisplayed === 1 ? "" : "s"}
                 {licenses ? "" : " in the database"}.
             </p>

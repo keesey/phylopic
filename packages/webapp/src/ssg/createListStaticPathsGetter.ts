@@ -11,7 +11,7 @@ const createStaticPathsGetter =
         const listResponse = await fetchData<List>(listKey)
         if (!listResponse.ok || !listResponse.data.totalPages) {
             if (!listResponse.ok) {
-                console.error(listResponse)
+                console.error(listKey, "=>", listResponse)
             }
             return {
                 fallback: "blocking",
@@ -22,7 +22,7 @@ const createStaticPathsGetter =
         const pageKey = listKey + createSearch({ build, page: 0 })
         const pageResponse = await fetchData<Page>(pageKey)
         if (!pageResponse.ok) {
-            console.error(pageResponse)
+            console.error(pageKey, "=>", pageResponse)
             return {
                 fallback: "blocking",
                 paths: [],
