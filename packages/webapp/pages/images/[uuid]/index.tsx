@@ -167,6 +167,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     }
     const parameters: Omit<ImageParameters, "uuid"> & Query = {
         embed_nodes: "true",
+        embed_contributor: "true",
         embed_specificNode: "true",
     }
     const result = await fetchResult<ImageWithEmbedded>(

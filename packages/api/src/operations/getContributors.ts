@@ -36,7 +36,7 @@ const getItemLinks = async (client: ClientBase, offset: number, limit: number): 
     })
     return queryResult.rows.map(({ uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}` }))
 }
-// :TODO: /contributors/<uuid>?embed=latestImage
+// :TODO: /contributors/<uuid>?embed_latestImage=true
 const getItemLinksAndJSON = async (
     client: ClientBase,
     offset: number,

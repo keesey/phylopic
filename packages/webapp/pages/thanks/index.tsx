@@ -5,6 +5,7 @@ import BuildContainer from "~/builds/BuildContainer"
 import PageHead from "~/metadata/PageHead"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
+import getBuildStaticProps, { Props } from "~/ssg/getBuildStaticProps"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
@@ -12,9 +13,9 @@ import SiteNav from "~/ui/SiteNav"
 import SupportersView from "~/views/SupportersView"
 import SUPPORTERS from "~/views/SupportersView/SUPPORTERS"
 const NAMES = SUPPORTERS.reduce<readonly ReactNode[]>((prev, supporters) => [...prev, ...supporters.names], [])
-const PageComponent: NextPage = () => (
+const PageComponent: NextPage<Props> = ({ build }) => (
     <SWRConfig>
-        <BuildContainer>
+        <BuildContainer initialValue={build}>
             <PageLoader />
             <PageHead title="Special Thanks from PhyloPic" url="https://www.phylopic.org/thanks" />
             <SearchContainer>
@@ -38,3 +39,4 @@ const PageComponent: NextPage = () => (
     </SWRConfig>
 )
 export default PageComponent
+export const getStaticProps = getBuildStaticProps

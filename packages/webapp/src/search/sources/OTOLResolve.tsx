@@ -30,7 +30,7 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
     const direct = useSWR<NodeWithEmbedded>(
         `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(
             ott_id,
-        )}?embed=primaryImage`,
+        )}?embed_primaryImage=true`,
         fetchDirect,
     )
     const lineage = useSWR([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
@@ -42,7 +42,7 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
     }, [lineage.data?.lineage])
     const indirect = useSWR<NodeWithEmbedded>(
         lineageIDs.length
-            ? [`${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?embed=primaryImage`, lineageIDs]
+            ? [`${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?embed_primaryImage=true`, lineageIDs]
             : null,
         fetchIndirect,
     )

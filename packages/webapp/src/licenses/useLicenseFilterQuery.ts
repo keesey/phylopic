@@ -1,8 +1,9 @@
+import { ImageListParameters } from "@phylopic/api-models"
 import { useContext, useMemo } from "react"
 import LicenseFilterTypeContext from "./LicenseFilterTypeContext"
 const useLicenseFilterQuery = () => {
     const [licenses] = useContext(LicenseFilterTypeContext) ?? []
-    return useMemo(
+    return useMemo<ImageListParameters>(
         () => ({
             ...(licenses === "publicdomain" ? { filter_license_by: "false" } : null),
             ...(licenses === "publicdomain" || licenses === "-nc" || licenses === "-nc-sa"
@@ -11,7 +12,7 @@ const useLicenseFilterQuery = () => {
             ...(licenses === "publicdomain" || licenses === "-sa" || licenses === "-nc-sa"
                 ? { filter_license_sa: "false" }
                 : null),
-            embed: "specificNode",
+            embed_specificNode: "true",
         }),
         [licenses],
     )

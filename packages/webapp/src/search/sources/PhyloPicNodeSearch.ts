@@ -17,8 +17,9 @@ const PhyloPicNodeSearch: FC = () => {
         () =>
             matchingText
                 ? process.env.NEXT_PUBLIC_API_URL +
-                  "/images" +
+                  "/nodes" +
                   createSearch({
+                      embed_items: "true",
                       embed_primaryImage: "true",
                       filter_name: matchingText,
                       page: "0",
