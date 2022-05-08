@@ -13,7 +13,6 @@ const PhyloPicNodeSearch: FC = () => {
         () => getMatchingText(state?.internalMatches, state?.text),
         [state?.internalMatches, state?.text],
     )
-    console.log({ matchingText })
     const endpoint = useMemo(
         () =>
             matchingText
