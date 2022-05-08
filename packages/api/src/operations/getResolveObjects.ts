@@ -1,5 +1,5 @@
 import { DATA_MEDIA_TYPE, isResolveParameters, ResolveParameters, TitledLink } from "@phylopic/api-models"
-import { Authority, createSearch, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import { Authority, createSearch, Namespace, ObjectID, stringifyNormalized, UUID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
@@ -129,7 +129,7 @@ export const getResolveObjects: Operation<GetResolveObjectsParameters, GetResolv
     }
     const link = await getRedirect(service, authority, namespace, objectIDs, queryParameters)
     return {
-        body: JSON.stringify(link),
+        body: stringifyNormalized(link),
         headers: {
             ...DATA_HEADERS,
             ...createRedirectHeaders(link.href, false),

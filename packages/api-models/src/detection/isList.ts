@@ -1,10 +1,5 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
-import {
-    isNonnegativeInteger,
-    isNormalizedText,
-    isNullOr,
-    isPositiveInteger
-} from "@phylopic/utils"
+import { isNonnegativeInteger, isNormalizedText, isNullOr, isPositiveInteger } from "@phylopic/utils"
 import { List } from "../types/List.js"
 import isData from "./isData.js"
 import isLink from "./isLink.js"

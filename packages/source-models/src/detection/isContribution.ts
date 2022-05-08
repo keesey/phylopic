@@ -24,7 +24,7 @@ export const isContribution = (x: unknown, faultCollector?: ValidationFaultColle
     isUUID((x as Contribution).uuid, faultCollector?.sub("uuid")) &&
     Boolean(
         (x as Contribution).attribution ||
-        isPublicDomainLicenseURL((x as Contribution).license) ||
-        invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
+            isPublicDomainLicenseURL((x as Contribution).license) ||
+            invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
     )
 export default isContribution

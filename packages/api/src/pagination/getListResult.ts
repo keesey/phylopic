@@ -1,4 +1,5 @@
 import { Link } from "@phylopic/api-models"
+import { stringifyNormalized } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { ClientBase } from "pg"
 import APIError from "../errors/APIError"
@@ -49,7 +50,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
             const totalItems = await getTotalItems(client)
             result = {
                 ...OK_RESULT,
-                body: JSON.stringify(getListObject(listPath, listQuery, totalItems, itemsPerPage)),
+                body: stringifyNormalized(getListObject(listPath, listQuery, totalItems, itemsPerPage)),
             }
         } finally {
             client.release()
@@ -111,7 +112,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 const itemLinks = rawItemLinks.slice(0, itemsPerPage)
                 result = {
                     ...OK_RESULT,
-                    body: JSON.stringify(getPageObject(listPath, listQuery, pageIndex, lastPage, itemLinks)),
+                    body: stringifyNormalized(getPageObject(listPath, listQuery, pageIndex, lastPage, itemLinks)),
                 }
             } finally {
                 client.release()

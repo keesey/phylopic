@@ -1,11 +1,5 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
-import {
-    invalidate,
-    isDefined,
-    isNormalizedText,
-    isUndefinedOr,
-    isUUID,
-} from "@phylopic/utils"
+import { invalidate, isDefined, isNormalizedText, isUndefinedOr, isUUID } from "@phylopic/utils"
 import { ImageEmbedded } from "../../types/ImageWithEmbedded.js"
 import { IMAGE_EMBEDDED_PARAMETERS } from "../constants/IMAGE_EMBEDDED_PARAMETERS.js"
 import { ImageListParameters } from "../types/ImageListParameters.js"

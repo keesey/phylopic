@@ -1,11 +1,12 @@
 import type { Error as ErrorModel } from "@phylopic/api-models"
+import { stringifyNormalized } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import APIError from "./APIError"
 const fromAPIError = (e: APIError, stack: string | null): APIGatewayProxyResult => ({
-    body: JSON.stringify({ build: BUILD, errors: e.data, stack }),
+    body: stringifyNormalized({ build: BUILD, errors: e.data, stack }),
     headers: {
         ...CORS_HEADERS,
         ...DATA_HEADERS,

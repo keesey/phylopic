@@ -1,7 +1,9 @@
 {
     "compilerOptions": {
-        "outDir": "./dist"
+        "baseUrl": ".",
+        "module": "ESNext",
+        "outDir": "dist"
     },
     "extends": "../../tsconfig.json",
-    "include": ["src", "../api-models/src/mediaTypes/DATA_MEDIA_TYPE.ts"]
+    "include": ["src"]
 }

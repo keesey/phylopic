@@ -1,4 +1,5 @@
-import { Link } from "@phylopic/api-models"
+import { Link, PageWithEmbedded } from "@phylopic/api-models"
+import { stringifyNormalized } from "@phylopic/utils"
 import getPageObject from "./getPageObject"
 const getPageObjectJSONWithEmbedded = (
     listEndpoint: string,
@@ -8,11 +9,11 @@ const getPageObjectJSONWithEmbedded = (
     itemLinks: readonly Link[],
     itemsJSON: readonly string[],
 ) => {
-    const o = {
+    const o: PageWithEmbedded<unknown> = {
         _embedded: {},
         ...getPageObject(listEndpoint, listQuery, pageIndex, lastPage, itemLinks),
     }
-    const json = JSON.stringify(o)
+    const json = stringifyNormalized(o)
     return json.replace('"_embedded":{}', `"_embedded":{"items":[${itemsJSON.join(",")}]}`)
 }
 export default getPageObjectJSONWithEmbedded

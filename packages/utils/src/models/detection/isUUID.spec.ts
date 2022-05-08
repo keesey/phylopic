@@ -3,11 +3,12 @@ import { describe, it } from "mocha"
 import { isUUID } from "./isUUID.js"
 describe("isUUID", () => {
     const test = (value: unknown, expected: boolean) => {
-        it(`should determine that ${JSON.stringify(value)} is${expected ? "" : " not"
-            } a Universal Unique Identifier.`, () => {
-                const actual = isUUID(value)
-                expect(actual).to.equal(expected)
-            })
+        it(`should determine that ${JSON.stringify(value)} is${
+            expected ? "" : " not"
+        } a Universal Unique Identifier.`, () => {
+            const actual = isUUID(value)
+            expect(actual).to.equal(expected)
+        })
     }
     test("1ee65cf3-53db-4a52-9960-a9f7093d845d", true)
     test(" 1ee65cf3-53db-4a52-9960-a9f7093d845d", false)
