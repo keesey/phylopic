@@ -1,5 +1,6 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
-import { ReactNode, FC } from "react"
+import { extractPath } from "@phylopic/utils"
+import { ReactNode, FC, useMemo } from "react"
 import AnchorLink from "~/ui/AnchorLink"
 import ImageThumbnailView from "../ImageThumbnailView"
 import NomenView from "../NomenView"
@@ -11,8 +12,9 @@ export interface Props {
     value: NodeWithEmbedded
 }
 const IllustratedNodeView: FC<Props> = ({ caption, value, short }) => {
+    const href = useMemo(() => extractPath(value._links.self.href), [value._links.self.href])
     return (
-        <AnchorLink href={value._links.self.href}>
+        <AnchorLink href={href}>
             <figure className={styles.figure}>
                 {value?._embedded?.primaryImage && (
                     <ImageThumbnailView

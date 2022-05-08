@@ -1,5 +1,6 @@
 export * from "./createQueryString.js"
 export * from "./createSearch.js"
+export * from "./extractPath.js"
 export * from "./extractQueryString.js"
 export * from "./parseQueryString.js"
 export type { ParsedQuery, Query } from "./Query"

@@ -1,7 +1,8 @@
 import { ListObjectsV2Command, S3Client, _Object } from "@aws-sdk/client-s3"
 import { TitledLink } from "@phylopic/api-models"
 import { Contributor, Image, isSource, Node, Source, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { getJSON, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
+import { extractPath, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
+import { getJSON } from "@phylopic/utils-aws"
 import { Digraph } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny"
 const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]
@@ -152,7 +153,7 @@ const readExternal = async (
         Bucket: "source.phylopic.org",
         Key: `externals/${path}/meta.json`,
     })
-    result.externals.set(path, { uuid: link.href?.replace(/^\/nodes\//, ""), title: link.title })
+    result.externals.set(path, { uuid: extractPath(link.href ?? "").replace(/^\/nodes\//, ""), title: link.title })
 }
 const addToResult = async (client: S3Client, result: BucketResult, object: _Object): Promise<void> => {
     if (!object.Key) {

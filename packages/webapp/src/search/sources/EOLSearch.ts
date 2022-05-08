@@ -1,8 +1,8 @@
 import { createSearch } from "@phylopic/utils"
-import axios from "axios"
 import { FC, useContext, useEffect } from "react"
 import { Fetcher } from "swr"
 import useSWR from "swr/immutable"
+import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 const URL = "https://eol.org/api/search/1.0.json"
 interface EOLSearch {
@@ -21,7 +21,7 @@ const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, 
     if (query.length < 2) {
         return [[], query]
     }
-    const response = await axios.get<EOLSearch>(
+    const response = await fetchDataAndCheck<EOLSearch>(
         url +
             createSearch({
                 key: process.env.NEXT_PUBLIC_EOL_API_KEY,

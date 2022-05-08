@@ -1,5 +1,5 @@
 import { TitledLink } from "@phylopic/api-models"
-import { compareStrings } from "@phylopic/utils"
+import { compareStrings, extractPath } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import ExternalTitledLinkView from "../ExternalTitledLinkView"
 import LinkedAuthorizedNamespaceView from "../LinkedAuthorizedNamespaceView"
@@ -12,7 +12,9 @@ const NodeExternalView: FC<Props> = ({ value, short }) => {
     const categories = useMemo(
         () =>
             value.reduce<Readonly<Record<string, Readonly<Record<string, TitledLink>>>>>((prev, link) => {
-                const [authority, namespace, objectID] = link.href.replace(/^\/resolve\//, "").split("/", 3)
+                const [authority, namespace, objectID] = extractPath(link.href)
+                    .replace(/^\/resolve\//, "")
+                    .split("/", 3)
                 const authorizedNamespace = authority + "/" + namespace
                 return {
                     ...prev,

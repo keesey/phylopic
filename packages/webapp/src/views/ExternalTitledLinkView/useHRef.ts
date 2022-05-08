@@ -1,3 +1,4 @@
+import { extractPath } from "@phylopic/utils"
 import { useMemo } from "react"
 const RESOLVERS: Readonly<Record<string, ((id: string) => string) | undefined>> = {
     ["eol.org/pages"]: id => `https://www.eol.org/pages/${encodeURIComponent(id)}`,
@@ -14,7 +15,7 @@ const RESOLVERS: Readonly<Record<string, ((id: string) => string) | undefined>> 
 }
 const useHRef = (resolveHRef: string) => {
     return useMemo(() => {
-        const path = resolveHRef.replace(/^\/resolve\//, "")
+        const path = extractPath(resolveHRef).replace(/^\/resolve\//, "")
         const [authority, namespace, objectID] = path.split("/", 3)
         const resolve = RESOLVERS[authority + "/" + namespace]
         return resolve?.(objectID)

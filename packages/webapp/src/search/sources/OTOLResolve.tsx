@@ -1,8 +1,8 @@
-import axios from "axios"
 import { NodeWithEmbedded } from "@phylopic/api-models"
-import { useContext, useEffect, useMemo, FC } from "react"
+import { FC, useContext, useEffect, useMemo } from "react"
 import { Fetcher } from "swr"
 import useSWR from "swr/immutable"
+import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 import OTOL_URL from "./OTOL_URL"
 interface OTOLLineageItem {
@@ -14,15 +14,22 @@ interface OTOLTaxonInfo {
     readonly lineage?: readonly OTOLLineageItem[]
 }
 const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async (url, ott_id, include_lineage) => {
-    const response = await axios.post<OTOLTaxonInfo>(url, { ott_id, include_lineage })
+    const response = await fetchDataAndCheck<OTOLTaxonInfo>(url, {
+        body: JSON.stringify({ include_lineage, ott_id }),
+        headers: new Headers({ "content-type": "application/json" }),
+        method: "POST",
+    })
     return response.data
 }
 const fetchDirect: Fetcher<NodeWithEmbedded, [string]> = async url => {
-    const response = await axios.get(url)
+    const response = await fetchDataAndCheck<NodeWithEmbedded>(url)
     return response.data
 }
 const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = async (url, objectIDs) => {
-    const response = await axios.post(url, objectIDs)
+    const response = await fetchDataAndCheck<NodeWithEmbedded>(url, {
+        body: JSON.stringify(objectIDs),
+        method: "POST",
+    })
     return response.data
 }
 const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {

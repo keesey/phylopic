@@ -1,3 +1,4 @@
+import { extractPath } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import { ChangeEvent, FormEvent, useCallback, useContext, useState, FC } from "react"
@@ -18,7 +19,7 @@ const SearchBar: FC = () => {
             event.preventDefault()
             const node = internalResults?.[0] ?? resolution?.node
             if (node) {
-                router.push(node._links.self.href)
+                router.push(extractPath(node._links.self.href))
             }
         },
         [resolution, internalResults, router],

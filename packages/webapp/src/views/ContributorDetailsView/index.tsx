@@ -8,11 +8,8 @@ const ContributorDetailsView: FC<Props> = ({ value }) => {
     const contactHRef = value?._links.contact?.href
     const emailAddress = useMemo(() => contactHRef?.replace(/^mailto:/, ""), [contactHRef])
     const emailHRef = useMemo(
-        () =>
-            emailAddress
-                ? "mailto:" + emailAddress + createSearch({ subject: "Your Silhouette Images on PhyloPic" })
-                : null,
-        [emailAddress],
+        () => (contactHRef ? contactHRef + createSearch({ subject: "Your Silhouette Images on PhyloPic" }) : null),
+        [contactHRef],
     )
     if (!emailHRef) {
         return null

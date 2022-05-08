@@ -2,7 +2,7 @@ import { List, Page } from "@phylopic/api-models"
 import { createSearch, isDefined } from "@phylopic/utils"
 import { GetStaticPaths, GetStaticPathsResult } from "next"
 import fetchData from "~/fetch/fetchData"
-import extractUUIDv4 from "~/routes/extractUUID"
+import extractUUIDv4 from "~/routes/extractUUIDv4"
 import { EntityPageQuery } from "./EntityPageQuery"
 const createStaticPathsGetter =
     (endpoint: string): GetStaticPaths<EntityPageQuery> =>

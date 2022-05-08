@@ -1,7 +1,7 @@
-import axios from "axios"
 import { FC, useContext, useEffect } from "react"
 import { Fetcher } from "swr"
 import useSWR from "swr/immutable"
+import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 import OTOL_URL from "./OTOL_URL"
 interface OTOLAutocompleteName {
@@ -14,7 +14,11 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
     if (name.length < 2) {
         return [[], name]
     }
-    const response = await axios.post<readonly OTOLAutocompleteName[]>(url, { name })
+    const response = await fetchDataAndCheck<readonly OTOLAutocompleteName[]>(url, {
+        body: JSON.stringify({ name }),
+        headers: new Headers({ "content-type": "application/json" }),
+        method: "POST",
+    })
     return [response.data, name]
 }
 const OTOLAutocompleteName: FC = () => {

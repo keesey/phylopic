@@ -1,4 +1,4 @@
-import { isUUID, UUID } from "@phylopic/utils"
+import { extractPath, isUUID, UUID } from "@phylopic/utils"
 import { TableName } from "./TableName"
 const TABLE_FOR_PATH: Readonly<Record<string, TableName | undefined>> = {
     contributors: "contributor",
@@ -6,7 +6,7 @@ const TABLE_FOR_PATH: Readonly<Record<string, TableName | undefined>> = {
     images: "image",
 }
 const getTableAndUUIDFromHRef = (href: string) => {
-    const parts = href.split("?", 2)[0].split(/\//g).filter(Boolean)
+    const parts = extractPath(href).split(/\//g).filter(Boolean)
     if (parts.length !== 2) {
         return null
     }

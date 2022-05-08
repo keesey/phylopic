@@ -7,7 +7,7 @@ import {
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"
-import { createSearch, isDefined, isUUIDv4, Query } from "@phylopic/utils"
+import { createSearch, extractPath, isDefined, isUUIDv4, Query } from "@phylopic/utils"
 import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -24,7 +24,7 @@ import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import LicenseQualifier from "~/licenses/LicenseQualifier"
 import PageHead from "~/metadata/PageHead"
 import getShortNomen from "~/models/getShortNomen"
-import extractUUIDv4 from "~/routes/extractUUID"
+import extractUUIDv4 from "~/routes/extractUUIDv4"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
@@ -79,12 +79,12 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                         ? {
                                                               children: (
                                                                   <NomenView
-                                                                      value={node?._embedded?.parentNode?.names?.[0]}
+                                                                      value={node._embedded?.parentNode?.names?.[0]}
                                                                       short
                                                                       defaultText="Parent Node"
                                                                   />
                                                               ),
-                                                              href: node?._links.parentNode?.href,
+                                                              href: extractPath(node._links.parentNode.href),
                                                           }
                                                         : null,
                                                     {
@@ -138,7 +138,10 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                                 {node?._links.lineage && (
                                                                     <p>
                                                                         <AnchorLink
-                                                                            href={node?._links.lineage.href ?? "."}
+                                                                            href={
+                                                                                extractPath(node._links.lineage.href) ??
+                                                                                "."
+                                                                            }
                                                                         >
                                                                             Look through the ancestors of{" "}
                                                                             <NomenView

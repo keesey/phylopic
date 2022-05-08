@@ -1,4 +1,5 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
+import { extractPath } from "@phylopic/utils"
 import { FC } from "react"
 import useImageAlt from "~/hooks/useImageAlt"
 import AnchorLink from "~/ui/AnchorLink"
@@ -10,7 +11,7 @@ export interface Props {
 const LinkedImageThumbnailView: FC<Props> = ({ value }) => {
     const title = useImageAlt(value)
     return (
-        <AnchorLink className={styles.main} href={value._links.self.href} title={title}>
+        <AnchorLink className={styles.main} href={extractPath(value._links.self.href)} title={title}>
             <ImageThumbnailView value={value} />
         </AnchorLink>
     )

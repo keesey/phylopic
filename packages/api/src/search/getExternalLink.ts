@@ -1,5 +1,5 @@
 import { TitledLink } from "@phylopic/api-models"
-import { Authority, createSearch, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import { Authority, createSearch, Namespace, ObjectID, Query, UUID } from "@phylopic/utils"
 import { PoolClient } from "pg"
 import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
@@ -8,7 +8,7 @@ const getExternalLink = async (
     authority: Authority,
     namespace: Namespace,
     objectID: ObjectID,
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
+    queryParameters: Query,
 ): Promise<TitledLink> => {
     const result = await client.query<{ node_uuid: UUID; title: string | null }>(
         'SELECT node_uuid,title FROM node_external WHERE authority=$1::character varying AND "namespace"=$2::character varying AND objectid=$3::character varying AND build=$4::bigint LIMIT 1',

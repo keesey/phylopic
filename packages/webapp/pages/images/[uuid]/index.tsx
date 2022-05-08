@@ -1,5 +1,5 @@
 import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, isUUIDv4, Query } from "@phylopic/utils"
+import { createSearch, extractPath, isUUIDv4, Query } from "@phylopic/utils"
 import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import BuildContainer from "~/builds/BuildContainer"
@@ -53,7 +53,7 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                 url={`https://www.phylopic.org/images/${image.uuid}`}
             >
                 <meta key="meta:author" name="author" content={image.attribution ?? "Anonymous"} />
-                <link key="link:author" rel="author" href={image._links.contributor.href} />
+                <link key="link:contributor" rel="contributor" href={image._links.contributor.href} />
             </PageHead>
             <SearchContainer>
                 <header>
@@ -137,9 +137,7 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                         <br key="br" />
                         {lineageNodeHRef && (
                             <div key="controls">
-                                <AnchorLink href={lineageNodeHRef.split("?", 2)[0] + "/lineage"}>
-                                    View Lineage
-                                </AnchorLink>
+                                <AnchorLink href={extractPath(lineageNodeHRef) + "/lineage"}>View Lineage</AnchorLink>
                             </div>
                         )}
                         <ImageRasterView key="raster" value={image} />
