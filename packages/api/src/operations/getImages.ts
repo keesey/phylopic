@@ -32,7 +32,7 @@ const getQueryBuilder = (parameters: ImageListParameters, results: "total" | "uu
     const builder = new QueryConfigBuilder()
     const selection =
         results === "total"
-            ? 'COUNT(image."uuid") as total'
+            ? 'COUNT(DISTINCT image."uuid") as total'
             : results === "uuid"
             ? 'image."uuid" AS "uuid"'
             : 'image.json AS json,image."uuid" AS "uuid"'
