@@ -3,14 +3,14 @@ import {
     ImageListParameters,
     IMAGE_EMBEDDED_PARAMETERS,
     NodeListParameters,
-    NODE_EMBEDDED_PARAMETERS,
+    NODE_EMBEDDED_PARAMETERS
 } from "@phylopic/api-models"
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
-import TEMPORARY_HEADERS from "src/headers/responses/TEMPORARY_HEADERS"
 import APIError from "../errors/APIError"
 import create405 from "../errors/create405"
 import errorToResult from "../errors/errorToResult"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
+import TEMPORARY_HEADERS from "../headers/responses/TEMPORARY_HEADERS"
 import getAutocomplete from "../operations/getAutocomplete"
 import getContributor from "../operations/getContributor"
 import getContributors from "../operations/getContributors"
