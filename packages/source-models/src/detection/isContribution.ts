@@ -1,3 +1,4 @@
+import type { ValidationFaultCollector } from "@phylopic/utils"
 import {
     invalidate,
     isEmailAddress,
@@ -8,10 +9,9 @@ import {
     isObject,
     isPublicDomainLicenseURL,
     isUUID,
-    ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Contribution } from "../types/Contribution"
-import isNodeIdentifier from "./isNodeIdentifier"
+import { Contribution } from "../types/Contribution.js"
+import isNodeIdentifier from "./isNodeIdentifier.js"
 export const isContribution = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contribution =>
     isObject(x, faultCollector) &&
     isNullOr(isNormalizedText)((x as Contribution).attribution, faultCollector?.sub("attribution")) &&
@@ -24,7 +24,7 @@ export const isContribution = (x: unknown, faultCollector?: ValidationFaultColle
     isUUID((x as Contribution).uuid, faultCollector?.sub("uuid")) &&
     Boolean(
         (x as Contribution).attribution ||
-            isPublicDomainLicenseURL((x as Contribution).license) ||
-            invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
+        isPublicDomainLicenseURL((x as Contribution).license) ||
+        invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
     )
 export default isContribution

@@ -1,7 +1,7 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import { EmailAddress } from "../types/EmailAddress"
-import { isEmailAddress } from "./isEmailAddress"
+import { EmailAddress } from "../types/EmailAddress.js"
+import isEmailAddress from "./isEmailAddress.js"
 describe("isEmailAddress", () => {
     const test = (value: EmailAddress, valid: boolean) => {
         it(`should return ${valid ? "true" : "false"} for ${JSON.stringify(value)}.`, () => {

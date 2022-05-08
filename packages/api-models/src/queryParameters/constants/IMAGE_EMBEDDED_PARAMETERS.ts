@@ -1,5 +1,5 @@
-import { ImageEmbedded } from "../../types/ImageWithEmbedded"
-import { EmbeddableParameters } from "../types/EmbeddableParameters"
+import { ImageEmbedded } from "../../types/ImageWithEmbedded.js"
+import { EmbeddableParameters } from "../types/EmbeddableParameters.js"
 export const IMAGE_EMBEDDED_PARAMETERS: ReadonlyArray<string & keyof EmbeddableParameters<ImageEmbedded>> = [
     "embed_contributor",
     "embed_generalNode",

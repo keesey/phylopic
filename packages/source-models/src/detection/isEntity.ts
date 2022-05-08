@@ -1,5 +1,6 @@
-import { isObject, isUUID, ValidationFaultCollector } from "@phylopic/utils"
-import { Entity } from "../types/Entity"
+import type { ValidationFaultCollector } from "@phylopic/utils"
+import { isObject, isUUID } from "@phylopic/utils"
+import { Entity } from "../types/Entity.js"
 export const isEntity = <T>(
     x: unknown,
     isValue: (x: unknown, faultCollector?: ValidationFaultCollector) => x is T,

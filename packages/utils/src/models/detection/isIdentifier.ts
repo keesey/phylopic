@@ -1,10 +1,10 @@
-import { FaultDetector } from "../../detection/FaultDetector"
-import invalidate from "../../validation/invalidate"
-import type { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
-import { Identifier } from "../types/Identifier"
-import isAuthority from "./isAuthority"
-import isNamespace from "./isNamespace"
-import isObjectID from "./isObjectID"
+import { FaultDetector } from "../../detection/FaultDetector.js"
+import invalidate from "../../validation/invalidate.js"
+import type ValidationFaultCollector from "../../validation/ValidationFaultCollector.js"
+import { Identifier } from "../types/Identifier.js"
+import isAuthority from "./isAuthority.js"
+import isNamespace from "./isNamespace.js"
+import isObjectID from "./isObjectID.js"
 export const isIdentifier: FaultDetector<Identifier> = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

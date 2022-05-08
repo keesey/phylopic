@@ -9,11 +9,11 @@ import {
     isVectorMediaType,
     ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Image } from "../types/Image"
-import isEntity from "./isEntity"
-import isLink from "./isLink"
-import isLinks from "./isLinks"
-import isMediaLink from "./isMediaLink"
+import { Image } from "../types/Image.js"
+import isEntity from "./isEntity.js"
+import isLink from "./isLink.js"
+import isLinks from "./isLinks.js"
+import isMediaLink from "./isMediaLink.js"
 const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image["_links"] =>
     isLinks(x, faultCollector) &&
     isLink(isNormalizedText)((x as Image["_links"]).contributor, faultCollector?.sub("contributor")) &&

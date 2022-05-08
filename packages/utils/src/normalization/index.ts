@@ -1,1 +1,1 @@
-export * from "./normalizeText"
+export * from "./normalizeText.js"

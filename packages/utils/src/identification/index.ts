@@ -1,1 +1,1 @@
-export * from "./parseIdentifier"
+export * from "./parseIdentifier.js"

@@ -1,8 +1,8 @@
 import { validate } from "email-validator"
-import { FaultDetector } from "../../detection/FaultDetector"
-import invalidate from "../../validation/invalidate"
-import type { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
-import { EmailAddress } from "../types/EmailAddress"
+import { FaultDetector } from "../../detection/FaultDetector.js"
+import invalidate from "../../validation/invalidate.js"
+import type ValidationFaultCollector from "../../validation/ValidationFaultCollector.js"
+import { EmailAddress } from "../types/EmailAddress.js"
 export const isEmailAddress: FaultDetector<EmailAddress> = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

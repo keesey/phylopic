@@ -1,7 +1,7 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
 import { LicenseURL, ValidLicenseURL } from "@phylopic/utils"
-import canChange from "./canChange"
+import canChange from "./canChange.js"
 describe("licenses/canChange", () => {
     const test = (a: LicenseURL, b: ValidLicenseURL, permitted: boolean) => {
         it(`should${permitted ? "" : " not"} allow a change from '${a}' to '${b}'`, () => {

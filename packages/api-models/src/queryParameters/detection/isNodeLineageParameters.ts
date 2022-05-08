@@ -1,8 +1,8 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
-import { NodeEmbedded } from "../../types/NodeWithEmbedded"
-import NODE_EMBEDDED_PARAMETERS from "../constants/NODE_EMBEDDED_PARAMETERS"
-import { NodeLineageParameters } from "../types/NodeLineageParameters"
-import isListParameters from "./isListParameters"
+import { NodeEmbedded } from "../../types/NodeWithEmbedded.js"
+import NODE_EMBEDDED_PARAMETERS from "../constants/NODE_EMBEDDED_PARAMETERS.js"
+import { NodeLineageParameters } from "../types/NodeLineageParameters.js"
+import isListParameters from "./isListParameters.js"
 export const isNodeLineageParameters = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

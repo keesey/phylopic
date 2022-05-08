@@ -1,7 +1,7 @@
-import { stringifyNormalized } from "../../json/stringifyNormalized"
-import { stringifyNomen } from "../../nomina/stringifyNomen"
-import { Nomen } from "../types/Nomen"
-import normalizeNomen from "./normalizeNomen"
+import { stringifyNormalized } from "../../json/stringifyNormalized.js"
+import { stringifyNomen } from "../../nomina/stringifyNomen.js"
+import { Nomen } from "../types/Nomen.js"
+import normalizeNomen from "./normalizeNomen.js"
 const compare = (a: Nomen, b: Nomen) => {
     if (a === b) {
         return 0

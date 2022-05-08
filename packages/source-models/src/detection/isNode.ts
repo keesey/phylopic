@@ -1,3 +1,4 @@
+import type { ValidationFaultCollector } from "@phylopic/utils"
 import {
     isISOTimestamp,
     isNomen,
@@ -5,9 +6,8 @@ import {
     isNullOr,
     isObject,
     isUUID,
-    ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Node } from "../types/Node"
+import { Node } from "../types/Node.js"
 export const isNode = (x: unknown, faultCollector?: ValidationFaultCollector): x is Node =>
     isObject(x, faultCollector) &&
     isISOTimestamp((x as Node).created, faultCollector?.sub("created")) &&

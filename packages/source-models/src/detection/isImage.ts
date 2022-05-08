@@ -1,3 +1,4 @@
+import type { ValidationFaultCollector } from "@phylopic/utils"
 import {
     invalidate,
     isISOTimestamp,
@@ -7,9 +8,9 @@ import {
     isObject,
     isPublicDomainLicenseURL,
     isUUID,
-    ValidationFaultCollector,
+
 } from "@phylopic/utils"
-import { Image } from "../types/Image"
+import { Image } from "../types/Image.js"
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isObject(x, faultCollector) &&
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&
@@ -21,7 +22,7 @@ export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): 
     isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor")) &&
     Boolean(
         (x as Image).attribution ||
-            isPublicDomainLicenseURL((x as Image).license) ||
-            invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
+        isPublicDomainLicenseURL((x as Image).license) ||
+        invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
     )
 export default isImage

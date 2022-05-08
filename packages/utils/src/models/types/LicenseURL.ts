@@ -1,3 +1,3 @@
-import { LegacyLicenseURL } from "./LegacyLicenseURL"
-import { ValidLicenseURL } from "./ValidLicenseURL"
+import { LegacyLicenseURL } from "./LegacyLicenseURL.js"
+import { ValidLicenseURL } from "./ValidLicenseURL.js"
 export type LicenseURL = LegacyLicenseURL | ValidLicenseURL

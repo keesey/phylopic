@@ -1,4 +1,4 @@
-import { EmailAddress, ISOTimestamp } from "@phylopic/utils"
+import type { EmailAddress, ISOTimestamp } from "@phylopic/utils"
 export type Contributor = Readonly<{
     emailAddress: EmailAddress | null
     created: ISOTimestamp

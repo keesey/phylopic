@@ -1,8 +1,8 @@
 import { invalidate, isEmailAddress, isNormalizedText, isNullOr, ValidationFaultCollector } from "@phylopic/utils"
-import { Contributor } from "../types/Contributor"
-import isEntity from "./isEntity"
-import isLink from "./isLink"
-import isLinks from "./isLinks"
+import { Contributor } from "../types/Contributor.js"
+import isEntity from "./isEntity.js"
+import isLink from "./isLink.js"
+import isLinks from "./isLinks.js"
 const isMailToHRef = (x: unknown, faultCollector?: ValidationFaultCollector): x is string =>
     (typeof x === "string" && x.startsWith("mailto:") && isEmailAddress(x.slice("mailto:".length))) ||
     invalidate(faultCollector, "Not a valid `mailto:` link.")

@@ -1,3 +1,3 @@
-import { RasterMediaType } from "./RasterMediaType"
-import { VectorMediaType } from "./VectorMediaType"
+import { RasterMediaType } from "./RasterMediaType.js"
+import { VectorMediaType } from "./VectorMediaType.js"
 export type ImageMediaType = RasterMediaType | VectorMediaType

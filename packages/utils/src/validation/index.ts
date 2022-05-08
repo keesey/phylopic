@@ -1,3 +1,3 @@
-export type { ValidationFault } from "./ValidationFault"
-export * from "./ValidationFaultCollector"
-export * from "./invalidate"
+export type { ValidationFault } from "./ValidationFault.js"
+export * from "./ValidationFaultCollector.js"
+export * from "./invalidate.js"

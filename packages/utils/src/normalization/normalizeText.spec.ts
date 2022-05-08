@@ -1,6 +1,6 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import { normalizeText } from "./normalizeText"
+import normalizeText from "./normalizeText.js"
 describe("normalizeText", () => {
     const test = (value: string, expected: string) => {
         it(`should convert ${JSON.stringify(value)} to ${JSON.stringify(expected)}`, () => {

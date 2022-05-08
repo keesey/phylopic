@@ -1,6 +1,7 @@
-import { isArray, isNormalizedText, isObject, ValidationFaultCollector } from "@phylopic/utils"
-import { QueryMatches } from ".."
-import isLinks from "./isLinks"
+import type { ValidationFaultCollector } from "@phylopic/utils"
+import { isArray, isNormalizedText, isObject } from "@phylopic/utils"
+import { QueryMatches } from "../types/QueryMatches.js"
+import isLinks from "./isLinks.js"
 export const isQueryMatches = (x: unknown, faultCollector?: ValidationFaultCollector): x is QueryMatches =>
     isObject(x, faultCollector) &&
     isLinks((x as QueryMatches)._links, faultCollector?.sub("_links")) &&

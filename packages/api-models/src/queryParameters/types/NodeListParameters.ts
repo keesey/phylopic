@@ -1,5 +1,5 @@
-import { NodeEmbedded } from "../../types/NodeWithEmbedded"
-import { ListParameters } from "./ListParameters"
+import { NodeEmbedded } from "../../types/NodeWithEmbedded.js"
+import { ListParameters } from "./ListParameters.js"
 export interface NodeListParameters extends ListParameters<NodeEmbedded> {
     filter_name?: string
 }

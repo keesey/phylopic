@@ -1,8 +1,8 @@
-import { LicenseURL, RasterMediaType, URL, VectorMediaType } from "@phylopic/utils"
-import { Entity } from "./Entity"
-import { Link } from "./Link"
-import { Links } from "./Links"
-import { MediaLink } from "./MediaLink"
+import type { LicenseURL, RasterMediaType, URL, VectorMediaType } from "@phylopic/utils"
+import { Entity } from "./Entity.js"
+import { Link } from "./Link.js"
+import { Links } from "./Links.js"
+import { MediaLink } from "./MediaLink.js"
 export interface ImageLinks extends Links {
     readonly contributor: Link
     readonly generalNode: Link | null

@@ -1,5 +1,5 @@
-import createQueryString from "./createQueryString"
-import { Query } from "./Query"
+import createQueryString from "./createQueryString.js"
+import { Query } from "./Query.js"
 export const createSearch = (query: Query) => {
     const queryString = createQueryString(query)
     return queryString ? `?${queryString}` : ""

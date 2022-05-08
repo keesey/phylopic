@@ -1,6 +1,6 @@
-import { ValidationFault } from "./ValidationFault"
+import { ValidationFault } from "./ValidationFault.js"
 export class ValidationFaultCollector {
-    constructor(private fields: readonly string[] = [], private faults: ValidationFault[] = []) {}
+    constructor(private fields: readonly string[] = [], private faults: ValidationFault[] = []) { }
     public add(message: string) {
         const field = this.fields.join(".")
         this.faults.push({ field, message })

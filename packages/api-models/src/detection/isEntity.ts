@@ -1,7 +1,7 @@
 import { isISOTimestamp, isUUID, ValidationFaultCollector } from "@phylopic/utils"
-import { Entity } from "../types/Entity"
-import { Links } from "../types/Links"
-import isData from "./isData"
+import { Entity } from "../types/Entity.js"
+import { Links } from "../types/Links.js"
+import isData from "./isData.js"
 export const isEntity = <TLinks extends Links>(
     x: unknown,
     isLinks: (x: unknown, faultCollector?: ValidationFaultCollector) => x is TLinks,

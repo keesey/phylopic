@@ -1,4 +1,4 @@
-import { ErrorType } from "../types/Error"
+import type { ErrorType } from "../types/ErrorType.js"
 export const ERROR_TYPES: ReadonlySet<ErrorType> = new Set([
     "ACCESS_DENIED",
     "API_CONFIGURATION_ERROR",

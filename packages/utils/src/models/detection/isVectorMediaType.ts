@@ -1,7 +1,7 @@
-import invalidate from "../../validation/invalidate"
-import type { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
-import VECTOR_MEDIA_TYPES from "../constants/VECTOR_MEDIA_TYPES"
-import { VectorMediaType } from "../types/VectorMediaType"
+import invalidate from "../../validation/invalidate.js"
+import type ValidationFaultCollector from "../../validation/ValidationFaultCollector.js"
+import VECTOR_MEDIA_TYPES from "../constants/VECTOR_MEDIA_TYPES.js"
+import { VectorMediaType } from "../types/VectorMediaType.js"
 const VALIDATION_MESSAGE = `Expected one of the following vector image media types: ${[...VECTOR_MEDIA_TYPES]
     .sort()
     .join(", ")}.`

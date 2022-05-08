@@ -1,6 +1,6 @@
-import { Data } from "./Data"
-import { Link } from "./Link"
-import { Links } from "./Links"
+import { Data } from "./Data.js"
+import { Link } from "./Link.js"
+import { Links } from "./Links.js"
 export interface PageLinks extends Links {
     readonly items: readonly Link[]
     readonly list: Link
