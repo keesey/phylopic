@@ -35,7 +35,7 @@ const getQueryBuilder = (parameters: ImageListParameters, results: "total" | "uu
             ? 'COUNT(DISTINCT image."uuid") as total'
             : results === "uuid"
             ? 'image."uuid" AS "uuid"'
-            : 'image.json AS json,image."uuid" AS "uuid"'
+            : 'image."json" AS "json",image."uuid" AS "uuid"'
     if (parameters.filter_node) {
         builder.add(
             `
@@ -83,13 +83,13 @@ SELECT ${selection} FROM node_name
     } else if (parameters.filter_clade) {
         builder.add(
             `GROUP BY image."uuid",image.depth${
-                results === "json" ? ",image.json" : ""
+                results === "json" ? ',image."json"' : ""
             } ORDER BY image.depth,image."uuid"`,
         )
     } else if (parameters.filter_name || parameters.filter_node) {
         builder.add(
             `GROUP BY image."uuid",image.created${
-                results === "json" ? ",image.json" : ""
+                results === "json" ? ',image."json"' : ""
             } ORDER BY image.created DESC,image."uuid"`,
         )
     } else {

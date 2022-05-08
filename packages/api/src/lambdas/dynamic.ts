@@ -3,7 +3,7 @@ import {
     ImageListParameters,
     IMAGE_EMBEDDED_PARAMETERS,
     NodeListParameters,
-    NODE_EMBEDDED_PARAMETERS
+    NODE_EMBEDDED_PARAMETERS,
 } from "@phylopic/api-models"
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
 import APIError from "../errors/APIError"

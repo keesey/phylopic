@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { FC, useContext, useEffect, useState } from "react"
+import { FC, useContext, useEffect, useMemo, useState } from "react"
 import LicenseFilterView from "~/views/LicenseFilterView"
 import NumberView from "~/views/NumberView"
 import LicenseFilterTypeContext from "../LicenseFilterTypeContext"
@@ -18,7 +18,7 @@ const ImageLicenseControls: FC<Props> = ({ total }) => {
     if (typeof total !== "number") {
         return null
     }
-    const totalDisplayed = isNaN(total) ? lastValidTotal : total
+    const totalDisplayed = useMemo(() => isNaN(total) ? lastValidTotal : total, [lastValidTotal, total])
     return (
         <>
             <p className={clsx(isNaN(total) && styles.pending)}>
