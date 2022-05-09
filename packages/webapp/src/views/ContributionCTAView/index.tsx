@@ -14,22 +14,22 @@ const ContributionCTAView: FC = () => {
                     </p>
                     <ul className={styles.ctaList}>
                         <li>
-                            <AnchorLink href="/contribute/images">Image Uploader</AnchorLink>
+                            <a href="https://contribute.phylopic.org">Image Uploader</a>
                         </li>
                     </ul>
                 </section>
                 <section>
                     <h3>Engineering</h3>
                     <p>
-                        Application developers may access the data in <SiteTitle /> using the API. Developers may also
-                        add features to the <SiteTitle /> website.
+                        Software engineers may access the data in <SiteTitle /> using the API. They may also add
+                        features to the <SiteTitle /> website.
                     </p>
                     <ul className={styles.ctaList}>
                         <li>
-                            <AnchorLink href="/apidocs">API Documentation</AnchorLink>
+                            <a href="https://api-docs.phylopic.org">API Documentation</a>
                         </li>
                         <li>
-                            <AnchorLink href="/code">Codebases</AnchorLink>
+                            <a href="https://github.com/keesey/phylopic">Codebase</a>
                         </li>
                     </ul>
                 </section>

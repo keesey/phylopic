@@ -49,9 +49,15 @@ const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hide
     const loadNextPage = useCallback(() => setSize(size + 1), [setSize, size])
     const totalItems = list.data?.totalItems ?? NaN
     const totalPages = list.data?.totalPages ?? NaN
-    const displayedPages = useMemo(() => typeof maxPages === "number" ? data?.slice(0, maxPages) : data, [data, maxPages])
+    const displayedPages = useMemo(
+        () => (typeof maxPages === "number" ? data?.slice(0, maxPages) : data),
+        [data, maxPages],
+    )
     const items = useMemo(
-        () => (displayedPages ? displayedPages.reduce<unknown[]>((prev, page) => [...prev, ...(page._embedded?.items ?? [])], []) : []),
+        () =>
+            displayedPages
+                ? displayedPages.reduce<unknown[]>((prev, page) => [...prev, ...(page._embedded?.items ?? [])], [])
+                : [],
         [displayedPages],
     )
     const error = list.error ?? pages.error
@@ -72,9 +78,14 @@ const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hide
                 />
             )}
             {error && !hideControls && (
-                <p key="error">
-                    <strong>{String(error)}</strong>
-                </p>
+                <section key="error">
+                    <p>
+                        <strong>{String(error)}</strong>
+                    </p>
+                    <p>
+                        (You may <a href="https://github.com/keesey/phylopic/issues/new">report this issue</a>.)
+                    </p>
+                </section>
             )}
         </>
     )

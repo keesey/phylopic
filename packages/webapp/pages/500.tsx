@@ -26,6 +26,9 @@ const Page: FC = () => (
                         <h1>Server Error</h1>
                     </header>
                     <p>Sorry for the inconvenience. Please check back later.</p>
+                    <p>
+                        You may also <a href="https://github.com/keesey/phylopic/issues/new">report the issue</a>.
+                    </p>
                 </SearchOverlay>
             </main>
             <SiteFooter />

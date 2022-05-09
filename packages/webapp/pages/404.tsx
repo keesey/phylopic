@@ -40,6 +40,10 @@ const Page: FC = () => (
                             The page you requested cannot be found. Please try the{" "}
                             <AnchorLink href="/">Home Page</AnchorLink>.
                         </p>
+                        <p>
+                            If you believe this is a bug, please{" "}
+                            <a href="https://github.com/keesey/phylopic/issues/new">report the issue</a>.
+                        </p>
                     </header>
                 </SearchOverlay>
             </main>

@@ -128,6 +128,16 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                                                     value={[...image._embedded.nodes].reverse()}
                                                     variant="lineage"
                                                 />
+                                                {lineageNodeHRef && (
+                                                    <>
+                                                        {" "}
+                                                        [
+                                                        <AnchorLink href={extractPath(lineageNodeHRef) + "/lineage"}>
+                                                            View Lineage
+                                                        </AnchorLink>
+                                                        ]
+                                                    </>
+                                                )}
                                             </td>
                                         </tr>
                                     )}
@@ -135,11 +145,6 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                             </table>
                         </header>
                         <br key="br" />
-                        {lineageNodeHRef && (
-                            <div key="controls">
-                                <AnchorLink href={extractPath(lineageNodeHRef) + "/lineage"}>View Lineage</AnchorLink>
-                            </div>
-                        )}
                         <ImageRasterView key="raster" value={image} />
                         <section key="download">
                             <h2>Download Files</h2>

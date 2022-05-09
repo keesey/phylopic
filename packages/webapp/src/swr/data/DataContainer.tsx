@@ -27,9 +27,14 @@ const DataContainer: FC<Props> = ({ children, endpoint, hideLoader, onError, que
             <Fragment key="items">{children?.(data)}</Fragment>
             {!data && isValidating && !hideLoader && <Loader />}
             {error && (
-                <p key="error">
-                    <strong>{String(error)}</strong>
-                </p>
+                <section key="error">
+                    <p>
+                        <strong>{String(error)}</strong>
+                    </p>
+                    <p>
+                        (You may <a href="https://github.com/keesey/phylopic/issues/new">report this issue</a>.)
+                    </p>
+                </section>
             )}
         </>
     )

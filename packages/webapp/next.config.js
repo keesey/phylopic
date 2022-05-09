@@ -4,28 +4,18 @@ module.exports = {
     async redirects() {
         return [
             {
-                source: "/account/login",
-                destination: "/contribute/images",
+                source: "/account",
+                destination: "https://contribute.phylopic.org",
                 permanent: true,
             },
             {
-                source: "/account/images/submit",
-                destination: "/contribute/images",
-                permanent: true,
-            },
-            {
-                source: "/apidocs",
-                destination: "https://api-docs.phylopic.org/",
-                permanent: true,
-            },
-            {
-                source: "/code",
-                destination: "https://github.com/keesey/phylopic/",
+                source: "/account/:path*",
+                destination: "https://contribute.phylopic.org",
                 permanent: true,
             },
             {
                 source: "/contact",
-                destination: "/contributors/keesey%40gmail.com",
+                destination: "/contributors/060f03a9-fafd-4d08-81d1-b8f82080573f",
                 permanent: true,
             },
             {

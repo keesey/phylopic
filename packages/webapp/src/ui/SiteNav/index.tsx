@@ -24,9 +24,7 @@ const SiteNav: FC = () => {
             <div key="menuButton" className={styles.menuButton}>
                 <button onClick={handleMenuButtonClick}>☰</button>
             </div>
-            {dropdownOpen && (
-                <DropdownNav onClose={handleDropdownNavClose} />
-            )}
+            {dropdownOpen && <DropdownNav onClose={handleDropdownNavClose} />}
         </nav>
     )
 }
