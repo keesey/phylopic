@@ -8,6 +8,7 @@ import PageHead from "~/metadata/PageHead"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
+import ImagePageContainer from "~/swr/data/IMagePageContainer"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import AnchorLink from "~/ui/AnchorLink"
 import PageLoader from "~/ui/PageLoader"
@@ -43,8 +44,8 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                             <h2>Latest Contributions</h2>
                             <PaginationContainer
                                 endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
-                                hideControls
                                 query={{ embed_specificNode: true }}
+                                maxPages={1}
                             >
                                 {(images, totalImages) => (
                                     <>

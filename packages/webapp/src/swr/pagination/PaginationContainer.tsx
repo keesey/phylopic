@@ -13,6 +13,7 @@ export type Props<T = unknown> = {
     endpoint: URL
     hideControls?: boolean
     hideLoader?: boolean
+    maxPages?: number
     onError?: (error: Error) => void
     query?: Query
 }
@@ -22,7 +23,7 @@ const SWR_INFINITE_CONFIG = {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
 }
-const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hideLoader, onError, query }) => {
+const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hideLoader, maxPages, onError, query }) => {
     const [build] = useContext(BuildContext) ?? []
     const fetcher = useAPIFetcher<List | PageWithEmbedded<unknown>>()
     const queryWithoutEmbeds = useMemo(
@@ -48,9 +49,10 @@ const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hide
     const loadNextPage = useCallback(() => setSize(size + 1), [setSize, size])
     const totalItems = list.data?.totalItems ?? NaN
     const totalPages = list.data?.totalPages ?? NaN
+    const displayedPages = useMemo(() => typeof maxPages === "number" ? data?.slice(0, maxPages) : data, [data, maxPages])
     const items = useMemo(
-        () => (data ? data.reduce<unknown[]>((prev, page) => [...prev, ...(page._embedded?.items ?? [])], []) : []),
-        [data],
+        () => (displayedPages ? displayedPages.reduce<unknown[]>((prev, page) => [...prev, ...(page._embedded?.items ?? [])], []) : []),
+        [displayedPages],
     )
     const error = list.error ?? pages.error
     useEffect(() => {
@@ -61,7 +63,7 @@ const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hide
     return (
         <>
             <Fragment key="items">{children(items, totalItems)}</Fragment>
-            {size < totalPages && !error && !hideControls && (
+            {size < (maxPages ?? totalPages) && !error && !hideControls && (
                 <InfiniteScroll
                     hideLoader={hideLoader}
                     key="infinite-scroll"
