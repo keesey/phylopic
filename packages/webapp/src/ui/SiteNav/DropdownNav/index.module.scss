@@ -1,0 +1,65 @@
+@use "../../../styles/colors.scss";
+
+.main {
+    background-color: colors.$white;
+    border-bottom: 1px solid colors.$cerulean;
+    border-left: 1px solid colors.$cerulean;
+    color: colors.$cerulean;
+    display: flex;
+    flex-direction: column;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow-y: scroll;
+    padding: 1rem;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1;
+
+    a {
+        font-weight: normal;
+
+        &:hover {
+            opacity: 0.5;
+        }
+    }
+
+    h2 {
+        border-bottom: none;
+        color: colors.$ink;
+        font-size: 1.1rem;
+        margin: 0 0 1rem;
+    }
+
+    section {
+        border-bottom: 0.5px solid colors.$inkFade;
+        margin: 0 0 1rem;
+        padding: 0 0 1rem;
+
+        &:last-of-type {
+            border-bottom: none;
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
+.menuButton {
+    font-weight: bold;
+    text-align: right;
+
+    button {
+        background: none;
+        border: 1.5pt solid colors.$cerulean;
+        border-radius: 0.5em;
+        color: colors.$cerulean;
+        font-size: larger;
+        font-weight: bold;
+        transition: all 0.3s;
+
+        &:hover {
+            background-color: colors.$cerulean;
+            color: colors.$white;
+        }
+    }
+}
