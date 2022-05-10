@@ -1,7 +1,7 @@
 import { DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { Identifier } from "@phylopic/utils"
-import { CLIData } from "../getCLIData"
-import { CommandResult } from "./CommandResult"
+import { CLIData } from "../getCLIData.js"
+import { CommandResult } from "./CommandResult.js"
 const unlink = (cliData: CLIData, identifier: Identifier): CommandResult => {
     if (!cliData.externals.has(identifier)) {
         console.warn("No external with that identifier.")

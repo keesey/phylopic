@@ -1,8 +1,8 @@
 import { Entity, Image, Node } from "@phylopic/source-models"
-import { CLIData } from "../getCLIData"
-import { CommandResult } from "./CommandResult"
-import getLineage from "./utils/getLineage"
-import precedes from "./utils/precedes"
+import { CLIData } from "../getCLIData.js"
+import { CommandResult } from "./CommandResult.js"
+import getLineage from "./utils/getLineage.js"
+import precedes from "./utils/precedes.js"
 const show = (cliData: CLIData, entity: Entity<Image | Node>): CommandResult => {
     console.info("--------------------------------------------------------------------------------")
     console.info(JSON.stringify(entity, undefined, "\t"))

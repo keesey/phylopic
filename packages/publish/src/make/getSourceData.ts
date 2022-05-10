@@ -2,9 +2,10 @@ import { TitledLink } from "@phylopic/api-models"
 import { Contributor, Image, isContributor, isImage, isNode, isSource, Node, Source } from "@phylopic/source-models"
 import { compareStrings, normalizeUUID, UUID } from "@phylopic/utils"
 import { Arc, Digraph } from "simple-digraph"
-import listDir from "../fsutils/listDir"
-import readJSON from "../fsutils/readJSON"
-import getPhylogeny from "../models/getPhylogeny"
+import listDir from "../fsutils/listDir.js"
+import readJSON from "../fsutils/readJSON.js"
+import getPhylogeny from "../models/getPhylogeny.js"
+import SOURCE_PATH from "../paths/SOURCE_PATH.js"
 export type SourceData = Readonly<{
     build: number
     contributors: ReadonlyMap<UUID, Contributor>
@@ -37,7 +38,7 @@ type ProcessArgs = Args &
         nextVertex: number
     }
 const loadSource = async (): Promise<Source> => {
-    return await readJSON<Source>(".s3/source.phylopic.org/meta.json", isSource)
+    return await readJSON<Source>(SOURCE_PATH, isSource)
 }
 const loadImage = async (uuid: UUID, args: Pick<ProcessArgs, "images">): Promise<void> => {
     const path = `images/${normalizeUUID(uuid)}/meta.json`
@@ -139,14 +140,14 @@ const processClade = (
     }
     args.depths.set(uuid, depth)
     args.sortIndices.set(uuid, args.sortIndex++)
-    ;[...args.phylogeny[1].values()]
-        .filter(([head]) => head === vertex)
-        .map(
-            ([, tail]) =>
-                [tail, args.sizes.get(tail) ?? 0, args.verticesToNodeUUIDs.get(tail)] as [number, number, UUID],
-        )
-        .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
-        .forEach(([vertex]) => processClade(args, vertex, depth + 1))
+        ;[...args.phylogeny[1].values()]
+            .filter(([head]) => head === vertex)
+            .map(
+                ([, tail]) =>
+                    [tail, args.sizes.get(tail) ?? 0, args.verticesToNodeUUIDs.get(tail)] as [number, number, UUID],
+            )
+            .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
+            .forEach(([vertex]) => processClade(args, vertex, depth + 1))
 }
 const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, vertex: number): number => {
     const arcs = [...phylogeny[1].values()].filter(([head]) => head === vertex)

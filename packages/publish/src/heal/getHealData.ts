@@ -4,7 +4,7 @@ import { Contributor, Image, isSource, Node, Source, SOURCE_BUCKET_NAME } from "
 import { extractPath, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import { Digraph } from "simple-digraph"
-import getPhylogeny from "../models/getPhylogeny"
+import getPhylogeny from "../models/getPhylogeny.js"
 const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]
 export type HealData = Readonly<{
     contributors: ReadonlyMap<UUID, Contributor>

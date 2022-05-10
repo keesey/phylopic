@@ -1,4 +1,3 @@
-import { parseNomen } from "parse-nomen"
 import { Contributor, Image, isContributor, isImage, isNode, Node } from "@phylopic/source-models"
 import {
     isUUID,
@@ -9,9 +8,10 @@ import {
     UUID,
     ValidationFaultCollector,
 } from "@phylopic/utils"
-import nameMatches from "../cli/commands/utils/nameMatches"
-import precedes from "../cli/commands/utils/precedes"
-import { HealData } from "./getHealData"
+import { parseNomen } from "parse-nomen"
+import nameMatches from "../cli/commands/utils/nameMatches.js"
+import precedes from "../cli/commands/utils/precedes.js"
+import { HealData } from "./getHealData.js"
 const analyze = (data: HealData): HealData => {
     const contributors = new Map<UUID, Contributor>(data.contributors)
     const contributorsToPut = new Set<UUID>(data.contributorsToPut)

@@ -1,7 +1,7 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { EmailAddress, UUID } from "@phylopic/utils"
-import { CLIData } from "../getCLIData"
-import { CommandResult } from "./CommandResult"
+import { CLIData } from "../getCLIData.js"
+import { CommandResult } from "./CommandResult.js"
 const approve = (_client: S3Client, cliData: CLIData, _contributor?: EmailAddress, _uuid?: UUID): CommandResult => {
     return {
         cliData,

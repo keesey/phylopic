@@ -1,10 +1,10 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { Entity, Image, isImage, Node } from "@phylopic/source-models"
 import { stringifyNormalized } from "@phylopic/utils"
-import { CLIData } from "../getCLIData"
-import { CommandResult } from "./CommandResult"
-import precedes from "./utils/precedes"
-import putToMap from "./utils/putToMap"
+import { CLIData } from "../getCLIData.js"
+import { CommandResult } from "./CommandResult.js"
+import precedes from "./utils/precedes.js"
+import putToMap from "./utils/putToMap.js"
 const identify = (
     cliData: CLIData,
     image: Entity<Image>,

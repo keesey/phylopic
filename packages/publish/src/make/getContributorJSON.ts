@@ -1,6 +1,6 @@
 import { Contributor } from "@phylopic/api-models"
 import { normalizeUUID, UUID } from "@phylopic/utils"
-import type { SourceData } from "./getSourceData"
+import type { SourceData } from "./getSourceData.js"
 const getContributorJSON = (uuid: UUID, data: SourceData, count: number): Contributor => {
     uuid = normalizeUUID(uuid)
     const sourceContributor = data.contributors.get(uuid)

@@ -36,16 +36,17 @@
         "download:images": "aws s3 sync --delete s3://images.phylopic.org/ ./.s3/images.phylopic.org",
         "download:source": "aws s3 sync --delete s3://source.phylopic.org/ ./.s3/source.phylopic.org",
         "format": "prettier -w . && eslint --ext .js,.ts --fix .",
-        "heal": "ts-node ./src/heal.ts",
-        "insert": "ts-node ./src/insert.ts 2> insert-error.log",
+        "heal": "ts-node --esm ./src/heal.ts",
+        "insert": "ts-node --esm ./src/insert.ts 2> insert-error.log",
         "lint": "eslint --ext .js,.ts .",
         "make": "yarn download && yarn process && concurrently \"yarn insert\" \"yarn upload\" && yarn release && yarn sync",
         "process": "./process.sh 2> process-error.log",
-        "release": "ts-node ./src/release.ts 2> release-error.log",
+        "release": "ts-node --esm ./src/release.ts 2> release-error.log",
         "sync": "yarn sync:images",
         "sync:images": "aws s3 sync --acl public-read --delete ./.s3/images.phylopic.org s3://images.phylopic.org/",
         "upload": "yarn upload:images",
         "upload:images": "aws s3 sync --acl public-read ./.s3/images.phylopic.org s3://images.phylopic.org/"
     },
+    "type": "module",
     "version": "2.0.0-alpha"
 }

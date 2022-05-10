@@ -1,10 +1,10 @@
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3"
 import { Entity, Image, Node } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
-import { CLIData } from "../getCLIData"
-import { CommandResult, SourceUpdate } from "./CommandResult"
-import succeed from "./succeed"
-import deleteFromMap from "./utils/deleteFromMap"
+import { CLIData } from "../getCLIData.js"
+import { CommandResult, SourceUpdate } from "./CommandResult.js"
+import succeed from "./succeed.js"
+import deleteFromMap from "./utils/deleteFromMap.js"
 const deleteImage = (cliData: CLIData, uuid: UUID): CommandResult => {
     return {
         cliData: {

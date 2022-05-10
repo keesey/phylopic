@@ -1,4 +1,4 @@
-import { HealData } from "./getHealData"
+import { HealData } from "./getHealData.js"
 const hasActions = (data: Pick<HealData, "externalsToPut" | "imagesToPut" | "keysToDelete" | "nodesToPut">) => {
     return (
         data.imagesToPut.size > 0 ||

@@ -2,8 +2,8 @@ import { PutObjectCommand } from "@aws-sdk/client-s3"
 import axios from "axios"
 import { Entity, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { isScientific, Nomen, UUID } from "@phylopic/utils"
-import type { CLIData } from "../../getCLIData"
-import { CommandResult, SourceUpdate } from "../CommandResult"
+import type { CLIData } from "../../getCLIData.js"
+import { CommandResult, SourceUpdate } from "../CommandResult.js"
 interface OTOLTaxon {
     ott_id: number
     tax_sources: string[]
