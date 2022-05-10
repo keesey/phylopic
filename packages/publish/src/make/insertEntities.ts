@@ -1,9 +1,8 @@
-import { normalizeSync as normalizeDiacritics } from "normalize-diacritics"
-import type { NomenPart } from "parse-nomen"
-import type { ClientBase, QueryConfig } from "pg"
-import { TitledLink } from "@phylopic/api-models"
+import { normalizeQuery, TitledLink } from "@phylopic/api-models"
 import { Contributor } from "@phylopic/source-models"
 import { chunk, compareStrings, LicenseURL, stringifyNormalized, UUID } from "@phylopic/utils"
+import type { NomenPart } from "parse-nomen"
+import type { ClientBase, QueryConfig } from "pg"
 import { cleanTables } from "./cleanEntities"
 import getContributorJSON from "./getContributorJSON"
 import getImageJSON from "./getImageJSON"
@@ -16,17 +15,12 @@ interface NodeQueryConfigs {
     readonly nodes: QueryConfig
 }
 const getNormalizedName = (name: readonly NomenPart[]) => {
-    const normalized = normalizeDiacritics(
+    const normalized = normalizeQuery(
         name
             .filter(part => part.class === "scientific" || part.class === "vernacular")
             .map(({ text }) => text)
             .join(" "),
     )
-        .toLowerCase()
-        .replaceAll(/\s+/g, " ")
-        .replaceAll(/[^a-z -]+/g, " ")
-        .trim()
-        .replaceAll(/\s+/g, " ")
     if (normalized.length <= MINIMUM_SEARCH_TEXT_LENGTH) {
         return ""
     }

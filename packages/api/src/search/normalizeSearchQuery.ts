@@ -1,13 +1,8 @@
-import { normalize as normalizeDiacritics } from "normalize-diacritics"
+import { normalizeQuery } from "@phylopic/api-models"
 import APIError from "../errors/APIError"
 import MIN_QUERY_LENGTH from "./MIN_QUERY_LENGTH"
-export const normalizeQuery = async (query: string) => {
-    query = (await normalizeDiacritics(query ?? ""))
-        .toLowerCase()
-        .replace(/\s+/g, " ")
-        .replace(/[^a-z -]+/g, " ")
-        .trim()
-        .replace(/\s+/g, " ")
+export const normalizeSearchQuery = (query: string) => {
+    query = normalizeQuery(query)
     if (query.length < MIN_QUERY_LENGTH) {
         throw new APIError(400, [
             {
@@ -22,4 +17,4 @@ export const normalizeQuery = async (query: string) => {
     }
     return query
 }
-export default normalizeQuery
+export default normalizeSearchQuery

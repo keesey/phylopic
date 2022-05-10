@@ -9,7 +9,7 @@ import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import MAX_AUTOCOMPLETE_RESULTS from "../search/MAX_AUTOCOMPLETE_RESULTS"
-import normalizeQuery from "../search/normalizeQuery"
+import normalizeSearchQuery from "../search/normalizeSearchQuery"
 import { PoolClientService } from "../services/PoolClientService"
 import { Operation } from "./Operation"
 type GetAutocompleteParameters = DataRequestHeaders & Partial<SearchParameters>
@@ -40,7 +40,7 @@ export const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocomple
         return createBuildRedirect("/autocomplete", { query })
     }
     checkBuild(build, "There was a problem with a request to find search suggestions.")
-    const normalizedQuery = await normalizeQuery(query ?? "")
+    const normalizedQuery = normalizeSearchQuery(query ?? "")
     const href = "/autocomplete" + createSearch({ build, query: normalizedQuery })
     if (query !== normalizedQuery) {
         return {
