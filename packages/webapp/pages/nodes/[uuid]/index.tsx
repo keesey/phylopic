@@ -33,11 +33,11 @@ import NodeContainer from "~/swr/data/NodeContainer"
 import AnchorLink from "~/ui/AnchorLink"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import Loader from "~/ui/Loader"
+import NomenHeader from "~/ui/NomenHeader"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import ImageListView from "~/views/ImageListView"
-import NodeDetailsView from "~/views/NodeDetailsView"
 import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
 export type Props = {
@@ -120,11 +120,8 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                     ) ?? undefined
                                                 }
                                             />
-                                            <h1>
-                                                <NomenView value={node?.names[0]} short defaultText="[Unnamed]" />
-                                            </h1>
+                                            <NomenHeader value={node} />
                                         </header>
-                                        <NodeDetailsView value={node} />
                                         <section>
                                             <h2>Silhouette Images</h2>
                                             <ImageLicensePaginator query={imagesQuery}>

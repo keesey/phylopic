@@ -15,6 +15,7 @@ import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import AnchorLink from "~/ui/AnchorLink"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import HeaderNav from "~/ui/HeaderNav"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
@@ -82,15 +83,32 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                                     },
                                 ]}
                             />
-                            <h1>
-                                <NomenView
-                                    value={image._embedded.specificNode?.names?.[0]}
-                                    short
-                                    defaultText="Silhouette"
-                                />
-                                {" by "}
-                                {image.attribution ?? "Anonymous"}
-                            </h1>
+                            <HeaderNav
+                                buttons={
+                                    lineageNodeHRef
+                                        ? [
+                                              {
+                                                  children: "View Lineage →",
+                                                  key: "lineage",
+                                                  href: extractPath(lineageNodeHRef) + "/lineage",
+                                                  type: "anchor",
+                                              },
+                                          ]
+                                        : []
+                                }
+                                headerLevel={1}
+                                header={
+                                    <>
+                                        <NomenView
+                                            value={image._embedded.specificNode?.names?.[0]}
+                                            short
+                                            defaultText="Silhouette"
+                                        />
+                                        {" by "}
+                                        {image.attribution ?? "Anonymous"}
+                                    </>
+                                }
+                            />
                             <table>
                                 <tbody>
                                     <tr key="license">
@@ -129,16 +147,6 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                                                     value={[...image._embedded.nodes].reverse()}
                                                     variant="lineage"
                                                 />
-                                                {lineageNodeHRef && (
-                                                    <>
-                                                        {" "}
-                                                        [
-                                                        <AnchorLink href={extractPath(lineageNodeHRef) + "/lineage"}>
-                                                            View Lineage
-                                                        </AnchorLink>
-                                                        ]
-                                                    </>
-                                                )}
                                             </td>
                                         </tr>
                                     )}

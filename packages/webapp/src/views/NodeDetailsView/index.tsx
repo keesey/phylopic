@@ -1,42 +1,22 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
-import React, { useState, FC } from "react"
-import AnchorLink from "~/ui/AnchorLink"
+import React, { FC } from "react"
 import InlineSections from "~/ui/InlineSections"
-import NomenListView from "~/views/NomenListView"
 import NodeExternalView from "~/views/NodeExternalView"
 import NodeListView from "~/views/NodeListView"
+import NomenListView from "~/views/NomenListView"
 import NomenView from "../NomenView"
-import styles from "./index.module.scss"
 export interface Props {
     value?: NodeWithEmbedded
 }
 const NodeDetailsView: FC<Props> = ({ value }) => {
-    const [active, setActive] = useState(false)
     if (!value) {
         return null
     }
     const hasNames = value.names.length > 1
     const hasChildNodes = value._embedded?.childNodes && value._embedded.childNodes.length > 0
     const hasExternal = value._links.external.length > 0
-    const hasParent = Boolean(value._links.parentNode)
-    if (!hasNames && !hasChildNodes && !hasExternal && !hasParent) {
+    if (!hasNames && !hasChildNodes && !hasExternal) {
         return null
-    }
-    if (!active) {
-        return (
-            <div key="controls" className={styles.controls}>
-                {(hasNames || hasChildNodes || hasExternal) && (
-                    <button key="details" className={styles.button} onClick={() => setActive(true)}>
-                        See Details ⌄
-                    </button>
-                )}
-                {hasParent && (
-                    <AnchorLink key="lineage" href={`/nodes/${value.uuid}/lineage`}>
-                        View Lineage
-                    </AnchorLink>
-                )}
-            </div>
-        )
     }
     return (
         <section>
@@ -63,17 +43,6 @@ const NodeDetailsView: FC<Props> = ({ value }) => {
                     </section>
                 )}
             </InlineSections>
-            <br />
-            <div key="controls" className={styles.controls}>
-                <button key="details" className={styles.button} onClick={() => setActive(false)}>
-                    Collapse Details ⌃
-                </button>
-                {hasParent && (
-                    <AnchorLink key="lineage" href={`/nodes/${value.uuid}/lineage`}>
-                        View Lineage
-                    </AnchorLink>
-                )}
-            </div>
         </section>
     )
 }

@@ -10,6 +10,7 @@ import SearchOverlay from "~/search/SearchOverlay"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import AnchorLink from "~/ui/AnchorLink"
+import HeaderNav from "~/ui/HeaderNav"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
@@ -40,7 +41,18 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                             </p>
                         </header>
                         <section>
-                            <h2>Latest Contributions</h2>
+                            <HeaderNav
+                                buttons={[
+                                    {
+                                        children: "See more →",
+                                        href: "/images",
+                                        key: "images",
+                                        type: "anchor",
+                                    },
+                                ]}
+                                header="Latest Contributions"
+                                headerLevel={2}
+                            />
                             <PaginationContainer
                                 endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
                                 query={{ embed_specificNode: true }}
@@ -48,11 +60,10 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                             >
                                 {(images, totalImages) => (
                                     <>
-                                        <ImageListView value={images as readonly ImageWithEmbedded[]} />
                                         <p>
-                                            <NumberView value={totalImages} /> silhouette images in the database.{" "}
-                                            <AnchorLink href="/images">See more →</AnchorLink>
+                                            <NumberView value={totalImages} /> silhouette images in the database.
                                         </p>
+                                        <ImageListView value={images as readonly ImageWithEmbedded[]} />
                                     </>
                                 )}
                             </PaginationContainer>

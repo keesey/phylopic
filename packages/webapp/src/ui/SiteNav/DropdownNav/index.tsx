@@ -1,5 +1,6 @@
 import { FC } from "react"
 import AnchorLink from "~/ui/AnchorLink"
+import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
 export type Props = {
     onClose?: () => void
@@ -8,6 +9,12 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
     <nav className={styles.main}>
         <div className={styles.menuButton}>
             <button onClick={onClose}>☰</button>
+        </div>
+        <div className={styles.siteLink}>
+            <AnchorLink href="/">
+                <SiteTitle />
+            </AnchorLink>{" "}
+            &mdash; free silhouette images of organisms
         </div>
         <section>
             <h2>Browse</h2>

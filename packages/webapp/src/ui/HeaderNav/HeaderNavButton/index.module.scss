@@ -1,0 +1,21 @@
+@use "../../../styles/colors.scss";
+
+.main {
+    background-color: colors.$ink;
+    border: 1pt solid colors.$ink;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    color: colors.$white;
+    font-size: smaller;
+    font-weight: bold;
+    margin-top: 0;
+    padding: 8pt;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    white-space: pre;
+
+    &:hover {
+        background-color: colors.$white;
+        color: colors.$ink;
+    }
+}
