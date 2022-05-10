@@ -8,6 +8,7 @@ import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useLicenseText from "~/hooks/useLicenseText"
 import useNomenText from "~/hooks/useNomenText"
 import PageHead from "~/metadata/PageHead"
+import DonationPromo from "~/promos/DonationPromo"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
@@ -153,6 +154,7 @@ const PageComponent: NextPage<Props> = ({ image }) => {
                                 <LicenseDetailsView value={image} />
                             </section>
                             <ImageFilesView value={image} />
+                            <DonationPromo />
                         </section>
                     </SearchOverlay>
                 </main>

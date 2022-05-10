@@ -1,0 +1,18 @@
+@use "../../styles/colors.scss";
+
+.main {
+    background-color: colors.$dandelion;
+    border-radius: 1rem;
+    color: colors.$black;
+    margin: 1rem 0;
+    padding: 1rem;
+    text-align: center;
+
+    a {
+        color: colors.$ink;
+
+        &:hover {
+            color: colors.$black;
+        }
+    }
+}
