@@ -60,10 +60,10 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                             >
                                 {(images, totalImages) => (
                                     <>
+                                        <ImageListView value={images as readonly ImageWithEmbedded[]} />
                                         <p>
                                             <NumberView value={totalImages} /> silhouette images in the database.
                                         </p>
-                                        <ImageListView value={images as readonly ImageWithEmbedded[]} />
                                     </>
                                 )}
                             </PaginationContainer>
