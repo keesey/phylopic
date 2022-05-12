@@ -1,5 +1,5 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, Image, isImage, isNode, Node } from "@phylopic/source-models"
+import { Entity, Image, isImage, isNode, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { normalizeNomina, stringifyNomen, stringifyNormalized, UUID } from "@phylopic/utils"
 import { CLIData } from "../getCLIData.js"
 import { CommandResult } from "./CommandResult.js"

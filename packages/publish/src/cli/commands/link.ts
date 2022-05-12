@@ -1,6 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { TitledLink } from "@phylopic/api-models"
-import { Entity, Node } from "@phylopic/source-models"
+import { Entity, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { Identifier, stringifyNomen, stringifyNormalized } from "@phylopic/utils"
 import { CLIData } from "../getCLIData.js"
 import { CommandResult } from "./CommandResult.js"

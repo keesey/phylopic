@@ -31,7 +31,7 @@
         "utf-8-validate": "^5.0.2"
     },
     "scripts": {
-        "cli": "ts-node ./src/cli.ts",
+        "cli": "ts-node --esm ./src/cli.ts",
         "download": "concurrently \"yarn download:images\" \"yarn download:source\"",
         "download:images": "aws s3 sync --delete s3://images.phylopic.org/ ./.s3/images.phylopic.org",
         "download:source": "aws s3 sync --delete s3://source.phylopic.org/ ./.s3/source.phylopic.org",

@@ -4,9 +4,9 @@ import { createSearch, isScientific, Nomen, shortenNomen, stringifyNomen, UUID }
 // :TODO: Switch to cross-fetch
 import axios from "axios"
 import fetch, { Request } from "cross-fetch"
-import type { CLIData } from "../../getCLIData"
-import { CommandResult, SourceUpdate } from "../CommandResult"
-import succeeds from "../utils/succeeds"
+import type { CLIData } from "../../getCLIData.js"
+import { CommandResult, SourceUpdate } from "../CommandResult.js"
+import succeeds from "../utils/succeeds.js"
 interface EOLSearchResult {
     readonly content: string
     readonly id: number
