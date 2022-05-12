@@ -19,7 +19,7 @@ const unlink = (cliData: CLIData, identifier: Identifier): CommandResult => {
         },
         sourceUpdates: [
             new DeleteObjectCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Key: `externals/${identifier}/meta.json`,
             }),
         ],

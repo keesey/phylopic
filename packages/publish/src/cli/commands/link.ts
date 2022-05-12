@@ -31,7 +31,7 @@ const link = (cliData: CLIData, identifier: Identifier, entity: Entity<Node>, ti
         sourceUpdates: [
             new PutObjectCommand({
                 Body: stringifyNormalized(newLink),
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 ContentType: "application/json",
                 Key: `externals/${identifier}/meta.json`,
             }),

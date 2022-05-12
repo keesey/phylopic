@@ -1,5 +1,5 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
-const findImageSourceFile = async (client: S3Client, Bucket: string, Prefix: string) => {
+export const findImageSourceFile = async (client: S3Client, Bucket: string, Prefix: string) => {
     const listCommand = new ListObjectsV2Command({
         Bucket,
         MaxKeys: 1,

@@ -31,7 +31,7 @@ const getEntities = async <T>(
     do {
         const listResult = await client.send(
             new ListObjectsV2Command({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 ContinuationToken,
                 Delimiter: "/",
                 Prefix: `${name}/`,
@@ -44,7 +44,7 @@ const getEntities = async <T>(
                     promises.push(
                         (async () => {
                             const [value] = await getJSON<T>(client, {
-                                Bucket: "source.phylopic.org",
+                                Bucket: SOURCE_BUCKET_NAME,
                                 Key: `${name}/${uuid}/meta.json`,
                             })
                             validator(value)
@@ -66,7 +66,7 @@ const getExternals = async (client: S3Client) => {
     do {
         const listResult = await client.send(
             new ListObjectsV2Command({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 ContinuationToken,
                 Prefix: `externals/`,
             }),
@@ -83,7 +83,7 @@ const getExternals = async (client: S3Client) => {
                                 console.warn(`Unexpected external key: ${JSON.stringify(object.Key)}.`)
                             }
                             const [{ href, title }] = await getJSON<{ href: string; title: string }>(client, {
-                                Bucket: "source.phylopic.org",
+                                Bucket: SOURCE_BUCKET_NAME,
                                 Key: object.Key,
                             })
                             const uuid = href?.replace(/^\/nodes\//, "")
@@ -106,7 +106,7 @@ const getImageFileKeys = async (client: S3Client, uuids: readonly UUID[]): Promi
         uuids.map<Promise<[UUID, string]>>(async uuid => {
             const listResult = await client.send(
                 new ListObjectsV2Command({
-                    Bucket: "source.phylopic.org",
+                    Bucket: SOURCE_BUCKET_NAME,
                     MaxKeys: 2,
                     Prefix: `images/${uuid}/source.`,
                 }),

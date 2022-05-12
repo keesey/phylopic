@@ -14,7 +14,7 @@ const deleteImage = (cliData: CLIData, uuid: UUID): CommandResult => {
         },
         sourceUpdates: [
             new DeleteObjectsCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Delete: {
                     Objects: [{ Key: `images/${uuid}/meta.json` }, { Key: cliData.imageFileKeys.get(uuid) }],
                 },
@@ -64,7 +64,7 @@ const deleteNode = (cliData: CLIData, uuid: UUID): CommandResult => {
         sourceUpdates: [
             ...result.sourceUpdates,
             new DeleteObjectsCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Delete: {
                     Objects: [
                         { Key: `nodes/${uuid}/meta.json` },

@@ -11,13 +11,13 @@ const approve = (_client: S3Client, cliData: CLIData, _contributor?: EmailAddres
     /*
     if (contributor && uuid) {
         const metaInput = {
-            Bucket: "submissions.phylopic.org",
+            Bucket: CONTRIBUTE_BUCKET_NAME,
             Key: `contributors/${encodeURIComponent(contributor)}/images/${uuid}/meta.json`,
         }
         const [exists, file] = await Promise.all([
             objectExists(metaInput),
             findImageSourceFile(
-                "submissions.phylopic.org",
+                CONTRIBUTE_BUCKET_NAME,
                 `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.`,
             ),
         ])
@@ -47,14 +47,14 @@ const approve = (_client: S3Client, cliData: CLIData, _contributor?: EmailAddres
         await Promise.all([
             client.send(
                 new CopyObjectCommand({
-                    Bucket: "source.phylopic.org",
+                    Bucket: SOURCE_BUCKET_NAME,
                     CopySource: encodeURI(`submissions.phylopic.org/${file.Key}`),
                     Key: file.Key?.replace(/^contributors\/[^/]+\//, ""),
                 }),
             ),
             client.send(
                 new PutObjectCommand({
-                    Bucket: "source.phylopic.org",
+                    Bucket: SOURCE_BUCKET_NAME,
                     Body: stringifyNormalized(image),
                     ContentType: "application/json",
                     Key: `images/${uuid}/meta.json`,
@@ -63,7 +63,7 @@ const approve = (_client: S3Client, cliData: CLIData, _contributor?: EmailAddres
         ])
         await client.send(
             new DeleteObjectsCommand({
-                Bucket: "submissions.phylopic.org",
+                Bucket: CONTRIBUTE_BUCKET_NAME,
                 Delete: {
                     Objects: [{ Key: file.Key }, { Key: metaInput.Key }],
                 },

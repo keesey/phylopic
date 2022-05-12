@@ -23,7 +23,7 @@ const enact = async (
             putJSON(
                 client,
                 {
-                    Bucket: "source.phylopic.org",
+                    Bucket: SOURCE_BUCKET_NAME,
                     Key: `contributors/${uuid}/meta.json`,
                 },
                 data.contributors.get(uuid),
@@ -33,7 +33,7 @@ const enact = async (
             putJSON(
                 client,
                 {
-                    Bucket: "source.phylopic.org",
+                    Bucket: SOURCE_BUCKET_NAME,
                     Key: `images/${uuid}/meta.json`,
                 },
                 data.images.get(uuid),
@@ -43,7 +43,7 @@ const enact = async (
             putJSON(
                 client,
                 {
-                    Bucket: "source.phylopic.org",
+                    Bucket: SOURCE_BUCKET_NAME,
                     Key: `nodes/${uuid}/meta.json`,
                 },
                 data.nodes.get(uuid),
@@ -55,7 +55,7 @@ const enact = async (
                 return await putJSON(
                     client,
                     {
-                        Bucket: "source.phylopic.org",
+                        Bucket: SOURCE_BUCKET_NAME,
                         Key: `externals/${identifier}/meta.json`,
                     },
                     {
@@ -73,7 +73,7 @@ const enact = async (
                 chunked.map(chunk =>
                     client.send(
                         new DeleteObjectsCommand({
-                            Bucket: "source.phylopic.org",
+                            Bucket: SOURCE_BUCKET_NAME,
                             Delete: {
                                 Objects: chunk.map(Key => ({ Key })),
                             },

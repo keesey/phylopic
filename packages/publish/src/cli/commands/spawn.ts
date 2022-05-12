@@ -33,7 +33,7 @@ const spawn = (
         },
         sourceUpdates: [
             new PutObjectCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Body: stringifyNormalized(newNode),
                 ContentType: "application/json",
                 Key: `nodes/${uuid}/meta.json`,

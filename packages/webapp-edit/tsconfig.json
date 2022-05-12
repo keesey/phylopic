@@ -1,0 +1,16 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "allowJs": true,
+        "baseUrl": ".",
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "noEmit": true,
+        "paths": {
+            "~/*": ["src/*"]
+        },
+        "target": "ESNext"
+    },
+    "include": ["./pages/**/*.ts", "./pages/**/*.tsx", "./src/**/*.ts", "./src/**/*.tsx"]
+}

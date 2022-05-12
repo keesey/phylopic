@@ -1,0 +1,24 @@
+.main {
+    display: flex;
+    flex-wrap: nowrap;
+    button {
+        border-radius: 1em;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        border: none;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        padding: 0.5rem;
+    }
+}
+.textEditor {
+    flex-grow: 1;
+    > input {
+        width: 100%;
+    }
+}
+.classSelector {
+    border: 2px solid black;
+    margin-left: 1em;
+}

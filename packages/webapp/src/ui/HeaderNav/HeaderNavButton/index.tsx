@@ -6,16 +6,16 @@ export type Props = ({ type: "anchor" } & AnchorLinkProps) | ({ type: "button" }
 const HeaderNavButton: FC<Props> = props => {
     const combinedClassName = useMemo(() => clsx([props.className, styles.main]), [props.className])
     if (props.type === "button") {
-        const { children, className, type, ...otherProps } = props
+        const { children, className: _className, type: _type, ...otherProps } = props
         return (
             <button className={combinedClassName} {...otherProps}>
                 {children}
             </button>
         )
     } else {
-        const { children, className, type, ...otherProps } = props
+        const { children, className: _className, type: _type, ...otherProps } = props
         return (
-            <AnchorLink className={clsx([className, styles.main])} {...otherProps}>
+            <AnchorLink className={combinedClassName} {...otherProps}>
                 {children}
             </AnchorLink>
         )

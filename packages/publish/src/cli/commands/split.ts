@@ -57,13 +57,13 @@ const split = (
         },
         sourceUpdates: [
             new PutObjectCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Body: stringifyNormalized(updatedOriginal),
                 ContentType: "application/json",
                 Key: `nodes/${original.uuid}/meta.json`,
             }),
             new PutObjectCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Body: stringifyNormalized(newNode),
                 ContentType: "application/json",
                 Key: `nodes/${uuid}/meta.json`,

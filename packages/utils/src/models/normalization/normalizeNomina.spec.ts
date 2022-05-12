@@ -34,7 +34,7 @@ const ORANG: Nomen = [
         text: "orang",
     },
 ]
-describe("normalizeNames", () => {
+describe("normalizeNomina", () => {
     const test = (value: readonly Nomen[], expected: readonly Nomen[]) => {
         it(`should convert ${JSON.stringify(value)} to ${JSON.stringify(expected)}`, () => {
             const actual = normalizeNomina(value)

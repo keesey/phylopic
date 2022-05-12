@@ -42,7 +42,7 @@ const identify = (
         },
         sourceUpdates: [
             new PutObjectCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Body: stringifyNormalized(updatedImage),
                 ContentType: "application/json",
                 Key: `images/${image.uuid}/meta.json`,

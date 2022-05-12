@@ -1,0 +1,46 @@
+.container {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.modal {
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 1em;
+    color: black;
+    max-height: 100vh;
+    max-width: 11in;
+    > header {
+        align-items: baseline;
+        background-color: black;
+        border-top-left-radius: 1em;
+        border-top-right-radius: 1em;
+        color: white;
+        display: flex;
+        gap: 2em;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        padding: 1em;
+        > h2 {
+            flex-grow: 1;
+            text-align: left;
+        }
+    }
+}
+.content {
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 1em;
+}
+.close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: larger;
+}

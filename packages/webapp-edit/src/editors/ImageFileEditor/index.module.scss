@@ -1,0 +1,45 @@
+.main {
+    background-color: black;
+    border-radius: 1em;
+    color: white;
+    margin: 0;
+    padding: 0.25in;
+    text-align: center;
+    > img {
+        background-color: white;
+        max-width: 100%;
+        max-height: 50vh;
+        height: auto;
+        width: auto;
+    }
+    > nav {
+        align-items: baseline;
+        display: flex;
+        gap: 1em;
+        justify-content: center;
+        margin-top: 1em;
+        a[role="button"],
+        label {
+            background-color: white;
+            border-radius: 1em;
+            color: black;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 1em;
+            text-decoration: none;
+            text-transform: uppercase;
+            &::after {
+                content: none;
+            }
+            &::before {
+                content: none;
+            }
+            &:hover {
+                opacity: 0.75;
+            }
+        }
+        input[type="file"] {
+            display: none;
+        }
+    }
+}

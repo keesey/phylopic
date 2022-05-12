@@ -93,7 +93,7 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
             ...[...imagesToPut.entries()].map(
                 ([uuid, image]) =>
                     new PutObjectCommand({
-                        Bucket: "source.phylopic.org",
+                        Bucket: SOURCE_BUCKET_NAME,
                         Body: stringifyNormalized(image),
                         ContentType: "application/json",
                         Key: `images/${uuid}/meta.json`,
@@ -102,7 +102,7 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
             ...[...nodesToPut.entries()].map(
                 ([uuid, node]) =>
                     new PutObjectCommand({
-                        Bucket: "source.phylopic.org",
+                        Bucket: SOURCE_BUCKET_NAME,
                         Body: stringifyNormalized(node),
                         ContentType: "application/json",
                         Key: `nodes/${uuid}/meta.json`,
@@ -111,14 +111,14 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
             ...[...externalsToPut.entries()].map(
                 ([path, link]) =>
                     new PutObjectCommand({
-                        Bucket: "source.phylopic.org",
+                        Bucket: SOURCE_BUCKET_NAME,
                         Body: stringifyNormalized(link),
                         ContentType: "application/json",
                         Key: `externals/${path}/meta.json`,
                     }),
             ),
             new PutObjectCommand({
-                Bucket: "source.phylopic.org",
+                Bucket: SOURCE_BUCKET_NAME,
                 Body: stringifyNormalized(updatedNode),
                 ContentType: "application/json",
                 Key: `nodes/${conserved.uuid}/meta.json`,

@@ -1,0 +1,21 @@
+.main {
+    > ul {
+        align-items: baseline;
+        display: flex;
+        flex-wrap: wrap;
+        > li {
+            align-items: baseline;
+            display: inline-flex;
+            &::after {
+                content: "/";
+                margin: 0 0.3em;
+            }
+            &:last-of-type::after {
+                content: none;
+            }
+        }
+        cite {
+            font-family: inherit;
+        }
+    }
+}

@@ -1,0 +1,28 @@
+.main {
+    position: relative;
+}
+.label {
+    padding: 3px;
+    > button {
+        background: none;
+        border: none;
+        font-size: inherit;
+        padding: none;
+    }
+    > a[role="button"] {
+        float: right;
+    }
+}
+.labelEditing {
+    padding: 3px;
+    visibility: hidden;
+}
+.select,
+.selectEditing {
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+.select {
+    opacity: 0;
+}

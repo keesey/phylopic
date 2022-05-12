@@ -62,7 +62,7 @@ const readImageMeta = async (
         return
     }
     const [image] = await getJSON<Image>(client, {
-        Bucket: "source.phylopic.org",
+        Bucket: SOURCE_BUCKET_NAME,
         Key,
     })
     result.images.set(uuid, image)
@@ -114,7 +114,7 @@ const readContributorMeta = async (
         return
     }
     const [contributor] = await getJSON<Contributor>(client, {
-        Bucket: "source.phylopic.org",
+        Bucket: SOURCE_BUCKET_NAME,
         Key,
     })
     result.contributors.set(uuid, contributor)
@@ -136,7 +136,7 @@ const readNodeMeta = async (
         return
     }
     const [node] = await getJSON<Node>(client, {
-        Bucket: "source.phylopic.org",
+        Bucket: SOURCE_BUCKET_NAME,
         Key,
     })
     result.nodes.set(uuid, node)
@@ -150,7 +150,7 @@ const readExternal = async (
 ) => {
     const path = `${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}/${encodeURIComponent(objectId)}`
     const [link] = await getJSON<TitledLink>(client, {
-        Bucket: "source.phylopic.org",
+        Bucket: SOURCE_BUCKET_NAME,
         Key: `externals/${path}/meta.json`,
     })
     result.externals.set(path, { uuid: extractPath(link.href ?? "").replace(/^\/nodes\//, ""), title: link.title })
@@ -194,7 +194,7 @@ const addToResult = async (client: S3Client, result: BucketResult, object: _Obje
 const readFromBucket = async (client: S3Client, result: BucketResult, ContinuationToken?: string): Promise<void> => {
     const listResult = await client.send(
         new ListObjectsV2Command({
-            Bucket: "source.phylopic.org",
+            Bucket: SOURCE_BUCKET_NAME,
             ContinuationToken,
         }),
     )
