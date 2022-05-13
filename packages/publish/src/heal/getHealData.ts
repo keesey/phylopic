@@ -1,7 +1,7 @@
 import { ListObjectsV2Command, S3Client, _Object } from "@aws-sdk/client-s3"
-import { TitledLink } from "@phylopic/api-models"
+import { isTitledLink, TitledLink } from "@phylopic/api-models"
 import { Contributor, Image, isSource, Node, Source, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { extractPath, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
+import { extractPath, isString, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import { Digraph } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
@@ -9,7 +9,7 @@ const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]
 export type HealData = Readonly<{
     contributors: ReadonlyMap<UUID, Contributor>
     contributorsToPut: ReadonlySet<UUID>
-    externals: ReadonlyMap<string, Readonly<{ uuid: UUID; title: string }>>
+    externals: ReadonlyMap<string, TitledLink>
     externalsToPut: ReadonlySet<string>
     imageFileKeys: ReadonlyMap<UUID, string>
     images: ReadonlyMap<UUID, Image>
@@ -25,7 +25,7 @@ export type HealData = Readonly<{
 type BucketResult = {
     contributors: Map<UUID, Contributor>
     contributorsToPut: Set<UUID>
-    externals: Map<string, Readonly<{ uuid: UUID; title: string }>>
+    externals: Map<string, TitledLink>
     externalsToPut: Set<string>
     imageFileKeys: Map<UUID, string>
     images: Map<UUID, Image>
@@ -152,8 +152,8 @@ const readExternal = async (
     const [link] = await getJSON<TitledLink>(client, {
         Bucket: SOURCE_BUCKET_NAME,
         Key: `externals/${path}/meta.json`,
-    })
-    result.externals.set(path, { uuid: extractPath(link.href ?? "").replace(/^\/nodes\//, ""), title: link.title })
+    }, isTitledLink(isString))
+    result.externals.set(path, link)
 }
 const addToResult = async (client: S3Client, result: BucketResult, object: _Object): Promise<void> => {
     if (!object.Key) {
@@ -235,7 +235,7 @@ const getHealData = async (client: S3Client): Promise<HealData> => {
     const bucketResult: BucketResult = {
         contributors: new Map<UUID, Contributor>(),
         contributorsToPut: new Set<UUID>(),
-        externals: new Map<string, Readonly<{ title: string; uuid: UUID }>>(),
+        externals: new Map<string, TitledLink>(),
         externalsToPut: new Set<string>(),
         imageFileKeys: new Map<UUID, string>(),
         images: new Map<UUID, Image>(),

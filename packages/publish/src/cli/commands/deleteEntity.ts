@@ -54,7 +54,7 @@ const deleteNode = (cliData: CLIData, uuid: UUID): CommandResult => {
     }
     // Collect externals
     const externalPaths = [...cliData.externals.entries()]
-        .filter(([, link]) => link.uuid === uuid)
+        .filter(([, link]) => link.href === `/nodes/${uuid}`)
         .map(([path]) => path)
     return {
         cliData: {

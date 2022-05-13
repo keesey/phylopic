@@ -1,6 +1,16 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { TitledLink } from "@phylopic/api-models"
 import { Entity, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { createSearch, isScientific, Nomen, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
+import {
+    createSearch,
+    isScientific,
+    isUUID,
+    Nomen,
+    shortenNomen,
+    stringifyNomen,
+    stringifyNormalized,
+    UUID,
+} from "@phylopic/utils"
 // :TODO: Switch to cross-fetch
 import axios from "axios"
 import fetch, { Request } from "cross-fetch"
@@ -73,12 +83,12 @@ const getPathsFromNamebank = async (namebankIDs?: ReadonlySet<number>): Promise<
 }
 const hasNamebankLink = (externals: CLIData["externals"], nodeUUID: UUID) => {
     return [...externals.entries()].some(
-        ([path, { uuid }]) => uuid === nodeUUID && path.startsWith("ubio.org/namebank/"),
+        ([path, { href }]) => href === `/nodes/${nodeUUID}` && path.startsWith("ubio.org/namebank/"),
     )
 }
 const getNamebankIDs = (cliData: CLIData, nodeUUID: UUID) => {
     return [...cliData.externals.entries()]
-        .filter(([path, { uuid }]) => uuid === nodeUUID && path.startsWith("ubio.org/namebank/"))
+        .filter(([path, { href }]) => href === `/nodes/${nodeUUID}` && path.startsWith("ubio.org/namebank/"))
         .map(([path]) => parseInt(path.slice("ubio.org/namebank/".length, 10)))
         .sort()
 }
@@ -116,7 +126,7 @@ const getFirstEOLSearchMatch = async (names: readonly Nomen[], parentEOLPageID?:
 }
 const processEOLEntry = async (
     cliData: CLIData,
-    externals: Map<UUID, Readonly<{ uuid: UUID; title: string }>>,
+    externals: Map<UUID, TitledLink>,
     sourceUpdates: SourceUpdate[],
     entry: Readonly<[UUID, Node]>,
 ) => {
@@ -130,12 +140,12 @@ const processEOLEntry = async (
             title,
         })
         const path = `eol.org/pages/${id}`
-        if (externals.has(path) && externals.get(path)?.uuid !== uuid) {
+        if (externals.has(path) && externals.get(path)?.href !== `/nodes/${uuid}`) {
             console.warn(`Match found for EOL ID ${id} (${title}), but it is already assigned to another node.`)
         } else {
             externals.set(path, {
+                href: `/nodes/${uuid}`,
                 title,
-                uuid,
             })
             sourceUpdates.push(
                 new PutObjectCommand({
@@ -150,7 +160,7 @@ const processEOLEntry = async (
 }
 const processEOL = async (
     cliData: CLIData,
-    externals: Map<UUID, Readonly<{ uuid: UUID; title: string }>>,
+    externals: Map<UUID, TitledLink>,
     sourceUpdates: SourceUpdate[],
     entries: [UUID, Node][],
 ) => {
@@ -164,7 +174,7 @@ const processEOL = async (
 }
 const processNamebank = async (
     cliData: CLIData,
-    externals: Map<UUID, Readonly<{ uuid: UUID; title: string }>>,
+    externals: Map<UUID, TitledLink>,
     sourceUpdates: SourceUpdate[],
     entries: [UUID, Node][],
 ) => {
@@ -174,13 +184,10 @@ const processNamebank = async (
             if (paths.length === 0) {
                 await processEOLEntry(cliData, externals, sourceUpdates, [uuid, node])
             } else {
-                const external = { uuid, title: stringifyNomen(node.names[0]) }
-                const body = JSON.stringify({
-                    href: `/nodes/${external.uuid}`,
-                    title: external.title,
-                })
+                const external = { href: `/nodes/${uuid}`, title: stringifyNomen(node.names[0]) }
+                const body = stringifyNormalized(external)
                 for (const path of paths) {
-                    if (externals.has(path) && externals.get(path)?.uuid !== uuid) {
+                    if (externals.has(path) && externals.get(path)?.href !== `/nodes/${uuid}`) {
                         console.warn(
                             `Match found for ${path} (${external.title}), but it is already assigned to another node.`,
                         )
@@ -206,7 +213,8 @@ const getCandidates = (cliData: CLIData, root: Entity<Node>) => {
     const uuidsWithEOLLinks = new Set(
         [...cliData.externals.entries()]
             .filter(([path]) => path.startsWith("eol.org/pages/"))
-            .map(([, external]) => external.uuid),
+            .map(([, external]) => external.href.replace(/^\/nodes\//, ""))
+            .filter(uuid => isUUID(uuid)),
     )
     const candidates = [...cliData.nodes.entries()]
         .filter(([uuid]) => !uuidsWithEOLLinks.has(uuid))
@@ -216,7 +224,7 @@ const getCandidates = (cliData: CLIData, root: Entity<Node>) => {
 }
 const autolinkEOL = async (cliData: CLIData, root: Entity<Node>): Promise<CommandResult> => {
     const sourceUpdates: SourceUpdate[] = []
-    const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>([...cliData.externals.entries()])
+    const externals = new Map<string, TitledLink>([...cliData.externals.entries()])
     const candidates = getCandidates(cliData, root)
     console.info(`Processing ${candidates.length} node${candidates.length === 1 ? "" : "s"}...`)
     const [namebankCandidates, otherCandidates] = candidates.reduce<[[UUID, Node][], [UUID, Node][]]>(

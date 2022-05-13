@@ -38,8 +38,8 @@ const head = async (client: S3Client, req: NextApiRequest, res: NextApiResponse<
         const result = await client.send(command)
         res.setHeader("Content-Type", result.ContentType ?? "*/*")
         res.setHeader("Content-Length", result.ContentLength ?? "0")
-    } catch (e: any) {
-        res.status(typeof e?.status === "number" ? e.status : 404).end()
+    } catch (e) {
+        res.status(isAWSError(e) ? e.$metadata.httpStatusCode : 404).end()
         return
     }
     res.status(200).end()

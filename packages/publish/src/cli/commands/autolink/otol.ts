@@ -1,9 +1,10 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import axios from "axios"
 import { Entity, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { isScientific, Nomen, UUID } from "@phylopic/utils"
+import { isScientific, Nomen, stringifyNormalized, UUID } from "@phylopic/utils"
 import type { CLIData } from "../../getCLIData.js"
 import { CommandResult, SourceUpdate } from "../CommandResult.js"
+import { TitledLink } from "@phylopic/api-models"
 interface OTOLTaxon {
     ott_id: number
     tax_sources: string[]
@@ -22,7 +23,7 @@ interface OTOLMatchedNames {
 }
 const hasOTOLLink = (externals: CLIData["externals"], nodeUUID: UUID) => {
     return [...externals.entries()].some(
-        ([path, { uuid }]) => uuid === nodeUUID && path.startsWith("opentreeoflife.org/taxonomy/"),
+        ([path, { href }]) => href === `/nodes/${nodeUUID}` && path.startsWith("opentreeoflife.org/taxonomy/"),
     )
 }
 const succeeds = (nodes: CLIData["nodes"], predecessorUUID: UUID, entity: Entity<Node>): boolean => {
@@ -41,7 +42,7 @@ const succeeds = (nodes: CLIData["nodes"], predecessorUUID: UUID, entity: Entity
 }
 const findContext = (cliData: CLIData, entity: Entity<Node>): string | undefined => {
     const external = [...cliData.externals.entries()].find(
-        ([path, { uuid }]) => uuid === entity.uuid && path.startsWith("opentreeoflife.org/contexts/"),
+        ([path, { href }]) => href === `/nodes/${entity.uuid}` && path.startsWith("opentreeoflife.org/contexts/"),
     )
     if (external) {
         return decodeURIComponent(external[0].split("/", 3)[2])
@@ -60,16 +61,19 @@ const AUTHORITY_ABBRS: Readonly<Record<string, Readonly<[string, string]>> | und
     worms: ["marinespecies.org", "taxname"],
 }
 const getExternalEntries = (taxon: OTOLTaxon, uuid: UUID) => {
-    const map = new Map<string, Readonly<{ uuid: UUID; title: string }>>()
+    const map = new Map<string, TitledLink>()
     map.set(`opentreeoflife.org/taxonomy/${encodeURIComponent(String(taxon.ott_id))}`, {
-        uuid,
+        href: `/nodes/${uuid}`,
         title: taxon.unique_name,
     })
     for (const source of taxon.tax_sources) {
         const [authorityAbbr, objectID] = source.split(":")
         const namespace = AUTHORITY_ABBRS[authorityAbbr]
         if (namespace) {
-            map.set([...namespace, objectID].map(encodeURIComponent).join("/"), { uuid, title: taxon.unique_name })
+            map.set([...namespace, objectID].map(encodeURIComponent).join("/"), {
+                href: `/nodes/${uuid}`,
+                title: taxon.unique_name,
+            })
         }
     }
     return [...map.entries()]
@@ -83,7 +87,7 @@ const getScientificNames = (names: readonly Nomen[]) =>
     )
 const autolinkOTOL = async (cliData: CLIData, root: Entity<Node>): Promise<CommandResult> => {
     const sourceUpdates: SourceUpdate[] = []
-    const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>([...cliData.externals.entries()])
+    const externals = new Map<string, TitledLink>([...cliData.externals.entries()])
     const nodeEntries = [...cliData.nodes.entries()].filter(
         ([uuid, node]) =>
             node.names.some(isScientific) &&
@@ -109,7 +113,7 @@ const autolinkOTOL = async (cliData: CLIData, root: Entity<Node>): Promise<Comma
                 for (const result of results) {
                     for (const match of result.matches) {
                         for (const [path, external] of getExternalEntries(match.taxon, nodeUUID)) {
-                            if (externals.has(path) && externals.get(path)?.uuid !== external.uuid) {
+                            if (externals.has(path) && externals.get(path)?.href !== external.href) {
                                 console.warn(
                                     `Match found for OTT ID ${match.taxon.ott_id} (${match.taxon.unique_name}), but it is already assigned to another node.`,
                                 )
@@ -118,10 +122,7 @@ const autolinkOTOL = async (cliData: CLIData, root: Entity<Node>): Promise<Comma
                                 sourceUpdates.push(
                                     new PutObjectCommand({
                                         Bucket: SOURCE_BUCKET_NAME,
-                                        Body: JSON.stringify({
-                                            href: `/nodes/${external.uuid}`,
-                                            title: external.title,
-                                        }),
+                                        Body: stringifyNormalized(external),
                                         ContentType: "application/json",
                                         Key: `externals/${path}/meta.json`,
                                     }),

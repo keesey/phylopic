@@ -79,7 +79,7 @@ export default class LineReader {
         if (!link) {
             return undefined
         }
-        const uuid = link.uuid
+        const uuid = link.href.replace(/^\/nodes\//, "")
         const value = this.cliData.nodes.get(uuid)
         if (!value) {
             return undefined

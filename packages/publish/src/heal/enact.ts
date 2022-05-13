@@ -1,5 +1,6 @@
 import { DeleteObjectsCommand, S3Client } from "@aws-sdk/client-s3"
 import { TitledLink } from "@phylopic/api-models"
+import { SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { chunk } from "@phylopic/utils"
 import { putJSON } from "@phylopic/utils-aws"
 import { HealData } from "./getHealData.js"
@@ -58,10 +59,7 @@ const enact = async (
                         Bucket: SOURCE_BUCKET_NAME,
                         Key: `externals/${identifier}/meta.json`,
                     },
-                    {
-                        href: `/nodes/${external.uuid}`,
-                        title: external.title,
-                    } as TitledLink,
+                    external,
                 )
             }
         }),

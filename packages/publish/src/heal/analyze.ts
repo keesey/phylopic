@@ -1,3 +1,4 @@
+import { TitledLink } from "@phylopic/api-models"
 import { Contributor, Image, isContributor, isImage, isNode, Node } from "@phylopic/source-models"
 import {
     isUUID,
@@ -20,7 +21,7 @@ const analyze = (data: HealData): HealData => {
     const nodesToPut = new Set<UUID>(data.nodesToPut)
     const images = new Map<UUID, Image>(data.images)
     const imagesToPut = new Set<UUID>(data.imagesToPut)
-    const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>(data.externals)
+    const externals = new Map<string, TitledLink>(data.externals)
     const externalsToPut = new Set<string>(data.externalsToPut)
     let error = false
     for (const [uuid, contributor] of data.contributors.entries()) {
@@ -70,10 +71,10 @@ const analyze = (data: HealData): HealData => {
     }
     for (const [identifier, external] of data.externals.entries()) {
         try {
-            if (!isUUID(external.uuid)) {
+            const externalUUID = external.href.replace(/^\/nodes\//, "")
+            if (!isUUID(externalUUID)) {
                 console.warn(
-                    `Invalid UUID for external identifier (${JSON.stringify(identifier)}): <${
-                        external.uuid
+                    `Invalid UUID for external identifier (${JSON.stringify(identifier)}): <${externalUUID
                     }>. Deleting.`,
                 )
                 keysToDelete.add(`/externals/${identifier}/meta.json`)
@@ -92,20 +93,19 @@ const analyze = (data: HealData): HealData => {
                     continue
                 }
             }
-            if (!nodes.has(external.uuid)) {
+            if (!nodes.has(externalUUID)) {
                 console.warn(
-                    `External identifier (${JSON.stringify(identifier)}) is linked to a non-canonical node: <${
-                        external.uuid
+                    `External identifier (${JSON.stringify(identifier)}) is linked to a non-canonical node: <${externalUUID
                     }>. Deleting.`,
                 )
-                const synonymIdentifier = `phylopic.org/nodes/${external.uuid}`
+                const synonymIdentifier = `phylopic.org${external.href}`
                 if (identifier === synonymIdentifier) {
                     console.warn("Self-referential external identifier! Deleting.")
                     keysToDelete.add(`/externals/${identifier}/meta.json`)
                     continue
                 } else {
                     const synonym = externals.get(synonymIdentifier)
-                    if (synonym && synonym.uuid !== external.uuid) {
+                    if (synonym && `/nodes/${synonym.uuid}` !== external.href) {
                         console.warn(`Redirecting to a canonical node: <${synonym.uuid}>.`)
                         externals.set(identifier, { ...external, uuid: synonym.uuid })
                         externalsToPut.add(identifier)
@@ -124,15 +124,15 @@ const analyze = (data: HealData): HealData => {
                                 matches =
                                     external.title !== parsedTitle
                                         ? [...nodes.entries()].filter(([, { names }]) =>
-                                              names.some(name => nameMatches(external.title, name)),
-                                          )
+                                            names.some(name => nameMatches(external.title, name)),
+                                        )
                                         : matches
                                 if (matches.length !== 1) {
                                     matches =
                                         external.title.toLowerCase() !== parsedTitle.toLowerCase()
                                             ? [...nodes.entries()].filter(([, { names }]) =>
-                                                  names.some(name => nameMatches(external.title, name, true)),
-                                              )
+                                                names.some(name => nameMatches(external.title, name, true)),
+                                            )
                                             : matches
                                     if (matches.length !== 1) {
                                         console.warn("Could not find an unambiguous match. Deleting.")

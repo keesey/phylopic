@@ -1,4 +1,5 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { TitledLink } from "@phylopic/api-models"
 import { Entity, Image, isImage, isNode, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { normalizeNomina, stringifyNomen, stringifyNormalized, UUID } from "@phylopic/utils"
 import { CLIData } from "../getCLIData.js"
@@ -58,13 +59,13 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
         }
     }
     // Collect externals to update.
-    const externalsToPut = new Map<string, Readonly<{ uuid: UUID; title: string }>>()
+    const externalsToPut = new Map<string, TitledLink>()
     // Create updated externals map.
-    const externals = new Map<string, Readonly<{ uuid: UUID; title: string }>>(cliData.externals)
+    const externals = new Map<string, TitledLink>(cliData.externals)
     for (const [path, external] of cliData.externals.entries()) {
-        if (external.uuid === suppressed.uuid) {
-            externalsToPut.set(path, { ...external, uuid: conserved.uuid })
-            externals.set(path, { ...external, uuid: conserved.uuid })
+        if (external.href === `/nodes/${suppressed.uuid}`) {
+            externalsToPut.set(path, { ...external, href: `/nodes/${conserved.uuid}` })
+            externals.set(path, { ...external, href: `/nodes/${conserved.uuid}` })
         }
     }
     // Create and validate updated node.
@@ -79,7 +80,7 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
     // Update node and synonym map for conserved and suppressed.
     nodes.delete(suppressed.uuid)
     nodes.set(conserved.uuid, updatedNode)
-    const link = { uuid: conserved.uuid, title: stringifyNomen(suppressed.value.names[0]) }
+    const link: TitledLink = { href: `/nodes/${conserved.uuid}`, title: stringifyNomen(suppressed.value.names[0]) }
     externalsToPut.set(`phylopic.org/nodes/${suppressed.uuid}`, link)
     externals.set(`phylopic.org/nodes/${suppressed.uuid}`, link)
     // Return result.

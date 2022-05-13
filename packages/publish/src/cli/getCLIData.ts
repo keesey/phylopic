@@ -1,9 +1,10 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
+import { isTitledLink, TitledLink } from "@phylopic/api-models"
 import { Image, isImage, isNode, isSource, Node, Source, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { isUUID, normalizeUUID, UUID } from "@phylopic/utils"
+import { FaultDetector, isString, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 export type CLIData = Readonly<{
-    externals: ReadonlyMap<string, Readonly<{ uuid: UUID; title: string }>>
+    externals: ReadonlyMap<string, TitledLink>
     imageFileKeys: ReadonlyMap<UUID, string>
     images: ReadonlyMap<UUID, Image>
     source: Source
@@ -23,7 +24,7 @@ const getSource = async (client: S3Client): Promise<Source> => {
 const getEntities = async <T>(
     client: S3Client,
     name: string,
-    validator: (value: T) => void,
+    detector: FaultDetector<T>,
 ): Promise<ReadonlyMap<UUID, T>> => {
     const result = new Map<UUID, T>()
     let ContinuationToken: string | undefined
@@ -43,11 +44,14 @@ const getEntities = async <T>(
                     const uuid = normalizeUUID(prefix.Prefix.replace(`${name}/`, "").replace(/\/$/, ""))
                     promises.push(
                         (async () => {
-                            const [value] = await getJSON<T>(client, {
-                                Bucket: SOURCE_BUCKET_NAME,
-                                Key: `${name}/${uuid}/meta.json`,
-                            })
-                            validator(value)
+                            const [value] = await getJSON<T>(
+                                client,
+                                {
+                                    Bucket: SOURCE_BUCKET_NAME,
+                                    Key: `${name}/${uuid}/meta.json`,
+                                },
+                                detector,
+                            )
                             result.set(uuid, value)
                         })(),
                     )
@@ -60,7 +64,7 @@ const getEntities = async <T>(
     return result
 }
 const getExternals = async (client: S3Client) => {
-    const result = new Map<string, Readonly<{ uuid: UUID; title: string }>>()
+    const result = new Map<string, TitledLink>()
     let ContinuationToken: string | undefined
     const promises: Promise<void>[] = []
     do {
@@ -82,15 +86,19 @@ const getExternals = async (client: S3Client) => {
                             if (parts.length !== 3) {
                                 console.warn(`Unexpected external key: ${JSON.stringify(object.Key)}.`)
                             }
-                            const [{ href, title }] = await getJSON<{ href: string; title: string }>(client, {
-                                Bucket: SOURCE_BUCKET_NAME,
-                                Key: object.Key,
-                            })
+                            const [{ href, title }] = await getJSON<TitledLink>(
+                                client,
+                                {
+                                    Bucket: SOURCE_BUCKET_NAME,
+                                    Key: object.Key,
+                                },
+                                isTitledLink(isString),
+                            )
                             const uuid = href?.replace(/^\/nodes\//, "")
                             if (!isUUID(uuid) || uuid !== normalizeUUID(uuid)) {
-                                throw new Error(`Invalid UUID: ${uuid}`)
+                                throw new Error(`Invalid UUID: ${uuid} (${SOURCE_BUCKET_NAME}//${object.Key})`)
                             }
-                            result.set(parts.join("/"), { uuid, title })
+                            result.set(parts.join("/"), { href: `/nodes/${uuid}`, title })
                         }
                     })(),
                 )

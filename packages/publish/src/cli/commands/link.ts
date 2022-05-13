@@ -7,7 +7,7 @@ import { CommandResult } from "./CommandResult.js"
 const link = (cliData: CLIData, identifier: Identifier, entity: Entity<Node>, title?: string): CommandResult => {
     const existing = cliData.externals.get(identifier)
     if (existing) {
-        if (existing.uuid === entity.uuid) {
+        if (existing.href === `/nodes/${entity.uuid}`) {
             console.warn("No change required.")
             return {
                 cliData,
@@ -20,9 +20,8 @@ const link = (cliData: CLIData, identifier: Identifier, entity: Entity<Node>, ti
     if (!title) {
         title = stringifyNomen(entity.value.names[0])
     }
-    const newValue = { uuid: entity.uuid, title }
-    externals.set(identifier, newValue)
     const newLink: TitledLink = { href: `/nodes/${encodeURIComponent(entity.uuid)}`, title }
+    externals.set(identifier, newLink)
     return {
         cliData: {
             ...cliData,
