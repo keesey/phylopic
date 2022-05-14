@@ -1,5 +1,4 @@
 import { DeleteObjectsCommand, S3Client } from "@aws-sdk/client-s3"
-import { TitledLink } from "@phylopic/api-models"
 import { SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { chunk } from "@phylopic/utils"
 import { putJSON } from "@phylopic/utils-aws"

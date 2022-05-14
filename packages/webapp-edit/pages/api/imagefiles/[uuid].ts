@@ -5,8 +5,7 @@ import {
     PutObjectCommand,
     S3Client,
 } from "@aws-sdk/client-s3"
-import { SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import findImageSourceFile from "@phylopic/source-models/dist/s3/findImageSourceFile"
+import { findImageSourceFile, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { ImageMediaType, isImageMediaType, normalizeUUID, UUID } from "@phylopic/utils"
 import { objectExists } from "@phylopic/utils-aws"
 import { NextApiHandler, NextApiRequest, NextApiResponse, NextConfig } from "next"

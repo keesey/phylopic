@@ -1,8 +1,8 @@
 import { CopyObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import { NextApiHandler, NextApiResponse } from "next"
 import {
     CONTRIBUTE_BUCKET_NAME,
     Contribution,
+    findImageSourceFile,
     getLineage,
     Image,
     isContribution,
@@ -11,7 +11,7 @@ import {
 } from "@phylopic/source-models"
 import { EmailAddress, Identifier, isEmailAddress, isUUID, stringifyNormalized, UUID } from "@phylopic/utils"
 import { getJSON, objectExists } from "@phylopic/utils-aws"
-import findImageSourceFile from "@phylopic/source-models/dist/s3/findImageSourceFile"
+import { NextApiHandler, NextApiResponse } from "next"
 
 const isInternal = (identifier: Identifier | null) =>
     Boolean(identifier && identifier.startsWith("phylopic.org/nodes/"))
