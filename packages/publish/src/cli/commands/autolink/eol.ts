@@ -6,6 +6,7 @@ import {
     isScientific,
     isUUID,
     Nomen,
+    normalizeText,
     shortenNomen,
     stringifyNomen,
     stringifyNormalized,
@@ -134,7 +135,8 @@ const processEOLEntry = async (
     const parentID = getParentEOLPageIDs(cliData, node)[0]
     const matches = await getFirstEOLSearchMatch(node.names, parentID)
     if (matches?.length === 1) {
-        const { id, title } = matches[0]
+        const { id } = matches[0]
+        const title = normalizeText(matches[0].title)
         const body = JSON.stringify({
             href: `/nodes/${uuid}`,
             title,

@@ -28,7 +28,7 @@ const getEntities = async <T>(
     name: string,
     detector: FaultDetector<T>,
 ): Promise<ReadonlyMap<UUID, T>> => {
-    console.info("Loading entities...")
+    console.info(`Loading ${name}...`)
     const result = new Map<UUID, T>()
     let ContinuationToken: string | undefined
     const promises: Promise<void>[] = []
@@ -64,7 +64,7 @@ const getEntities = async <T>(
         ContinuationToken = listResult.NextContinuationToken
     } while (ContinuationToken)
     await Promise.all(promises)
-    console.info("Loaded entities.")
+    console.info(`Loaded ${name}.`)
     return result
 }
 const getExternals = async (client: S3Client) => {

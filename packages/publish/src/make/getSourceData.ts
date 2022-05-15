@@ -181,10 +181,17 @@ const loadExternalObjectIDs = (
     for (const objectID of objectIDs) {
         objectPromises.push(
             (async () => {
-                const link = await readJSON<TitledLink>(
-                    `.s3/source.phylopic.org/externals/${authority}/${namespace}/${objectID}/meta.json`,
-                )
-                externals.set(`${authority}/${namespace}/${objectID}`, link)
+                const identifier = `${encodeURIComponent(authority)}/${encodeURIComponent(
+                    namespace,
+                )}/${encodeURIComponent(objectID)}`
+                const path = `.s3/source.phylopic.org/externals/${identifier}/meta.json`
+                try {
+                    const link = await readJSON<TitledLink>(path)
+                    externals.set(identifier, link)
+                } catch (e) {
+                    console.warn("Could not read JSON from file: " + path)
+                    console.error(e)
+                }
             })(),
         )
     }
@@ -197,7 +204,9 @@ const loadExternalNamespaces = async (
 ): Promise<void> => {
     await Promise.all(
         namespaces.map(async namespace => {
-            const objectIDs = await listDir(`.s3/source.phylopic.org/externals/${authority}/${namespace}`)
+            const objectIDs = (await listDir(`.s3/source.phylopic.org/externals/${authority}/${namespace}`)).map(
+                decodeURIComponent,
+            )
             loadExternalObjectIDs(externals, authority, namespace, objectIDs, objectPromises)
         }),
     )
@@ -209,7 +218,9 @@ const loadExternalAuthorities = async (
 ): Promise<void> => {
     await Promise.all(
         authorities.map(async authority => {
-            const namespaces = await listDir(`.s3/source.phylopic.org/externals/${authority}/`)
+            const namespaces = (await listDir(`.s3/source.phylopic.org/externals/${authority}/`)).map(
+                decodeURIComponent,
+            )
             await loadExternalNamespaces(externals, authority, namespaces, objectPromises)
         }),
     )
@@ -217,7 +228,7 @@ const loadExternalAuthorities = async (
 const loadExternals = async (externals: Map<string, TitledLink>): Promise<void> => {
     console.info("Looking up externals...")
     const objectPromises: Promise<void>[] = []
-    const authorities = await listDir(".s3/source.phylopic.org/externals/")
+    const authorities = (await listDir(".s3/source.phylopic.org/externals/")).map(decodeURIComponent)
     await loadExternalAuthorities(externals, authorities, objectPromises)
     console.info(`Loading ${objectPromises.length} externals...`)
     await Promise.all(objectPromises)

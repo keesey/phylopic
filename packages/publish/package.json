@@ -33,8 +33,8 @@
     "scripts": {
         "cli": "ts-node --esm ./src/cli.ts",
         "download": "concurrently \"yarn download:images\" \"yarn download:source\"",
-        "download:images": "aws s3 sync --delete s3://images.phylopic.org/ ./.s3/images.phylopic.org",
-        "download:source": "aws s3 sync --delete s3://source.phylopic.org/ ./.s3/source.phylopic.org",
+        "download:images": "aws s3 sync --delete s3://images.phylopic.org/ ./.s3/images.phylopic.org && find .s3/images.phylopic.org -type d -empty -delete",
+        "download:source": "aws s3 sync --delete s3://source.phylopic.org/ ./.s3/source.phylopic.org && find .s3/source.phylopic.org -type d -empty -delete",
         "format": "prettier -w . && eslint --ext .js,.ts --fix .",
         "heal": "ts-node --esm ./src/heal.ts",
         "insert": "ts-node --esm ./src/insert.ts 2> insert-error.log",

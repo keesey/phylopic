@@ -1,7 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import axios from "axios"
 import { Entity, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { isScientific, Nomen, stringifyNormalized, UUID } from "@phylopic/utils"
+import { isScientific, Nomen, normalizeText, stringifyNormalized, UUID } from "@phylopic/utils"
 import type { CLIData } from "../../getCLIData.js"
 import { CommandResult, SourceUpdate } from "../CommandResult.js"
 import { TitledLink } from "@phylopic/api-models"
@@ -72,7 +72,7 @@ const getExternalEntries = (taxon: OTOLTaxon, uuid: UUID) => {
         if (namespace) {
             map.set([...namespace, objectID].map(encodeURIComponent).join("/"), {
                 href: `/nodes/${uuid}`,
-                title: taxon.unique_name,
+                title: normalizeText(taxon.unique_name),
             })
         }
     }

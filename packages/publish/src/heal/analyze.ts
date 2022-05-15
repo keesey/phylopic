@@ -121,7 +121,7 @@ const analyze = (data: HealData): HealData => {
                     continue
                 }
                 if (data.nodes.has(nodeUUID)) {
-                    console.warn(`Identifier refers to a canonical node: <${identifier}>.`)
+                    console.warn(`Identifier refers to a canonical node: <${identifier}>. Deleting.`)
                     keysToDelete.add(`externals/${identifier}/meta.json`)
                     externals.delete(identifier)
                     continue
@@ -276,7 +276,11 @@ const analyze = (data: HealData): HealData => {
                 (modified.general ? findCanonicalUUID(nodes, externals, modified.general) : undefined) ?? null
             if (canonicalGeneral !== modified.general) {
                 if (!canonicalGeneral) {
-                    throw new Error(`Cannot find canonical general node for image <${uuid}>.`)
+                    console.warn(`Cannot find canonical general node for image <${uuid}>. Setting to \`null\`.`)
+                    modified = {
+                        ...modified,
+                        general: null,
+                    }
                 } else {
                     console.warn("Using canonical node for image's general node.")
                     modified = {

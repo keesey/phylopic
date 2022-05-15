@@ -1,4 +1,4 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 import { TitledLink } from "@phylopic/api-models"
 import { Entity, Image, isImage, isNode, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { normalizeNomina, stringifyNomen, stringifyNormalized, UUID } from "@phylopic/utils"
@@ -62,10 +62,10 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
     const externalsToPut = new Map<string, TitledLink>()
     // Create updated externals map.
     const externals = new Map<string, TitledLink>(cliData.externals)
-    for (const [path, external] of cliData.externals.entries()) {
+    for (const [identifier, external] of cliData.externals.entries()) {
         if (external.href === `/nodes/${suppressed.uuid}`) {
-            externalsToPut.set(path, { ...external, href: `/nodes/${conserved.uuid}` })
-            externals.set(path, { ...external, href: `/nodes/${conserved.uuid}` })
+            externalsToPut.set(identifier, { ...external, href: `/nodes/${conserved.uuid}` })
+            externals.set(identifier, { ...external, href: `/nodes/${conserved.uuid}` })
         }
     }
     // Create and validate updated node.
@@ -110,12 +110,12 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
                     }),
             ),
             ...[...externalsToPut.entries()].map(
-                ([path, link]) =>
+                ([identifier, link]) =>
                     new PutObjectCommand({
                         Bucket: SOURCE_BUCKET_NAME,
                         Body: stringifyNormalized(link),
                         ContentType: "application/json",
-                        Key: `externals/${path}/meta.json`,
+                        Key: `externals/${identifier}/meta.json`,
                     }),
             ),
             new PutObjectCommand({
@@ -123,6 +123,10 @@ const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Nod
                 Body: stringifyNormalized(updatedNode),
                 ContentType: "application/json",
                 Key: `nodes/${conserved.uuid}/meta.json`,
+            }),
+            new DeleteObjectCommand({
+                Bucket: SOURCE_BUCKET_NAME,
+                Key: `nodes/${suppressed.uuid}/meta.json`,
             }),
         ],
     }
