@@ -7,7 +7,7 @@ export interface Props {
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 const TimestampView: FC<Props> = ({ format = "date", value }) => {
     const date = useMemo(() => (value ? new Date(value) : null), [value])
-    const title = useMemo(() => date?.toLocaleString(), [date])
+    const title = useMemo(() => date?.toLocaleString("en"), [date])
     const isYear = format === "year"
     const dateString = useMemo(() => {
         if (date) {

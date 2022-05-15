@@ -11,6 +11,7 @@ export type CLIData = Readonly<{
     nodes: ReadonlyMap<UUID, Node>
 }>
 const getSource = async (client: S3Client): Promise<Source> => {
+    console.info("Loading source metadata...")
     const [main] = await getJSON<Source>(
         client,
         {
@@ -19,6 +20,7 @@ const getSource = async (client: S3Client): Promise<Source> => {
         },
         isSource,
     )
+    console.info("Loaded source metadata.")
     return main
 }
 const getEntities = async <T>(
@@ -26,6 +28,7 @@ const getEntities = async <T>(
     name: string,
     detector: FaultDetector<T>,
 ): Promise<ReadonlyMap<UUID, T>> => {
+    console.info("Loading entities...")
     const result = new Map<UUID, T>()
     let ContinuationToken: string | undefined
     const promises: Promise<void>[] = []
@@ -61,9 +64,11 @@ const getEntities = async <T>(
         ContinuationToken = listResult.NextContinuationToken
     } while (ContinuationToken)
     await Promise.all(promises)
+    console.info("Loaded entities.")
     return result
 }
 const getExternals = async (client: S3Client) => {
+    console.info("Loading externals...")
     const result = new Map<string, TitledLink>()
     let ContinuationToken: string | undefined
     const promises: Promise<void>[] = []
@@ -107,9 +112,11 @@ const getExternals = async (client: S3Client) => {
         ContinuationToken = listResult.NextContinuationToken
     } while (ContinuationToken)
     await Promise.all(promises)
+    console.info("Loaded externals.")
     return result
 }
 const getImageFileKeys = async (client: S3Client, uuids: readonly UUID[]): Promise<ReadonlyMap<UUID, string>> => {
+    console.info("Getting image file keys...")
     const entries = await Promise.all(
         uuids.map<Promise<[UUID, string]>>(async uuid => {
             const listResult = await client.send(
@@ -125,6 +132,7 @@ const getImageFileKeys = async (client: S3Client, uuids: readonly UUID[]): Promi
             return [uuid, listResult.Contents[0].Key]
         }),
     )
+    console.info("Got image file keys.")
     return new Map(entries)
 }
 const getCLIData = async (client: S3Client): Promise<CLIData> => {

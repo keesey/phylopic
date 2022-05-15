@@ -1,6 +1,7 @@
-import { TitledLink } from "@phylopic/api-models"
+import { isTitledLink, TitledLink } from "@phylopic/api-models"
 import { Contributor, Image, isContributor, isImage, isNode, Node } from "@phylopic/source-models"
 import {
+    isString,
     isUUID,
     normalizeText,
     shortenNomen,
@@ -13,6 +14,40 @@ import { parseNomen } from "parse-nomen"
 import nameMatches from "../cli/commands/utils/nameMatches.js"
 import precedes from "../cli/commands/utils/precedes.js"
 import { HealData } from "./getHealData.js"
+const findCanonicalUUID = (
+    nodes: ReadonlyMap<UUID, Node>,
+    externals: ReadonlyMap<string, TitledLink>,
+    uuid: UUID,
+    visited?: Set<UUID>,
+): UUID | undefined => {
+    if (!isUUID(uuid)) {
+        return undefined
+    }
+    if (nodes.has(uuid)) {
+        return uuid
+    }
+    const external = externals.get(`phylopic.org/nodes/${uuid}`)
+    if (external) {
+        if (!visited) {
+            visited = new Set<UUID>()
+        } else if (visited.has(uuid)) {
+            throw new Error("Cyclical externals! See UUID: " + uuid)
+        }
+        visited.add(uuid)
+        return findCanonicalUUID(nodes, externals, external.href, visited)
+    }
+}
+const findCanonicalHRef = (
+    nodes: ReadonlyMap<UUID, Node>,
+    externals: ReadonlyMap<string, TitledLink>,
+    href: string,
+): string | undefined => {
+    if (href.startsWith("/nodes/")) {
+        const uuid = href.replace(/^\/nodes\//, "")
+        const canonicalUUID = findCanonicalUUID(nodes, externals, uuid)
+        return canonicalUUID ? `/nodes/${canonicalUUID}` : undefined
+    }
+}
 const analyze = (data: HealData): HealData => {
     const contributors = new Map<UUID, Contributor>(data.contributors)
     const contributorsToPut = new Set<UUID>(data.contributorsToPut)
@@ -26,7 +61,21 @@ const analyze = (data: HealData): HealData => {
     let error = false
     for (const [uuid, contributor] of data.contributors.entries()) {
         try {
-            const modified = contributor
+            let modified = contributor
+            if (normalizeText(modified.name) !== modified.name) {
+                console.warn(`Normalizing contributor name: ${modified.name}`)
+                modified = {
+                    ...modified,
+                    name: normalizeText(modified.name),
+                }
+            }
+            if (typeof modified.showEmailAddress !== "boolean") {
+                console.warn(`No \`showEmailAddress\` for contributor <${uuid}>. Setting to \`false\`.`)
+                modified = {
+                    ...modified,
+                    showEmailAddress: false,
+                }
+            }
             const collector = new ValidationFaultCollector()
             if (!isContributor(modified, collector)) {
                 console.error("Invalid contributor: " + stringifyNormalized(modified))
@@ -42,13 +91,141 @@ const analyze = (data: HealData): HealData => {
             error = true
         }
     }
+    for (const [identifier, external] of data.externals.entries()) {
+        try {
+            let modified = external
+            if (modified.title !== normalizeText(modified.title)) {
+                console.warn(`Normalizing external title: ${JSON.stringify(modified.title)}.`)
+                modified = {
+                    ...modified,
+                    title: normalizeText(modified.title),
+                }
+            }
+            const externalUUID = modified.href.replace(/^\/nodes\//, "")
+            if (!isUUID(externalUUID)) {
+                console.warn(
+                    `Invalid UUID for external identifier (${JSON.stringify(
+                        identifier,
+                    )}): <${externalUUID}>. Deleting.`,
+                )
+                keysToDelete.add(`externals/${identifier}/meta.json`)
+                externals.delete(identifier)
+                continue
+            }
+            if (identifier.startsWith("phylopic.org/nodes/")) {
+                const nodeUUID = identifier.replace(/^phylopic\.org\/nodes\//, "")
+                if (!isUUID(nodeUUID)) {
+                    console.warn(`Invalid UUID in synonym: <${identifier}>. Deleting.`)
+                    keysToDelete.add(`externals/${identifier}/meta.json`)
+                    externals.delete(identifier)
+                    continue
+                }
+                if (data.nodes.has(nodeUUID)) {
+                    console.warn(`Identifier refers to a canonical node: <${identifier}>.`)
+                    keysToDelete.add(`externals/${identifier}/meta.json`)
+                    externals.delete(identifier)
+                    continue
+                }
+            }
+            const canonicalHRef = findCanonicalHRef(nodes, externals, external.href)
+            if (canonicalHRef !== modified.href) {
+                console.warn(
+                    `External identifier (${JSON.stringify(
+                        identifier,
+                    )}) is linked to a non-canonical node: <${externalUUID}>.`,
+                )
+                if (canonicalHRef) {
+                    console.warn(`Redirecting to a canonical node: <${canonicalHRef}>.`)
+                    modified = {
+                        ...modified,
+                        href: canonicalHRef,
+                    }
+                } else {
+                    const parsedTitle = stringifyNomen(shortenNomen(parseNomen(modified.title)))
+                    console.warn(
+                        `No canonical node could be found. Matching against title (${JSON.stringify(
+                            modified.title,
+                        )})...`,
+                    )
+                    let matches = [...nodes.entries()].filter(([, { names }]) =>
+                        names.some(name => nameMatches(parsedTitle, name)),
+                    )
+                    if (matches.length !== 1) {
+                        if (matches.length > 1) {
+                            // Try again with the full name.
+                            matches =
+                                modified.title !== parsedTitle
+                                    ? [...nodes.entries()].filter(([, { names }]) =>
+                                          names.some(name => nameMatches(modified.title, name)),
+                                      )
+                                    : matches
+                            if (matches.length !== 1) {
+                                matches =
+                                    modified.title.toLowerCase() !== parsedTitle.toLowerCase()
+                                        ? [...nodes.entries()].filter(([, { names }]) =>
+                                              names.some(name => nameMatches(modified.title, name, true)),
+                                          )
+                                        : matches
+                                if (matches.length !== 1) {
+                                    console.warn("Could not find an unambiguous match. Deleting.")
+                                    keysToDelete.add(`externals/${identifier}/meta.json`)
+                                    externals.delete(identifier)
+                                    continue
+                                }
+                            }
+                        }
+                    }
+                    if (matches.length === 1) {
+                        console.warn(`Found an unambiguous match: <${matches[0][0]}>.`)
+                        modified = {
+                            ...modified,
+                            href: `/nodes/${matches[0][0]}`,
+                        }
+                    } else {
+                        console.warn("Could not find a match. Deleting.")
+                        keysToDelete.add(`externals/${identifier}/meta.json`)
+                        externals.delete(identifier)
+                        continue
+                    }
+                }
+            }
+            const collector = new ValidationFaultCollector()
+            if (!isTitledLink(isString)(modified, collector)) {
+                console.error(`Invalid external <${identifier}>. Deleting.`)
+                console.error(collector.list())
+                keysToDelete.add(`externals/${identifier}/meta.json`)
+                externals.delete(identifier)
+                continue
+            }
+            if (modified !== external) {
+                externals.set(identifier, modified)
+                externalsToPut.add(identifier)
+            }
+        } catch (e) {
+            console.error(e)
+            error = true
+        }
+    }
     for (const [uuid, node] of data.nodes.entries()) {
         try {
             let modified = node
+            const canonicalParent =
+                (modified.parent ? findCanonicalUUID(nodes, externals, modified.parent) : undefined) ?? null
+            if (canonicalParent !== modified.parent) {
+                if (!canonicalParent) {
+                    throw new Error(`Cannot find canonical node for <${modified.parent}> (parent of <${uuid}>).`)
+                }
+                console.warn("Setting node parent to canonical parent.")
+                modified = {
+                    ...modified,
+                    parent: canonicalParent,
+                }
+            }
             if (modified.parent && !nodes.has(modified.parent)) {
                 throw `Node has invalid parent: <${uuid}>.`
             }
-            if (!node.parent && node.parent !== null) {
+            if (!modified.parent && modified.parent !== null) {
+                console.warn("Parent was undefined. Setting to `null`.")
                 modified = {
                     ...modified,
                     parent: null,
@@ -69,109 +246,6 @@ const analyze = (data: HealData): HealData => {
             error = true
         }
     }
-    for (const [identifier, external] of data.externals.entries()) {
-        try {
-            const externalUUID = external.href.replace(/^\/nodes\//, "")
-            if (!isUUID(externalUUID)) {
-                console.warn(
-                    `Invalid UUID for external identifier (${JSON.stringify(
-                        identifier,
-                    )}): <${externalUUID}>. Deleting.`,
-                )
-                keysToDelete.add(`/externals/${identifier}/meta.json`)
-                continue
-            }
-            if (identifier.startsWith("phylopic.org/nodes/")) {
-                const nodeUUID = identifier.replace(/^phylopic\.org\/nodes\//, "")
-                if (!isUUID(nodeUUID)) {
-                    console.warn(`Invalid UUID in synonym: <${identifier}>. Deleting.`)
-                    keysToDelete.add(`/externals/${identifier}/meta.json`)
-                    continue
-                }
-                if (data.nodes.has(nodeUUID)) {
-                    console.warn(`Identifier refers to a canonical node: <${identifier}>.`)
-                    keysToDelete.add(`/externals/${identifier}/meta.json`)
-                    continue
-                }
-            }
-            if (!nodes.has(externalUUID)) {
-                console.warn(
-                    `External identifier (${JSON.stringify(
-                        identifier,
-                    )}) is linked to a non-canonical node: <${externalUUID}>. Deleting.`,
-                )
-                const synonymIdentifier = `phylopic.org${external.href}`
-                if (identifier === synonymIdentifier) {
-                    console.warn("Self-referential external identifier! Deleting.")
-                    keysToDelete.add(`/externals/${identifier}/meta.json`)
-                    continue
-                } else {
-                    const synonym = externals.get(synonymIdentifier)
-                    if (synonym && `/nodes/${synonym.uuid}` !== external.href) {
-                        console.warn(`Redirecting to a canonical node: <${synonym.uuid}>.`)
-                        externals.set(identifier, { ...external, uuid: synonym.uuid })
-                        externalsToPut.add(identifier)
-                    } else {
-                        const parsedTitle = stringifyNomen(shortenNomen(parseNomen(external.title)))
-                        console.warn(
-                            `No canonical node could be found. Matching against title (${JSON.stringify(
-                                external.title,
-                            )})...`,
-                        )
-                        let matches = [...nodes.entries()].filter(([, { names }]) =>
-                            names.some(name => nameMatches(parsedTitle, name)),
-                        )
-                        if (matches.length !== 1) {
-                            if (matches.length > 1) {
-                                matches =
-                                    external.title !== parsedTitle
-                                        ? [...nodes.entries()].filter(([, { names }]) =>
-                                              names.some(name => nameMatches(external.title, name)),
-                                          )
-                                        : matches
-                                if (matches.length !== 1) {
-                                    matches =
-                                        external.title.toLowerCase() !== parsedTitle.toLowerCase()
-                                            ? [...nodes.entries()].filter(([, { names }]) =>
-                                                  names.some(name => nameMatches(external.title, name, true)),
-                                              )
-                                            : matches
-                                    if (matches.length !== 1) {
-                                        console.warn("Could not find an unambiguous match. Deleting.")
-                                        keysToDelete.add(`/externals/${identifier}/meta.json`)
-                                        continue
-                                    }
-                                }
-                            } else {
-                                console.warn("Could not find a match. Deleting.")
-                                keysToDelete.add(`/externals/${identifier}/meta.json`)
-                                continue
-                            }
-                        }
-                        const [matchUUID] = matches[0]
-                        console.warn(`Redirecting to a canonical node: <${matchUUID}>.`)
-                        externals.set(identifier, { ...external, uuid: matchUUID })
-                        externalsToPut.add(identifier)
-                    }
-                }
-                if (external.title !== normalizeText(external.title)) {
-                    console.warn(
-                        `Normalizing external title: ${JSON.stringify(external.title)}. (Identifier: ${JSON.stringify(
-                            identifier,
-                        )})`,
-                    )
-                    externals.set(identifier, {
-                        ...(externals.get(identifier) ?? external),
-                        title: normalizeText(external.title),
-                    })
-                    externalsToPut.add(identifier)
-                }
-            }
-        } catch (e) {
-            console.error(e)
-            error = true
-        }
-    }
     for (const [uuid, image] of data.images.entries()) {
         try {
             if (nodes.has(uuid)) {
@@ -181,21 +255,38 @@ const analyze = (data: HealData): HealData => {
                 throw `Image without source file: <${uuid}>.`
             }
             let modified = image
-            if (!nodes.has(modified.specific)) {
-                throw `Cannot find specific node for image: <${uuid}>.`
-            }
             if (!isUUID(modified.contributor)) {
                 throw `Invalid contributor UUID (<${modified.contributor}>) in image: <${uuid}>.`
             }
             if (!contributors.has(modified.contributor)) {
                 throw `Cannot find contributor (UUID: <${modified.contributor}>) for image: <${uuid}>.`
             }
-            if (modified.general) {
-                if (!nodes.has(modified.general)) {
-                    throw `Cannot find general node for image: <${uuid}>.`
+            const canonicalSpecific = findCanonicalUUID(nodes, externals, modified.specific)
+            if (!canonicalSpecific) {
+                throw new Error(`Cannot find canonical specific node for image <${uuid}>.`)
+            }
+            if (canonicalSpecific !== modified.specific) {
+                console.warn("Using canonical node for image's specific node.")
+                modified = {
+                    ...modified,
+                    specific: canonicalSpecific,
                 }
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                if (!precedes(nodes, modified.general!, modified.specific)) {
+            }
+            const canonicalGeneral =
+                (modified.general ? findCanonicalUUID(nodes, externals, modified.general) : undefined) ?? null
+            if (canonicalGeneral !== modified.general) {
+                if (!canonicalGeneral) {
+                    throw new Error(`Cannot find canonical general node for image <${uuid}>.`)
+                } else {
+                    console.warn("Using canonical node for image's general node.")
+                    modified = {
+                        ...modified,
+                        general: canonicalGeneral,
+                    }
+                }
+            }
+            if (modified.general) {
+                if (!precedes(nodes, modified.general, modified.specific)) {
                     console.warn(
                         `Removing general node for image since it does not precede the specific node: <${uuid}>.`,
                     )

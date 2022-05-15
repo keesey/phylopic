@@ -7,7 +7,7 @@ export interface Props {
 const DateView: FC<Props> = ({ datetime }) =>
     datetime ? (
         <time dateTime={datetime} title={datetime}>
-            {new Date(datetime).toLocaleString()}
+            {new Date(datetime).toLocaleString("en")}
         </time>
     ) : null
 export default DateView

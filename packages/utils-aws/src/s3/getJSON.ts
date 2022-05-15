@@ -10,12 +10,14 @@ export const getJSON = async <T>(client: S3Client, input: GetObjectCommandInput,
     }
     const json = await streamToString(output.Body as Readable)
     const object = JSON.parse(json) as T
-    const faultCollector = detect ? new ValidationFaultCollector() : undefined
-    if (detect && !detect(object, faultCollector)) {
-        throw new Error(
-            `Error in file s3://${input.Bucket}/#${input.Key}:` + faultCollector?.list().join("\n\n") ||
-                "Invalid object.",
-        )
+    if (detect) {
+        const faultCollector = new ValidationFaultCollector()
+        if (!detect(object, faultCollector)) {
+            throw new Error(
+                `Error in file s3://${input.Bucket}/${input.Key}:` +
+                    (faultCollector?.list().join("\n\n") || "Invalid object."),
+            )
+        }
     }
     return [object, output] as Readonly<[T, GetObjectCommandOutput]>
 }
