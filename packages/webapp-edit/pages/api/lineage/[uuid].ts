@@ -19,6 +19,9 @@ const lineage: NextApiHandler = async (req, res) => {
         )
         const lineage = await getLineage(client, req.query.uuid, source.root)
         res.json(lineage)
+    } catch (e) {
+        res.status(500)
+        res.json(String(e))
     } finally {
         client.destroy()
     }

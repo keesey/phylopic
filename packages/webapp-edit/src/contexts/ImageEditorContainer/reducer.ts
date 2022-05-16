@@ -1,5 +1,4 @@
-import { isNode } from "@phylopic/source-models"
-import { isArray, isEmailAddress, isImageMediaType, isLicenseURL, normalizeText } from "@phylopic/utils"
+import { isEmailAddress, isImageMediaType, isLicenseURL, normalizeText } from "@phylopic/utils"
 import { Reducer } from "react"
 import { Action } from "./Actions"
 import { State } from "./State"
@@ -75,6 +74,7 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
         }
         case "SET_LICENSE": {
             if (!isLicenseURL(action.payload)) {
+                console.warn("Invalid payload.")
                 return prevState
             }
             return {
@@ -90,9 +90,12 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
             }
         }
         case "SET_LINEAGE": {
-            if (!isArray(isNode)(action.payload)) {
+            /*
+            if (!isArray(isEntity(isNode))(action.payload)) {
+                console.warn("Invalid payload.")
                 return prevState
             }
+            */
             return {
                 ...prevState,
                 error: undefined,

@@ -215,7 +215,7 @@ const analyze = (data: HealData): HealData => {
                 if (!canonicalParent) {
                     throw new Error(`Cannot find canonical node for <${modified.parent}> (parent of <${uuid}>).`)
                 }
-                console.warn("Setting node parent to canonical parent.")
+                console.warn("Setting node parent to canonical parent. ", modified.parent, "=>", canonicalParent)
                 modified = {
                     ...modified,
                     parent: canonicalParent,

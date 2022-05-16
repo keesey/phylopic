@@ -58,7 +58,7 @@ const getAuthorities = async (client: S3Client) => {
                 }
             }
         }
-        ContinuationToken = response.ContinuationToken
+        ContinuationToken = response.NextContinuationToken
     } while (ContinuationToken)
     return authorities
 }
@@ -82,7 +82,7 @@ const getNamespacesForAuthority = async (client: S3Client, authority: Authority)
                 }
             }
         }
-        ContinuationToken = response.ContinuationToken
+        ContinuationToken = response.NextContinuationToken
     } while (ContinuationToken)
     return namespaces
 }

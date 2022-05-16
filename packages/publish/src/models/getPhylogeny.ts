@@ -1,5 +1,5 @@
 import { Node, Source } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
+import { isUUID, UUID } from "@phylopic/utils"
 import { Arc, createAcyclicGraph, Digraph, sources } from "simple-digraph"
 export interface PhylogenySourceData {
     source: Source
@@ -18,16 +18,19 @@ const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): Ph
     if (!data.source) {
         throw new Error("Source metadata is missing!")
     }
-    let nextVertex = 1
     const nodeUUIDsToVertices = new Map<UUID, number>()
     const verticesToNodeUUIDs = new Map<number, UUID>()
-    for (const uuid of data.nodes.keys()) {
-        nodeUUIDsToVertices.set(uuid, nextVertex)
-        verticesToNodeUUIDs.set(nextVertex, uuid)
-        nextVertex++
+    {
+        let nextVertex = 1
+        const uuids = new Set<UUID>(data.nodes.keys())
+        for (const uuid of uuids) {
+            nodeUUIDsToVertices.set(uuid, nextVertex)
+            verticesToNodeUUIDs.set(nextVertex, uuid)
+            nextVertex++
+        }
     }
     const phylogenyArcs = [] as Arc[]
-    const vertices = [] as number[]
+    const extraVertices = new Set<number>()
     const rootVertex = nodeUUIDsToVertices.get(data.source.root)
     if (!rootVertex) {
         throw new Error("Invalid root node.")
@@ -38,28 +41,26 @@ const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): Ph
             throw new Error("Inconsistency in phylogeny.")
         }
         if (vertex === rootVertex) {
-            vertices.push(vertex)
+            extraVertices.add(vertex)
             if (node.parent) {
-                console.warn("Removing parent from root node.")
+                console.warn("Root node has a parent.")
                 options?.handleParentedRoot?.(uuid, node)
             }
         } else if (!node.parent) {
-            console.warn(`Attempting to root node which does not have a parent: <${uuid}>.`)
+            console.warn(`Node does not have a parent: <${uuid}>.`)
+            options?.handleOrphan?.(uuid, node)
+            phylogenyArcs.push([rootVertex, vertex])
+        } else if (!nodeUUIDsToVertices.has(node.parent)) {
+            console.warn(`Parent node does not have a vertex: <${node.parent}>. (Parent of <${uuid}>.)`)
             options?.handleOrphan?.(uuid, node)
             phylogenyArcs.push([rootVertex, vertex])
         } else {
-            const parentVertex = nodeUUIDsToVertices.get(node.parent)
-            if (!parentVertex) {
-                console.warn(`Attempting to root node with invalid parent: <${uuid}>.`)
-                options?.handleOrphan?.(uuid, node)
-                phylogenyArcs.push([rootVertex, vertex])
-            } else {
-                vertices.push(vertex)
-                phylogenyArcs.push([parentVertex, vertex])
-            }
+            const parentVertex = nodeUUIDsToVertices.get(node.parent) as number
+            extraVertices.add(vertex)
+            phylogenyArcs.push([parentVertex, vertex])
         }
     }
-    const phylogeny = createAcyclicGraph(phylogenyArcs, vertices)
+    const phylogeny = createAcyclicGraph(phylogenyArcs, extraVertices)
     const sourceVertices = sources(phylogeny)
     if (sourceVertices.size === 0) {
         throw new Error("Phylogeny has no root!")
