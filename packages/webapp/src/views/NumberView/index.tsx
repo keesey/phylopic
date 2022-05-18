@@ -7,6 +7,6 @@ const NumberView: FC<Props> = ({ value }) => {
         () => (typeof value !== "number" || !isFinite(value) ? "" : value.toLocaleString("en")),
         [value],
     )
-    return text.length ? <strong>{text}</strong> : null
+    return text.length ? <>{text}</> : null
 }
 export default NumberView

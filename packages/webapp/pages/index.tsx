@@ -14,8 +14,8 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import ContributionCTAView from "~/views/ContributionCTAView"
+import CountView from "~/views/CountView"
 import ImageListView from "~/views/ImageListView"
-import NumberView from "~/views/NumberView"
 import SupportersView from "~/views/SupportersView"
 export interface Props {
     build: number
@@ -61,7 +61,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                                     <>
                                         <ImageListView value={images as readonly ImageWithEmbedded[]} />
                                         <p>
-                                            <NumberView value={totalImages} /> silhouette images in the database.
+                                            <CountView value={totalImages} /> silhouette images in the database.
                                         </p>
                                     </>
                                 )}

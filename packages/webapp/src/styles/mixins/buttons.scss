@@ -1,4 +1,5 @@
 @use "../colors.scss";
+
 @mixin cta {
     background-color: colors.$foam;
     border: 2pt solid colors.$aquatic;
@@ -10,19 +11,23 @@
     padding: 1rem;
     text-transform: uppercase;
     transition: all 0.3s;
+
     &:hover {
         background-color: colors.$aquatic;
         color: colors.$foam;
     }
 }
+
 @mixin cta-pending {
     cursor: progress;
     opacity: 0.5;
+
     &:hover {
         background-color: colors.$foam;
         color: colors.$aquatic;
     }
 }
+
 @mixin text {
     border: none;
     background: none;
@@ -31,6 +36,7 @@
     margin: 0;
     padding: 0;
     transition: all 0.3s;
+
     &:hover {
         color: colors.$glacier;
     }
