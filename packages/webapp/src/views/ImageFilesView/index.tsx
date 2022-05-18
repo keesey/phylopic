@@ -43,7 +43,10 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                         <th>
                             {sourceFileExtension === "SVG" ? "Vector" : "Vectorized"}
                             {" File ("}
-                            <a href={EXTENSION_LINKS.svg}><abbr title="Scalable Vector Graphics">SVG</abbr></a>)
+                            <a href={EXTENSION_LINKS.svg}>
+                                <abbr title="Scalable Vector Graphics">SVG</abbr>
+                            </a>
+                            )
                         </th>
                         <td className={styles.cellList}>
                             <DownLoadLink filenamePrefix={filenamePrefix} link={value._links.vectorFile} />
@@ -57,7 +60,11 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 )}
                 <tr key="raster">
                     <th>
-                        Alternate Sizes (<a href={EXTENSION_LINKS.png}><abbr title="Portable Network Graphics">PNG</abbr></a>)
+                        Alternate Sizes (
+                        <a href={EXTENSION_LINKS.png}>
+                            <abbr title="Portable Network Graphics">PNG</abbr>
+                        </a>
+                        )
                     </th>
                     <td className={styles.cellList}>
                         {rasterFiles.map(link => (
@@ -67,7 +74,11 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 </tr>
                 <tr key="thumbnail">
                     <th>
-                        Thumbnails (<a href={EXTENSION_LINKS.png}><abbr title="Portable Network Graphics">PNG</abbr></a>)
+                        Thumbnails (
+                        <a href={EXTENSION_LINKS.png}>
+                            <abbr title="Portable Network Graphics">PNG</abbr>
+                        </a>
+                        )
                     </th>
                     <td className={styles.cellList}>
                         {thumbnailFiles.map(link => (
