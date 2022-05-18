@@ -34,7 +34,7 @@ const findCanonicalUUID = (
             throw new Error("Cyclical externals! See UUID: " + uuid)
         }
         visited.add(uuid)
-        return findCanonicalUUID(nodes, externals, external.href, visited)
+        return findCanonicalUUID(nodes, externals, external.href.replace(/^\/nodes\//, ""), visited)
     }
 }
 const findCanonicalHRef = (

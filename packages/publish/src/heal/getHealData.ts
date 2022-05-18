@@ -5,7 +5,7 @@ import { isString, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import { Digraph } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
-const SOURCE_FILE_EXTENSIONS = ["svg", "png", "tif", "bmp", "gif", "jpg"]
+const SOURCE_FILE_EXTENSIONS = ["jpeg", "gif", "bmp", "tiff", "png", "svg"]
 export type HealData = Readonly<{
     contributors: ReadonlyMap<UUID, Contributor>
     contributorsToPut: ReadonlySet<UUID>
@@ -88,7 +88,7 @@ const readImageSource = async (
         const existingExtension = existingKey.split(".", 2)[1]
         const existingExtensionIndex = SOURCE_FILE_EXTENSIONS.indexOf(existingExtension)
         const extensionIndex = SOURCE_FILE_EXTENSIONS.indexOf(extension)
-        const keyToDelete = extensionIndex < existingExtensionIndex ? existingKey : Key
+        const keyToDelete = extensionIndex < existingExtensionIndex ? Key : existingKey
         console.warn(`Two or more source files for image: <${uuid}>.\n\tMarking <${keyToDelete}> for deletion.`)
         result.keysToDelete.add(keyToDelete)
         result.imageFileKeys.set(uuid, extensionIndex < existingExtensionIndex ? Key : existingKey)
@@ -148,16 +148,18 @@ const readExternal = async (
     namespace: string,
     objectId: string,
 ) => {
-    const path = `${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}/${encodeURIComponent(objectId)}`
+    const identifier = `${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}/${encodeURIComponent(
+        objectId,
+    )}`
     const [link] = await getJSON<TitledLink>(
         client,
         {
             Bucket: SOURCE_BUCKET_NAME,
-            Key: `externals/${path}/meta.json`,
+            Key: `externals/${identifier}/meta.json`,
         },
         isTitledLink(isString),
     )
-    result.externals.set(path, link)
+    result.externals.set(identifier, link)
 }
 const addToResult = async (client: S3Client, result: BucketResult, object: _Object): Promise<void> => {
     if (!object.Key) {
@@ -170,7 +172,7 @@ const addToResult = async (client: S3Client, result: BucketResult, object: _Obje
     if (match) {
         return readImageMeta(client, result, match[1])
     }
-    match = object.Key?.match(/^images\/([^/]+)\/source\.(svg|png|bmp|gif|jpg)$/)
+    match = object.Key?.match(/^images\/([^/]+)\/source\.(svg|png|bmp|gif|jpeg|tiff)$/)
     if (match) {
         return readImageSource(result, match[1], match[2])
     }
@@ -217,6 +219,7 @@ const getPhylogenyResult = (data: BucketResult) => {
         { ...data, source },
         {
             handleOrphan: (uuid, node) => {
+                console.warn(`Parenting orphaned node to root: <${uuid}>.`)
                 data.nodes.set(uuid, {
                     ...node,
                     parent: source.root,
@@ -224,6 +227,7 @@ const getPhylogenyResult = (data: BucketResult) => {
                 data.nodesToPut.add(uuid)
             },
             handleParentedRoot: (uuid, node) => {
+                console.warn(`Root node has a parent. Removing.`)
                 data.nodes.set(uuid, {
                     created: node.created,
                     names: node.names,
