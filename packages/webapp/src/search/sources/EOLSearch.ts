@@ -1,7 +1,7 @@
 import { createSearch } from "@phylopic/utils"
 import { FC, useContext, useEffect } from "react"
 import { Fetcher } from "swr"
-import useSWR from "swr/immutable"
+import useSWRImmutable from "swr/immutable"
 import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 const URL = "https://eol.org/api/search/1.0.json"
@@ -32,7 +32,7 @@ const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, 
 }
 const EOLSearch: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
-    const response = useSWR(state?.text ? [URL, state.text] : null, fetcher)
+    const response = useSWRImmutable(state?.text ? [URL, state.text] : null, fetcher)
     useEffect(() => {
         if (dispatch && response.data) {
             dispatch({

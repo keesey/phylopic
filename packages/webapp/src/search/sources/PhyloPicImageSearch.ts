@@ -1,7 +1,7 @@
 import { ImageListParameters, ImageWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, extractQueryString, parseQueryString, Query } from "@phylopic/utils"
 import { FC, useContext, useEffect, useMemo } from "react"
-import useSWR from "swr/immutable"
+import useSWRImmutable from "swr/immutable"
 import useAPIFetcher from "~/swr/api/useAPIFetcher"
 import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
@@ -28,7 +28,7 @@ const PhyloPicImageSearch: FC = () => {
     )
     const fetcher = useAPIFetcher<PageWithEmbedded<ImageWithEmbedded>>()
     const key = useAPISWRKey(endpoint)
-    const { data } = useSWR(key, fetcher)
+    const { data } = useSWRImmutable(key, fetcher)
     useEffect(() => {
         if (dispatch && data) {
             const parsedQuery = parseQueryString(extractQueryString(data._links.self.href))

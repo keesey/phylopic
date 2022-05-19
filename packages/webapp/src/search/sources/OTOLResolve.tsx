@@ -1,7 +1,7 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
 import { FC, useContext, useEffect, useMemo } from "react"
 import { Fetcher } from "swr"
-import useSWR from "swr/immutable"
+import useSWRImmutable from "swr/immutable"
 import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 import OTOL_URL from "./OTOL_URL"
@@ -34,20 +34,20 @@ const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = as
 }
 const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
     const [, dispatch] = useContext(SearchContext) ?? []
-    const direct = useSWR<NodeWithEmbedded>(
+    const direct = useSWRImmutable<NodeWithEmbedded>(
         `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(
             ott_id,
         )}?embed_primaryImage=true`,
         fetchDirect,
     )
-    const lineage = useSWR([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
+    const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
     const lineageIDs = useMemo(() => {
         if (!lineage.data?.lineage) {
             return []
         }
         return lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))
     }, [lineage.data?.lineage])
-    const indirect = useSWR<NodeWithEmbedded>(
+    const indirect = useSWRImmutable<NodeWithEmbedded>(
         lineageIDs.length
             ? [
                   `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?embed_primaryImage=true`,

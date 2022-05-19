@@ -30,9 +30,7 @@ const PageComponent: NextPage = () => (
                             />
                             <h1>Thank you!</h1>
                         </header>
-                        <section>
-                            :TODO:
-                        </section>
+                        <section>:TODO:</section>
                     </SearchOverlay>
                 </main>
                 <SiteFooter />

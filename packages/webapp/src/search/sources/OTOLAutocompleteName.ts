@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect } from "react"
 import { Fetcher } from "swr"
-import useSWR from "swr/immutable"
+import useSWRImmutable from "swr/immutable"
 import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 import OTOL_URL from "./OTOL_URL"
@@ -23,7 +23,7 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
 }
 const OTOLAutocompleteName: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
-    const response = useSWR(state?.text ? [OTOL_URL + "/tnrs/autocomplete_name", state.text] : null, fetcher)
+    const response = useSWRImmutable(state?.text ? [OTOL_URL + "/tnrs/autocomplete_name", state.text] : null, fetcher)
     useEffect(() => {
         if (dispatch && response.data) {
             dispatch({
