@@ -1,5 +1,6 @@
 import { NodeListParameters, NodeWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, extractQueryString, parseQueryString, Query } from "@phylopic/utils"
+import { useDebounce } from "@react-hook/debounce"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import useAPIFetcher from "~/swr/api/useAPIFetcher"
@@ -7,6 +8,7 @@ import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
 import { SetNodeResultsAction } from "../context/actions"
 import getMatchingText from "../utils/getMatchingText"
+import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
 const PhyloPicNodeSearch: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const matchingText = useMemo(
@@ -29,7 +31,9 @@ const PhyloPicNodeSearch: FC = () => {
     )
     const fetcher = useAPIFetcher<PageWithEmbedded<NodeWithEmbedded>>()
     const key = useAPISWRKey(endpoint)
-    const { data } = useSWRImmutable(key, fetcher)
+    const [debouncedKey, setDebouncedKey] = useDebounce<string | null>(key, DEBOUNCE_WAIT, true)
+    useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
+    const { data } = useSWRImmutable(debouncedKey, fetcher)
     useEffect(() => {
         if (dispatch && data) {
             const parsedQuery = parseQueryString(extractQueryString(data._links.self.href))

@@ -2434,15 +2434,15 @@
 "@phylopic/api-models@file:packages/api-models":
   version "2.0.0-alpha"
   dependencies:
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-models-2.0.0-alpha-3cca8834-739e-4fc3-95de-ad98d8d09a82-1651885580165/node_modules/@phylopic/utils"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-models-2.0.0-alpha-57025d6a-94b7-40a8-996a-2160a39c76ee-1652942156548/node_modules/@phylopic/utils"
     normalize-diacritics "^3.0.8"
 
 "@phylopic/api@file:packages/api":
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-815d41c6-be6c-418c-9d7e-0981ba3bd0c2-1651885580110/node_modules/@phylopic/api-models"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-815d41c6-be6c-418c-9d7e-0981ba3bd0c2-1651885580110/node_modules/@phylopic/utils"
+    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-af2a4abb-ddf8-432e-9a2d-7ad1181c5ceb-1652942156493/node_modules/@phylopic/api-models"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-api-2.0.0-alpha-af2a4abb-ddf8-432e-9a2d-7ad1181c5ceb-1652942156493/node_modules/@phylopic/utils"
     aws-lambda "^1.0.7"
     is-uuid "^1.0.2"
     pg "^8.7.3"
@@ -2462,7 +2462,6 @@
     cross-fetch "^3.1.5"
     dotenv "^16.0.0"
     metadata-scraper "^0.2.49"
-    normalize-diacritics "^3.0.8"
     parse-nomen "^2.1.2"
     path "^0.12.7"
     pg "^8.7.3"
@@ -2474,9 +2473,8 @@
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-d892f8e6-24fd-4515-835f-131b2bee9738-1651885580212/node_modules/@phylopic/utils"
-    "@phylopic/utils-aws" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-d892f8e6-24fd-4515-835f-131b2bee9738-1651885580212/node_modules/@phylopic/utils-aws"
-    email-validator "^2.0.4"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-4c0506e3-18a3-4ea1-8647-36d02809e7ad-1652942156596/node_modules/@phylopic/utils"
+    "@phylopic/utils-aws" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-source-models-2.0.0-alpha-4c0506e3-18a3-4ea1-8647-36d02809e7ad-1652942156596/node_modules/@phylopic/utils-aws"
     parse-nomen "^2.1.2"
     uuid "^8.3.2"
 
@@ -2484,7 +2482,7 @@
   version "2.0.0-alpha"
   dependencies:
     "@aws-sdk/client-s3" "^3.82.0"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-utils-aws-2.0.0-alpha-3be672c5-47eb-4c77-9695-80a934252e09-1651885580210/node_modules/@phylopic/utils"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-utils-aws-2.0.0-alpha-2b19139a-da05-4668-90a9-90f0c80aa414-1652942156594/node_modules/@phylopic/utils"
     raw-body "^2.5.1"
     stream "^0.0.2"
 
@@ -2498,8 +2496,9 @@
 "@phylopic/webapp@file:packages/webapp":
   version "2.0.0-alpha"
   dependencies:
-    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-7ccfe7f7-76a4-4bc1-8b34-975dc62b7fc7-1651885580214/node_modules/@phylopic/api-models"
-    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-7ccfe7f7-76a4-4bc1-8b34-975dc62b7fc7-1651885580214/node_modules/@phylopic/utils"
+    "@phylopic/api-models" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-aafe71af-6af1-4ed3-afbd-519ce279a042-1652942156597/node_modules/@phylopic/api-models"
+    "@phylopic/utils" "file:../../../../Library/Caches/Yarn/v6/npm-@phylopic-webapp-2.0.0-alpha-aafe71af-6af1-4ed3-afbd-519ce279a042-1652942156597/node_modules/@phylopic/utils"
+    "@react-hook/debounce" "^4.0.0"
     clsx "^1.1.1"
     cross-fetch "^3.1.5"
     next "^12.1.6"
@@ -2510,6 +2509,18 @@
     sass "^1.51.0"
     slugify "^1.6.5"
     swr "^1.3.0"
+
+"@react-hook/debounce@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@react-hook/debounce/-/debounce-4.0.0.tgz#5da87e7bfa158cfe2830ffc997dc1b755e261379"
+  integrity sha512-706Xcg+KKWHk9BuZQUQ0ZQKp9zhv3/MbqFenWVfHcynYpSGRVwQTzJRGvPxvsdtXxJv+HfgKTY/O/hEejakwmA==
+  dependencies:
+    "@react-hook/latest" "^1.0.2"
+
+"@react-hook/latest@^1.0.2":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@react-hook/latest/-/latest-1.0.3.tgz#c2d1d0b0af8b69ec6e2b3a2412ba0768ac82db80"
+  integrity sha512-dy6duzl+JnAZcDbNTfmaP3xHiKtbXYOaz3G51MGVljh548Y8MWzTr+PHLOfvpypEVW9zwvl+VyKjbWKEVbV1Rg==
 
 "@rushstack/eslint-patch@^1.1.3":
   version "1.1.3"

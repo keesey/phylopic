@@ -1,10 +1,12 @@
 import { QueryMatches } from "@phylopic/api-models"
 import { createSearch, extractQueryString, parseQueryString } from "@phylopic/utils"
+import { useDebounce } from "@react-hook/debounce"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import useAPIFetcher from "~/swr/api/useAPIFetcher"
 import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
+import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
 const PhyloPicAutocomplete: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const { text } = state ?? {}
@@ -17,7 +19,9 @@ const PhyloPicAutocomplete: FC = () => {
     )
     const fetcher = useAPIFetcher<QueryMatches>()
     const key = useAPISWRKey(endpoint)
-    const response = useSWRImmutable(key, fetcher)
+    const [debouncedKey, setDebouncedKey] = useDebounce<string | null>(key, DEBOUNCE_WAIT, true)
+    useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
+    const response = useSWRImmutable(debouncedKey, fetcher)
     useEffect(() => {
         if (dispatch && response.data) {
             const query = parseQueryString(extractQueryString(response.data._links.self.href))

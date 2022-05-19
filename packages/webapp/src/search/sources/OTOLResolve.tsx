@@ -5,6 +5,8 @@ import useSWRImmutable from "swr/immutable"
 import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 import OTOL_URL from "./OTOL_URL"
+import { useDebounce } from "@react-hook/debounce"
+import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
 interface OTOLLineageItem {
     // Abridged.
     readonly ott_id: number
@@ -34,12 +36,19 @@ const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = as
 }
 const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
     const [, dispatch] = useContext(SearchContext) ?? []
-    const direct = useSWRImmutable<NodeWithEmbedded>(
-        `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(
-            ott_id,
-        )}?embed_primaryImage=true`,
-        fetchDirect,
+    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
+    useEffect(
+        () =>
+            setDirectKey(
+                ott_id
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(
+                          ott_id,
+                      )}?embed_primaryImage=true`
+                    : null,
+            ),
+        [ott_id, setDirectKey],
     )
+    const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchDirect)
     const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
     const lineageIDs = useMemo(() => {
         if (!lineage.data?.lineage) {
@@ -47,15 +56,20 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
         }
         return lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))
     }, [lineage.data?.lineage])
-    const indirect = useSWRImmutable<NodeWithEmbedded>(
-        lineageIDs.length
-            ? [
-                  `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?embed_primaryImage=true`,
-                  lineageIDs,
-              ]
-            : null,
-        fetchIndirect,
+    const [indirectKey, setIndirectKey] = useDebounce<[string, string[]] | null>(null, DEBOUNCE_WAIT, true)
+    useEffect(
+        () =>
+            setIndirectKey(
+                lineageIDs.length
+                    ? ([
+                          `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?embed_primaryImage=true`,
+                          lineageIDs,
+                      ] as [string, string[]])
+                    : null,
+            ),
+        [lineageIDs, setIndirectKey],
     )
+    const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchIndirect)
     useEffect(() => {
         const node = direct.data ?? indirect.data
         if (node && dispatch) {
