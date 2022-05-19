@@ -19,11 +19,6 @@ module.exports = {
                 permanent: true,
             },
             {
-                source: "/contribute",
-                destination: "https://www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
-                permanent: true,
-            },
-            {
                 source: "/donate",
                 destination: "https://www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
                 permanent: true,

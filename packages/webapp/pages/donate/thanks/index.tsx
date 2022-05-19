@@ -24,13 +24,15 @@ const PageComponent: NextPage = () => (
                             <Breadcrumbs
                                 items={[
                                     { children: "Home", href: "/" },
-                                    { children: "Contribute", href: "/contribute" },
+                                    { children: "Donate", href: "/donate" },
                                     { children: <strong>Thanks for Your Donation</strong> },
                                 ]}
                             />
                             <h1>Thank you!</h1>
                         </header>
-                        <section>:TODO:</section>
+                        <section>
+                            :TODO:
+                        </section>
                     </SearchOverlay>
                 </main>
                 <SiteFooter />

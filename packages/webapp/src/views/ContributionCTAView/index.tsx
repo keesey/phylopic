@@ -41,7 +41,7 @@ const ContributionCTAView: FC = () => {
                     </p>
                     <ul className={styles.ctaList}>
                         <li>
-                            <AnchorLink href="/contribute">Make a donation</AnchorLink>
+                            <AnchorLink href="/donate">Make a donation</AnchorLink>
                         </li>
                         <li>
                             <a href="https://www.patreon.com/tmkeesey">Support the creator on Patreon</a>

@@ -37,7 +37,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     <a href="https://contribute.phylopic.org">Upload Images</a>
                 </li>
                 <li>
-                    <AnchorLink href="/contribute">Make a Donation</AnchorLink>
+                    <AnchorLink href="/donate">Make a Donation</AnchorLink>
                 </li>
             </ul>
         </section>
