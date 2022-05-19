@@ -44,7 +44,8 @@
         "format": "prettier -w . && eslint --ext .ts,.tsx --fix .",
         "lint": "eslint --ext .ts,.tsx .",
         "start": "next start",
-        "unused": "next-unused"
+        "unused": "next-unused",
+        "vercel:install": "cd ../.. && yarn bootstrap"
     },
     "version": "2.0.0-alpha"
 }

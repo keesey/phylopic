@@ -75,7 +75,6 @@
     "format": "lerna run format",
     "lint": "lerna run lint",
     "postversion": "git push && git push --tags",
-    "prepare": "yarn build",
     "prepublishOnly": "yarn test && yarn lint",
     "preversion": "yarn format",
     "test": "lerna run test",
