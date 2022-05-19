@@ -45,7 +45,7 @@
         "lint": "eslint --ext .ts,.tsx .",
         "start": "next start",
         "unused": "next-unused",
-        "vercel:install": "cd ../.. && yarn bootstrap"
+        "vercel:install": "cd ../.. && yarn install && yarn bootstrap"
     },
     "version": "2.0.0-alpha"
 }
