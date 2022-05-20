@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+    experimental: {
+        esmExternals: "loose",
+    },
     reactStrictMode: true,
     async redirects() {
         return [

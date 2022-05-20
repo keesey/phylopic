@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "paths": {
             "~/*": ["src/*"]
         },
-        "rootDir": "src"
+        "rootDir": "."
     },
     "exclude": ["node_modules"],
     "extends": "@phylopic/tsconfig/next.json",

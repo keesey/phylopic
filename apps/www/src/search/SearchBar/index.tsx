@@ -38,7 +38,6 @@ const SearchBar: FC = () => {
         <form className={styles.main} onSubmit={handleFormSubmit}>
             <input
                 className={clsx(focused && styles.focused)}
-                enterKeyHint="search"
                 key="input"
                 id="searchName"
                 list="autocomplete"

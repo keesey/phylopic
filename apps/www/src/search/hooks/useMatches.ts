@@ -7,7 +7,7 @@ const useMatches = (maxLength: number) => {
     const { externalMatches, internalMatches, text } = state || {}
     return useMemo(() => {
         if (text && (externalMatches?.length || internalMatches?.length)) {
-            return [...new Set([...(internalMatches ?? []), ...(externalMatches ?? [])].filter(Boolean))]
+            return Array.from(new Set([...(internalMatches ?? []), ...(externalMatches ?? [])].filter(Boolean)))
                 .sort((a, b) => getSortIndex(a, text) - getSortIndex(b, text) || compareStrings(a, b))
                 .slice(0, maxLength)
         }

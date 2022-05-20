@@ -13,9 +13,7 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
             }
             return {
                 ...prevState,
-                externalMatches: [
-                    ...new Set<string>([...action.payload.map(normalizeQuery), ...prevState.externalMatches]),
-                ].sort(
+                externalMatches: Array.from(new Set<string>([...action.payload.map(normalizeQuery), ...prevState.externalMatches])).sort(
                     (a, b) => getSortIndex(a, prevState.text) - getSortIndex(b, prevState.text) || compareStrings(a, b),
                 ),
             }
