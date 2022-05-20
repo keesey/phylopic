@@ -1,86 +1,36 @@
 {
-  "author": {
-    "email": "keesey+phylopic@gmail.com",
-    "name": "T. Michael Keesey"
-  },
-  "bugs": {
-    "url": "https://github.com/keesey/phylopic/issues"
-  },
-  "dependencies": {
-    "@phylopic/api": "file:packages/api",
-    "@phylopic/api-docs": "file:packages/api-docs",
-    "@phylopic/api-models": "file:packages/api-models",
-    "@phylopic/publish": "file:packages/publish",
-    "@phylopic/source-models": "file:packages/source-models",
-    "@phylopic/utils": "file:packages/utils",
-    "@phylopic/utils-aws": "file:packages/utils-aws",
-    "@phylopic/webapp": "file:packages/webapp"
-  },
-  "description": "An open database of freely reusable silhouettes of life forms.",
-  "devDependencies": {
-    "@types/aws-lambda": "^8.10.92",
-    "@types/chai": "^4.3.0",
-    "@types/is-uuid": "^1.0.0",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "^16.11.13",
-    "@types/node-fetch": "^2.1.4",
-    "@types/pg": "^8.6.4",
-    "@types/probe-image-size": "^7.0.1",
-    "@types/react": "^18.0.8",
-    "@types/react-dom": "^18.0.3",
-    "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.10.1",
-    "@typescript-eslint/parser": "^5.10.1",
-    "api-spec-converter": "^2.12.0",
-    "bootprint": "^4.0.4",
-    "bootprint-json-schema": "^4.0.4",
-    "bootprint-openapi": "^4.0.4",
-    "chai": "^4.3.4",
-    "eslint": "^8.6.0",
-    "eslint-config-next": "^12.1.6",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-next": "^0.0.0",
-    "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.5.0",
-    "flux-standard-action": "^2.1.2",
-    "fork-ts-checker-webpack-plugin": "^7.2.7",
-    "handlebars": "^4.7.7",
-    "lerna": "^4.0.0",
-    "mocha": "^9.1.4",
-    "next-unused": "^0.0.6",
-    "openapi-types": "^10.0.0",
-    "pgtest": "^0.2.3",
-    "prettier": "^2.5.1",
-    "serverless": "^3.0.1",
-    "serverless-offline": "^8.4.0",
-    "serverless-webpack": "^5.6.1",
-    "sinon": "^13.0.0",
-    "swagger-cli": "^4.0.4",
-    "ts-loader": "^9.2.7",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6.4",
-    "webpack": "^5.70.0",
-    "yarn": "^1.22.18"
-  },
-  "license": "MIT",
-  "name": "phylopic",
-  "private": true,
-  "repository": "https://github.com/keesey/phylopic",
-  "scripts": {
-    "bootstrap": "lerna bootstrap --force-local",
-    "build": "lerna run build",
-    "format": "lerna run format",
-    "lint": "lerna run lint",
-    "postversion": "git push && git push --tags",
-    "prepublishOnly": "yarn test && yarn lint",
-    "preversion": "yarn format",
-    "test": "lerna run test",
-    "version": "git add -A src"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "description": "An open database of freely reusable silhouettes of life forms.",
+    "devDependencies": {
+        "@changesets/cli": "^2.22.0",
+        "eslint": "^8.15.0",
+        "eslint-config-phylopic": "*",
+        "prettier": "^2.5.1",
+        "turbo": "latest"
+    },
+    "license": "MIT",
+    "name": "phylopic",
+    "private": true,
+    "repository": "https://github.com/keesey/phylopic",
+    "scripts": {
+        "build": "turbo run build",
+        "changeset": "changeset",
+        "clean": "turbo run clean && rm -rf node_modules",
+        "dev": "turbo run dev --no-cache --parallel --continue",
+        "format": "prettier --write \"**/*.{js,json,md,ts,tsx}\"",
+        "lint": "turbo run lint",
+        "release": "turbo run build --filter=docs^... && changeset publish",
+        "test": "turbo run test",
+        "version-packages": "changeset version"
+    },
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ]
 }

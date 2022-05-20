@@ -7,30 +7,28 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
-        "@phylopic/utils": "file:../utils",
+        "@phylopic/utils": "*",
         "normalize-diacritics": "^3.0.8"
     },
     "description": "Type declarations and validation for PhyloPic API value objects.",
     "devDependencies": {
-        "eslint": "^8.6.0",
+        "@phylopic/tsconfig": "*",
+        "eslint": "^8.15.0",
+        "eslint-config-phylopic": "*",
         "mocha": "^9.1.4",
         "prettier": "^2.5.1",
+        "ts-node": "^10.7.0",
+        "tsup": "^5.10.1",
         "typescript": "^4.6.4",
         "yarn": "^1.22.18"
     },
-    "exports": {
-        ".": {
-            "import": "./dist/esm/index.js",
-            "require": "./dist/index.js",
-            "types": "./dist/index.d.ts"
-        }
-    },
     "files": [
-        "dist"
+        "dist/**"
     ],
     "homepage": "https://github.com/keesey/phylopic/packages/api-models#readme",
     "license": "MIT",
-    "main": "dist/index.js",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
     "name": "@phylopic/api-models",
     "publishConfig": {
         "access": "public"
@@ -39,22 +37,13 @@
         "type": "git",
         "url": "git+https://github.com/keesey/phylopic.git"
     },
-    "resolutions": {
-        "@types/node": "*"
-    },
     "scripts": {
-        "build": "tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json && echo >dist/esm/package.json '{\"type\":\"module\"}'",
-        "format": "prettier -w . && eslint --ext .js,.ts --fix .",
-        "lint": "eslint --ext .js,.ts .",
-        "postversion": "git push && git push --tags",
-        "prebuild": "rm -rf dist",
-        "prepare": "yarn build",
-        "prepublishOnly": "yarn test && yarn lint",
-        "preversion": "yarn lint && yarn test",
-        "test": "mocha -r ts-node/register \"./src/**/*.spec.ts\"",
-        "version": "git add -A src"
+        "build": "tsup src/index.ts --format esm,cjs --dts",
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+        "lint": "TIMING=1 eslint src/**/*.ts* --fix",
+        "test": "mocha -r ts-node/register \"./src/**/*.spec.ts\""
     },
-    "type": "module",
-    "types": "dist/index.d.ts",
-    "version": "2.0.0-alpha"
+    "types": "./dist/index.d.ts",
+    "version": "0.0.0"
 }

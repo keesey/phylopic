@@ -1,7 +1,5 @@
 {
-    "compilerOptions": {
-        "outDir": "./dist"
-    },
-    "extends": "../../tsconfig.json",
-    "include": ["src"]
+    "extends": "@phylopic/tsconfig/base.json",
+    "include": ["."],
+    "exclude": ["dist", "build", "node_modules"]
 }

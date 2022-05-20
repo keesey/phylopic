@@ -1,0 +1,48 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.52.0",
+        "@phylopic/source-models": "*",
+        "@phylopic/utils": "*",
+        "@phylopic/utils-aws": "*",
+        "clsx": "^1.1.1",
+        "cross-fetch": "^3.1.5",
+        "next": "^12.1.6",
+        "parse-nomen": "^2.1.2",
+        "react": "^18.1.0",
+        "react-dom": "^18.1.0",
+        "react-spinners": "^0.11.0",
+        "simple-digraph": "^1.0.1",
+        "slugify": "^1.6.5",
+        "swr": "^1.3.0"
+    },
+    "description": "Web application (run locally) for editing *Phylopic* source data and image files.",
+    "devDependencies": {
+        "@phylopic/tsconfig": "*",
+        "@types/react": "^16.14.26",
+        "@types/react-dom": "^16.9.16",
+        "eslint-config-phylopic": "*",
+        "sass": "^1.51.0",
+        "typescript": "^4.6.4"
+    },
+    "license": "MIT",
+    "name": "@phylopic/edit",
+    "next-unused": {
+        "include": [
+            "./src"
+        ]
+    },
+    "private": true,
+    "scripts": {
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
+        "dev": "next dev -p 3001",
+        "lint": "TIMING=1 next lint"
+    },
+    "version": "0.0.0"
+}

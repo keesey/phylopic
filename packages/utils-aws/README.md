@@ -5,7 +5,7 @@
 ## Usage
 
 ```
-const utils = require('@phylopic/utils');
+const utilsAWS = require('@phylopic/utils-aws');
 
 // TODO: DEMONSTRATE API
 ```

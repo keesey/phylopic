@@ -1,3 +1,4 @@
 {
-    "extends": ["../../.eslintrc.json"]
+    "extends": ["phylopic"],
+    "root": true
 }

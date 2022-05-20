@@ -1,0 +1,14 @@
+{
+    "files": [
+        "base.json",
+        "node14.json",
+        "next.json",
+        "react-lib.json"
+    ],
+    "license": "MIT",
+    "name": "@phylopic/tsconfig",
+    "publishConfig": {
+        "access": "public"
+    },
+    "version": "0.0.0"
+}
