@@ -1,8 +1,8 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import { LEGACY_LICENSE_URLS } from "../constants/LEGACY_LICENSE_URLS.js"
-import { VALID_LICENSE_URLS } from "../constants/VALID_LICENSE_URLS.js"
-import { isLicenseURL } from "./isLicenseURL.js"
+import { LEGACY_LICENSE_URLS } from "../constants/LEGACY_LICENSE_URLS"
+import { VALID_LICENSE_URLS } from "../constants/VALID_LICENSE_URLS"
+import { isLicenseURL } from "./isLicenseURL"
 describe("isLicenseURL", () => {
     const test = (value: unknown, expected: boolean) => {
         it(`should determine that ${JSON.stringify(value)} is${expected ? "" : " not"} a license URL.`, () => {

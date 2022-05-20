@@ -1,5 +1,5 @@
 {
+    "exclude": ["dist", "build", "node_modules"],
     "extends": "@phylopic/tsconfig/node14.json",
     "include": ["."],
-    "exclude": ["dist", "build", "node_modules"]
 }

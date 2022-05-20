@@ -1,10 +1,10 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
 import { isArray, isNomen, isNormalizedText, isNullOr, isURL } from "@phylopic/utils"
-import { Node } from "../types/Node.js"
-import isEntity from "./isEntity.js"
-import isLink from "./isLink.js"
-import isLinks from "./isLinks.js"
-import isTitledLink from "./isTitledLink.js"
+import { Node } from "../types/Node"
+import isEntity from "./isEntity"
+import isLink from "./isLink"
+import isLinks from "./isLinks"
+import isTitledLink from "./isTitledLink"
 const isNodeLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Node["_links"] =>
     isLinks(x, faultCollector) &&
     isArray(isLink(isNormalizedText))((x as Node["_links"]).childNodes, faultCollector?.sub("childNodes")) &&

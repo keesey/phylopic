@@ -1,1 +1,1 @@
-export * from "./stringifyNormalized.js"
+export * from "./stringifyNormalized"

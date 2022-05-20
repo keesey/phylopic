@@ -1,6 +1,6 @@
 import { UUID } from "@phylopic/utils"
-import { ImageEmbedded } from "../../types/ImageWithEmbedded.js"
-import { ListParameters } from "./ListParameters.js"
+import { ImageEmbedded } from "../../types/ImageWithEmbedded"
+import { ListParameters } from "./ListParameters"
 export interface ImageListParameters extends ListParameters<ImageEmbedded> {
     filter_clade?: UUID
     filter_contributor?: UUID

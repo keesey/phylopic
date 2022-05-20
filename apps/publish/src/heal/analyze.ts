@@ -11,9 +11,9 @@ import {
     ValidationFaultCollector,
 } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
-import nameMatches from "../cli/commands/utils/nameMatches.js"
-import precedes from "../cli/commands/utils/precedes.js"
-import { HealData } from "./getHealData.js"
+import nameMatches from "../cli/commands/utils/nameMatches"
+import precedes from "../cli/commands/utils/precedes"
+import { HealData } from "./getHealData"
 const findCanonicalUUID = (
     nodes: ReadonlyMap<UUID, Node>,
     externals: ReadonlyMap<string, TitledLink>,

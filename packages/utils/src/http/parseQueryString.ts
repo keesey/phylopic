@@ -1,4 +1,4 @@
-import { ParsedQuery } from "./Query.js"
+import { ParsedQuery } from "./Query"
 export const parseQueryString = <TQuery extends ParsedQuery = ParsedQuery>(query: string) =>
     query
         .split("&")

@@ -1,8 +1,8 @@
 import "dotenv/config"
 import pg from "pg"
-import getBuild from "./make/getBuild.js"
-import getSourceData from "./make/getSourceData.js"
-import insertEntities from "./make/insertEntities.js"
+import getBuild from "./make/getBuild"
+import getSourceData from "./make/getSourceData"
+import insertEntities from "./make/insertEntities"
 ;(async () => {
     try {
         const build = (await getBuild()) + 1

@@ -1,7 +1,7 @@
-import { stringifyNormalized } from "../../json/stringifyNormalized.js"
-import { stringifyNomen } from "../../nomina/stringifyNomen.js"
-import { Nomen } from "../types/Nomen.js"
-import normalizeNomen from "./normalizeNomen.js"
+import { stringifyNormalized } from "../../json/stringifyNormalized"
+import { stringifyNomen } from "../../nomina/stringifyNomen"
+import { Nomen } from "../types/Nomen"
+import normalizeNomen from "./normalizeNomen"
 const compare = (a: Nomen, b: Nomen) => {
     if (a === b) {
         return 0
@@ -61,14 +61,13 @@ export const normalizeNomina = (nomina: readonly Nomen[]) => {
     if (nomina.length <= 1) {
         return nomina
     }
-    return [
-        ...new Set<string>(
+    return Array.from(new Set<string>(
             nomina
                 .map(normalizeNomen)
                 .filter(nomen => nomen.length > 0 && nomen[0].text)
                 .map(stringifyNormalized),
         ),
-    ]
+    )
         .map(json => JSON.parse(json) as Nomen)
         .sort(createCanonicalNameComparator(nomina[0]))
 }

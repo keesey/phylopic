@@ -1,1 +1,1 @@
-export * from "./normalizeQuery.js"
+export * from "./normalizeQuery"

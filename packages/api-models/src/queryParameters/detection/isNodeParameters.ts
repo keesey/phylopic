@@ -1,4 +1,4 @@
-import { NODE_EMBEDDED_PARAMETERS } from "../constants/NODE_EMBEDDED_PARAMETERS.js"
-import isEntityParameters from "./isEntityParameters.js"
+import { NODE_EMBEDDED_PARAMETERS } from "../constants/NODE_EMBEDDED_PARAMETERS"
+import isEntityParameters from "./isEntityParameters"
 export const isNodeParameters = isEntityParameters(NODE_EMBEDDED_PARAMETERS)
 export default isNodeParameters

@@ -1,6 +1,6 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import isISOTimestamp from "./isISOTimestamp.js"
+import isISOTimestamp from "./isISOTimestamp"
 describe("isISOTimestamp", () => {
     const test = (value: unknown, expected: boolean) => {
         it(`should determine that ${JSON.stringify(value)} is${expected ? "" : " not"} an ISO timestamp.`, () => {

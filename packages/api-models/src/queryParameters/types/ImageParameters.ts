@@ -1,3 +1,3 @@
-import { ImageEmbedded } from "../../types/ImageWithEmbedded.js"
-import { EntityParameters } from "./EntityParameters.js"
+import { ImageEmbedded } from "../../types/ImageWithEmbedded"
+import { EntityParameters } from "./EntityParameters"
 export type ImageParameters = EntityParameters<ImageEmbedded>

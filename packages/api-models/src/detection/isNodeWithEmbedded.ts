@@ -1,9 +1,9 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
 import { isArray, isNullOr, isObject, isUndefinedOr } from "@phylopic/utils"
-import { NodeWithEmbedded } from "../types/NodeWithEmbedded.js"
-import { NodeEmbedded } from "../types/NodeWithEmbedded.js"
-import isImage from "./isImage.js"
-import isNode from "./isNode.js"
+import { NodeWithEmbedded } from "../types/NodeWithEmbedded"
+import { NodeEmbedded } from "../types/NodeWithEmbedded"
+import isImage from "./isImage"
+import isNode from "./isNode"
 const isNodeEmbedded = (x: unknown, faultCollector?: ValidationFaultCollector): x is NodeEmbedded =>
     isObject(x, faultCollector) &&
     isUndefinedOr(isArray(isNode))((x as NodeEmbedded).childNodes, faultCollector?.sub("childNodes")) &&

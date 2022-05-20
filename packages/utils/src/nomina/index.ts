@@ -1,3 +1,3 @@
-export * from "./isScientific.js"
-export * from "./shortenNomen.js"
-export * from "./stringifyNomen.js"
+export * from "./isScientific"
+export * from "./shortenNomen"
+export * from "./stringifyNomen"

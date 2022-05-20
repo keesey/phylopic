@@ -1,2 +1,2 @@
-import { ListParameters } from "./ListParameters.js"
+import { ListParameters } from "./ListParameters"
 export type ContributorListParameters = ListParameters<Record<string, never>>

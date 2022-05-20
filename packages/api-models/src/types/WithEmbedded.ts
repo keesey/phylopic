@@ -1,4 +1,4 @@
-import { Links } from "./Links.js"
+import { Links } from "./Links"
 export type WithEmbedded<
     TEntity extends { readonly _links: TLinks },
     TLinks extends Links,

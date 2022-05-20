@@ -1,14 +1,14 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Node 14",
-    "extends": "./base.json",
     "compilerOptions": {
-        "lib": ["es2020"],
-        "module": "commonjs",
-        "target": "es2020",
-        "strict": true,
         "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["ES2020"],
+        "module": "CommonJS",
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
-    }
+        "strict": true,
+        "target": "ES2020"
+    },
+    "display": "Node 14",
+    "extends": "./base.json"
 }

@@ -3,11 +3,11 @@ import { Contributor } from "@phylopic/source-models"
 import { chunk, compareStrings, LicenseURL, stringifyNormalized, UUID } from "@phylopic/utils"
 import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
-import { cleanTables } from "./cleanEntities.js"
-import getContributorJSON from "./getContributorJSON.js"
-import getImageJSON from "./getImageJSON.js"
-import getNodeJSON from "./getNodeJSON.js"
-import type { SourceData } from "./getSourceData.js"
+import { cleanTables } from "./cleanEntities"
+import getContributorJSON from "./getContributorJSON"
+import getImageJSON from "./getImageJSON"
+import getNodeJSON from "./getNodeJSON"
+import type { SourceData } from "./getSourceData"
 const MINIMUM_SEARCH_TEXT_LENGTH = 2
 interface NodeQueryConfigs {
     readonly externals: QueryConfig

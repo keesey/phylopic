@@ -2,10 +2,10 @@ import { TitledLink } from "@phylopic/api-models"
 import { Contributor, Image, isContributor, isImage, isNode, isSource, Node, Source } from "@phylopic/source-models"
 import { compareStrings, normalizeUUID, UUID } from "@phylopic/utils"
 import { Arc, Digraph } from "simple-digraph"
-import listDir from "../fsutils/listDir.js"
-import readJSON from "../fsutils/readJSON.js"
-import getPhylogeny from "../models/getPhylogeny.js"
-import SOURCE_PATH from "../paths/SOURCE_PATH.js"
+import listDir from "../fsutils/listDir"
+import readJSON from "../fsutils/readJSON"
+import getPhylogeny from "../models/getPhylogeny"
+import SOURCE_PATH from "../paths/SOURCE_PATH"
 export type SourceData = Readonly<{
     build: number
     contributors: ReadonlyMap<UUID, Contributor>

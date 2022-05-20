@@ -10,8 +10,8 @@ import {
     isPublicDomainLicenseURL,
     isUUID,
 } from "@phylopic/utils"
-import { Contribution } from "../types/Contribution.js"
-import isNodeIdentifier from "./isNodeIdentifier.js"
+import { Contribution } from "../types/Contribution"
+import isNodeIdentifier from "./isNodeIdentifier"
 export const isContribution = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contribution =>
     isObject(x, faultCollector) &&
     isNullOr(isNormalizedText)((x as Contribution).attribution, faultCollector?.sub("attribution")) &&

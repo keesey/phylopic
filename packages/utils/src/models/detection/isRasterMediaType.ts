@@ -1,7 +1,7 @@
-import invalidate from "../../validation/invalidate.js"
-import type ValidationFaultCollector from "../../validation/ValidationFaultCollector.js"
-import RASTER_MEDIA_TYPES from "../constants/RASTER_MEDIA_TYPES.js"
-import { RasterMediaType } from "../types/RasterMediaType.js"
+import invalidate from "../../validation/invalidate"
+import type ValidationFaultCollector from "../../validation/ValidationFaultCollector"
+import RASTER_MEDIA_TYPES from "../constants/RASTER_MEDIA_TYPES"
+import { RasterMediaType } from "../types/RasterMediaType"
 const VALIDATION_MESSAGE = `Expected one of the following raster image media types: ${[...RASTER_MEDIA_TYPES]
     .sort()
     .join(", ")}.`

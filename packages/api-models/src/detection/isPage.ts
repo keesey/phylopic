@@ -1,9 +1,9 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
 import { isArray, isNonnegativeInteger, isNormalizedText, isNullOr } from "@phylopic/utils"
-import { Page } from "../types/Page.js"
-import isData from "./isData.js"
-import isLink from "./isLink.js"
-import isLinks from "./isLinks.js"
+import { Page } from "../types/Page"
+import isData from "./isData"
+import isLink from "./isLink"
+import isLinks from "./isLinks"
 const isPageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Page["_links"] =>
     isLinks(x, faultCollector) &&
     isArray(isLink(isNormalizedText))((x as Page["_links"]).items, faultCollector?.sub("items")) &&

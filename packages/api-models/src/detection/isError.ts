@@ -7,8 +7,8 @@ import {
     isURL,
     ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Error } from "../types/Error.js"
-import isErrorType from "./isErrorType.js"
+import { Error } from "../types/Error"
+import isErrorType from "./isErrorType"
 export const isError = (x: unknown, faultCollector?: ValidationFaultCollector): x is Error =>
     isObject(x, faultCollector) &&
     (isString((x as Error).developerMessage) ||

@@ -1,1 +1,1 @@
-export * from "./normalizeArcs.js"
+export * from "./normalizeArcs"

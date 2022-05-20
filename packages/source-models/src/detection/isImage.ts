@@ -9,7 +9,7 @@ import {
     isPublicDomainLicenseURL,
     isUUID,
 } from "@phylopic/utils"
-import { Image } from "../types/Image.js"
+import { Image } from "../types/Image"
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isObject(x, faultCollector) &&
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&

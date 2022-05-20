@@ -1,1 +1,1 @@
-export * from "./canChange.js"
+export * from "./canChange"

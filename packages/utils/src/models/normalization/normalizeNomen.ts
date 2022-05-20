@@ -1,6 +1,6 @@
 import { NOMEN_PART_CLASSES } from "parse-nomen"
-import normalizeText from "../../normalization/normalizeText.js"
-import { Nomen } from "../types/Nomen.js"
+import normalizeText from "../../normalization/normalizeText"
+import { Nomen } from "../types/Nomen"
 export const normalizeNomen = (nomen: Nomen) =>
     nomen
         .map(part => ({

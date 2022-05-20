@@ -1,4 +1,4 @@
-import { HealData } from "./getHealData.js"
+import { HealData } from "./getHealData"
 const logActions = (data: Pick<HealData, "externalsToPut" | "imagesToPut" | "keysToDelete" | "nodesToPut">) => {
     const images = data.imagesToPut.size
     const deletions = data.keysToDelete.size

@@ -2,8 +2,8 @@ import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 import { TitledLink } from "@phylopic/api-models"
 import { Entity, Image, isImage, isNode, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { normalizeNomina, stringifyNomen, stringifyNormalized, UUID } from "@phylopic/utils"
-import { CLIData } from "../getCLIData.js"
-import { CommandResult } from "./CommandResult.js"
+import { CLIData } from "../getCLIData"
+import { CommandResult } from "./CommandResult"
 const merge = (cliData: CLIData, conserved: Entity<Node>, suppressed: Entity<Node>): CommandResult => {
     // Check if these already match.
     if (conserved.uuid === suppressed.uuid) {

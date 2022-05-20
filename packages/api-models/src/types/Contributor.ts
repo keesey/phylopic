@@ -1,7 +1,7 @@
 import { UUID } from "@phylopic/utils"
-import { Entity } from "./Entity.js"
-import { Link } from "./Link.js"
-import { Links } from "./Links.js"
+import { Entity } from "./Entity"
+import { Link } from "./Link"
+import { Links } from "./Links"
 export interface ContributorLinks extends Links {
     readonly contact: Link | null
     readonly images: Link

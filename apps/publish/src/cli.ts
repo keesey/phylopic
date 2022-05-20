@@ -1,8 +1,8 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import "dotenv/config"
 import * as readline from "readline"
-import getCLIData, { CLIData } from "./cli/getCLIData.js"
-import parseCommand, { QUIT } from "./cli/parseCommand.js"
+import getCLIData, { CLIData } from "./cli/getCLIData"
+import parseCommand, { QUIT } from "./cli/parseCommand"
 const takeCommands = (client: S3Client, data: CLIData) =>
     new Promise<void>(resolve => {
         const rl = readline.createInterface({

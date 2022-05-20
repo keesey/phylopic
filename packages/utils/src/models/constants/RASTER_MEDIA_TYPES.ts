@@ -1,4 +1,4 @@
-import { RasterMediaType } from "../types/RasterMediaType.js"
+import { RasterMediaType } from "../types/RasterMediaType"
 export const RASTER_MEDIA_TYPES: ReadonlySet<RasterMediaType> = new Set([
     "image/bmp",
     "image/gif",

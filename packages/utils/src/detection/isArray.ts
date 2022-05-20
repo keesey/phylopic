@@ -1,5 +1,5 @@
-import invalidate from "../validation/invalidate.js"
-import { FaultDetector } from "./FaultDetector.js"
+import invalidate from "../validation/invalidate"
+import { FaultDetector } from "./FaultDetector"
 export const isArray =
     <T>(isType: FaultDetector<T>): FaultDetector<readonly T[]> =>
     (x, faultCollector): x is readonly T[] =>

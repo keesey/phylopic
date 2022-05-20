@@ -1,1 +1,1 @@
-export * from "./compareStrings.js"
+export * from "./compareStrings"

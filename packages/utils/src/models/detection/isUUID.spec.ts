@@ -1,6 +1,6 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import { isUUID } from "./isUUID.js"
+import { isUUID } from "./isUUID"
 describe("isUUID", () => {
     const test = (value: unknown, expected: boolean) => {
         it(`should determine that ${JSON.stringify(value)} is${

@@ -1,7 +1,7 @@
 import { GetObjectCommand, GetObjectCommandInput, GetObjectCommandOutput, S3Client } from "@aws-sdk/client-s3"
 import { FaultDetector, ValidationFaultCollector } from "@phylopic/utils"
 import { Readable } from "stream"
-import streamToString from "./streamToString.js"
+import streamToString from "./streamToString"
 export const getJSON = async <T>(client: S3Client, input: GetObjectCommandInput, detect?: FaultDetector<T>) => {
     const command = new GetObjectCommand(input)
     const output = await client.send(command)

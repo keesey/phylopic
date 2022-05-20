@@ -1,2 +1,2 @@
-export type { AWSError } from "./AWSError.js"
-export * from "./isAWSError.js"
+export type { AWSError } from "./AWSError"
+export * from "./isAWSError"

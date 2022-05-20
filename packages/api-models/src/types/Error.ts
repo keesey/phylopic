@@ -1,4 +1,4 @@
-import { ErrorType } from "./ErrorType.js"
+import { ErrorType } from "./ErrorType"
 export interface Error {
     readonly developerMessage: string
     readonly documentation?: URL

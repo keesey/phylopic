@@ -1,5 +1,5 @@
-import { Page, PageLinks } from "./Page.js"
-import { WithEmbedded } from "./WithEmbedded.js"
+import { Page, PageLinks } from "./Page"
+import { WithEmbedded } from "./WithEmbedded"
 export interface PageEmbedded<TItem> {
     readonly items: readonly TItem[]
 }

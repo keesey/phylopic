@@ -2,7 +2,7 @@ import { Link, Node, TitledLink } from "@phylopic/api-models"
 import { Entity, Image } from "@phylopic/source-models"
 import { isDefined, isString, UUID } from "@phylopic/utils"
 import { immediateSuccessors } from "simple-digraph"
-import type { SourceData } from "./getSourceData.js"
+import type { SourceData } from "./getSourceData"
 const getChildNodes = (vertex: number, data: SourceData): readonly Link[] => {
     const childVertices = immediateSuccessors(data.phylogeny, new Set([vertex]))
     return [...childVertices]

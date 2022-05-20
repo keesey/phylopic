@@ -1,4 +1,4 @@
-import { ValidationFault } from "./ValidationFault.js"
+import { ValidationFault } from "./ValidationFault"
 export class ValidationFaultCollector {
     constructor(private fields: readonly string[] = [], private faults: ValidationFault[] = []) {}
     public add(message: string) {

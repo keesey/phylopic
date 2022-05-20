@@ -1,1 +1,1 @@
-export * from "./chunk.js"
+export * from "./chunk"

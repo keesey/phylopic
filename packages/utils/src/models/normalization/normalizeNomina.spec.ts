@@ -1,7 +1,7 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import { Nomen } from "../types/Nomen.js"
-import normalizeNomina from "./normalizeNomina.js"
+import { Nomen } from "../types/Nomen"
+import normalizeNomina from "./normalizeNomina"
 const HOMO_SAPIENS: Nomen = [
     {
         class: "scientific",

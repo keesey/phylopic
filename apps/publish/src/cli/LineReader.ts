@@ -11,8 +11,8 @@ import {
 } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { v4, version } from "uuid"
-import nameMatches from "./commands/utils/nameMatches.js"
-import { CLIData } from "./getCLIData.js"
+import nameMatches from "./commands/utils/nameMatches"
+import { CLIData } from "./getCLIData"
 export default class LineReader {
     private index = 0
     private readonly parts: readonly string[]

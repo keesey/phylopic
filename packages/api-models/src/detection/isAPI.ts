@@ -1,9 +1,9 @@
 import { isArray, isISOTimestamp, isNormalizedText, isURL, ValidationFaultCollector } from "@phylopic/utils"
-import { API } from "../types/API.js"
-import isData from "./isData.js"
-import isLink from "./isLink.js"
-import isLinks from "./isLinks.js"
-import isTitledLink from "./isTitledLink.js"
+import { API } from "../types/API"
+import isData from "./isData"
+import isLink from "./isLink"
+import isLinks from "./isLinks"
+import isTitledLink from "./isTitledLink"
 const isAPILinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is API["_links"] =>
     isLinks(x, faultCollector) &&
     isTitledLink(isNormalizedText)((x as API["_links"]).contact, faultCollector?.sub("contact")) &&

@@ -1,4 +1,4 @@
-import { LicenseURL } from "../types/LicenseURL.js"
+import { LicenseURL } from "../types/LicenseURL"
 export const LICENSE_NAMES: Readonly<Record<LicenseURL, string>> = {
     "https://creativecommons.org/licenses/by-nc-sa/3.0/": "Attribution-NonCommercial-ShareAlike 3.0 Unported",
     "https://creativecommons.org/licenses/by-nc/3.0/": "Attribution-NonCommercial 3.0 Unported",

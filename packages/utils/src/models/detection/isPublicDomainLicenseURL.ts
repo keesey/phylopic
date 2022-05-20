@@ -1,7 +1,7 @@
-import invalidate from "../../validation/invalidate.js"
-import type ValidationFaultCollector from "../../validation/ValidationFaultCollector.js"
-import PUBLIC_DOMAIN_LICENSE_URLS from "../constants/PUBLIC_DOMAIN_LICENSE_URLS.js"
-import { PublicDomainLicenseURL } from "../types/PublicDomainLicenseURL.js"
+import invalidate from "../../validation/invalidate"
+import type ValidationFaultCollector from "../../validation/ValidationFaultCollector"
+import PUBLIC_DOMAIN_LICENSE_URLS from "../constants/PUBLIC_DOMAIN_LICENSE_URLS"
+import { PublicDomainLicenseURL } from "../types/PublicDomainLicenseURL"
 const VALIDATION_MESSAGE = `Expected one of the following public domain license URLs: ${[...PUBLIC_DOMAIN_LICENSE_URLS]
     .sort()
     .join(", ")}.`

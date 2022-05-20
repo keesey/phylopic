@@ -1,8 +1,8 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
 import { FaultDetector, ImageMediaType } from "@phylopic/utils"
-import { MediaLink } from "../types/MediaLink.js"
-import isLink from "./isLink.js"
-import isSizes from "./isSizes.js"
+import { MediaLink } from "../types/MediaLink"
+import isLink from "./isLink"
+import isSizes from "./isSizes"
 export const isMediaLink =
     <THRef extends string, TType extends ImageMediaType>(
         isHRef: FaultDetector<THRef>,

@@ -1,7 +1,7 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import { UUID } from "../types/UUID.js"
-import { normalizeUUID } from "./normalizeUUID.js"
+import { UUID } from "../types/UUID"
+import { normalizeUUID } from "./normalizeUUID"
 describe("normalizeUUID", () => {
     const test = (value: UUID, expected: UUID) => {
         it(`should convert ${JSON.stringify(value)} to ${JSON.stringify(expected)}`, () => {

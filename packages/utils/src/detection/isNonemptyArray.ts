@@ -1,6 +1,6 @@
-import invalidate from "../validation/invalidate.js"
-import type ValidationFaultCollector from "../validation/ValidationFaultCollector.js"
-import isArray from "./isArray.js"
+import invalidate from "../validation/invalidate"
+import type ValidationFaultCollector from "../validation/ValidationFaultCollector"
+import isArray from "./isArray"
 export const isNonemptyArray =
     <T>(isType: (x: unknown, faultCollector?: ValidationFaultCollector) => x is T) =>
     (x: unknown, faultCollector?: ValidationFaultCollector): x is readonly T[] =>

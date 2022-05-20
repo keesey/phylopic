@@ -1,8 +1,8 @@
 import { Nomen } from "@phylopic/utils"
-import { Entity } from "./Entity.js"
-import { Link } from "./Link.js"
-import { Links } from "./Links.js"
-import { TitledLink } from "./TitledLink.js"
+import { Entity } from "./Entity"
+import { Link } from "./Link"
+import { Links } from "./Links"
+import { TitledLink } from "./TitledLink"
 export interface NodeLinks extends Links {
     readonly childNodes: readonly Link[]
     readonly cladeImages: Link | null

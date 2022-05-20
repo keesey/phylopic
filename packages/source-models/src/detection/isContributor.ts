@@ -1,6 +1,6 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
 import { invalidate, isEmailAddress, isISOTimestamp, isNormalizedText, isNullOr, isObject } from "@phylopic/utils"
-import { Contributor } from "../types/Contributor.js"
+import { Contributor } from "../types/Contributor"
 export const isContributor = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contributor =>
     isObject(x, faultCollector) &&
     isISOTimestamp((x as Contributor).created, faultCollector?.sub("created")) &&
