@@ -1,10 +1,10 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { Entity, isNode, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { Nomen, normalizeNomina, stringifyNormalized, UUID } from "@phylopic/utils"
-import { CLIData } from "../getCLIData"
-import { CommandResult } from "./CommandResult"
-import checkNewUUID from "./utils/checkNewUUID"
-import putToMap from "./utils/putToMap"
+import { CLIData } from "../getCLIData.js"
+import { CommandResult } from "./CommandResult.js"
+import checkNewUUID from "./utils/checkNewUUID.js"
+import putToMap from "./utils/putToMap.js"
 const spawn = (
     cliData: CLIData,
     original: Entity<Node>,

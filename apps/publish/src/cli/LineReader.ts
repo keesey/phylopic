@@ -11,8 +11,8 @@ import {
 } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { v4, version } from "uuid"
-import nameMatches from "./commands/utils/nameMatches"
-import { CLIData } from "./getCLIData"
+import nameMatches from "./commands/utils/nameMatches.js"
+import { CLIData } from "./getCLIData.js"
 export default class LineReader {
     private index = 0
     private readonly parts: readonly string[]
@@ -24,7 +24,7 @@ export default class LineReader {
                 if (index % 2 === 0) {
                     return [...prev, ...current.trim().split(/\s+/g)]
                 }
-                return [...prev, `"${current.trim().replaceAll(/\s+/g, " ")}"`]
+                return [...prev, `"${current.trim().replace(/\s+/g, " ")}"`]
             }, [])
             .filter(Boolean)
     }

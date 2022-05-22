@@ -3,8 +3,8 @@ import { isImageMediaType, normalizeUUID, RasterMediaType, UUID, VectorMediaType
 import { createReadStream } from "fs"
 import { join } from "path"
 import probeImageSize from "probe-image-size"
-import listDir from "../fsutils/listDir"
-import type { SourceData } from "./getSourceData"
+import listDir from "../fsutils/listDir.js"
+import type { SourceData } from "./getSourceData.js"
 
 const IMAGES_URL_BASE = "http://images.phylopic.org/images/"
 const getNodes = (uuid: string, data: SourceData): readonly Link[] => {

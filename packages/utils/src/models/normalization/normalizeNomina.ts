@@ -61,7 +61,8 @@ export const normalizeNomina = (nomina: readonly Nomen[]) => {
     if (nomina.length <= 1) {
         return nomina
     }
-    return Array.from(new Set<string>(
+    return Array.from(
+        new Set<string>(
             nomina
                 .map(normalizeNomen)
                 .filter(nomen => nomen.length > 0 && nomen[0].text)

@@ -1,8 +1,8 @@
 import { Entity, Node } from "@phylopic/source-models"
-import { CLIData } from "../getCLIData"
-import autolinkEOL from "./autolink/eol"
-import autolinkOTOL from "./autolink/otol"
-import { CommandResult } from "./CommandResult"
+import { CLIData } from "../getCLIData.js"
+import autolinkEOL from "./autolink/eol.js"
+import autolinkOTOL from "./autolink/otol.js"
+import { CommandResult } from "./CommandResult.js"
 const autolink = (cliData: CLIData, source: "eol" | "otol", root: Entity<Node>): Promise<CommandResult> => {
     switch (source) {
         case "eol":

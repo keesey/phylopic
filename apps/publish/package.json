@@ -22,6 +22,7 @@
     },
     "devDependencies": {
         "@phylopic/tsconfig": "*",
+        "@types/probe-image-size": "^7.0.1",
         "eslint-config-phylopic": "*",
         "typescript": "^4.6.4"
     },
