@@ -45,6 +45,13 @@
     ],
     "license": "MIT",
     "main": "./dist/index.js",
+    "mocha": {
+        "extension": [
+            "ts"
+        ],
+        "loader": "ts-node/esm",
+        "spec": "src/**/*.spec.ts"
+    },
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-aws",
     "publishConfig": {
@@ -59,10 +66,9 @@
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix",
-        "test": "mocha -r ts-node/register \"./src/**/*.spec.ts\""
+        "test": "mocha"
     },
     "sideEffects": false,
-    "type": "module",
     "types": "./dist/index.d.ts",
     "version": "0.0.0"
 }

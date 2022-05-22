@@ -1,4 +1,4 @@
-import isKey from "./isKey"
+import isKey from "./isKey.js"
 const getParameters = <T>(
     parameters: { [name: string]: string | undefined } | null,
     names: ReadonlyArray<string & keyof T>,

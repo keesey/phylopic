@@ -1,8 +1,8 @@
 import { DATA_MEDIA_TYPE } from "@phylopic/api-models"
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import APIError from "../errors/APIError"
-import checkAccept from "./checkAccept"
+import APIError from "../errors/APIError.js"
+import checkAccept from "./checkAccept.js"
 const test = (accept: string, expectError: boolean) => {
     let error: APIError | null = null
     try {
