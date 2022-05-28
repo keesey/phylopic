@@ -43,6 +43,7 @@
     "name": "@phylopic/api",
     "private": true,
     "scripts": {
+        "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf node_modules",
         "deploy": "sls deploy",
         "dev": "sls offline --httpPort 3003",
         "lint": "eslint --ext .js,.ts . --fix"
