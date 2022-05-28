@@ -29,6 +29,7 @@
     "name": "@phylopic/publish",
     "private": true,
     "scripts": {
+        "clean": "rm -rf .turbo && rm -rf node_modules",
         "cli": "ts-node --esm ./src/cli.ts",
         "download": "concurrently \"yarn download:images\" \"yarn download:source\"",
         "download:images": "aws s3 sync --delete s3://images.phylopic.org/ ./.s3/images.phylopic.org && find .s3/images.phylopic.org -type d -empty -delete",

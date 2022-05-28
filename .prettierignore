@@ -1,4 +1,7 @@
 .next
 .s3
+.scratch
+.serverless
+.webpack
 dist
 node_modules

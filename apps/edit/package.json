@@ -40,7 +40,7 @@
     },
     "private": true,
     "scripts": {
-        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
+        "clean": "rm -rf .next && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3001",
         "lint": "TIMING=1 next lint"
     },
