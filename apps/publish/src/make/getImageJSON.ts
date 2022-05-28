@@ -6,7 +6,7 @@ import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir.js"
 import type { SourceData } from "./getSourceData.js"
 
-const IMAGES_URL_BASE = "http://images.phylopic.org/images/"
+const IMAGES_URL_BASE = "https://images.phylopic.org/images/"
 const getNodes = (uuid: string, data: SourceData): readonly Link[] => {
     const nodeUUIDs = data.illustration.get(uuid)
     if (!nodeUUIDs) {
