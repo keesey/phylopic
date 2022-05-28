@@ -35,7 +35,7 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
     try {
         body = await selectEntityJSON(client, "contributor", normalizedUUID, "contributor")
     } finally {
-        await  service.deletePgClient(client)
+        await service.deletePgClient(client)
     }
     return {
         body,

@@ -45,8 +45,7 @@
     "scripts": {
         "deploy": "sls deploy",
         "dev": "sls offline --httpPort 3003",
-        "lint": "eslint --ext .js,.ts . --fix",
-        "test": "mocha"
+        "lint": "eslint --ext .js,.ts . --fix"
     },
     "version": "0.0.0"
 }
