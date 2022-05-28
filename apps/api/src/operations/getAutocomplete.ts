@@ -10,16 +10,16 @@ import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import MAX_AUTOCOMPLETE_RESULTS from "../search/MAX_AUTOCOMPLETE_RESULTS"
 import normalizeSearchQuery from "../search/normalizeSearchQuery"
-import { PoolClientService } from "../services/PoolClientService"
+import { PgClientService } from "../services/PgClientService"
 import { Operation } from "./Operation"
 type GetAutocompleteParameters = DataRequestHeaders & Partial<SearchParameters>
-type GetAutocompleteService = PoolClientService
-const findMatches = async (service: PoolClientService, query: string): Promise<readonly string[]> => {
+type GetAutocompleteService = PgClientService
+const findMatches = async (service: PgClientService, query: string): Promise<readonly string[]> => {
     if (query.length < 2) {
         return []
     }
     let result: readonly string[]
-    const client = await service.getPoolClient()
+    const client = await service.createPgClient()
     try {
         const queryResult = await client.query<{ normalized: string; from_start: boolean }>(
             `SELECT normalized,normalized LIKE $1::character varying AS from_start FROM node_name WHERE build=$2::bigint AND normalized LIKE $3::character varying GROUP BY normalized,from_start ORDER BY from_start DESC,normalized LIMIT ${MAX_AUTOCOMPLETE_RESULTS}`,
@@ -27,7 +27,7 @@ const findMatches = async (service: PoolClientService, query: string): Promise<r
         )
         result = queryResult.rows.map(({ normalized }) => normalized)
     } finally {
-        client.release()
+        await service.deletePgClient(client)
     }
     return result
 }

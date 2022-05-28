@@ -18,7 +18,7 @@
         "probe-image-size": "^7.2.3",
         "readline": "^1.3.0",
         "simple-digraph": "^1.0.1",
-        "ts-node": "^10.7.0"
+        "ts-node": "^10.8.0"
     },
     "devDependencies": {
         "@phylopic/tsconfig": "*",

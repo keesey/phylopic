@@ -1,4 +1,4 @@
-import APIError from "../errors/APIError.js"
+import APIError from "../errors/APIError"
 const checkAccept = (accept: string | undefined, mediaType: string) => {
     if (typeof accept !== "string") {
         // No Accept header.

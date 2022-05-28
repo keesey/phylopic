@@ -14,12 +14,12 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
-import { PoolClientService } from "../services/PoolClientService"
+import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetContributorsParameters = DataRequestHeaders & ContributorListParameters
-export type GetContributorsService = PoolClientService
+export type GetContributorsService = PgClientService
 const ITEMS_PER_PAGE = 96
 const USER_MESSAGE = "There was a problem with a request to list contributors."
 const getTotalItems = async (client: ClientBase) => {

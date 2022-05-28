@@ -8,7 +8,7 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import { PoolClientService } from "../services/PoolClientService"
+import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
@@ -16,9 +16,9 @@ export type GetResolveObjectsParameters = DataRequestHeaders &
     Partial<Omit<ResolveParameters, "objectID">> & {
         readonly body?: string
     }
-export type GetResolveObjectsService = PoolClientService
+export type GetResolveObjectsService = PgClientService
 const getRedirect = async (
-    service: PoolClientService,
+    service: PgClientService,
     authority: Authority | undefined,
     namespace: Namespace | undefined,
     objectIDs: ObjectID[],
@@ -44,7 +44,7 @@ const getRedirect = async (
             },
         ])
     }
-    const client = await service.getPoolClient()
+    const client = await service.createPgClient()
     let link: TitledLink
     try {
         const result = await client.query<{ node_uuid: UUID; title: string | null }>(
@@ -66,7 +66,7 @@ const getRedirect = async (
             title: result.rows[0].title ?? "",
         }
     } finally {
-        client.release()
+        await service.deletePgClient(client)
     }
     return link
 }

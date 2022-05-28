@@ -20,12 +20,12 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
-import { PoolClientService } from "../services/PoolClientService"
+import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetImagesParameters = DataRequestHeaders & ImageListParameters
-export type GetImagesService = PoolClientService
+export type GetImagesService = PgClientService
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list silhouette images."
 const getQueryBuilder = (parameters: ImageListParameters, results: "total" | "uuid" | "json") => {

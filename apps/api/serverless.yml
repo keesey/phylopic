@@ -106,11 +106,11 @@ functions:
         memorySize: 1024
         timeout: 30
         environment:
+            PGDATABASE: "${ssm:PGDATABASE}"
             PGHOST: "${ssm:PGHOST}"
+            PGPASSWORD: "${ssm:PGPASSWORD}"
             PGPORT: "${ssm:PGPORT}"
             PGUSER: "${ssm:PGUSER}"
-            PGPASSWORD: "${ssm:PGPASSWORD}"
-            PGDATABASE: "${ssm:PGDATABASE}"
             PHYLOPIC_BUILD: "${ssm:PHYLOPIC_BUILD}"
         events:
             - http:

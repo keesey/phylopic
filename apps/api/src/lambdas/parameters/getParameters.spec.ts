@@ -1,6 +1,6 @@
 import { expect } from "chai"
 import { describe, it } from "mocha"
-import getParameters from "./getParameters.js"
+import getParameters from "./getParameters"
 const test =
     <T>(params: { [name: string]: string }, names: ReadonlyArray<Lowercase<string> & keyof T>, expected: Partial<T>) =>
     () => {

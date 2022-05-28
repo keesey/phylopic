@@ -5,7 +5,7 @@ import { ClientBase } from "pg"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
-import { PoolClientService } from "../services/PoolClientService"
+import { PgClientService } from "../services/PgClientService"
 import getListObject from "./getListObject"
 import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
@@ -23,7 +23,7 @@ export interface Parameters<TEmbedded = Record<string, never>> {
     listPath: string
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>
     page?: string
-    service: PoolClientService
+    service: PgClientService
     userMessage?: string
     validEmbeds: ReadonlyArray<string & keyof TEmbedded>
 }
@@ -45,7 +45,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
 }: Parameters<TEmbedded>) => {
     let result: APIGatewayProxyResult
     if (!page) {
-        const client = await service.getPoolClient()
+        const client = await service.createPgClient()
         try {
             const totalItems = await getTotalItems(client)
             result = {
@@ -53,7 +53,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 body: stringifyNormalized(getListObject(listPath, listQuery, totalItems, itemsPerPage)),
             }
         } finally {
-            client.release()
+            await service.deletePgClient(client)
         }
     } else {
         const pageIndex = getPageIndex(page)
@@ -77,7 +77,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 .filter(key => key.startsWith("embed_"))
                 .map(key => key.slice("embed_".length))
                 .filter(isValidEmbed)
-            const client = await service.getPoolClient()
+            const client = await service.createPgClient()
             try {
                 const rawItems = await getItemLinksAndJSON(client, pageIndex * itemsPerPage, itemsPerPage + 1, embeds)
                 if (rawItems.length === 0) {
@@ -99,10 +99,10 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                     ),
                 }
             } finally {
-                client.release()
+                await service.deletePgClient(client)
             }
         } else {
-            const client = await service.getPoolClient()
+            const client = await service.createPgClient()
             try {
                 const rawItemLinks = await getItemLinks(client, pageIndex * itemsPerPage, itemsPerPage + 1)
                 if (rawItemLinks.length === 0) {
@@ -115,7 +115,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                     body: stringifyNormalized(getPageObject(listPath, listQuery, pageIndex, lastPage, itemLinks)),
                 }
             } finally {
-                client.release()
+                await service.deletePgClient(client)
             }
         }
     }

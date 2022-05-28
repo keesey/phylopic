@@ -1,11 +1,11 @@
 import { TitledLink } from "@phylopic/api-models"
 import { Authority, createSearch, Namespace, ObjectID, Query, UUID } from "@phylopic/utils"
-import { PoolClient } from "pg"
+import { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 const getExternalLink = async (
-    client: PoolClient,
+    client: ClientBase,
     authority: Authority,
     namespace: Namespace,
     objectID: ObjectID,

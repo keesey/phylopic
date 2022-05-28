@@ -18,11 +18,11 @@ import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
-import { PoolClientService } from "../services/PoolClientService"
+import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetImageParameters = DataRequestHeaders & Partial<EntityParameters<ImageEmbedded>>
-export type GetImageService = PoolClientService
+export type GetImageService = PgClientService
 const USER_MESSAGE = "There was a problem with an attempt to load silhouette data."
 const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParameters<ImageEmbedded> =>
     IMAGE_EMBEDDED_PARAMETERS.includes(x as any)
@@ -45,7 +45,7 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
     const embeds = Object.keys(queryParameters)
         .filter(isEmbeddedParameter)
         .map(key => key.slice("embed_".length) as string & keyof ImageEmbedded)
-    const client = await service.getPoolClient()
+    const client = await service.createPgClient()
     let body: string
     try {
         body = await selectEntityJSONWithEmbedded<Image, ImageLinks>(
@@ -57,7 +57,7 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
             "silhouette image",
         )
     } finally {
-        client.release()
+        await service.deletePgClient(client)
     }
     return {
         body,

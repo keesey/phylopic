@@ -3,7 +3,7 @@ import {
     ImageListParameters,
     IMAGE_EMBEDDED_PARAMETERS,
     NodeListParameters,
-    NODE_EMBEDDED_PARAMETERS,
+    NODE_EMBEDDED_PARAMETERS
 } from "@phylopic/api-models"
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
 import APIError from "../errors/APIError"
@@ -21,17 +21,12 @@ import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
 import getResolveObjects from "../operations/getResolveObjects"
-import { PoolClientService } from "../services/PoolClientService"
-import { S3Service } from "../services/S3Service"
+import { PgClientService } from "../services/PgClientService"
 import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
 import getUUID from "./parameters/getUUID"
-import POOL_CLIENT_SERVICE from "./services/POOL_CLIENT_SERVICE"
-import S3_SERVICE from "./services/S3_SERVICE"
-const SERVICE: PoolClientService & S3Service = {
-    ...POOL_CLIENT_SERVICE,
-    ...S3_SERVICE,
-}
+import PG_CLIENT_SERVICE from "./services/PG_CLIENT_SERVICE"
+const SERVICE: PgClientService = PG_CLIENT_SERVICE
 const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["filter_name"]
 const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [
     "filter_clade",

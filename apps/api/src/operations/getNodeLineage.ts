@@ -20,12 +20,12 @@ import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult from "../pagination/getListResult"
 import createPermanentRedirect from "../results/createPermanentRedirect"
-import { PoolClientService } from "../services/PoolClientService"
+import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetNodesParameters = DataRequestHeaders & NodeLineageParameters
-export type GetNodesService = PoolClientService
+export type GetNodesService = PgClientService
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list taxonomic groups."
 const getQueryBuilder = (uuid: UUID, results: "total" | "uuid" | "json") => {

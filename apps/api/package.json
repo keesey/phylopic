@@ -7,7 +7,6 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.82.0",
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
         "aws-lambda": "^1.0.7",
@@ -17,14 +16,21 @@
     "description": "Application Programming Interface for PhyloPic",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
+        "@types/aws-lambda": "^8.10.97",
         "@types/chai": "^4.3.1",
         "@types/mocha": "^9.1.1",
         "@types/pg": "^8.6.5",
         "chai": "^4.3.6",
         "eslint-config-phylopic": "*",
+        "fork-ts-checker-webpack-plugin": "^7.2.11",
         "mocha": "^10.0.0",
-        "ts-node": "^10.7.0",
-        "typescript": "^4.6.4"
+        "serverless": "^3.18.1",
+        "serverless-offline": "^8.8.0",
+        "serverless-webpack": "^5.7.1",
+        "ts-loader": "^9.3.0",
+        "ts-node": "^10.8.0",
+        "typescript": "^4.6.4",
+        "webpack": "^5.72.1"
     },
     "license": "MIT",
     "mocha": {
@@ -42,6 +48,5 @@
         "lint": "eslint --ext .js,.ts . --fix",
         "test": "mocha"
     },
-    "type": "module",
     "version": "0.0.0"
 }

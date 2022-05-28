@@ -18,11 +18,11 @@ import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
-import { PoolClientService } from "../services/PoolClientService"
+import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
-export type GetNodeService = PoolClientService
+export type GetNodeService = PgClientService
 const USER_MESSAGE = "There was a problem with an attempt to load taxonomic data."
 const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParameters<NodeEmbedded> =>
     NODE_EMBEDDED_PARAMETERS.includes(x as any)
@@ -45,7 +45,7 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
     const embeds = Object.keys(queryParameters)
         .filter(isEmbeddedParameter)
         .map(key => key.slice("embed_".length) as string & keyof NodeEmbedded)
-    const client = await service.getPoolClient()
+    const client = await service.createPgClient()
     let body: string
     try {
         body = await selectEntityJSONWithEmbedded<Node, NodeLinks>(
@@ -57,7 +57,7 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
             "taxonomic group",
         )
     } finally {
-        client.release()
+        await service.deletePgClient(client)
     }
     return {
         body,
