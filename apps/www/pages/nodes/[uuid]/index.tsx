@@ -7,7 +7,15 @@ import {
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"
-import { createSearch, extractPath, isDefined, isUUIDv4, Query } from "@phylopic/utils"
+import {
+    createSearch,
+    extractPath,
+    extractQueryString,
+    isDefined,
+    isUUIDv4,
+    parseQueryString,
+    Query,
+} from "@phylopic/utils"
 import type { GetStaticProps, NextPage } from "next"
 import React, { useMemo } from "react"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -24,6 +32,7 @@ import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import LicenseQualifier from "~/licenses/LicenseQualifier"
 import PageHead from "~/metadata/PageHead"
 import getShortNomen from "~/models/getShortNomen"
+import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
@@ -84,7 +93,11 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                                       defaultText="Parent Node"
                                                                   />
                                                               ),
-                                                              href: extractPath(node._links.parentNode.href),
+                                                              href:
+                                                                  node._embedded.parentNode &&
+                                                                  nodeHasOwnCladeImages(node._embedded.parentNode)
+                                                                      ? extractPath(node._links.parentNode.href)
+                                                                      : undefined,
                                                           }
                                                         : null,
                                                     {
@@ -199,10 +212,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         embed_primaryImage: "true",
     } as NodeParameters & Query
     const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + createSearch(nodeQuery)
-    const imagesQuery = { filter_clade: uuid } as ImageListParameters & Query
-    const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
     const nodeResultPromise = fetchResult<NodeWithEmbedded>(nodeKey)
-    const imagesResponsePromise = fetchData<List>(imagesKey)
     const nodeResult = await nodeResultPromise
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
@@ -215,12 +225,25 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             },
         }
     }
+    const cladeImagesUUID =
+        parseQueryString(extractQueryString(nodeResult.data._links.cladeImages?.href ?? "")).filter_clade ?? uuid
+    if (cladeImagesUUID !== uuid) {
+        return {
+            redirect: {
+                destination: "/nodes/" + cladeImagesUUID,
+                permanent: false,
+            },
+        }
+    }
     const build = nodeResult.data.build
     const props: Props = {
         build,
         fallback: { [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data },
         uuid,
     }
+    const imagesQuery = { filter_clade: cladeImagesUUID } as ImageListParameters & Query
+    const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
+    const imagesResponsePromise = fetchData<List>(imagesKey)
     const imagesResponse = await imagesResponsePromise
     if (imagesResponse.ok) {
         props.fallback[unstable_serialize(addBuildToURL(imagesKey, build))] = imagesResponse.data

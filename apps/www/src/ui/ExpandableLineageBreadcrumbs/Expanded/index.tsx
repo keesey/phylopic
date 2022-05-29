@@ -1,5 +1,6 @@
 import { Node } from "@phylopic/api-models"
-import { useMemo, FC } from "react"
+import { FC, useMemo } from "react"
+import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import NomenView from "~/views/NomenView"
 import Breadcrumbs, { BreadcrumbItem } from "../../Breadcrumbs"
 export interface Props {
@@ -11,9 +12,9 @@ const Expanded: FC<Props> = ({ afterItems, beforeItems, values }) => {
     const valueItems = useMemo<readonly BreadcrumbItem[]>(
         () =>
             values.length > 0
-                ? [...values].reverse().map(({ names, uuid }) => ({
-                      children: <NomenView value={names[0]} short />,
-                      href: `/nodes/${uuid}`,
+                ? [...values].reverse().map(node => ({
+                      children: <NomenView value={node.names[0]} short />,
+                      href: nodeHasOwnCladeImages(node) ? `/nodes/${node.uuid}` : undefined,
                   }))
                 : [
                       {
