@@ -1,7 +1,7 @@
 import { Link, Node, TitledLink } from "@phylopic/api-models"
 import { Entity, Image } from "@phylopic/source-models"
 import { isDefined, isString, UUID } from "@phylopic/utils"
-import { immediateSuccessors } from "simple-digraph"
+import { difference, immediateSuccessors, successorUnion } from "simple-digraph"
 import type { SourceData } from "./getSourceData.js"
 const getChildNodes = (vertex: number, data: SourceData): readonly Link[] => {
     const childVertices = immediateSuccessors(data.phylogeny, new Set([vertex]))
@@ -102,29 +102,48 @@ const getExternal = (uuid: UUID, data: SourceData) => {
                 } as TitledLink),
         )
 }
-const hasImages = (nodeUUID: UUID, data: SourceData): boolean => {
-    return Array.from(data.images.keys()).some(imageUUID => data.illustration.get(imageUUID)?.includes(nodeUUID))
-}
-const getCladeImagesUUID = (uuid: UUID, data: SourceData): UUID => {
-    if (hasImages(uuid, data)) {
-        return uuid
-    }
-    const vertex = data.nodeUUIDsToVertices.get(uuid)
+const getCladeImageUUIDs = (nodeUUID: UUID, data: SourceData): ReadonlySet<UUID> => {
+    const vertex = data.nodeUUIDsToVertices.get(nodeUUID)
     if (!vertex) {
-        // Fail gracefully
-        return uuid
+        throw new Error("Cannot find vertex for UUID: " + nodeUUID)
+    }
+    const clade = successorUnion(data.phylogeny, new Set([vertex]))
+    const result = new Set<UUID>()
+    const imageUUIDs = Array.from(data.images.keys())
+    for (const cladeVertex of clade) {
+        const cladeUUID = data.verticesToNodeUUIDs.get(cladeVertex)
+        if (!cladeUUID) {
+            throw new Error("Cannot find UUID for vertex: " + cladeVertex)
+        }
+        imageUUIDs
+            .filter(imageUUID => data.illustration.get(imageUUID)?.includes(cladeUUID))
+            .forEach(imageUUID => result.add(imageUUID))
+    }
+    return result
+}
+const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData, cladeImages?: ReadonlySet<UUID>): UUID => {
+    const vertex = data.nodeUUIDsToVertices.get(nodeUUID)
+    if (!vertex) {
+        throw new Error("Cannot find vertex for UUID: " + nodeUUID)
     }
     const childVertices = immediateSuccessors(data.phylogeny, new Set([vertex]))
     if (childVertices.size !== 1) {
-        return uuid
+        return nodeUUID
     }
     const childVertex = Array.from(childVertices)[0]
     const childUUID = data.verticesToNodeUUIDs.get(childVertex)
     if (!childUUID) {
-        // Fail gracefully
-        return uuid
+        throw new Error("Cannot find UUID for vertex: " + childVertex)
     }
-    return getCladeImagesUUID(childUUID, data)
+    cladeImages = cladeImages ?? getCladeImageUUIDs(nodeUUID, data)
+    const childCladeImages = getCladeImageUUIDs(childUUID, data)
+    if (
+        childCladeImages.size === cladeImages.size &&
+        Array.from(childCladeImages).every(uuid => cladeImages?.has(uuid))
+    ) {
+        return getCladeImagesUUID(childUUID, data, childCladeImages)
+    }
+    return nodeUUID
 }
 const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     uuid = uuid.toLowerCase()
