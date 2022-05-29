@@ -1,6 +1,7 @@
 import { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
 import { Query } from "@phylopic/utils"
 import { FC, useMemo } from "react"
+import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import AnchorLink from "~/ui/AnchorLink"
 import ImageListView from "~/views/ImageListView"
@@ -16,6 +17,7 @@ const LineageNodeView: FC<Props> = ({ value }) => {
         () => ({ filter_node: value.uuid, embed_items: "true", embed_specificNode: "true" }),
         [value.uuid],
     )
+    const linked = useMemo(() => nodeHasOwnCladeImages(value), [value])
     return (
         <section className={styles.main}>
             <PaginationContainer endpoint={`${process.env.NEXT_PUBLIC_API_URL}/images`} query={query}>
@@ -28,9 +30,13 @@ const LineageNodeView: FC<Props> = ({ value }) => {
                 }
             </PaginationContainer>
             <header className={styles.header} key="header">
-                <AnchorLink href={`/nodes/${value.uuid}`}>
-                    <NomenView value={value.names[0]} short />
-                </AnchorLink>
+                {linked ? (
+                    <AnchorLink href={`/nodes/${value.uuid}`}>
+                        <NomenView value={value.names[0]} short key="name" />
+                    </AnchorLink>
+                ) : (
+                    <NomenView value={value.names[0]} short key="name" />
+                )}
             </header>
         </section>
     )
