@@ -102,26 +102,7 @@ const getExternal = (uuid: UUID, data: SourceData) => {
                 } as TitledLink),
         )
 }
-const getCladeImageUUIDs = (nodeUUID: UUID, data: SourceData): ReadonlySet<UUID> => {
-    const vertex = data.nodeUUIDsToVertices.get(nodeUUID)
-    if (!vertex) {
-        throw new Error("Cannot find vertex for UUID: " + nodeUUID)
-    }
-    const clade = successorUnion(data.phylogeny, new Set([vertex]))
-    const result = new Set<UUID>()
-    const imageUUIDs = Array.from(data.images.keys())
-    for (const cladeVertex of clade) {
-        const cladeUUID = data.verticesToNodeUUIDs.get(cladeVertex)
-        if (!cladeUUID) {
-            throw new Error("Cannot find UUID for vertex: " + cladeVertex)
-        }
-        imageUUIDs
-            .filter(imageUUID => data.illustration.get(imageUUID)?.includes(cladeUUID))
-            .forEach(imageUUID => result.add(imageUUID))
-    }
-    return result
-}
-const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData, cladeImages?: ReadonlySet<UUID>): UUID => {
+const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData): UUID => {
     const vertex = data.nodeUUIDsToVertices.get(nodeUUID)
     if (!vertex) {
         throw new Error("Cannot find vertex for UUID: " + nodeUUID)
@@ -135,13 +116,16 @@ const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData, cladeImages?: Read
     if (!childUUID) {
         throw new Error("Cannot find UUID for vertex: " + childVertex)
     }
-    cladeImages = cladeImages ?? getCladeImageUUIDs(nodeUUID, data)
-    const childCladeImages = getCladeImageUUIDs(childUUID, data)
+    const cladeImages = data.cladeImages.get(nodeUUID)
+    const childCladeImages = data.cladeImages.get(childUUID)
+    if (!cladeImages || !childCladeImages) {
+        throw new Error("Incomplete clade-image data.")
+    }
     if (
         childCladeImages.size === cladeImages.size &&
         Array.from(childCladeImages).every(uuid => cladeImages?.has(uuid))
     ) {
-        return getCladeImagesUUID(childUUID, data, childCladeImages)
+        return getCladeImagesUUID(childUUID, data)
     }
     return nodeUUID
 }

@@ -8,6 +8,7 @@ import getPhylogeny from "../models/getPhylogeny.js"
 import SOURCE_PATH from "../paths/SOURCE_PATH.js"
 export type SourceData = Readonly<{
     build: number
+    cladeImages: ReadonlyMap<UUID, ReadonlySet<UUID>>
     contributors: ReadonlyMap<UUID, Contributor>
     depths: ReadonlyMap<UUID, number>
     externals: ReadonlyMap<string, TitledLink>
@@ -114,8 +115,21 @@ const getNodeUUIDsInLineage = (
     }
     return [specific]
 }
-const getIllustration = (args: Pick<SourceData, "images" | "nodes">): ReadonlyMap<UUID, readonly UUID[]> => {
-    const map = new Map<UUID, readonly UUID[]>()
+const getImageNodeDerivedData = (
+    args: Pick<SourceData, "images" | "nodes">,
+): Pick<SourceData, "cladeImages" | "illustration"> => {
+    const cladeImages = new Map<UUID, Set<UUID>>()
+    const illustration = new Map<UUID, readonly UUID[]>()
+    for (const nodeUUID of args.nodes.keys()) {
+        cladeImages.set(nodeUUID, new Set<UUID>())
+    }
+    const addImageToClades = (imageUUID: UUID, nodeUUID: UUID) => {
+        cladeImages.get(nodeUUID)?.add(imageUUID)
+        const node = args.nodes.get(nodeUUID)
+        if (node?.parent) {
+            addImageToClades(imageUUID, node.parent)
+        }
+    }
     for (const [uuid, image] of args.images.entries()) {
         const { general, specific } = image
         if (!args.nodes.has(specific)) {
@@ -124,9 +138,11 @@ const getIllustration = (args: Pick<SourceData, "images" | "nodes">): ReadonlyMa
         if (general && !args.nodes.has(general)) {
             throw new Error(`Invalid general node for image <${uuid}>.`)
         }
-        map.set(uuid, getNodeUUIDsInLineage(args, uuid, specific, general))
+        const lineage = getNodeUUIDsInLineage(args, uuid, specific, general)
+        illustration.set(uuid, lineage)
+        addImageToClades(uuid, specific)
     }
-    return map
+    return { cladeImages, illustration }
 }
 const processClade = (
     args: Pick<SourceData, "phylogeny" | "verticesToNodeUUIDs"> &
@@ -254,16 +270,13 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
         build: args.build,
         contributors,
         externals,
-        illustration: getIllustration({
-            images,
-            nodes,
-        }),
         images,
         source,
         nodeUUIDsToVertices,
         nodes,
         phylogeny,
         verticesToNodeUUIDs,
+        ...getImageNodeDerivedData({ images, nodes }),
         ...getPhylogenyDerivedData({ source, nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
     }
 }
