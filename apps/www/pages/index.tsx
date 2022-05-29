@@ -5,6 +5,7 @@ import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import BuildContainer from "~/builds/BuildContainer"
 import PageHead from "~/metadata/PageHead"
+import SchemaMetadata from "~/metadata/SchemaMetadata"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
@@ -25,7 +26,63 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
     <SWRConfig value={{ fallback }}>
         <BuildContainer initialValue={build}>
             <PageLoader />
-            <PageHead title="PhyloPic" url="https://www.phylopic.org/" />
+            <PageHead title="PhyloPic" url="https://www.phylopic.org/">
+                <SchemaMetadata
+                    object={{
+                        "@context": "https://schema.org",
+                        "@type": "WebSite",
+                        potentialAction: {
+                            "@type": "SearchAction",
+                            query: "required name=search_term_string",
+                            target: "https://www.phylopic.org/search?q={search_term_string}",
+                        },
+                        url: "https://www.phylopic.org",
+                    }}
+                />
+                <SchemaMetadata
+                    object={{
+                        "@context": "https://schema.org",
+                        "@type": "ItemList",
+                        itemListElement: [
+                            {
+                                "@type": "ListItem",
+                                position: 0,
+                                url: "https://www.phylopic.org/images",
+                            },
+                            {
+                                "@type": "ListItem",
+                                position: 1,
+                                url: "https://www.phylopic.org/nodes",
+                            },
+                            {
+                                "@type": "ListItem",
+                                position: 2,
+                                url: "https://www.phylopic.org/contributors",
+                            },
+                            {
+                                "@type": "ListItem",
+                                position: 3,
+                                url: "https://www.phylopic.org/donate",
+                            },
+                            {
+                                "@type": "ListItem",
+                                position: 4,
+                                url: "https://www.phylopic.org/thanks",
+                            },
+                            {
+                                "@type": "ListItem",
+                                position: 5,
+                                url: "https://contribute.phylopic.org",
+                            },
+                            {
+                                "@type": "ListItem",
+                                position: 6,
+                                url: "https://api-docs.phylopic.org",
+                            },
+                        ],
+                    }}
+                />
+            </PageHead>
             <SearchContainer>
                 <header>
                     <SiteNav />

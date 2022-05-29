@@ -15,6 +15,9 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                 <SiteTitle />
             </AnchorLink>{" "}
             &mdash; free silhouette images of organisms
+            <div className={styles.subheader}>
+                version 2.0 <abbr title="beta version">βɛτα</abbr>
+            </div>
         </div>
         <section>
             <h2>Browse</h2>

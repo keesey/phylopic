@@ -7,6 +7,9 @@ const SiteFooter: FC = () => (
     <footer className={styles.main}>
         <ul>
             <li className={styles.item}>
+                Version 2.0 <abbr title="beta version">βɛτα</abbr>
+            </li>
+            <li className={styles.item}>
                 <abbr title="Copyright">©</abbr> {YEAR} <a href="http://tmkeesey.net">T. Michael Keesey</a>
             </li>
             <li className={clsx(styles.item, styles.logos)}>
