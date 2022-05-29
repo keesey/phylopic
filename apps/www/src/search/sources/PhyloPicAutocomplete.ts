@@ -25,8 +25,10 @@ const PhyloPicAutocomplete: FC = () => {
     useEffect(() => {
         if (dispatch && response.data) {
             const query = parseQueryString(extractQueryString(response.data._links.self.href))
-            const basis = query.query ?? ""
-            dispatch({ type: "SET_INTERNAL_MATCHES", payload: response.data.matches, meta: { basis } })
+            const basis = query.query
+            if (basis) {
+                dispatch({ type: "SET_INTERNAL_MATCHES", payload: response.data.matches, meta: { basis } })
+            }
         }
     }, [dispatch, response.data])
     return null

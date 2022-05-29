@@ -5,6 +5,12 @@ const getMatchingText = (matches?: readonly string[], normalizedText?: string) =
     if (matches?.includes(normalizedText)) {
         return normalizedText
     }
-    return matches?.find(value => value.startsWith(normalizedText)) ?? ""
+    return (
+        (matches &&
+            Array.from(matches)
+                .sort()
+                .find(value => value.startsWith(normalizedText))) ??
+        ""
+    )
 }
 export default getMatchingText

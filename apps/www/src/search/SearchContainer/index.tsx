@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { FC, ReactNode, useContext, useEffect, useReducer } from "react"
+import { FC, ReactNode, useContext, useEffect, useReducer, useState } from "react"
 import BuildContext from "~/builds/BuildContext"
 import SearchContext from "../context"
 import { State } from "../context/State"
@@ -27,6 +27,7 @@ export interface Props {
 }
 const SearchContainer: FC<Props> = ({ children, initialText = "" }) => {
     const [build] = useContext(BuildContext) ?? []
+    const [prevBuild, setPrevBuild] = useState(build)
     const contextValue = useReducer(reducer, [initialText], () => createInitialState(initialText))
     const [, dispatch] = contextValue
     const { events } = useRouter()
@@ -36,8 +37,11 @@ const SearchContainer: FC<Props> = ({ children, initialText = "" }) => {
         return () => events.off("routeChangeStart", handler)
     }, [dispatch, events])
     useEffect(() => {
-        dispatch({ type: "RESET_INTERNAL" })
-    }, [dispatch, build])
+        if (prevBuild !== build) {
+            setPrevBuild(build)
+            dispatch({ type: "RESET_INTERNAL" })
+        }
+    }, [build, dispatch, prevBuild])
     return (
         <SearchContext.Provider value={contextValue}>
             <PhyloPicAutocomplete />

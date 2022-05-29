@@ -8,21 +8,22 @@ import useMatches from "../hooks/useMatches"
 import styles from "./index.module.scss"
 const MAX_MATCHES = 16
 const SearchBar: FC = () => {
-    const [value, setValue] = useState("")
     const [state, dispatch] = useContext(SearchContext) ?? []
+    const [value, setValue] = useState(state?.text ?? "")
     const { focused, nodeResults: internalResults } = state || {}
+    const internalResult = internalResults?.[0]
     const resolution = useExternalResolutions()[0]
     const matches = useMatches(MAX_MATCHES)
     const router = useRouter()
     const handleFormSubmit = useCallback(
         (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault()
-            const node = internalResults?.[0] ?? resolution?.node
+            const node = internalResult ?? resolution?.node
             if (node) {
                 router.push(extractPath(node._links.self.href))
             }
         },
-        [resolution, internalResults, router],
+        [resolution, internalResult, router],
     )
     const handleInputBlur = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: false }), [dispatch])
     const handleInputChange = useCallback(
