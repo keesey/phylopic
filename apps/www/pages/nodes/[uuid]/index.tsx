@@ -17,7 +17,7 @@ import {
     Query,
 } from "@phylopic/utils"
 import type { GetStaticProps, NextPage } from "next"
-import React, { useMemo } from "react"
+import React from "react"
 import { SWRConfig, unstable_serialize } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
@@ -26,6 +26,7 @@ import BuildContainer from "~/builds/BuildContainer"
 import fetchData from "~/fetch/fetchData"
 import fetchResult from "~/fetch/fetchResult"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
+import CladeImageLicensePaginator from "~/licenses/CladeImageLicensePaginator"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
@@ -58,10 +59,6 @@ const NODE_QUERY: Omit<NodeParameters, "uuid"> & Query = {
     embed_primaryImage: "true",
 }
 const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
-    const imagesQuery = useMemo(
-        () => ({ embed_specificNode: "true", filter_clade: uuid } as ImageListParameters & Query),
-        [uuid],
-    )
     return (
         <SWRConfig value={{ fallback }}>
             <BuildContainer initialValue={build}>
@@ -137,7 +134,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                         </header>
                                         <section>
                                             <h2>Silhouette Images</h2>
-                                            <ImageLicensePaginator query={imagesQuery}>
+                                            <CladeImageLicensePaginator node={node}>
                                                 {(images, totalImages) => (
                                                     <>
                                                         <ImageLicenseControls total={totalImages} />
@@ -186,7 +183,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                                         {totalImages > 0 && <ImageListView value={images} />}
                                                     </>
                                                 )}
-                                            </ImageLicensePaginator>
+                                            </CladeImageLicensePaginator>
                                         </section>
                                     </SearchOverlay>
                                 </main>
@@ -227,14 +224,6 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     }
     const cladeImagesUUID =
         parseQueryString(extractQueryString(nodeResult.data._links.cladeImages?.href ?? "")).filter_clade ?? uuid
-    if (cladeImagesUUID !== uuid) {
-        return {
-            redirect: {
-                destination: "/nodes/" + cladeImagesUUID,
-                permanent: false,
-            },
-        }
-    }
     const build = nodeResult.data.build
     const props: Props = {
         build,
