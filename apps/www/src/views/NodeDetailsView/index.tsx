@@ -26,9 +26,7 @@ const NodeDetailsView: FC<Props> = ({ value }) => {
             <InlineSections key="info">
                 {hasNames && (
                     <section key="names">
-                        <h3>
-                            Equivalent Name{value.names.length > 2 ? "s" : ""}
-                        </h3>
+                        <h3>Equivalent Name{value.names.length > 2 ? "s" : ""}</h3>
                         <NomenListView value={value.names.slice(1)} />
                     </section>
                 )}

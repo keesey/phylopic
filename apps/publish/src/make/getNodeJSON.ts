@@ -102,6 +102,30 @@ const getExternal = (uuid: UUID, data: SourceData) => {
                 } as TitledLink),
         )
 }
+const hasImages = (nodeUUID: UUID, data: SourceData): boolean => {
+    return Array.from(data.images.keys()).some(imageUUID => data.illustration.get(imageUUID)?.includes(nodeUUID))
+}
+const getCladeImagesUUID = (uuid: UUID, data: SourceData): UUID => {
+    if (hasImages(uuid, data)) {
+        return uuid
+    }
+    const vertex = data.nodeUUIDsToVertices.get(uuid)
+    if (!vertex) {
+        // Fail gracefully
+        return uuid
+    }
+    const childVertices = immediateSuccessors(data.phylogeny, new Set([vertex]))
+    if (childVertices.size !== 1) {
+        return uuid
+    }
+    const childVertex = Array.from(childVertices)[0]
+    const childUUID = data.verticesToNodeUUIDs.get(childVertex)
+    if (!childUUID) {
+        // Fail gracefully
+        return uuid
+    }
+    return getCladeImagesUUID(childUUID, data)
+}
 const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     uuid = uuid.toLowerCase()
     const root = uuid === data.source.root
@@ -116,12 +140,13 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     if (!root && !sourceNode.parent) {
         throw new Error(`Parent not found! (UUID=${uuid})`)
     }
+    const cladeImagesUUID = getCladeImagesUUID(uuid, data)
     return {
         _links: {
             childNodes: getChildNodes(vertex, data),
-            cladeImages: { href: `/images?build=${data.build}&clade=${uuid}` },
+            cladeImages: { href: `/images?build=${data.build}&filter_clade=${cladeImagesUUID}` },
             external: getExternal(uuid, data),
-            images: { href: `/images?build=${data.build}&node=${uuid}` },
+            images: { href: `/images?build=${data.build}&filter_node=${uuid}` },
             lineage: { href: `/nodes/${uuid}/lineage?build=${data.build}` },
             parentNode: sourceNode.parent ? { href: `/nodes/${sourceNode.parent}?build=${data.build}` } : null,
             primaryImage: getPrimaryImage(uuid, data),
