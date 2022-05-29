@@ -8,6 +8,7 @@ import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useLicenseText from "~/hooks/useLicenseText"
 import useNomenText from "~/hooks/useNomenText"
 import PageHead from "~/metadata/PageHead"
+import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
 import DonationPromo from "~/promos/DonationPromo"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
@@ -56,6 +57,7 @@ const PageComponent: NextPage<Props> = ({ image }) => {
             >
                 <meta key="meta:author" name="author" content={image.attribution ?? "Anonymous"} />
                 <link key="link:contributor" rel="contributor" href={image._links.contributor.href} />
+                <VisualArtworkSchemaScript image={image} />
             </PageHead>
             <SearchContainer>
                 <header>

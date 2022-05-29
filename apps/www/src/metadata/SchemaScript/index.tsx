@@ -4,7 +4,7 @@ import { Thing, WithContext } from "schema-dts"
 export type Props = {
     object: WithContext<Thing>
 }
-const SchemaMetadata: FC<Props> = ({ object }) => {
+const SchemaScript: FC<Props> = ({ object }) => {
     return (
         <script
             type="application/ld+json"
@@ -14,4 +14,4 @@ const SchemaMetadata: FC<Props> = ({ object }) => {
         />
     )
 }
-export default SchemaMetadata
+export default SchemaScript

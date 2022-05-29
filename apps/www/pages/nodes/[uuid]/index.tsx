@@ -15,7 +15,6 @@ import {
     isUUIDv4,
     parseQueryString,
     Query,
-    stringifyNomen,
 } from "@phylopic/utils"
 import type { GetStaticProps, NextPage } from "next"
 import React from "react"
@@ -32,7 +31,7 @@ import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import LicenseQualifier from "~/licenses/LicenseQualifier"
 import PageHead from "~/metadata/PageHead"
-import SchemaMetadata from "~/metadata/SchemaMetadata"
+import TaxonSchemaScript from "~/metadata/SchemaScript/TaxonSchemaScript"
 import getShortNomen from "~/models/getShortNomen"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
@@ -72,43 +71,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                 title={`PhyloPic: ${getShortNomen(node?.names[0])}`}
                                 url={`https://www.phylopic.org/nodes/${uuid}`}
                             >
-                                {node && (
-                                    <SchemaMetadata
-                                        object={{
-                                            "@context": "https://schema.org",
-                                            "@type": "Taxon",
-                                            "@id": `https://www.phylopic.org/nodes/${node.uuid}`,
-                                            alternateName:
-                                                node.names.length > 1
-                                                    ? node.names.slice(1).map(stringifyNomen)
-                                                    : undefined,
-                                            childTaxon: node._links.childNodes.length
-                                                ? node._links.childNodes.map(
-                                                      ({ href }) => "https://www.phylopic.org" + extractPath(href),
-                                                  )
-                                                : undefined,
-                                            hasDefinedTerm: {
-                                                "@type": "DefinedTerm",
-                                                name: stringifyNomen(node.names[0]),
-                                            },
-                                            image: node._links.primaryImage?.href
-                                                ? "https://www.phylopic.org" +
-                                                  extractPath(node._links.primaryImage.href)
-                                                : undefined,
-                                            mainEntityOfPage: `https://www.phylopic.org/nodes/${node.uuid}/lineage`,
-                                            name: stringifyNomen(node.names[0]),
-                                            parentTaxon: node._links.parentNode?.href
-                                                ? "https://www.phylopic.org" + extractPath(node._links.parentNode.href)
-                                                : undefined,
-                                            sameAs: node._links.external.length
-                                                ? node._links.external.map(
-                                                      ({ href }) => "https://www.phylopic.org" + extractPath(href),
-                                                  )
-                                                : undefined,
-                                            url: `https://www.phylopic.org/nodes/${node.uuid}`,
-                                        }}
-                                    />
-                                )}
+                                {node && <TaxonSchemaScript node={node} />}
                             </PageHead>
                             <SearchContainer>
                                 <header>

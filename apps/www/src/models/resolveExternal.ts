@@ -1,5 +1,4 @@
-import { extractPath } from "@phylopic/utils"
-import { useMemo } from "react"
+import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 const RESOLVERS: Readonly<Record<string, ((id: string) => string) | undefined>> = {
     ["eol.org/pages"]: id => `https://www.eol.org/pages/${encodeURIComponent(id)}`,
     ["gbif.org/species"]: id => `https://www.gbif.org/species/${encodeURIComponent(id)}`,
@@ -13,12 +12,8 @@ const RESOLVERS: Readonly<Record<string, ((id: string) => string) | undefined>> 
     ["phylopic.org/images"]: uuid => `/images/${encodeURIComponent(uuid)}`,
     ["ubio.org/namebank"]: id => `http://www.ubio.org/browser/details.php?namebankID=${encodeURIComponent(id)}`,
 }
-const useHRef = (resolveHRef: string) => {
-    return useMemo(() => {
-        const path = extractPath(resolveHRef).replace(/^\/resolve\//, "")
-        const [authority, namespace, objectID] = path.split("/", 3)
-        const resolve = RESOLVERS[authority + "/" + namespace]
-        return resolve?.(objectID)
-    }, [resolveHRef])
+const resolveExternal = (authority: Authority, namespace: Namespace, objectID: ObjectID) => {
+    const resolve = RESOLVERS[encodeURIComponent(authority) + "/" + encodeURIComponent(namespace)]
+    return resolve?.(objectID)
 }
-export default useHRef
+export default resolveExternal

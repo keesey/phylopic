@@ -14,6 +14,7 @@ import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PageHead from "~/metadata/PageHead"
+import PersonSchemaScript from "~/metadata/SchemaScript/PersonSchemaScript"
 import getContributorName from "~/models/getContributorName"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
@@ -53,7 +54,9 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                                             contributor,
                                         )}`}
                                         url={`https://www.phylopic.org/contributors/${uuid}`}
-                                    />
+                                    >
+                                        {contributor && <PersonSchemaScript contributor={contributor} />}
+                                    </PageHead>
                                 )}
                             </ImageLicensePaginator>
                             <SearchContainer>
@@ -111,10 +114,11 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         return { notFound: true }
     }
     const imagesQuery: ImageListParameters & Query = { filter_contributor: uuid }
+    const contributorKey = process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid
     const listImagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
     const [listImagesResponse, contributorResult] = await Promise.all([
         fetchData<List>(listImagesKey),
-        fetchResult<Contributor>(process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid),
+        fetchResult<Contributor>(contributorKey),
     ])
     if (contributorResult.status !== "success") {
         return getStaticPropsResult(contributorResult)
@@ -122,7 +126,9 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     const build = contributorResult.data.build
     const props: Props = {
         build: contributorResult.data.build,
-        fallback: {},
+        fallback: {
+            [unstable_serialize(addBuildToURL(contributorKey, build))]: contributorResult.data,
+        },
         uuid,
     }
     if (listImagesResponse.ok) {
