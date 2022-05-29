@@ -70,7 +70,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                             <PageHead
                                 socialImage={node?._embedded.primaryImage?._links["http://ogp.me/ns#image"]}
                                 title={`PhyloPic: ${getShortNomen(node?.names[0])}`}
-                                url={`https://www.phylopic.org/nodes/${node.uuid}`}
+                                url={`https://www.phylopic.org/nodes/${uuid}`}
                             >
                                 {node && (
                                     <SchemaMetadata
