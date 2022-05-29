@@ -16,6 +16,7 @@
     }
     img {
         margin: 0 0.35rem -1pt;
+        max-width: calc(100vw - 64px);
     }
     .imageTextWithTail {
         margin-bottom: -6px;
