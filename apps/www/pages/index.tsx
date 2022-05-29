@@ -126,7 +126,18 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                         </section>
                         <ContributionCTAView />
                         <section>
-                            <h2>Special Thanks</h2>
+                            <HeaderNav
+                                buttons={[
+                                    {
+                                        children: "See more →",
+                                        href: "/thanks",
+                                        key: "images",
+                                        type: "anchor",
+                                    },
+                                ]}
+                                header="Special Thanks"
+                                headerLevel={2}
+                            />
                             <SupportersView />
                         </section>
                     </SearchOverlay>

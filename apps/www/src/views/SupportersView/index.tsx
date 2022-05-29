@@ -52,7 +52,6 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                         ))}
                     </ul>
                 )}
-                {!supporters && <AnchorLink href="/thanks#indiegogo">See more →</AnchorLink>}
             </section>
             <section id="contributors">
                 <h3>
