@@ -33,7 +33,7 @@ const ITEM_URLS: readonly URL[] = [
     "https://www.phylopic.org/contributors",
     "https://www.phylopic.org/thanks",
     "https://www.phylopic.org/mailinglist",
-    "https://api-docs.phylopic.org",
+    "http://api-docs.phylopic.org/2.0",
     "https://contribute.phylopic.org",
     "https://keesey.gumroad.com/l/pocketphylogenies",
 ]
