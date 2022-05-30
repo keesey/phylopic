@@ -45,16 +45,10 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             </ul>
         </section>
         <section>
-            <h2>Technical</h2>
+            <h2>Educational Materials</h2>
             <ul>
                 <li>
-                    <a href="https://github.com/keesey/phylopic/issues/new">Report an Issue</a>
-                </li>
-                <li>
-                    <a href="https://api-docs.phylopic.org">API Documentation</a>
-                </li>
-                <li>
-                    <a href="https://github.com/keesey/phylopic">Code Repository</a>
+                    <a href="https://keesey.gumroad.com/l/pocketphylogenies">Pocket Phylogenies</a>
                 </li>
             </ul>
         </section>
@@ -69,6 +63,20 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                 </li>
                 <li>
                     <a href="https://www.facebook.com/phylopic">Facebook</a>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Technical</h2>
+            <ul>
+                <li>
+                    <a href="https://github.com/keesey/phylopic/issues/new">Report an Issue</a>
+                </li>
+                <li>
+                    <a href="https://api-docs.phylopic.org">API Documentation</a>
+                </li>
+                <li>
+                    <a href="https://github.com/keesey/phylopic">Code Repository</a>
                 </li>
             </ul>
         </section>

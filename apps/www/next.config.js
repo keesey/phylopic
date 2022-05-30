@@ -40,6 +40,11 @@ module.exports = {
                 permanent: true,
             },
             {
+                source: "/materials",
+                destination: "https://keesey.gumroad.com/l/pocketphylogenies",
+                permanent: true,
+            },
+            {
                 source: "/name/:path*",
                 destination: "/nodes/:path*",
                 permanent: true,

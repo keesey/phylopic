@@ -1,0 +1,26 @@
+.main {
+    cursor: pointer;
+    filter: drop-shadow(-10px 10px 10px rgba(48, 88, 96, 0.1));
+    height: 350px;
+    position: relative;
+    width: 200px;
+    perspective: 1024px;
+}
+.front {
+    background-color: #12aba6;
+    color: white;
+}
+.side {
+    backface-visibility: hidden;
+    border-radius: 1rem;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all 0.5s;
+}
+.hidden {
+    transform: rotateY(180deg)
+}

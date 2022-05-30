@@ -5,6 +5,7 @@ import React from "react"
 import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import BuildContainer from "~/builds/BuildContainer"
+import PocketPhylogenies from "~/materials/PocketPhylogenies"
 import PageHead from "~/metadata/PageHead"
 import SchemaScript from "~/metadata/SchemaScript"
 import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
@@ -25,12 +26,12 @@ export interface Props {
     fallback: PublicConfiguration["fallback"]
 }
 const ITEM_URLS: readonly URL[] = [
-    "https://www.phylopic.org/store",
     "https://www.phylopic.org/images",
     "https://www.phylopic.org/nodes",
     "https://www.phylopic.org/contributors",
     "https://www.phylopic.org/thanks",
     "https://api-docs.phylopic.org",
+    "https://keesey.gumroad.com/l/pocketphylogenies",
 ]
 const PageComponent: NextPage<Props> = ({ build, fallback }) => (
     <SWRConfig value={{ fallback }}>
@@ -100,9 +101,33 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                             <HeaderNav
                                 buttons={[
                                     {
+                                        children: "Download →",
+                                        href: "/materials",
+                                        key: "materials",
+                                        type: "anchor",
+                                    },
+                                ]}
+                                header="Pocket Phylogenies"
+                                headerLevel={2}
+                            />
+                            <p>
+                                Free wallet-sized cards with common questions about evolution on one side, and diagrams
+                                for explaining the answers on the other. Click on the cards below to see the diagrams,
+                                and{" "}
+                                <a href="https://keesey.gumroad.com/l/pocketphylogenies">
+                                    click here to print out Pocket Phylogenies for yourself
+                                </a>
+                                .
+                            </p>
+                            <PocketPhylogenies />
+                        </section>
+                        <section>
+                            <HeaderNav
+                                buttons={[
+                                    {
                                         children: "See more →",
                                         href: "/thanks",
-                                        key: "images",
+                                        key: "thanks",
                                         type: "anchor",
                                     },
                                 ]}
