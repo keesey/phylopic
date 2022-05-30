@@ -57,6 +57,18 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                         url: "https://www.phylopic.org",
                     }}
                 />
+                <SchemaScript
+                    object={{
+                        "@context": "https://schema.org",
+                        "@id": "http://tmkeesey.net",
+                        "@type": "Person",
+                        alternateName: "T. Michael Keesey",
+                        email: "keesey@gmail.com",
+                        name: "Mike Keesey",
+                        sameAs: `https://www.phylopic.org/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`,
+                        url: "http://tmkeesey.net",
+                    }}
+                />
                 <ItemListSchemaScript urls={ITEM_URLS} />
             </PageHead>
             <SearchContainer>

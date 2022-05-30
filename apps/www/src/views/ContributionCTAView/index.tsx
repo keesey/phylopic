@@ -44,7 +44,9 @@ const ContributionCTAView: FC = () => {
                             <AnchorLink href="/donate">Make a donation</AnchorLink>
                         </li>
                         <li>
-                            <a href="https://www.patreon.com/tmkeesey">Support the creator on Patreon</a>
+                            <a href="https://www.patreon.com/tmkeesey?fan_landing=true">
+                                Support the creator on Patreon
+                            </a>
                         </li>
                     </ul>
                 </section>

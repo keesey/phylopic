@@ -27,7 +27,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                 All patrons on{" "}
                 <a
                     className={styles.imageLink}
-                    href="https://www.patreon.com/tmkeesey"
+                    href="https://www.patreon.com/tmkeesey?fan_landing=true"
                     title="Support the creator of PhyloPic on Patreon."
                 >
                     <img src="/logos/patreon-cerulean.svg" width={150} height={20} alt="Patreon" />

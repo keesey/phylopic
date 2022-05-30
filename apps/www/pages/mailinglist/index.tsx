@@ -4,6 +4,7 @@ import { SWRConfig } from "swr"
 import BuildContainer from "~/builds/BuildContainer"
 import MailingListForm from "~/forms/MailingListForm"
 import PageHead from "~/metadata/PageHead"
+import SchemaScript from "~/metadata/SchemaScript"
 import SearchContainer from "~/search/SearchContainer"
 import SearchOverlay from "~/search/SearchOverlay"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -15,7 +16,18 @@ const PageComponent: NextPage = () => (
     <SWRConfig>
         <BuildContainer>
             <PageLoader />
-            <PageHead title="Sign up for the PhyloPic Mailing List" url="https://www.phylopic.org/mailinglist" />
+            <PageHead title="Sign up for the PhyloPic Mailing List" url="https://www.phylopic.org/mailinglist">
+                <SchemaScript
+                    object={{
+                        "@context": "https://schema.org",
+                        "@type": "MediaSubscription",
+                        "@id": "http://www.phylopic.org/mailinglist",
+                        description: "Newsletter for PhyloPic.",
+                        name: "PhyloPic Mailing List",
+                        url: "http://www.phylopic.org/mailinglist",
+                    }}
+                />
+            </PageHead>
             <SearchContainer>
                 <header>
                     <SiteNav />
