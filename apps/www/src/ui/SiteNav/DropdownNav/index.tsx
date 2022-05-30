@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { FC } from "react"
 import AnchorLink from "~/ui/AnchorLink"
 import SiteTitle from "~/ui/SiteTitle"
@@ -42,6 +43,9 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                 <li>
                     <AnchorLink href="/donate">Make a Donation</AnchorLink>
                 </li>
+                <li>
+                    <a href="https://www.patreon.com/tmkeesey">Become a Patron</a>
+                </li>
             </ul>
         </section>
         <section>
@@ -57,6 +61,9 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <ul>
                 <li>
                     <a href="https://www.patreon.com/tmkeesey">Patreon</a>
+                </li>
+                <li>
+                    <AnchorLink href="/mailinglist">Mailing List</AnchorLink>
                 </li>
                 <li>
                     <a href="https://www.twitter.com/phylopic">Twitter</a>

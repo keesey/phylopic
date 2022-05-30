@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from "clsx"
+import Link from "next/link"
 import { FC } from "react"
 import styles from "./index.module.scss"
 const YEAR = new Date().getFullYear()
@@ -13,6 +14,11 @@ const SiteFooter: FC = () => (
                 <abbr title="Copyright">©</abbr> {YEAR} <a href="http://tmkeesey.net">T. Michael Keesey</a>
             </li>
             <li className={clsx(styles.item, styles.logos)}>
+                <Link href="/mailinglist">
+                    <a className={styles.textIcon} title="Subscribe to the PhyloPic mailing list.">
+                        <img src="/logos/mail.svg" width={28} height={28} alt="Mailing List" />
+                    </a>
+                </Link>
                 <a href="https://www.twitter.com/phylopic" title="Follow @phylopic on Twitter.">
                     <img src="/logos/twitter.svg" width={28} height={28} alt="Twitter" />
                 </a>

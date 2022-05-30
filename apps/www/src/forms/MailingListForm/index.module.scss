@@ -1,0 +1,31 @@
+@use "../../styles/colors.scss";
+@use "../../styles/mixins/buttons.scss";
+.content {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+    input[type=email] {
+        background-color: colors.$white;
+        border: 1px solid colors.$wash;
+        border-radius: 2rem;
+        border-right: none;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        color: colors.$ink;
+        font-size: large;
+        width: 100%;
+        padding: 0.5rem;
+        &::placeholder {
+            color: colors.$wash;
+        }
+    }
+    button {
+        @include buttons.cta;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+}
+.offscreen {
+    position: absolute;
+    left: -4192px;
+}

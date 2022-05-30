@@ -5,6 +5,7 @@ import React from "react"
 import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import BuildContainer from "~/builds/BuildContainer"
+import MailingListForm from "~/forms/MailingListForm"
 import PocketPhylogenies from "~/materials/PocketPhylogenies"
 import PageHead from "~/metadata/PageHead"
 import SchemaScript from "~/metadata/SchemaScript"
@@ -17,6 +18,7 @@ import HeaderNav from "~/ui/HeaderNav"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
+import SiteTitle from "~/ui/SiteTitle"
 import ContributionCTAView from "~/views/ContributionCTAView"
 import CountView from "~/views/CountView"
 import ImageListView from "~/views/ImageListView"
@@ -30,7 +32,9 @@ const ITEM_URLS: readonly URL[] = [
     "https://www.phylopic.org/nodes",
     "https://www.phylopic.org/contributors",
     "https://www.phylopic.org/thanks",
+    "https://www.phylopic.org/mailinglist",
     "https://api-docs.phylopic.org",
+    "https://contribute.phylopic.org",
     "https://keesey.gumroad.com/l/pocketphylogenies",
 ]
 const PageComponent: NextPage<Props> = ({ build, fallback }) => (
@@ -120,6 +124,14 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                                 .
                             </p>
                             <PocketPhylogenies />
+                        </section>
+                        <section>
+                            <h2>Mailing List</h2>
+                            <p>
+                                Subscribe to the <SiteTitle /> newsletter to receives updates about the
+                                site&mdash;improvements, new features, and more!
+                            </p>
+                            <MailingListForm />
                         </section>
                         <section>
                             <HeaderNav
