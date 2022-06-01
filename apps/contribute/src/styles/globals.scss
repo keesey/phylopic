@@ -1,0 +1,95 @@
+@use "colors.scss";
+@use "mixins/buttons.scss";
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap");
+* {
+    box-sizing: border-box;
+}
+a {
+    color: inherit;
+    transition: all 0.3s;
+    &:active,
+    &:hover {
+        opacity: 0.5;
+    }
+}
+abbr {
+    text-decoration: none;
+}
+button,
+a.cta {
+    @include buttons.cta;
+}
+a.text {
+    @include buttons.text;
+}
+body,
+html {
+    color: colors.$white;
+    font-family: Roboto, sans-serif;
+    font-size: large;
+    margin: 0;
+    padding: 0;
+    @media (max-width: 1200px) {
+        font-size: medium;
+    }
+}
+html {
+    background-color: colors.$black;
+}
+body {
+    align-items: stretch;
+    background-color: colors.$ink;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: stretch;
+    max-height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+    text-align: center;
+}
+main {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    font-size: x-large;
+    height: calc(100vh - 150px);
+    justify-content: center;
+    overflow: auto;
+    padding: 32px;
+    @media (max-width: 1200px) {
+        font-size: large;
+    }
+    @media (max-width: 768px) {
+        font-size: medium;
+    }
+}
+p {
+    text-align: left;
+}
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+input {
+    background-color: colors.$vellum;
+    border-radius: 1rem;
+    border: none;
+    color: colors.$ink;
+    font-size: x-large;
+    width: 100%;
+    padding: 0.5rem;
+    @media (max-width: 1200px) {
+        font-size: large;
+    }
+    @media (max-width: 768px) {
+        font-size: medium;
+    }
+    &::placeholder {
+        color: colors.$wash;
+    }
+    &[type="submit"] {
+        @include buttons.cta;
+    }
+}

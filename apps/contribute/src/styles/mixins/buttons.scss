@@ -1,0 +1,47 @@
+@use "../colors.scss";
+@mixin cta {
+    background-color: colors.$dandelion;
+    border: 2pt solid colors.$sunshine;
+    border-radius: 2rem;
+    color: colors.$black;
+    cursor: pointer;
+    font-size: large;
+    font-weight: bold;
+    margin: 1rem 0.5rem;
+    padding: 0.66rem 2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    @media (max-width: 1200px) {
+        font-size: medium;
+    }
+    &:hover {
+        background-color: colors.$black;
+        border-color: colors.$black;
+        color: colors.$dandelion;
+        opacity: 1;
+    }
+}
+@mixin cta-pending {
+    cursor: progress;
+    opacity: 0.5;
+    &:hover {
+        background-color: colors.$dandelion;
+        color: colors.$black;
+    }
+}
+@mixin text {
+    border: none;
+    background: none;
+    display: block;
+    color: colors.$sunshine;
+    font-size: medium;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    text-decoration: underline;
+    transition: all 0.3s;
+    &:hover {
+        opacity: 0.5;
+    }
+}
