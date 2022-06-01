@@ -1,11 +1,3 @@
-# `@phylopic/webapp`
+# `@phylopic/www`
 
 > TODO: description
-
-## Usage
-
-```
-const webapp = require('@phylopic/webapp');
-
-// TODO: DEMONSTRATE API
-```

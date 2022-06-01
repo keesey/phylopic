@@ -1,11 +1,3 @@
-# `@phylopic/utils`
+# `@phylopic/utils-aws`
 
 > TODO: description
-
-## Usage
-
-```
-const utilsAWS = require('@phylopic/utils-aws');
-
-// TODO: DEMONSTRATE API
-```

@@ -70,11 +70,3 @@ yarn cli
 ```
 
 Once at the prompt, type `help` to see a list of commands.
-
-### Formatting
-
-To cleanly format all source files, run:
-
-```sh
-yarn format
-```

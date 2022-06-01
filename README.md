@@ -4,18 +4,26 @@ _[PhyloPic](https://www.phylopic.org)_ is an open database of freely reusable si
 
 ## Projects
 
-| Project Path                                      | Description                                                                                            |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [api](./packages/api)                             | Serverless API for accessing _PhyloPic_ data.                                                          |
-| [api-docs](./packages/api-docs)                   | Documentation for the _PhyloPic_ API.                                                                  |
-| [api-models](./packages/api-models)               | Type declarations and utility files for data models used by the API.                                   |
-| [publish](./packages/publish)                     | Code for administrating _PhyloPic_, including publishing releases and managing source files.           |
-| [source-models](./packages/source-models)         | Type declarations and utility files for data models used in the source bucket.                         |
-| [ui](./packages/ui)                               | Commonly-used React components for user interface.                                                     |
-| [utils](./packages/utils)                         | Common code.                                                                                           |
-| [webapp](./packages/webapp)                       | Public website for searching for and viewing silhouette images.                                        |
-| [webapp-contribute](./packages/webapp-contribute) | Public website for contributing silhouette images.                                                     |
-| [webapp-edit](./packages/webapp-edit)             | Private website (run locally) for managing _PhyloPic_, including contribution review and data editing. |
+### Apps
+
+| Project Path                    | Description                                                                                            |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [api](./apps/api)               | Serverless API for accessing _PhyloPic_ data.                                                          |
+| [api-docs](./apps/api-docs)     | Documentation for the _PhyloPic_ API.                                                                  |
+| [contribute](./apps/contribute) | Public website for contributing silhouette images.                                                     |
+| [edit](./apps/edit)             | Private website (run locally) for managing _PhyloPic_, including contribution review and data editing. |
+| [publish](./apps/publish)       | Code for administrating _PhyloPic_, including publishing releases and managing source files.           |
+| [www](./apps/www)               | Public website for searching for and viewing silhouette images.                                        |
+
+### Packages
+
+| Project Path                              | Description                                                                    |
+| ----------------------------------------- | -------------------------------------------------------------------------------|
+| [api-models](./packages/api-models)       | Type declarations and utility files for data models used by the API.           |
+| [source-models](./packages/source-models) | Type declarations and utility files for data models used in the source bucket. |
+| [ui](./packages/ui)                       | Commonly-used React components for user interfaces.                            |
+| [utils](./packages/utils)                 | Common code.                                                                   |
+| [utils-aws](./packages/utils-aws)         | Common code related to Amazon Web Services.                                    |
 
 ## Contributing
 
