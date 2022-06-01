@@ -1,5 +1,5 @@
+import { MediaLink } from "@phylopic/api-models"
 import Head from "next/head"
-import { MediaLink } from "phylopic-api-types"
 import { FC, useMemo } from "react"
 export interface Props {
     description?: string
