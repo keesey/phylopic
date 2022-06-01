@@ -33,7 +33,10 @@ const PageComponent: NextPage = () => (
                                 ]}
                             />
                             <p>
-                                Decided not to donate to <SiteTitle />? That&rsquo;s O.K., there are&hellip;
+                                <strong>
+                                    Decided not to donate to <SiteTitle />?
+                                </strong>{" "}
+                                That&rsquo;s O.K., there are&hellip;
                             </p>
                             <h1>Other Ways to Contribute</h1>
                         </header>
@@ -75,7 +78,7 @@ const PageComponent: NextPage = () => (
                                 </p>
                             </section>
                             <section>
-                                <h2>Support Technologies</h2>
+                                <h2>Support Free Technologies</h2>
                                 <p>
                                     <SiteTitle /> relies on a number of free, open-source technologies. Support them
                                     instead! Here are a few:
@@ -95,9 +98,10 @@ const PageComponent: NextPage = () => (
                             <section>
                                 <h2>Software Engineering</h2>
                                 <p>
-                                    Check out the <a href="https://github.com/keesey/phylopic">code repository</a>{" "}
-                                    and/or the <a href="http://api-docs.phylopic.org/2.0">API Documentation</a> and
-                                    think about contributing to <SiteTitle /> or building a tool thatt uses it.
+                                    If you are technically inclined, check out the{" "}
+                                    <a href="https://github.com/keesey/phylopic">code repository</a> and/or the{" "}
+                                    <a href="http://api-docs.phylopic.org/2.0">API Documentation</a>. Think about
+                                    contributing to <SiteTitle /> or building a tool that uses it.
                                 </p>
                             </section>
                             <section>
