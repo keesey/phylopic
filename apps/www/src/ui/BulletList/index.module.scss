@@ -1,0 +1,8 @@
+@use "../../styles/mixins/bullet.scss";
+.main {
+    display: flex;
+    flex-wrap: wrap;
+    > li {
+        @include bullet.item;
+    }
+}
