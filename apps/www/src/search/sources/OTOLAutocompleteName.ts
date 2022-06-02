@@ -21,6 +21,7 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
     })
     return [response.data, name]
 }
+const sanitizeUniqueName = (name: string) => name.replace(/\s*\((genus|merged)\s+(in|with)[^)]+\)/gi, "")
 const OTOLAutocompleteName: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const response = useSWRImmutable(state?.text ? [OTOL_URL + "/tnrs/autocomplete_name", state.text] : null, fetcher)
@@ -36,7 +37,7 @@ const OTOLAutocompleteName: FC = () => {
                 payload: response.data[0].reduce<Record<string, string>>(
                     (prev, { ott_id, unique_name }) => ({
                         ...prev,
-                        [ott_id]: unique_name,
+                        [ott_id]: sanitizeUniqueName(unique_name),
                     }),
                     {},
                 ),

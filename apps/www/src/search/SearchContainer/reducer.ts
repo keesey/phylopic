@@ -3,7 +3,6 @@ import { compareStrings } from "@phylopic/utils"
 import { Reducer } from "react"
 import { Action } from "../context/actions"
 import { State } from "../context/State"
-import getMatchingText from "../utils/getMatchingText"
 import getSortIndex from "../utils/getSortIndex"
 const reducer: Reducer<State, Action> = (prevState, action) => {
     switch (action.type) {
@@ -87,8 +86,7 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
             }
         }
         case "SET_IMAGE_RESULTS": {
-            const basis = getMatchingText(prevState.internalMatches, prevState.text)
-            if (action.meta.basis !== basis) {
+            if (action.meta.basis !== prevState.text) {
                 return prevState
             }
             return {
@@ -106,8 +104,7 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
             }
         }
         case "SET_NODE_RESULTS": {
-            const basis = getMatchingText(prevState.internalMatches, prevState.text)
-            if (action.meta.basis !== basis) {
+            if (action.meta.basis !== prevState.text) {
                 return prevState
             }
             return {
