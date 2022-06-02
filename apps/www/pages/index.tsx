@@ -94,7 +94,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                                         type: "anchor",
                                     },
                                 ]}
-                                header="Latest Contributions"
+                                header="Latest Uploads"
                                 headerLevel={2}
                             />
                             <PaginationContainer
