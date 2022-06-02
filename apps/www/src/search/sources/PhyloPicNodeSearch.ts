@@ -1,20 +1,18 @@
 import { NodeListParameters, NodeWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, extractQueryString, parseQueryString, Query } from "@phylopic/utils"
+import { createSearch, Query } from "@phylopic/utils"
 import { useDebounce } from "@react-hook/debounce"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
-import useAPIFetcher from "~/swr/api/useAPIFetcher"
 import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
 import { SetNodeResultsAction } from "../context/actions"
+import useQueryFetcher, { QueryKey } from "../hooks/useQueryFetcher"
 import getMatchingText from "../utils/getMatchingText"
 import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
 const PhyloPicNodeSearch: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
-    const matchingText = useMemo(
-        () => getMatchingText(state?.internalMatches, state?.text),
-        [state?.internalMatches, state?.text],
-    )
+    const basis = state?.text || undefined
+    const matchingText = useMemo(() => getMatchingText(state?.internalMatches, basis), [state?.internalMatches, basis])
     const endpoint = useMemo(
         () =>
             matchingText
@@ -29,19 +27,18 @@ const PhyloPicNodeSearch: FC = () => {
                 : null,
         [matchingText],
     )
-    const fetcher = useAPIFetcher<PageWithEmbedded<NodeWithEmbedded>>()
-    const key = useAPISWRKey(endpoint)
-    const [debouncedKey, setDebouncedKey] = useDebounce<string | null>(key, DEBOUNCE_WAIT, true)
+    const apiSWRKey = useAPISWRKey(endpoint)
+    const key = useMemo(() => [apiSWRKey, basis] as QueryKey, [apiSWRKey, basis])
+    const [debouncedKey, setDebouncedKey] = useDebounce(key, DEBOUNCE_WAIT, true)
     useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
+    const fetcher = useQueryFetcher<PageWithEmbedded<NodeWithEmbedded>>()
     const { data } = useSWRImmutable(debouncedKey, fetcher)
     useEffect(() => {
-        if (dispatch && data) {
-            const parsedQuery = parseQueryString(extractQueryString(data._links.self.href))
-            const basis = parsedQuery.filter_name ?? ""
+        if (dispatch && data?.[0] && data[1]) {
             dispatch({
+                meta: { basis: data[1] },
+                payload: data[0]._embedded.items,
                 type: "SET_NODE_RESULTS",
-                payload: data._embedded.items,
-                meta: { basis },
             } as SetNodeResultsAction)
         }
     }, [data, dispatch])
