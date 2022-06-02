@@ -15,7 +15,10 @@ const DonationPromo: FC = () => {
                 Hey, do you like <SiteTitle />? <AnchorLink href="/donate">Make a donation</AnchorLink> to keep it
                 going!
             </p>
-            <p>Or, <a href="https://www.patreon.com/tmkeesey?fan_landing=true">become a patron</a> to see previews of new features!</p>
+            <p>
+                Or, <a href="https://www.patreon.com/tmkeesey?fan_landing=true">become a patron</a> to see previews of
+                new features!
+            </p>
         </aside>
     )
 }

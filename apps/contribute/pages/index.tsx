@@ -7,11 +7,15 @@ const Page: NextPage = () => (
         <main>
             <section>
                 <header>
-                    <h1><cite>PhyloPic</cite> Image Uploader</h1>
+                    <h1>
+                        <cite>PhyloPic</cite> Image Uploader
+                    </h1>
                 </header>
                 <p>Coming soon.</p>
                 <p>
-                    <a href="https://beta.phylopic.org">Return to <abbr title="beta">βɛτα</abbr> site.</a>
+                    <a href="https://beta.phylopic.org">
+                        Return to <abbr title="beta">βɛτα</abbr> site.
+                    </a>
                 </p>
             </section>
         </main>
