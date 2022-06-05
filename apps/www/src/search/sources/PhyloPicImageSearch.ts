@@ -27,7 +27,7 @@ const PhyloPicImageSearch: FC = () => {
         [matchingText],
     )
     const apiSWRKey = useAPISWRKey(endpoint)
-    const key = useMemo(() => [apiSWRKey, basis] as QueryKey, [apiSWRKey, basis])
+    const key = useMemo(() => (apiSWRKey && basis ? ([apiSWRKey, basis] as QueryKey) : null), [apiSWRKey, basis])
     const [debouncedKey, setDebouncedKey] = useDebounce(key, DEBOUNCE_WAIT, true)
     useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
     const fetcher = useQueryFetcher<PageWithEmbedded<ImageWithEmbedded>>()
