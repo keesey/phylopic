@@ -63,19 +63,23 @@ const PageHead: FC<Props> = ({
             <link key="link:icon:32x32" rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
             <link rel="link:icon:16x16" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
             <link rel="link:manifest" href="/site.webmanifest" />
-            <script
-                async
-                src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(
-                    process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID ?? "",
-                )}`}
-            ></script>
-            <script
-                dangerouslySetInnerHTML={{
-                    __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config",${JSON.stringify(
-                        String(process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID ?? ""),
-                    )})`,
-                }}
-            />
+            {process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID && (
+                <>
+                    <script
+                        async
+                        src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(
+                            process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
+                        )}`}
+                    ></script>
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config",${JSON.stringify(
+                                process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
+                            )})`,
+                        }}
+                    />
+                </>
+            )}
             {children}
         </Head>
     )
