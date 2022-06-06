@@ -1,4 +1,4 @@
-import React, { useContext, FC } from "react"
+import { useContext, FC } from "react"
 import NameEditorContainer from "~/contexts/NameEditorContainer"
 import Context from "~/contexts/NodeEditorContainer/Context"
 import NameEditor from "~/editors/NameEditor"

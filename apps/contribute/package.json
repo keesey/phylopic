@@ -8,15 +8,22 @@
     },
     "dependencies": {
         "@phylopic/api-models": "*",
+        "@phylopic/source-models": "*",
+        "@phylopic/utils": "*",
+        "@phylopic/utils-aws": "*",
+        "jsonwebtoken": "^8.5.1",
         "next": "^12.1.6",
+        "potrace": "^2.1.8",
         "react": "^18.1.0",
         "react-dom": "^18.1.0"
     },
     "description": "Image contribution application for *PhyloPic*.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/react": "^16.14.26",
-        "@types/react-dom": "^16.9.16",
+        "@types/jsonwebtoken": "^8.5.8",
+        "@types/potrace": "^2.1.1",
+        "@types/react": "^18.0.12",
+        "@types/react-dom": "^18.0.5",
         "eslint-config-phylopic": "*",
         "sass": "^1.51.0",
         "typescript": "^4.6.4"

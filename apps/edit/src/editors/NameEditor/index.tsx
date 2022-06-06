@@ -1,6 +1,6 @@
 import { NomenPartClass } from "parse-nomen"
 import { Nomen, stringifyNormalized } from "@phylopic/utils"
-import React, { useContext, useState, FC } from "react"
+import { useContext, useState, FC } from "react"
 import Context from "~/contexts/NameEditorContainer/Context"
 import NameSelector from "~/selectors/NameSelector"
 import NameView from "~/views/NameView"

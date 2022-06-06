@@ -1,0 +1,79 @@
+@use "../../styles/colors.scss";
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    @media (min-aspect-ratio: 2/1) {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    @media (max-width: 1200px) {
+        grid-template-columns: 1fr;
+    }
+    > * {
+        padding: 0;
+        &:nth-child(1) {
+            border-bottom: 1px solid colors.$glacier;
+            border-right: 1px solid colors.$glacier;
+            padding-bottom: 2rem;
+            padding-right: 2rem;
+            @media (min-aspect-ratio: 2/1) {
+                border-bottom: none;
+                padding: 0;
+                padding-right: 2rem;
+            }
+            @media (max-width: 1200px) {
+                border-right: none;
+                padding: 0 0 2rem;
+            }
+        }
+        &:nth-child(2) {
+            border-bottom: 1px solid colors.$glacier;
+            border-left: 1px solid colors.$glacier;
+            padding-bottom: 2rem;
+            padding-left: 2rem;
+            @media (min-aspect-ratio: 2/1) {
+                border-bottom: none;
+                border-left: none;
+                border-right: 1px solid colors.$glacier;
+                padding: 0 2rem;
+            }
+            @media (max-width: 1200px) {
+                border-left: none;
+                padding: 2rem 0;
+            }
+        }
+        &:nth-child(3) {
+            border-right: 1px solid colors.$glacier;
+            border-top: 1px solid colors.$glacier;
+            padding-right: 2rem;
+            padding-top: 2rem;
+            @media (min-aspect-ratio: 2/1) {
+                border-top: none;
+                padding: 0 2rem;
+            }
+            @media (max-width: 1200px) {
+                border-bottom: 1px solid colors.$glacier;
+                border-right: none;
+                border-top: none;
+                padding: 2rem 0;
+            }
+        }
+        &:nth-child(4) {
+            border-left: 1px solid colors.$glacier;
+            border-top: 1px solid colors.$glacier;
+            padding-left: 2rem;
+            padding-top: 2rem;
+            @media (min-aspect-ratio: 2/1) {
+                border: none;
+                padding: 0;
+                padding-left: 2rem;
+            }
+            @media (max-width: 1200px) {
+                border: none;
+                padding: 2rem 0 0;
+            }
+        }
+        p:first-child {
+            margin-block-start: 0;
+        }
+    }
+}

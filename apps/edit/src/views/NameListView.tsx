@@ -1,5 +1,5 @@
 import { NomenPart } from "parse-nomen"
-import React, { FC } from "react"
+import { FC } from "react"
 import NameTextView from "./NameTextView"
 
 export interface Props {

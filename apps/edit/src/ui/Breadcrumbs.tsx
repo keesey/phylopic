@@ -1,5 +1,5 @@
 import Link from "next/link"
-import React, { ReactNode, FC } from "react"
+import { ReactNode, FC } from "react"
 import styles from "./Breadcrumbs.module.scss"
 
 export type BreadcrumbItem = Readonly<{

@@ -1,5 +1,5 @@
 import { isUUID, normalizeUUID } from "@phylopic/utils"
-import React, { DragEvent, useCallback, useContext, FC } from "react"
+import { DragEvent, useCallback, useContext, FC } from "react"
 import Context from "~/contexts/PhylogenyEditorContainer/Context"
 import BubbleNode from "~/ui/BubbleNode"
 import NameView from "~/views/NameView"

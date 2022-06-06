@@ -1,7 +1,7 @@
 import { List, Page } from "@phylopic/api-models"
 import { extractPath } from "@phylopic/utils"
+import { FetchResult, fetchResult } from "@phylopic/utils-api"
 import { GetServerSideProps } from "next"
-import fetchResult, { FetchResult } from "~/fetch/fetchResult"
 
 const createGetServerSideListSitemapProps =
     (path: string): GetServerSideProps =>

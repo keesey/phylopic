@@ -1,13 +1,22 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "~/*": ["src/*"]
-        },
-        "rootDir": ".",
-        "module": "esnext"
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "src/*"
+      ]
     },
-    "exclude": ["node_modules"],
-    "extends": "@phylopic/tsconfig/next.json",
-    "include": ["pages", "src", "next-env.d.ts"]
+    "rootDir": ".",
+    "module": "esnext",
+    "jsx": "preserve"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "extends": "@phylopic/tsconfig/next.json",
+  "include": [
+    "pages",
+    "src",
+    "next-env.d.ts"
+  ]
 }

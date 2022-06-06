@@ -1,10 +1,8 @@
 import type { NextPage } from "next"
-import React, { ReactNode } from "react"
+import { ReactNode } from "react"
 import { SWRConfig } from "swr"
-import BuildContainer from "~/builds/BuildContainer"
 import PageHead from "~/metadata/PageHead"
-import SearchContainer from "~/search/SearchContainer"
-import SearchOverlay from "~/search/SearchOverlay"
+import SearchOverlay from "~/ui/SearchOverlay"
 import getBuildStaticProps, { Props } from "~/ssg/getBuildStaticProps"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import PageLoader from "~/ui/PageLoader"
@@ -12,6 +10,8 @@ import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import SupportersView from "~/views/SupportersView"
 import SUPPORTERS from "~/views/SupportersView/SUPPORTERS"
+import { SearchContainer } from "@phylopic/search"
+import { BuildContainer } from "@phylopic/utils-api"
 const NAMES = SUPPORTERS.reduce<readonly ReactNode[]>((prev, supporters) => [...prev, ...supporters.names], [])
 const PageComponent: NextPage<Props> = ({ build }) => (
     <SWRConfig>

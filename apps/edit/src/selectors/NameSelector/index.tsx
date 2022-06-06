@@ -1,6 +1,6 @@
 import { isNomen, Nomen } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
-import React, {
+import {
     DetailedHTMLProps,
     FC,
     InputHTMLAttributes,

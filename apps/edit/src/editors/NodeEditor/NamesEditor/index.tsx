@@ -1,6 +1,6 @@
 import { parseNomen } from "parse-nomen"
 import { Nomen, normalizeNomina, stringifyNormalized } from "@phylopic/utils"
-import React, { ChangeEvent, FormEvent, Fragment, useCallback, useContext, useMemo, useState, FC } from "react"
+import { ChangeEvent, FormEvent, Fragment, useCallback, useContext, useMemo, useState, FC } from "react"
 import Context from "~/contexts/NodeEditorContainer/Context"
 import NameSelector from "~/selectors/NameSelector"
 import BubbleItem from "~/ui/BubbleItem"

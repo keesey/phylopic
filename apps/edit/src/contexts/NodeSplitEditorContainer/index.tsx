@@ -1,6 +1,6 @@
 import { Node } from "@phylopic/source-models"
 import { ISOTimestamp, Nomen, stringifyNormalized, UUID } from "@phylopic/utils"
-import React, { FC, ReactNode, Reducer, useEffect, useMemo, useReducer } from "react"
+import { FC, ReactNode, Reducer, useEffect, useMemo, useReducer } from "react"
 import { Action } from "./Actions"
 import Context from "./Context"
 import reducer from "./reducer"

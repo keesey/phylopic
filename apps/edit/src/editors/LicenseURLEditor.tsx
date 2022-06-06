@@ -6,7 +6,7 @@ import {
     LICENSE_NAMES,
     VALID_LICENSE_URLS,
 } from "@phylopic/utils"
-import React, { ChangeEvent, useCallback, useState, FC } from "react"
+import { ChangeEvent, useCallback, useState, FC } from "react"
 import styles from "./LicenseURLEditor.module.scss"
 
 export type Props = {

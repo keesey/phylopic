@@ -1,6 +1,6 @@
 import { API } from "@phylopic/api-models"
+import { fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps } from "next"
-import fetchResult from "~/fetch/fetchResult"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 export type Props = {
     build: number

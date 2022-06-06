@@ -1,5 +1,5 @@
 import { NomenPart } from "parse-nomen"
-import React, { Fragment, FC } from "react"
+import { Fragment, FC } from "react"
 
 export interface Props {
     name: readonly NomenPart[]

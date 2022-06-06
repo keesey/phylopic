@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps, FC, HTMLAttributes } from "react"
+import { DetailedHTMLProps, FC, HTMLAttributes } from "react"
 import styles from "./BubbleList.module.scss"
 
 export type Props = Omit<DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>, "className">

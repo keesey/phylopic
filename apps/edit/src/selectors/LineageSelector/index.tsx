@@ -1,5 +1,5 @@
 import { Entity, Node } from "@phylopic/source-models"
-import React, { FC, useCallback, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import NodeSelector from "../NodeSelector"
 
 export interface Props {

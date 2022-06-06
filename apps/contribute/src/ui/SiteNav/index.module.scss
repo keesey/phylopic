@@ -1,0 +1,30 @@
+@use "../../styles/colors.scss";
+.main {
+    align-items: baseline;
+    background-color: colors.$cerulean;
+    color: colors.$white;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 1rem;
+    font-weight: bold;
+    gap: 1rem;
+    height: 75px;
+    justify-content: space-between;
+    max-height: 75px;
+    min-height: 75px;
+    overflow: hidden;
+    padding: 1rem;
+    @media (max-width: 222px) {
+        flex-direction: column;
+    }
+    a {
+        text-decoration: none;
+    }
+    h1 {
+        font-family: Georgia, serif;
+        font-size: 25.4pt;
+        font-variant: small-caps;
+        margin: 0;
+        padding: 0;
+    }
+}

@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import { FC } from "react"
 import UUIDSelector from "~/selectors/UUIDSelector"
 import NodesEditor from "./NodesEditor"
 import useAddLineage from "./useAddLineage"

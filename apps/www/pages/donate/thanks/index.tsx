@@ -1,10 +1,8 @@
 import type { NextPage } from "next"
 import React from "react"
 import { SWRConfig } from "swr"
-import BuildContainer from "~/builds/BuildContainer"
 import PageHead from "~/metadata/PageHead"
-import SearchContainer from "~/search/SearchContainer"
-import SearchOverlay from "~/search/SearchOverlay"
+import SearchOverlay from "~/ui/SearchOverlay"
 import AnchorLink from "~/ui/AnchorLink"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import BulletList from "~/ui/BulletList"
@@ -13,6 +11,8 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import SiteTitle from "~/ui/SiteTitle"
+import { BuildContainer } from "@phylopic/utils-api"
+import { SearchContainer } from "@phylopic/search"
 const PageComponent: NextPage = () => (
     <SWRConfig>
         <BuildContainer>

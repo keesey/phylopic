@@ -1,6 +1,6 @@
 import { Entity, Node } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
-import React, { FC, useCallback, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import Modal from "~/ui/Modal"
 import UUIDSelector from "../UUIDSelector"
 

@@ -1,0 +1,16 @@
+@use "../../../../styles/colors.scss";
+.radioOption {
+    align-items: baseline;
+    color: colors.$sunshine;
+    display: grid;
+    grid-template-columns: 2em 1fr;
+    text-align: left;
+    text-decoration: underline;
+    transition: all 0.3s;
+    &:hover {
+        color: colors.$dandelion;
+    }
+    label {
+        cursor: pointer;
+    }
+}

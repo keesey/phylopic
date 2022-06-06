@@ -1,5 +1,5 @@
 import { NomenPart } from "parse-nomen"
-import React, { DetailedHTMLProps, HTMLAttributes, FC } from "react"
+import { DetailedHTMLProps, HTMLAttributes, FC } from "react"
 import NameTextView from "./NameTextView"
 
 export type Props = Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "className"> & {

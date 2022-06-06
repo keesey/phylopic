@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import { FC } from "react"
 import { Arc } from "./Arc"
 import VERTEX_HEIGHT from "./VERTEX_HEIGHT"
 import VERTEX_SPACING from "./VERTEX_SPACING"

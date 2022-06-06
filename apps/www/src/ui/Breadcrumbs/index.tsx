@@ -1,4 +1,4 @@
-import React, { ReactNode, FC } from "react"
+import { ReactNode, FC } from "react"
 import AnchorLink from "../AnchorLink"
 import styles from "./index.module.scss"
 export type BreadcrumbItem = Readonly<{

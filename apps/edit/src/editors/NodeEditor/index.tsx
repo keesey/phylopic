@@ -1,6 +1,6 @@
 import { useRouter } from "next/dist/client/router"
 import { ISOTimestamp, Nomen, UUID } from "@phylopic/utils"
-import React, { useCallback, useContext, useState, FC } from "react"
+import { useCallback, useContext, useState, FC } from "react"
 import { v4 } from "uuid"
 import Context from "~/contexts/NodeEditorContainer/Context"
 import NodeSplitEditorContainer from "~/contexts/NodeSplitEditorContainer"

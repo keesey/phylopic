@@ -1,6 +1,6 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
 import { isString } from "@phylopic/utils"
-import React, { FC, useMemo } from "react"
+import { FC, useMemo } from "react"
 import slugify from "slugify"
 import useLicenseText from "~/hooks/useLicenseText"
 import useNomenText from "~/hooks/useNomenText"

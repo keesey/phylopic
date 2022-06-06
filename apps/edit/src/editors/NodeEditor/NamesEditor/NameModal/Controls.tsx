@@ -1,5 +1,5 @@
 import { stringifyNormalized } from "@phylopic/utils"
-import React, { useCallback, useContext, FC } from "react"
+import { useCallback, useContext, FC } from "react"
 import NameContext from "~/contexts/NameEditorContainer/Context"
 import NodeContext from "~/contexts/NodeEditorContainer/Context"
 import styles from "./Controls.module.scss"

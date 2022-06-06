@@ -1,6 +1,6 @@
 import { Node } from "@phylopic/source-models"
 import { isDefined, stringifyNormalized, UUID } from "@phylopic/utils"
-import React, { useContext, useMemo, FC } from "react"
+import { useContext, useMemo, FC } from "react"
 import { createAcyclicGraph, immediateSuccessors, sinks, successorUnion } from "simple-digraph"
 import Context from "~/contexts/PhylogenyEditorContainer/Context"
 import { NodesMap } from "~/contexts/PhylogenyEditorContainer/State"

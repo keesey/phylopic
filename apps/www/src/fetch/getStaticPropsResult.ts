@@ -1,5 +1,5 @@
+import { ErrorFetchResult, NotFoundFetchResult } from "@phylopic/utils-api"
 import { GetStaticPropsResult } from "next"
-import { ErrorFetchResult, NotFoundFetchResult } from "./fetchResult"
 const getStaticPropsResult = (result: ErrorFetchResult | NotFoundFetchResult): GetStaticPropsResult<never> => {
     switch (result.status) {
         case "error": {
