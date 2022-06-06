@@ -1,6 +1,3 @@
-User-agent: *
-Disallow: /
-
 Sitemap: https://www.phylopic.org/sitemaps/index.xml
 Sitemap: https://www.phylopic.org/sitemaps/contributors.xml
 Sitemap: https://www.phylopic.org/sitemaps/images.xml
