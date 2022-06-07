@@ -6,7 +6,7 @@ import { FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import SearchContext from "../context"
 import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
-export const PhyloPicAutocomplete: FC = () => {
+const PhyloPicAutocomplete: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const { text } = state ?? {}
     const endpoint = useMemo(

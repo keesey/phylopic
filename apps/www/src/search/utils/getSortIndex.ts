@@ -1,4 +1,4 @@
-export const getSortIndex = (value: string | undefined, query: string) => {
+const getSortIndex = (value: string | undefined, query: string) => {
     if (typeof value !== "string") {
         return Number.MAX_SAFE_INTEGER
     }

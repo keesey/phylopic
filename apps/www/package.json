@@ -8,9 +8,9 @@
     },
     "dependencies": {
         "@phylopic/api-models": "*",
-        "@phylopic/search": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
+        "@react-hook/debounce": "^4.0.0",
         "clsx": "^1.1.1",
         "next": "^12.1.6",
         "parse-nomen": "^2.1.2",

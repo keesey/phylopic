@@ -1,4 +1,4 @@
-export const getMatchingText = (matches?: readonly string[], normalizedText?: string) => {
+const getMatchingText = (matches?: readonly string[], normalizedText?: string) => {
     if (!normalizedText) {
         return ""
     }

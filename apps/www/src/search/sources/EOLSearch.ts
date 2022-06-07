@@ -30,7 +30,7 @@ const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, 
     )
     return [response.data.results, query]
 }
-export const EOLSearch: FC = () => {
+const EOLSearch: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const response = useSWRImmutable(state?.text ? [URL, state.text] : null, fetcher)
     useEffect(() => {

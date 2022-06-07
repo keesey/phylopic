@@ -25,7 +25,7 @@ export interface Props {
     children?: ReactNode
     initialText?: string
 }
-export const SearchContainer: FC<Props> = ({ children, initialText = "" }) => {
+const SearchContainer: FC<Props> = ({ children, initialText = "" }) => {
     const [build] = useContext(BuildContext) ?? []
     const [prevBuild, setPrevBuild] = useState(build)
     const contextValue = useReducer(reducer, [initialText], () => createInitialState(initialText))

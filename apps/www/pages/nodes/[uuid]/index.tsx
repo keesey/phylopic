@@ -5,7 +5,7 @@ import {
     Node,
     NodeParameters,
     NodeWithEmbedded,
-    PageWithEmbedded,
+    PageWithEmbedded
 } from "@phylopic/api-models"
 import {
     createSearch,
@@ -14,8 +14,9 @@ import {
     isDefined,
     isUUIDv4,
     parseQueryString,
-    Query,
+    Query
 } from "@phylopic/utils"
+import { addBuildToURL, BuildContainer, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
 import React from "react"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -31,7 +32,7 @@ import TaxonSchemaScript from "~/metadata/SchemaScript/TaxonSchemaScript"
 import getShortNomen from "~/models/getShortNomen"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
-import SearchOverlay from "~/ui/SearchOverlay"
+import SearchContainer from "~/search/SearchContainer"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import NodeContainer from "~/swr/data/NodeContainer"
@@ -40,13 +41,12 @@ import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import Loader from "~/ui/Loader"
 import NomenHeader from "~/ui/NomenHeader"
 import PageLoader from "~/ui/PageLoader"
+import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import ImageListView from "~/views/ImageListView"
 import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
-import { addBuildToURL, BuildContainer, fetchData, fetchResult } from "@phylopic/utils-api"
-import { SearchContainer } from "@phylopic/search"
 export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Pick<Node, "build" | "uuid">

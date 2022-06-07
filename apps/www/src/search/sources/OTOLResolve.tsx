@@ -82,7 +82,7 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
     }, [direct.data, dispatch, indirect.data, ott_id])
     return null
 }
-export const OTOLResolve: FC = () => {
+const OTOLResolve: FC = () => {
     const [state] = useContext(SearchContext) ?? []
     const unresolvedOTTIDs = useMemo(() => {
         const ott_ids = Object.keys(state?.externalResults["opentreeoflife.org"]?.taxonomy ?? {})

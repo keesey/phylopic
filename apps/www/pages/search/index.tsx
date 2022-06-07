@@ -1,26 +1,25 @@
 import {
-    API,
-    Node,
-    NodeListParameters,
+    API, NodeListParameters,
     NodeWithEmbedded,
     normalizeQuery,
     PageWithEmbedded,
-    QueryMatches,
+    QueryMatches
 } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
+import { BuildContainer, fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
 import React from "react"
 import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import PageHead from "~/metadata/PageHead"
-import SearchAside from "~/ui/SearchAside"
-import SearchOverlay from "~/ui/SearchOverlay"
+import SearchContainer from "~/search/SearchContainer"
+import getMatchingText from "~/search/sources/getMatchingText"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import PageLoader from "~/ui/PageLoader"
+import SearchAside from "~/ui/SearchAside"
+import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
-import { BuildContainer, fetchResult } from "@phylopic/utils-api"
-import { getMatchingText, SearchContainer } from "@phylopic/search"
 interface Props {
     build?: number
     fallback?: PublicConfiguration["fallback"]

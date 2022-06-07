@@ -1,5 +1,5 @@
-import { SearchContext } from "@phylopic/search"
 import { FC, Fragment, ReactNode, useContext } from "react"
+import SearchContext from "~/search/context"
 import SearchResults from "../SearchResults"
 import styles from "./index.module.scss"
 export interface Props {
