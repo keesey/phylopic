@@ -1,5 +1,5 @@
 User-agent: *
-Disallow: /
+Allow: /
 
 Sitemap: https://www.phylopic.org/sitemaps/index.xml
 Sitemap: https://www.phylopic.org/sitemaps/contributors.xml
