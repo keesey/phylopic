@@ -21,7 +21,7 @@ const Results: FC<Props> = ({ onCancel, onComplete, searchTerm }) => {
         onComplete?.({
             specific: {
                 identifier: null,
-                name: parsedSearchTerm
+                name: parsedSearchTerm,
             },
         })
     }, [onComplete, parsedSearchTerm])

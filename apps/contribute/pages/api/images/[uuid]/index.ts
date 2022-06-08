@@ -3,7 +3,7 @@ import {
     GetObjectCommandOutput,
     HeadObjectCommand,
     PutObjectCommand,
-    S3Client
+    S3Client,
 } from "@aws-sdk/client-s3"
 import { isUUIDv4 } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"

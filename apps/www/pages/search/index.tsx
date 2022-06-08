@@ -1,9 +1,10 @@
 import {
-    API, NodeListParameters,
+    API,
+    NodeListParameters,
     NodeWithEmbedded,
     normalizeQuery,
     PageWithEmbedded,
-    QueryMatches
+    QueryMatches,
 } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
 import { BuildContainer, fetchResult } from "@phylopic/utils-api"

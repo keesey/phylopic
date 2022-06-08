@@ -38,7 +38,7 @@
     },
     "private": true,
     "scripts": {
-    "build": "next build",
+        "build": "next build",
         "clean": "rm -rf .next && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3000",
         "lint": "TIMING=1 next lint",

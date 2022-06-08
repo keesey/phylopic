@@ -11,7 +11,9 @@ const useFileState = () => {
                 event.preventDefault()
                 if (event.dataTransfer?.items?.length) {
                     setFile(
-                        Array.from(event.dataTransfer.items).filter(item => item.kind === "file")[0]?.getAsFile() ?? undefined,
+                        Array.from(event.dataTransfer.items)
+                            .filter(item => item.kind === "file")[0]
+                            ?.getAsFile() ?? undefined,
                     )
                 } else if (event.dataTransfer?.files?.length) {
                     setFile(event.dataTransfer.files[0])

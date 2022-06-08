@@ -22,7 +22,12 @@ const EmailForm: FC<Props> = ({ onEmailSupplied, onEmailAndPayloadSupplied }) =>
             const faultCollector = new ValidationFaultCollector()
             if (!isEmailAddress(value, faultCollector.sub("email"))) {
                 setSWRKey(null)
-                alert(faultCollector.list().map(fault => fault.message).join("\n\n"))
+                alert(
+                    faultCollector
+                        .list()
+                        .map(fault => fault.message)
+                        .join("\n\n"),
+                )
             } else {
                 setSWRKey(`/api/authorize/${encodeURIComponent(value)}`)
             }

@@ -5,7 +5,7 @@ import {
     Node,
     NodeParameters,
     NodeWithEmbedded,
-    PageWithEmbedded
+    PageWithEmbedded,
 } from "@phylopic/api-models"
 import {
     createSearch,
@@ -14,7 +14,7 @@ import {
     isDefined,
     isUUIDv4,
     parseQueryString,
-    Query
+    Query,
 } from "@phylopic/utils"
 import { addBuildToURL, BuildContainer, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"

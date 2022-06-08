@@ -13,10 +13,7 @@ export interface SearchEntry {
 }
 const useSearch = (text: string) => {
     const phyloPicKey = useMemo(
-        () =>
-            text
-                ? `${process.env.NEXT_PUBLIC_API_URL}/nodes?name=${encodeURIComponent(text)}&page=1`
-                : null,
+        () => (text ? `${process.env.NEXT_PUBLIC_API_URL}/nodes?name=${encodeURIComponent(text)}&page=1` : null),
         [text],
     )
     const phyloPic = useSWR<PageWithEmbedded<Node>>(phyloPicKey, fetcher)
@@ -55,7 +52,7 @@ const useSearch = (text: string) => {
     return useAsyncMemo(
         entry,
         error,
-        (!data && !error) && (phyloPic.isValidating || otol.isValidating || eol.isValidating),
+        !data && !error && (phyloPic.isValidating || otol.isValidating || eol.isValidating),
     )
 }
 export default useSearch

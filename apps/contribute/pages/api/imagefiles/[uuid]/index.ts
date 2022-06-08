@@ -4,7 +4,7 @@ import {
     HeadObjectCommand,
     ListObjectsV2Command,
     PutObjectCommand,
-    S3Client
+    S3Client,
 } from "@aws-sdk/client-s3"
 import { EmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"
