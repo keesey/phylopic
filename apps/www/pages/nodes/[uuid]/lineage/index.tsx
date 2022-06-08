@@ -105,13 +105,13 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const nodeParameters: Omit<NodeParameters, "uuid"> & Query = { embed_primaryImage: "true" }
-    const baseKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid
-    const nodeKey = baseKey + createSearch(nodeParameters)
-    const listKey = baseKey + "/lineage"
-    const [nodeResult, listResult] = await Promise.all([
+    const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid
+    const listKey = nodeKey + "/lineage"
+    const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + createSearch({ filter_node: uuid })
+    const [nodeResult, listResult, imagesResult] = await Promise.all([
         fetchResult<NodeWithEmbedded>(nodeKey),
         fetchResult<List>(listKey),
+        fetchResult<List>(imagesKey),
     ])
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
@@ -123,17 +123,33 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     const props: Props = {
         build,
         fallback: {
+            ...(imagesResult.ok ? { [unstable_serialize(addBuildToURL(imagesKey, build))]: imagesResult.data } : null),
             [unstable_serialize(addBuildToURL(listKey, build))]: listResult.data,
             [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data,
         },
         uuid,
     }
-    if (listResult.data.totalPages) {
-        const getPageKey = (page: number) => listKey + createSearch({ build, page })
-        const pageResponse = await fetchData<Page>(getPageKey(0))
-        if (pageResponse.ok) {
-            props.fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
-        }
-    }
+    await Promise.all([
+        (async () => {
+            if (listResult.data.totalPages) {
+                const getPageKey = (page: number) => listKey + createSearch({ build, embed_items: true, page })
+                const pageResponse = await fetchData<Page>(getPageKey(0))
+                if (pageResponse.ok) {
+                    props.fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
+                }
+            }
+        })(),
+        (async () => {
+            if (imagesResult.ok && imagesResult.data.totalPages) {
+                const getPageKey = (page: number) =>
+                    imagesKey +
+                    createSearch({ build, embed_items: true, embed_specificNode: true, filter_node: uuid, page })
+                const pageResponse = await fetchData<Page>(getPageKey(0))
+                if (pageResponse.ok) {
+                    props.fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
+                }
+            }
+        })(),
+    ])
     return { props }
 }
