@@ -44,7 +44,7 @@ const SUPPORTERS: ReadonlyArray<{ names: readonly ReactNode[] }> = [
         names: [
             "Akifumi Tanabe",
             "Bastian Greshake Tzovaras",
-            "Bruno de Medeiros",
+            "Tauana Cunha & Bruno de Medeiros",
             "Daniel C. Ilut",
             "Foo Njaball",
             "J. Schnitzler",
