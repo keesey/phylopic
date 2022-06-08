@@ -1,4 +1,4 @@
 import { createContext } from "react"
 import { JWT } from "./JWT"
-const AuthContext = createContext<Readonly<[JWT | undefined, (value: JWT | undefined) => void]> | undefined>(undefined)
+const AuthContext = createContext<Readonly<[JWT | null, (value: JWT | null) => void]> | undefined>(undefined)
 export default AuthContext

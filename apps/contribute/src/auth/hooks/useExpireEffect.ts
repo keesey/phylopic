@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import { useCallback, useEffect, useMemo } from "react"
 import { JWT } from "../JWT"
 import decodeJWT from "../jwt/decodeJWT"
-const useExpireEffect = (token: JWT | undefined) => {
+const useExpireEffect = (token: JWT | null) => {
     const router = useRouter()
     const expiration = useMemo(() => {
         if (token) {

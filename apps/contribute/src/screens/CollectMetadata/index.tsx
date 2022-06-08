@@ -69,10 +69,10 @@ const CollectMetadata: FC<Props> = ({ uuid }) => {
                 <ImageView source={imageSource.data} />
             </div>
             <div>
-                <Taxonomy onComplete={handleStepComplete} suggestion={prevSubmission} />
+                <Taxonomy onComplete={handleStepComplete} suggestion={prevSubmission ?? undefined} />
             </div>
             <div>
-                <Usage onComplete={handleStepComplete} suggestion={prevSubmission} />
+                <Usage onComplete={handleStepComplete} suggestion={prevSubmission ?? undefined} />
             </div>
             <div>
                 <Finalize submission={submission} onComplete={handleFinalizeComplete} uuid={uuid} />

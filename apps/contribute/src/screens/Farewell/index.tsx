@@ -8,7 +8,7 @@ const Farewell: FC = () => {
     const authorized = useAuthorized()
     useEffect(() => {
         if (authorized) {
-            setJWT?.(undefined)
+            setJWT?.(null)
         }
     }, [authorized, setJWT])
     if (authorized) {

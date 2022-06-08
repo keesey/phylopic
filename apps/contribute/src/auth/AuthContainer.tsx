@@ -7,7 +7,7 @@ type Props = {
     children: ReactNode
 }
 const AuthContainer: FC<Props> = ({ children }) => {
-    const contextValue = useStoredState<JWT | undefined>("auth")
+    const contextValue = useStoredState<JWT>("auth")
     useExpireEffect(contextValue[0])
     return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
 }
