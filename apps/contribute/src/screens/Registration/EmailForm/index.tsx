@@ -4,7 +4,7 @@ import { ChangeEvent, FC, FormEvent, useCallback, useEffect, useState } from "re
 import useSWR from "swr"
 import isPayload from "~/auth/isPayload"
 import Payload from "~/auth/Payload"
-import fetcher from "~/swr/fetcher"
+import fetchJSON from "~/swr/fetchJSON"
 export interface Props {
     onEmailSupplied?: (email: EmailAddress) => void
     onEmailAndPayloadSupplied?: (email: EmailAddress, payload: Payload) => void
@@ -15,7 +15,7 @@ const EmailForm: FC<Props> = ({ onEmailSupplied, onEmailAndPayloadSupplied }) =>
     const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value)
     }, [])
-    const { data, isValidating, error } = useSWR<string | null>(swrKey, fetcher)
+    const { data, isValidating, error } = useSWR<string | null>(swrKey, fetchJSON)
     const handleFormSubmit = useCallback(
         (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault()

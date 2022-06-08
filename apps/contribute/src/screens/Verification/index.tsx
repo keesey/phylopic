@@ -1,9 +1,9 @@
 import { EmailAddress, UUID } from "@phylopic/utils"
 import { FC, useContext, useEffect, useMemo } from "react"
-import useSWR from "swr"
+import useSWRImmutable from "swr/immutable"
 import AuthContext from "~/auth/AuthContext"
 import { JWT } from "~/auth/JWT"
-import fetcher from "~/swr/fetcher"
+import fetchJWT from "~/swr/fetchJWT"
 import Loader from "~/ui/Loader"
 import WelcomeBack from "../WelcomeBack"
 export interface Props {
@@ -13,14 +13,14 @@ export interface Props {
 const Verification: FC<Props> = ({ email, uuid }) => {
     const [, setJWT] = useContext(AuthContext) ?? []
     const url = useMemo(() => `/api/authorize/${encodeURIComponent(email)}/${encodeURIComponent(uuid)}`, [email, uuid])
-    const { data, isValidating, error } = useSWR<JWT>(url, fetcher)
+    const { data, isValidating, error } = useSWRImmutable<JWT>(url, fetchJWT)
     useEffect(() => {
         if (error) {
             alert(error)
         }
     }, [error])
     useEffect(() => {
-        if (data && typeof data === "string") {
+        if (data) {
             setJWT?.(data)
         }
     }, [data, setJWT])

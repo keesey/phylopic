@@ -2,7 +2,7 @@ import { normalizeQuery, QueryMatches } from "@phylopic/api-models"
 import { compareStrings } from "@phylopic/utils"
 import { useMemo } from "react"
 import useSWR from "swr"
-import fetcher from "~/swr/fetcher"
+import fetchJSON from "~/swr/fetchJSON"
 import useEOLResults from "./useEOLResults"
 import useOTOLResults from "./useOTOLResults"
 const getSortIndex = (value: string, query: string) => {
@@ -27,7 +27,7 @@ const useAutocomplete = (text: string): readonly string[] => {
                 : null,
         [normalized],
     )
-    const phyloPic = useSWR<QueryMatches>(phyloPicKey, fetcher)
+    const phyloPic = useSWR<QueryMatches>(phyloPicKey, fetchJSON)
     const otol = useOTOLResults(normalized)
     const eol = useEOLResults(normalized)
     const all = useMemo(() => {

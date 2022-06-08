@@ -3,7 +3,7 @@ import { Identifier, Nomen } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { useMemo } from "react"
 import useSWR from "swr"
-import fetcher from "~/swr/fetcher"
+import fetchJSON from "~/swr/fetchJSON"
 import useAsyncMemo from "~/utils/useAsyncMemo"
 import useEOLResults from "./useEOLResults"
 import useOTOLResults from "./useOTOLResults"
@@ -16,7 +16,7 @@ const useSearch = (text: string) => {
         () => (text ? `${process.env.NEXT_PUBLIC_API_URL}/nodes?name=${encodeURIComponent(text)}&page=1` : null),
         [text],
     )
-    const phyloPic = useSWR<PageWithEmbedded<Node>>(phyloPicKey, fetcher)
+    const phyloPic = useSWR<PageWithEmbedded<Node>>(phyloPicKey, fetchJSON)
     const otol = useOTOLResults(text)
     const eol = useEOLResults(text)
     const phyloPicEntries = useMemo(
