@@ -2,6 +2,7 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
         "allowJs": true,
+        "baseUrl": ".",
         "incremental": true,
         "isolatedModules": true,
         "jsx": "preserve",
@@ -9,12 +10,16 @@
         "module": "ESNext",
         "noEmit": true,
         "outDir": "dist",
+        "paths": {
+            "~/*": ["src/*"]
+        },
         "resolveJsonModule": true,
+        "rootDir": ".",
         "skipLibCheck": true,
         "target": "ES5"
     },
     "display": "Next.js",
     "exclude": ["node_modules"],
     "extends": "./base.json",
-    "include": ["src", "next-env.d.ts"]
+    "include": ["pages", "src", "next-env.d.ts"]
 }
