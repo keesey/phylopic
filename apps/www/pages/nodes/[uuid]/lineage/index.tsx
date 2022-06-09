@@ -29,11 +29,12 @@ import NomenView from "~/views/NomenView"
 export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Pick<Node, "build" | "uuid">
+const NODE_PARAMETERS: Pick<NodeParameters, "embed_primaryImage"> & Query = { embed_primaryImage: "true" }
 const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
     return (
         <SWRConfig value={{ fallback }}>
             <BuildContainer initialValue={build}>
-                <NodeContainer uuid={uuid}>
+                <NodeContainer uuid={uuid} query={NODE_PARAMETERS}>
                     {node => (
                         <>
                             <PageLoader />
@@ -105,9 +106,9 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid
-    const listKey = nodeKey + "/lineage"
-    const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + createSearch({ filter_node: uuid })
+    const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + createSearch(NODE_PARAMETERS)
+    const listKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + "/lineage"
+    const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/images/" + createSearch({ filter_node: uuid })
     const [nodeResult, listResult, imagesResult] = await Promise.all([
         fetchResult<NodeWithEmbedded>(nodeKey),
         fetchResult<List>(listKey),
