@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from "react"
+import React, { FC, ReactNode, useState } from "react"
 import BuildContext from "./BuildContext"
 export interface BuildContainerProps {
     children: ReactNode
