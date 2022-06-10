@@ -1,5 +1,5 @@
-@use "../../styles/colors.scss";
-@use "../../styles/mixins/bullet.scss";
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/bullet.scss";
 .main {
     background-color: colors.$cerulean;
     color: colors.$white;
@@ -20,10 +20,7 @@
     }
 }
 .item {
-    @include bullet.item;
-    &::after {
-        color: colors.$white;
-    }
+    @include bullet.item(colors.$white);
 }
 .logos {
     align-items: center;

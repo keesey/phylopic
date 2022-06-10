@@ -1,5 +1,5 @@
-@use "../../../styles/colors.scss";
-@use "../../../styles/mixins/buttons.scss";
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/buttons.scss";
 .selectFile {
     align-items: flex-start;
     border: 16px dashed colors.$wash;
@@ -17,7 +17,7 @@
     border-color: colors.$sunshine;
 }
 .uploadLabel {
-    @include buttons.cta;
+    @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
 }
 .form {
     margin-top: 1em;

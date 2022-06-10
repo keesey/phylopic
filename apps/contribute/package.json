@@ -9,6 +9,7 @@
     "dependencies": {
         "@phylopic/api-models": "*",
         "@phylopic/source-models": "*",
+        "@phylopic/styles": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
         "form-data": "^4.0.0",

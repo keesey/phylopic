@@ -1,0 +1,36 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "description": "Stylesheet tools for *PhyloPic*.",
+    "devDependencies": {
+        "sass-lint": "^1.13.1"
+    },
+    "files": [
+        "**/*.scss"
+    ],
+    "homepage": "https://github.com/keesey/phylopic/packages/styles#readme",
+    "keywords": [
+        "PhyloPic",
+        "stylesheets",
+        "UI"
+    ],
+    "license": "MIT",
+    "name": "@phylopic/styles",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/keesey/phylopic.git"
+    },
+    "scripts": {
+        "clean": "rm -rf .turbo && rm -rf node_modules",
+        "lint": "TIMING=1 sass-lint src/**/*.scss"
+    },
+    "version": "0.0.0"
+}

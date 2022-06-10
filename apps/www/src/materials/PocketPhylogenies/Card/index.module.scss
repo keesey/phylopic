@@ -1,13 +1,14 @@
+@use "@phylopic/styles/colors.scss";
 .main {
     cursor: pointer;
-    filter: drop-shadow(-10px 10px 10px rgba(48, 88, 96, 0.1));
+    filter: drop-shadow(-10px 10px 10px colors.$shadow);
     height: 350px;
     position: relative;
     width: 200px;
     perspective: 1024px;
 }
 .front {
-    background-color: #12aba6;
+    background-color: colors.$marine;
     color: white;
 }
 .side {

@@ -1,10 +1,8 @@
-@use "../colors.scss";
-
-@mixin cta {
-    background-color: colors.$foam;
-    border: 2pt solid colors.$aquatic;
+@mixin cta($foreground-color, $background-color, $border-color) {
+    background-color: $background-color;
+    border: 2pt solid $border-color;
     border-radius: 2rem;
-    color: colors.$aquatic;
+    color: $foreground-color;
     cursor: pointer;
     font-size: large;
     font-weight: bold;
@@ -13,8 +11,8 @@
     transition: all 0.3s;
 
     &:hover {
-        background-color: colors.$aquatic;
-        color: colors.$foam;
+        background-color: $border-color;
+        color: $background-color;
     }
 }
 
@@ -23,21 +21,21 @@
     opacity: 0.5;
 
     &:hover {
-        background-color: colors.$foam;
-        color: colors.$aquatic;
+        background-color: $background-color;
+        color: $foreground-color;
     }
 }
 
-@mixin text {
+@mixin text($color, $hover-color) {
     border: none;
     background: none;
-    color: colors.$cerulean;
+    color: $color;
     font-size: 1em;
     margin: 0;
     padding: 0;
     transition: all 0.3s;
 
     &:hover {
-        color: colors.$glacier;
+        color: $hover-color;
     }
 }

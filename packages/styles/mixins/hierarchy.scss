@@ -1,7 +1,8 @@
-@mixin item {
+@mixin item($separator-color) {
     display: inline;
 
     &::after {
+        color: $separator-color;
         content: "/";
         margin: 0 0.25em;
     }

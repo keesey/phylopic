@@ -1,5 +1,5 @@
-@use "../../styles/colors.scss";
-@use "../../styles/mixins/buttons.scss";
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/buttons.scss";
 .content {
     display: flex;
     flex-wrap: nowrap;
@@ -20,7 +20,7 @@
         }
     }
     button {
-        @include buttons.cta;
+        @include buttons.cta(colors.$aquatic, colors.$foam, colors.$aquatic);
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }

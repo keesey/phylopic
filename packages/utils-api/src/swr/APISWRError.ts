@@ -10,7 +10,7 @@ export class APISWRError extends Error {
             data?.errors
                 .map(error => error.userMessage)
                 .filter(isDefined)
-                .join("\n") ?? statusText,
+                .join("\n") || statusText,
         )
     }
 }

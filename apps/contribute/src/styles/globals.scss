@@ -1,32 +1,22 @@
-@use "colors.scss";
-@use "mixins/buttons.scss";
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/buttons.scss";
+@import "@phylopic/styles/globals.scss";
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap");
-* {
-    box-sizing: border-box;
-}
 a {
-    color: inherit;
-    transition: all 0.3s;
-    &:active,
     &:hover {
         opacity: 0.5;
     }
 }
-abbr {
-    text-decoration: none;
-}
 button,
 a.cta {
-    @include buttons.cta;
+    @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
 }
 a.text {
-    @include buttons.text;
+    @include buttons.text(colors.$sunshine, colors.$sunshineFade);
 }
 body,
 html {
     color: colors.$white;
-    font-family: Roboto, sans-serif;
-    font-size: large;
     margin: 0;
     padding: 0;
     @media (max-width: 1200px) {
@@ -67,11 +57,6 @@ main {
 p {
     text-align: left;
 }
-ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
 input {
     background-color: colors.$vellum;
     border-radius: 1rem;
@@ -90,6 +75,6 @@ input {
         color: colors.$wash;
     }
     &[type="submit"] {
-        @include buttons.cta;
+        @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
     }
 }

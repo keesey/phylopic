@@ -1,5 +1,5 @@
-@use "../../styles/colors.scss";
-@use "../../styles/mixins/bullet.scss";
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/bullet.scss";
 .main {
     background-color: colors.$pine;
     bottom: 0;
@@ -24,7 +24,7 @@
     }
 }
 .item {
-    @include bullet.item;
+    @include bullet.item(colors.$black);
     &::after {
         color: colors.$white;
     }

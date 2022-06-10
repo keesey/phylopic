@@ -1,10 +1,10 @@
-@use "../colors.scss";
-@mixin item {
+@mixin item($separator-color) {
     &::after {
-        color: colors.$black;
+        color: $separator-color;
         content: "•";
         margin: 0 0.5em;
     }
+
     &:last-of-type::after {
         content: none;
     }
