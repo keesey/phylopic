@@ -1,6 +1,6 @@
+import { BuildContext } from "@phylopic/utils-api"
 import { useRouter } from "next/router"
 import { FC, ReactNode, useContext, useEffect, useReducer, useState } from "react"
-import BuildContext from "~/builds/BuildContext"
 import SearchContext from "../context"
 import { State } from "../context/State"
 import EOLSearch from "../sources/EOLSearch"

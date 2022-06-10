@@ -1,6 +1,5 @@
 import {
     API,
-    Node,
     NodeListParameters,
     NodeWithEmbedded,
     normalizeQuery,
@@ -8,19 +7,18 @@ import {
     QueryMatches,
 } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
+import { BuildContainer, fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
 import React from "react"
 import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
-import BuildContainer from "~/builds/BuildContainer"
-import fetchResult from "~/fetch/fetchResult"
 import PageHead from "~/metadata/PageHead"
-import SearchAside from "~/search/SearchAside"
 import SearchContainer from "~/search/SearchContainer"
-import SearchOverlay from "~/search/SearchOverlay"
-import getMatchingText from "~/search/utils/getMatchingText"
+import getMatchingText from "~/search/sources/getMatchingText"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import PageLoader from "~/ui/PageLoader"
+import SearchAside from "~/ui/SearchAside"
+import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 interface Props {

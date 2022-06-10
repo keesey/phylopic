@@ -1,11 +1,10 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query, URL } from "@phylopic/utils"
+import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { FC, Fragment, ReactNode, useCallback, useContext, useEffect, useMemo } from "react"
 import { BareFetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import useSWRInfinite from "swr/infinite"
-import BuildContext from "~/builds/BuildContext"
-import useAPIFetcher from "../api/useAPIFetcher"
 import createPageKeyGetter from "./createPageKeyGetter"
 import InfiniteScroll from "./InfiniteScroll"
 export type Props<T = unknown> = {

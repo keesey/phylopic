@@ -1,5 +1,5 @@
 import { Nomen, stringifyNormalized } from "@phylopic/utils"
-import React, { FC } from "react"
+import { FC } from "react"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"

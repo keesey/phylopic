@@ -1,5 +1,5 @@
 import { UUID } from "@phylopic/utils"
-import React, { DragEvent, useCallback, useContext, FC } from "react"
+import { DragEvent, useCallback, useContext, FC } from "react"
 import Context from "~/contexts/PhylogenyEditorContainer/Context"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"

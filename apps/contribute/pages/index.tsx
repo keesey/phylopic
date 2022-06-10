@@ -1,24 +1,28 @@
 import type { NextPage } from "next"
 import React from "react"
+import { SWRConfig } from "swr"
+import AuthContainer from "~/auth/AuthContainer"
 import PageHead from "~/metadata/PageHead"
+import Registration from "~/screens/Registration"
+import MountedOnly from "~/ui/MountedOnly"
+import PageLoader from "~/ui/PageLoader"
+import SiteFooter from "~/ui/SiteFooter"
+import SiteNav from "~/ui/SiteNav"
 const Page: NextPage = () => (
-    <>
+    <SWRConfig>
+        <PageLoader />
         <PageHead title="PhyloPic: Contribute" url="https://contribute.phylopic.org/" />
-        <main>
-            <section>
-                <header>
-                    <h1>
-                        <cite>PhyloPic</cite> Image Uploader
-                    </h1>
-                </header>
-                <p>Coming soon.</p>
-                <p>
-                    <a href="https://beta.phylopic.org">
-                        Return to <abbr title="beta">βɛτα</abbr> site.
-                    </a>
-                </p>
-            </section>
-        </main>
-    </>
+        <AuthContainer>
+            <header>
+                <SiteNav />
+            </header>
+            <main>
+                <MountedOnly>
+                    <Registration />
+                </MountedOnly>
+            </main>
+            <SiteFooter />
+        </AuthContainer>
+    </SWRConfig>
 )
 export default Page

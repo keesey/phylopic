@@ -1,5 +1,5 @@
 import { Nomen } from "@phylopic/utils"
-import React, { FC } from "react"
+import { FC } from "react"
 import NameView from "./NameView"
 
 export interface Props {

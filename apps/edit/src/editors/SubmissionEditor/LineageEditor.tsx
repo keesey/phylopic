@@ -1,6 +1,6 @@
 import { Entity, Node, NodeIdentifier } from "@phylopic/source-models"
 import { Identifier, isUUID, stringifyNormalized, UUID } from "@phylopic/utils"
-import React, { useCallback, useContext, useMemo, useState, FC } from "react"
+import { useCallback, useContext, useMemo, useState, FC } from "react"
 import Context from "~/contexts/SubmissionEditorContainer/Context"
 // import LineageSelector from "~/selectors/LineageSelector"
 import BubbleItem from "~/ui/BubbleItem"

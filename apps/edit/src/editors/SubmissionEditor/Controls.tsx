@@ -1,5 +1,5 @@
 import { stringifyNormalized } from "@phylopic/utils"
-import React, { useContext, useEffect, useMemo, FC } from "react"
+import { useContext, useEffect, useMemo, FC } from "react"
 import Context from "~/contexts/SubmissionEditorContainer/Context"
 import useApprove from "~/contexts/SubmissionEditorContainer/useApprove"
 import useDelete from "~/contexts/SubmissionEditorContainer/useDelete"

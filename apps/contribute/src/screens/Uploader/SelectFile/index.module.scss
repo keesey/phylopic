@@ -1,0 +1,26 @@
+@use "../../../styles/colors.scss";
+@use "../../../styles/mixins/buttons.scss";
+.selectFile {
+    align-items: flex-start;
+    border: 16px dashed colors.$wash;
+    border-radius: 32px;
+    display: flex;
+    flex-direction: column;
+    padding: 128px;
+    justify-content: center;
+    transition: all 0.3s;
+    input[type="file"] {
+        display: none;
+    }
+}
+.highlighted {
+    border-color: colors.$sunshine;
+}
+.uploadLabel {
+    @include buttons.cta;
+}
+.form {
+    margin-top: 1em;
+    text-align: center;
+    width: 100%;
+}

@@ -1,8 +1,8 @@
 import { createSearch } from "@phylopic/utils"
+import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { FC, useContext, useEffect } from "react"
-import { Fetcher } from "swr"
+import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 const URL = "https://eol.org/api/search/1.0.json"
 interface EOLSearch {

@@ -1,5 +1,5 @@
 import { MediaLink } from "@phylopic/api-models"
-import React, { FC, useMemo } from "react"
+import { FC, useMemo } from "react"
 import slugify from "slugify"
 import getImageFileExtension from "~/files/getImageFileExtension"
 import DimensionView from "./DimensionView"

@@ -1,10 +1,9 @@
 import { QueryMatches } from "@phylopic/api-models"
 import { createSearch, extractQueryString, parseQueryString } from "@phylopic/utils"
+import { useAPIFetcher, useAPISWRKey } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
-import useAPIFetcher from "~/swr/api/useAPIFetcher"
-import useAPISWRKey from "~/swr/api/useAPISWRKey"
 import SearchContext from "../context"
 import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
 const PhyloPicAutocomplete: FC = () => {

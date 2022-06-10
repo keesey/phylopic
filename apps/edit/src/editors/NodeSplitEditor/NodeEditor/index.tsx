@@ -1,6 +1,6 @@
 import { Node } from "@phylopic/source-models"
 import { isNomen, Nomen } from "@phylopic/utils"
-import React, { DragEvent, useCallback, useContext, FC } from "react"
+import { DragEvent, useCallback, useContext, FC } from "react"
 import { NodeDestination } from "~/contexts/NodeSplitEditorContainer/Actions"
 import Context from "~/contexts/NodeSplitEditorContainer/Context"
 import NameView from "~/views/NameView"

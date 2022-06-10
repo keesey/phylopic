@@ -1,21 +1,21 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
 import { URL } from "@phylopic/utils"
+import { BuildContainer } from "@phylopic/utils-api"
 import type { NextPage } from "next"
 import React from "react"
 import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
-import BuildContainer from "~/builds/BuildContainer"
 import MailingListForm from "~/forms/MailingListForm"
 import PocketPhylogenies from "~/materials/PocketPhylogenies"
 import PageHead from "~/metadata/PageHead"
 import SchemaScript from "~/metadata/SchemaScript"
 import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
 import SearchContainer from "~/search/SearchContainer"
-import SearchOverlay from "~/search/SearchOverlay"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import HeaderNav from "~/ui/HeaderNav"
 import PageLoader from "~/ui/PageLoader"
+import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import SiteTitle from "~/ui/SiteTitle"
@@ -65,7 +65,9 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                         alternateName: "T. Michael Keesey",
                         email: "keesey@gmail.com",
                         name: "Mike Keesey",
-                        sameAs: `https://www.phylopic.org/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`,
+                        sameAs: process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID
+                            ? `https://www.phylopic.org/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`
+                            : undefined,
                         url: "http://tmkeesey.net",
                     }}
                 />

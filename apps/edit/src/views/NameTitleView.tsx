@@ -1,7 +1,7 @@
 import { Entity, Node } from "@phylopic/source-models"
 import { Nomen } from "@phylopic/utils"
 import Link from "next/link"
-import React, { FC } from "react"
+import { FC } from "react"
 import NameView from "./NameView"
 
 export interface Props {

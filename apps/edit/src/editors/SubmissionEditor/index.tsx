@@ -1,4 +1,4 @@
-import React, { useContext, FC } from "react"
+import { useContext, FC } from "react"
 import Context from "~/contexts/SubmissionEditorContainer/Context"
 import AttributionEditor from "./AttributionEditor"
 import ContributorEditor from "./ContributorEditor"

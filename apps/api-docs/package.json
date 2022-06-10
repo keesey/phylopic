@@ -34,7 +34,7 @@
         "build:html": "bootprint openapi ./.swagger.yaml ./dist/2.0",
         "build:public": "cp -r ./public ./dist",
         "build:swagger": "api-spec-converter --from=openapi_3 --to=swagger_2 --syntax=yaml openapi.yaml > .swagger.yaml",
-        "clean": "yarn clean dist && rm -rf .turbo && rm -rf node_modules",
+        "clean": "yarn clean:dist && rm -rf .turbo && rm -rf node_modules",
         "clean:dist": "rm -rf dist",
         "deploy": "aws s3 sync --acl public-read --delete ./dist s3://api-docs.phylopic.org",
         "predeploy": "yarn build",

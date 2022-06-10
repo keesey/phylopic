@@ -14,7 +14,7 @@ import { Identifier, ImageMediaType, isEmailAddress, isUUID, normalizeUUID, stri
 import { getJSON } from "@phylopic/utils-aws"
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from "next"
 import Head from "next/head"
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import SubmissionEditorContainer from "~/contexts/SubmissionEditorContainer"
 import ImageFileEditor from "~/editors/ImageFileEditor"
 import SubmissionEditor from "~/editors/SubmissionEditor"

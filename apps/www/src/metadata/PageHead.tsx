@@ -70,7 +70,7 @@ const PageHead: FC<Props> = ({
                         src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(
                             process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
                         )}`}
-                    ></script>
+                    />
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config",${JSON.stringify(

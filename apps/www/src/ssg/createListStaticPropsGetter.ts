@@ -1,12 +1,10 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
+import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps } from "next"
 import { unstable_serialize } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
-import addBuildToURL from "~/builds/addBuildToURL"
-import fetchData from "~/fetch/fetchData"
-import fetchResult from "~/fetch/fetchResult"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 export type Props = {
     fallback: PublicConfiguration["fallback"]

@@ -1,5 +1,5 @@
 import { UUID } from "@phylopic/utils"
-import React, { FC, useContext } from "react"
+import { FC, useContext } from "react"
 import Context from "~/contexts/NodeSplitEditorContainer/Context"
 import Controls from "./Controls"
 import NodeEditor from "./NodeEditor"

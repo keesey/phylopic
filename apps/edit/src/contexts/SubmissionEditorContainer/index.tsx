@@ -1,6 +1,6 @@
 import { Contribution, NodeIdentifier, Source } from "@phylopic/source-models"
 import { ImageMediaType } from "@phylopic/utils"
-import React, { FC, ReactNode, Reducer, useEffect, useReducer } from "react"
+import { FC, ReactNode, Reducer, useEffect, useReducer } from "react"
 import { Action } from "./Actions"
 import Context from "./Context"
 import reducer from "./reducer"

@@ -1,7 +1,7 @@
+import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { FC, useContext, useEffect } from "react"
-import { Fetcher } from "swr"
+import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import fetchDataAndCheck from "~/fetch/fetchDataAndCheck"
 import SearchContext from "../context"
 import OTOL_URL from "./OTOL_URL"
 interface OTOLAutocompleteName {

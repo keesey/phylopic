@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps, InputHTMLAttributes, KeyboardEvent, useCallback, FC } from "react"
+import { DetailedHTMLProps, InputHTMLAttributes, KeyboardEvent, useCallback, FC } from "react"
 import { isUUID, UUID } from "@phylopic/utils"
 import styles from "./index.module.scss"
 

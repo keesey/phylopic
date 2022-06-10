@@ -1,5 +1,5 @@
 import { stringifyNormalized } from "@phylopic/utils"
-import React, { useContext, useEffect, useMemo, FC } from "react"
+import { useContext, useEffect, useMemo, FC } from "react"
 import Context from "~/contexts/ImageEditorContainer/Context"
 import useSave from "~/contexts/ImageEditorContainer/useSave"
 import styles from "./Controls.module.scss"

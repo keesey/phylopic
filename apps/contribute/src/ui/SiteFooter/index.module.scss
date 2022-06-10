@@ -1,0 +1,32 @@
+@use "../../styles/colors.scss";
+@use "../../styles/mixins/bullet.scss";
+.main {
+    background-color: colors.$cerulean;
+    color: colors.$white;
+    gap: 1em;
+    height: 75px;
+    max-height: 75px;
+    min-height: 75px;
+    overflow: hidden;
+    padding: 1em;
+    a {
+        text-decoration: none;
+    }
+    ul {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+.item {
+    @include bullet.item;
+    &::after {
+        color: colors.$white;
+    }
+}
+.logos {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+}

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import { FC, useCallback, useEffect, useState } from "react"
-import SearchBar from "../../search/SearchBar"
+import SearchBar from "../SearchBar"
 import AnchorLink from "../AnchorLink"
 import SiteTitle from "../SiteTitle"
 import DropdownNav from "./DropdownNav"

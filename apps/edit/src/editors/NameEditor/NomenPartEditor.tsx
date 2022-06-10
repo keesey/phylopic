@@ -1,5 +1,5 @@
 import { NomenPartClass } from "parse-nomen"
-import React, { useContext, FC } from "react"
+import { useContext, FC } from "react"
 import Context from "~/contexts/NameEditorContainer/Context"
 import TextEditor from "../TextEditor"
 import styles from "./NomenPartEditor.module.scss"

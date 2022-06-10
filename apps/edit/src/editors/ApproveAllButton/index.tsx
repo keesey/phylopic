@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import React, { useCallback, useState, FC } from "react"
+import { useCallback, useState, FC } from "react"
 export interface Props {
     contributor: string
 }

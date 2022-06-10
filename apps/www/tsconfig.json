@@ -1,11 +1,12 @@
 {
+    "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
         "baseUrl": ".",
+        "outDir": "dist",
         "paths": {
             "~/*": ["src/*"]
         },
-        "rootDir": ".",
-        "module": "esnext"
+        "rootDir": "."
     },
     "exclude": ["node_modules"],
     "extends": "@phylopic/tsconfig/next.json",
