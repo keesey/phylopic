@@ -21,6 +21,7 @@ _[PhyloPic](https://www.phylopic.org)_ is an open database of freely reusable si
 | ----------------------------------------- | ------------------------------------------------------------------------------ |
 | [api-models](./packages/api-models)       | Type declarations and utility files for data models used by the API.           |
 | [source-models](./packages/source-models) | Type declarations and utility files for data models used in the source bucket. |
+| [styles](./packages/styles)               | Stylesheet values and mixins.                                                  |
 | [ui](./packages/ui)                       | Commonly-used React components for user interfaces.                            |
 | [utils](./packages/utils)                 | Common code.                                                                   |
 | [utils-api](./packages/utils-api)         | Common code related for using the API in a webapp.                             |
