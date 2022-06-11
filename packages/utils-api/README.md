@@ -1,3 +1,3 @@
-# `@phylopic/source-models`
+# `@phylopic/utils-api`
 
 > TODO: description

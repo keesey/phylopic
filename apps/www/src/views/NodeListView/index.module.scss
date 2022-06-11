@@ -1,6 +1,6 @@
-@use "../../styles/colors.scss";
-@use "../../styles/mixins/bullet.scss";
-@use "../../styles/mixins/hierarchy.scss";
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/bullet.scss";
+@use "@phylopic/styles/mixins/hierarchy.scss";
 
 .main {
     display: inline-flex;
@@ -9,7 +9,7 @@
 
 .lineage {
     .item {
-        @include hierarchy.item;
+        @include hierarchy.item(colors.$ink);
     }
 }
 

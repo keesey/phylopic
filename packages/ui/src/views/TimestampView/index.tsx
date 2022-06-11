@@ -1,15 +1,15 @@
 import { ISOTimestamp } from "@phylopic/utils"
-import { FC, useMemo } from "react"
-export interface Props {
+import React from "react"
+export interface TimestampViewProps {
     format?: "date" | "datetime" | "year"
     value: ISOTimestamp
 }
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-const TimestampView: FC<Props> = ({ format = "date", value }) => {
-    const date = useMemo(() => (value ? new Date(value) : null), [value])
-    const title = useMemo(() => date?.toLocaleString("en"), [date])
+export const TimestampView: React.FC<TimestampViewProps> = ({ format = "date", value }) => {
+    const date = React.useMemo(() => (value ? new Date(value) : null), [value])
+    const title = React.useMemo(() => date?.toLocaleString("en"), [date])
     const isYear = format === "year"
-    const dateString = useMemo(() => {
+    const dateString = React.useMemo(() => {
         if (date) {
             const year = date?.getFullYear().toString(10)
             if (isYear) {
@@ -20,7 +20,7 @@ const TimestampView: FC<Props> = ({ format = "date", value }) => {
             return `${year} ${month} ${day}`
         }
     }, [date, isYear])
-    const timeString = useMemo(() => date?.toLocaleTimeString(), [date])
+    const timeString = React.useMemo(() => date?.toLocaleTimeString(), [date])
     if (!date || isNaN(date.valueOf())) {
         return null
     }

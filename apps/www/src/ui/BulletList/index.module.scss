@@ -1,8 +1,9 @@
-@use "../../styles/mixins/bullet.scss";
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/bullet.scss";
 .main {
     display: flex;
     flex-wrap: wrap;
     > li {
-        @include bullet.item;
+        @include bullet.item(colors.$black);
     }
 }

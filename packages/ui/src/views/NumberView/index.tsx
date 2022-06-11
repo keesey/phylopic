@@ -1,9 +1,9 @@
-import { FC, useMemo } from "react"
-export type Props = {
+import React from "react"
+export type NumberViewProps = {
     value?: number
 }
-const NumberView: FC<Props> = ({ value }) => {
-    const text = useMemo(
+export const NumberView: React.FC<NumberViewProps> = ({ value }) => {
+    const text = React.useMemo(
         () => (typeof value !== "number" || !isFinite(value) ? "" : value.toLocaleString("en")),
         [value],
     )

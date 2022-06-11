@@ -1,11 +1,10 @@
 import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
+import { TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
 import { createSearch, extractPath, isUUIDv4, Query } from "@phylopic/utils"
 import { BuildContainer, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
 import { useMemo } from "react"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
-import useLicenseText from "~/hooks/useLicenseText"
-import useNomenText from "~/hooks/useNomenText"
 import PageHead from "~/metadata/PageHead"
 import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
 import DonationPromo from "~/promos/DonationPromo"
@@ -25,7 +24,6 @@ import LicenseDetailsView from "~/views/LicenseDetailsView"
 import LicenseView from "~/views/LicenseView"
 import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
-import TimestampView from "~/views/TimestampView"
 export interface Props {
     image: ImageWithEmbedded
 }

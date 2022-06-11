@@ -1,12 +1,12 @@
-import Image from "next/image"
 import { ImageWithEmbedded } from "@phylopic/api-models"
-import { FC } from "react"
-import useImageAlt from "~/hooks/useImageAlt"
-import useImageLoader from "~/hooks/useImageLoader"
-export interface Props {
+import Image from "next/image"
+import React from "react"
+import useImageAlt from "../../hooks/useImageAlt"
+import useImageLoader from "../../hooks/useImageLoader"
+export interface ImageThumbnailViewProps {
     value: ImageWithEmbedded
 }
-const ImageThumbnailView: FC<Props> = ({ value }) => {
+export const ImageThumbnailView: React.FC<ImageThumbnailViewProps> = ({ value }) => {
     const alt = useImageAlt(value)
     const loader = useImageLoader(value._links.thumbnailFiles)
     return (

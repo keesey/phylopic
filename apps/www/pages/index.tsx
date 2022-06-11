@@ -1,4 +1,5 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
+import { CountView } from "@phylopic/ui"
 import { URL } from "@phylopic/utils"
 import { BuildContainer } from "@phylopic/utils-api"
 import type { NextPage } from "next"
@@ -20,7 +21,6 @@ import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import SiteTitle from "~/ui/SiteTitle"
 import ContributionCTAView from "~/views/ContributionCTAView"
-import CountView from "~/views/CountView"
 import ImageListView from "~/views/ImageListView"
 import SupportersView from "~/views/SupportersView"
 export interface Props {

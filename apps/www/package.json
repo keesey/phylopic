@@ -9,6 +9,7 @@
     "dependencies": {
         "@phylopic/api-models": "*",
         "@phylopic/styles": "*",
+        "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
         "@react-hook/debounce": "^4.0.0",

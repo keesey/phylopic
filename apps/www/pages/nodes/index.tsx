@@ -1,4 +1,5 @@
 import { Node } from "@phylopic/api-models"
+import { CountView } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import type { NextPage } from "next"
 import React from "react"
@@ -13,7 +14,6 @@ import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
-import CountView from "~/views/CountView"
 import NodeListView from "~/views/NodeListView"
 export interface Props {
     build: number

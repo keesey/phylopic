@@ -1,10 +1,10 @@
-import { FC, useMemo } from "react"
+import React from "react"
 import NumberView from "../NumberView"
-export type Props = {
+export type CountViewProps = {
     value?: number
 }
-const CountView: FC<Props> = ({ value }) => {
-    const integerValue = useMemo(
+export const CountView: React.FC<CountViewProps> = ({ value }) => {
+    const integerValue = React.useMemo(
         () => (typeof value === "number" && isFinite(value) ? Math.round(value) : NaN),
         [value],
     )

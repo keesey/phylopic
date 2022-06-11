@@ -1,0 +1,71 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "description": "General user interface components for *PhyloPic*.",
+    "devDependencies": {
+        "@phylopic/api-models": "*",
+        "@phylopic/utils": "*",
+        "@phylopic/utils-api": "*",
+        "@phylopic/tsconfig": "*",
+        "@types/react": "^18.0.12",
+        "clsx": "^1.1.1",
+        "eslint-config-phylopic": "*",
+        "next": "^12.1.6",
+        "parse-nomen": "^2.1.2",
+        "react": "^18.1.0",
+        "sharp": "^0.30.6",
+        "typescript": "^4.6.4"
+    },
+    "exports": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.cjs",
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+    },
+    "files": [
+        "dist/**"
+    ],
+    "homepage": "https://github.com/keesey/phylopic/packages/ui#readme",
+    "keywords": [
+        "API",
+        "PhyloPic"
+    ],
+    "license": "MIT",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "name": "@phylopic/ui",
+    "peerDependencies": {
+        "@phylopic/api-models": "*",
+        "@phylopic/utils": "*",
+        "@phylopic/utils-api": "*",
+        "clsx": "^1.1.1",
+        "next": "^12.1.6",
+        "parse-nomen": "^2.1.2",
+        "react": "^18.1.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/keesey/phylopic.git"
+    },
+    "resolutions": {
+        "@types/node": "*"
+    },
+    "scripts": {
+        "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils @phylopic/utils-api clsx next next/image next/link parse-nomen react",
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils @phylopic/utils-api clsx next next/image next/link parse-nomen react",
+        "lint": "TIMING=1 eslint src/**/*.ts* --fix",
+        "test": "mocha"
+    },
+    "sideEffects": false,
+    "types": "./dist/index.d.ts",
+    "version": "0.0.0"
+}

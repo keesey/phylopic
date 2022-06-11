@@ -1,4 +1,5 @@
 import { Contributor, List } from "@phylopic/api-models"
+import { CountView } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import type { NextPage } from "next"
 import { Fragment } from "react"
@@ -16,7 +17,6 @@ import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import SiteTitle from "~/ui/SiteTitle"
-import CountView from "~/views/CountView"
 export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Partial<Pick<List, "build">>

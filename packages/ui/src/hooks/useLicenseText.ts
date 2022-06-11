@@ -19,7 +19,7 @@ const SHORT_NAMES: Readonly<Record<LicenseURL, string>> = {
     "https://creativecommons.org/publicdomain/mark/1.0/": "PDM 1.0",
     "https://creativecommons.org/publicdomain/zero/1.0/": "CC0 1.0",
 }
-const useLicenseText = (licenseURL: LicenseURL, short = false) => {
+export const useLicenseText = (licenseURL: LicenseURL, short = false) => {
     return useMemo(() => (short ? SHORT_NAMES[licenseURL] : NAMES[licenseURL]) ?? null, [licenseURL, short])
 }
 export default useLicenseText

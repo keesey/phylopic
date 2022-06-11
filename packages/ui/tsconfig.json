@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "lib": ["dom", "ES2015"]
+    },
+    "exclude": ["build", "dist", "node_modules"],
+    "extends": "@phylopic/tsconfig/react-lib.json",
+    "include": ["."]
+}
