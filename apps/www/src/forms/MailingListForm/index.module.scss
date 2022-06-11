@@ -20,7 +20,7 @@
         }
     }
     button {
-        @include buttons.cta(colors.$aquatic, colors.$foam, colors.$aquatic);
+        @include buttons.cta(colors.$aquatic, colors.$foam);
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }

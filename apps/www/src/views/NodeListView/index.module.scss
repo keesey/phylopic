@@ -9,7 +9,7 @@
 
 .lineage {
     .item {
-        @include hierarchy.item(colors.$ink);
+        @include hierarchy.item;
     }
 }
 

@@ -1,4 +1,4 @@
-@mixin item($separator-color) {
+@mixin item($separator-color: "inherit") {
     display: inline;
 
     &::after {

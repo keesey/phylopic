@@ -1,4 +1,4 @@
-@mixin cta($foreground-color, $background-color, $border-color) {
+@mixin cta($foreground-color, $background-color, $border-color: $foreground-color) {
     background-color: $background-color;
     border: 2pt solid $border-color;
     border-radius: 2rem;
