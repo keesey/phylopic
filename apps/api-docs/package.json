@@ -8,7 +8,6 @@
     },
     "description": "Documentation for PhyloPic's Application Programming Interface",
     "devDependencies": {
-        "api-spec-converter": "^2.12.0",
         "bootprint": "^4.0.4",
         "bootprint-openapi": "^4.0.4",
         "swagger-cli": "^4.0.4",
@@ -30,10 +29,9 @@
         "url": "git+https://github.com/keesey/phylopic.git"
     },
     "scripts": {
-        "build": "yarn build:public && yarn build:swagger && yarn build:html",
-        "build:html": "bootprint openapi ./.swagger.yaml ./dist/2.0",
+        "build": "yarn build:public && yarn build:html",
+        "build:html": "bootprint openapi ./openapi.yaml ./dist/2.0",
         "build:public": "cp -r ./public ./dist",
-        "build:swagger": "api-spec-converter --from=openapi_3 --to=swagger_2 --syntax=yaml openapi.yaml > .swagger.yaml",
         "clean": "yarn clean:dist && rm -rf .turbo && rm -rf node_modules",
         "clean:dist": "rm -rf dist",
         "deploy": "aws s3 sync --acl public-read --delete ./dist s3://api-docs.phylopic.org",
