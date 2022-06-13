@@ -258,7 +258,6 @@ components:
         Specifies a particular page of items to retrieve.
       schema:
         format: integer
-        minimum: 0
         type: number
     query: 
       name: query
@@ -492,9 +491,9 @@ components:
                 format: url
                 type: string
               field:
-                description: The path to the field in the payload that caused the error.
+                description: Identifies the parameter that caused the error.
                 type: string
-                example: "attribution"
+                example: "build"
               type:
                 description: The type of error, from [this list](https://docs.aws.amazon.com/apigateway/api-reference/resource/gateway-response/#responseType).
                 type: string
@@ -575,10 +574,6 @@ components:
                   allOf:
                     - $ref: "#/components/schemas/Link"
                     - description: A link to the node indicating the specific taxon that this image illustrates.
-                submission:
-                  allOf:
-                    - $ref: "#/components/schemas/Link"
-                    - description: A link for viewing the latest submitted changes.
                 thumbnailFiles:
                   type: array
                   description: A list of links to raster thumbnail image files (PNG format) of various square sizes.
@@ -736,7 +731,7 @@ components:
                 lineage:
                   allOf:
                     - $ref: "#/components/schemas/Link"
-                    - description: A link to a list of this node and all nodes
+                    - description: A link to a list of this node and all nodes ancestral to it.
                 parentNode:
                   allOf:
                     - $ref: "#/components/schemas/Link"
