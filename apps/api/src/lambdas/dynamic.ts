@@ -3,7 +3,7 @@ import {
     ImageListParameters,
     IMAGE_EMBEDDED_PARAMETERS,
     NodeListParameters,
-    NODE_EMBEDDED_PARAMETERS,
+    NODE_EMBEDDED_PARAMETERS
 } from "@phylopic/api-models"
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
 import APIError from "../errors/APIError"
@@ -20,7 +20,7 @@ import getNode from "../operations/getNode"
 import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
-import getResolveObjects from "../operations/getResolveObjects"
+import postResolveObjects from "../operations/postResolveObjects"
 import { PgClientService } from "../services/PgClientService"
 import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
@@ -203,7 +203,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
         } else {
             switch (event.httpMethod) {
                 case "POST": {
-                    return getResolveObjects(
+                    return postResolveObjects(
                         {
                             body: event.body ?? undefined,
                             ...getParameters(event.headers, ["accept"]),

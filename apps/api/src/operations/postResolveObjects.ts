@@ -106,7 +106,7 @@ const getObjectIDsFromBody = (body: string | null) => {
     }
     return objectIDs
 }
-export const getResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
+export const postResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
     { accept, body, ...queryAndPathParameters },
     service,
 ) => {
@@ -138,4 +138,4 @@ export const getResolveObjects: Operation<GetResolveObjectsParameters, GetResolv
         statusCode: 303,
     } as APIGatewayProxyResult
 }
-export default getResolveObjects
+export default postResolveObjects

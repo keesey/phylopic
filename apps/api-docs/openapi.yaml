@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PhyloPic API
-  description: Documentation for the next version of *PhyloPic*'s Application Programming Interface.
+  description: Documentation *PhyloPic*'s Application Programming Interface.
   contact:
     name: Mike Keesey
     email: keesey+phylopic@gmail.com
@@ -9,7 +9,7 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 0.0.0
+  version: 2.0.0
 tags:
   - name: general
     description: General API information and status.
@@ -24,12 +24,6 @@ servers:
     description: The production API
 components:
   headers:
-    Accept-Ranges:
-      description: The units acceptable for range requests. Always `items`.
-      example: items
-      schema:
-        pattern: "^items$"
-        type: string
     Access-Control-Allow-Credentials:
       description: Specifies that credentials are allowed in requests. Always `true`.
       example: "true"
@@ -53,52 +47,16 @@ components:
       schema:
         format: number
         type: string
-    Content-Range:
-      description: The range of embedded items, in the format `"items {start}-{end}/{total}"`. If the total is unknown, it will be `"*"`. If there are no items, there will be `"*"` instead of `"{start}-{end}"`.
-      example: items 0-9/88
-      schema:
-        pattern: '^items \d+-\d+/\d+$'
-        type: string
     Content-Type:
       description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json`.
       example: application/vnd.phylopic.v2+json
       schema:
         format: mimetype
         type: string
-    ETag-GET:
-      description: An identifier for this version of the resource. May be used on subsequent calls to avoid unnecessary reloading (`If-None-Match` header).
-      example: '"identifier"'
-      schema:
-        pattern: '^"[^"]+"$'
-        type: string
-    ETag-GET-Range:
-      description: An identifier for this version of the list. Should be used on subsequent calls to ensure the same version of the list is being loaded (`If-Match` header).
-      example: '"identifier"'
-      schema:
-        pattern: '^"[^"]+"$'
-        type: string
-    ETag-PATCH:
-      description: An identifier for this version of the resource. May be used on subsequent calls to avoid unnecessary reloading (`If-None-Match` header). Must be used on `PATCH` calls to ensure the same version of the resource is being updated.
-      required: true
-      example: '"identifier"'
-      schema:
-        pattern: '^"[^"]+"$'
-        type: string
-    ETag-PUT:
-      description: An identifier for this version of the resource. May be used on subsequent calls to avoid unnecessary reloading (`If-None-Match` header). Must be used on `PUT` calls to ensure the same version of the resource is being updated.
-      required: true
-      example: '"identifier"'
-      schema:
-        pattern: '^"[^"]+"$'
-        type: string
     Location:
       description: The URL for the resource.
       schema:
         format: url
-        type: string
-    Warning-GET-Range:
-      description: Warning message. This will be included if you request a range starting after `0` and do not provide an `If-Match` header. Send back a header that matches the `ETag` header of the response to remove this warning.
-      schema:
         type: string
   parameters:
     Accept:
@@ -119,171 +77,199 @@ components:
       schema:
         format: mimetype
         type: string
-    If-Match-GET:
-      name: If-Match
-      in: header
-      description: Identifies which version(s) of the list is/are expected, as given by the `ETag` header on a previous response. If that version is out of date, a `416` response will be returned.
-      schema:
-        pattern: '^(\*|(W\\/)?"([^"]|\\")+"(,\s*(W\/)?"([^"]|\\")+")*)$'
-        type: string
-      example: '"identifier"'
-    If-Match-modify:
-      name: If-Match
-      in: header
-      required: true
-      description: Identifies which version(s) of the resource is/are being modified, as given by the `ETag` header on a previous response. If that version is out of date, a `412` response will be returned.
-      schema:
-        pattern: '^(\*|(W\\/)?"([^"]|\\")+"(,\s*(W\/)?"([^"]|\\")+")*)$'
-        type: string
-    If-None-Match:
-      name: If-None-Match
-      in: header
-      description: Identifies which version of the resource has already been loaded, as given by the `ETag` header on a previous response. If this matches the current version, a `304` response will be returned.
-      schema:
-        pattern: '^(\*|(W\\/)?"([^"]|\\")+"(,\s*(W\/)?"([^"]|\\")+")*)$'
-        type: string
-    Range:
-      name: Range
-      in: header
+    authority: 
+      name: authority
+      in: path
       required: true
       description: |
-        A range of the items to read, inclusive.
-
-        Example: `items=0-9`
+        Specifies an authority for collections of objects.
       schema:
-        pattern: '^items=\d+-\d+$'
+        example: eol.org
         type: string
-    contributor:
-      name: contributor
+    build:
+      name: build
       in: query
       required: false
       description: |
-        Limits results to entries contributed by a certain user.
+        Specifies the build for the returned data. Only the current build is valid.
 
-        The value is the contributor's email address.
+        Leaving this parameter out will yield a temporary redirect (`307`) to the same URL but with the current `build` value added to the query.
       schema:
-        format: email
+        type: integer
+    embed_childNodes:
+      name: embed_childNodes
+      in: query
+      description: |
+        If `"true"`, includes all members of `childNodes` in `_embedded`.
+      schema:
+        pattern: "^true$"
         type: string
-    created_lt:
-      name: created_lt
+    embed_contributor:
+      name: embed_contributor
+      in: query
+      description: |
+        If `"true"`, includes `contributor` in `_embedded`.
+      schema:
+        pattern: "^true$"
+        type: string
+    embed_generalNode:
+      name: embed_generalNode
+      in: query
+      description: |
+        If `"true"`, includes `generalNode` in `_embedded`.
+      schema:
+        pattern: "^true$"
+        type: string
+    embed_items:
+      name: embed_items
+      in: query
+      description: |
+        If `"true"`, includes `items` in `_embedded`. (This is a prerequisite for including any embeds on the items themselves.)
+      schema:
+        pattern: "^true$"
+        type: string
+    embed_nodes:
+      name: embed_nodes
+      in: query
+      description: |
+        If `"true"`, includes all members of `nodes` in `_embedded`.
+      schema:
+        pattern: "^true$"
+        type: string
+    embed_parentNode:
+      name: embed_parentNode
+      in: query
+      description: |
+        If `"true"`, includes `parentNode` in `_embedded`.
+      schema:
+        pattern: "^true$"
+        type: string
+    embed_primaryImage:
+      name: embed_primaryImage
+      in: query
+      description: |
+        If `"true"`, includes `primaryImage` in `_embedded`.
+      schema:
+        pattern: "^true$"
+        type: string
+    embed_specificNode:
+      name: embed_specificNode
+      in: query
+      description: |
+        If `"true"`, includes `specificNode` in `_embedded`.
+      schema:
+        pattern: "^true$"
+        type: string
+    filter_clade:
+      name: filter_clade
       in: query
       required: false
       description: |
-        Limits results to entries created at or before this time.
+        Limits results to entries within a clade (as identified by its UUID).
 
-        The value must be an ISO-formatted date-time, for example, `1970-01-01T00:00:00.000Z`.
+        Cannot be used alongside `filter_contributor`, `filter_name`, or `filter_node`.
       schema:
-        format: date-time
+        format: uuid
         type: string
-    created_gt:
-      name: created_gt
+    filter_contributor:
+      name: filter_contributor
       in: query
       required: false
       description: |
-        Limits results to entries created at or after this time.
+        Limits results to entries contributed by a certain user (as identified by their UUID).
 
-        The value must be an ISO-formatted date-time, for example, `1970-01-01T00:00:00.000Z`.
+        Cannot be used alongside `filter_clade`, `filter_name`, or `filter_node`.
       schema:
-        format: date-time
+        format: uuid
         type: string
-    embed-Image:
-      name: embed
-      in: query
-      description: |
-        A space-separated list of related entities to embed. May include:
-        - `generalNode`
-        - `nodes`
-        - `specificNode`
-
-        If omitted, no entities will be embedded.
-      schema:
-        pattern: "^((generalNode|nodes|specificNode) )*(generalNode|nodes|specificNode)$"
-        type: string
-    embed-Node:
-      name: embed
-      in: query
-      description: |
-        A space-separated list of related entities to embed. May include:
-        - `childNodes`
-        - `parentNode`
-        - `primaryImage`
-
-        If omitted, no entities will be embedded.
-      schema:
-        pattern: "^((childNodes|parentNode|primaryImage) )*(childNodes|parentNode|primaryImage)$"
-        type: string
-    licensecomponents:
-      name: licensecomponents
+    filter_license_by:
+      name: filter_license_by
       in: query
       required: false
       description: |
-        Limits entries to those with or without certain license components.
-
-        Components are represented as a space-separated list. May include:
-        - `by` (Attribution)
-        - `nc` (NonCommercial)
-        - `sa` (StandAlone)
-
-        Any of these may be prepended by `-` to indicate that only images under licenses **without** that component should be returned.
-
-        Examples:
-        - `by`: only include images with licenses that require attribution.
-        - `-by`: exclude all images with licenses that require attribution.
-        - `-by -nc -sa`: only include images in the public domain (having none of the license components).
+        If `"true"`, limits results to entries with a license that requires attribution.
+        If `"false"`, limits results to entries with a license that does not require attribution.
       schema:
-        format: '^(\-?(by|nc|sa) )*(\-?(by|nc|sa))$'
+        pattern: "^(true|false)$"
         type: string
-    modified_lt:
-      name: modified_lt
+    filter_license_nc:
+      name: filter_license_nc
       in: query
       required: false
       description: |
-        Limits results to entries last modified at or before this time.
-
-        The value must be an ISO-formatted date-time, for example, `1970-01-01T00:00:00.000Z`.
+        If `"true"`, limits results to entries with a license that does not allow commercial usage.
+        If `"false"`, limits results to entries with a license that allows commercial usage.
       schema:
-        format: date-time
+        pattern: "^(true|false)$"
         type: string
-      example: "1970-01-01T00:00:00.000Z"
-    modified_gt:
-      name: modified_gt
+    filter_license_sa:
+      name: filter_license_sa
       in: query
       required: false
       description: |
-        Limits results to entries last modified at or after this time.
-
-        The value must be an ISO-formatted date-time, for example, `1970-01-01T00:00:00.000Z`.
+        If `"true"`, limits results to entries with a license with the StandAlone clause.
+        If `"false"`, limits results to entries with a license without the StandAlone clause.
       schema:
-        format: date-time
+        pattern: "^(true|false)$"
         type: string
-    sort:
-      name: sort
+    filter_name:
+      name: filter_name
       in: query
       required: false
       description: |
-        A space-separated list of fields to sort by. May include:
-        - `created`
-        - `modified`
-
-        Either of these may be prepended by `-` to indicate descending order. The default value is `-modified`.
+        Limits results to entries matching a given name. The name should be normalized (all lower-case letters or hyphens, no diacritics, single spaces between words).
       schema:
-        pattern: '^(\-?(created|modified) )*(\-?(created|modified))$'
+        pattern: "^([a-z-]+ )*[a-z-]+$"
         type: string
-    sort-Node:
-      name: sort
+    filter_node:
+      name: filter_node
       in: query
       required: false
       description: |
-        A space-separated list of fields to sort by. May include:
-        - `created`
-        - `modified`
-        - `tree`
+        Limits results to entries matching a given name. The name should be normalized (all lower-case letters or hyphens, no diacritics, single spaces between words).
 
-        Either of these may be prepended by `-` to indicate descending order. The default value is `tree`.
+        Cannot be used alongside `filter_clade`, `filter_contributor`, or `filter_name`.
       schema:
-        pattern: '^(\-?(created|modified|tree) )*(\-?(created|modified|tree))$'
+        format: uuid
         type: string
-    uuid-Entity:
+    namespace: 
+      name: namespace
+      in: path
+      required: true
+      description: |
+        Specifies aa particular collection of objects, under an authority.
+      schema:
+        example: pages
+        type: string
+    objectid:
+      name: objectid
+      in: path
+      required: true
+      description: |
+        Specifies an object within an authorized namespace.
+      schema:
+        example: '1'
+        type: string
+    page: 
+      name: page
+      in: query
+      required: false
+      description: |
+        Specifies a particular page of items to retrieve.
+      schema:
+        format: integer
+        minimum: 0
+        type: number
+    query: 
+      name: query
+      in: query
+      required: true
+      description: |
+        A search string to match names against. Must be at least two characters in length, all lower-case letters, hyphens (`"-"`), or spaces (`" "`).
+      schema:
+        pattern: "^([a-z-]+ )*[a-z-]+$"
+        type: string
+    uuid:
       name: uuid
       in: path
       required: true
@@ -299,25 +285,6 @@ components:
           $ref: "#/components/headers/Access-Control-Allow-Credentials"
         Access-Control-Allow-Origin:
           $ref: "#/components/headers/Access-Control-Allow-Origin"
-    "302":
-      description: The requested resource has been found at another location.
-      headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Cache-Control:
-          $ref: "#/components/headers/Cache-Control"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
-        Content-Type:
-          $ref: "#/components/headers/Content-Type"
-        Location:
-          $ref: "#/components/headers/Location"
-      content:
-        application/vnd.phylopic.v2+json:
-          schema:
-            $ref: "#/components/schemas/EntityReference"
     "303":
       description: The requested resource should be loaded from another location.
       headers:
@@ -334,16 +301,7 @@ components:
       content:
         application/vnd.phylopic.v2+json:
           schema:
-            $ref: "#/components/schemas/EntityReference"
-    "304":
-      description: The resource has not been modified since the last time it was requested.
-      headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        ETag:
-          $ref: "#/components/headers/ETag-GET"
+            $ref: "#/components/schemas/Link"
     "307":
       description: The requested resource is available at another location, temporarily.
       headers:
@@ -360,17 +318,24 @@ components:
       content:
         application/vnd.phylopic.v2+json:
           schema:
-            type: object
-            required:
-              - _links
-            properties:
-              _links:
-                type: object
-                required:
-                  - equivalent
-                properties:
-                  equivalent:
-                    $ref: "#/components/schemas/Link"
+            $ref: "#/components/schemas/Link"
+    "308":
+      description: The requested resource is available at another location, permanently.
+      headers:
+        Access-Control-Allow-Credentials:
+          $ref: "#/components/headers/Access-Control-Allow-Credentials"
+        Access-Control-Allow-Origin:
+          $ref: "#/components/headers/Access-Control-Allow-Origin"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+        Content-Type:
+          $ref: "#/components/headers/Content-Type"
+        Location:
+          $ref: "#/components/headers/Location"
+      content:
+        application/vnd.phylopic.v2+json:
+          schema:
+            $ref: "#/components/schemas/Link"
     "400":
       description: There is an error in the request.
       headers:
@@ -419,7 +384,7 @@ components:
           schema:
             $ref: "#/components/schemas/Errors"
     "410":
-      description: The resource has been removed.
+      description: The specified build is old and no longer present. Remove the `build` parameter to be redirected (`307`) to the latest version of this resource.
       headers:
         Access-Control-Allow-Credentials:
           $ref: "#/components/headers/Access-Control-Allow-Credentials"
@@ -435,189 +400,75 @@ components:
         application/vnd.phylopic.v2+json:
           schema:
             $ref: "#/components/schemas/Errors"
-    "412":
-      description: The entity has been modified and needs to be refreshed before making further modifications.
-      headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
-        Content-Type:
-          $ref: "#/components/headers/Content-Type"
-      content:
-        application/vnd.phylopic.v2+json:
-          schema:
-            $ref: "#/components/schemas/Errors"
-    "416":
-      description: The requested range is not satisfiable.
-      headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
-        Content-Type:
-          $ref: "#/components/headers/Content-Type"
-        ETag:
-          $ref: "#/components/headers/ETag-GET-Range"
-      content:
-        application/vnd.phylopic.v2+json:
-          schema:
-            $ref: "#/components/schemas/Errors"
-    "list-Image":
-      description: |
-        [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) list of embedded image records.
-      headers:
-        Accept-Ranges:
-          $ref: "#/components/headers/Accept-Ranges"
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Cache-Control:
-          $ref: "#/components/headers/Cache-Control"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
-        Content-Range:
-          $ref: "#/components/headers/Content-Range"
-        Content-Type:
-          $ref: "#/components/headers/Content-Type"
-        ETag:
-          $ref: "#/components/headers/ETag-GET-Range"
-        Warning:
-          $ref: "#/components/headers/Warning-GET-Range"
-      content:
-        application/vnd.phylopic.v2+json:
-          schema:
-            type: object
-            required:
-              - _embedded
-              - _links
-            properties:
-              _embedded:
-                type: object
-                description: Container for embedded entities.
-                properties:
-                  items:
-                    type: array
-                    description: The requested image entities.
-                    items:
-                      $ref: "#/components/schemas/ImageWithEmbedded"
-              _links:
-                type: object
-                description: Container for a link to this resource (`self`).
-                required:
-                  - self
-                properties:
-                  self:
-                    allOf:
-                      - $ref: "#/components/schemas/Link"
-                      - description: Link to this list.
-              total:
-                description: The total number of items in the set.
-                format: uint
-                type: number
-    "list-Node":
-      description: |
-        [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) list of embedded node records.
-      headers:
-        Accept-Ranges:
-          $ref: "#/components/headers/Accept-Ranges"
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Cache-Control:
-          $ref: "#/components/headers/Cache-Control"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
-        Content-Range:
-          $ref: "#/components/headers/Content-Range"
-        Content-Type:
-          $ref: "#/components/headers/Content-Type"
-        ETag:
-          $ref: "#/components/headers/ETag-GET-Range"
-        Warning:
-          $ref: "#/components/headers/Warning-GET-Range"
-      content:
-        application/vnd.phylopic.v2+json:
-          schema:
-            type: object
-            required:
-              - _embedded
-              - _links
-            properties:
-              _embedded:
-                type: object
-                description: Container for embedded entities.
-                properties:
-                  items:
-                    type: array
-                    description: The requested node entities.
-                    items:
-                      $ref: "#/components/schemas/NodeWithEmbedded"
-              _links:
-                description: Container for a link to this resource (`self`).
-                type: object
-                required:
-                  - self
-                properties:
-                  self:
-                    allOf:
-                      - $ref: "#/components/schemas/Link"
-                      - description: Link to this list.
-              total:
-                description: The total number of items in the set.
-                format: uint
-                type: number
   schemas:
-    Dated:
-      description: Common properties for all dated objects.
-      required:
-        - created
-        - modified
-      type: object
-      properties:
-        created:
-          description: The time this was created.
-          format: date-time
-          type: string
-        modified:
-          description: The last time this was modified.
-          format: date-time
-          type: string
-    Entity:
-      description: Common properties for all entities.
-      required:
-        - _links
-        - created
-        - modified
-        - uuid
+    Contributor:
       allOf:
-        - $ref: "#/components/schemas/Dated"
-        - $ref: "#/components/schemas/EntityReference"
-    EntityReference:
-      description: Identifier and link for an entity.
-      type: object
-      required:
-        - _links
-        - uuid
-      properties:
-        _links:
+        - $ref: "#/components/schemas/Entity"
+        - description: A contributing user.
           type: object
           required:
-            - self
+            - _links
+            - count
+            - name
           properties:
-            self:
-              $ref: "#/components/schemas/Link"
-        uuid:
-          description: The universally unique identifier for this entity.
-          format: uuid
-          type: string
-          example: 123e4567-e89b-12d3-a456-426655440000
+            _links:
+              type: object
+              required:
+                - contact
+                - images
+                - self
+              properties:
+                contact:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - description: A `mailto:` link including the contributor's email address.
+                      nullable: true
+                images:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - description: A link to a list of all images uploaded by this user.
+            count:
+              type: integer
+              description: The number of images uploaded by this user.
+            name:
+              type: string
+              description: This user's full name, or alias.
+    Data:
+      description: Any object corresponding to a data build.
+      required:
+        - build
+      type: object
+      properties:
+        build:
+          description: The index number of the build that this object belongs to.
+          type: integer
+    Entity:
+      allOf:
+        - $ref: "#/components/schemas/Data"
+        - description: Common properties for all entities.
+          required:
+            - _links
+            - build
+            - created
+            - uuid
+          properties:
+            _links:
+              type: object
+              required:
+                - self
+              properties:
+                self:
+                  $ref: "#/components/schemas/Link"
+            created:
+              description: The time this was created.
+              example: 1970-01-01T00:00:00.000Z
+              pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$'
+              type: string
+            uuid:
+              description: The universally unique identifier for this entity.
+              format: uuid
+              type: string
+              example: 123e4567-e89b-12d3-a456-426655440000
     Errors:
       description: List of errors.
       type: object
@@ -661,6 +512,7 @@ components:
           required:
             - _links
             - attribution
+            - build
             - sponsor
           type: object
           properties:
@@ -673,87 +525,88 @@ components:
               example: "Patron Name"
               nullable: true
             _links:
-              $ref: "#/components/schemas/ImageLinks"
-    ImageLinks:
-      type: object
-      required:
-        - contributor
-        - generalNode
-        - http://ogp.me/ns#image
-        - license
-        - nodes
-        - rasterFiles
-        - self
-        - sourceFile
-        - specificNode
-        - thumbnailFiles
-        - twitter:image
-        - vectorFile
-      properties:
-        contributor:
-          allOf:
-            - $ref: "#/components/schemas/Link"
-            - description: A `mailto:` URL with the contributor's email address.
-        generalNode:
-          allOf:
-            - $ref: "#/components/schemas/Link"
-            - description: A link to the node indicating how generally the image can be applied, either an ancestor of `specificNode` or a node indicating a common ancestor with `specificNode`.
-              nullable: true
-        "http://ogp.me/ns#image":
-          allOf:
-            - $ref: "#/components/schemas/MediaLink"
-            - description: A link to an image for use with Open Graph (PNG format).
-        license:
-          allOf:
-            - $ref: "#/components/schemas/Link"
-            - description: A link to the license that this image is under.
-        nodes:
-          type: array
-          description: Links to all nodes that this image illustrates, based on `specificNode` and (if provided) `generalNode`.
-          items:
-            $ref: "#/components/schemas/Link"
-        rasterFiles:
-          type: array
-          description: A list of links to raster image files (PNG format) of various sizes.
-          items:
-            $ref: "#/components/schemas/MediaLink"
-        sourceFile:
-          allOf:
-            - $ref: "#/components/schemas/MediaLink"
-            - description: A link to the raster or vector image file as it was submitted. May be an SVG file or any of the accepted raster image formats.
-        specificNode:
-          allOf:
-            - $ref: "#/components/schemas/Link"
-            - description: A link to the node indicating the specific taxon that this image illustrates.
-        submission:
-          allOf:
-            - $ref: "#/components/schemas/Link"
-            - description: A link for viewing the latest submitted changes.
-        thumbnailFiles:
-          type: array
-          description: A list of links to raster thumbnail image files (PNG format) of various square sizes.
-          items:
-            $ref: "#/components/schemas/MediaLink"
-        "twitter:image":
-          allOf:
-            - $ref: "#/components/schemas/MediaLink"
-            - description: A link to an image for use with Twitter (PNG format).
-        vectorFile:
-          allOf:
-            - $ref: "#/components/schemas/MediaLink"
-            - description: A link to the vector image file as it was submitted. Always in SVG format.
-              nullable: true
+              type: object
+              required:
+                - contributor
+                - generalNode
+                - http://ogp.me/ns#image
+                - license
+                - nodes
+                - rasterFiles
+                - self
+                - sourceFile
+                - specificNode
+                - thumbnailFiles
+                - twitter:image
+                - vectorFile
+              properties:
+                contributor:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - description: A `mailto:` URL with the contributor's email address.
+                generalNode:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - description: A link to the node indicating how generally the image can be applied, either an ancestor of `specificNode` or a node indicating a common ancestor with `specificNode`.
+                      nullable: true
+                "http://ogp.me/ns#image":
+                  allOf:
+                    - $ref: "#/components/schemas/MediaLink"
+                    - description: A link to an image for use with Open Graph (PNG format).
+                license:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - description: A link to the license that this image is under.
+                nodes:
+                  type: array
+                  description: Links to all nodes that this image illustrates, based on `specificNode` and (if provided) `generalNode`.
+                  items:
+                    $ref: "#/components/schemas/Link"
+                rasterFiles:
+                  type: array
+                  description: A list of links to raster image files (PNG format) of various sizes.
+                  items:
+                    $ref: "#/components/schemas/MediaLink"
+                sourceFile:
+                  allOf:
+                    - $ref: "#/components/schemas/MediaLink"
+                    - description: A link to the raster or vector image file as it was submitted. May be an SVG file or any of the accepted raster image formats.
+                specificNode:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - description: A link to the node indicating the specific taxon that this image illustrates.
+                submission:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - description: A link for viewing the latest submitted changes.
+                thumbnailFiles:
+                  type: array
+                  description: A list of links to raster thumbnail image files (PNG format) of various square sizes.
+                  items:
+                    $ref: "#/components/schemas/MediaLink"
+                "twitter:image":
+                  allOf:
+                    - $ref: "#/components/schemas/MediaLink"
+                    - description: A link to an image for use with Twitter (PNG format).
+                vectorFile:
+                  allOf:
+                    - $ref: "#/components/schemas/MediaLink"
+                    - description: A link to the vector image file as it was submitted. Always in SVG format.
+                      nullable: true
     ImageWithEmbedded:
       description: Resource for an image.
       required:
         - _embedded
       allOf:
+        - $ref: "#/components/schemas/Image"
         - type: object
           properties:
             _embedded:
               type: object
               description: Embedded entities related to the image. See `_links` for more information.
               properties:
+                contributor:
+                  $ref: "#/components/schemas/Contributor"
                 generalNode:
                   allOf:
                     - $ref: "#/components/schemas/Node"
@@ -764,7 +617,6 @@ components:
                     $ref: "#/components/schemas/Node"
                 specificNode:
                   $ref: "#/components/schemas/Node"
-        - $ref: "#/components/schemas/Image"
     Link:
       description: A basic link.
       type: object
@@ -775,6 +627,41 @@ components:
           format: url
           type: string
           example: /path
+    List:
+      description: A list of entities.
+      type: object
+      required:
+        - _links
+        - build
+        - itemsPerPage
+        - totalItems
+        - totalPages
+      allOf:
+        - type: object
+          properties:
+            _links:
+              required:
+                - firstPage
+                - lastPage
+                - self
+              properties:
+                firstPage:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - nullable: true
+                lastPage:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - nullable: true
+                self:
+                  $ref: "#/components/schemas/Link"
+            itemsPerPage:
+              type: integer
+            totalItems:
+              type: integer
+            totalPages:
+              type: integer
+        - $ref: "#/components/schemas/Data"
     MediaLink:
       allOf:
         - $ref: "#/components/schemas/Link"
@@ -786,11 +673,11 @@ components:
             - type
           properties:
             href:
-              example: "/path/123e4567-e89b-12d3-a456-426655440000/raster32.png"
+              example: "https://www.domain.tld/path/123e4567-e89b-12d3-a456-426655440000/raster64.png"
             sizes:
               pattern: '^\d+x\d+$'
               type: string
-              example: 32x32
+              example: 64x64
             type:
               format: mimetype
               type: string
@@ -802,8 +689,8 @@ components:
           type: object
           required:
             - _links
+            - build
             - names
-            - root
           properties:
             _links:
               type: object
@@ -813,6 +700,7 @@ components:
                 - contributor
                 - external
                 - images
+                - lineage
                 - parentNode
                 - primaryImage
                 - self
@@ -828,24 +716,34 @@ components:
                 cladeImages:
                   allOf:
                     - $ref: "#/components/schemas/Link"
-                    - description: A link to a list of all images illustrating this node or any descendant node.
+                    - description: |
+                        A link to a list of all images illustrating this node or any descendant node.
+
+                        (For unillustrated nodes, this will be the same as the `cladeImages` link of a descendant node.)
                 contributor:
                   allOf:
                     - $ref: "#/components/schemas/Link"
-                    - description: A `mailto:` URL with the contributor's email address.
+                    - description: A link to data about the user who uploaded the image.
                 external:
                   type: array
-                  description: Links to the same node under other domains (for example, Encyclopedia of Life).
+                  description: Links to the same node under other domains (for example, *Encyclopedia of Life*).
                   items:
                     $ref: "#/components/schemas/TitledLink"
                 images:
                   allOf:
                     - $ref: "#/components/schemas/Link"
                     - description: A link to a list of all images illustrating this node.
+                lineage:
+                  allOf:
+                    - $ref: "#/components/schemas/Link"
+                    - description: A link to a list of this node and all nodes
                 parentNode:
                   allOf:
                     - $ref: "#/components/schemas/Link"
-                    - description: Link to the parent node (immediate ancestor).
+                    - description: |
+                        Link to the parent node (immediate ancestor).
+
+                        (Only `null` for the root node, *Pan-Biota*.)
                       nullable: true
                 primaryImage:
                   allOf:
@@ -857,9 +755,6 @@ components:
               description: A list of all of this node's names, starting with the preferred name.
               items:
                 $ref: "#/components/schemas/NodeName"
-            root:
-              description: A flag that, if `true`, indicates that this is a root node and should not have a parent.
-              type: boolean
     NodeName:
       description: A taxonomic name, associated with a phylogenetic node.
       type: array
@@ -877,37 +772,14 @@ components:
             format: '^\S+( \S+)*$'
             type: string
             example: Homo sapiens
-    NodeReference:
-      description: A reference to a phylogenetic node.
-      required:
-        - _embedded
-        - _links
-        - names
-      properties:
-        _embedded:
-          type: object
-          properties:
-            primaryImage:
-              $ref: "#/components/schemas/Image"
-        _links:
-          type: object
-          required:
-            - self
-          properties:
-            self:
-              $ref: "#/components/schemas/Link"
-        names:
-          type: array
-          items:
-            $ref: "#/components/schemas/NodeName"
     NodeWithEmbedded:
       description: A resource for a phylogenetic node.
       required:
         - _embedded
         - _links
         - names
-        - root
       allOf:
+        - $ref: "#/components/schemas/Node"
         - type: object
           properties:
             _embedded:
@@ -918,10 +790,6 @@ components:
                   type: array
                   items:
                     $ref: "#/components/schemas/Node"
-                contributor:
-                  allOf:
-                    - $ref: "#/components/schemas/Link"
-                    - description: A `mailto:` URL with the contributor's email address.
                 parentNode:
                   allOf:
                     - $ref: "#/components/schemas/Node"
@@ -930,7 +798,88 @@ components:
                   allOf:
                     - $ref: "#/components/schemas/Image"
                     - nullable: true
-        - $ref: "#/components/schemas/Node"
+    Page:
+      allOf:
+        - $ref: "#/components/schemas/Data"
+        - description: A page of entities.
+          required:
+            - _links
+            - index
+          type: object
+          properties:
+            _links:
+              type: object
+              required:
+                - items
+                - list
+                - next
+                - previous
+              properties:
+                items:
+                  description: Links to the entities in the page.
+                  type: array
+                  items:
+                    - $ref: "#/components/schemas/Link"
+                list:
+                    allOf:
+                      - description: The list that this page is part of.
+                      - $ref: "#/components/schemas/Link"
+                next:
+                    allOf:
+                      - description: The next page of entities, or `null` if this is the last page.
+                      - $ref: "#/components/schemas/Link"
+                      - nullable: true
+                previous:
+                    allOf:
+                      - description: The previous page of entities, or `null` if this is the first page.
+                      - $ref: "#/components/schemas/Link"
+                      - nullable: true
+            index:
+              description: The index of this page within the list of all pages (zero-based).
+              type: integer
+    PageWithEmbeddedContributors:
+      allOf:
+        - $ref: "#/components/schemas/Page"
+        - type: object
+          properties:
+            _embedded:
+              type: object
+              description: Embedded entities belonging to the page. See `_links` for more information.
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Contributor"
+    PageWithEmbeddedImages:
+      allOf:
+        - $ref: "#/components/schemas/Page"
+        - type: object
+          properties:
+            _embedded:
+              type: object
+              description: Embedded entities belonging to the page. See `_links` for more information.
+              properties:
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - $ref: "#/components/schemas/Image"
+                      - $ref: "#/components/schemas/ImageWithEmbedded"
+    PageWithEmbeddedNodes:
+      allOf:
+        - $ref: "#/components/schemas/Page"
+        - type: object
+          properties:
+            _embedded:
+              type: object
+              description: Embedded entities belonging to the page. See `_links` for more information.
+              properties:
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - $ref: "#/components/schemas/Node"
+                      - $ref: "#/components/schemas/NodeWithEmbedded"
     TitledLink:
       description: A link with a title, usually for an external resource.
       allOf:
@@ -942,24 +891,16 @@ components:
             title:
               type: string
               example: "Name"
-  securitySchemes:
-    keyAuth:
-      description: User consuming the API data.
-      type: apiKey
-      in: header
-      name: X-API-Key
 paths:
   /:
     get:
-      operationId: get
+      operationId: getIndex
       summary: Returns API information and links to resources.
       tags:
         - general
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-None-Match"
-      security:
-        - keyAuth: []
+        - $ref: "#/components/parameters/build"
       responses:
         "200":
           description: |
@@ -975,14 +916,14 @@ paths:
               $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
-            ETag:
-              $ref: "#/components/headers/ETag-GET"
           content:
             application/vnd.phylopic.v2+json:
               schema:
                 type: object
                 required:
                   - _links
+                  - build
+                  - buildTimestamp
                   - title
                   - version
                 properties:
@@ -1004,11 +945,14 @@ paths:
                           $ref: "#/components/schemas/TitledLink"
                       self:
                         $ref: "#/components/schemas/Link"
+                  build:
+                    description: Index number of the current data build.
+                    type: integer
                   buildTimestamp:
                     description: Timestamp of the current data build.
+                    example: 1970-01-01T00:00:00.000Z
                     pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$'
                     type: string
-                    example: 1970-01-01T00:00:00.000Z
                   title:
                     type: string
                     example: PhyloPic Application Programming Interface
@@ -1017,10 +961,14 @@ paths:
                     pattern: '^\d+\.\d+\.\d+(-(alpha|beta|rc)(\.\d+)?)?$'
                     type: string
                     example: 2.0.0
-        "304":
-          $ref: "#/components/responses/304"
+        "307":
+          $ref: "#/components/responses/307"
+        "400":
+          $ref: "#/components/responses/400"
         "406":
           $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
   /autocomplete:
     get:
       operationId: getAutocomplete
@@ -1029,18 +977,21 @@ paths:
         - nodes
         - search
       description: |
-        Never returns more than 30 results. Results with the text toward the beginning are favored. The results can be clarified via `/search/nodes`.
+        Never returns more than q6 results. Results with the text toward the beginning are favored. The results can be clarified via `/nodes`, using the `filter_name` query parameter.
       parameters:
         - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/build"
         - name: query
           in: query
           required: true
-          description: The leading text to look up. Must be at least two characters.
+          description: |
+            The text to look up. Must be at least two characters.
+
+            If not normalized (lower case, single spaces only, only alphabetic characters and hyphens [`"-"`]\), a `308` response will indicate the URL with the normalized query text.
           schema:
+            format: '^([a-z-]+ )*[^a-z-]+$'
             type: string
-          example: human
-      security:
-        - keyAuth: []
+            example: human
       responses:
         "200":
           description: |
@@ -1059,52 +1010,26 @@ paths:
           content:
             application/vnd.phylopic.v2+json:
               schema:
-                type: object
-                required:
-                  - _links
-                  - matches
-                properties:
-                  _links:
+                allOf:
+                  - $ref: "#/components/schemas/Entity"
+                  - description: Results of an autocomplete search.
                     type: object
                     required:
-                      - self
+                      - _links
+                      - build
+                      - matches
                     properties:
-                      self:
-                        $ref: "#/components/schemas/Link"
-                  matches:
-                    type: array
-                    items:
-                      type: string
-                      example: modern humans
-        "400":
-          $ref: "#/components/responses/400"
-        "406":
-          $ref: "#/components/responses/406"
-  /cladeimages/{uuid}:
-    get:
-      operationId: getCladeImages
-      summary: Lists all images associated with a given phylogenetic node or any of its descendants.
-      tags:
-        - images
-        - nodes
-      parameters:
-        - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-Match-GET"
-        - $ref: "#/components/parameters/Range"
-        - $ref: "#/components/parameters/contributor"
-        - $ref: "#/components/parameters/created_lt"
-        - $ref: "#/components/parameters/created_gt"
-        - $ref: "#/components/parameters/embed-Image"
-        - $ref: "#/components/parameters/licensecomponents"
-        - $ref: "#/components/parameters/modified_lt"
-        - $ref: "#/components/parameters/modified_gt"
-        - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/uuid-Entity"
-      security:
-        - keyAuth: []
-      responses:
-        "206":
-          $ref: "#/components/responses/list-Image"
+                      matches:
+                        type: array
+                        description: Text matches for the query, found in node names.
+                        items:
+                          example: modern humans
+                          pattern: '^([a-z-]+ )*[a-z-]+$'
+                          type: string
+        "307":
+          $ref: "#/components/responses/307"
+        "308":
+          $ref: "#/components/responses/308"
         "400":
           $ref: "#/components/responses/400"
         "404":
@@ -1113,37 +1038,123 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
-        "416":
-          $ref: "#/components/responses/416"
+  /contributors:
+    get:
+      operationId: getContributors
+      summary: Lists all contributors, from those with the highest number of contributions to those with the lowest.
+      tags:
+        - contributors
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_items"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: |
+            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) list record (if `page` is not provided) or page record (if `page` is provided).
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/List"
+                  - $ref: "#/components/schemas/PageWithEmbeddedContributors"
+        "307":
+          $ref: "#/components/responses/307"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
+  /contributors/{uuid}:
+    get:
+      operationId: getContributor
+      summary: Returns a specific contributing user.
+      tags:
+        - nodes
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/uuid"
+      responses:
+        "200":
+          description: |
+            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) contributor record.
+          headers:
+            Access-Control-Allow-Credentials:
+              $ref: "#/components/headers/Access-Control-Allow-Credentials"
+            Access-Control-Allow-Origin:
+              $ref: "#/components/headers/Access-Control-Allow-Origin"
+            Cache-Control:
+              $ref: "#/components/headers/Cache-Control"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+            Content-Type:
+              $ref: "#/components/headers/Content-Type"
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                $ref: "#/components/schemas/Contributor"
+        "307":
+          $ref: "#/components/responses/307"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
   /images:
     get:
       operationId: getImages
-      summary: Lists all images.
+      summary: Lists all images, or a filtered subset.
       tags:
         - images
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-Match-GET"
-        - $ref: "#/components/parameters/Range"
-        - $ref: "#/components/parameters/contributor"
-        - $ref: "#/components/parameters/created_lt"
-        - $ref: "#/components/parameters/created_gt"
-        - $ref: "#/components/parameters/embed-Image"
-        - $ref: "#/components/parameters/licensecomponents"
-        - $ref: "#/components/parameters/modified_lt"
-        - $ref: "#/components/parameters/modified_gt"
-        - $ref: "#/components/parameters/sort"
-      security:
-        - keyAuth: []
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_contributor"
+        - $ref: "#/components/parameters/embed_generalNode"
+        - $ref: "#/components/parameters/embed_items"
+        - $ref: "#/components/parameters/embed_nodes"
+        - $ref: "#/components/parameters/embed_specificNode"
+        - $ref: "#/components/parameters/filter_clade"
+        - $ref: "#/components/parameters/filter_contributor"
+        - $ref: "#/components/parameters/filter_license_by"
+        - $ref: "#/components/parameters/filter_license_nc"
+        - $ref: "#/components/parameters/filter_license_sa"
+        - allOf:
+          - $ref: "#/components/parameters/filter_name"
+          - description: |
+              Limits results to entries matching a given name. The name should be normalized (all lower-case letters or hyphens, no diacritics, single spaces between words).
+
+              Cannot be used alongside `filter_clade`, `filter_contributor`, or `filter_node`.
+        - $ref: "#/components/parameters/filter_node"
+        - $ref: "#/components/parameters/page"
       responses:
-        "206":
-          $ref: "#/components/responses/list-Image"
+        "200":
+          description: |
+            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) list record (if `page` is not provided) or page record (if `page` is provided).
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/List"
+                  - $ref: "#/components/schemas/PageWithEmbeddedImages"
+        "307":
+          $ref: "#/components/responses/307"
         "400":
           $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
         "406":
           $ref: "#/components/responses/406"
-        "416":
-          $ref: "#/components/responses/416"
+        "410":
+          $ref: "#/components/responses/410"
   /images/{uuid}:
     get:
       operationId: getImage
@@ -1152,11 +1163,12 @@ paths:
         - images
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-None-Match"
-        - $ref: "#/components/parameters/uuid-Entity"
-        - $ref: "#/components/parameters/embed-Image"
-      security:
-        - keyAuth: []
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_contributor"
+        - $ref: "#/components/parameters/embed_generalNode"
+        - $ref: "#/components/parameters/embed_nodes"
+        - $ref: "#/components/parameters/embed_specificNode"
+        - $ref: "#/components/parameters/uuid"
       responses:
         "200":
           description: |
@@ -1172,14 +1184,14 @@ paths:
               $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
-            ETag:
-              $ref: "#/components/headers/ETag-GET"
           content:
             application/vnd.phylopic.v2+json:
               schema:
                 $ref: "#/components/schemas/ImageWithEmbedded"
-        "304":
-          $ref: "#/components/responses/304"
+        "307":
+          $ref: "#/components/responses/307"
+        "400":
+          $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
         "406":
@@ -1198,8 +1210,7 @@ paths:
         Note that this does not include all licenses for all images in the database.
       parameters:
         - $ref: "#/components/parameters/Accept"
-      security:
-        - keyAuth: []
+        - $ref: "#/components/parameters/build"
       responses:
         "200":
           description: List of titled links to licenses.
@@ -1214,34 +1225,14 @@ paths:
               $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
-            ETag:
-              $ref: "#/components/headers/ETag-GET"
           content:
             application/vnd.phylopic.v2+json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/TitledLink"
-        "406":
-          $ref: "#/components/responses/406"
-  /lineage/{uuid}:
-    get:
-      operationId: getLineage
-      summary: Retrieves the ancestral lineage for a given node.
-      description: The nodes are listed in order from least to most ancestral. That is, the first node is the specified node, the second is its parent node, and the last is the root node.
-      tags:
-        - nodes
-      parameters:
-        - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-Match-GET"
-        - $ref: "#/components/parameters/Range"
-        - $ref: "#/components/parameters/embed-Node"
-        - $ref: "#/components/parameters/uuid-Entity"
-      security:
-        - keyAuth: []
-      responses:
-        "206":
-          $ref: "#/components/responses/list-Node"
+        "307":
+          $ref: "#/components/responses/307"
         "400":
           $ref: "#/components/responses/400"
         "404":
@@ -1250,72 +1241,42 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
-        "416":
-          $ref: "#/components/responses/416"
-  /nodeimages/{uuid}:
-    get:
-      operationId: getNodeImages
-      summary: Lists all images associated with a given phylogenetic node.
-      tags:
-        - images
-        - nodes
-      parameters:
-        - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-Match-GET"
-        - $ref: "#/components/parameters/Range"
-        - $ref: "#/components/parameters/contributor"
-        - $ref: "#/components/parameters/created_lt"
-        - $ref: "#/components/parameters/created_gt"
-        - $ref: "#/components/parameters/embed-Image"
-        - $ref: "#/components/parameters/licensecomponents"
-        - $ref: "#/components/parameters/modified_lt"
-        - $ref: "#/components/parameters/modified_gt"
-        - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/uuid-Entity"
-      security:
-        - keyAuth: []
-      responses:
-        "206":
-          $ref: "#/components/responses/list-Image"
-        "400":
-          $ref: "#/components/responses/400"
-        "404":
-          $ref: "#/components/responses/404"
-        "406":
-          $ref: "#/components/responses/406"
-        "410":
-          $ref: "#/components/responses/410"
-        "416":
-          $ref: "#/components/responses/416"
   /nodes:
     get:
       operationId: getNodes
-      summary: Lists all nodes.
+      summary: Lists all nodes, or a filtered subset.
       tags:
         - nodes
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-Match-GET"
-        - $ref: "#/components/parameters/Range"
-        - $ref: "#/components/parameters/contributor"
-        - $ref: "#/components/parameters/created_lt"
-        - $ref: "#/components/parameters/created_gt"
-        - $ref: "#/components/parameters/embed-Node"
-        - $ref: "#/components/parameters/modified_lt"
-        - $ref: "#/components/parameters/modified_gt"
-        - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/uuid-Entity"
-      security:
-        - keyAuth: []
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_childNodes"
+        - $ref: "#/components/parameters/embed_primaryImage"
+        - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/filter_name"
+        - $ref: "#/components/parameters/page"
       responses:
-        "206":
-          $ref: "#/components/responses/list-Node"
+        "200":
+          description: |
+            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) list record (if `page` is not provided) or page record (if `page` is provided).
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/List"
+                  - $ref: "#/components/schemas/PageWithEmbeddedNodes"
+        "307":
+          $ref: "#/components/responses/307"
+        "308":
+          $ref: "#/components/responses/308"
         "400":
           $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
         "406":
           $ref: "#/components/responses/406"
-        "416":
-          $ref: "#/components/responses/416"
+        "410":
+          $ref: "#/components/responses/410"
   /nodes/{uuid}:
     get:
       operationId: getNode
@@ -1324,11 +1285,11 @@ paths:
         - nodes
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-None-Match"
-        - $ref: "#/components/parameters/uuid-Entity"
-        - $ref: "#/components/parameters/embed-Node"
-      security:
-        - keyAuth: []
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_childNodes"
+        - $ref: "#/components/parameters/embed_primaryImage"
+        - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/uuid"
       responses:
         "200":
           description: |
@@ -1344,14 +1305,51 @@ paths:
               $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
-            ETag:
-              $ref: "#/components/headers/ETag-GET"
           content:
             application/vnd.phylopic.v2+json:
               schema:
                 $ref: "#/components/schemas/NodeWithEmbedded"
-        "304":
-          $ref: "#/components/responses/304"
+        "307":
+          $ref: "#/components/responses/307"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
+  /nodes/{uuid}/lineage:
+    get:
+      operationId: getLineage
+      summary: Retrieves the ancestral lineage for a given node.
+      description: The nodes are listed in order from least to most ancestral. That is, the first node is the specified node, the second is its parent node, and the last is the root node.
+      tags:
+        - nodes
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_childNodes"
+        - $ref: "#/components/parameters/embed_primaryImage"
+        - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/filter_name"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: |
+            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) list record (if `page` is not provided) or page record (if `page` is provided).
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/List"
+                  - $ref: "#/components/schemas/PageWithEmbeddedNodes"
+        "307":
+          $ref: "#/components/responses/307"
+        "308":
+          $ref: "#/components/responses/308"
+        "400":
+          $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
         "406":
@@ -1367,136 +1365,116 @@ paths:
       responses:
         "204":
           $ref: "#/components/responses/204"
-  /resolve:
+  /resolve/{authority}/{namespace}:
     get:
-      operationId: resolve
-      summary: Resolves an external URI to the closest phylogenetic node.
+      operationId: getResolveObject
+      summary: Resolves a list of external identifiers under a single authorized namespace to a single phylogenetic node.
+      description: Identifiers toward the beginning of the list have priority. Subsequent identifiers are checked if a node cannot be found for an earlier identifier.
       tags:
         - nodes
         - search
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/embed-Node"
-        - name: uri
-          in: query
-          required: true
-          description: The URI of the external resource.
-          schema:
-            format: uri
-            type: string
-          example: https://eol.org/pages/328046
-      security:
-        - keyAuth: []
+        - $ref: "#/components/parameters/Content-Type"
+        - $ref: "#/components/parameters/authority"
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_childNodes"
+        - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/embed_primaryImage"
+        - $ref: "#/components/parameters/namespace"
+      requestBody:
+        description: A list of object IDs.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                - type: string
       responses:
         "307":
-          description: A corresponding or ancestral node was found.
+          description: An ancestral node was found.
           headers:
             Location:
-              $ref: "#/components/headers/Location"
+               $ref: "#/components/headers/Location"
+          content:
+            application/vnd.phylopic.v2+json:
+              $ref: "#/components/schemas/TitledLink"
+        "308":
+          description: The node was found.
+          headers:
+            Location:
+               $ref: "#/components/headers/Location"
+          content:
+            application/vnd.phylopic.v2+json:
+              $ref: "#/components/schemas/TitledLink"
         "400":
           $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
         "406":
           $ref: "#/components/responses/406"
-  /rootnode:
+        "410":
+          $ref: "#/components/responses/410"
+  /resolve/{authority}/{namespace}/{objectid}:
     get:
-      operationId: getRootNode
+      operationId: getResolveObject
+      summary: Resolves an external identifier to the closest phylogenetic node.
+      description: Valid query parameters passed to this method are included in the returned `Location` header.
+      tags:
+        - nodes
+        - search
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/authority"
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_childNodes"
+        - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/embed_primaryImage"
+        - $ref: "#/components/parameters/namespace"
+        - $ref: "#/components/parameters/objectid"
+      responses:
+        "307":
+          description: An ancestral node was found.
+          headers:
+            Location:
+               $ref: "#/components/headers/Location"
+          content:
+            application/vnd.phylopic.v2+json:
+              $ref: "#/components/schemas/TitledLink"
+        "308":
+          description: The node was found.
+          headers:
+            Location:
+               $ref: "#/components/headers/Location"
+          content:
+            application/vnd.phylopic.v2+json:
+              $ref: "#/components/schemas/TitledLink"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
+  /root:
+    get:
+      operationId: getRoot
       summary: Retrieves the root phylogenetic node (the ancestor of all others).
       description: Redirects to the appropriate `/nodes/{uuid}` endpoint.
       tags:
         - nodes
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/embed-Node"
-      security:
-        - keyAuth: []
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_childNodes"
+        - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/embed_primaryImage"
       responses:
-        "303":
-          $ref: "#/components/responses/303"
-        "400":
-          $ref: "#/components/responses/400"
+        "307":
+          $ref: "#/components/responses/308"
+        "308":
+          $ref: "#/components/responses/308"
         "406":
           $ref: "#/components/responses/406"
-  /search/nodes:
-    get:
-      operationId: searchNodes
-      summary: Returns an embedded list of references to nodes whose names match a search string.
-      tags:
-        - nodes
-        - search
-      parameters:
-        - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/If-Match-GET"
-        - $ref: "#/components/parameters/Range"
-        - $ref: "#/components/parameters/contributor"
-        - $ref: "#/components/parameters/created_lt"
-        - $ref: "#/components/parameters/created_gt"
-        - $ref: "#/components/parameters/embed-Node"
-        - $ref: "#/components/parameters/modified_lt"
-        - $ref: "#/components/parameters/modified_gt"
-        - name: query
-          in: query
-          required: true
-          description: The text to search for. Must be at least two characters, trimmed of whitespace.
-          schema:
-            type: string
-            example: Homo sapiens
-        - $ref: "#/components/parameters/sort"
-      security:
-        - keyAuth: []
-      responses:
-        "206":
-          description: |
-            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) description of search results.
-          headers:
-            Accept-Ranges:
-              $ref: "#/components/headers/Accept-Ranges"
-            Access-Control-Allow-Credentials:
-              $ref: "#/components/headers/Access-Control-Allow-Credentials"
-            Access-Control-Allow-Origin:
-              $ref: "#/components/headers/Access-Control-Allow-Origin"
-            Cache-Control:
-              $ref: "#/components/headers/Cache-Control"
-            Content-Length:
-              $ref: "#/components/headers/Content-Length"
-            Content-Range:
-              $ref: "#/components/headers/Content-Range"
-            Content-Type:
-              $ref: "#/components/headers/Content-Type"
-            ETag:
-              $ref: "#/components/headers/ETag-GET-Range"
-            Warning:
-              $ref: "#/components/headers/Warning-GET-Range"
-          content:
-            application/vnd.phylopic.v2+json:
-              schema:
-                type: object
-                required:
-                  - _embedded
-                  - _links
-                  - query
-                properties:
-                  _embedded:
-                    type: object
-                    properties:
-                      items:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/NodeReference"
-                  _links:
-                    type: object
-                    required:
-                      - self
-                    properties:
-                      self:
-                        $ref: "#/components/schemas/Link"
-                  query:
-                    type: string
-                    example: Homo sapiens
-        "400":
-          $ref: "#/components/responses/400"
-        "406":
-          $ref: "#/components/responses/406"
-        "416":
-          $ref: "#/components/responses/416"
