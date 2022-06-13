@@ -977,7 +977,7 @@ paths:
         - nodes
         - search
       description: |
-        Never returns more than q6 results. Results with the text toward the beginning are favored. The results can be clarified via `/nodes`, using the `filter_name` query parameter.
+        Never returns more than 16 results. Results with the text toward the beginning are favored. The results can be clarified via `/nodes` or `/images`, using the `filter_name` query parameter.
       parameters:
         - $ref: "#/components/parameters/Accept"
         - $ref: "#/components/parameters/build"
@@ -1041,7 +1041,8 @@ paths:
   /contributors:
     get:
       operationId: getContributors
-      summary: Lists all contributors, from those with the highest number of contributions to those with the lowest.
+      summary: Lists all contributing users.
+      description: Contributors are listed in order from those with the most uploaded images to those with the fewest.
       tags:
         - contributors
       parameters:
@@ -1074,7 +1075,7 @@ paths:
       operationId: getContributor
       summary: Returns a specific contributing user.
       tags:
-        - nodes
+        - contributors
       parameters:
         - $ref: "#/components/parameters/Accept"
         - $ref: "#/components/parameters/build"
@@ -1112,8 +1113,13 @@ paths:
     get:
       operationId: getImages
       summary: Lists all images, or a filtered subset.
+      description: |
+        Images are listed from most recently uploaded to least recently uploaded, unless certain `filter_` parameters are specified:
+        - `filter_clade`: images are listed from most basal taxa to most deeply nested taxa.
+        - `filter_name`: images are listed according to which one's taxa fit the search string best
       tags:
         - images
+        - search
       parameters:
         - $ref: "#/components/parameters/Accept"
         - $ref: "#/components/parameters/build"
@@ -1240,8 +1246,13 @@ paths:
     get:
       operationId: getNodes
       summary: Lists all nodes, or a filtered subset.
+      description: |
+        Nodes are listed with the most basal node first, followed by subclades in order from smallest to largest.
+
+        If `filter_name` is passed, the nodes with names matching the search text are listed according to how early in the name the search text appears.
       tags:
         - nodes
+        - search
       parameters:
         - $ref: "#/components/parameters/Accept"
         - $ref: "#/components/parameters/build"
