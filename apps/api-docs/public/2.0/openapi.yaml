@@ -26,29 +26,6 @@ servers:
     description: Production API
 components:
   headers:
-    Access-Control-Allow-Credentials:
-      description: Specifies that credentials are allowed in requests. Always `true`.
-      example: "true"
-      schema:
-        pattern: "^true$"
-        type: string
-    Access-Control-Allow-Origin:
-      description: Specifies that requests may be made from any origin. Always `*`.
-      example: "*"
-      schema:
-        pattern: '^\*$'
-        type: string
-    Cache-Control:
-      description: Specifications for caching mechanisms.
-      example: no-cache
-      schema:
-        type: string
-    Content-Length:
-      description: The length of the content, in bytes.
-      example: 1024
-      schema:
-        format: integer
-        type: string
     Content-Type:
       description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json`.
       example: application/vnd.phylopic.v2+json
@@ -300,20 +277,9 @@ components:
   responses:
     "204":
       description: The request completed successfully. No further information is provided.
-      headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
     "303":
       description: The requested resource should be loaded from another location.
       headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
         Location:
@@ -323,14 +289,8 @@ components:
           schema:
             $ref: "#/components/schemas/Link"
     "307":
-      description: The requested resource is available at another location, temporarily.
+      description: The initial request lacked the `build` parameter. The resource can be found at the URL supplied by `Location`, which has the current build index added to the query.
       headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
         Location:
@@ -342,12 +302,6 @@ components:
     "308":
       description: The requested resource is available at another location, permanently.
       headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
         Location:
@@ -359,12 +313,6 @@ components:
     "400":
       description: There is an error in the request.
       headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
       content:
@@ -374,14 +322,6 @@ components:
     "404":
       description: The resource cannot be found.
       headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Cache-Control:
-          $ref: "#/components/headers/Cache-Control"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
       content:
@@ -391,12 +331,6 @@ components:
     "406":
       description: The request cannot be accepted because the `Accept` header does not allow an available type of content.
       headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
       content:
@@ -406,14 +340,6 @@ components:
     "410":
       description: The specified build is old and no longer present. Remove the `build` parameter to be redirected (`307`) to the latest version of this resource.
       headers:
-        Access-Control-Allow-Credentials:
-          $ref: "#/components/headers/Access-Control-Allow-Credentials"
-        Access-Control-Allow-Origin:
-          $ref: "#/components/headers/Access-Control-Allow-Origin"
-        Cache-Control:
-          $ref: "#/components/headers/Cache-Control"
-        Content-Length:
-          $ref: "#/components/headers/Content-Length"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
       content:
@@ -692,7 +618,7 @@ components:
             - type
           properties:
             href:
-              example: "https://www.domain.tld/path/123e4567-e89b-12d3-a456-426655440000/raster64.png"
+              example: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/thumbnail/64x64.png"
             sizes:
               pattern: '^\d+x\d+$'
               type: string
@@ -925,14 +851,6 @@ paths:
           description: |
             [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) resource description for the API.
           headers:
-            Access-Control-Allow-Credentials:
-              $ref: "#/components/headers/Access-Control-Allow-Credentials"
-            Access-Control-Allow-Origin:
-              $ref: "#/components/headers/Access-Control-Allow-Origin"
-            Cache-Control:
-              $ref: "#/components/headers/Cache-Control"
-            Content-Length:
-              $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
           content:
@@ -1016,14 +934,6 @@ paths:
           description: |
             [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) textual matches.
           headers:
-            Access-Control-Allow-Credentials:
-              $ref: "#/components/headers/Access-Control-Allow-Credentials"
-            Access-Control-Allow-Origin:
-              $ref: "#/components/headers/Access-Control-Allow-Origin"
-            Cache-Control:
-              $ref: "#/components/headers/Cache-Control"
-            Content-Length:
-              $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
           content:
@@ -1038,6 +948,11 @@ paths:
                       - build
                       - matches
                     properties:
+                      _links:
+                        type: object
+                        properties:
+                          self:
+                            $ref: "#/components/schemas/Link"
                       matches:
                         type: array
                         description: Text matches for the query, found in node names.
@@ -1104,14 +1019,6 @@ paths:
           description: |
             [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) contributor record.
           headers:
-            Access-Control-Allow-Credentials:
-              $ref: "#/components/headers/Access-Control-Allow-Credentials"
-            Access-Control-Allow-Origin:
-              $ref: "#/components/headers/Access-Control-Allow-Origin"
-            Cache-Control:
-              $ref: "#/components/headers/Cache-Control"
-            Content-Length:
-              $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
           content:
@@ -1194,14 +1101,6 @@ paths:
           description: |
             [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) image record.
           headers:
-            Access-Control-Allow-Credentials:
-              $ref: "#/components/headers/Access-Control-Allow-Credentials"
-            Access-Control-Allow-Origin:
-              $ref: "#/components/headers/Access-Control-Allow-Origin"
-            Cache-Control:
-              $ref: "#/components/headers/Cache-Control"
-            Content-Length:
-              $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
           content:
@@ -1235,14 +1134,6 @@ paths:
         "200":
           description: List of titled links to licenses.
           headers:
-            Access-Control-Allow-Credentials:
-              $ref: "#/components/headers/Access-Control-Allow-Credentials"
-            Access-Control-Allow-Origin:
-              $ref: "#/components/headers/Access-Control-Allow-Origin"
-            Cache-Control:
-              $ref: "#/components/headers/Cache-Control"
-            Content-Length:
-              $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
           content:
@@ -1320,14 +1211,6 @@ paths:
           description: |
             [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) node record.
           headers:
-            Access-Control-Allow-Credentials:
-              $ref: "#/components/headers/Access-Control-Allow-Credentials"
-            Access-Control-Allow-Origin:
-              $ref: "#/components/headers/Access-Control-Allow-Origin"
-            Cache-Control:
-              $ref: "#/components/headers/Cache-Control"
-            Content-Length:
-              $ref: "#/components/headers/Content-Length"
             Content-Type:
               $ref: "#/components/headers/Content-Type"
           content:
