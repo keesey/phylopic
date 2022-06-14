@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   title: PhyloPic API
   description: Documentation *PhyloPic*'s Application Programming Interface.
@@ -9,10 +9,12 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.0.0
+  version: 2.0.0-beta
 tags:
   - name: general
     description: General API information and status.
+  - name: contributors
+    description: Methods related to contributing users.
   - name: nodes
     description: Methods related to phylogenetic nodes.
   - name: images
@@ -21,7 +23,7 @@ tags:
     description: Searches for entities (images and nodes).
 servers:
   - url: https://api.phylopic.org
-    description: The production API
+    description: Production API
 components:
   headers:
     Access-Control-Allow-Credentials:
@@ -77,7 +79,7 @@ components:
       schema:
         format: mimetype
         type: string
-    authority: 
+    authority:
       name: authority
       in: path
       required: true
@@ -232,7 +234,7 @@ components:
       schema:
         format: uuid
         type: string
-    namespace: 
+    namespace:
       name: namespace
       in: path
       required: true
@@ -248,18 +250,17 @@ components:
       description: |
         Specifies an object within an authorized namespace.
       schema:
-        example: '1'
+        example: "1"
         type: string
-    page: 
+    page:
       name: page
       in: query
       required: false
       description: |
         Specifies a particular page of items to retrieve.
       schema:
-        format: integer
-        type: number
-    query: 
+        type: integer
+    query:
       name: query
       in: query
       required: true
@@ -652,10 +653,13 @@ components:
                 self:
                   $ref: "#/components/schemas/Link"
             itemsPerPage:
+              description: The maximum number of entities on each page in this list.
               type: integer
             totalItems:
+              description: The total number of entities in this list.
               type: integer
             totalPages:
+              description: The total number of pages in this list.
               type: integer
     MediaLink:
       allOf:
@@ -816,19 +820,19 @@ components:
                   items:
                     $ref: "#/components/schemas/Link"
                 list:
-                    allOf:
-                      - description: The list that this page is part of.
-                      - $ref: "#/components/schemas/Link"
+                  allOf:
+                    - description: The list that this page is part of.
+                    - $ref: "#/components/schemas/Link"
                 next:
-                    allOf:
-                      - description: The next page of entities, or `null` if this is the last page.
-                      - $ref: "#/components/schemas/Link"
-                      - nullable: true
+                  allOf:
+                    - description: The next page of entities, or `null` if this is the last page.
+                    - $ref: "#/components/schemas/Link"
+                    - nullable: true
                 previous:
-                    allOf:
-                      - description: The previous page of entities, or `null` if this is the first page.
-                      - $ref: "#/components/schemas/Link"
-                      - nullable: true
+                  allOf:
+                    - description: The previous page of entities, or `null` if this is the first page.
+                    - $ref: "#/components/schemas/Link"
+                    - nullable: true
             index:
               description: The index of this page within the list of all pages (zero-based).
               type: integer
@@ -984,7 +988,7 @@ paths:
 
             If not normalized (lower case, single spaces only, only alphabetic characters and hyphens [`"-"`]\), a `308` response will indicate the URL with the normalized query text.
           schema:
-            format: '^([a-z-]+ )*[^a-z-]+$'
+            format: "^([a-z-]+ )*[^a-z-]+$"
             type: string
             example: human
       responses:
@@ -1006,7 +1010,7 @@ paths:
             application/vnd.phylopic.v2+json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/Entity"
+                  - $ref: "#/components/schemas/Data"
                   - description: Results of an autocomplete search.
                     type: object
                     required:
@@ -1019,7 +1023,7 @@ paths:
                         description: Text matches for the query, found in node names.
                         items:
                           example: modern humans
-                          pattern: '^([a-z-]+ )*[a-z-]+$'
+                          pattern: "^([a-z-]+ )*[a-z-]+$"
                           type: string
         "307":
           $ref: "#/components/responses/307"
@@ -1110,8 +1114,8 @@ paths:
       summary: Lists all images, or a filtered subset.
       description: |
         Images are listed from most recently uploaded to least recently uploaded, unless certain `filter_` parameters are specified:
-        - `filter_clade`: images are listed from most basal taxa to most deeply nested taxa.
-        - `filter_name`: images are listed according to which one's taxa fit the search string best
+        - `filter_clade`: images are listed from most basal nodes to most deeply nested nodes.
+        - `filter_name`: images are listed according to which one's nodes' names fit the search string best.
       tags:
         - images
         - search
@@ -1398,7 +1402,7 @@ paths:
           description: An ancestral node was found.
           headers:
             Location:
-               $ref: "#/components/headers/Location"
+              $ref: "#/components/headers/Location"
           content:
             application/vnd.phylopic.v2+json:
               schema:
@@ -1407,7 +1411,7 @@ paths:
           description: The node was found.
           headers:
             Location:
-               $ref: "#/components/headers/Location"
+              $ref: "#/components/headers/Location"
           content:
             application/vnd.phylopic.v2+json:
               schema:
@@ -1442,7 +1446,7 @@ paths:
           description: An ancestral node was found.
           headers:
             Location:
-               $ref: "#/components/headers/Location"
+              $ref: "#/components/headers/Location"
           content:
             application/vnd.phylopic.v2+json:
               schema:
@@ -1451,7 +1455,7 @@ paths:
           description: The node was found.
           headers:
             Location:
-               $ref: "#/components/headers/Location"
+              $ref: "#/components/headers/Location"
           content:
             application/vnd.phylopic.v2+json:
               schema:
