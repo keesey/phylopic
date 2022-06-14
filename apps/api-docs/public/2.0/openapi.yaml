@@ -47,7 +47,7 @@ components:
       description: The length of the content, in bytes.
       example: 1024
       schema:
-        format: number
+        format: integer
         type: string
     Content-Type:
       description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json`.
@@ -69,14 +69,16 @@ components:
 
         If omitted, `*/*` (a wildcard allowing all types) is assumed, and the response's `Content-Type` header will be `application/vnd.phylopic.v2+json`.
       schema:
+        example: application/vnd.phylopic.v2+json
         format: mimetype
         type: string
     Content-Type:
       name: Content-Type
       in: header
       required: true
-      description: The media type for the payload, including API version. Must be `application/vnd.phylopic.v2+json`.
+      description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json`.
       schema:
+        example: application/vnd.phylopic.v2+json
         format: mimetype
         type: string
     authority:
@@ -93,10 +95,11 @@ components:
       in: query
       required: false
       description: |
-        Specifies the build for the returned data. Only the current build is valid.
+        Specifies the index of the build for the returned data. Only the current build is valid.
 
         Leaving this parameter out will yield a temporary redirect (`307`) to the same URL but with the current `build` value added to the query.
       schema:
+        example: 80
         type: integer
     embed_childNodes:
       name: embed_childNodes
@@ -104,6 +107,7 @@ components:
       description: |
         If `"true"`, includes all members of `childNodes` in `_embedded`.
       schema:
+        example: "true"
         pattern: "^true$"
         type: string
     embed_contributor:
@@ -112,6 +116,7 @@ components:
       description: |
         If `"true"`, includes `contributor` in `_embedded`.
       schema:
+        example: "true"
         pattern: "^true$"
         type: string
     embed_generalNode:
@@ -120,6 +125,7 @@ components:
       description: |
         If `"true"`, includes `generalNode` in `_embedded`.
       schema:
+        example: "true"
         pattern: "^true$"
         type: string
     embed_items:
@@ -128,6 +134,7 @@ components:
       description: |
         If `"true"`, includes `items` in `_embedded`. (This is a prerequisite for including any embeds on the items themselves.)
       schema:
+        example: "true"
         pattern: "^true$"
         type: string
     embed_nodes:
@@ -136,6 +143,7 @@ components:
       description: |
         If `"true"`, includes all members of `nodes` in `_embedded`.
       schema:
+        example: "true"
         pattern: "^true$"
         type: string
     embed_parentNode:
@@ -144,6 +152,7 @@ components:
       description: |
         If `"true"`, includes `parentNode` in `_embedded`.
       schema:
+        example: "true"
         pattern: "^true$"
         type: string
     embed_primaryImage:
@@ -152,6 +161,7 @@ components:
       description: |
         If `"true"`, includes `primaryImage` in `_embedded`.
       schema:
+        example: "true"
         pattern: "^true$"
         type: string
     embed_specificNode:
@@ -160,6 +170,7 @@ components:
       description: |
         If `"true"`, includes `specificNode` in `_embedded`.
       schema:
+        example: "true"
         pattern: "^true$"
         type: string
     filter_clade:
@@ -171,6 +182,7 @@ components:
 
         Cannot be used alongside `filter_contributor`, `filter_name`, or `filter_node`.
       schema:
+        example: "8f901db5-84c1-4dc0-93ba-2300eeddf4ab"
         format: uuid
         type: string
     filter_contributor:
@@ -182,6 +194,7 @@ components:
 
         Cannot be used alongside `filter_clade`, `filter_name`, or `filter_node`.
       schema:
+        example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
         format: uuid
         type: string
     filter_license_by:
@@ -192,6 +205,7 @@ components:
         If `"true"`, limits results to entries with a license that requires attribution.
         If `"false"`, limits results to entries with a license that does not require attribution.
       schema:
+        example: "false"
         pattern: "^(true|false)$"
         type: string
     filter_license_nc:
@@ -202,6 +216,7 @@ components:
         If `"true"`, limits results to entries with a license that does not allow commercial usage.
         If `"false"`, limits results to entries with a license that allows commercial usage.
       schema:
+        example: "false"
         pattern: "^(true|false)$"
         type: string
     filter_license_sa:
@@ -212,6 +227,7 @@ components:
         If `"true"`, limits results to entries with a license with the StandAlone clause.
         If `"false"`, limits results to entries with a license without the StandAlone clause.
       schema:
+        example: "false"
         pattern: "^(true|false)$"
         type: string
     filter_name:
@@ -221,6 +237,7 @@ components:
       description: |
         Limits results to entries matching a given name. The name should be normalized (all lower-case letters or hyphens, no diacritics, single spaces between words).
       schema:
+        example: "homo sapiens"
         pattern: "^([a-z-]+ )*[a-z-]+$"
         type: string
     filter_node:
@@ -232,6 +249,7 @@ components:
 
         Cannot be used alongside `filter_clade`, `filter_contributor`, or `filter_name`.
       schema:
+        example: "8f901db5-84c1-4dc0-93ba-2300eeddf4ab"
         format: uuid
         type: string
     namespace:
@@ -259,6 +277,7 @@ components:
       description: |
         Specifies a particular page of items to retrieve.
       schema:
+        example: 0
         type: integer
     query:
       name: query
@@ -267,6 +286,7 @@ components:
       description: |
         A search string to match names against. Must be at least two characters in length, all lower-case letters, hyphens (`"-"`), or spaces (`" "`).
       schema:
+        example: "homo s"
         pattern: "^([a-z-]+ )*[a-z-]+$"
         type: string
     uuid:
@@ -590,7 +610,7 @@ components:
                     - description: A link to the vector image file as it was submitted. Always in SVG format.
                       nullable: true
     ImageWithEmbedded:
-      description: Resource for an image.
+      description: An image with related entities embedded.
       required:
         - _embedded
       allOf:
@@ -772,7 +792,7 @@ components:
             type: string
             example: Homo sapiens
     NodeWithEmbedded:
-      description: A resource for a phylogenetic node.
+      description: A node with related entities embedded.
       required:
         - _embedded
         - _links
@@ -1398,17 +1418,8 @@ paths:
               items:
                 type: string
       responses:
-        "307":
-          description: An ancestral node was found.
-          headers:
-            Location:
-              $ref: "#/components/headers/Location"
-          content:
-            application/vnd.phylopic.v2+json:
-              schema:
-                $ref: "#/components/schemas/TitledLink"
-        "308":
-          description: The node was found.
+        "303":
+          description: A matching node was found.
           headers:
             Location:
               $ref: "#/components/headers/Location"
@@ -1483,7 +1494,7 @@ paths:
         - $ref: "#/components/parameters/embed_primaryImage"
       responses:
         "307":
-          $ref: "#/components/responses/308"
+          $ref: "#/components/responses/307"
         "308":
           $ref: "#/components/responses/308"
         "406":
