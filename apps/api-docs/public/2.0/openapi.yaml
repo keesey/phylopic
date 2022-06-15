@@ -1167,6 +1167,7 @@ paths:
         - $ref: "#/components/parameters/Accept"
         - $ref: "#/components/parameters/build"
         - $ref: "#/components/parameters/embed_childNodes"
+        - $ref: "#/components/parameters/embed_items"
         - $ref: "#/components/parameters/embed_primaryImage"
         - $ref: "#/components/parameters/embed_parentNode"
         - $ref: "#/components/parameters/filter_name"
