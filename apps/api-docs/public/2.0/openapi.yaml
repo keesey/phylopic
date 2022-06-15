@@ -21,6 +21,8 @@ tags:
     description: Methods related to silhouette images.
   - name: search
     description: Searches for entities (images and nodes).
+  - name: external identifiers
+    description: Methods related to external taxonomic databases.
 servers:
   - url: https://api.phylopic.org
     description: Production API
