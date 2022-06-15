@@ -249,6 +249,26 @@ functions:
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
                           - X-Api-Key
+                  path: namespaces
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          querystrings:
+                              build: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
                   path: nodes
                   method: get
                   request:
