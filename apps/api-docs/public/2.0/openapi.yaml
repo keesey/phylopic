@@ -234,7 +234,7 @@ components:
       in: path
       required: true
       description: |
-        Specifies aa particular collection of objects, under an authority.
+        Specifies a particular collection of objects, under an authority.
       schema:
         example: pages
         type: string
