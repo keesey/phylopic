@@ -17,15 +17,21 @@ _[PhyloPic](https://www.phylopic.org)_ is an open database of freely reusable si
 
 ### Packages
 
-| Project Path                              | Description                                                                    |
-| ----------------------------------------- | ------------------------------------------------------------------------------ |
-| [api-models](./packages/api-models)       | Type declarations and utility files for data models used by the API.           |
-| [source-models](./packages/source-models) | Type declarations and utility files for data models used in the source bucket. |
-| [styles](./packages/styles)               | Stylesheet values and mixins.                                                  |
-| [ui](./packages/ui)                       | Commonly-used React components for user interfaces.                            |
-| [utils](./packages/utils)                 | Common code.                                                                   |
-| [utils-api](./packages/utils-api)         | Common code related for using the API in a webapp.                             |
-| [utils-aws](./packages/utils-aws)         | Common code related to Amazon Web Services.                                    |
+| Project Path                                                | Description                                                                    |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| [api-models](./packages/api-models)                         | Type declarations and utility files for data models used by the API.           |
+| [eslint-config-phylopic](./packages/eslint-config-phylopic) | ESLint configurations used throughout the project.                             |
+| [source-models](./packages/source-models)                   | Type declarations and utility files for data models used in the source bucket. |
+| [styles](./packages/styles)                                 | Stylesheet values and mixins.                                                  |
+| [tsconfig](./packages/tsconfig)                             | Typescript configurations used throughout the project.                         |
+| [ui](./packages/ui)                                         | Commonly-used React components for user interfaces.                            |
+| [utils](./packages/utils)                                   | Common code.                                                                   |
+| [utils-api](./packages/utils-api)                           | Common code related for using the API in a webapp.                             |
+| [utils-aws](./packages/utils-aws)                           | Common code related to Amazon Web Services.                                    |
+
+### Database Scripts
+
+The script for creating the project's Postgres database is in [sql/create.sql](./sql/create.sql).
 
 ## Contributing
 
