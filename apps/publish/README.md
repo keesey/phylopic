@@ -4,6 +4,8 @@ Publishing scripts for _[PhyloPic](https://www.phylopic.org)_ builds.
 
 ## Setting Up
 
+See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
+
 ### Prerequisites
 
 Make sure you have the following installed on your system and reachable via the system path:
@@ -14,14 +16,6 @@ Make sure you have the following installed on your system and reachable via the 
 -   [Node.js](https://nodejs.org/en/download/) (v16 or higher)
 -   [potrace](http://potrace.sourceforge.net/#downloading) (v1.16 or higher)
 -   [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
-
-### Dependencies
-
-To install dependencies, run this from the monorepo root:
-
-```sh
-yarn
-```
 
 ### Environment Variables
 

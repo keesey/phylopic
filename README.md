@@ -1,37 +1,86 @@
 # PhyloPic
 
-_[PhyloPic](https://www.phylopic.org)_ is an open database of freely reusable silhouettes of life forms. Code for _PhyloPic_ resides in this [monorepo](https://classic.yarnpkg.com/blog/2017/08/02/introducing-workspaces/).
+_[PhyloPic](https://beta.phylopic.org)_ is an open database of freely reusable silhouettes of life forms. Code for _PhyloPic_ resides in this [monorepo](https://turborepo.org/docs).
+
+Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/).
 
 ## Projects
 
 ### Apps
 
-| Project Path                    | Description                                                                                           |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| [api](./apps/api)               | Serverless API for accessing _PhyloPic_ data.                                                         |
-| [api-docs](./apps/api-docs)     | Documentation for the _PhyloPic_ API.                                                                 |
-| [contribute](./apps/contribute) | Public webapp for contributing silhouette images.                                                     |
-| [edit](./apps/edit)             | Private webapp (run locally) for managing _PhyloPic_, including contribution review and data editing. |
-| [publish](./apps/publish)       | Code for administrating _PhyloPic_, including publishing releases and managing source files.          |
-| [www](./apps/www)               | Public webapp for searching for and viewing silhouette images.                                        |
+| Project Path                    | Description                                                                                          |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [api](./apps/api)               | Serverless API for accessing _PhyloPic_ data                                                         |
+| [api-docs](./apps/api-docs)     | Documentation for the _PhyloPic_ API                                                                 |
+| [contribute](./apps/contribute) | Public webapp for contributing silhouette images                                                     |
+| [edit](./apps/edit)             | Private webapp (run locally) for managing _PhyloPic_, including contribution review and data editing |
+| [publish](./apps/publish)       | Code for administrating _PhyloPic_, including publishing releases and managing source files          |
+| [www](./apps/www)               | Public webapp for searching for and viewing silhouette images                                        |
 
 ### Packages
 
-| Project Path                                                | Description                                                                    |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| [api-models](./packages/api-models)                         | Type declarations and utility files for data models used by the API.           |
-| [eslint-config-phylopic](./packages/eslint-config-phylopic) | ESLint configurations used throughout the project.                             |
-| [source-models](./packages/source-models)                   | Type declarations and utility files for data models used in the source bucket. |
-| [styles](./packages/styles)                                 | Stylesheet values and mixins.                                                  |
-| [tsconfig](./packages/tsconfig)                             | Typescript configurations used throughout the project.                         |
-| [ui](./packages/ui)                                         | Commonly-used React components for user interfaces.                            |
-| [utils](./packages/utils)                                   | Common code.                                                                   |
-| [utils-api](./packages/utils-api)                           | Common code related for using the API in a webapp.                             |
-| [utils-aws](./packages/utils-aws)                           | Common code related to Amazon Web Services.                                    |
+| Project Path                                                | Description                                                                   |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [api-models](./packages/api-models)                         | Type declarations and utility files for data models used by the API           |
+| [eslint-config-phylopic](./packages/eslint-config-phylopic) | ESLint configurations used throughout the project                             |
+| [source-models](./packages/source-models)                   | Type declarations and utility files for data models used in the source bucket |
+| [styles](./packages/styles)                                 | Stylesheet values and mixins                                                  |
+| [tsconfig](./packages/tsconfig)                             | Typescript configurations used throughout the project                         |
+| [ui](./packages/ui)                                         | Commonly-used React components for user interfaces                            |
+| [utils](./packages/utils)                                   | Common code                                                                   |
+| [utils-api](./packages/utils-api)                           | Common code related for using the API in a webapp                             |
+| [utils-aws](./packages/utils-aws)                           | Common code related to Amazon Web Services                                    |
 
-### Database Scripts
+### Database scripts
 
 The script for creating the project's Postgres database is in [sql/create.sql](./sql/create.sql).
+
+## Getting started
+
+Install [Yarn](https://classic.yarnpkg.com/), and then run `yarn` from the command root to install dependencies.
+
+## Formatting and linting
+
+To clean up formatting for all source files in all projects, run:
+
+```sh
+yarn format
+```
+
+To lint all source files and automatically fix certain issues:
+
+```sh
+yarn lint
+```
+
+## Testing
+
+To run unit tests in all projects that have them:
+
+```sh
+yarn test
+```
+
+## Running locally
+
+To run all apps locally:
+
+```sh
+yarn dev
+```
+
+Apps will run on the following ports:
+
+| App Project                     | Port   |
+| ------------------------------- | ------ |
+| [api](./apps/api)               | `3003` |
+| [contribute](./apps/contribute) | `3002` |
+| [edit](./apps/edit)             | `3001` |
+| [www](./apps/www)               | `3000` |
+
+## Releasing versions
+
+TBD
 
 ## Contributing
 

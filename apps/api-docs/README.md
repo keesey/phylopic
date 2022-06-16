@@ -1,42 +1,30 @@
-# PhyloPic API Documentation
+# _PhyloPic_ API Documentation
 
-This project is for documenting the planned Application Programming Interface for the next version of [_PhyloPic_](http://phylopic.org). The primary file is [`openapi.yaml`](https://github.com/keesey/@phylopic/api-docs/blob/master/openapi.yaml), which is written using the [OpenAPI Specification](https://swagger.io/specification/).
+This project is for documenting the API (Application Programming Interface) for [_PhyloPic_](https://beta/phylopic.org). The primary file is [`public/2.0/openapi.yaml`](./public/2.0/openapi.yaml), which is written using the [OpenAPI Specification](https://swagger.io/specification/).
 
 ## View online
 
-An HTML version of the documentation is currently being hosted [here](http://www.phylopic.org.s3-website-us-west-2.amazonaws.com/api/docs/2.0/).
+The documentation is hosted online here: [http://api-docs.phylopic.org](http://api-docs.phylopic.org)
 
 ## Getting started
 
-### Prerequisites
+See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
 
-To do development work, you will likely require [yarn](https://yarnpkg.com/). Installation instructions are [here](https://yarnpkg.com/docs/install).
+## Testing
 
-### Installing dependencies
-
-Once yarn is installed, go to the project folder and run:
-
-```sh
-yarn
-```
-
-## Running the tests
-
-To test that `openapi.yaml` is valid, run:
+To test that `public/2.0/openapi.yaml` is valid, run:
 
 ```sh
 yarn test
 ```
 
-## Generating documentation
+## Deploying
 
-To generate documentation as an HTML web page, run:
+To deploy to `api-docs.phylopic.org`, you will need to install [AWS Command Line Interface](https://aws.amazon.com/cli/) and set it up with proper credentials.
 
 ```sh
-yarn build
+yarn deploy
 ```
-
-This will create files in `dist/api/docs/2.0/`. To view the document, simply open `index.html` from that folder in a web browser.
 
 ## Authors
 
