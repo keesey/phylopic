@@ -84,4 +84,4 @@ TBD
 
 ## Contributing
 
-To contribute to the development of _PhyloPic_, please read the guidelines in [`CONTRIBUTING.md`](./CONTRIBUTING.md) and contact Mike Keesey ([`keesey+phylopic@gmail.com`](keesey+phylopic@gmail.com)). The repository is open and may be forked, with pull requests made back into the original repository.
+To contribute to the development of _PhyloPic_, please read the guidelines in [`CONTRIBUTING.md`](./CONTRIBUTING.md) and contact Mike Keesey ([`keesey+phylopic@gmail.com`](mailto:keesey+phylopic@gmail.com)). The repository is open and may be forked, with pull requests made back into the original repository.
