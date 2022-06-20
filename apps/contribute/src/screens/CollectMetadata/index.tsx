@@ -75,7 +75,7 @@ const CollectMetadata: FC<Props> = ({ uuid }) => {
                 <Usage onComplete={handleStepComplete} suggestion={prevSubmission ?? undefined} />
             </div>
             <div>
-                <Finalize submission={submission} onComplete={handleFinalizeComplete} uuid={uuid} />
+                <Finalize onComplete={handleFinalizeComplete} submission={submission} uuid={uuid} />
             </div>
         </section>
     )
