@@ -1,6 +1,7 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { EmailAddress } from "@phylopic/utils"
 import Payload from "~/auth/Payload"
+import getContributionMetaKey from "~/s3/getContributionMetaKey"
 const getExpiration = () => {
     const expiration = new Date()
     expiration.setDate(expiration.getDate() + 1)
@@ -13,7 +14,7 @@ const putMetadata = async (client: S3Client, email: EmailAddress, payload: Paylo
             Body: JSON.stringify(payload),
             ContentType: "application/json",
             Expires: verified ? undefined : getExpiration(),
-            Key: `contributors/${encodeURIComponent(email)}/meta.json`,
+            Key: getContributionMetaKey(email),
             Tagging: `verified=${encodeURIComponent(verified.toString())}`,
         }),
     )

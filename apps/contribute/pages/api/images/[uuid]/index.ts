@@ -5,7 +5,8 @@ import {
     PutObjectCommand,
     S3Client,
 } from "@aws-sdk/client-s3"
-import { isUUIDv4 } from "@phylopic/utils"
+import { isContribution } from "@phylopic/source-models"
+import { isUUIDv4, normalizeUUID, stringifyNormalized } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import { Readable } from "stream"
@@ -13,6 +14,7 @@ import getBearerJWT from "~/auth/http/getBearerJWT"
 import includesETag from "~/auth/http/includesETag"
 import verifyJWT from "~/auth/jwt/verifyJWT"
 import getImageSourceKey from "~/auth/s3/getImageSourceKey"
+import getContributionMetaKey from "~/s3/getContributionMetaKey"
 const index: NextApiHandler<string | null> = async (req, res) => {
     res.setHeader("accept", "application/json").setHeader("accept-encoding", "identity")
     try {
@@ -33,9 +35,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             }
             const client = new S3Client({})
             try {
-                const Key = `/contributors/${encodeURIComponent(payload.sub)}/images/${encodeURIComponent(
-                    uuid,
-                )}/meta.json`
+                const Key = `/contributions/${encodeURIComponent(normalizeUUID(uuid))}/meta.json`
                 const options = {
                     Bucket: "contribute.phylopic.org",
                     Key,
@@ -73,15 +73,23 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             if (!payload?.sub) {
                 throw 401
             }
+            let contribution: unknown
+            try {
+                contribution = JSON.parse(req.body as string)
+            } catch (e) {
+                console.error(e)
+                throw 400
+            }
+            if (!isContribution(contribution)) {
+                throw 400
+            }
             const client = new S3Client({})
             try {
-                const Key = `contributors/${encodeURIComponent(payload.sub)}/images/${encodeURIComponent(
-                    uuid.toLowerCase(),
-                )}/meta.json`
+                const Key = getContributionMetaKey(uuid)
                 const response = await client.send(
                     new PutObjectCommand({
                         Bucket: "contribute.phylopic.org",
-                        Body: req.body,
+                        Body: stringifyNormalized(contribution),
                         ContentType: "application/json",
                         Key,
                     }),

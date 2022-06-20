@@ -1,5 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { EmailAddress, isEmailAddress, ValidationFaultCollector } from "@phylopic/utils"
+import { EmailAddress, isEmailAddress, stringifyNormalized, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler, NextApiRequest } from "next"
 import isPayload from "~/auth/isPayload"
 import issueJWT from "~/auth/jwt/issueJWT"
@@ -20,7 +20,6 @@ const handleGet = async (client: S3Client, email: EmailAddress): Promise<Payload
 }
 const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRequest["body"]) => {
     if (!isPayload(body)) {
-        console.error("Invalid payload.")
         throw 400
     }
     let existingPayload: Payload | undefined
@@ -31,7 +30,7 @@ const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRe
             throw e
         }
     }
-    if (existingPayload && JSON.stringify(existingPayload) !== JSON.stringify(body)) {
+    if (existingPayload && stringifyNormalized(existingPayload) !== stringifyNormalized(body)) {
         throw 401
     }
     if (!existingPayload) {

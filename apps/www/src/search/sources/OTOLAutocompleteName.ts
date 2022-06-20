@@ -15,8 +15,8 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
         return [[], name]
     }
     const response = await fetchDataAndCheck<readonly OTOLAutocompleteName[]>(url, {
-        body: JSON.stringify({ name }),
-        headers: new Headers({ "content-type": "application/json" }),
+        data: { name },
+        headers: { "content-type": "application/json" },
         method: "POST",
     })
     return [response.data, name]

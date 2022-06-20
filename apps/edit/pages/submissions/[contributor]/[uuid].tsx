@@ -136,7 +136,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ params }) 
     const uuidNormalized = normalizeUUID(uuid)
     let result: GetServerSidePropsResult<Props>
     const client = new S3Client({})
-    const path = `contributors/${encodeURIComponent(contributor)}/images/${uuidNormalized}/`
+    const path = `contributions/${uuidNormalized}/`
     try {
         // eslint-disable-next-line prefer-const
         let [[contribution], file, [source]] = await Promise.all([
@@ -144,7 +144,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ params }) 
                 client,
                 {
                     Bucket: CONTRIBUTE_BUCKET_NAME,
-                    Key: `${path}meta.json`,
+                    Key: s`${path}meta.json`,
                 },
                 isContribution,
             ),

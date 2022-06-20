@@ -12,9 +12,7 @@ import {
     stringifyNormalized,
     UUID,
 } from "@phylopic/utils"
-// :TODO: Switch to cross-fetch
 import axios from "axios"
-import fetch, { Request } from "cross-fetch"
 import type { CLIData } from "../../getCLIData.js"
 import { CommandResult, SourceUpdate } from "../CommandResult.js"
 import succeeds from "../utils/succeeds.js"
@@ -64,15 +62,10 @@ const getPathsFromNamebank = async (namebankIDs?: ReadonlySet<number>): Promise<
         "User-Agent": "phylopic/2.0 (http://phylopic.org/; keesey+phylopic@gmail.com) phylopic-publish/0.0.0",
     }
     // console.debug(`Looking for EoL matches for uBio NameBank IDs: ${[...namebankIDs].sort().join(", ")}...`)
-    const request = new Request(url, { headers })
-    const response = await fetch(request)
-    if (!response.ok) {
-        throw new Error(`Wikidata error: ${response.statusText}.`)
-    }
-    const queryResponse = (await response.json()) as SPARQLResponse
+    const response = await axios.get<SPARQLResponse>(url, { headers, responseType: "json" })
     const eolIDs = new Set<string>()
-    if (queryResponse && queryResponse.results && queryResponse.results.bindings) {
-        queryResponse.results.bindings.forEach(binding => {
+    if (response.data?.results?.bindings) {
+        response.data.results.bindings.forEach(binding => {
             if (binding.EOL_ID) {
                 eolIDs.add(binding.EOL_ID.value)
             }
@@ -117,7 +110,10 @@ const getFirstEOLSearchMatch = async (names: readonly Nomen[], parentEOLPageID?:
             key: process.env.EOL_API_KEY,
             q: stringifyNomen(shortenNomen(name)),
         }
-        const response = await axios.get<EOLSearchResults>(`https://eol.org/api/search/1.0.json${createSearch(query)}`)
+        const response = await axios.get<EOLSearchResults>(
+            `https://eol.org/api/search/1.0.json${createSearch(query)}`,
+            { responseType: "json" },
+        )
         const results = response.data.results.filter(result => result.title === query.q)
         if (results.length > 0) {
             return results

@@ -1,5 +1,5 @@
 import { isAuthority, isNamespace, isObjectID } from "@phylopic/utils"
-import fetch from "cross-fetch"
+import axios from "axios"
 import { GetServerSideProps, NextPage } from "next"
 import { ParsedUrlQuery } from "querystring"
 const PageComponent: NextPage = () => null
@@ -14,7 +14,7 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
     if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
         return { notFound: true }
     }
-    const response = await fetch(
+    const response = await axios.get<never>(
         [
             process.env.NEXT_PUBLIC_API_URL,
             "resolve",
@@ -23,11 +23,14 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
             encodeURIComponent(objectID),
         ].join("/"),
         {
-            redirect: "manual",
+            maxRedirects: 0,
         },
     )
-    const destination = response.headers.get("location")
-    if (destination && (response.status === 307 || response.status === 308)) {
+    if (response.status !== 307 && response.status !== 308) {
+        return { notFound: true }
+    }
+    const destination = response.headers.location
+    if (destination) {
         return {
             redirect: {
                 destination,

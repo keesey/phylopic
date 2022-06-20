@@ -1,6 +1,6 @@
-import { DATA_MEDIA_TYPE, ErrorResponse } from "@phylopic/api-models"
+import { ErrorResponse } from "@phylopic/api-models"
 import { FaultDetector, ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
-import fetch from "cross-fetch"
+import axios, { AxiosRequestConfig } from "axios"
 export type HTTPRelatedDataResponse = {
     headers: Headers
     ok: boolean
@@ -23,80 +23,53 @@ export type HTTPErrorFetchDataResponse = HTTPRelatedDataResponse & {
     error?: unknown
     ok: false
 }
-export type JSONErrorFetchDataResponse = {
-    code: "JSONError"
-    error: unknown
-    ok: false
-}
 export type FetchDataResponse<T> =
     | SuccessfulFetchDataResponse<T>
     | DetectionErrorFetchDataResponse
     | HTTPErrorFetchDataResponse
-    | JSONErrorFetchDataResponse
 export const fetchData = async <T>(
-    input: RequestInfo,
-    init?: RequestInit,
+    url: string,
+    config?: AxiosRequestConfig<T>,
     detector?: FaultDetector<T>,
 ): Promise<FetchDataResponse<T>> => {
-    const response = await fetch(input, init)
-    if (response.ok) {
-        try {
-            const data = await response.json()
-            if (detector) {
-                const collector = new ValidationFaultCollector(["body"])
-                if (!detector(data, collector)) {
-                    return {
-                        code: "DetectionError",
-                        ok: false,
-                        faults: collector.list(),
-                    }
+    try {
+        const response = await axios(url, {
+            method: "GET",
+            responseType: "json",
+            ...config,
+        })
+        if (detector) {
+            const collector = new ValidationFaultCollector(["body"])
+            if (!detector(response.data, collector)) {
+                return {
+                    code: "DetectionError",
+                    ok: false,
+                    faults: collector.list(),
                 }
-            }
-            return {
-                data,
-                headers: response.headers,
-                ok: true,
-                status: response.status,
-                statusText: response.statusText,
-            }
-        } catch (e) {
-            return {
-                code: "JSONError",
-                ok: false,
-                error: e,
-            }
-        }
-    } else if (response.headers.get("content-type") === DATA_MEDIA_TYPE) {
-        let data: ErrorResponse
-        try {
-            data = await response.json()
-        } catch (error) {
-            return {
-                code: "HTTPError",
-                headers: response.headers,
-                ok: false,
-                error,
-                status: response.status,
-                statusText: response.statusText,
             }
         }
         return {
-            build: data.build,
-            code: "HTTPError",
-            details: data.stack ?? undefined,
-            error: data.errors,
-            headers: response.headers,
-            ok: false,
+            data: response.data as T,
+            headers: new Headers(response.headers),
+            ok: true,
             status: response.status,
             statusText: response.statusText,
         }
-    }
-    return {
-        code: "HTTPError",
-        headers: response.headers,
-        ok: false,
-        status: response.status,
-        statusText: response.statusText,
+    } catch (e) {
+        if (axios.isAxiosError(e) && e.response) {
+            const data = e.response.data as unknown as ErrorResponse | undefined
+            return {
+                build: data?.build,
+                code: "HTTPError",
+                details: data?.stack ?? undefined,
+                error: data?.errors,
+                headers: new Headers(e.response.headers),
+                ok: false,
+                status: e.response.status,
+                statusText: e.response.statusText,
+            }
+        }
+        throw e
     }
 }
 export default fetchData

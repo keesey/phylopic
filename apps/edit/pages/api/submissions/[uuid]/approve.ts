@@ -18,15 +18,11 @@ const isInternal = (identifier: Identifier | null) =>
 export const post = async (client: S3Client, contributor: EmailAddress, uuid: UUID, res: NextApiResponse) => {
     const metaInput = {
         Bucket: CONTRIBUTE_BUCKET_NAME,
-        Key: `contributors/${encodeURIComponent(contributor)}/images/${uuid}/meta.json`,
+        Key: `contributions/${uuid}/meta.json`,
     }
     const [exists, file] = await Promise.all([
         objectExists(client, metaInput),
-        findImageSourceFile(
-            client,
-            CONTRIBUTE_BUCKET_NAME,
-            `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.`,
-        ),
+        findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `contributions/${uuid}/source.`),
     ])
     if (!file?.Key || !exists) {
         return res.status(404)
@@ -66,7 +62,7 @@ export const post = async (client: S3Client, contributor: EmailAddress, uuid: UU
             client.send(
                 new CopyObjectCommand({
                     Bucket: SOURCE_BUCKET_NAME,
-                    CopySource: encodeURI(`submissions.phylopic.org/${file.Key}`),
+                    CopySource: encodeURI(`contribute.phylopic.org/${file.Key}`),
                     Key: file.Key?.replace(/^contributors\/[^/]+\//, ""),
                 }),
             ),

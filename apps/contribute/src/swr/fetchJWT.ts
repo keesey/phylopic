@@ -1,15 +1,16 @@
-import fetch from "cross-fetch"
+import axios from "axios"
 import { decode } from "jsonwebtoken"
 import { JWT } from "~/auth/JWT"
 const fetchJWT = async (key: string): Promise<JWT> => {
-    const response = await fetch(key)
-    if (response.ok) {
-        const jwt = await response.text()
-        if (!decode(jwt)) {
-            throw new Error("Invalid token.")
-        }
-        return jwt
+    const response = await axios.get<JWT>(key, {
+        responseType: "text",
+    })
+    if (typeof response.data !== "string") {
+        throw new Error("Invalid response for key: " + key)
     }
-    throw new Error(response.statusText)
+    if (!decode(response.data)) {
+        throw new Error("Invalid token.")
+    }
+    return response.data
 }
 export default fetchJWT

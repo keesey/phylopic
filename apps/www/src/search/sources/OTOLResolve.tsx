@@ -17,8 +17,8 @@ interface OTOLTaxonInfo {
 }
 const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async (url, ott_id, include_lineage) => {
     const response = await fetchDataAndCheck<OTOLTaxonInfo>(url, {
-        body: JSON.stringify({ include_lineage, ott_id }),
-        headers: new Headers({ "content-type": "application/json" }),
+        data: { include_lineage, ott_id },
+        headers: { "content-type": "application/json" },
         method: "POST",
     })
     return response.data
@@ -29,7 +29,7 @@ const fetchDirect: Fetcher<NodeWithEmbedded, [string]> = async url => {
 }
 const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = async (url, objectIDs) => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url, {
-        body: JSON.stringify(objectIDs),
+        data: objectIDs,
         method: "POST",
     })
     return response.data

@@ -1,19 +1,18 @@
 import { ListObjectsV2Command, ListObjectsV2CommandOutput, S3Client } from "@aws-sdk/client-s3"
+import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
+import { isUUID, UUID } from "@phylopic/utils"
 import { GetServerSideProps, NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
-import { EmailAddress, isEmailAddress } from "@phylopic/utils"
-import React from "react"
 import Breadcrumbs from "~/ui/Breadcrumbs"
-import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 
 export interface Props {
-    contributors: readonly EmailAddress[]
+    contributions: readonly UUID[]
     index: number
     lastPage?: boolean
 }
 const PAGE_SIZE = 36
-const Page: NextPage<Props> = ({ index, lastPage, contributors }) => (
+const Page: NextPage<Props> = ({ index, lastPage, contributions }) => (
     <>
         <Head>
             <title>PhyloPic Editor: Submissions</title>
@@ -41,14 +40,14 @@ const Page: NextPage<Props> = ({ index, lastPage, contributors }) => (
                 </ul>
             </nav>
             <section>
-                {contributors.length === 0 && <p>No submissions to review.</p>}
-                {contributors.length > 0 && (
+                {contributions.length === 0 && <p>No submissions to review.</p>}
+                {contributions.length > 0 && (
                     <ul>
-                        {contributors.map(contributor => (
-                            <li key={contributor}>
-                                <Link href={`/submissions/${encodeURIComponent(contributor)}`}>
+                        {contributions.map(contribution => (
+                            <li key={contribution}>
+                                <Link href={`/submissions/${encodeURIComponent(contribution)}`}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a>{contributor}</a>
+                                    <a>{contribution}</a>
                                 </Link>
                             </li>
                         ))}
@@ -59,16 +58,16 @@ const Page: NextPage<Props> = ({ index, lastPage, contributors }) => (
     </>
 )
 export default Page
-const getPageContributors = async (
+const getPageContributions = async (
     index: number,
     ContinuationToken?: string,
-): Promise<Readonly<[readonly EmailAddress[], boolean]>> => {
+): Promise<Readonly<[readonly UUID[], boolean]>> => {
     const command = new ListObjectsV2Command({
         Bucket: CONTRIBUTE_BUCKET_NAME,
         ContinuationToken,
         Delimiter: "/",
         MaxKeys: PAGE_SIZE,
-        Prefix: "contributors/",
+        Prefix: "contributions/",
     })
     const client = new S3Client({})
     let result: ListObjectsV2CommandOutput
@@ -83,26 +82,26 @@ const getPageContributors = async (
     if (!index) {
         return [
             result.CommonPrefixes.map(({ Prefix }) =>
-                decodeURIComponent(Prefix?.replace(/^contributors\//, "").replace(/\/$/, "") ?? ""),
-            ).filter(prefix => isEmailAddress(prefix)),
+                decodeURIComponent(Prefix?.replace(/^contributions\//, "").replace(/\/$/, "") ?? ""),
+            ).filter(prefix => isUUID(prefix)),
             !result.NextContinuationToken,
         ]
     }
     if (!result.NextContinuationToken) {
         return [[], true]
     }
-    return getPageContributors(index - 1, result.NextContinuationToken)
+    return getPageContributions(index - 1, result.NextContinuationToken)
 }
 export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) => {
     const page = typeof query.page === "string" ? parseInt(query.page, 10) : 1
     const index = isNaN(page) ? 0 : Math.max(0, page - 1)
-    const [contributors, lastPage] = await getPageContributors(index)
-    if (!contributors.length && index > 0) {
+    const [contributions, lastPage] = await getPageContributions(index)
+    if (!contributions.length && index > 0) {
         return { notFound: true }
     }
     return {
         props: {
-            contributors,
+            contributions,
             index,
             lastPage,
         },

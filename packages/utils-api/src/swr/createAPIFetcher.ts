@@ -1,31 +1,31 @@
 import { DATA_MEDIA_TYPE, ErrorResponse } from "@phylopic/api-models"
 import { URL } from "@phylopic/utils"
-import fetch from "cross-fetch"
+import axios from "axios"
 import { Dispatch, SetStateAction } from "react"
 import type { Fetcher } from "swr"
 import APISWRError from "./APISWRError"
 export const createAPIFetcher =
     <T extends Readonly<{ build: number }>>(setBuild?: Dispatch<SetStateAction<number>>): Fetcher<T, URL> =>
     async key => {
-        const response = await fetch(key)
-        if (response.ok) {
-            const data: T = await response.json()
-            if (setBuild && typeof data?.build === "number") {
-                setBuild(data.build)
+        try {
+            const response = await axios.get<T>(key, { responseType: "json" })
+            if (setBuild && typeof response.data.build === "number") {
+                setBuild(response.data.build)
             }
-            return data as T
-        } else if (response.headers.get("content-type") === DATA_MEDIA_TYPE) {
-            let data: ErrorResponse | undefined
-            try {
-                data = await response.json()
-                if (setBuild && typeof data?.build === "number") {
-                    setBuild(data.build)
+            return response.data
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                if (e.response.headers["content-type"] === DATA_MEDIA_TYPE) {
+                    const data = e.response.data as ErrorResponse | undefined
+                    const build = data?.build
+                    if (setBuild && typeof build === "number") {
+                        setBuild(build)
+                    }
+                    throw new APISWRError(e.response.status, e.response.statusText, data)
                 }
-            } catch (e) {
-                // Corrupted JSON. Ignore.
+                throw new APISWRError(e.response.status, e.response.statusText)
             }
-            throw new APISWRError(response.status, response.statusText, data)
+            throw e
         }
-        throw new APISWRError(response.status, response.statusText)
     }
 export default createAPIFetcher

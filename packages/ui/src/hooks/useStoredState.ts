@@ -1,8 +1,17 @@
+import { stringifyNormalized } from "@phylopic/utils"
 import { useCallback, useEffect, useMemo, useState } from "react"
-const useStoredState = <T>(key: string): Readonly<[T | null, (value: T | null) => void]> => {
+const safeParse = (json: string) => {
+    try {
+        return JSON.parse(json)
+    } catch (e) {
+        console.warn(e)
+        return null
+    }
+}
+export const useStoredState = <T>(key: string): Readonly<[T | null, (value: T | null) => void]> => {
     const [json, setJSON] = useState<string | null | undefined>(undefined)
-    const value = useMemo<T | null>(() => (json ? JSON.parse(json) : null), [json])
-    const setValue = useCallback((newValue: T | null) => setJSON(newValue ? JSON.stringify(newValue) : null), [])
+    const value = useMemo<T | null>(() => (json ? safeParse(json) : null), [json])
+    const setValue = useCallback((newValue: T | null) => setJSON(newValue ? stringifyNormalized(newValue) : null), [])
     useEffect(() => {
         const stored = localStorage.getItem(key)
         if (stored) {
@@ -16,6 +25,7 @@ const useStoredState = <T>(key: string): Readonly<[T | null, (value: T | null) =
             localStorage.setItem(key, json)
         }
     }, [json, key])
+    console.log("[STORED]", key, json, value)
     return useMemo(() => [value, setValue], [setValue, value])
 }
 export default useStoredState

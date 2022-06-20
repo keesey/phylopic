@@ -4,12 +4,13 @@ import { streamToString } from "@phylopic/utils-aws"
 import { Readable } from "stream"
 import { JWT } from "~/auth/JWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
+import getContributorTokenKey from "~/s3/getContributorTokenKey"
 import decodeJWT from "../jwt/decodeJWT"
 const getJWT = async (client: S3Client, email: EmailAddress, uuid: UUID, verify = false): Promise<JWT> => {
     const response = await client.send(
         new GetObjectCommand({
             Bucket: "contribute.phylopic.org",
-            Key: `contributors/${encodeURIComponent(email)}/auth/${encodeURIComponent(uuid)}.jwt`,
+            Key: getContributorTokenKey(email, uuid),
         }),
     )
     const token = await streamToString(response.Body as Readable)

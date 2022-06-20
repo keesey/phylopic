@@ -7,6 +7,7 @@ const useFetcher = <T>(headers?: Omit<AxiosRequestHeaders, "authorization">) => 
         (url: string) =>
             axios.get<T>(url, {
                 headers: token ? { ...headers, authorization: `Bearer ${token}` } : headers,
+                responseType: "json",
             }),
         [headers, token],
     )

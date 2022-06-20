@@ -1,10 +1,8 @@
-import fetch from "cross-fetch"
+import axios from "axios"
 const fetchJSON = async <T>(key: string) => {
-    const response = await fetch(key)
-    if (response.ok) {
-        const data: T = await response.json()
-        return data as T
-    }
-    throw new Error(response.statusText)
+    const response = await axios.get<T>(key, {
+        responseType: "json",
+    })
+    return response.data
 }
 export default fetchJSON

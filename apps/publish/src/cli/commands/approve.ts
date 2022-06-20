@@ -48,7 +48,7 @@ const approve = (_client: S3Client, cliData: CLIData, _contributor?: EmailAddres
             client.send(
                 new CopyObjectCommand({
                     Bucket: SOURCE_BUCKET_NAME,
-                    CopySource: encodeURI(`submissions.phylopic.org/${file.Key}`),
+                    CopySource: encodeURI(`contribute.phylopic.org/${file.Key}`),
                     Key: file.Key?.replace(/^contributors\/[^/]+\//, ""),
                 }),
             ),

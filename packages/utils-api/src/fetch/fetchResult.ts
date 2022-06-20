@@ -1,4 +1,5 @@
 import { FaultDetector } from "@phylopic/utils"
+import { AxiosRequestConfig } from "axios"
 import fetchData from "./fetchData"
 export type SuccessfulFetchResult<T> = {
     data: T
@@ -16,11 +17,11 @@ export type ErrorFetchResult = {
 }
 export type FetchResult<T> = SuccessfulFetchResult<T> | NotFoundFetchResult | ErrorFetchResult
 export const fetchResult = async <T>(
-    input: RequestInfo,
-    init?: RequestInit,
+    url: string,
+    config?: AxiosRequestConfig,
     detector?: FaultDetector<T>,
 ): Promise<FetchResult<T>> => {
-    const response = await fetchData(input, init, detector)
+    const response = await fetchData(url, config, detector)
     if (response.ok) {
         return {
             data: response.data,
@@ -45,13 +46,6 @@ export const fetchResult = async <T>(
             }
             return {
                 error: new Error(response.statusText),
-                ok: false,
-                status: "error",
-            }
-        }
-        case "JSONError": {
-            return {
-                error: response.error,
                 ok: false,
                 status: "error",
             }

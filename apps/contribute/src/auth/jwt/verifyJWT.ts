@@ -15,7 +15,12 @@ const verifyJWT = (token: JWT) =>
                     return reject(err)
                 }
                 if (typeof decoded === "string") {
-                    return resolve(JSON.parse(decoded))
+                    try {
+                        const payload: JwtPayload & Payload = JSON.parse(decoded)
+                        return resolve(payload)
+                    } catch (e) {
+                        return reject(e)
+                    }
                 }
                 resolve((decoded ?? null) as (JwtPayload & Payload) | null)
             },

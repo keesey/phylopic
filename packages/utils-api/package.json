@@ -12,7 +12,7 @@
         "@phylopic/utils": "*",
         "@phylopic/tsconfig": "*",
         "@types/react": "^18.0.12",
-        "cross-fetch": "^3.1.5",
+        "axios": "^0.27.2",
         "eslint-config-phylopic": "*",
         "react": "^18.1.0",
         "swr": "^1.3.0",
@@ -46,7 +46,7 @@
     "peerDependencies": {
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
-        "cross-fetch": "^3.1.5",
+        "axios": "^0.27.2",
         "react": "^18.1.0",
         "swr": "^1.3.0"
     },
@@ -61,9 +61,9 @@
         "@types/node": "*"
     },
     "scripts": {
-        "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils cross-fetch react swr",
+        "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils axios react swr",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils cross-fetch react swr",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils axios react swr",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix",
         "test": "mocha"
     },

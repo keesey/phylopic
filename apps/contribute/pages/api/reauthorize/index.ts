@@ -42,12 +42,10 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             res.setHeader("cache-control", "max-age=3600")
             res.setHeader("date", new Date().toUTCString())
             res.status(204)
-        } else if (req.method !== "POST") {
-            throw 405
-        } else {
+        } else if (req.method === "POST") {
             const ttl = getTTL(req.body)
-            const client = new S3Client({})
             let token: JWT
+            const client = new S3Client({})
             try {
                 token = await handlePost(client, req.headers.authorization, ttl)
             } finally {
@@ -56,6 +54,8 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             res.setHeader("content-type", "application/jwt")
             res.status(200)
             res.send(token)
+        } else {
+            throw 405
         }
     } catch (e) {
         if (typeof e === "number") {

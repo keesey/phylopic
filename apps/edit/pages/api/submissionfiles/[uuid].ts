@@ -7,8 +7,8 @@ import {
 } from "@aws-sdk/client-s3"
 import { CONTRIBUTE_BUCKET_NAME, findImageSourceFile } from "@phylopic/source-models"
 import {
-    EmailAddress,
     ImageMediaType,
+    IMAGE_MEDIA_TYPES,
     isEmailAddress,
     isImageMediaType,
     isUUID,
@@ -19,12 +19,8 @@ import { objectExists } from "@phylopic/utils-aws"
 import { NextApiHandler, NextApiRequest, NextApiResponse, NextConfig } from "next"
 import type { Readable } from "stream"
 
-const deleteFile = async (client: S3Client, contributor: EmailAddress, uuid: UUID, res: NextApiResponse) => {
-    const file = await findImageSourceFile(
-        client,
-        CONTRIBUTE_BUCKET_NAME,
-        `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.`,
-    )
+const deleteFile = async (client: S3Client, uuid: UUID, res: NextApiResponse) => {
+    const file = await findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `contributions/${uuid}/source.`)
     if (!file?.Key) {
         return res.status(404).end()
     }
@@ -42,9 +38,19 @@ const deleteFile = async (client: S3Client, contributor: EmailAddress, uuid: UUI
     }
     res.status(204).end()
 }
-const getContentType = (filename?: string) => {
+const getContentType = (filename?: string): ImageMediaType => {
     const extension = filename?.match(/\.([^.]+)$/)?.[1]
     switch (extension) {
+        case "bmp": {
+            return "image/bmp"
+        }
+        case "gif": {
+            return "image/gif"
+        }
+        case "jpg":
+        case "jpeg": {
+            return "image/jpeg"
+        }
         case "png": {
             return "image/png"
         }
@@ -67,37 +73,21 @@ const writeToReponse = async (body: GetObjectCommandOutput["Body"], res: NextApi
         stream.pipe(res)
     })
 const getFilename = (uuid: UUID, key: string) => uuid + key.slice(key.lastIndexOf("."))
-const getKey = (contributor: EmailAddress, uuid: UUID, contentType: ImageMediaType | undefined) => {
+const getKey = (uuid: UUID, contentType: ImageMediaType | undefined) => {
     if (!contentType) {
         return null
     }
     switch (contentType) {
         case "image/svg+xml": {
-            return `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.svg`
-        }
-        case undefined: {
-            return `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.png`
+            return `contributions/${uuid}/source.svg`
         }
         default: {
-            return `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.${contentType.replace(
-                "image/",
-                "",
-            )}`
+            return `contributions/${uuid}/source.${contentType.replace("image/", "")}`
         }
     }
 }
-const get = async (
-    client: S3Client,
-    contributor: EmailAddress,
-    uuid: UUID,
-    download: boolean,
-    res: NextApiResponse,
-) => {
-    const file = await findImageSourceFile(
-        client,
-        CONTRIBUTE_BUCKET_NAME,
-        `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.`,
-    )
+const get = async (client: S3Client, uuid: UUID, download: boolean, res: NextApiResponse) => {
+    const file = await findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `contributions/${uuid}/source.`)
     if (!file?.Key) {
         return res.status(404)
     }
@@ -119,18 +109,8 @@ const get = async (
     }
     await writeToReponse(getResult.Body, res)
 }
-const head = async (
-    client: S3Client,
-    contributor: EmailAddress,
-    uuid: UUID,
-    download: boolean,
-    res: NextApiResponse,
-) => {
-    const file = await findImageSourceFile(
-        client,
-        CONTRIBUTE_BUCKET_NAME,
-        `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.`,
-    )
+const head = async (client: S3Client, uuid: UUID, download: boolean, res: NextApiResponse) => {
+    const file = await findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `contributions/${uuid}/source.`)
     if (!file?.Key) {
         return res.status(404)
     }
@@ -150,14 +130,8 @@ const streamToBuffer = async (stream: Readable) =>
         })
         stream.on("error", reject)
     })
-const put = async (
-    client: S3Client,
-    contributor: EmailAddress,
-    uuid: UUID,
-    req: NextApiRequest,
-    res: NextApiResponse,
-) => {
-    const path = `contributors/${encodeURIComponent(contributor)}/images/${uuid}/`
+const put = async (client: S3Client, uuid: UUID, req: NextApiRequest, res: NextApiResponse) => {
+    const path = `contributions/${uuid}/`
     if (
         !(await objectExists(client, {
             Bucket: CONTRIBUTE_BUCKET_NAME,
@@ -171,7 +145,7 @@ const put = async (
     if (!isImageMediaType(ContentType)) {
         return res.status(400)
     }
-    const newKey = getKey(contributor, uuid, ContentType)
+    const newKey = getKey(uuid, ContentType)
     if (!newKey) {
         return res.status(415)
     }
@@ -199,8 +173,7 @@ const put = async (
     res.status(201)
 }
 const imagefile: NextApiHandler = async (req, res) => {
-    const mediaTypes: ImageMediaType[] = ["image/bmp", "image/gif", "image/jpeg", "image/png", "image/svg+xml"]
-    res.setHeader("Accept", mediaTypes.join(", ")).setHeader("Accept-Encoding", "identity")
+    res.setHeader("Accept", Array.from(IMAGE_MEDIA_TYPES).join(", ")).setHeader("Accept-Encoding", "identity")
     if (typeof req.query.contributor !== "string" || typeof req.query.uuid !== "string") {
         res.status(404)
         return
@@ -209,25 +182,24 @@ const imagefile: NextApiHandler = async (req, res) => {
         res.status(404)
         return
     }
-    const contributor = req.query.contributor
     const uuid = normalizeUUID(req.query.uuid)
     const client = new S3Client({})
     try {
         switch (req.method) {
             case "DELETE": {
-                await deleteFile(client, contributor, uuid, res)
+                await deleteFile(client, uuid, res)
                 break
             }
             case "GET": {
-                await get(client, contributor, uuid, req.query.download === "1", res)
+                await get(client, uuid, req.query.download === "1", res)
                 break
             }
             case "HEAD": {
-                await head(client, contributor, uuid, req.query.download === "1", res)
+                await head(client, uuid, req.query.download === "1", res)
                 break
             }
             case "PUT": {
-                await put(client, contributor, uuid, req, res)
+                await put(client, uuid, req, res)
                 break
             }
             default: {

@@ -14,7 +14,7 @@ const deleteContribution = async (client: S3Client, req: NextApiRequest, res: Ne
         await client.send(
             new DeleteObjectCommand({
                 Bucket: CONTRIBUTE_BUCKET_NAME,
-                Key: `contributors/${encodeURIComponent(contributor)}/images/${normalizeUUID(uuid)}/meta.json`,
+                Key: `contributions/${normalizeUUID(uuid)}/meta.json`,
             }),
         )
     } catch (e) {
@@ -32,7 +32,7 @@ const head = async (client: S3Client, req: NextApiRequest, res: NextApiResponse<
     }
     const command = new HeadObjectCommand({
         Bucket: CONTRIBUTE_BUCKET_NAME,
-        Key: `contributors/${encodeURIComponent(contributor)}/images/${normalizeUUID(uuid)}/meta.json`,
+        Key: `contributions/${normalizeUUID(uuid)}/meta.json`,
     })
     try {
         const result = await client.send(command)
@@ -58,7 +58,7 @@ const put = async (client: S3Client, req: NextApiRequest, res: NextApiResponse<v
         client,
         {
             Bucket: CONTRIBUTE_BUCKET_NAME,
-            Key: `contributors/${encodeURIComponent(contributor)}/images/${normalizeUUID(uuid)}/meta.json`,
+            Key: `contributions/${normalizeUUID(uuid)}/meta.json`,
         },
         req.body,
     )

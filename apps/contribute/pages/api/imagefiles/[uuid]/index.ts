@@ -6,21 +6,21 @@ import {
     PutObjectCommand,
     S3Client,
 } from "@aws-sdk/client-s3"
-import { EmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
+import { EmailAddress, isUUIDv4, normalizeUUID, UUID } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import { Readable } from "stream"
 import getBearerJWT from "~/auth/http/getBearerJWT"
 import includesETag from "~/auth/http/includesETag"
 import verifyJWT from "~/auth/jwt/verifyJWT"
+import getContributionSourceKey from "~/s3/getContributionSourceKey"
+import { ImageFileExtension } from "~/s3/ImageFileExtension"
 const getImageSourceKey = async (client: S3Client, email: EmailAddress, uuid: UUID) => {
     const listResponse = await client.send(
         new ListObjectsV2Command({
             Bucket: "contribute.phylopic.org",
             MaxKeys: 1,
-            Prefix: `contributors/${encodeURIComponent(email)}/images/${encodeURIComponent(
-                uuid.toLowerCase(),
-            )}/source.`,
+            Prefix: `contributions/${encodeURIComponent(normalizeUUID(uuid))}/source.`,
         }),
     )
     if (listResponse.Contents?.length !== 1 || !listResponse.Contents[0].Key) {
@@ -28,7 +28,7 @@ const getImageSourceKey = async (client: S3Client, email: EmailAddress, uuid: UU
     }
     return listResponse.Contents[0].Key
 }
-const getExtensionForMIMEType = (type: string | undefined) => {
+const getExtensionForMIMEType = (type: string | undefined): ImageFileExtension => {
     switch (type) {
         case "image/bmp": {
             return "bmp"
@@ -37,7 +37,7 @@ const getExtensionForMIMEType = (type: string | undefined) => {
             return "gif"
         }
         case "image/jpeg": {
-            return "jpg"
+            return "jpeg"
         }
         case "image/png": {
             return "png"
@@ -119,9 +119,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                         }),
                     )
                 }
-                const newKey = `contributors/${encodeURIComponent(payload.sub)}/images/${encodeURIComponent(
-                    uuid.toLowerCase(),
-                )}/source.${extension}`
+                const newKey = getContributionSourceKey(uuid, extension)
                 const response = await client.send(
                     new PutObjectCommand({
                         Bucket: "contribute.phylopic.org",

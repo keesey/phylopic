@@ -3,10 +3,11 @@ import { EmailAddress } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"
 import { Readable } from "stream"
 import Payload from "~/auth/Payload"
+import getContributorMetaKey from "~/s3/getContributorMetaKey"
 const getMetadata = async (client: S3Client, email: EmailAddress, verify = false): Promise<Payload> => {
     const options = {
         Bucket: "contribute.phylopic.org",
-        Key: `contributors/${encodeURIComponent(email)}/meta.json`,
+        Key: getContributorMetaKey(email),
     }
     let response: GetObjectCommandOutput
     try {
