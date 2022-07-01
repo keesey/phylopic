@@ -36,7 +36,9 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                         <>
                             <PageLoader />
                             <PageHead
-                                description={`Illustrated evolutionary lineage of ${node ? stringifyNomen(node?.names[0]) : "[Unnamed Group]"}.`}
+                                description={`Illustrated evolutionary lineage of ${
+                                    node ? stringifyNomen(node?.names[0]) : "[Unnamed Group]"
+                                }.`}
                                 socialImage={node?._embedded?.primaryImage?._links["http://ogp.me/ns#image"]}
                                 title={`PhyloPic: Lineage of ${getShortNomen(node?.names[0])}`}
                                 url={`https://www.phylopic.org/nodes/${uuid}/lineage`}

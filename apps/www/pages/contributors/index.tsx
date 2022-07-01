@@ -24,7 +24,11 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
     <SWRConfig value={{ fallback }}>
         <BuildContainer initialValue={build}>
             <PageLoader />
-            <PageHead title="PhyloPic: Contributors" url="https://www.phylopic.org/contributors" description="A list of everyone who has contributed free silhouette images to PhyloPic." />
+            <PageHead
+                title="PhyloPic: Contributors"
+                url="https://www.phylopic.org/contributors"
+                description="A list of everyone who has contributed free silhouette images to PhyloPic."
+            />
             <SearchContainer>
                 <header>
                     <SiteNav />

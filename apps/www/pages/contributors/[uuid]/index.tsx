@@ -44,9 +44,9 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                             <ImageLicensePaginator query={imagesQuery} hideControls>
                                 {images => (
                                     <PageHead
-                                    description={`All free silhouette images that have been contributed to PhyloPic by ${getContributorName(
-                                        contributor,
-                                    )}.`}
+                                        description={`All free silhouette images that have been contributed to PhyloPic by ${getContributorName(
+                                            contributor,
+                                        )}.`}
                                         socialImage={
                                             (images[0] as ImageWithEmbedded)?._links["http://ogp.me/ns#image"] ?? null
                                         }

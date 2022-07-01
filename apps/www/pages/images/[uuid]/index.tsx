@@ -37,7 +37,8 @@ const PageComponent: NextPage<Props> = ({ image }) => {
         [image.attribution, licenseShort, nameShort],
     )
     const description = useMemo(
-        () => `A free silhouette image of ${nameLong} by ${image.attribution ?? "Anonymous"} (License: ${licenseLong}).`,
+        () =>
+            `A free silhouette image of ${nameLong} by ${image.attribution ?? "Anonymous"} (License: ${licenseLong}).`,
         [image.attribution, licenseShort, nameShort],
     )
     const lineageNodeHRef = useMemo(() => {

@@ -16,7 +16,11 @@ const PageComponent: NextPage = () => (
     <SWRConfig>
         <BuildContainer>
             <PageLoader />
-            <PageHead description="Get updates on new features for PhyloPic, the open database of freely-reuseable silhouette images of organisms." title="Sign up for the PhyloPic Mailing List" url="https://www.phylopic.org/mailinglist">
+            <PageHead
+                description="Get updates on new features for PhyloPic, the open database of freely-reuseable silhouette images of organisms."
+                title="Sign up for the PhyloPic Mailing List"
+                url="https://www.phylopic.org/mailinglist"
+            >
                 <SchemaScript
                     object={{
                         "@context": "https://schema.org",
