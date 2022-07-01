@@ -24,6 +24,7 @@
     },
     "description": "Primary public web application for *PhyloPic*.",
     "devDependencies": {
+        "@next/bundle-analyzer": "^12.2.1-canary.1",
         "@phylopic/tsconfig": "*",
         "@types/react": "^18.0.12",
         "@types/react-dom": "^18.0.5",
@@ -41,6 +42,7 @@
     },
     "private": true,
     "scripts": {
+        "analyze": "ANALYZE=true yarn build",
         "build": "next build",
         "clean": "rm -rf .next && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3000",
