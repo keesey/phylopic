@@ -1,5 +1,7 @@
 {
+    "$schema": "https://json.schemastore.org/web-manifest-combined.json",
     "background_color": "#f7fffb",
+    "description": "PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses.",
     "display": "standalone",
     "icons": [
         {
@@ -15,5 +17,6 @@
     ],
     "name": "PhyloPic: Freely Reusable Silhouettes of Life Forms",
     "short_name": "PhyloPic",
+    "start_url": ".",
     "theme_color": "#305860"
 }
