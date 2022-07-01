@@ -32,7 +32,7 @@ const Verification: FC<Props> = ({ email, jti }) => {
         return (
             <section>
                 <p>There was an error. Please check the link in your email. Details:</p>
-                <blockquote>{error}</blockquote>
+                <blockquote>{String(error)}</blockquote>
                 <p>
                     If the link expired, you will need to{" "}
                     <Link href="/">

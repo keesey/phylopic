@@ -16,19 +16,22 @@ const parseJSON = (json: string): unknown => {
         throw 400
     }
 }
-const getContributorJSON = async (client: S3Client, uuid: UUID) => getJSON(
-    client,
-    {
-        Bucket: SOURCE_BUCKET_NAME,
-        Key: getContributorSourceKey(uuid),
-    },
-    isContributor,
-)
+const getContributorJSON = async (client: S3Client, uuid: UUID) =>
+    getJSON(
+        client,
+        {
+            Bucket: SOURCE_BUCKET_NAME,
+            Key: getContributorSourceKey(uuid),
+        },
+        isContributor,
+    )
 const getVerified = async (client: S3Client, email: EmailAddress) => {
-    const response = await client.send(new GetObjectTaggingCommand({
-        Bucket: CONTRIBUTE_BUCKET_NAME,
-        Key: getContributorMetaKey(email),
-    }))
+    const response = await client.send(
+        new GetObjectTaggingCommand({
+            Bucket: CONTRIBUTE_BUCKET_NAME,
+            Key: getContributorMetaKey(email),
+        }),
+    )
     return response.TagSet?.find(value => value.Key === "verified")?.Value === "true"
 }
 const index: NextApiHandler<string | null> = async (req, res) => {
@@ -94,7 +97,11 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                             throw 400
                         }
                     }
-                    if (existing && (contributor!.emailAddress !== existing.emailAddress || contributor!.created !== existing.created)) {
+                    if (
+                        existing &&
+                        (contributor!.emailAddress !== existing.emailAddress ||
+                            contributor!.created !== existing.created)
+                    ) {
                         throw 400
                     }
                     await handlePut(res, client, {

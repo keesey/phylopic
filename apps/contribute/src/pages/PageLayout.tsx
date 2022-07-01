@@ -10,7 +10,7 @@ export type Props = {
     fallback?: SWRConfiguration["fallback"]
     head: PageHeadProps
 }
-const PageLayout: FC<Props> = ({ children, fallback, head }) => {
+const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
     return (
         <SWRConfig value={{ fallback }}>
             <PageLoader />

@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Link, { LinkProps } from "next/link"
-import { AnchorHTMLAttributes, DetailedHTMLProps, FC } from "react"
-export type AnchorLinkProps = LinkProps & DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
-export const AnchorLink: FC<AnchorLinkProps> = ({
+import React from "react"
+export type AnchorLinkProps = LinkProps &
+    React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
+export const AnchorLink: React.FC<AnchorLinkProps> = ({
     as,
     children,
     href,

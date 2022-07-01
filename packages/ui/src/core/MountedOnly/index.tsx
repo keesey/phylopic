@@ -1,11 +1,11 @@
-import { FC, ReactNode, useEffect, useState } from "react"
+import React from "react"
 import Loader from "../Loader"
 export type MountedOnlyProps = {
-    children: ReactNode
+    children: React.ReactNode
 }
-export const MountedOnly: FC<MountedOnlyProps> = ({ children }) => {
-    const [mounted, setMounted] = useState(false)
-    useEffect(() => setMounted(true), [])
+export const MountedOnly: React.FC<MountedOnlyProps> = ({ children }) => {
+    const [mounted, setMounted] = React.useState(false)
+    React.useEffect(() => setMounted(true), [])
     if (!mounted) {
         return <Loader />
     }

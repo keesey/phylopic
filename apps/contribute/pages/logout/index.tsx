@@ -4,7 +4,6 @@ import type { NextPage } from "next"
 import { SWRConfig } from "swr"
 import AuthContainer from "~/auth/AuthContainer"
 import PageHead from "~/metadata/PageHead"
-import Farewell from "~/screens_legacy/Farewell"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
@@ -18,7 +17,7 @@ const Page: NextPage = () => (
             </header>
             <main>
                 <MountedOnly>
-                    <Farewell />
+                    <p>:TODO:</p>
                 </MountedOnly>
             </main>
             <SiteFooter />

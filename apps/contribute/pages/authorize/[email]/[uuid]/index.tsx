@@ -17,7 +17,7 @@ const Page: NextPage<Props> = ({ email, jti }) => (
         <PageLoader />
         <PageHead
             title="PhyloPic: Email Verification"
-            url={`https://contribute.phylopic.org/authorize/${encodeURIComponent(email)}/${encodeURIComponent(uuid)}`}
+            url={`https://contribute.phylopic.org/authorize/${encodeURIComponent(email)}/${encodeURIComponent(jti)}`}
         />
         <AuthContainer>
             <header>

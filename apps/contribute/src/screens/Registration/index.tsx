@@ -7,12 +7,14 @@ import EmailForm from "./EmailForm"
 import ReauthorizeForm from "./ReauthorizeForm"
 import useSWR from "swr"
 import axios from "axios"
-const fetchPost = async (key: { body: unknown, url: string }) => {
-    const response = await axios.post(key.url, key.body, {
+import { Loader } from "@phylopic/ui"
+import { setRequestMeta } from "next/dist/server/request-meta"
+const fetchPost = async (key: { body: unknown; url: string }) => {
+    await axios.post(key.url, key.body, {
         headers: { "content-type": "application/json" },
-        responseType: "json"
+        responseType: "json",
     })
-    
+    return true
 }
 const Registration: FC = () => {
     const authorized = useAuthorized()
@@ -30,7 +32,7 @@ const Registration: FC = () => {
     }, [])
     const authorizeKey = useMemo(() => {
         if (sendRequested && isEmailAddress(emailAddress)) {
-            return { url: `/api/authorize/${encodeURIComponent(emailAddress)}`, body: {ttl} }
+            return { url: `/api/authorize/${encodeURIComponent(emailAddress)}`, body: { ttl } }
         }
         return null
     }, [])
@@ -38,28 +40,38 @@ const Registration: FC = () => {
     useEffect(() => {
         if (authorized) {
             router.push("/submissions")
+        } else if (swr.data) {
+            router.push("/checkemail")
         }
-    }, [authorized, router])
-    if (authorized) {
+    }, [authorized, router, swr.data])
+    if (!swr.data && swr.isValidating) {
+        return <Loader />
+    }
+    if (swr.error) {
+        // :TODO: Error Message Component
+        return <p>{String(swr.error)}</p>
+    }
+    if (authorized || emailAddress || swr.data) {
         return null
     }
-    if (!emailAddress) {
-        if (authEmailAddress) {
-            return (
-                <section>
-                    <p>Welcome back!</p>
-                    <p>Your registration has expired. Please click below to send another authorization email to <em>{authEmailAddress}</em>.</p>
-                    <ReauthorizeForm onSubmit={handleSubmit} />
-                </section>
-            )
-        }
+    if (authEmailAddress) {
         return (
             <section>
-                <p>Ready to upload some silhouette images? Great, let&apos;s get started!</p>
-                <p>Please enter your email address:</p>
-                <EmailForm onSubmit={handleSubmit} />
+                <p>Welcome back!</p>
+                <p>
+                    Your registration has expired. Please click below to send another authorization email to{" "}
+                    <em>{authEmailAddress}</em>.
+                </p>
+                <ReauthorizeForm onSubmit={handleSubmit} />
             </section>
         )
     }
+    return (
+        <section>
+            <p>Ready to upload some silhouette images? Great, let&apos;s get started!</p>
+            <p>Please enter your email address:</p>
+            <EmailForm onSubmit={handleSubmit} />
+        </section>
+    )
 }
 export default Registration
