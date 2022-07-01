@@ -39,7 +39,7 @@ const PageComponent: NextPage<Props> = ({ image }) => {
     const description = useMemo(
         () =>
             `A free silhouette image of ${nameLong} by ${image.attribution ?? "Anonymous"} (License: ${licenseLong}).`,
-        [image.attribution, licenseShort, nameShort],
+        [image.attribution, licenseLong, nameLong],
     )
     const lineageNodeHRef = useMemo(() => {
         if (!image._embedded.nodes?.length) {

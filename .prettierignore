@@ -5,3 +5,4 @@
 .webpack
 dist
 node_modules
+public
