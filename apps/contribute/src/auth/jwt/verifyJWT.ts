@@ -1,6 +1,6 @@
 import { JwtPayload, verify } from "jsonwebtoken"
-import { JWT } from "../JWT"
-import Payload from "../Payload"
+import { JWT } from "../models/JWT"
+import Payload from "../models/Payload"
 const verifyJWT = (token: JWT) =>
     new Promise<(JwtPayload & Payload) | null>((resolve, reject) => {
         verify(

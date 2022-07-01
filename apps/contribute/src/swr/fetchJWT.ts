@@ -1,6 +1,6 @@
 import axios from "axios"
 import { decode } from "jsonwebtoken"
-import { JWT } from "~/auth/JWT"
+import { JWT } from "~/auth/models/JWT"
 const fetchJWT = async (key: string): Promise<JWT> => {
     const response = await axios.get<JWT>(key, {
         responseType: "text",

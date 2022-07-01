@@ -1,34 +1,45 @@
-import { EmailAddress, UUID } from "@phylopic/utils"
+import { Loader } from "@phylopic/ui"
+import { EmailAddress, isEmailAddress, isUUID, UUID } from "@phylopic/utils"
+import Link from "next/link"
+import { useRouter } from "next/router"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import AuthContext from "~/auth/AuthContext"
-import { JWT } from "~/auth/JWT"
+import { JWT } from "~/auth/models/JWT"
 import fetchJWT from "~/swr/fetchJWT"
-import Loader from "~/ui/Loader"
-import WelcomeBack from "../WelcomeBack"
 export interface Props {
     email: EmailAddress
-    uuid: UUID
+    jti: UUID
 }
-const Verification: FC<Props> = ({ email, uuid }) => {
+const Verification: FC<Props> = ({ email, jti }) => {
     const [, setJWT] = useContext(AuthContext) ?? []
-    const url = useMemo(() => `/api/authorize/${encodeURIComponent(email)}/${encodeURIComponent(uuid)}`, [email, uuid])
+    const url = useMemo(
+        () =>
+            isEmailAddress(email) && isUUID(jti)
+                ? `/api/authorize/${encodeURIComponent(email)}/${encodeURIComponent(jti)}`
+                : null,
+        [email, jti],
+    )
     const { data, isValidating, error } = useSWRImmutable<JWT>(url, fetchJWT)
-    useEffect(() => {
-        if (error) {
-            alert(error)
-        }
-    }, [error])
+    const router = useRouter()
     useEffect(() => {
         if (data) {
             setJWT?.(data)
+            router.push("/submissions")
         }
     }, [data, setJWT])
     if (error) {
         return (
             <section>
-                <p>There was an error. Please check the link in your email.</p>
-                <p>If it expired, you will need to request another.</p>
+                <p>There was an error. Please check the link in your email. Details:</p>
+                <blockquote>{error}</blockquote>
+                <p>
+                    If the link expired, you will need to{" "}
+                    <Link href="/">
+                        <a>request another</a>
+                    </Link>
+                    .
+                </p>
             </section>
         )
     }
@@ -40,6 +51,6 @@ const Verification: FC<Props> = ({ email, uuid }) => {
             </section>
         )
     }
-    return <WelcomeBack />
+    return null
 }
 export default Verification

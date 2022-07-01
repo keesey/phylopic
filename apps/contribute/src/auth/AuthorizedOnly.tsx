@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from "react"
-import Registration from "~/screens/Registration"
+import Registration from "~/screens_legacy/Registration"
 import useAuthorized from "./hooks/useAuthorized"
 type Props = {
     children: ReactNode

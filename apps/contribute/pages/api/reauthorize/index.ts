@@ -1,22 +1,22 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { NextApiHandler } from "next"
 import getBearerJWT from "~/auth/http/getBearerJWT"
-import { JWT } from "~/auth/JWT"
 import issueJWT from "~/auth/jwt/issueJWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
+import { JWT } from "~/auth/models/JWT"
 import putJWT from "~/auth/s3/putJWT"
-const MAX_TTL = 365 * 24 * 60 * 60 * 1000
-const MIN_TTL = 60 * 1000
+import MAX_TTL from "~/auth/ttl/MAX_TTL"
+import MIN_TTL from "~/auth/ttl/MIN_TTL"
 const handlePost = async (client: S3Client, authorization: string | undefined, ttl?: number): Promise<JWT> => {
     const token = getBearerJWT(authorization)
     const payload = await verifyJWT(token)
     if (!payload) {
         throw 401
     }
-    if (!payload.sub || !payload.name) {
+    if (!payload.sub || !payload.uuid) {
         throw 500
     }
-    const newToken = await issueJWT(payload.sub, { name: payload.name }, ttl)
+    const newToken = await issueJWT(payload.sub, { uuid: payload.uuid }, ttl)
     await putJWT(client, newToken)
     return newToken
 }

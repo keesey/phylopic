@@ -1,9 +1,9 @@
-import { EmailAddress } from "@phylopic/utils"
+import { EmailAddress, normalizeUUID } from "@phylopic/utils"
 import { randomUUID } from "crypto"
-import Payload from "~/auth/Payload"
+import Payload from "~/auth/models/Payload"
 import createJWT from "./createJWT"
 const issueJWT = async (email: EmailAddress, payload: Payload, ttl = 24 * 60 * 60 * 1000) => {
-    const uuid = randomUUID().toLowerCase()
+    const uuid = normalizeUUID(randomUUID())
     const issuedAt = new Date()
     const expiration = new Date(issuedAt.valueOf() + ttl)
     const token = await createJWT({

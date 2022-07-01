@@ -1,7 +1,7 @@
+import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useEmailAddress from "~/auth/hooks/useEmailAddress"
-import AnchorLink from "../AnchorLink"
 import styles from "./index.module.scss"
 const SiteNav: FC = () => {
     const authorized = useAuthorized()

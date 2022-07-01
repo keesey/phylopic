@@ -1,6 +1,6 @@
 import { EmailAddress, UUID } from "@phylopic/utils"
 import { sign } from "jsonwebtoken"
-import Payload from "../Payload"
+import Payload from "../models/Payload"
 export interface Args {
     email: EmailAddress
     expiration: Date

@@ -1,8 +1,8 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import getContributorTokenKey from "~/s3/getContributorTokenKey"
-import { JWT } from "../JWT"
+import getContributorTokenKey from "~/s3/keys/getContributorTokenKey"
 import decodeJWT from "../jwt/decodeJWT"
 import verifyJWT from "../jwt/verifyJWT"
+import { JWT } from "../models/JWT"
 const putJWT = async (client: S3Client, token: JWT, verify = false) => {
     const payload = verify ? await verifyJWT(token) : decodeJWT(token)
     if (!payload?.exp || !payload?.sub || !payload?.jti) {

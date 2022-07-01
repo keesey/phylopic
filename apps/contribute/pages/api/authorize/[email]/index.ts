@@ -1,28 +1,28 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { EmailAddress, isEmailAddress, stringifyNormalized, ValidationFaultCollector } from "@phylopic/utils"
+import { EmailAddress, isEmailAddress, UUID, ValidationFaultCollector } from "@phylopic/utils"
+import { randomUUID } from "crypto"
 import { NextApiHandler, NextApiRequest } from "next"
-import isPayload from "~/auth/isPayload"
 import issueJWT from "~/auth/jwt/issueJWT"
-import Payload from "~/auth/Payload"
+import isPayload from "~/auth/models/isPayload"
+import Payload from "~/auth/models/Payload"
 import getMetadata from "~/auth/s3/getMetadata"
 import putJWT from "~/auth/s3/putJWT"
 import putMetadata from "~/auth/s3/putMetadata"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
-const issueAndSendJWT = async (client: S3Client, email: EmailAddress, payload: Payload) => {
-    const token = await issueJWT(email, payload)
+import DEFAULT_TTL from "~/auth/ttl/DEFAULT_TTL"
+import isTTLPayload from "~/auth/ttl/isTTLPayload"
+import MAX_TTL from "~/auth/ttl/MAX_TTL"
+import MIN_TTL from "~/auth/ttl/MIN_TTL"
+const issueAndSendJWT = async (client: S3Client, email: EmailAddress, uuid: UUID, ttl: number) => {
+    const token = await issueJWT(email, { uuid }, ttl)
     await putJWT(client, token)
     await sendAuthEmail(token)
 }
-const handleGet = async (client: S3Client, email: EmailAddress): Promise<Payload> => {
-    const payload = await getMetadata(client, email, true)
-    await issueAndSendJWT(client, email, payload)
-    return { name: payload.name }
-}
 const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRequest["body"]) => {
-    if (!isPayload(body)) {
+    if (!isTTLPayload(body)) {
         throw 400
     }
-    let existingPayload: Payload | undefined
+    let existingPayload: unknown
     try {
         existingPayload = await getMetadata(client, email, true)
     } catch (e) {
@@ -30,24 +30,23 @@ const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRe
             throw e
         }
     }
-    if (existingPayload && stringifyNormalized(existingPayload) !== stringifyNormalized(body)) {
-        throw 401
+    let uuid: UUID
+    if (isPayload(existingPayload)) {
+        uuid = existingPayload.uuid
+    } else {
+        uuid = randomUUID()
+        await putMetadata(client, email, { uuid }, false)
     }
-    if (!existingPayload) {
-        await putMetadata(client, email, body)
-    }
-    await issueAndSendJWT(client, email, body)
+    await issueAndSendJWT(client, email, uuid, Math.max(MIN_TTL, Math.min(MAX_TTL, body.ttl ?? DEFAULT_TTL)))
 }
 const index: NextApiHandler<Payload | null> = async (req, res) => {
     try {
         if (req.method === "OPTIONS") {
-            res.setHeader("allow", "GET, OPTIONS, POST")
+            res.setHeader("allow", "OPTIONS, POST")
             res.setHeader("cache-control", "max-age=3600")
             res.setHeader("date", new Date().toUTCString())
             res.status(204)
-        } else if (req.method !== "GET" && req.method !== "POST") {
-            throw 405
-        } else {
+        } else if (req.method === "POST") {
             const email = req.query.email as EmailAddress
             const faultCollector = new ValidationFaultCollector()
             if (!isEmailAddress(email, faultCollector.sub("email"))) {
@@ -56,17 +55,13 @@ const index: NextApiHandler<Payload | null> = async (req, res) => {
             }
             const client = new S3Client({})
             try {
-                if (req.method === "GET") {
-                    const payload = await handleGet(client, email)
-                    res.json(payload)
-                    res.status(200)
-                } else {
-                    await handlePost(client, email, req.body)
-                    res.status(204)
-                }
+                await handlePost(client, email, req.body)
+                res.status(204)
             } finally {
                 client.destroy()
             }
+        } else {
+            throw 405
         }
     } catch (e) {
         if (typeof e === "number") {

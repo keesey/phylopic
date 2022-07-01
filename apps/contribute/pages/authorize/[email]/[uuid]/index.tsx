@@ -1,20 +1,18 @@
-/* eslint-disable @next/next/no-img-element */
+import { MountedOnly } from "@phylopic/ui"
+import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
-import React from "react"
 import { SWRConfig } from "swr"
 import AuthContainer from "~/auth/AuthContainer"
 import PageHead from "~/metadata/PageHead"
+import Verification from "~/screens/Verification"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
-import Verification from "~/screens/Verification"
-import MountedOnly from "~/ui/MountedOnly"
-import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 export interface Props {
     email: EmailAddress
-    uuid: UUID
+    jti: UUID
 }
-const Page: NextPage<Props> = ({ email, uuid }) => (
+const Page: NextPage<Props> = ({ email, jti }) => (
     <SWRConfig>
         <PageLoader />
         <PageHead
@@ -27,7 +25,7 @@ const Page: NextPage<Props> = ({ email, uuid }) => (
             </header>
             <main>
                 <MountedOnly>
-                    <Verification email={email} uuid={uuid} />
+                    <Verification email={email} jti={jti} />
                 </MountedOnly>
             </main>
             <SiteFooter />
@@ -43,6 +41,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
         return { notFound: true }
     }
     return {
-        props: { email, uuid } as Props,
+        props: { email, jti: uuid } as Props,
     }
 }

@@ -1,8 +1,9 @@
 import formData from "form-data"
 import Mailgun from "mailgun.js"
-import { JWT } from "../JWT"
+import { JWT } from "../models/JWT"
 import decodeJWT from "../jwt/decodeJWT"
 import verifyJWT from "../jwt/verifyJWT"
+import { MailgunMessageData } from "mailgun.js/interfaces/Messages"
 const sendAuthEmail = async (token: JWT, verify = false) => {
     if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
         throw new Error("The server is missing certain data required to send email.")
@@ -11,10 +12,9 @@ const sendAuthEmail = async (token: JWT, verify = false) => {
     if (!payload?.jti || !payload.iat || !payload.name || !payload.sub) {
         throw new Error("Invalid token.")
     }
-    const messageData = {
+    const messageData: MailgunMessageData = {
         from: `PhyloPic Contributions <no-reply@${process.env.MAILGUN_DOMAIN}>`,
-        to: payload.sub,
-        subject: "Contributing Silhouettes to PhyloPic",
+        subject: "Uploading Silhouettes to PhyloPic",
         text: `Hey ${payload.name},
         
 Open this link to start uploading images to PhyloPic: https://contribute.phylopic.org/authorize/${encodeURIComponent(
@@ -23,6 +23,7 @@ Open this link to start uploading images to PhyloPic: https://contribute.phylopi
 
 Thanks! Can't wait to see them.
 `,
+        to: payload.sub,
     }
     const mailgun = new Mailgun(formData)
     const client = mailgun.client({

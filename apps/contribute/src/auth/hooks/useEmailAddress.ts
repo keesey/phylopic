@@ -1,5 +1,6 @@
+import { EmailAddress } from "@phylopic/utils"
 import usePayload from "./usePayload"
-const useEmailAddress = () => {
+const useEmailAddress = (): EmailAddress | null => {
     const { sub } = usePayload() ?? {}
     return sub ?? null
 }

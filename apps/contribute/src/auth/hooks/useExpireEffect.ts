@@ -1,33 +1,14 @@
 import { useRouter } from "next/router"
-import { useCallback, useEffect, useMemo } from "react"
-import { JWT } from "../JWT"
-import decodeJWT from "../jwt/decodeJWT"
-const useExpireEffect = (token: JWT | null) => {
+import { useCallback } from "react"
+import useExpirationHandler from "./useExpirationHandler"
+const useExpireEffect = (bufferMS = 0) => {
     const router = useRouter()
-    const expiration = useMemo(() => {
-        if (token) {
-            const decoded = decodeJWT(token)
-            if (typeof decoded?.exp === "number") {
-                return decoded.exp * 1000
-            }
-        }
-    }, [token])
-    const expire = useCallback(async () => {
+    const handleExpire = useCallback(async () => {
         if (router.pathname !== "/") {
             alert("Your session has timed out due to inactivity. You'll have to enter your email to re-authorize.")
             await router.push("/")
         }
     }, [router])
-    useEffect(() => {
-        if (typeof expiration === "number") {
-            const now = new Date().valueOf()
-            if (expiration <= now) {
-                expire()
-            } else {
-                const handle = setTimeout(expire, expiration - now)
-                return () => clearTimeout(handle)
-            }
-        }
-    }, [expire, expiration, router])
+    useExpirationHandler(handleExpire, bufferMS)
 }
 export default useExpireEffect

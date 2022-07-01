@@ -11,7 +11,10 @@ const safeParse = (json: string) => {
 export const useStoredState = <T>(key: string): Readonly<[T | null, (value: T | null) => void]> => {
     const [json, setJSON] = useState<string | null | undefined>(undefined)
     const value = useMemo<T | null>(() => (json ? safeParse(json) : null), [json])
-    const setValue = useCallback((newValue: T | null) => setJSON(newValue !== null ? stringifyNormalized(newValue) : null), [])
+    const setValue = useCallback(
+        (newValue: T | null) => setJSON(newValue !== null ? stringifyNormalized(newValue) : null),
+        [],
+    )
     useEffect(() => {
         const stored = localStorage.getItem(key)
         if (stored) {

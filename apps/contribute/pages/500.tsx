@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
@@ -11,8 +10,8 @@ const Page: NextPage = () => (
         <main>
             <section>
                 <p>Something weird happened.</p>
-                <Link href="/" className="cta">
-                    <a>Start over</a>
+                <Link href="/">
+                    <a className="cta">Start over</a>
                 </Link>
             </section>
         </main>

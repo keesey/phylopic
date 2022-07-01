@@ -47,8 +47,8 @@ const PageHead: FC<Props> = ({
             <meta key="meta:twitter:image:width" name="twitter:image:width" content={socialImageWidth} />
             <meta key="meta:twitter:title" name="twitter:title" content={title} />
             <meta key="meta:viewport" name="viewport" content="width=device-width,initial-scale=1" />
-            <meta key="meta:og:og:description" property="og:description" content={description} />
-            <meta key="meta:og:og:image" property="og:image" content={socialImageHRef} />
+            <meta key="meta:og:description" property="og:description" content={description} />
+            <meta key="meta:og:image" property="og:image" content={socialImageHRef} />
             <meta key="meta:og:image:alt" property="og:image:alt" content={title} />
             <meta key="meta:og:image:height" property="og:image:height" content={socialImageHeight} />
             <meta key="meta:og:image:type" property="og:image:type" content={socialImage?.type} />
