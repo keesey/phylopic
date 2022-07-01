@@ -1,7 +1,8 @@
+import dynamic from "next/dynamic"
 import { FC, Fragment, ReactNode, useContext } from "react"
 import SearchContext from "~/search/context"
-import SearchResults from "../SearchResults"
 import styles from "./index.module.scss"
+const SearchResults = dynamic(() => import("../SearchResults"), { ssr: false })
 export interface Props {
     children?: ReactNode
 }

@@ -62,8 +62,8 @@ const PageHead: FC<Props> = ({
             <link key="link:canonical" rel="canonical" href={url} />
             <link key="link:apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
             <link key="link:icon:32x32" rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-            <link rel="link:icon:16x16" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-            <link rel="link:manifest" href="/site.webmanifest" />
+            <link key="link:icon:16x16" rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+            <link key="link:manifest" rel="manifest" href="/site.webmanifest" />
             {process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID && (
                 <>
                     <Script

@@ -1,10 +1,11 @@
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { FC, useCallback, useEffect, useState } from "react"
-import SearchBar from "../SearchBar"
 import AnchorLink from "../AnchorLink"
+import SearchBar from "../SearchBar"
 import SiteTitle from "../SiteTitle"
-import DropdownNav from "./DropdownNav"
 import styles from "./index.module.scss"
+const DropdownNav = dynamic(() => import("./DropdownNav"), { ssr: false })
 const SiteNav: FC = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const router = useRouter()
