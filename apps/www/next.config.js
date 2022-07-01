@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const withPWA = require("next-pwa")
+const runtimeCaching = require("next-pwa/cache")
+
+module.exports = withPWA({
     experimental: {
         esmExternals: "loose",
     },
@@ -9,6 +12,10 @@ module.exports = {
     },
     images: {
         domains: ["images.phylopic.org"],
+    },
+    pwa: {
+        dest: "public",
+        runtimeCaching,
     },
     reactStrictMode: true,
     async redirects() {
@@ -55,4 +62,4 @@ module.exports = {
             },
         ]
     },
-}
+})

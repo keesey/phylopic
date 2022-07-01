@@ -39,6 +39,8 @@ const PageHead: FC<Props> = ({
             <meta key="meta:no-email-collection" name="no-email-collection" content="//unspam.com/noemailcollection" />
             <meta key="meta:reply-to" name="reply-to" content="keesey+phylopic@gmail.com" />
             <meta key="meta:robots" name="robots" content={`${index ? "" : "no"}index`} />
+            <meta key="meta:theme-color:light" name="theme-color" content="#305860" media="(prefers-color-scheme: light)" />
+            <meta key="meta:theme-color:dark" name="theme-color" content="#f7fffb" media="(prefers-color-scheme: dark)" />
             <meta key="meta:twitter:card" name="twitter:card" content="summary_large_image" />
             <meta key="meta:twitter:creator" name="twitter:creator" content="@phylopic" />
             <meta key="meta:twitter:description" name="twitter:description" content={description} />

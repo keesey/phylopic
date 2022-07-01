@@ -13,6 +13,12 @@
             "src": "/android-chrome-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "/maskable.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
         }
     ],
     "name": "PhyloPic: Freely Reusable Silhouettes of Life Forms",
