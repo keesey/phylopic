@@ -1,4 +1,5 @@
 import { stringifyNormalized } from "@phylopic/utils"
+import Script from "next/script"
 import { FC } from "react"
 import { Thing, WithContext } from "schema-dts"
 export type Props = {
@@ -6,11 +7,11 @@ export type Props = {
 }
 const SchemaScript: FC<Props> = ({ object }) => {
     return (
-        <script
-            type="application/ld+json"
+        <Script
             dangerouslySetInnerHTML={{
                 __html: stringifyNormalized(object),
             }}
+            type="application/ld+json"
         />
     )
 }

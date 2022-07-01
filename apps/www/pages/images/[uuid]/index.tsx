@@ -28,10 +28,16 @@ export interface Props {
     image: ImageWithEmbedded
 }
 const PageComponent: NextPage<Props> = ({ image }) => {
+    const nameLong = useNomenText(image._embedded.specificNode?.names[0])
     const nameShort = useNomenText(image._embedded.specificNode?.names[0], true)
+    const licenseLong = useLicenseText(image._links.license.href)
     const licenseShort = useLicenseText(image._links.license.href, true)
     const title = useMemo(
         () => `PhyloPic: ${nameShort} by ${image.attribution ?? "Anonymous"} (${licenseShort})`,
+        [image.attribution, licenseShort, nameShort],
+    )
+    const description = useMemo(
+        () => `A free silhouette image of ${nameLong} by ${image.attribution ?? "Anonymous"} (License: ${licenseLong}).`,
         [image.attribution, licenseShort, nameShort],
     )
     const lineageNodeHRef = useMemo(() => {
@@ -48,6 +54,7 @@ const PageComponent: NextPage<Props> = ({ image }) => {
         <BuildContainer initialValue={image.build}>
             <PageLoader />
             <PageHead
+                description={description}
                 socialImage={image._links["http://ogp.me/ns#image"]}
                 title={title}
                 url={`https://www.phylopic.org/images/${image.uuid}`}

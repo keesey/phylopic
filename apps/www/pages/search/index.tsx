@@ -30,7 +30,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, initialText }) => (
     <SWRConfig value={{ fallback }}>
         <BuildContainer initialValue={build}>
             <PageLoader />
-            <PageHead title="Search for Silhouette Images on PhyloPic" url="https://www.phylopic.org/search" />
+            <PageHead title="Search for Silhouette Images on PhyloPic" url="https://www.phylopic.org/search" description="Search for free silhouette images of animals, plants, and other life forms." />
             <SearchContainer initialText={initialText}>
                 <header>
                     <SiteNav />

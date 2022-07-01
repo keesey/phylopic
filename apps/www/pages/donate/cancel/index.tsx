@@ -17,7 +17,7 @@ const PageComponent: NextPage = () => (
     <SWRConfig>
         <BuildContainer>
             <PageLoader />
-            <PageHead title="PhyloPic: Other Ways to Contribute" url="https://www.phylopic.org/contribute/cancel" />
+            <PageHead title="PhyloPic: Other Ways to Contribute" url="https://www.phylopic.org/contribute/cancel" description="Ways to contribute to PhyloPic, an open database of freely-reuseable silhouette images of organisms." />
             <SearchContainer>
                 <header>
                     <SiteNav />

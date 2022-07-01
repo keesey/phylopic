@@ -1,6 +1,7 @@
-import PropagateLoader from "react-spinners/PropagateLoader"
 import { useEffect, useState, FC } from "react"
 import styles from "./index.module.scss"
+import dynamic from "next/dynamic"
+const PropagateLoader = dynamic(() => import("react-spinners/PropagateLoader"), { ssr: false })
 export interface Props {
     hideLoader?: boolean
     onInViewport?: () => void
@@ -38,7 +39,15 @@ const InfiniteScroll: FC<Props> = ({ hideLoader, onInViewport, pending }) => {
     }, [inViewport, onInViewport, pending])
     return (
         <div className={styles.main} ref={setElement}>
-            {pending && !hideLoader && <PropagateLoader color="#0080a0" />}
+            {pending && !hideLoader && (
+                <PropagateLoader
+                    color="#0080a0"
+                    css={PropagateLoader.defaultProps!.css!}
+                    loading={PropagateLoader.defaultProps!.loading!}
+                    size={PropagateLoader.defaultProps!.size!}
+                    speedMultiplier={PropagateLoader.defaultProps!.speedMultiplier!}
+                />
+            )}
             {!pending && " "}
         </div>
     )

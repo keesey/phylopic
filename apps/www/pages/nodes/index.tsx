@@ -23,7 +23,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
     <SWRConfig value={{ fallback }}>
         <BuildContainer initialValue={build}>
             <PageLoader />
-            <PageHead title="PhyloPic: Taxonomic Groups" url="https://www.phylopic.org/nodes" />
+            <PageHead title="PhyloPic: Taxonomic Groups" url="https://www.phylopic.org/nodes" description="A list of all taxonomic groups covered by PhyloPic, the open database of freely reuseable silhouette images of organisms." />
             <SearchContainer>
                 <header>
                     <SiteNav />

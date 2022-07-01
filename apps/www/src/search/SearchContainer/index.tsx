@@ -1,15 +1,15 @@
 import { BuildContext } from "@phylopic/utils-api"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { FC, ReactNode, useContext, useEffect, useReducer, useState } from "react"
 import SearchContext from "../context"
 import { State } from "../context/State"
-import EOLSearch from "../sources/EOLSearch"
-import OTOLAutocompleteName from "../sources/OTOLAutocompleteName"
-import OTOLResolve from "../sources/OTOLResolve"
-import PhyloPicAutocomplete from "../sources/PhyloPicAutocomplete"
-// import PhyloPicImageSearch from "../sources/PhyloPicImageSearch"
-import PhyloPicNodeSearch from "../sources/PhyloPicNodeSearch"
 import reducer from "./reducer"
+const EOLSearch = dynamic(() => import("../sources/EOLSearch"), { ssr: false })
+const OTOLAutocompleteName = dynamic(() => import("../sources/OTOLAutocompleteName"), { ssr: false })
+const OTOLResolve = dynamic(() => import("../sources/OTOLResolve"), { ssr: false })
+const PhyloPicAutocomplete = dynamic(() => import("../sources/PhyloPicAutocomplete"), { ssr: false })
+const PhyloPicNodeSearch = dynamic(() => import("../sources/PhyloPicNodeSearch"), { ssr: false })
 const createInitialState = (text: string): State => ({
     externalMatches: [],
     externalResults: {},

@@ -27,7 +27,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => {
             <BuildContainer initialValue={build}>
                 <LicenseTypeFilterContainer>
                     <PageLoader />
-                    <PageHead title="PhyloPic: Silhouette Images" url="https://www.phylopic.org/images/" />
+                    <PageHead title="PhyloPic: Silhouette Images" url="https://www.phylopic.org/images/" description="Browse all the free silhouette images in PhyloPic." />
                     <SearchContainer>
                         <header>
                             <SiteNav />

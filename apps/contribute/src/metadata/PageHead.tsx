@@ -1,5 +1,6 @@
 import { MediaLink } from "@phylopic/api-models"
 import Head from "next/head"
+import Script from "next/script"
 import { FC, ReactNode, useMemo } from "react"
 export interface Props {
     children?: ReactNode
@@ -65,18 +66,20 @@ const PageHead: FC<Props> = ({
             <link rel="link:manifest" href="/site.webmanifest" />
             {process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID && (
                 <>
-                    <script
+                    <Script
                         async
                         src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(
                             process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
                         )}`}
+                        strategy="lazyOnload"
                     />
-                    <script
+                    <Script
                         dangerouslySetInnerHTML={{
                             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config",${JSON.stringify(
                                 process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
                             )})`,
                         }}
+                        strategy="lazyOnload"
                     />
                 </>
             )}

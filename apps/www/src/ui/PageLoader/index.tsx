@@ -1,7 +1,8 @@
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import { useEffect, useState, FC } from "react"
-import PropagateLoader from "react-spinners/PropagateLoader"
+import { FC, useEffect, useState } from "react"
 import styles from "./index.module.scss"
+const PropagateLoader = dynamic(() => import("react-spinners/PropagateLoader"), { ssr: false })
 const PageLoader: FC = () => {
     const [active, setActive] = useState(false)
     const { events } = useRouter()
@@ -22,7 +23,13 @@ const PageLoader: FC = () => {
     }
     return (
         <div className={styles.main}>
-            <PropagateLoader color="#0080a0" />
+            <PropagateLoader
+                color="#0080a0"
+                css={PropagateLoader.defaultProps!.css!}
+                loading={PropagateLoader.defaultProps!.loading!}
+                size={PropagateLoader.defaultProps!.size!}
+                speedMultiplier={PropagateLoader.defaultProps!.speedMultiplier!}
+            />
         </div>
     )
 }

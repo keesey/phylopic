@@ -41,7 +41,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
     <SWRConfig value={{ fallback }}>
         <BuildContainer initialValue={build}>
             <PageLoader />
-            <PageHead title="PhyloPic" url="https://www.phylopic.org/">
+            <PageHead title="PhyloPic" url="https://www.phylopic.org/" description="PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses.">
                 <SchemaScript
                     object={{
                         "@context": "https://schema.org",
