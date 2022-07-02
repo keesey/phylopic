@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Contributor } from "@phylopic/api-models"
+import Image from "next/future/image"
 import { FC, ReactNode } from "react"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import AnchorLink from "~/ui/AnchorLink"
@@ -14,11 +15,13 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
             <p className={styles.highlighted} id="systbio.org">
                 <a href="https://www.systbio.org" className={styles.imageLink}>
                     <cite>
-                        <img
+                        <Image
                             src="/logos/ssb-cerulean.svg"
                             height={26}
                             alt="The Society of Systematic Biologists"
                             className={styles.imageTextWithTail}
+                            width={473}
+                            style={{ objectFit: "contain" }}
                         />
                     </cite>
                 </a>
@@ -30,7 +33,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                     href="https://www.patreon.com/tmkeesey?fan_landing=true"
                     title="Support the creator of PhyloPic on Patreon."
                 >
-                    <img src="/logos/patreon-cerulean.svg" width={150} height={20} alt="Patreon" />
+                    <Image src="/logos/patreon-cerulean.svg" width={150} height={20} alt="Patreon" />
                 </a>
             </p>
             <section id="indiegogo">
@@ -40,7 +43,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                         href="https://www.indiegogo.com/projects/phylopic-2-0-free-silhouettes-of-all-life-forms"
                         className={styles.imageLink}
                     >
-                        <img src="/logos/indiegogo-cerulean.svg" width={140} height={20} alt="IndieGogo" />
+                        <Image src="/logos/indiegogo-cerulean.svg" width={140} height={20} alt="IndieGogo" />
                         campaign
                     </a>
                     {supporters && ":"}

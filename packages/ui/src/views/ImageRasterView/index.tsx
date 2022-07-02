@@ -1,6 +1,6 @@
 import { ImageWithEmbedded, MediaLink } from "@phylopic/api-models"
 import { ImageMediaType, URL } from "@phylopic/utils"
-import Image from "next/image"
+import Image from "next/future/image"
 import React from "react"
 import useImageAlt from "../../hooks/useImageAlt"
 import useImageLoader from "../../hooks/useImageLoader"
@@ -25,8 +25,9 @@ export const ImageRasterView: React.FC<ImageRasterViewProps> = ({ value }) => {
             crossOrigin="anonymous"
             height={height}
             loader={loader}
-            layout="fixed"
+            priority
             src={value.uuid}
+            style={{ maxWidth: "calc(100vw - 112px)", objectFit: "scale-down" }}
             width={width}
         />
     )

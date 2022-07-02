@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { FC, useCallback, useState } from "react"
 import styles from "./index.module.scss"
-import Image from "next/image"
+import Image from "next/future/image"
 export type Props = {
     index: 1 | 2 | 3 | 4 | 5
 }
@@ -20,7 +20,6 @@ const Card: FC<Props> = ({ index }) => {
             <div className={clsx(styles.side, styles.front, flipped ? styles.hidden : styles.showing)}>
                 <Image
                     alt={ALT[index]}
-                    layout="fixed"
                     width={200}
                     height={350}
                     src={`/materials/pocketphylogenies/pp-${index}-front-x3.png`}
@@ -29,7 +28,6 @@ const Card: FC<Props> = ({ index }) => {
             <div className={clsx(styles.side, styles.back, flipped ? styles.showing : styles.hidden)}>
                 <Image
                     alt="Diagram revealing answer."
-                    layout="fixed"
                     width={200}
                     height={350}
                     src={`/materials/pocketphylogenies/pp-${index}-back-x3.png`}

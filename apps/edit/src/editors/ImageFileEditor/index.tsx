@@ -1,5 +1,6 @@
 import { ImageMediaType } from "@phylopic/utils"
-import { ChangeEvent, DragEvent, useCallback, useState, FC } from "react"
+import Image from "next/future/image"
+import { ChangeEvent, DragEvent, FC, useCallback, useState } from "react"
 import styles from "./index.module.scss"
 import upload from "./upload"
 
@@ -52,7 +53,7 @@ const ImageFileEditor: FC<Props> = ({ apiPath, mediaType: fileType }) => {
     return (
         <figure onDrop={handleFigureDrop} className={className}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
                 alt="Original Submission"
                 src={`${apiPath}${cachebuster ? `?${encodeURIComponent(cachebuster)}` : ""}`}
             />

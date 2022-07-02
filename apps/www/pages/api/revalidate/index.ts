@@ -15,18 +15,15 @@ const index: NextApiHandler = async (req, res) => {
         return res.status(401).json({ message: "Invalid token." })
     }
     try {
-        const results = await Promise.allSettled(PATHS_TO_REVALIDATE.map(path => res.unstable_revalidate(path)))
-        const reasons: unknown[] = []
+        const results = await Promise.allSettled(PATHS_TO_REVALIDATE.map(path => res.revalidate(path)))
+        let revalidated = true
         for (const result of results) {
             if (result.status === "rejected") {
                 console.error(result.reason)
-                reasons.push(result.reason)
+                revalidated = false
             }
         }
-        if (reasons.length > 0) {
-            throw new Error(`Failed to revalidate ${reasons.length} out of ${PATHS_TO_REVALIDATE.length} paths.`)
-        }
-        return res.json({ revalidated: true })
+        return res.json({ revalidated })
     } catch (err) {
         console.error(err)
         return res.status(500).send(String(err))

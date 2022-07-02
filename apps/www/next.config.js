@@ -9,6 +9,9 @@ module.exports = withBundleAnalyzer(
     withPWA({
         experimental: {
             esmExternals: "loose",
+            images: {
+                allowFutureImage: true,
+            },
         },
         i18n: {
             defaultLocale: "en",

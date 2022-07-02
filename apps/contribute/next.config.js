@@ -2,6 +2,9 @@
 module.exports = {
     experimental: {
         esmExternals: "loose",
+        images: {
+            allowFutureImage: true,
+        },
     },
     i18n: {
         defaultLocale: "en",

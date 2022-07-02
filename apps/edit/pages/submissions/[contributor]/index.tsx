@@ -2,12 +2,11 @@ import { ListObjectsV2Command, ListObjectsV2CommandOutput, S3Client } from "@aws
 import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 import { EmailAddress, isDefined, isEmailAddress, isUUID, UUID } from "@phylopic/utils"
 import { GetServerSideProps, NextPage } from "next"
+import Image from "next/future/image"
 import Head from "next/head"
 import Link from "next/link"
-import React from "react"
 import ApproveAllButton from "~/editors/ApproveAllButton"
 import Breadcrumbs from "~/ui/Breadcrumbs"
-
 export interface Props {
     contributor: EmailAddress
     index: number
@@ -66,7 +65,7 @@ const Page: NextPage<Props> = ({ contributor, index, lastPage, uuids }) => (
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a>
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img
+                                            <Image
                                                 alt={`Submission ${uuid}`}
                                                 height={150}
                                                 src={`/api/submissionfiles/${encodeURIComponent(contributor)}/${uuid}`}
