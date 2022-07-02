@@ -163,7 +163,7 @@ rm *.source.raster.png
 cd ../..
 
 echo "[RASTER] Cleaned up raster bases. Making S3 mirror folders..."
-for file in .scratch/raster/*.source.(bmp|gif|jpg|png); do
+for file in .scratch/raster/*.source.(bmp|gif|jpeg|png); do
 	dir=$(echo $file |
 		sed 's/^\.scratch\/raster\//.s3\/images.phylopic.org\/images\//' |
 		sed 's/\.source\..*$//')
@@ -180,7 +180,7 @@ done
 wait
 
 echo "[RASTER] Made S3 mirror folders. Moving files to S3 mirror..."
-for file in .scratch/raster/*.source.(bmp|gif|jpg|png); do
+for file in .scratch/raster/*.source.(bmp|gif|jpeg|png); do
 	dest=$(echo $file |
 		sed 's/^\.scratch\/raster\//.s3\/images.phylopic.org\/images\//' |
 		sed 's/\.source\./\/source./')

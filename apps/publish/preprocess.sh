@@ -46,7 +46,7 @@ for file in .s3/source.phylopic.org/images/**/source.svg; do
         cp $file $dest
     fi
 done &
-for file in .s3/source.phylopic.org/images/**/source.(bmp|gif|jpg|png); do
+for file in .s3/source.phylopic.org/images/**/source.(bmp|gif|jpeg|png); do
     dest=$(echo $file |
         sed 's/^\.s3\/source\.phylopic\.org\/images\//.scratch\/raster\//' |
         sed 's/\/source\./.source./')
