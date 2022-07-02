@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import clsx from "clsx";
-import Image from "next/future/image";
-import { FC } from "react";
-import logoFacebook from "../../../public/logos/facebook.svg";
-import logoPatreon from "../../../public/logos/patreon-white.svg";
-import logoTwitter from "../../../public/logos/twitter.svg";
-import styles from "./index.module.scss";
+import clsx from "clsx"
+import Image from "next/future/image"
+import { FC } from "react"
+import logoFacebook from "../../../public/logos/facebook.svg"
+import logoPatreon from "../../../public/logos/patreon-white.svg"
+import logoTwitter from "../../../public/logos/twitter.svg"
+import styles from "./index.module.scss"
 const YEAR = new Date().getFullYear()
 const SiteFooter: FC = () => (
     <footer className={styles.main}>

@@ -4,7 +4,6 @@ const runtimeCaching = require("next-pwa/cache")
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
     enabled: process.env.ANALYZE === "true",
 })
-
 module.exports = withBundleAnalyzer(
     withPWA({
         experimental: {
@@ -20,10 +19,13 @@ module.exports = withBundleAnalyzer(
         images: {
             domains: ["images.phylopic.org"],
         },
-        pwa: {
-            dest: "public",
-            runtimeCaching,
-        },
+        pwa:
+            process.env.NODE_ENV === "production"
+                ? {
+                      dest: "public",
+                      runtimeCaching,
+                  }
+                : undefined,
         reactStrictMode: true,
         async redirects() {
             return [
