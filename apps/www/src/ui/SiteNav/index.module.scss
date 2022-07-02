@@ -1,7 +1,7 @@
 @use "@phylopic/styles/colors.scss";
 .main {
     align-items: center;
-    background-color: colors.$pine;
+    background-color: colors.$deep;
     color: colors.$white;
     display: flex;
     flex-wrap: wrap;
@@ -31,7 +31,7 @@
         transition: all 0.3s;
         &:hover {
             background-color: colors.$white;
-            color: colors.$pine;
+            color: colors.$deep;
         }
     }
 }
