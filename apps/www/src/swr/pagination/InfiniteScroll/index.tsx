@@ -39,7 +39,7 @@ const InfiniteScroll: FC<Props> = ({ hideLoader, onInViewport, pending }) => {
     }, [inViewport, onInViewport, pending])
     return (
         <div className={styles.main} ref={setElement}>
-            {pending && !hideLoader && <PropagateLoader color="#0080a0" css="" loading size={15} speedMultiplier={1} />}
+            {pending && !hideLoader && <PropagateLoader color="#00809f" css="" loading size={15} speedMultiplier={1} />}
             {!pending && " "}
         </div>
     )

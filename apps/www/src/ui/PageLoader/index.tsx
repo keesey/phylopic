@@ -23,7 +23,7 @@ const PageLoader: FC = () => {
     }
     return (
         <div className={styles.main}>
-            <PropagateLoader color="#0080a0" css="" loading size={15} speedMultiplier={1} />
+            <PropagateLoader color="#00809f" css="" loading size={15} speedMultiplier={1} />
         </div>
     )
 }
