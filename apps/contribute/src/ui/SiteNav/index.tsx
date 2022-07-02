@@ -3,6 +3,7 @@ import Image from "next/future/image"
 import { FC } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useEmailAddress from "~/auth/hooks/useEmailAddress"
+import logoPhyloPic from "../../../public/logos/phylopic.svg"
 import styles from "./index.module.scss"
 const SiteNav: FC = () => {
     const authorized = useAuthorized()
@@ -11,7 +12,7 @@ const SiteNav: FC = () => {
         <nav className={styles.main}>
             <h1>
                 <a key="title" href="https://www.phylopic.org/">
-                    <Image src="/logos/phylopic.svg" alt="PhyloPic" width={156.5} height={25.4} />
+                    <Image src={logoPhyloPic} alt="PhyloPic" width={156.5} height={25.4} />
                 </a>
                 : Contribute
             </h1>

@@ -4,6 +4,9 @@ import Image from "next/future/image"
 import { FC, ReactNode } from "react"
 import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import AnchorLink from "~/ui/AnchorLink"
+import logoIndiegogo from "../../../public/logos/indiegogo-cerulean.svg"
+import logoPatreon from "../../../public/logos/patreon-cerulean.svg"
+import logoSSB from "../../../public/logos/ssb-cerulean.svg"
 import styles from "./index.module.scss"
 export interface Props {
     showContributors?: boolean
@@ -16,7 +19,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                 <a href="https://www.systbio.org" className={styles.imageLink}>
                     <cite>
                         <Image
-                            src="/logos/ssb-cerulean.svg"
+                            src={logoSSB}
                             height={26}
                             alt="The Society of Systematic Biologists"
                             className={styles.imageTextWithTail}
@@ -33,7 +36,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                     href="https://www.patreon.com/tmkeesey?fan_landing=true"
                     title="Support the creator of PhyloPic on Patreon."
                 >
-                    <Image src="/logos/patreon-cerulean.svg" width={150} height={20} alt="Patreon" />
+                    <Image src={logoPatreon} width={150} height={20} alt="Patreon" />
                 </a>
             </p>
             <section id="indiegogo">
@@ -43,7 +46,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                         href="https://www.indiegogo.com/projects/phylopic-2-0-free-silhouettes-of-all-life-forms"
                         className={styles.imageLink}
                     >
-                        <Image src="/logos/indiegogo-cerulean.svg" width={140} height={20} alt="IndieGogo" />
+                        <Image src={logoIndiegogo} width={140} height={20} alt="IndieGogo" />
                         campaign
                     </a>
                     {supporters && ":"}
