@@ -22,7 +22,6 @@ export const ImageRasterView: React.FC<ImageRasterViewProps> = ({ value }) => {
     return (
         <Image
             alt={alt}
-            crossOrigin="anonymous"
             height={height}
             loader={loader}
             priority

@@ -9,6 +9,6 @@ export interface ImageThumbnailViewProps {
 export const ImageThumbnailView: React.FC<ImageThumbnailViewProps> = ({ value }) => {
     const alt = useImageAlt(value)
     const loader = useImageLoader(value._links.thumbnailFiles)
-    return <Image alt={alt} crossOrigin="anonymous" height={64} loader={loader} src={value.uuid} width={64} />
+    return <Image alt={alt} height={64} loader={loader} src={value.uuid} width={64} />
 }
 export default ImageThumbnailView
