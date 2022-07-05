@@ -133,10 +133,10 @@ const getImageNodeDerivedData = (
     for (const [uuid, image] of args.images.entries()) {
         const { general, specific } = image
         if (!args.nodes.has(specific)) {
-            throw new Error(`Invalid specific node for image <${uuid}>.`)
+            throw new Error(`Invalid specific node for image <${uuid}>: <${specific}>.`)
         }
         if (general && !args.nodes.has(general)) {
-            throw new Error(`Invalid general node for image <${uuid}>.`)
+            throw new Error(`Invalid general node for image <${uuid}>: <${general}>.`)
         }
         const lineage = getNodeUUIDsInLineage(args, uuid, specific, general)
         illustration.set(uuid, lineage)
