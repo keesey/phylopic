@@ -65,7 +65,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
                         <LicenseTypeFilterContainer>
                             <PageLoader />
                             <PageHead
-                                description={`Freely reuseable silhouette images of ${
+                                description={`Freely reusable silhouette images of ${
                                     node ? stringifyNomen(node?.names[0]) : "[Unnamed Group]"
                                 }.`}
                                 socialImage={node?._embedded.primaryImage?._links["http://ogp.me/ns#image"]}

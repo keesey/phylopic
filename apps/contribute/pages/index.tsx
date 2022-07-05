@@ -1,17 +1,16 @@
-import { MountedOnly } from "@phylopic/ui"
 import type { NextPage } from "next"
+import dynamic from "next/dynamic"
 import PageLayout from "~/pages/PageLayout"
-import Registration from "~/screens/Registration"
+const Registration = dynamic(() => import("~/screens/Registration"))
 const Page: NextPage = () => (
     <PageLayout
         head={{
+            description: "Upload your own images to PhyloPic, the open database of freely reusable silhouettes.",
             title: "PhyloPic: Contribute",
             url: "https://contribute.phylopic.org/",
         }}
     >
-        <MountedOnly>
-            <Registration />
-        </MountedOnly>
+        <Registration />
     </PageLayout>
 )
 export default Page

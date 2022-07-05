@@ -1,6 +1,6 @@
 # _PhyloPic_ Webapp
 
-This [Next.js](https://nextjs.org/) application allows users to find and download freely-reuseable silhouette images of organisms.
+This [Next.js](https://nextjs.org/) application allows users to find and download freely reusable silhouette images of organisms.
 
 The app is hosted at [https://beta.phylopic.org](https://beta.phylopic.org) and will eventually move to `https://www.phylopic.org`.
 

@@ -1,27 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import { MountedOnly } from "@phylopic/ui"
 import type { NextPage } from "next"
-import { SWRConfig } from "swr"
-import AuthContainer from "~/auth/AuthContainer"
-import PageHead from "~/metadata/PageHead"
-import PageLoader from "~/ui/PageLoader"
-import SiteFooter from "~/ui/SiteFooter"
-import SiteNav from "~/ui/SiteNav"
+import PageLayout from "~/pages/PageLayout"
 const Page: NextPage = () => (
-    <SWRConfig>
-        <PageLoader />
-        <PageHead title="PhyloPic: Contribute" url="https://contribute.phylopic.org/logout" />
-        <AuthContainer>
-            <header>
-                <SiteNav />
-            </header>
-            <main>
-                <MountedOnly>
-                    <p>:TODO:</p>
-                </MountedOnly>
-            </main>
-            <SiteFooter />
-        </AuthContainer>
-    </SWRConfig>
+    <PageLayout
+        head={{
+            title: "PhyloPic: Signed Out",
+            url: "https://contribute.phylopic.org/logout",
+        }}
+    >
+        <p>:TODO:</p>
+    </PageLayout>
 )
 export default Page

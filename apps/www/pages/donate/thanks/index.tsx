@@ -38,7 +38,7 @@ const PageComponent: NextPage = () => (
                             <p>
                                 Your generous donation will help keep <SiteTitle /> online. Thousands of educators,
                                 researchers, and students will be able to search the taxonomic database for freely
-                                reuseable silhouettes <strong>thanks to you!</strong>
+                                reusable silhouettes <strong>thanks to you!</strong>
                             </p>
                         </section>
                         <section>
@@ -67,7 +67,7 @@ const PageComponent: NextPage = () => (
                                     <p>
                                         <SiteTitle /> relies on silhouettes uploaded by people like you! Use the{" "}
                                         <a href="https://contribute.phylopic.org">Image Uploader</a> to add your artwork
-                                        the database of freely-reusable images!
+                                        the database of freely reusable images!
                                     </p>
                                     <p></p>
                                 </section>

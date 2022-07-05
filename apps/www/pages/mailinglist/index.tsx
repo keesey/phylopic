@@ -17,7 +17,7 @@ const PageComponent: NextPage = () => (
         <BuildContainer>
             <PageLoader />
             <PageHead
-                description="Get updates on new features for PhyloPic, the open database of freely-reuseable silhouette images of organisms."
+                description="Get updates on new features for PhyloPic, the open database of freely reusable silhouette images of organisms."
                 title="Sign up for the PhyloPic Mailing List"
                 url="https://www.phylopic.org/mailinglist"
             >

@@ -20,7 +20,7 @@ const PageComponent: NextPage = () => (
             <PageHead
                 title="PhyloPic: Other Ways to Contribute"
                 url="https://www.phylopic.org/contribute/cancel"
-                description="Ways to contribute to PhyloPic, an open database of freely-reuseable silhouette images of organisms."
+                description="Ways to contribute to PhyloPic, an open database of freely reusable silhouette images of organisms."
             />
             <SearchContainer>
                 <header>
@@ -50,7 +50,7 @@ const PageComponent: NextPage = () => (
                                 <p>
                                     <SiteTitle /> relies on silhouettes uploaded by people like you! Use the{" "}
                                     <a href="https://contribute.phylopic.org">Image Uploader</a> to add your artwork the
-                                    database of freely-reusable images!
+                                    database of freely reusable images!
                                 </p>
                                 <p></p>
                             </section>

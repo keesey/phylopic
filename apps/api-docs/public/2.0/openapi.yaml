@@ -4,7 +4,7 @@ info:
   description: |
     Documentation for [*PhyloPic*](https://beta.phylopic.org/)'s Application Programming Interface.
 
-    *PhyloPic* is an open database of freely-reuseable silhouette images of organisms, searchable by phylogeny.
+    *PhyloPic* is an open database of freely reusable silhouette images of organisms, searchable by phylogeny.
   contact:
     name: Mike Keesey
     email: keesey+phylopic@gmail.com
