@@ -4,6 +4,7 @@ import { FC } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useEmailAddress from "~/auth/hooks/useEmailAddress"
 import logoPhyloPic from "../../../public/logos/phylopic.svg"
+import SiteTitle from "../SiteTitle"
 import styles from "./index.module.scss"
 const SiteNav: FC = () => {
     const authorized = useAuthorized()
@@ -11,15 +12,14 @@ const SiteNav: FC = () => {
     return (
         <nav className={styles.main}>
             <h1>
-                <a key="title" href="https://www.phylopic.org/">
-                    <Image src={logoPhyloPic} alt="PhyloPic" width={156.5} height={25.4} />
+                <a key="title" href="https://beta.phylopic.org/">
+                    <SiteTitle />
                 </a>
-                : Contribute
             </h1>
             {authorized && email && (
                 <>
                     <AnchorLink href="/images/new">Contribute a New Image</AnchorLink>
-                    <a href={`https://www.phylopic.org/contributors/${encodeURIComponent(email)}`}>View Your Images</a>
+                    <a href={`https://beta.phylopic.org/contributors/${encodeURIComponent(email)}`}>View Your Images</a>
                     <AnchorLink href="/logout">Log Out</AnchorLink>
                 </>
             )}

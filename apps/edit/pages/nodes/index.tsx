@@ -75,7 +75,6 @@ const getPageObjects = async (
         MaxKeys: PAGE_SIZE,
     })
     const result = await client.send(command)
-    console.debug(result)
     if (!result.CommonPrefixes?.length) {
         return [[], true]
     }

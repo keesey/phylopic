@@ -1,14 +1,13 @@
+import { Loader } from "@phylopic/ui"
 import { EmailAddress, isEmailAddress } from "@phylopic/utils"
+import axios from "axios"
 import { useRouter } from "next/router"
 import { FC, useCallback, useEffect, useMemo, useState } from "react"
+import useSWR from "swr"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useEmailAddress from "~/auth/hooks/useEmailAddress"
 import EmailForm from "./EmailForm"
 import ReauthorizeForm from "./ReauthorizeForm"
-import useSWR from "swr"
-import axios from "axios"
-import { Loader } from "@phylopic/ui"
-import { setRequestMeta } from "next/dist/server/request-meta"
 const fetchPost = async (key: { body: unknown; url: string }) => {
     await axios.post(key.url, key.body, {
         headers: { "content-type": "application/json" },
@@ -31,12 +30,12 @@ const Registration: FC = () => {
         setSendRequested(isEmailAddress(newEmail))
     }, [])
     const authorizeKey = useMemo(() => {
-        if (sendRequested && isEmailAddress(emailAddress)) {
+        if (!authorized && sendRequested && isEmailAddress(emailAddress)) {
             return { url: `/api/authorize/${encodeURIComponent(emailAddress)}`, body: { ttl } }
         }
         return null
-    }, [])
-    const swr = useSWR(authEmailAddress, fetchPost)
+    }, [authorized, emailAddress, sendRequested, ttl])
+    const swr = useSWR(authorizeKey, fetchPost)
     useEffect(() => {
         if (authorized) {
             router.push("/submissions")

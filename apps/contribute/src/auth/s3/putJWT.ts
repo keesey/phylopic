@@ -1,11 +1,12 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { isEmailAddress, isUUID } from "@phylopic/utils"
 import getContributorTokenKey from "~/s3/keys/getContributorTokenKey"
 import decodeJWT from "../jwt/decodeJWT"
 import verifyJWT from "../jwt/verifyJWT"
 import { JWT } from "../models/JWT"
 const putJWT = async (client: S3Client, token: JWT, verify = false) => {
     const payload = verify ? await verifyJWT(token) : decodeJWT(token)
-    if (!payload?.exp || !payload?.sub || !payload?.jti) {
+    if (!payload?.exp || !isEmailAddress(payload?.sub) || !isUUID(payload?.jti)) {
         throw new Error("Invalid token.")
     }
     await client.send(

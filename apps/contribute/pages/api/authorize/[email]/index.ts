@@ -37,7 +37,8 @@ const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRe
         uuid = randomUUID()
         await putMetadata(client, email, { uuid }, false)
     }
-    await issueAndSendJWT(client, email, uuid, Math.max(MIN_TTL, Math.min(MAX_TTL, body.ttl ?? DEFAULT_TTL)))
+    const ttl = Math.max(MIN_TTL, Math.min(MAX_TTL, body.ttl ?? DEFAULT_TTL))
+    await issueAndSendJWT(client, email, uuid, ttl)
 }
 const index: NextApiHandler<Payload | null> = async (req, res) => {
     try {

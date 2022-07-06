@@ -2,6 +2,7 @@ import { HeadObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 import { isEmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
+import Expire from "~/auth/Expire"
 import getBearerJWT from "~/auth/http/getBearerJWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
 import PageLayout from "~/pages/PageLayout"
@@ -17,6 +18,7 @@ const Page: NextPage<Props> = ({ error, uuid }) => (
             url: `https://contribute.phylopic.org/submissions/${encodeURIComponent(uuid)}`,
         }}
     >
+        <Expire />
         <p>:TODO:</p>
     </PageLayout>
 )
