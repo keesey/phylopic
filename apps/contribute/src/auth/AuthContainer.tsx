@@ -7,10 +7,6 @@ type Props = {
 }
 const AuthContainer: FC<Props> = ({ children }) => {
     const contextValue = useStoredState<JWT>("auth")
-    return (
-        <AuthContext.Provider value={contextValue}>
-            {children}
-        </AuthContext.Provider>
-    )
+    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
 }
 export default AuthContainer

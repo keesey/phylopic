@@ -1,4 +1,5 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
+import { InfiniteScroll } from "@phylopic/ui"
 import { createSearch, Query, URL } from "@phylopic/utils"
 import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { FC, Fragment, ReactNode, useCallback, useContext, useEffect, useMemo } from "react"
@@ -6,7 +7,6 @@ import { BareFetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import useSWRInfinite from "swr/infinite"
 import createPageKeyGetter from "./createPageKeyGetter"
-import InfiniteScroll from "./InfiniteScroll"
 export type Props<T = unknown> = {
     children: (value: readonly T[], total: number) => ReactNode
     endpoint: URL
@@ -71,6 +71,7 @@ const PaginationContainer: FC<Props> = ({ children, endpoint, hideControls, hide
             {size < (maxPages ?? totalPages) && !error && !hideControls && (
                 <InfiniteScroll
                     hideLoader={hideLoader}
+                    loaderColor="#00809f"
                     key="infinite-scroll"
                     onInViewport={loadNextPage}
                     pending={list.isValidating || pages.isValidating}

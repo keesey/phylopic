@@ -1,16 +1,24 @@
-import { useEffect, useState, FC } from "react"
-import styles from "./index.module.scss"
+import React from "react"
 import dynamic from "next/dynamic"
 const PropagateLoader = dynamic(() => import("react-spinners/PropagateLoader"), { ssr: false })
-export interface Props {
+export interface InfiniteScrollProps {
     hideLoader?: boolean
+    loaderColor?: string
     onInViewport?: () => void
     pending?: boolean
 }
-const InfiniteScroll: FC<Props> = ({ hideLoader, onInViewport, pending }) => {
-    const [inViewport, setInViewport] = useState(false)
-    const [element, setElement] = useState<HTMLDivElement | null>(null)
-    useEffect(() => {
+const STYLE: React.CSSProperties = {
+    alignItems: "center",
+    display: "flex",
+    height: "3rem",
+    justifyContent: "center",
+    margin: "1rem",
+    textAlign: "center",
+}
+export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({ hideLoader, loaderColor, onInViewport, pending }) => {
+    const [inViewport, setInViewport] = React.useState(false)
+    const [element, setElement] = React.useState<HTMLDivElement | null>(null)
+    React.useEffect(() => {
         if (element) {
             const observer = new IntersectionObserver(
                 entries => {
@@ -32,16 +40,17 @@ const InfiniteScroll: FC<Props> = ({ hideLoader, onInViewport, pending }) => {
             return () => observer.disconnect()
         }
     }, [element])
-    useEffect(() => {
+    React.useEffect(() => {
         if (!pending && inViewport) {
             onInViewport?.()
         }
     }, [inViewport, onInViewport, pending])
     return (
-        <div className={styles.main} ref={setElement}>
-            {pending && !hideLoader && <PropagateLoader color="#00809f" css="" loading size={15} speedMultiplier={1} />}
+        <div ref={setElement} style={STYLE}>
+            {pending && !hideLoader && (
+                <PropagateLoader color={loaderColor ?? "#000"} css="" loading size={15} speedMultiplier={1} />
+            )}
             {!pending && " "}
         </div>
     )
 }
-export default InfiniteScroll

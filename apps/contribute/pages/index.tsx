@@ -1,7 +1,7 @@
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
 import PageLayout from "~/pages/PageLayout"
-const Registration = dynamic(() => import("~/screens/Registration"))
+const Registration = dynamic(() => import("~/screens/Registration"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
         head={{

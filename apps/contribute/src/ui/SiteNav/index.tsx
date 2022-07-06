@@ -1,9 +1,7 @@
 import { AnchorLink } from "@phylopic/ui"
-import Image from "next/future/image"
 import { FC } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useEmailAddress from "~/auth/hooks/useEmailAddress"
-import logoPhyloPic from "../../../public/logos/phylopic.svg"
 import SiteTitle from "../SiteTitle"
 import styles from "./index.module.scss"
 const SiteNav: FC = () => {
@@ -18,8 +16,8 @@ const SiteNav: FC = () => {
             </h1>
             {authorized && email && (
                 <>
-                    <AnchorLink href="/images/new">Contribute a New Image</AnchorLink>
-                    <a href={`https://beta.phylopic.org/contributors/${encodeURIComponent(email)}`}>View Your Images</a>
+                    <AnchorLink href="/submissions/new">Contribute a New Image</AnchorLink>
+                    <AnchorLink href="/submissions">View Your Images</AnchorLink>
                     <AnchorLink href="/logout">Log Out</AnchorLink>
                 </>
             )}

@@ -2,7 +2,7 @@ import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector 
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import PageLayout from "~/pages/PageLayout"
-const Verification = dynamic(() => import("~/screens/Verification"))
+const Verification = dynamic(() => import("~/screens/Verification"), { ssr: false })
 export interface Props {
     email: EmailAddress
     jti: UUID

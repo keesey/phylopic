@@ -4,8 +4,8 @@ import PageLayout from "~/pages/PageLayout"
 const Page: NextPage = () => (
     <PageLayout
         head={{
-            title: "PhyloPic: Contribute",
-            url: "https://contribute.phylopic.org/",
+            title: "PhyloPic: Submissions",
+            url: "https://contribute.phylopic.org/submissions",
         }}
     >
         <Expire />

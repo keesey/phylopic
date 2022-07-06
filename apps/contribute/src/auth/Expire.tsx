@@ -1,5 +1,5 @@
-import { FC } from "react";
-import useExpireEffect from "./hooks/useExpireEffect";
+import { FC } from "react"
+import useExpireEffect from "./hooks/useExpireEffect"
 const Expire: FC = () => {
     useExpireEffect()
     return null
