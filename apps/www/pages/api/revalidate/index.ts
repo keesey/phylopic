@@ -12,7 +12,7 @@ const PATHS_TO_REVALIDATE = [
 ]
 const index: NextApiHandler = async (req, res) => {
     if (req.query.secret !== process.env.REVALIDATE_TOKEN) {
-        return res.status(401).json({ message: "Invalid token." })
+        return res.status(401).json({ message: "Invalid secret token." })
     }
     try {
         const results = await Promise.allSettled(PATHS_TO_REVALIDATE.map(path => res.revalidate(path)))

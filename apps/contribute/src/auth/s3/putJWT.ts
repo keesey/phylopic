@@ -7,7 +7,7 @@ import { JWT } from "../models/JWT"
 const putJWT = async (client: S3Client, token: JWT, verify = false) => {
     const payload = verify ? await verifyJWT(token) : decodeJWT(token)
     if (!payload?.exp || !isEmailAddress(payload?.sub) || !isUUID(payload?.jti)) {
-        throw new Error("Invalid token.")
+        throw new Error("Tried to save an invalid token.")
     }
     await client.send(
         new PutObjectCommand({

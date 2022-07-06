@@ -9,7 +9,7 @@ const fetchJWT = async (key: string): Promise<JWT> => {
         throw new Error("Invalid response for key: " + key)
     }
     if (!decode(response.data)) {
-        throw new Error("Invalid token.")
+        throw new Error("Downloaded an invalid token.")
     }
     return response.data
 }

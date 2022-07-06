@@ -10,7 +10,7 @@ const SiteNav: FC = () => {
     return (
         <nav className={styles.main}>
             <h1>
-                <a key="title" href="https://beta.phylopic.org/">
+                <a key="title" href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}`}>
                     <SiteTitle />
                 </a>
             </h1>

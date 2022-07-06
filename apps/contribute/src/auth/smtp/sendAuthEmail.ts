@@ -11,7 +11,7 @@ const sendAuthEmail = async (token: JWT, verify = false) => {
     }
     const payload = verify ? await verifyJWT(token) : decodeJWT(token)
     if (!payload?.iat || !isEmailAddress(payload?.sub) || !isUUID(payload?.jti)) {
-        throw new Error("Invalid token.")
+        throw new Error("Tried to send an email using an invalid token.")
     }
     const messageData: MailgunMessageData = {
         from: `PhyloPic Contributions <no-reply@${process.env.MAILGUN_DOMAIN}>`,
