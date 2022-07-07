@@ -7,6 +7,7 @@ import {
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"
+import { NodeContainer } from "@phylopic/ui"
 import {
     createSearch,
     extractPath,
@@ -19,7 +20,6 @@ import {
 } from "@phylopic/utils"
 import { addBuildToURL, BuildContainer, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
-import React from "react"
 import { SWRConfig, unstable_serialize } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
@@ -36,7 +36,6 @@ import extractUUIDv4 from "~/routes/extractUUIDv4"
 import SearchContainer from "~/search/SearchContainer"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
-import NodeContainer from "~/swr/data/NodeContainer"
 import AnchorLink from "~/ui/AnchorLink"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import Loader from "~/ui/Loader"

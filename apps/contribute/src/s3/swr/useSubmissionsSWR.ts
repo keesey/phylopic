@@ -1,20 +1,21 @@
 import { EmailAddress, isEmailAddress, UUID } from "@phylopic/utils"
-import { useMemo } from "react"
-import useSWR from "swr"
+import { useCallback, useMemo } from "react"
+import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 export type Submissions = {
     readonly nextToken: string | null
     readonly uuids: readonly UUID[]
 }
 const useSubmissionsSWR = (emailAddress: EmailAddress | null) => {
-    const key = useMemo(
-        () =>
-            isEmailAddress(emailAddress)
-                ? `/api/s3/contribute/contributors/${encodeURIComponent(emailAddress)}/submissions`
+    const getKey = useCallback<SWRInfiniteKeyLoader>(
+        (index, previousPageData: Submissions | null) =>
+            (index === 0 || previousPageData?.uuids.length) && isEmailAddress(emailAddress)
+                ? `/api/s3/contribute/contributors/${encodeURIComponent(emailAddress)}/submissions` +
+                  (previousPageData?.nextToken ? `?token=${encodeURIComponent(previousPageData.nextToken)}` : "")
                 : null,
         [emailAddress],
     )
     const fetcher = useAuthorizedJSONFetcher<Submissions>()
-    return useSWR<Submissions>(key, fetcher)
+    return useSWRInfinite<Submissions>(getKey, fetcher)
 }
 export default useSubmissionsSWR

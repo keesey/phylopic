@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next"
 import PageLayout from "~/pages/PageLayout"
+import Farewell from "~/screens/Farewell"
 const Page: NextPage = () => (
     <PageLayout
         head={{
@@ -8,7 +9,7 @@ const Page: NextPage = () => (
             url: "https://contribute.phylopic.org/logout",
         }}
     >
-        <p>:TODO:</p>
+        <Farewell />
     </PageLayout>
 )
 export default Page

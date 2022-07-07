@@ -24,7 +24,7 @@ const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRe
     }
     let existingPayload: unknown
     try {
-        existingPayload = await getMetadata(client, email, true)
+        existingPayload = await getMetadata(client, email, false)
     } catch (e) {
         if (e !== 401 && e !== 404) {
             throw e

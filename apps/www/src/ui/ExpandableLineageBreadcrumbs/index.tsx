@@ -1,7 +1,7 @@
 import { Node } from "@phylopic/api-models"
+import { PaginationContainer } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
-import PaginationContainer from "~/swr/pagination/PaginationContainer"
 import { BreadcrumbItem } from "../Breadcrumbs"
 import Collapsed from "./Collapsed"
 import Expanded from "./Expanded"

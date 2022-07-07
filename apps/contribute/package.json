@@ -10,6 +10,7 @@
         "@phylopic/api-models": "*",
         "@phylopic/source-models": "*",
         "@phylopic/styles": "*",
+        "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
         "form-data": "^4.0.0",

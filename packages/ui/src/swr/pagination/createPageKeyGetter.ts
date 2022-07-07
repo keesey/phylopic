@@ -1,6 +1,6 @@
 import { PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query, URL } from "@phylopic/utils"
-const createPageKeyGetter =
+export const createPageKeyGetter =
     <T = unknown>(endpoint: URL, query?: Query) =>
     (page: number, previousPageData: PageWithEmbedded<T>) => {
         if (previousPageData && !previousPageData._links.next) {
@@ -8,4 +8,3 @@ const createPageKeyGetter =
         }
         return endpoint + createSearch({ ...query, page })
     }
-export default createPageKeyGetter

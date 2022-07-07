@@ -1,30 +1,38 @@
 import { createSearch, Query, URL } from "@phylopic/utils"
 import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
-import { FC, Fragment, ReactNode, useContext, useEffect, useMemo } from "react"
+import React from "react"
 import useSWRImmutable from "swr/immutable"
-import Loader from "~/ui/Loader"
-export type Props<T extends Readonly<{ build: number }> = Readonly<{ build: number }>> = {
-    children?: (value?: T) => ReactNode
+import { Loader } from "../../core"
+export type DataContainerProps<T extends Readonly<{ build: number }> = Readonly<{ build: number }>> = {
+    children?: (value?: T) => React.ReactNode
     endpoint: URL
     hideLoader?: boolean
+    loaderColor?: string
     onError?: (error: Error) => void
     query?: Query
 }
-const DataContainer: FC<Props> = ({ children, endpoint, hideLoader, onError, query }) => {
-    const [build] = useContext(BuildContext) ?? []
+export const DataContainer: React.FC<DataContainerProps> = ({
+    children,
+    endpoint,
+    hideLoader,
+    loaderColor,
+    onError,
+    query,
+}) => {
+    const [build] = React.useContext(BuildContext) ?? []
     const fetcher = useAPIFetcher()
-    const queryWithBuild = useMemo(() => (build ? { ...query, build } : query ?? {}), [build, query])
-    const key = useMemo(() => endpoint + createSearch(queryWithBuild), [endpoint, queryWithBuild])
+    const queryWithBuild = React.useMemo(() => (build ? { ...query, build } : query ?? {}), [build, query])
+    const key = React.useMemo(() => endpoint + createSearch(queryWithBuild), [endpoint, queryWithBuild])
     const { data, error, isValidating } = useSWRImmutable(key, fetcher)
-    useEffect(() => {
+    React.useEffect(() => {
         if (error) {
             onError?.(error)
         }
     }, [error, onError])
     return (
         <>
-            <Fragment key="items">{children?.(data)}</Fragment>
-            {!data && isValidating && !hideLoader && <Loader />}
+            <React.Fragment key="items">{children?.(data)}</React.Fragment>
+            {!data && isValidating && !hideLoader && <Loader color={loaderColor} />}
             {error && (
                 <section key="error">
                     <p>
@@ -38,4 +46,3 @@ const DataContainer: FC<Props> = ({ children, endpoint, hideLoader, onError, que
         </>
     )
 }
-export default DataContainer

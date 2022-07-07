@@ -5,7 +5,7 @@ export interface Args {
     email: EmailAddress
     expiration: Date
     issuedAt: Date
-    uuid: UUID
+    jti: UUID
     payload: Payload
 }
 const createJWT = (args: Args) =>
@@ -20,7 +20,7 @@ const createJWT = (args: Args) =>
             {
                 audience: "https://contribute.phylopic.org",
                 issuer: "https://contribute.phylopic.org",
-                jwtid: args.uuid,
+                jwtid: args.jti,
                 subject: args.email,
             },
             (err, encoded) => (err ? reject(err) : resolve(encoded)),

@@ -1,8 +1,8 @@
 import { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
+import { PaginationContainerProps } from "@phylopic/ui"
 import { Query } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
-import { Props as PaginationContainerProps } from "~/swr/pagination/PaginationContainer"
 import ImageLicensePaginator from "./ImageLicensePaginator"
 export type Props = Omit<PaginationContainerProps<ImageWithEmbedded>, "endpoint"> & {
     node?: Node
