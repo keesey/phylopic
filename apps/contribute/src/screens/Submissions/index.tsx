@@ -1,18 +1,18 @@
+import { BuildContainer } from "@phylopic/utils-api"
 import { FC } from "react"
+import Greeting from "./Greeting"
+import styles from "./index.module.scss"
 import Pending from "./Pending"
 import Published from "./Published"
 const Submissions: FC = () => {
     return (
-        <>
-            <section>
-                <h2>Pending Submissions</h2>
+        <BuildContainer>
+            <section className={styles.main}>
+                <Greeting />
                 <Pending />
-            </section>
-            <section>
-                <h2>Published Submissions</h2>
                 <Published />
             </section>
-        </>
+        </BuildContainer>
     )
 }
 export default Submissions

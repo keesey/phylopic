@@ -1,0 +1,15 @@
+.main {
+    -ms-overflow-style: none;  /* IE and Edge */
+    box-sizing: border-box;
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 1rem;
+    min-height: 64px;
+    min-width: 100vw;
+    scrollbar-width: none;  /* Firefox */
+    width: 100vw;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

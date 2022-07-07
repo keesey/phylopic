@@ -13,7 +13,9 @@ const Farewell: FC = () => {
     return (
         <section>
             <h2>You have logged out.</h2>
-            <AnchorLink href="/" className="cta">Log Back In</AnchorLink>
+            <AnchorLink href="/" className="cta">
+                Log Back In
+            </AnchorLink>
         </section>
     )
 }

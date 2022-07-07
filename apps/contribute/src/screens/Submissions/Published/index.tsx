@@ -1,39 +1,50 @@
-import { Image, ImageListParameters } from "@phylopic/api-models"
-import { PaginationContainer } from "@phylopic/ui"
+import { ImageListParameters, ImageWithEmbedded } from "@phylopic/api-models"
+import { ImageThumbnailView, Loader, NumberView, PaginationContainer } from "@phylopic/ui"
 import { Query } from "@phylopic/utils"
-import { BuildContainer } from "@phylopic/utils-api"
 import { FC, useMemo } from "react"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import Banner from "~/ui/Banner"
 import SiteTitle from "~/ui/SiteTitle"
 const Published: FC = () => {
     const uuid = useContributorUUID()
-    const query = useMemo<ImageListParameters & Query>(() => (uuid ? { filter_contributor: uuid } : {}), [uuid])
-    if (!uuid) {
-        return null
+    const query = useMemo<(ImageListParameters & Query) | undefined>(
+        () => uuid ? { embed_specificNode: "true", filter_contributor: uuid } : undefined,
+        [uuid],
+    )
+    if (!query) {
+        return (
+            <section key="main">
+                <p key="header">Published images.</p>
+                <Banner key="banner">
+                    <Loader color="#ffffff" />
+                </Banner>
+            </section>
+        )
     }
     return (
-        <BuildContainer>
+        <section key="main">
             <PaginationContainer endpoint={`${process.env.NEXT_PUBLIC_API_URL}/images`} query={query}>
                 {(items, total) =>
-                    items.length ? (
-                        <>
-                            <small>
-                                {total} image{total === 1 ? "" : "s"}
-                            </small>
-                            <ul>
-                                {(items as Image[]).map((item: Image) => (
-                                    <li key={item.uuid}>{item.uuid}</li>
-                                ))}
-                            </ul>
-                        </>
-                    ) : (
-                        <p>
-                            You do not currently have any silhouettes on <SiteTitle />.
+                    <>
+                        <p key="header">
+                            {total === 0 && <>You do not currently have any published images on <SiteTitle />.</>}
+                            {total !== 0 && <>You have <NumberView value={total} /> published image{total === 1 ? "" : "s"} on <SiteTitle />.</>}
                         </p>
-                    )
+                        <Banner key="banner">
+                            {(items as ImageWithEmbedded[]).map(item => (
+                                <a
+                                    href={`https://${
+                                        process.env.NEXT_PUBLIC_WWW_DOMAIN
+                                    }/images/${encodeURIComponent(item.uuid)}`}
+                                >
+                                    <ImageThumbnailView key={item.uuid} value={item} />
+                                </a>
+                            ))}
+                        </Banner>
+                    </>
                 }
             </PaginationContainer>
-        </BuildContainer>
+        </section>
     )
 }
 export default Published

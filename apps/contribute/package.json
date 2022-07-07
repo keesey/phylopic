@@ -12,6 +12,7 @@
         "@phylopic/styles": "*",
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
+        "@phylopic/utils-api": "*",
         "@phylopic/utils-aws": "*",
         "form-data": "^4.0.0",
         "jsonwebtoken": "^8.5.1",
