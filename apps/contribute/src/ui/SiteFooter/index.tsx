@@ -21,7 +21,7 @@ const SiteFooter: FC = () => (
                     <Image src={logoFacebook} width={21} height={21} alt="Facebook" />
                 </a>
                 <a href="https://www.patreon.com/tmkeesey" title="Support the creator of PhyloPic on Patreon.">
-                    <Image src={logoPatreon} width={80} height={11.12} alt="Patreon" />
+                    <Image src={logoPatreon} width={80} height={11} alt="Patreon" />
                 </a>
             </li>
         </ul>

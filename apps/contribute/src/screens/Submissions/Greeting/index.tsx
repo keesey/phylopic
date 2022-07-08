@@ -7,9 +7,11 @@ const Greeting: FC = () => {
         return null
     }
     return (
-        <ContributorContainer uuid={uuid}>
-            {contributor => (contributor ? <p>Hi, {contributor.name ?? "[Anonymous]"}!</p> : null)}
-        </ContributorContainer>
+        <section className="dialogue">
+            <ContributorContainer uuid={uuid}>
+                {contributor => (contributor ? <p>Hi, {contributor.name ?? "[Anonymous]"}!</p> : null)}
+            </ContributorContainer>
+        </section>
     )
 }
 export default Greeting

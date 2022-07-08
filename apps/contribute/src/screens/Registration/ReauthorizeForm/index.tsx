@@ -11,11 +11,11 @@ const MONTH = 30 * DAY
 const QUARTER = 3 * MONTH
 const YEAR = 365 * DAY
 const TTL_VALUES = {
-    DAY: DAY,
-    WEEK: WEEK,
-    MONTH: MONTH,
-    QUARTER: QUARTER,
-    YEAR: YEAR,
+    DAY,
+    WEEK,
+    MONTH,
+    QUARTER,
+    YEAR,
 }
 const ReauthorizeForm: FC<Props> = ({ onSubmit }) => {
     const [ttl, setTTL] = useState<keyof typeof TTL_VALUES>("DAY")
@@ -33,19 +33,20 @@ const ReauthorizeForm: FC<Props> = ({ onSubmit }) => {
     }, [])
     return (
         <>
+            <div>
+                <label htmlFor="ttl">Authorize this device for </label>
+                <select onChange={handleTTLChange} value={ttl}>
+                    <option value="DAY" label="a day" />
+                    <option value="WEEK" label="a week" />
+                    <option value="MONTH" label="30 days" />
+                    <option value="QUARTER" label="90 days" />
+                    <option value="YEAR" label="a year" />
+                </select>
+                .
+            </div>
             <button className="cta" onClick={handleReauthorizeClick}>
                 Send Authorization
             </button>
-            <div>
-                <label htmlFor="ttl">Authorize this device for:</label>
-                <select onChange={handleTTLChange} value={ttl}>
-                    <option value="DAY" label="A Day" />
-                    <option value="WEEK" label="A Week" />
-                    <option value="MONTH" label="30 Days" />
-                    <option value="QUARTER" label="90 Days" />
-                    <option value="YEAR" label="A Year" />
-                </select>
-            </div>
             <p>
                 <a className="text" onClick={handleClearClick}>
                     Wait, that isn't my email address!

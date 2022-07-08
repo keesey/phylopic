@@ -14,18 +14,6 @@ a.cta {
 a.text {
     @include buttons.text(colors.$sunshine, colors.$sunshineFade);
 }
-body,
-html {
-    color: colors.$white;
-    margin: 0;
-    padding: 0;
-    @media (max-width: 1200px) {
-        font-size: medium;
-    }
-}
-html {
-    background-color: colors.$black;
-}
 body {
     align-items: stretch;
     background-color: colors.$ink;
@@ -38,24 +26,17 @@ body {
     overflow: hidden;
     text-align: center;
 }
-main {
-    align-items: center;
-    display: flex;
-    flex-grow: 1;
-    font-size: x-large;
-    height: calc(100vh - 150px);
-    justify-content: center;
-    overflow: auto;
-    padding: 32px;
+body,
+html {
+    color: colors.$white;
+    margin: 0;
+    padding: 0;
     @media (max-width: 1200px) {
-        font-size: large;
-    }
-    @media (max-width: 768px) {
         font-size: medium;
     }
 }
-p {
-    text-align: left;
+html {
+    background-color: colors.$black;
 }
 input {
     background-color: colors.$vellum;
@@ -77,4 +58,28 @@ input {
     &[type="submit"] {
         @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
     }
+}
+main {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    font-size: x-large;
+    height: calc(100vh - 150px);
+    justify-content: center;
+    overflow-y: auto;
+    @media (max-width: 1200px) {
+        font-size: large;
+    }
+    @media (max-width: 768px) {
+        font-size: medium;
+    }
+}
+p {
+    text-align: left;
+}
+.dialogue {
+    max-width: 11in;
+    margin: 0 auto;
+    padding: 1rem;
 }

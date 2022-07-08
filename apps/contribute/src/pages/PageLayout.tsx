@@ -1,3 +1,4 @@
+import { BuildContainer } from "@phylopic/utils-api"
 import { FC, ReactNode } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
 import AuthContainer from "~/auth/AuthContainer"
@@ -15,13 +16,15 @@ const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
         <SWRConfig value={{ fallback }}>
             <PageLoader />
             <PageHead {...head} />
-            <AuthContainer>
-                <header>
-                    <SiteNav />
-                </header>
-                <main>{children}</main>
-                <SiteFooter />
-            </AuthContainer>
+            <BuildContainer>
+                <AuthContainer>
+                    <header>
+                        <SiteNav />
+                    </header>
+                    <main>{children}</main>
+                    <SiteFooter />
+                </AuthContainer>
+            </BuildContainer>
         </SWRConfig>
     )
 }

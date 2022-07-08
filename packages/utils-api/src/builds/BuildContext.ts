@@ -1,3 +1,5 @@
-import { createContext, Dispatch, SetStateAction } from "react"
-export const BuildContext = createContext<Readonly<[number, Dispatch<SetStateAction<number>>]> | undefined>(undefined)
+import React from "react"
+export const BuildContext = React.createContext<
+    Readonly<[number, React.Dispatch<React.SetStateAction<number>>]> | undefined
+>(undefined)
 export default BuildContext

@@ -34,7 +34,7 @@ const SiteFooter: FC = () => (
                     href="https://www.patreon.com/tmkeesey?fan_landing=true"
                     title="Support the creator of PhyloPic on Patreon."
                 >
-                    <Image src={logoPatreon} width={80} height={11.12} alt="Patreon" />
+                    <Image src={logoPatreon} width={80} height={11} alt="Patreon" />
                 </a>
             </li>
         </ul>

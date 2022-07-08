@@ -1,10 +1,11 @@
-import { Loader } from "@phylopic/ui"
+import { AnchorLink, ContributorContainer, Loader } from "@phylopic/ui"
 import { EmailAddress, isEmailAddress } from "@phylopic/utils"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { FC, useCallback, useEffect, useMemo, useState } from "react"
 import useSWR from "swr"
 import useAuthorized from "~/auth/hooks/useAuthorized"
+import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import useEmailAddress from "~/auth/hooks/useEmailAddress"
 import EmailForm from "./EmailForm"
 import ReauthorizeForm from "./ReauthorizeForm"
@@ -36,6 +37,7 @@ const Registration: FC = () => {
         return null
     }, [authorized, emailAddress, sendRequested, ttl])
     const swr = useSWR(authorizeKey, fetchPost)
+    const uuid = useContributorUUID()
     useEffect(() => {
         if (authorized) {
             router.push("/submissions")
@@ -43,6 +45,20 @@ const Registration: FC = () => {
             router.push("/checkemail")
         }
     }, [authorized, router, swr.data])
+    if (authorized) {
+        return (
+            <section className="dialogue">
+                {uuid && (
+                    <ContributorContainer uuid={uuid}>
+                        {contributor => (contributor ? <p>Hi, {contributor.name}!</p> : null)}
+                    </ContributorContainer>
+                )}
+                <AnchorLink className="cta" href="/submissions">
+                    Let's get started!
+                </AnchorLink>
+            </section>
+        )
+    }
     if (!swr.data && swr.isValidating) {
         return <Loader />
     }
@@ -50,13 +66,18 @@ const Registration: FC = () => {
         // :TODO: Error Message Component
         return <p>{String(swr.error)}</p>
     }
-    if (authorized || emailAddress || swr.data) {
-        return null
-    }
     if (authEmailAddress) {
         return (
-            <section>
-                <p>Welcome back!</p>
+            <section className="dialogue">
+                <p>
+                    Welcome back
+                    {uuid && (
+                        <ContributorContainer uuid={uuid}>
+                            {contributor => (contributor ? `, ${contributor.name}` : null)}
+                        </ContributorContainer>
+                    )}
+                    !
+                </p>
                 <p>
                     Your registration has expired. Please click below to send another authorization email to{" "}
                     <em>{authEmailAddress}</em>.
@@ -66,7 +87,7 @@ const Registration: FC = () => {
         )
     }
     return (
-        <section>
+        <section className="dialogue">
             <p>Ready to upload some silhouette images? Great, let&apos;s get started!</p>
             <p>Please enter your email address:</p>
             <EmailForm onSubmit={handleSubmit} />

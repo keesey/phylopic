@@ -15,7 +15,7 @@ const Pending: FC = () => {
     const lastPage = useMemo(() => Boolean(data?.length && !data[data.length - 1]?.uuids.length), [data])
     return (
         <section>
-            <p>
+            <p className="dialogue">
                 {isValidating && submissionUUIDs.length === 0 && "Pending submissions."}
                 {!isValidating && submissionUUIDs.length === 0 && "You have no pending submissions."}
                 {!isValidating && submissionUUIDs.length !== 0 && (
