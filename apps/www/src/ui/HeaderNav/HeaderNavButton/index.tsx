@@ -1,6 +1,6 @@
+import { AnchorLink, AnchorLinkProps } from "@phylopic/ui"
 import clsx from "clsx"
 import { FC, HTMLProps, useMemo } from "react"
-import AnchorLink, { Props as AnchorLinkProps } from "~/ui/AnchorLink"
 import styles from "./index.module.scss"
 export type Props = ({ type: "anchor" } & AnchorLinkProps) | ({ type: "button" } & HTMLProps<HTMLButtonElement>)
 const HeaderNavButton: FC<Props> = props => {

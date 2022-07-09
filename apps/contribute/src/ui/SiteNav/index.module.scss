@@ -1,30 +1,38 @@
 @use "@phylopic/styles/colors.scss";
 .main {
-    align-items: baseline;
+    align-items: center;
     background-color: colors.$cerulean;
     color: colors.$white;
     display: flex;
     flex-wrap: wrap;
-    font-size: 1rem;
+    font-size: normal;
     font-weight: bold;
     gap: 1rem;
-    height: 75px;
     justify-content: space-between;
-    max-height: 75px;
-    min-height: 75px;
-    overflow: hidden;
     padding: 1rem;
     @media (max-width: 222px) {
         flex-direction: column;
     }
     a {
-        text-decoration: none;
+        color: inherit;
     }
-    h1 {
-        font-family: Georgia, serif;
-        font-size: 25.4pt;
-        font-variant: small-caps;
-        margin: 0;
-        padding: 0;
+}
+.siteTitle {
+    font-size: xx-large;
+}
+.menuButton {
+    text-align: right;
+    button {
+        background: none;
+        border: 1.5pt solid colors.$white;
+        border-radius: 0.5em;
+        color: colors.$white;
+        font-size: larger;
+        font-weight: bold;
+        transition: all 0.3s;
+        &:hover {
+            background-color: colors.$white;
+            color: colors.$deep;
+        }
     }
 }

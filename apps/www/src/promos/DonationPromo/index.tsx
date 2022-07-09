@@ -1,6 +1,6 @@
+import { AnchorLink } from "@phylopic/ui"
 import clsx from "clsx"
 import { FC, useEffect, useState } from "react"
-import AnchorLink from "~/ui/AnchorLink"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
 const DonationPromo: FC = () => {

@@ -1,16 +1,4 @@
 .main {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    height: calc(100vh - 150px);
-    justify-content: center;
-    max-height: calc(100vh - 150px);
-    min-height: calc(100vh - 150px);
-    overflow-y: auto;
-    padding: 0 2rem;
-    width: 100vw;
-    > * {
-        max-width: 11in;
-    }
+    display: block;
+    max-width: 11in;
 }

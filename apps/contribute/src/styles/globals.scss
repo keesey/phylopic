@@ -7,8 +7,7 @@ a {
         opacity: 0.5;
     }
 }
-button,
-a.cta {
+.cta {
     @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
 }
 a.text {
@@ -16,6 +15,10 @@ a.text {
 }
 body {
     background-color: colors.$ink;
+    height: 100vh;
+    max-height: 100vh;
+    min-height: 100vh;
+    overflow-y: hidden;
 }
 body,
 html {
@@ -51,7 +54,14 @@ input {
     }
 }
 main {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
     font-size: x-large;
+    height: calc(100vh - 150px);
+    justify-content: center;
+    max-height: calc(100vh - 150px);
+    min-height: calc(100vh - 150px);
     @media (max-width: 1200px) {
         font-size: large;
     }

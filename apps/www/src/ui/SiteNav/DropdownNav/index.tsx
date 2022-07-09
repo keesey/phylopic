@@ -1,6 +1,5 @@
-import Link from "next/link"
+import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
-import AnchorLink from "~/ui/AnchorLink"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
 export type Props = {

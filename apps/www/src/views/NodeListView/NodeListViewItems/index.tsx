@@ -1,7 +1,7 @@
 import { Node } from "@phylopic/api-models"
+import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
-import AnchorLink from "~/ui/AnchorLink"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
 export interface Props {

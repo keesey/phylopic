@@ -7,7 +7,7 @@ import {
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"
-import { NodeContainer } from "@phylopic/ui"
+import { AnchorLink, NodeContainer } from "@phylopic/ui"
 import {
     createSearch,
     extractPath,
@@ -36,7 +36,6 @@ import extractUUIDv4 from "~/routes/extractUUIDv4"
 import SearchContainer from "~/search/SearchContainer"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
-import AnchorLink from "~/ui/AnchorLink"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import Loader from "~/ui/Loader"
 import NomenHeader from "~/ui/NomenHeader"

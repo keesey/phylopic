@@ -1,8 +1,7 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
-import { ImageThumbnailView, useImageAlt } from "@phylopic/ui"
+import { AnchorLink, ImageThumbnailView, useImageAlt } from "@phylopic/ui"
 import { extractPath } from "@phylopic/utils"
 import { FC } from "react"
-import AnchorLink from "~/ui/AnchorLink"
 import styles from "./index.module.scss"
 export interface Props {
     value: ImageWithEmbedded

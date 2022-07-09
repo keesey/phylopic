@@ -5,6 +5,7 @@ import EmailInput from "~/ui/EmailInput"
 import TTLSelector from "~/ui/TTLSelector"
 import { TTL } from "~/ui/TTLSelector/TTL"
 import { TTL_VALUES } from "~/ui/TTLSelector/TTL_VALUES"
+import styles from "./index.module.scss"
 export interface Props {
     onSubmit?: (email: EmailAddress, ttl: number) => void
 }
@@ -33,11 +34,15 @@ const SignIn: FC<Props> = ({ onSubmit }) => {
             <p>Ready to upload some silhouette images? Great, let&apos;s get started!</p>
             <p>Please enter your email address:</p>
             <form onSubmit={handleFormSubmit}>
-                <EmailInput value={email} onChange={setEmail} />
-                <br />
-                <TTLSelector onChange={setTTL} value={ttl} />
-                <br />
-                <input type="submit" value="Continue" />
+                <div className={styles.field}>
+                    <EmailInput value={email} onChange={setEmail} />
+                </div>
+                <div className={styles.field}>
+                    <TTLSelector onChange={setTTL} value={ttl} />
+                </div>
+                <div>
+                    <input type="submit" value="Continue" />
+                </div>
             </form>
         </DialogueScreen>
     )

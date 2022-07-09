@@ -1,5 +1,5 @@
+import { AnchorLink } from "@phylopic/ui"
 import { ReactNode, FC } from "react"
-import AnchorLink from "../AnchorLink"
 import styles from "./index.module.scss"
 export type BreadcrumbItem = Readonly<{
     children: ReactNode
