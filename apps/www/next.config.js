@@ -4,8 +4,9 @@ const runtimeCaching = require("next-pwa/cache")
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
     enabled: process.env.ANALYZE === "true",
 })
+const pwa = process.env.NODE_ENV === "production" ? withPWA : x => x
 module.exports = withBundleAnalyzer(
-    withPWA({
+    pwa({
         experimental: {
             esmExternals: "loose",
             images: {
@@ -41,7 +42,9 @@ module.exports = withBundleAnalyzer(
                 },
                 {
                     source: "/contact",
-                    destination: "/contributors/060f03a9-fafd-4d08-81d1-b8f82080573f",
+                    destination: `/contributors/${encodeURIComponent(
+                        process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID,
+                    )}`,
                     permanent: true,
                 },
                 {
@@ -67,6 +70,11 @@ module.exports = withBundleAnalyzer(
                 {
                     source: "/name/:path*",
                     destination: "/nodes/:path*",
+                    permanent: true,
+                },
+                {
+                    source: "/root",
+                    destination: `/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID)}`,
                     permanent: true,
                 },
             ]
