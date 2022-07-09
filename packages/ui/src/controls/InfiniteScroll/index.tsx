@@ -1,9 +1,9 @@
 import React from "react"
 import dynamic from "next/dynamic"
+import { Loader } from "../../core/Loader"
 const PropagateLoader = dynamic(() => import("react-spinners/PropagateLoader"), { ssr: false })
 export interface InfiniteScrollProps {
     hideLoader?: boolean
-    loaderColor?: string
     onInViewport?: () => void
     pending?: boolean
 }
@@ -15,7 +15,7 @@ const STYLE: React.CSSProperties = {
     margin: "1rem",
     textAlign: "center",
 }
-export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({ hideLoader, loaderColor, onInViewport, pending }) => {
+export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({ hideLoader, onInViewport, pending }) => {
     const [inViewport, setInViewport] = React.useState(false)
     const [element, setElement] = React.useState<HTMLDivElement | null>(null)
     React.useEffect(() => {
@@ -47,9 +47,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({ hideLoader, load
     }, [inViewport, onInViewport, pending])
     return (
         <div ref={setElement} style={STYLE}>
-            {pending && !hideLoader && (
-                <PropagateLoader color={loaderColor ?? "#000"} css="" loading size={15} speedMultiplier={1} />
-            )}
+            {pending && !hideLoader && <Loader />}
             {!pending && " "}
         </div>
     )

@@ -26,14 +26,14 @@ const Pending: FC = () => {
                 )}
             </p>
             <Banner>
-                {isValidating && <Loader key="loader" color="#ffffff" />}
+                {isValidating && <Loader key="loader" />}
                 {!isValidating && submissionUUIDs.length === 0 && (
                     <AnchorLink className="cta" href="/submissions/new">
                         Upload an Image
                     </AnchorLink>
                 )}
                 {!isValidating && !lastPage && (
-                    <InfiniteScroll key="scroll" onInViewport={handleInfiniteScrollInViewport} loaderColor="#ffffff" />
+                    <InfiniteScroll key="scroll" onInViewport={handleInfiniteScrollInViewport} />
                 )}
             </Banner>
         </section>

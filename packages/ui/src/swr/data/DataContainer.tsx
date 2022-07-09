@@ -7,18 +7,10 @@ export type DataContainerProps<T extends Readonly<{ build: number }> = Readonly<
     children?: (value?: T) => React.ReactNode
     endpoint: URL
     hideLoader?: boolean
-    loaderColor?: string
     onError?: (error: Error) => void
     query?: Query
 }
-export const DataContainer: React.FC<DataContainerProps> = ({
-    children,
-    endpoint,
-    hideLoader,
-    loaderColor,
-    onError,
-    query,
-}) => {
+export const DataContainer: React.FC<DataContainerProps> = ({ children, endpoint, hideLoader, onError, query }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const fetcher = useAPIFetcher()
     const queryWithBuild = React.useMemo(() => (build ? { ...query, build } : query ?? {}), [build, query])
@@ -32,7 +24,7 @@ export const DataContainer: React.FC<DataContainerProps> = ({
     return (
         <>
             <React.Fragment key="items">{children?.(data)}</React.Fragment>
-            {!data && isValidating && !hideLoader && <Loader color={loaderColor} />}
+            {!data && isValidating && !hideLoader && <Loader />}
             {error && (
                 <section key="error">
                     <p>

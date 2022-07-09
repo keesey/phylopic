@@ -1,4 +1,5 @@
 import { BuildContainer } from "@phylopic/utils-api"
+import { LoaderContext } from "@phylopic/ui"
 import { FC, ReactNode } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
 import AuthContainer from "~/auth/AuthContainer"
@@ -14,17 +15,19 @@ export type Props = {
 const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
     return (
         <SWRConfig value={{ fallback }}>
-            <PageLoader />
-            <PageHead {...head} />
-            <BuildContainer>
-                <AuthContainer>
-                    <header>
-                        <SiteNav />
-                    </header>
-                    <main>{children}</main>
-                    <SiteFooter />
-                </AuthContainer>
-            </BuildContainer>
+            <LoaderContext.Provider value={{ color: "#fff" }}>
+                <PageLoader />
+                <PageHead {...head} />
+                <BuildContainer>
+                    <AuthContainer>
+                        <header>
+                            <SiteNav />
+                        </header>
+                        <main>{children}</main>
+                        <SiteFooter />
+                    </AuthContainer>
+                </BuildContainer>
+            </LoaderContext.Provider>
         </SWRConfig>
     )
 }

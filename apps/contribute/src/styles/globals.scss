@@ -15,16 +15,7 @@ a.text {
     @include buttons.text(colors.$sunshine, colors.$sunshineFade);
 }
 body {
-    align-items: stretch;
     background-color: colors.$ink;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: stretch;
-    max-height: 100vh;
-    min-height: 100vh;
-    overflow: hidden;
-    text-align: center;
 }
 body,
 html {
@@ -45,7 +36,7 @@ input {
     color: colors.$ink;
     font-size: x-large;
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.5em;
     @media (max-width: 1200px) {
         font-size: large;
     }
@@ -60,14 +51,7 @@ input {
     }
 }
 main {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
     font-size: x-large;
-    height: calc(100vh - 150px);
-    justify-content: center;
-    overflow-y: auto;
     @media (max-width: 1200px) {
         font-size: large;
     }
@@ -76,10 +60,6 @@ main {
     }
 }
 p {
+    margin-bottom: 1em;
     text-align: left;
-}
-.dialogue {
-    max-width: 11in;
-    margin: 0 auto;
-    padding: 1rem;
 }

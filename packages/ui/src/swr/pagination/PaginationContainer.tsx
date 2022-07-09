@@ -79,7 +79,6 @@ export const PaginationContainer: React.FC<PaginationContainerProps> = ({
             {size < (maxPages ?? totalPages) && !error && !hideControls && (
                 <InfiniteScroll
                     hideLoader={hideLoader}
-                    loaderColor="#00809f"
                     key="infinite-scroll"
                     onInViewport={loadNextPage}
                     pending={list.isValidating || pages.isValidating}

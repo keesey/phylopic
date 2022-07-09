@@ -18,7 +18,7 @@ const Published: FC = () => {
                     Published images.
                 </p>
                 <Banner key="banner">
-                    <Loader color="#ffffff" />
+                    <Loader />
                 </Banner>
             </section>
         )
@@ -65,9 +65,7 @@ const Published: FC = () => {
                                 </a>
                             ))}
                         </Banner>
-                        {total > 0 && (
-                            <p className="dialogue">Click on a silhouette if you want to edit it.</p>
-                        )}
+                        {total > 0 && <p className="dialogue">Click on a silhouette if you want to edit it.</p>}
                     </>
                 )}
             </PaginationContainer>
