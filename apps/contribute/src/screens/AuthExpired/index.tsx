@@ -6,6 +6,7 @@ import useEmailAddress from "~/auth/hooks/useEmailAddress"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import TTLSelector from "~/ui/TTLSelector"
 import { TTL } from "~/ui/TTLSelector/TTL"
+import styles from "./index.module.scss"
 export interface Props {
     onSubmit?: (email: EmailAddress | null, ttl?: number) => void
 }
@@ -43,13 +44,12 @@ const AuthExpired: FC<Props> = ({ onSubmit }) => {
                 Your authorization has expired. Please click below to send another authorization email to{" "}
                 <em>{emailAddress}</em>.
             </p>
-            <div>
+            <div className={styles.field}>
                 <TTLSelector onChange={setTTL} value={ttl} />
-                <br />
-                <button className="cta" onClick={handleReauthorizeClick}>
-                    Send Authorization
-                </button>
             </div>
+            <button className="cta" onClick={handleReauthorizeClick}>
+                Send Authorization
+            </button>
             <p>
                 <a className="text" onClick={handleClearClick}>
                     Wait, that isn't my email address!

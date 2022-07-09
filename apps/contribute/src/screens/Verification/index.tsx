@@ -25,7 +25,7 @@ const Verification: FC<Props> = ({ email, jti }) => {
     useEffect(() => {
         if (data) {
             setJWT?.(data)
-            router.push("/submissions")
+            router.push("/")
         }
     }, [data, setJWT])
     if (error) {

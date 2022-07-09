@@ -31,7 +31,7 @@ const SignIn: FC<Props> = ({ onSubmit }) => {
     )
     return (
         <DialogueScreen>
-            <p>Ready to upload some silhouette images? Great, let&apos;s get started!</p>
+            <p>Ready to upload some silhouette images? Great! Let&apos;s get started.</p>
             <p>Please enter your email address:</p>
             <form onSubmit={handleFormSubmit}>
                 <div className={styles.field}>

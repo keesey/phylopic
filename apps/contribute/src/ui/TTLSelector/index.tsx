@@ -20,7 +20,7 @@ const TTLSelector: FC<Props> = ({ onChange, value }) => {
                 <option value="YEAR" label="one year" />
             </select>
             .<br />
-            (You may log out at any time.)
+            <small>(You may log out at any time.)</small>
         </>
     )
 }

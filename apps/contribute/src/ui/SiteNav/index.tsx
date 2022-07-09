@@ -17,11 +17,15 @@ const SiteNav: FC = () => {
     }, [router])
     return (
         <nav className={styles.main}>
-            <AnchorLink key="title" className={styles.siteTitle} href="/">
-                <h1>
-                    <SiteTitle />: Contribute
-                </h1>
-            </AnchorLink>
+            <div key="title" className={styles.siteTitle}>
+                <AnchorLink key="title" className={styles.siteTitle} href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>
+                    <SiteTitle />
+                </AnchorLink>
+                {" / "}
+                <AnchorLink key="title" className={styles.siteTitle} href="/">
+                    Contribute
+                </AnchorLink>
+            </div>
             <div key="menuButton" className={styles.menuButton}>
                 <button onClick={handleMenuButtonClick}>☰</button>
             </div>

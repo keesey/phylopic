@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next"
 import PageLayout from "~/pages/PageLayout"
+import CheckEmail from "~/screens/CheckEmail"
 const Page: NextPage = () => (
     <PageLayout
         head={{
@@ -8,7 +9,7 @@ const Page: NextPage = () => (
             url: "https://contribute.phylopic.org/checkemail",
         }}
     >
-        <p>:TODO:</p>
+        <CheckEmail />
     </PageLayout>
 )
 export default Page
