@@ -14,11 +14,15 @@ const DropdownNav: FC<Props> = ({ onClose }) => {
                 <button onClick={onClose}>☰</button>
             </div>
             <div className={styles.siteLink}>
-                <AnchorLink href="/">
-                    <b>
-                        <SiteTitle />: Contribute
-                    </b>
-                </AnchorLink>{" "}
+                <div className={styles.siteTitle}>
+                    <AnchorLink href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>
+                        <SiteTitle />
+                    </AnchorLink>
+                    {" / "}
+                    <AnchorLink href="/">
+                        Contribute
+                    </AnchorLink>
+                </div>
                 <div className={styles.subheader}>
                     version 2.0 <abbr title="beta version">βɛτα</abbr>
                 </div>

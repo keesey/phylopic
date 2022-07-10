@@ -7,8 +7,8 @@ import useSWRImmutable from "swr/immutable"
 import AuthContext from "~/auth/AuthContext"
 import { JWT } from "~/auth/models/JWT"
 import PageLayout from "~/pages/PageLayout"
-import LoadingState from "~/screens/ErrorState"
-import ErrorState from "~/screens/LoadingState"
+import ErrorState from "~/screens/ErrorState"
+import LoadingState from "~/screens/LoadingState"
 import fetchJWT from "~/swr/fetchJWT"
 export interface Props {
     email: EmailAddress
@@ -45,12 +45,11 @@ const Content: FC<Props> = ({ email, jti }) => {
     if (error) {
         return (
             <ErrorState>
-                <p>Please check the link in your email. Details:</p>
-                <blockquote>{String(error)}</blockquote>
+                <p>Please check the link in your email.</p>
                 <p>
                     If the link expired, you will need to{" "}
                     <Link href="/">
-                        <a>request another</a>
+                        <a className="text">request another</a>
                     </Link>
                     .
                 </p>
@@ -58,13 +57,9 @@ const Content: FC<Props> = ({ email, jti }) => {
         )
     }
     if (isValidating) {
-        return (
-            <LoadingState>Verifying&hellp;</LoadingState>
-        )
+        return <LoadingState>Verifying&hellp;</LoadingState>
     }
-    return (
-        <LoadingState>Authorizing&hellp;</LoadingState>
-    )
+    return <LoadingState>Authorizing&hellp;</LoadingState>
 }
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const { email, jti } = context.params ?? {}

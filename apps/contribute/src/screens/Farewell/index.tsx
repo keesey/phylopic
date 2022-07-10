@@ -6,7 +6,7 @@ const Farewell: FC = () => {
         <DialogueScreen>
             <p>You have logged out.</p>
             <AnchorLink href="/" className="cta">
-                Log Back In
+                Log Me Back In
             </AnchorLink>
         </DialogueScreen>
     )

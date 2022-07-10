@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next"
-import { FC, useContext, useEffect } from "react"
+import dynamic from "next/dynamic"
+import { FC, useCallback, useContext } from "react"
 import AuthContext from "~/auth/AuthContext"
 import PageLayout from "~/pages/PageLayout"
-import LoadingState from "~/screens/ErrorState"
-import Farewell from "~/screens/Farewell"
+const ConfirmLogout = dynamic(() => import("~/screens/ConfirmLogout"), { ssr: false })
+const Farewell = dynamic(() => import("~/screens/Farewell"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
         head={{
@@ -18,12 +19,12 @@ const Page: NextPage = () => (
 export default Page
 const Content: FC = () => {
     const [token, setToken] = useContext(AuthContext) ?? []
-    useEffect(() => {
+    const handleLogoutConfirm = useCallback(() => {
         setToken?.(null)
         localStorage.removeItem("auth")
     }, [setToken])
     if (token) {
-        return <LoadingState>Logging out&hellip;</LoadingState>
+        return <ConfirmLogout onConfirm={handleLogoutConfirm} />
     }
     return <Farewell />
 }

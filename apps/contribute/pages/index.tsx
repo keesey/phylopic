@@ -1,17 +1,16 @@
 import { EmailAddress, isEmailAddress } from "@phylopic/utils"
+import axios from "axios"
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/router"
 import { FC, useCallback, useContext, useEffect, useMemo, useState } from "react"
 import useSWR from "swr"
+import AuthContext from "~/auth/AuthContext"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useExpired from "~/auth/hooks/useExpired"
 import PageLayout from "~/pages/PageLayout"
 import { DAY } from "~/ui/TTLSelector/TTL_VALUES"
-import axios from "axios"
-import LoadingState from "~/screens/ErrorState"
-import { useRouter } from "next/router"
-import useAuthToken from "~/auth/hooks/useAuthToken"
-import AuthContext from "~/auth/AuthContext"
+const LoadingState = dynamic(() => import("~/screens/LoadingState"), { ssr: false })
 const SignIn = dynamic(() => import("~/screens/SignIn"), { ssr: false })
 const AuthExpired = dynamic(() => import("~/screens/AuthExpired"), { ssr: false })
 const Welcome = dynamic(() => import("~/screens/Welcome"), { ssr: false })
@@ -41,17 +40,23 @@ const Content: FC = () => {
     const expired = useExpired()
     const [ttl, setTTL] = useState(DAY)
     const [email, setEmail] = useState<EmailAddress | null>(null)
-    const handleSubmit = useCallback((newEmail: EmailAddress | null, newTTL = DAY) => {
-        if (isEmailAddress(newEmail)) {
-            setTTL(newTTL)
-            setEmail(newEmail)
-        } else {
-            setEmail(null)
-            setAuthToken?.(null)
-            localStorage.removeItem("auth")
-        }
-    }, [setAuthToken])
-    const swrKey = useMemo<PostSWRKey | null>(() => email ? { url: `/api/authorize/${encodeURIComponent(email)}`, data: { ttl } } : null, [email, ttl])
+    const handleSubmit = useCallback(
+        (newEmail: EmailAddress | null, newTTL = DAY) => {
+            if (isEmailAddress(newEmail)) {
+                setTTL(newTTL)
+                setEmail(newEmail)
+            } else {
+                setEmail(null)
+                setAuthToken?.(null)
+                localStorage.removeItem("auth")
+            }
+        },
+        [setAuthToken],
+    )
+    const swrKey = useMemo<PostSWRKey | null>(
+        () => (email ? { url: `/api/authorize/${encodeURIComponent(email)}`, data: { ttl } } : null),
+        [email, ttl],
+    )
     const { data, error, isValidating } = useSWR(swrKey, postJSON)
     useEffect(() => {
         if (error) {

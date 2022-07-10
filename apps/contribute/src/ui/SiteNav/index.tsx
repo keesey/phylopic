@@ -18,18 +18,18 @@ const SiteNav: FC = () => {
     return (
         <nav className={styles.main}>
             <div key="title" className={styles.siteTitle}>
-                <AnchorLink key="title" className={styles.siteTitle} href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>
-                    <SiteTitle />
-                </AnchorLink>
-                {" / "}
-                <AnchorLink key="title" className={styles.siteTitle} href="/">
-                    Contribute
-                </AnchorLink>
+                    <AnchorLink href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>
+                        <SiteTitle />
+                    </AnchorLink>
+                    {" / "}
+                    <AnchorLink href="/">
+                        Contribute
+                    </AnchorLink>
             </div>
             <div key="menuButton" className={styles.menuButton}>
                 <button onClick={handleMenuButtonClick}>☰</button>
             </div>
-            {dropdownOpen && <DropdownNav onClose={handleDropdownNavClose} />}
+            {dropdownOpen && <DropdownNav key="dropdownNav" onClose={handleDropdownNavClose} />}
         </nav>
     )
 }

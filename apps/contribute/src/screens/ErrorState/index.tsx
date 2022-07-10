@@ -1,13 +1,12 @@
-import { Loader } from "@phylopic/ui"
 import { FC, ReactNode } from "react"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 export type Props = {
     children?: ReactNode
 }
-const LoadingState: FC<Props> = ({ children }) => (
+const ErrorState: FC<Props> = ({ children }) => (
     <DialogueScreen>
+        <h2>Error!</h2>
         {children}
-        <Loader />
     </DialogueScreen>
 )
-export default LoadingState
+export default ErrorState
