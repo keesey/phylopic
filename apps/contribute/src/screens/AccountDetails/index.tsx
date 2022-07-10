@@ -6,7 +6,7 @@ export interface Props {
     emailAddress?: EmailAddress
     onSubmit?: (payload: Contributor) => void
 }
-const ContributorForm: FC<Props> = ({ emailAddress, onSubmit }) => {
+const AccountDetails: FC<Props> = ({ emailAddress, onSubmit }) => {
     const [name, setName] = useState("")
     const [showEmailAddress, setShowEmailAddress] = useState(true)
     const handleNameInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -75,4 +75,4 @@ const ContributorForm: FC<Props> = ({ emailAddress, onSubmit }) => {
         </form>
     )
 }
-export default ContributorForm
+export default AccountDetails
