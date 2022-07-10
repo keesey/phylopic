@@ -14,7 +14,7 @@ export type Props = {
 }
 const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
     return (
-        <SWRConfig value={{ fallback }}>
+        <SWRConfig key="swrConfig" value={{ fallback }}>
             <LoaderContext.Provider value={{ color: "#fff" }}>
                 <PageLoader />
                 <PageHead {...head} />

@@ -2,9 +2,8 @@ import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query, URL } from "@phylopic/utils"
 import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import React from "react"
-import { BareFetcher } from "swr"
-import useSWRImmutable from "swr/immutable"
-import useSWRInfinite from "swr/infinite"
+import useSWR, { BareFetcher, SWRConfiguration } from "swr"
+import useSWRInfinite, { SWRInfiniteConfiguration, SWRInfiniteFetcher, SWRInfiniteKeyLoader } from "swr/infinite"
 import { InfiniteScroll } from "../../controls"
 import { createPageKeyGetter } from "./createPageKeyGetter"
 export type PaginationContainerProps<T = unknown> = {
@@ -15,12 +14,23 @@ export type PaginationContainerProps<T = unknown> = {
     maxPages?: number
     onError?: (error: Error) => void
     query?: Query
+    swrConfigs?: {
+        list?: SWRConfiguration<List, Error, BareFetcher<List>>
+        page?: SWRInfiniteConfiguration<
+            PageWithEmbedded<T>,
+            Error,
+            SWRInfiniteFetcher<PageWithEmbedded<T>, SWRInfiniteKeyLoader>
+        >
+    }
 }
-const SWR_INFINITE_CONFIG = {
-    revalidateFirstPage: false,
+const SWR_CONFIG = {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
+}
+const SWR_INFINITE_CONFIG = {
+    ...SWR_CONFIG,
+    revalidateFirstPage: false,
 }
 export const PaginationContainer: React.FC<PaginationContainerProps> = ({
     children,
@@ -30,6 +40,7 @@ export const PaginationContainer: React.FC<PaginationContainerProps> = ({
     maxPages,
     onError,
     query,
+    swrConfigs,
 }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const fetcher = useAPIFetcher<List | PageWithEmbedded<unknown>>()
@@ -45,13 +56,18 @@ export const PaginationContainer: React.FC<PaginationContainerProps> = ({
         [build, queryWithoutEmbeds],
     )
     const listKey = React.useMemo(() => endpoint + createSearch(listQuery), [endpoint, listQuery])
-    const list = useSWRImmutable<List>(listKey, fetcher as BareFetcher<List>)
+    const list = useSWR<List>(listKey, fetcher as BareFetcher<List>, {...SWR_CONFIG, ...swrConfigs?.list })
     const getPageKey = React.useMemo(
         () =>
-            list.data?.totalPages ? createPageKeyGetter(endpoint, { ...query, embed_items: true, build }) : () => null,
+            list.data?.totalPages && build
+                ? createPageKeyGetter(endpoint, { ...query, embed_items: true, build })
+                : () => null,
         [build, endpoint, list.data, query],
     )
-    const pages = useSWRInfinite(getPageKey, fetcher as BareFetcher<PageWithEmbedded<unknown>>, SWR_INFINITE_CONFIG)
+    const pages = useSWRInfinite(getPageKey, fetcher as BareFetcher<PageWithEmbedded<unknown>>, {
+        ...SWR_INFINITE_CONFIG,
+        ...swrConfigs?.page,
+    })
     const { data, setSize, size } = pages
     const loadNextPage = React.useCallback(() => setSize(size + 1), [setSize, size])
     const totalItems = list.data?.totalItems ?? NaN

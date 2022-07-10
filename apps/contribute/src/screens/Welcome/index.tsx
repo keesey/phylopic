@@ -1,3 +1,15 @@
 import { FC } from "react"
-const Welcome: FC = () => <>:TODO: Welcome</>
+import WideScreen from "~/pages/screenTypes/WideScreen"
+import Greeting from "./Greeting"
+import Pending from "./Pending"
+import Published from "./Published"
+const Welcome: FC = () => {
+    return (
+        <WideScreen>
+            <Greeting />
+            <Pending />
+            <Published />
+        </WideScreen>
+    )
+}
 export default Welcome

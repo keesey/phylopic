@@ -19,9 +19,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => {
                         <SiteTitle />
                     </AnchorLink>
                     {" / "}
-                    <AnchorLink href="/">
-                        Contribute
-                    </AnchorLink>
+                    <AnchorLink href="/">Contribute</AnchorLink>
                 </div>
                 <div className={styles.subheader}>
                     version 2.0 <abbr title="beta version">βɛτα</abbr>

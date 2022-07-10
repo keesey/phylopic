@@ -57,11 +57,12 @@ main {
     align-items: center;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     font-size: x-large;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 143.5px);
     justify-content: center;
-    max-height: calc(100vh - 150px);
-    min-height: calc(100vh - 150px);
+    max-height: calc(100vh - 143.5px);
+    min-height: calc(100vh - 143.5px);
     @media (max-width: 1200px) {
         font-size: large;
     }
@@ -73,3 +74,8 @@ p {
     margin-bottom: 1em;
     text-align: left;
 }
+.thumbnails {
+    img {
+        filter: invert(95%) sepia(0%) saturate(7500%) hue-rotate(340deg) brightness(106%) contrast(107%);
+    }
+} 

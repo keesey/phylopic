@@ -15,11 +15,13 @@ type Props = {
 const Page: NextPage<Props> = ({ error, uuid }) => (
     <PageLayout
         head={{
-            title: "PhyloPic: Your Submission",
+            title: "PhyloPic: Your Image",
             url: `https://contribute.phylopic.org/submissions/${encodeURIComponent(uuid)}`,
         }}
     >
-        <AuthorizedOnly>:TODO:</AuthorizedOnly>
+        <AuthorizedOnly>
+            <p>:TODO:</p>
+        </AuthorizedOnly>
     </PageLayout>
 )
 export default Page

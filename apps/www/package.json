@@ -29,17 +29,13 @@
         "@types/react": "^18.0.12",
         "@types/react-dom": "^18.0.5",
         "eslint-config-phylopic": "*",
+        "next-unused": "^0.0.6",
         "sass": "^1.51.0",
         "schema-dts": "^1.1.0",
         "typescript": "^4.6.4"
     },
     "license": "MIT",
     "name": "@phylopic/www",
-    "next-unused": {
-        "include": [
-            "./src"
-        ]
-    },
     "private": true,
     "scripts": {
         "analyze": "ANALYZE=true yarn build",
@@ -47,7 +43,8 @@
         "clean": "rm -rf .next && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3000",
         "lint": "TIMING=1 next lint",
-        "start": "next start"
+        "start": "next start",
+        "unused": "next-unused"
     },
     "version": "0.0.0"
 }

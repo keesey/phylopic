@@ -14,29 +14,33 @@ const Pending: FC = () => {
     const handleInfiniteScrollInViewport = useCallback(() => setSize(size + 1), [setSize, size])
     const lastPage = useMemo(() => Boolean(data?.length && !data[data.length - 1]?.uuids.length), [data])
     return (
-        <section>
-            <p className="dialogue">
-                {isValidating && submissionUUIDs.length === 0 && "Pending submissions."}
-                {!isValidating && submissionUUIDs.length === 0 && "You have no pending submissions."}
+        <>
+            <div>
+                {isValidating && submissionUUIDs.length === 0 && <>Loading pending submissions&hellip;</>}
+                {!isValidating && submissionUUIDs.length === 0 && (
+                    <>
+                        {"You have no pending submissions. "}
+                        <AnchorLink className="text" href="/submissions/new">
+                            Upload a new image.
+                        </AnchorLink>
+                    </>
+                )}
                 {!isValidating && submissionUUIDs.length !== 0 && (
                     <>
                         You have <NumberView value={submissionUUIDs.length} /> pending submission
                         {submissionUUIDs.length === 1 ? "" : "s"}.
                     </>
                 )}
-            </p>
-            <Banner>
-                {isValidating && <Loader key="loader" />}
-                {!isValidating && submissionUUIDs.length === 0 && (
-                    <AnchorLink className="cta" href="/submissions/new">
-                        Upload an Image
-                    </AnchorLink>
-                )}
-                {!isValidating && !lastPage && (
-                    <InfiniteScroll key="scroll" onInViewport={handleInfiniteScrollInViewport} />
-                )}
-            </Banner>
-        </section>
+            </div>
+            <div className="thumbnails">
+                <Banner>
+                    {isValidating && <Loader key="loader" />}
+                    {!isValidating && !lastPage && (
+                        <InfiniteScroll key="scroll" onInViewport={handleInfiniteScrollInViewport} />
+                    )}
+                </Banner>
+            </div>
+        </>
     )
 }
 export default Pending
