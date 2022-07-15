@@ -1,5 +1,5 @@
 import { Contributor, List } from "@phylopic/api-models"
-import { AnchorLink, CountView, PaginationContainer } from "@phylopic/ui"
+import { AnchorLink, CountView, NumberView, PaginationContainer } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import type { NextPage } from "next"
 import { Fragment } from "react"
@@ -58,9 +58,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                                             >
                                                 {name || "Anonymous"}
                                             </AnchorLink>,
-                                            <Fragment key={`count:${uuid}`}>
-                                                <CountView value={count} />
-                                            </Fragment>,
+                                            <NumberView key={`count:${uuid}`} value={count} />,
                                         ])}
                                     />
                                 </>
