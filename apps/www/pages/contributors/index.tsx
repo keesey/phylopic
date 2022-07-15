@@ -59,7 +59,7 @@ const PageComponent: NextPage<Props> = ({ build, fallback }) => (
                                                 {name || "Anonymous"}
                                             </AnchorLink>,
                                             <Fragment key={`count:${uuid}`}>
-                                                <strong>{count}</strong>
+                                                <CountView value={count} />
                                             </Fragment>,
                                         ])}
                                     />

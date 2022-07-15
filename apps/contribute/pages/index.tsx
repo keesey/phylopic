@@ -70,7 +70,7 @@ const Content: FC = () => {
         }
     }, [data, router])
     if (isValidating) {
-        return <LoadingState>Sending email&hellip;</LoadingState>
+        return <LoadingState>Sending email…</LoadingState>
     }
     if (expired) {
         return <AuthExpired onSubmit={handleSubmit} />

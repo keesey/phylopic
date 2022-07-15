@@ -3,7 +3,6 @@ import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 import { isEmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
-import Expire from "~/auth/Expire"
 import getBearerJWT from "~/auth/http/getBearerJWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
 import PageLayout from "~/pages/PageLayout"
@@ -33,9 +32,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
     let client: S3Client | undefined
     try {
         if (!context.req.headers.authorization) {
-            return {
-                redirect: { destination: "/", permanent: false },
-            }
+            throw 401
         }
         const token = getBearerJWT(context.req.headers.authorization)
         const payload = await verifyJWT(token)

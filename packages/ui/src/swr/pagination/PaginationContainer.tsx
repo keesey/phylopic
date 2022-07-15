@@ -56,7 +56,7 @@ export const PaginationContainer: React.FC<PaginationContainerProps> = ({
         [build, queryWithoutEmbeds],
     )
     const listKey = React.useMemo(() => endpoint + createSearch(listQuery), [endpoint, listQuery])
-    const list = useSWR<List>(listKey, fetcher as BareFetcher<List>, {...SWR_CONFIG, ...swrConfigs?.list })
+    const list = useSWR<List>(listKey, fetcher as BareFetcher<List>, { ...SWR_CONFIG, ...swrConfigs?.list })
     const getPageKey = React.useMemo(
         () =>
             list.data?.totalPages && build

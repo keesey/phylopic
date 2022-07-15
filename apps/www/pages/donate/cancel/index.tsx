@@ -40,7 +40,7 @@ const PageComponent: NextPage = () => (
                                 <strong>
                                     Decided not to donate to <SiteTitle />?
                                 </strong>{" "}
-                                That&rsquo;s O.K., there are&hellip;
+                                That’s O.K., there are…
                             </p>
                             <h1>Other Ways to Contribute</h1>
                         </header>
@@ -111,7 +111,7 @@ const PageComponent: NextPage = () => (
                             <section>
                                 <h2>Change Your Mind?</h2>
                                 <p>
-                                    Come on, you want to donate <em>something</em> don&rsquo;t you? Right?
+                                    Come on, you want to donate <em>something</em> don’t you? Right?
                                 </p>
                                 <p>
                                     <AnchorLink href="/donate">Go back!</AnchorLink>

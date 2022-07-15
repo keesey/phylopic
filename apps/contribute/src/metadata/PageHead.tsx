@@ -8,7 +8,7 @@ export interface Props {
     index?: boolean
     socialImage?: MediaLink | null
     title: string
-    url: string
+    url?: string
 }
 const DEFAULT_SOCIAL_IMAGE: MediaLink = {
     href: "/social/1200x628.png",
@@ -57,9 +57,9 @@ const PageHead: FC<Props> = ({
             <meta key="meta:og:site_name" property="og:site_name" content="PhyloPic: Contribute" />
             <meta key="meta:og:title" property="og:title" content={title} />
             <meta key="meta:og:type" property="og:type" content="website" />
-            <meta key="meta:og:url" property="og:url" content={url} />
+            {url && <meta key="meta:og:url" property="og:url" content={url} />}
             <link key="link:author" rel="author" href="http://tmkeesey.net" />
-            <link key="link:canonical" rel="canonical" href={url} />
+            {url && <link key="link:canonical" rel="canonical" href={url} />}
             <link key="link:apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
             <link key="link:icon:32x32" rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
             <link rel="link:icon:16x16" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

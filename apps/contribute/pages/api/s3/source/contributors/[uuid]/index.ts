@@ -1,12 +1,11 @@
-import { GetObjectTaggingCommand, S3Client } from "@aws-sdk/client-s3"
+import { S3Client } from "@aws-sdk/client-s3"
 import { CONTRIBUTE_BUCKET_NAME, Contributor, isContributor, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { EmailAddress, isObject, isUUID, stringifyNormalized, UUID, ValidationFaultCollector } from "@phylopic/utils"
+import { isObject, isUUID, stringifyNormalized, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handlePut from "~/s3/api/handlePut"
 import sendHeadOrGet from "~/s3/api/sendHeadOrGet"
-import getContributorMetaKey from "~/s3/keys/getContributorMetaKey"
 import getContributorSourceKey from "~/s3/keys/getContributorSourceKey"
 const parseJSON = (json: string): unknown => {
     try {
@@ -25,15 +24,6 @@ const getContributorJSON = async (client: S3Client, uuid: UUID) =>
         },
         isContributor,
     )
-const getVerified = async (client: S3Client, email: EmailAddress) => {
-    const response = await client.send(
-        new GetObjectTaggingCommand({
-            Bucket: CONTRIBUTE_BUCKET_NAME,
-            Key: getContributorMetaKey(email),
-        }),
-    )
-    return response.TagSet?.find(value => value.Key === "verified")?.Value === "true"
-}
 const index: NextApiHandler<string | null> = async (req, res) => {
     try {
         const { uuid } = req.query

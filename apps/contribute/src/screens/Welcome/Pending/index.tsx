@@ -16,7 +16,7 @@ const Pending: FC = () => {
     return (
         <>
             <div>
-                {isValidating && submissionUUIDs.length === 0 && <>Loading pending submissions&hellip;</>}
+                {isValidating && submissionUUIDs.length === 0 && <>Loading pending submissions…</>}
                 {!isValidating && submissionUUIDs.length === 0 && (
                     <>
                         {"You have no pending submissions. "}

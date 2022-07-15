@@ -1,10 +1,30 @@
 import { ImageListParameters, ImageWithEmbedded } from "@phylopic/api-models"
-import { AnchorLink, ImageThumbnailView, Loader, NumberView, PaginationContainer } from "@phylopic/ui"
+import {
+    AnchorLink,
+    ImageThumbnailView,
+    Loader,
+    NumberView,
+    PaginationContainer,
+    PaginationContainerProps,
+} from "@phylopic/ui"
 import { Query } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import Banner from "~/ui/Banner"
 import SiteTitle from "~/ui/SiteTitle"
+const SWR_CONFIGS: PaginationContainerProps["swrConfigs"] = {
+    list: {
+        revalidateIfStale: true,
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
+    },
+    page: {
+        revalidateFirstPage: true,
+        revalidateIfStale: true,
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
+    },
+}
 const Published: FC = () => {
     const uuid = useContributorUUID()
     const query = useMemo<(ImageListParameters & Query) | undefined>(
@@ -24,11 +44,16 @@ const Published: FC = () => {
         )
     }
     return (
-        <PaginationContainer endpoint={`${process.env.NEXT_PUBLIC_API_URL}/images`} query={query}>
+        <PaginationContainer
+            endpoint={`${process.env.NEXT_PUBLIC_API_URL}/images`}
+            maxPages={1}
+            query={query}
+            swrConfigs={SWR_CONFIGS}
+        >
             {(items, total) => (
                 <>
                     <p key="header" className="dialogue">
-                        {isNaN(total) && <>Loading published images&hellip;</>}
+                        {isNaN(total) && <>Loading published images…</>}
                         {total === 0 && (
                             <>
                                 You do not currently have any published images on <SiteTitle />.
@@ -51,6 +76,11 @@ const Published: FC = () => {
                                     <ImageThumbnailView value={item} />
                                 </AnchorLink>
                             ))}
+                            {total > 0 && total > items.length && (
+                                <AnchorLink className="text" href="/images">
+                                    See More →
+                                </AnchorLink>
+                            )}
                         </Banner>
                     </div>
                 </>
