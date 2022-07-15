@@ -50,3 +50,7 @@ main {
     max-width: 11in;
     padding: 1rem;
 }
+
+img:not([src]) {
+    visibility: hidden;
+}
