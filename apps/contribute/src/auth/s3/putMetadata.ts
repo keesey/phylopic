@@ -1,4 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 import { EmailAddress, stringifyNormalized, UUID } from "@phylopic/utils"
 import getContributorMetaKey from "~/s3/keys/contribute/getContributorMetaKey"
 const getExpiration = () => {
@@ -9,7 +10,7 @@ const getExpiration = () => {
 const putMetadata = async (client: S3Client, email: EmailAddress, body: { uuid: UUID }, verified = false) => {
     await client.send(
         new PutObjectCommand({
-            Bucket: "contribute.phylopic.org",
+            Bucket: CONTRIBUTE_BUCKET_NAME,
             Body: stringifyNormalized(body),
             ContentType: "application/json",
             Expires: verified ? undefined : getExpiration(),
