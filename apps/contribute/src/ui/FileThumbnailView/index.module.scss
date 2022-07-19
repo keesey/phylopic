@@ -1,4 +1,5 @@
 .main {
-    filter: invert(95%) sepia(0%) saturate(7500%) hue-rotate(340deg) brightness(106%) contrast(107%);
+    filter: invert(100%);
+    mix-blend-mode: lighten;
     object-fit: contain;
 }

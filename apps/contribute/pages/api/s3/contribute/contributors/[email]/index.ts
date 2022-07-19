@@ -17,6 +17,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             case "HEAD": {
                 const client = new S3Client({})
                 try {
+                    res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
                     await handleHeadOrGet(req, res, client, {
                         Bucket: CONTRIBUTE_BUCKET_NAME,
                         Key: getContributorMetaKey(email),

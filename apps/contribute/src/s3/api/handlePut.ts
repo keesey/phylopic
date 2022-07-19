@@ -8,7 +8,7 @@ import {
 import { NextApiResponse } from "next"
 import checkMetadataBearer from "./checkMetadataBearer"
 const handlePut = async (
-    res: NextApiResponse<string>,
+    res: NextApiResponse<any>,
     client: S3Client,
     input: PutObjectCommandInput,
     deleteInput?: DeleteObjectCommandInput,

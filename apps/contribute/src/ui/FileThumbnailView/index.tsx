@@ -7,6 +7,6 @@ export interface Props {
 }
 const loader: ImageLoader = props => props.src
 const FileThumbnailView: React.FC<Props> = ({ alt, src }) => {
-    return <Image alt={alt ?? ""} className={styles.main} height={64} loader={loader} src={src} width={64} />
+    return <Image alt={alt ?? ""} className={styles.main} height={96} loader={loader} src={src} width={96} />
 }
 export default FileThumbnailView

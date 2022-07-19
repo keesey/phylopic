@@ -1,6 +1,6 @@
 import { ListObjectsV2Command, ListObjectsV2CommandInput, S3Client } from "@aws-sdk/client-s3"
 import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
-import { isDefined, isEmailAddress, isNonemptyString, stringifyNormalized, UUID } from "@phylopic/utils"
+import { isDefined, isEmailAddress, isNonemptyString, UUID } from "@phylopic/utils"
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import getContributorSubmissionsKeyPrefix from "~/s3/keys/contribute/getContributorSubmissionsKeyPrefix"
@@ -8,7 +8,7 @@ import extractUUIDFromSubmissionKey from "~/s3/keys/source/extractUUIDFromSubmis
 import { UUIDList } from "~/s3/models/UUIDList"
 const handleHeadOrGet = async (
     req: NextApiRequest,
-    res: NextApiResponse<string>,
+    res: NextApiResponse<UUIDList>,
     input: ListObjectsV2CommandInput,
     extractUUIDFromKey: (key: string) => UUID | null,
 ) => {
@@ -26,19 +26,15 @@ const handleHeadOrGet = async (
                     .map(extractUUIDFromKey)
                     .filter(isDefined) ?? [],
         }
-        const json = stringifyNormalized(submissions)
-        res.status(200)
-        res.setHeader("Content-Length", json.length)
-        res.setHeader("Content-Type", "application/json")
+        res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
         if (req.method === "GET") {
-            res.send(json)
+            res.json(submissions)
         }
     } finally {
         client.destroy()
     }
 }
-
-const index: NextApiHandler<string | null> = async (req, res) => {
+const index: NextApiHandler<UUIDList | null> = async (req, res) => {
     try {
         const email = req.query.email
         if (!isEmailAddress(email)) {

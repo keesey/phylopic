@@ -24,7 +24,7 @@ const getContributorJSON = async (client: S3Client, uuid: UUID) =>
         },
         isContributor,
     )
-const index: NextApiHandler<string | null> = async (req, res) => {
+const index: NextApiHandler<Contributor | null> = async (req, res) => {
     try {
         const { uuid } = req.query
         if (!isUUID(uuid)) {
@@ -35,12 +35,13 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             case "HEAD": {
                 const client = new S3Client({})
                 try {
-                    const [contributor, output] = await getContributorJSON(client, uuid)
+                    const [contributor] = await getContributorJSON(client, uuid)
                     if (!contributor.emailAddress) {
                         throw 403
                     }
                     verifyAuthorization(req.headers, contributor.emailAddress)
-                    sendHeadOrGet(req, res, output)
+                    res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
+                    res.json(contributor)
                 } finally {
                     client.destroy()
                 }

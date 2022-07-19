@@ -43,6 +43,7 @@ const index: NextApiHandler<string> = async (req, res) => {
                     nextToken: token,
                     uuids,
                 })
+                res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
                 res.setHeader("content-length", json.length)
                 res.setHeader("content-type", "application/json")
                 if (req.method === "GET") {

@@ -23,6 +23,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                 if (!extension) {
                     throw 404
                 }
+                res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
                 await handleHeadOrGet(req, res, client, {
                     Bucket: SOURCE_BUCKET_NAME,
                     Key: getImageFileKey(uuid, extension),

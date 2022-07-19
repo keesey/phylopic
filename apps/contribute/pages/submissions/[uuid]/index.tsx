@@ -6,12 +6,12 @@ import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import getBearerJWT from "~/auth/http/getBearerJWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
 import PageLayout from "~/pages/PageLayout"
+import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
 import getSubmissionKey from "~/s3/keys/contribute/getSubmissionKey"
 type Props = {
-    error?: true
     uuid: UUID
 }
-const Page: NextPage<Props> = ({ error, uuid }) => (
+const Page: NextPage<Props> = ({ uuid }) => (
     <PageLayout
         head={{
             title: "PhyloPic: Your Submission",
@@ -24,11 +24,11 @@ const Page: NextPage<Props> = ({ error, uuid }) => (
 export default Page
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const uuid = context.params?.uuid
-    if (!isUUIDv4(uuid)) {
-        return { notFound: true }
-    }
     let client: S3Client | undefined
     try {
+        if (!isUUIDv4(uuid)) {
+            throw 404
+        }
         if (!context.req.headers.authorization) {
             return {
                 redirect: { destination: "/", permanent: false },
@@ -44,21 +44,35 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
             throw 403
         }
         client = new S3Client({})
-        const result = await client.send(
+        const output = await client.send(
             new HeadObjectCommand({
                 Bucket: CONTRIBUTE_BUCKET_NAME,
                 Key: getSubmissionKey(email, uuid),
             }),
         )
-        if (result.$metadata.httpStatusCode !== 200) {
-            throw result.$metadata.httpStatusCode ?? 500
-        }
+        checkMetadataBearer(output)
     } catch (e) {
+        console.error(e)
+        client?.destroy()
+        client = undefined
         if (typeof e === "number") {
-            context.res.statusCode = e
-        }
-        return {
-            props: { uuid, error: true },
+            switch (e) {
+                case 401:
+                case 403: {
+                    return {
+                        redirect: { destination: "/", permanent: false },
+                    }
+                }
+                case 404:
+                case 410: {
+                    return { notFound: true }
+                }
+                default: {
+                    throw e
+                }
+            }
+        } else {
+            throw e
         }
     } finally {
         client?.destroy()

@@ -1,9 +1,10 @@
-import { AnchorLink, InfiniteScroll, Loader, NumberView } from "@phylopic/ui"
+import { InfiniteScroll, Loader, NumberView } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC, useCallback, useMemo } from "react"
 import useEmailAddress from "~/auth/hooks/useEmailAddress"
 import useSubmissionsSWR from "~/s3/swr/useSubmissionsSWR"
 import Banner from "~/ui/Banner"
+import SpawnLink from "~/ui/SpawnLink"
 const Pending: FC = () => {
     const emailAddress = useEmailAddress()
     const { data, isValidating, setSize, size } = useSubmissionsSWR(emailAddress)
@@ -20,9 +21,9 @@ const Pending: FC = () => {
                 {!isValidating && submissionUUIDs.length === 0 && (
                     <>
                         {"You have no pending submissions. "}
-                        <AnchorLink className="text" href="/submissions/new">
+                        <SpawnLink>
                             Upload a new image.
-                        </AnchorLink>
+                        </SpawnLink>
                     </>
                 )}
                 {!isValidating && submissionUUIDs.length !== 0 && (

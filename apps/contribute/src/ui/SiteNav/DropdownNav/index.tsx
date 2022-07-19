@@ -2,6 +2,7 @@ import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import SiteTitle from "~/ui/SiteTitle"
+import SpawnLink from "~/ui/SpawnLink"
 import styles from "./index.module.scss"
 export type Props = {
     onClose?: () => void
@@ -49,8 +50,8 @@ const DropdownNav: FC<Props> = ({ onClose }) => {
                         </li>
                     )}
                     {authorized && (
-                        <li key="account:/submissions/new">
-                            <AnchorLink href="/submissions/new">Upload a Silhouette</AnchorLink>
+                        <li key="account:/spawn">
+                            <SpawnLink>Upload a Silhouette</SpawnLink>
                         </li>
                     )}
                     {authorized && (

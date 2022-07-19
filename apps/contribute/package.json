@@ -15,6 +15,7 @@
         "@phylopic/utils-api": "*",
         "@phylopic/utils-aws": "*",
         "clsx": "^1.2.1",
+        "crypto": "^1.0.1",
         "form-data": "^4.0.0",
         "jsonwebtoken": "^8.5.1",
         "mailgun.js": "^7.0.0",
