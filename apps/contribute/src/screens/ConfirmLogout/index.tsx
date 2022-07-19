@@ -9,7 +9,7 @@ const ConfirmLogout: FC<Props> = ({ onConfirm }) => {
         <DialogueScreen>
             <p>Are you sure you want to log out?</p>
             <button className="cta" onClick={onConfirm}>
-                Yes, Log Me Out
+                Yes, log me out
             </button>
             <p>
                 <Link href="/">

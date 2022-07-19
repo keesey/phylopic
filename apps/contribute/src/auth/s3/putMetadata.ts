@@ -1,6 +1,6 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { EmailAddress, stringifyNormalized, UUID } from "@phylopic/utils"
-import getContributorMetaKey from "~/s3/keys/getContributorMetaKey"
+import getContributorMetaKey from "~/s3/keys/contribute/getContributorMetaKey"
 const getExpiration = () => {
     const expiration = new Date()
     expiration.setDate(expiration.getDate() + 1)

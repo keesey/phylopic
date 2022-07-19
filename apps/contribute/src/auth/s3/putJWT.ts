@@ -1,6 +1,6 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { isEmailAddress, isUUID } from "@phylopic/utils"
-import getContributorTokenKey from "~/s3/keys/getContributorTokenKey"
+import getContributorTokenKey from "~/s3/keys/contribute/getContributorTokenKey"
 import decodeJWT from "../jwt/decodeJWT"
 import verifyJWT from "../jwt/verifyJWT"
 import { JWT } from "../models/JWT"

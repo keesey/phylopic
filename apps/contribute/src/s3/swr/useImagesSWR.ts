@@ -1,18 +1,19 @@
-import { EmailAddress, isEmailAddress } from "@phylopic/utils"
 import { useCallback } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
+import useAuthorized from "~/auth/hooks/useAuthorized"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import { UUIDList } from "../models/UUIDList"
-const useSubmissionsSWR = (emailAddress: EmailAddress | null) => {
+const useImagesSWR = () => {
+    const authorized = useAuthorized()
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: UUIDList | null) =>
-            (index === 0 || previousPageData?.uuids.length) && isEmailAddress(emailAddress)
-                ? `/api/s3/contribute/contributors/${encodeURIComponent(emailAddress)}/submissions` +
+            authorized && (index === 0 || previousPageData?.uuids.length)
+                ? `/api/s3/source/images` +
                   (previousPageData?.nextToken ? `?token=${encodeURIComponent(previousPageData.nextToken)}` : "")
                 : null,
-        [emailAddress],
+        [authorized],
     )
     const fetcher = useAuthorizedJSONFetcher<UUIDList>()
     return useSWRInfinite<UUIDList>(getKey, fetcher)
 }
-export default useSubmissionsSWR
+export default useImagesSWR

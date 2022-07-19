@@ -6,15 +6,14 @@ import {
     S3Client,
 } from "@aws-sdk/client-s3"
 import { NextApiRequest, NextApiResponse } from "next"
-import checkMetadataBearer from "./checkMetadataBearer"
 import sendHeadOrGet from "./sendHeadOrGet"
-const handleHeadOrGet = async (
+const handleHeadOrGet = async <T>(
     req: NextApiRequest,
-    res: NextApiResponse<string>,
+    res: NextApiResponse<T>,
     client: S3Client,
     input: GetObjectCommandInput | HeadObjectCommandInput,
 ) => {
-    const output = await client.send(req.method === "GET" ? new GetObjectCommand(input) : new HeadObjectCommand(input))
-    sendHeadOrGet(req, res, output)
+    const output = await client.send(req.method !== "HEAD" ? new GetObjectCommand(input) : new HeadObjectCommand(input))
+    await sendHeadOrGet(req, res, output)
 }
 export default handleHeadOrGet

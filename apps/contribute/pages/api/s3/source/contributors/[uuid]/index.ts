@@ -6,7 +6,7 @@ import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handlePut from "~/s3/api/handlePut"
 import sendHeadOrGet from "~/s3/api/sendHeadOrGet"
-import getContributorSourceKey from "~/s3/keys/getContributorSourceKey"
+import getContributorSourceKey from "~/s3/keys/source/getContributorSourceKey"
 const parseJSON = (json: string): unknown => {
     try {
         return JSON.parse(json)

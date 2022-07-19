@@ -6,7 +6,7 @@ import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import getBearerJWT from "~/auth/http/getBearerJWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
 import PageLayout from "~/pages/PageLayout"
-import getSubmissionKey from "~/s3/keys/getSubmissionKey"
+import getSubmissionKey from "~/s3/keys/contribute/getSubmissionKey"
 type Props = {
     error?: true
     uuid: UUID

@@ -2,7 +2,7 @@ import { GetObjectCommand, GetObjectCommandOutput, GetObjectTaggingCommand, S3Cl
 import { EmailAddress } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"
 import { Readable } from "stream"
-import getContributorMetaKey from "~/s3/keys/getContributorMetaKey"
+import getContributorMetaKey from "~/s3/keys/contribute/getContributorMetaKey"
 import Payload from "../models/Payload"
 const getMetadata = async (client: S3Client, email: EmailAddress, verify = false): Promise<Payload> => {
     const options = {

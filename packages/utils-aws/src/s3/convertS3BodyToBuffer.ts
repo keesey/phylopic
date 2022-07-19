@@ -1,4 +1,3 @@
-import rawBody from "raw-body"
 import { Readable } from "stream"
 export const convertS3BodyToBuffer = async (body: unknown): Promise<Buffer> => {
     if (body instanceof Buffer) {
@@ -8,7 +7,12 @@ export const convertS3BodyToBuffer = async (body: unknown): Promise<Buffer> => {
         return Buffer.from(body)
     }
     if (body instanceof Readable) {
-        return convertS3BodyToBuffer(await rawBody(body, {}))
+        return new Promise<Buffer>((resolve, reject) => {
+            const chunks: Uint8Array[] = []
+            body.on("data", chunk => chunks.push(chunk))
+            body.on("error", reject)
+            body.on("end", () => resolve(Buffer.concat(chunks)))
+        })
     }
     throw new Error("Unsupported body type.")
 }

@@ -3,9 +3,9 @@ import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 import { isDefined, isEmailAddress, isNonemptyString, stringifyNormalized, UUID } from "@phylopic/utils"
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
-import extractUUIDFromSubmissionKey from "~/s3/keys/extractUUIDFromSubmissionKey"
-import getContributorSubmissionsKeyPrefix from "~/s3/keys/getContributorSubmissionsKeyPrefix"
-import type { Submissions } from "~/s3/swr/useSubmissionsSWR"
+import getContributorSubmissionsKeyPrefix from "~/s3/keys/contribute/getContributorSubmissionsKeyPrefix"
+import extractUUIDFromSubmissionKey from "~/s3/keys/source/extractUUIDFromSubmissionKey"
+import { UUIDList } from "~/s3/models/UUIDList"
 const handleHeadOrGet = async (
     req: NextApiRequest,
     res: NextApiResponse<string>,
@@ -18,13 +18,13 @@ const handleHeadOrGet = async (
         if (typeof response.$metadata.httpStatusCode === "number" && response.$metadata.httpStatusCode >= 400) {
             throw response.$metadata.httpStatusCode
         }
-        const submissions: Submissions = {
+        const submissions: UUIDList = {
+            nextToken: response.NextContinuationToken || undefined,
             uuids:
                 response.Contents?.map(content => content.Key)
                     .filter(isNonemptyString)
                     .map(extractUUIDFromKey)
                     .filter(isDefined) ?? [],
-            nextToken: response.NextContinuationToken || null,
         }
         const json = stringifyNormalized(submissions)
         res.status(200)

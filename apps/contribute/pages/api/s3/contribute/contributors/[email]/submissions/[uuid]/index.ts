@@ -7,7 +7,7 @@ import handleDelete from "~/s3/api/handleDelete"
 import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
 import handlePatch from "~/s3/api/handlePatch"
 import handlePut from "~/s3/api/handlePut"
-import getSubmissionKey from "~/s3/keys/getSubmissionKey"
+import getSubmissionKey from "~/s3/keys/contribute/getSubmissionKey"
 import { isPartialSubmission } from "~/submission/isPartialSubmission"
 const parseJSON = (json: string): unknown => {
     try {
@@ -25,6 +25,18 @@ const index: NextApiHandler<string | null> = async (req, res) => {
         }
         verifyAuthorization(req.headers, email)
         switch (req.method) {
+            case "DELETE": {
+                const client = new S3Client({})
+                try {
+                    await handleDelete(res, client, {
+                        Bucket: CONTRIBUTE_BUCKET_NAME,
+                        Key: getSubmissionKey(email, uuid),
+                    })
+                } finally {
+                    client.destroy()
+                }
+                break
+            }
             case "GET":
             case "HEAD": {
                 const client = new S3Client({})
@@ -38,20 +50,8 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                 }
                 break
             }
-            case "DELETE": {
-                const client = new S3Client({})
-                try {
-                    await handleDelete(res, client, {
-                        Bucket: CONTRIBUTE_BUCKET_NAME,
-                        Key: getSubmissionKey(email, uuid),
-                    })
-                } finally {
-                    client.destroy()
-                }
-                break
-            }
             case "OPTIONS": {
-                res.setHeader("allow", "GET, HEAD, OPTIONS, PATCH, PUT")
+                res.setHeader("allow", "DELETE, GET, HEAD, OPTIONS, PATCH, PUT")
                 res.setHeader("cache-control", "max-age=3600")
                 res.setHeader("date", new Date().toUTCString())
                 res.status(204)

@@ -4,7 +4,7 @@ import { isEmailAddress } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
-import getContributorMetaKey from "~/s3/keys/getContributorMetaKey"
+import getContributorMetaKey from "~/s3/keys/contribute/getContributorMetaKey"
 const index: NextApiHandler<string | null> = async (req, res) => {
     try {
         const email = req.query.email

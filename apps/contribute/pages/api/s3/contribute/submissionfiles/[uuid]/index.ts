@@ -9,8 +9,8 @@ import handleDelete from "~/s3/api/handleDelete"
 import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
 import handlePut from "~/s3/api/handlePut"
 import { ImageFileExtension } from "~/s3/ImageFileExtension"
-import findSubmissionFileExtension from "~/s3/keys/findSubmissionFileExtension"
-import getSubmissionFileKey from "~/s3/keys/getSubmissionFileKey"
+import findSubmissionFileExtension from "~/s3/keys/contribute/findSubmissionFileExtension"
+import getSubmissionFileKey from "~/s3/keys/contribute/getSubmissionFileKey"
 import getImageFileExtension from "~/utils/getImageFileExtension"
 const getEmail = async (client: S3Client, uuid: UUID, extension: ImageFileExtension) => {
     const response = await client.send(
@@ -34,10 +34,13 @@ const index: NextApiHandler<string | null> = async (req, res) => {
         }
         client = new S3Client({})
         const extension = await findSubmissionFileExtension(client, uuid)
-        const taggedEmail = extension ? await getEmail(client, uuid, extension) : undefined
+        if (!extension) {
+            throw 404
+        }
         switch (req.method) {
             case "DELETE": {
-                if (!extension || !taggedEmail) {
+                const taggedEmail = extension ? await getEmail(client, uuid, extension) : undefined
+                if (!taggedEmail) {
                     throw 404
                 }
                 verifyAuthorization(req.headers, taggedEmail)
@@ -49,10 +52,6 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             }
             case "GET":
             case "HEAD": {
-                if (!extension || !taggedEmail) {
-                    throw 404
-                }
-                verifyAuthorization(req.headers, taggedEmail)
                 await handleHeadOrGet(req, res, client, {
                     Bucket: CONTRIBUTE_BUCKET_NAME,
                     Key: getSubmissionFileKey(uuid, extension),
@@ -67,6 +66,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                 break
             }
             case "PUT": {
+                const taggedEmail = extension ? await getEmail(client, uuid, extension) : undefined
                 let authEmail: string | undefined
                 if (taggedEmail) {
                     verifyAuthorization(req.headers, taggedEmail)

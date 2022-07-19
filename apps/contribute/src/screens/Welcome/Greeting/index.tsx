@@ -1,15 +1,7 @@
-import { ContributorContainer } from "@phylopic/ui"
 import { FC } from "react"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import useContributor from "~/auth/hooks/useContributor"
 const Greeting: FC = () => {
-    const uuid = useContributorUUID()
-    if (!uuid) {
-        return null
-    }
-    return (
-        <ContributorContainer uuid={uuid}>
-            {contributor => (contributor?.name ? <h2>Hey there, {contributor.name}!</h2> : <h2>Hey there!</h2>)}
-        </ContributorContainer>
-    )
+    const contributor = useContributor()
+    return <h2>Hey there{contributor?.name ? `, ${contributor.name}` : ""}!</h2>
 }
 export default Greeting

@@ -39,13 +39,13 @@ const DropdownNav: FC<Props> = ({ onClose }) => {
                         </li>
                     )}
                     {authorized && (
-                        <li key="account:/images">
-                            <AnchorLink href="/images">Your Published Images</AnchorLink>
+                        <li key="account:/submissions">
+                            <AnchorLink href="/submissions">Your Pending Submissions</AnchorLink>
                         </li>
                     )}
                     {authorized && (
-                        <li key="account:/submissions">
-                            <AnchorLink href="/submissions">Your Pending Submissions</AnchorLink>
+                        <li key="account:/images">
+                            <AnchorLink href="/images">Your Accepted Images</AnchorLink>
                         </li>
                     )}
                     {authorized && (

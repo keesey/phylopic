@@ -1,6 +1,6 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
 import { UUID } from "@phylopic/utils"
-import isImageFileExtension from "../isImageFileExtension"
+import isImageFileExtension from "../../isImageFileExtension"
 import getSubmissionFileKeyPrefix from "./getSubmissionFileKeyPrefix"
 const findSubmissionFileExtension = async (client: S3Client, uuid: UUID) => {
     const listResponse = await client.send(
