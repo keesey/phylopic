@@ -1,21 +1,9 @@
-import { ImageListParameters } from "@phylopic/api-models"
-import { AnchorLink, Loader } from "@phylopic/ui"
-import { Query } from "@phylopic/utils"
-import { FC, useMemo } from "react"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import { AnchorLink } from "@phylopic/ui"
+import { FC } from "react"
 import FullScreen from "~/pages/screenTypes/FullScreen"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
-import FileThumbnailView from "~/ui/FileThumbnailView"
-import styles from "./index.module.scss"
+import ImageGrid from "~/ui/ImageGrid"
 const Images: FC = () => {
-    const uuid = useContributorUUID()
-    const query = useMemo<(ImageListParameters & Query) | undefined>(
-        () => (uuid ? { embed_specificNode: "true", filter_contributor: uuid } : undefined),
-        [uuid],
-    )
-    if (!query) {
-        return <Loader />
-    }
     return (
         <FullScreen>
             <UUIDPaginationContainer endpoint="/api/s3/source/images">
@@ -32,15 +20,13 @@ const Images: FC = () => {
                                 ← Return to Home Screen.
                             </AnchorLink>
                         </p>
-                        <div className={styles.imageGrid}>
-                            {uuids.map(uuid => (
-                                <AnchorLink key={uuid} href={`/images/${encodeURIComponent(uuid)}`}>
-                                    <FileThumbnailView
-                                        src={`/api/s3/source/images/${encodeURIComponent(uuid)}/source`}
-                                    />
-                                </AnchorLink>
-                            ))}
-                        </div>
+                        <ImageGrid
+                            entries={uuids.map(uuid => ({
+                                href: `/images/${encodeURIComponent(uuid)}`,
+                                src: `/api/s3/source/images/${encodeURIComponent(uuid)}/source`,
+                                uuid,
+                            }))}
+                        />
                     </>
                 )}
             </UUIDPaginationContainer>

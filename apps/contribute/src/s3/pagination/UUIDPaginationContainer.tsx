@@ -1,5 +1,5 @@
 import { InfiniteScroll } from "@phylopic/ui"
-import { createQueryString, isNonemptyString, URL, UUID } from "@phylopic/utils"
+import { createSearch, URL, UUID } from "@phylopic/utils"
 import React, { Fragment, useCallback, useEffect, useMemo } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorized from "~/auth/hooks/useAuthorized"
@@ -24,9 +24,8 @@ const UUIDPaginationContainer: React.FC<Props> = ({
     const authorized = useAuthorized()
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: UUIDList | null) => {
-            console.log(index, previousPageData, authorized)
             return endpoint && authorized && (index === 0 || previousPageData?.nextToken)
-                ? endpoint + createQueryString({ token: previousPageData?.nextToken })
+                ? endpoint + createSearch({ token: previousPageData?.nextToken })
                 : null
         },
         [authorized, endpoint],

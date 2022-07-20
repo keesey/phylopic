@@ -5,7 +5,7 @@ import Images from "~/screens/Images"
 const Page: NextPage = () => (
     <PageLayout
         head={{
-            title: "PhyloPic: Published Images",
+            title: "PhyloPic: Accepted Images",
             url: "https://contribute.phylopic.org/images",
         }}
     >

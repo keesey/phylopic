@@ -1,5 +1,45 @@
+@use "@phylopic/styles/colors.scss";
 .main {
-    filter: invert(100%);
-    mix-blend-mode: lighten;
-    object-fit: contain;
+    filter: blur(8px);
+    height: 96px;
+    position: relative;
+    width: 96px;
+    transition: color 0.5s, filter 0.5s;
+    & > * {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        top: 0;
+        right: 0;
+    }
+    & img {
+        filter: invert(100%);
+        mix-blend-mode: lighten;
+        object-fit: contain;
+    }
+    &.loaded {
+        filter: none;
+    }
+    &.pending {
+        background-color: colors.$wash;
+        border-radius: 50%;
+    }
+    &.error {
+        background-color: colors.$dandelion;
+        border-radius: 50%;
+        color: colors.$black;
+        filter: none;
+        & img {
+            opacity: 0;
+            visibility: hidden;
+        }
+        & p {
+            align-items: center;
+            display: flex;
+            font-weight: bold;
+            justify-content: center;
+            text-align: center;
+            text-transform: uppercase;
+        }
+    }
 }

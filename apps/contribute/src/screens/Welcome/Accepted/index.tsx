@@ -1,4 +1,4 @@
-import { AnchorLink, Loader, NumberView, PaginationContainerProps } from "@phylopic/ui"
+import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
 import { FC } from "react"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
@@ -34,11 +34,6 @@ const Accepted: FC = () => {
                                 <FileThumbnailView src={`/api/s3/source/images/${encodeURIComponent(uuid)}/source`} />
                             </AnchorLink>
                         ))}
-                        {uuids.length >= MAX_ITEMS && (
-                            <AnchorLink className="text" key="more" href="/images">
-                                More →
-                            </AnchorLink>
-                        )}
                     </Banner>
                 </>
             )}
