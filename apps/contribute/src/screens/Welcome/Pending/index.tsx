@@ -1,47 +1,49 @@
-import { InfiniteScroll, Loader, NumberView } from "@phylopic/ui"
-import { UUID } from "@phylopic/utils"
-import { FC, useCallback, useMemo } from "react"
+import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
+import { FC, useMemo } from "react"
 import useEmailAddress from "~/auth/hooks/useEmailAddress"
-import useSubmissionsSWR from "~/s3/swr/useSubmissionsSWR"
+import getContributorSubmissionsKeyPrefix from "~/s3/keys/contribute/getContributorSubmissionsKeyPrefix"
+import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
+import FileThumbnailView from "~/ui/FileThumbnailView"
 import SpawnLink from "~/ui/SpawnLink"
 const Pending: FC = () => {
     const emailAddress = useEmailAddress()
-    const { data, isValidating, setSize, size } = useSubmissionsSWR(emailAddress)
-    const submissionUUIDs = useMemo<readonly UUID[]>(
-        () => data?.reduce<readonly UUID[]>((prev, value) => [...prev, ...value.uuids], []) ?? [],
-        [data],
+    const endpoint = useMemo(
+        () => (emailAddress ? "/api/s3/contribute/" + getContributorSubmissionsKeyPrefix(emailAddress) : null),
+        [emailAddress],
     )
-    const handleInfiniteScrollInViewport = useCallback(() => setSize(size + 1), [setSize, size])
-    const lastPage = useMemo(() => Boolean(data?.length && !data[data.length - 1]?.uuids.length), [data])
     return (
-        <>
-            <div>
-                {isValidating && submissionUUIDs.length === 0 && <>Loading pending submissions…</>}
-                {!isValidating && submissionUUIDs.length === 0 && (
-                    <>
-                        {"You have no pending submissions. "}
-                        <SpawnLink>
-                            Upload a new image.
-                        </SpawnLink>
-                    </>
-                )}
-                {!isValidating && submissionUUIDs.length !== 0 && (
-                    <>
-                        You have <NumberView value={submissionUUIDs.length} /> pending submission
-                        {submissionUUIDs.length === 1 ? "" : "s"}.
-                    </>
-                )}
-            </div>
-            <div className="thumbnails">
-                <Banner>
-                    {isValidating && <Loader key="loader" />}
-                    {!isValidating && !lastPage && (
-                        <InfiniteScroll key="scroll" onInViewport={handleInfiniteScrollInViewport} />
-                    )}
-                </Banner>
-            </div>
-        </>
+        <UUIDPaginationContainer endpoint={endpoint}>
+            {(uuids, isValidating) => (
+                <>
+                    <p>
+                        {uuids.length > 0 && (
+                            <>
+                                You have <NumberView value={uuids.length} /> pending submission
+                                {uuids.length === 1 ? "" : "s"}.{" "}
+                                {uuids.length === 1 ? "Click on it to edit it." : "Click on any to edit them."}
+                            </>
+                        )}
+                        {uuids.length === 0 && isValidating && "Looking for pending submissions…"}
+                        {uuids.length === 0 && !isValidating && (
+                            <>
+                                You have no pending submissions. <SpawnLink>Upload a silhouette.</SpawnLink>
+                            </>
+                        )}
+                    </p>
+                    <Banner>
+                        {uuids.length === 0 && isValidating && <Loader />}
+                        {uuids.map(uuid => (
+                            <AnchorLink key={uuid} href={`/submissions/${encodeURIComponent(uuid)}`}>
+                                <FileThumbnailView
+                                    src={`/api/s3/contribute/submissionfiles/${encodeURIComponent(uuid)}`}
+                                />
+                            </AnchorLink>
+                        ))}
+                    </Banner>
+                </>
+            )}
+        </UUIDPaginationContainer>
     )
 }
 export default Pending

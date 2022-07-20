@@ -8,7 +8,7 @@ import {
     isUUID,
     normalizeUUID,
     stringifyNormalized,
-    UUID
+    UUID,
 } from "@phylopic/utils"
 import { randomUUID } from "crypto"
 import { NextApiHandler } from "next"
@@ -16,22 +16,36 @@ import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import getContributorSubmissionsKeyPrefix from "~/s3/keys/contribute/getContributorSubmissionsKeyPrefix"
 import getSubmissionKey from "~/s3/keys/contribute/getSubmissionKey"
 import extractUUIDFromSubmissionKey from "~/s3/keys/source/extractUUIDFromSubmissionKey"
-const findExistingUUID = async (client: S3Client, email: EmailAddress, ContinuationToken?: string): Promise<UUID | undefined> => {
-    const output = await client.send(new ListObjectsV2Command({
-        Bucket: CONTRIBUTE_BUCKET_NAME,
-        ContinuationToken,
-        Delimiter: "/",
-        Prefix: getContributorSubmissionsKeyPrefix(email),
-    }))
+const findExistingUUID = async (
+    client: S3Client,
+    email: EmailAddress,
+    ContinuationToken?: string,
+): Promise<UUID | undefined> => {
+    const output = await client.send(
+        new ListObjectsV2Command({
+            Bucket: CONTRIBUTE_BUCKET_NAME,
+            ContinuationToken,
+            Delimiter: "/",
+            Prefix: getContributorSubmissionsKeyPrefix(email),
+        }),
+    )
     if (output.CommonPrefixes?.length) {
-        const result = await Promise.all(output.CommonPrefixes.map(async (cp) => {
-            const Key = cp.Prefix + "meta.json"
-            const tagging = cp.Prefix ? await client.send(new GetObjectTaggingCommand({
-                Bucket: CONTRIBUTE_BUCKET_NAME,
-                Key,
-            })) : null
-            return tagging?.TagSet?.some(tag => tag.Key === "finalized" && tag.Value === "false") ? extractUUIDFromSubmissionKey(Key) : null
-        }))
+        const result = await Promise.all(
+            output.CommonPrefixes.map(async cp => {
+                const Key = cp.Prefix + "meta.json"
+                const tagging = cp.Prefix
+                    ? await client.send(
+                          new GetObjectTaggingCommand({
+                              Bucket: CONTRIBUTE_BUCKET_NAME,
+                              Key,
+                          }),
+                      )
+                    : null
+                return tagging?.TagSet?.some(tag => tag.Key === "finalized" && tag.Value === "false")
+                    ? extractUUIDFromSubmissionKey(Key)
+                    : null
+            }),
+        )
         const uuid = result.find(isString)
         if (isUUID(uuid)) {
             return uuid
@@ -61,13 +75,15 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
                 uuid = await findExistingUUID(client, email)
                 if (!uuid) {
                     uuid = normalizeUUID(randomUUID())
-                    await client.send(new PutObjectCommand({
-                        Body: stringifyNormalized({ created: new Date().toISOString() }),
-                        Bucket: CONTRIBUTE_BUCKET_NAME,
-                        ContentType: "application/json",
-                        Key: getSubmissionKey(email, uuid),
-                        Tagging: "finalized=false",
-                    }))
+                    await client.send(
+                        new PutObjectCommand({
+                            Body: stringifyNormalized({ created: new Date().toISOString() }),
+                            Bucket: CONTRIBUTE_BUCKET_NAME,
+                            ContentType: "application/json",
+                            Key: getSubmissionKey(email, uuid),
+                            Tagging: "finalized=false",
+                        }),
+                    )
                 }
             } finally {
                 client.destroy()

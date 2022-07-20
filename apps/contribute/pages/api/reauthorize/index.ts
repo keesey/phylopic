@@ -11,31 +11,39 @@ import MAX_TTL from "~/auth/ttl/MAX_TTL"
 import MIN_TTL from "~/auth/ttl/MIN_TTL"
 const cleanExpiredJWTs = async (client: S3Client, email: EmailAddress, ContinuationToken?: string): Promise<void> => {
     try {
-        const listOutput = await client.send(new ListObjectsV2Command({
-            Bucket: CONTRIBUTE_BUCKET_NAME,
-            ContinuationToken,
-            Prefix: `contributors/${encodeURIComponent(email)}/auth/`
-        }))
+        const listOutput = await client.send(
+            new ListObjectsV2Command({
+                Bucket: CONTRIBUTE_BUCKET_NAME,
+                ContinuationToken,
+                Prefix: `contributors/${encodeURIComponent(email)}/auth/`,
+            }),
+        )
         if (listOutput.Contents?.length) {
-            await Promise.all(listOutput.Contents.map(async (content) => {
-                if (content.Key) {
-                    try {
-                        const headOutput = await client.send(new HeadObjectCommand({
-                            Bucket: CONTRIBUTE_BUCKET_NAME,
-                            Key: content.Key
-                        }))
-                        if (headOutput.Expires && headOutput.Expires.valueOf() <= new Date().valueOf()) {
-                            await client.send(new DeleteObjectCommand({
-                                Bucket: CONTRIBUTE_BUCKET_NAME,
-                                Key: content.Key
-                            }))
+            await Promise.all(
+                listOutput.Contents.map(async content => {
+                    if (content.Key) {
+                        try {
+                            const headOutput = await client.send(
+                                new HeadObjectCommand({
+                                    Bucket: CONTRIBUTE_BUCKET_NAME,
+                                    Key: content.Key,
+                                }),
+                            )
+                            if (headOutput.Expires && headOutput.Expires.valueOf() <= new Date().valueOf()) {
+                                await client.send(
+                                    new DeleteObjectCommand({
+                                        Bucket: CONTRIBUTE_BUCKET_NAME,
+                                        Key: content.Key,
+                                    }),
+                                )
+                            }
+                        } catch (e) {
+                            // Fail without killing the process.
+                            console.error(e)
                         }
-                    } catch (e) {
-                        // Fail without killing the process.
-                        console.error(e)
                     }
-                }
-            }))
+                }),
+            )
         }
         if (listOutput.NextContinuationToken) {
             return await cleanExpiredJWTs(client, email, listOutput.NextContinuationToken)

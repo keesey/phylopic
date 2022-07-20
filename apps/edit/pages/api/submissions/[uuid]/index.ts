@@ -4,7 +4,7 @@ import { isUUID, normalizeUUID } from "@phylopic/utils"
 import { isAWSError, putJSON } from "@phylopic/utils-aws"
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 
-const deleteContribution = async (client: S3Client, req: NextApiRequest, res: NextApiResponse<void>) => {
+const deleteSubmission = async (client: S3Client, req: NextApiRequest, res: NextApiResponse<void>) => {
     const { contributor, uuid } = req.query
     if (!isUUID(uuid) || typeof contributor !== "string") {
         res.status(404).end()
@@ -73,7 +73,7 @@ const submissions: NextApiHandler<void> = async (req, res) => {
         try {
             switch (req.method) {
                 case "DELETE": {
-                    await deleteContribution(client, req, res)
+                    await deleteSubmission(client, req, res)
                     break
                 }
                 case "HEAD": {

@@ -9,10 +9,10 @@ export type Props = {
     children: ReactNode
 }
 const FETCHER_CONFIG = { method: "POST" }
-const SpawnLink: FC<Props> = ({ children}) => {
+const SpawnLink: FC<Props> = ({ children }) => {
     const [requested, setRequested] = useState(false)
     const fetcher = useAuthorizedJSONFetcher<{ uuid: UUID }>(FETCHER_CONFIG)
-    const { data, error, isValidating } = useSWRImmutable(requested ? `/api/spawn`: null, fetcher)
+    const { data, error, isValidating } = useSWRImmutable(requested ? `/api/spawn` : null, fetcher)
     useEffect(() => {
         if (error) {
             alert(error)
@@ -26,7 +26,9 @@ const SpawnLink: FC<Props> = ({ children}) => {
         }
     }, [data?.uuid])
     return (
-        <a className={clsx("text", isValidating && styles.pending)} onClick={() => setRequested(true)}>{children}</a>
+        <a className={clsx("text", isValidating && styles.pending)} onClick={() => setRequested(true)}>
+            {children}
+        </a>
     )
 }
 export default SpawnLink

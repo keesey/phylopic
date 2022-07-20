@@ -1,5 +1,5 @@
 import { InfiniteScroll } from "@phylopic/ui"
-import { URL, UUID } from "@phylopic/utils"
+import { createQueryString, isNonemptyString, URL, UUID } from "@phylopic/utils"
 import React, { Fragment, useCallback, useEffect, useMemo } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorized from "~/auth/hooks/useAuthorized"
@@ -7,7 +7,7 @@ import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import { UUIDList } from "../models/UUIDList"
 export type Props = {
     children: (value: readonly UUID[], isValidating: boolean) => React.ReactNode
-    endpoint: URL
+    endpoint: URL | null
     hideControls?: boolean
     hideLoader?: boolean
     maxItems?: number
@@ -23,12 +23,13 @@ const UUIDPaginationContainer: React.FC<Props> = ({
 }) => {
     const authorized = useAuthorized()
     const getKey = useCallback<SWRInfiniteKeyLoader>(
-        (index, previousPageData: UUIDList | null) =>
-            authorized && (index === 0 || previousPageData?.uuids.length)
-                ? endpoint +
-                  (previousPageData?.nextToken ? `?token=${encodeURIComponent(previousPageData.nextToken)}` : "")
-                : null,
-        [authorized],
+        (index, previousPageData: UUIDList | null) => {
+            console.log(index, previousPageData, authorized)
+            return endpoint && authorized && (index === 0 || previousPageData?.nextToken)
+                ? endpoint + createQueryString({ token: previousPageData?.nextToken })
+                : null
+        },
+        [authorized, endpoint],
     )
     const fetcher = useAuthorizedJSONFetcher<UUIDList>()
     const { data, error, isValidating, setSize, size } = useSWRInfinite<UUIDList>(getKey, fetcher)
