@@ -1,11 +1,12 @@
-import { S3Client, HeadObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
+import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
 import { CONTRIBUTE_BUCKET_NAME, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
+import getSubmissionFileKeyPrefix from "~/s3/keys/contribute/getSubmissionFileKeyPrefix"
+import getImageFileKeyPrefix from "~/s3/keys/source/getImageFileKeyPrefix"
 import Editor from "~/screens/Editor"
-import Images from "~/screens/Images"
 type Props = {
     uuid: UUID
 }
@@ -30,23 +31,23 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const client = new S3Client({})
     let hasFile = false
     try {
-        const [sourceOutput, submissionOutput] = await Promise.all([
+        const [sourceFileOutput, submissionFileOutput] = await Promise.all([
             client.send(
                 new ListObjectsV2Command({
                     Bucket: SOURCE_BUCKET_NAME,
                     MaxKeys: 1,
-                    Prefix: `images/${encodeURIComponent(uuid)}/source.`,
+                    Prefix: getImageFileKeyPrefix(uuid),
                 }),
             ),
             client.send(
                 new ListObjectsV2Command({
                     Bucket: CONTRIBUTE_BUCKET_NAME,
                     MaxKeys: 1,
-                    Prefix: `submissionfiles/${encodeURIComponent(uuid)}/source.`,
+                    Prefix: getSubmissionFileKeyPrefix(uuid),
                 }),
             ),
         ])
-        hasFile = sourceOutput.Contents?.length === 1 || submissionOutput.Contents?.length === 1
+        hasFile = sourceFileOutput.Contents?.length === 1 || submissionFileOutput.Contents?.length === 1
     } finally {
         client.destroy()
     }
