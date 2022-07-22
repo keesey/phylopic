@@ -41,7 +41,7 @@ const findExistingUUID = async (
                           }),
                       )
                     : null
-                return tagging?.TagSet?.some(tag => tag.Key === "finalized" && tag.Value === "false")
+                return tagging?.TagSet?.some(tag => tag.Key === "started" && tag.Value === "false")
                     ? extractUUIDFromSubmissionKey(Key)
                     : null
             }),
@@ -77,11 +77,11 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
                     uuid = normalizeUUID(randomUUID())
                     await client.send(
                         new PutObjectCommand({
-                            Body: stringifyNormalized({ created: new Date().toISOString() }),
+                            Body: stringifyNormalized({}),
                             Bucket: CONTRIBUTE_BUCKET_NAME,
                             ContentType: "application/json",
                             Key: getSubmissionKey(email, uuid),
-                            Tagging: "finalized=false",
+                            Tagging: "finalized=false&started=false",
                         }),
                     )
                 }

@@ -1,5 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { CONTRIBUTE_BUCKET_NAME, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import { SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { isUUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import handleHeadOrGet from "~/s3/api/handleHeadOrGet"

@@ -33,7 +33,7 @@ const Submissions: FC = () => {
                         </p>
                         <ImageGrid
                             entries={uuids.map(uuid => ({
-                                href: `/submissions/${encodeURIComponent(uuid)}`,
+                                href: `/edit/${encodeURIComponent(uuid)}`,
                                 src: `/api/s3/contribute/submissionfiles/${encodeURIComponent(uuid)}`,
                                 uuid,
                             }))}

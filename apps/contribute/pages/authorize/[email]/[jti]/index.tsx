@@ -57,9 +57,9 @@ const Content: FC<Props> = ({ email, jti }) => {
         )
     }
     if (isValidating) {
-        return <LoadingState>Verifying&hellp;</LoadingState>
+        return <LoadingState>Verifying…</LoadingState>
     }
-    return <LoadingState>Authorizing&hellp;</LoadingState>
+    return <LoadingState>Authorizing…</LoadingState>
 }
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const { email, jti } = context.params ?? {}

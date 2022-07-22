@@ -30,7 +30,7 @@ const Accepted: FC = () => {
                     <Banner>
                         {uuids.length === 0 && isValidating && <Loader />}
                         {uuids.map(uuid => (
-                            <AnchorLink key={uuid} href={`/images/${encodeURIComponent(uuid)}`}>
+                            <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
                                 <FileThumbnailView src={`/api/s3/source/images/${encodeURIComponent(uuid)}/source`} />
                             </AnchorLink>
                         ))}

@@ -1,6 +1,13 @@
-import { S3Client } from "@aws-sdk/client-s3"
+import { PutObjectTaggingCommand, S3Client } from "@aws-sdk/client-s3"
 import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
-import { isEmailAddress, isUUID, stringifyNormalized, ValidationFaultCollector } from "@phylopic/utils"
+import {
+    EmailAddress,
+    isEmailAddress,
+    isUUID,
+    stringifyNormalized,
+    UUID,
+    ValidationFaultCollector,
+} from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleDelete from "~/s3/api/handleDelete"
@@ -16,6 +23,21 @@ const parseJSON = (json: string): unknown => {
         console.error(e)
         throw 400
     }
+}
+const STARTED_TAGGING = {
+    TagSet: [
+        { Key: "finalized", Value: "false" },
+        { Key: "started", Value: "true" },
+    ],
+}
+const markAsStarted = async (client: S3Client, email: EmailAddress, uuid: UUID) => {
+    await client.send(
+        new PutObjectTaggingCommand({
+            Bucket: CONTRIBUTE_BUCKET_NAME,
+            Key: getSubmissionKey(email, uuid),
+            Tagging: STARTED_TAGGING,
+        }),
+    )
 }
 const index: NextApiHandler<string | null> = async (req, res) => {
     try {
@@ -70,6 +92,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                         },
                         isPartialSubmission,
                     )
+                    await markAsStarted(client, email, uuid)
                 } finally {
                     client.destroy()
                 }
@@ -89,6 +112,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                         Bucket: CONTRIBUTE_BUCKET_NAME,
                         ContentType: "application/json",
                         Key: getSubmissionKey(email, uuid),
+                        Tagging: "finalized=false&started=true",
                     })
                 } finally {
                     client.destroy()

@@ -1,9 +1,9 @@
 @use "@phylopic/styles/colors.scss";
 .main {
-    filter: blur(8px);
-    height: 96px;
+    filter: blur(32px);
+    height: 512px;
     position: relative;
-    width: 96px;
+    width: 512px;
     transition: color 0.5s, filter 0.5s;
     & > * {
         position: absolute;

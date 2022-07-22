@@ -22,7 +22,7 @@ const SpawnLink: FC<Props> = ({ children }) => {
     useEffect(() => {
         const uuid = data?.uuid
         if (isUUID(uuid)) {
-            router.push(`/submissions/${encodeURIComponent(uuid)}`)
+            router.push(`/edit/${encodeURIComponent(uuid)}`)
         }
     }, [data?.uuid])
     return (

@@ -22,7 +22,7 @@ const Images: FC = () => {
                         </p>
                         <ImageGrid
                             entries={uuids.map(uuid => ({
-                                href: `/images/${encodeURIComponent(uuid)}`,
+                                href: `/edit/${encodeURIComponent(uuid)}`,
                                 src: `/api/s3/source/images/${encodeURIComponent(uuid)}/source`,
                                 uuid,
                             }))}
