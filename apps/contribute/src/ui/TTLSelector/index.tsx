@@ -1,24 +1,24 @@
-import { ChangeEvent, FC, useCallback } from "react"
-import { TTL } from "./TTL"
-import styles from "./index.module.scss"
-import DEFAULT_TTL from "~/auth/ttl/DEFAULT_TTL"
 import clsx from "clsx"
+import { ChangeEvent, FC, useCallback } from "react"
+import styles from "./index.module.scss"
+import { TTL } from "./TTL"
 export interface Props {
-    mode?: "light";
+    disabled?: boolean
+    mode?: "light"
     onChange?: (value: TTL) => void
     value?: TTL
 }
-const TTLSelector: FC<Props> = ({ mode, onChange, value }) => {
+const TTLSelector: FC<Props> = ({ disabled, mode, onChange, value }) => {
     const handleTTLChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
         onChange?.(event.target.value as TTL)
     }, [])
     return (
         <select
-            className={clsx(styles.select, mode && styles[mode])}
+            className={clsx(styles.select, mode && styles[mode], disabled && styles.disabled)}
+            disabled={disabled}
             name="ttl"
             onChange={handleTTLChange}
             value={value}
-            defaultValue={DEFAULT_TTL}
         >
             <option value="DAY" label="one day" />
             <option value="WEEK" label="one week" />

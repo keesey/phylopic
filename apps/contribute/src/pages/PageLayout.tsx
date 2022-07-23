@@ -19,16 +19,16 @@ const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
             <LoaderContext.Provider value={{ color: "#fff" }}>
                 <PageLoader />
                 <PageHead {...head} />
-                <BuildContainer>
-                    <AuthContainer>
+                <BuildContainer key="build">
+                    <AuthContainer key="auth">
                         <aside>
-                            <AuthExpirationCountdown />
+                            <AuthExpirationCountdown key="expiration" />
                         </aside>
                         <header>
-                            <SiteNav />
+                            <SiteNav key="nav" />
                         </header>
                         <main>{children}</main>
-                        <SiteFooter />
+                        <SiteFooter key="footer" />
                     </AuthContainer>
                 </BuildContainer>
             </LoaderContext.Provider>

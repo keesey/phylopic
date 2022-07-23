@@ -2,10 +2,24 @@
 .main {
     background-color: colors.$dandelion;
     color: colors.$black;
+    display: grid;
     font-size: smaller;
-    > a {
+    grid-template-columns: auto min-content;
+    padding: 0.25rem;
+    a {
         color: colors.$ink;
         cursor: pointer;
     }
-    padding: 0.25rem;
+}
+.link {
+    text-decoration: underline;
+}
+.close {
+    font-size: 1rem;
+    font-weight: bold;
+}
+.pending {
+    cursor: progress;
+    opacity: 0.5;
+    text-decoration: none;
 }

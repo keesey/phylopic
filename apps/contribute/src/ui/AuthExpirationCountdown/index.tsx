@@ -1,4 +1,5 @@
 import axios from "axios"
+import clsx from "clsx"
 import { FC, useCallback, useContext, useEffect, useState } from "react"
 import AuthContext from "~/auth/AuthContext"
 import usePayload from "~/auth/hooks/usePayload"
@@ -10,6 +11,8 @@ import { TTL_VALUES } from "../TTLSelector/TTL_VALUES"
 import styles from "./index.module.scss"
 const MAXIMUM_TTL = 12 * 60 * 60 * 1000
 const AuthExpirationCountdown: FC = () => {
+    const [dismissed, setDismissed] = useState(false)
+    const [pending, setPending] = useState(false)
     const [token, setToken] = useContext(AuthContext) ?? []
     const [now, setNow] = useState(() => new Date().valueOf())
     useEffect(() => {
@@ -26,6 +29,7 @@ const AuthExpirationCountdown: FC = () => {
         }
     }, [payload?.exp, payload?.iat])
     const reauthorize = useCallback(async () => {
+        setPending(true)
         try {
             const response = await axios.post<string>(`/api/reauthorize`, { ttl: TTL_VALUES[newTTL] } as TTLPayload, {
                 headers: {
@@ -36,11 +40,14 @@ const AuthExpirationCountdown: FC = () => {
                 throw new Error("Invalid response from server.")
             }
             setToken?.(response.data)
+            setDismissed(true)
         } catch (e) {
             alert(e)
+        } finally {
+            setPending(false)
         }
     }, [newTTL, token])
-    if (!token || typeof payload?.exp !== "number" || !isFinite(payload.exp)) {
+    if (dismissed || !token || typeof payload?.exp !== "number" || !isFinite(payload.exp)) {
         return null
     }
     const ttl = payload.exp * 1000 - now
@@ -49,11 +56,16 @@ const AuthExpirationCountdown: FC = () => {
     }
     return (
         <div className={styles.main}>
-            You have <Duration value={ttl} /> before your authorization expires.{" "}
-            <a onClick={reauthorize}>
-                Click here to renew
+            <span>
+                You have <Duration value={ttl} /> before your authorization expires.{" "}
+                <a className={clsx(styles.link, pending && styles.pending)} onClick={reauthorize}>
+                    Click here to renew
+                </a>{" "}
+                for <TTLSelector disabled={pending} mode="light" value={newTTL} onChange={setNewTTL} />.
+            </span>
+            <a className={clsx(styles.close, pending && styles.pending)} onClick={() => setDismissed(true)}>
+                ×
             </a>
-            {" "}for <TTLSelector mode="light" value={newTTL} onChange={setNewTTL} />.
         </div>
     )
 }

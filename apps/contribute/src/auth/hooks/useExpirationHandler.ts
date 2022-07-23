@@ -1,3 +1,4 @@
+import { setChunkedTimeout } from "@phylopic/utils"
 import { useEffect } from "react"
 import useExpiration from "./useExpiration"
 const useExpirationHandler = (onExpire?: () => void, bufferMS = 0) => {
@@ -8,8 +9,7 @@ const useExpirationHandler = (onExpire?: () => void, bufferMS = 0) => {
             if (expiration <= now) {
                 onExpire()
             } else {
-                const handle = setTimeout(onExpire, expiration - now)
-                return () => clearTimeout(handle)
+                return setChunkedTimeout(onExpire, expiration - now)
             }
         }
     }, [bufferMS, expiration, onExpire])

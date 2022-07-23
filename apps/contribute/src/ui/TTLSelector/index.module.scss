@@ -13,6 +13,9 @@
         opacity: 0.5;
     }
 }
+.disabled {
+    text-decoration: none;
+}
 .light {
     color: colors.$ink;    
 }
