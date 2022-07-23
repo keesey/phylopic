@@ -1,4 +1,5 @@
 import { JwtPayload, verify } from "jsonwebtoken"
+import isPayload from "../models/isPayload"
 import { JWT } from "../models/JWT"
 import Payload from "../models/Payload"
 import DOMAIN from "./DOMAIN"
@@ -21,6 +22,10 @@ const verifyJWT = (token: JWT) =>
                 if (typeof decoded === "string") {
                     try {
                         const payload: JwtPayload & Payload = JSON.parse(decoded)
+                        if (!isPayload(payload)) {
+                            throw new Error("Invalid payload.");
+                            
+                        }
                         return resolve(payload)
                     } catch (e) {
                         return reject(e)

@@ -1,9 +1,9 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
+import decodeJWT from "~/auth/jwt/decodeJWT"
 import { JWT } from "~/auth/models/JWT"
-import getJWT from "~/auth/s3/getJWT"
-import putMetadataVerified from "~/auth/s3/putMetadataVerified"
+import getToken from "~/auth/s3/getToken"
 const index: NextApiHandler<string | null> = async (req, res) => {
     try {
         if (req.method === "OPTIONS") {
@@ -19,13 +19,23 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             const faultCollector = new ValidationFaultCollector()
             if (!isEmailAddress(email, faultCollector.sub("email")) || !isUUIDv4(jti, faultCollector.sub("jti"))) {
                 console.warn(faultCollector.list())
-                throw 400
+                throw 404
             }
             const client = new S3Client({})
-            let token: JWT
+            let token: JWT | null
             try {
-                token = await getJWT(client, email, jti, true)
-                await putMetadataVerified(client, email, true)
+                let expires: Date | null
+                [token, expires] = await getToken(client, email)
+                if (!token) {
+                    throw 404
+                }
+                if (expires && expires.valueOf() <= new Date().valueOf()) {
+                    throw 410
+                }
+                const payload = decodeJWT(token)
+                if (payload?.jti !== jti) {
+                    throw 404
+                }
             } finally {
                 client.destroy()
             }

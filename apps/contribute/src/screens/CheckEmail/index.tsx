@@ -4,7 +4,8 @@ import SiteTitle from "~/ui/SiteTitle"
 const CheckEmail: FC = () => (
     <DialogueScreen>
         <p>
-            Check your inbox for an email from <i>PhyloPic Contributions</i>.
+            Check your inbox for an email from <i>PhyloPic Contributions</i>. Click on the link in that email within the
+            next 24 hours.
         </p>
         <p>You may close this page. See you soon!</p>
         <a className="text" href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>

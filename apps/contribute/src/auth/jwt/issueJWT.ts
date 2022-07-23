@@ -6,7 +6,7 @@ import DEFAULT_TTL from "../ttl/DEFAULT_TTL"
 import MAX_TTL from "../ttl/MAX_TTL"
 import MIN_TTL from "../ttl/MIN_TTL"
 import createJWT from "./createJWT"
-const issueJWT = async (email: EmailAddress, payload: Payload, ttl = 24 * 60 * 60 * 1000) => {
+const issueJWT = async (email: EmailAddress, payload: Payload, ttl = DEFAULT_TTL, issuedAt: Date) => {
     if (!isEmailAddress(email)) {
         throw new Error(`Not a valid email address: ${email}`)
     }
@@ -17,11 +17,10 @@ const issueJWT = async (email: EmailAddress, payload: Payload, ttl = 24 * 60 * 6
         ttl = MIN_TTL
     } else if (ttl > MAX_TTL) {
         ttl = MAX_TTL
-    } else if (isNaN(ttl)) {
+    } else if (!isFinite(ttl)) {
         ttl = DEFAULT_TTL
     }
     const jti = normalizeUUID(randomUUID())
-    const issuedAt = new Date()
     const expiration = new Date(issuedAt.valueOf() + ttl)
     const token = await createJWT({
         email,

@@ -1,41 +1,27 @@
-import { S3Client } from "@aws-sdk/client-s3"
+import { isEmailAddress, isPositiveInteger, isUUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import getBearerJWT from "~/auth/http/getBearerJWT"
 import issueJWT from "~/auth/jwt/issueJWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
 import { JWT } from "~/auth/models/JWT"
-import deleteExpiredJWTs from "~/auth/s3/deleteExpiredJWTs"
-import putJWT from "~/auth/s3/putJWT"
+import DEFAULT_TTL from "~/auth/ttl/DEFAULT_TTL"
+import isTTLPayload from "~/auth/ttl/isTTLPayload"
 import MAX_TTL from "~/auth/ttl/MAX_TTL"
 import MIN_TTL from "~/auth/ttl/MIN_TTL"
-const handlePost = async (client: S3Client, authorization: string | undefined, ttl?: number): Promise<JWT> => {
+const handlePost = async (authorization: string | undefined, ttl: number): Promise<JWT> => {
     const now = new Date()
     const token = getBearerJWT(authorization)
-    const payload = await verifyJWT(token)
-    if (!payload) {
+    const { sub: email, exp, uuid } = await verifyJWT(token) ?? {}
+    if (!isEmailAddress(email) || !isUUID(uuid) || !isPositiveInteger(exp) || exp * 1000 <= now.valueOf()) {
         throw 401
     }
-    if (!payload.sub || !payload.uuid) {
-        throw 500
-    }
-    const newToken = await issueJWT(payload.sub, { uuid: payload.uuid }, ttl)
-    await Promise.all([putJWT(client, newToken), deleteExpiredJWTs(client, payload.sub, now)])
-    return newToken
-}
-const isValidPayload = (x: unknown): x is Readonly<{ ttl: number }> => {
-    if (x && typeof x === "object" && typeof (x as { ttl: number }).ttl === "number") {
-        return true
-    }
-    return false
+    return await issueJWT(email, { uuid }, ttl, now)
 }
 const getTTL = (body: unknown) => {
-    if (!isValidPayload(body)) {
+    if (!isTTLPayload(body)) {
         throw 400
     }
-    if (!isFinite(body.ttl)) {
-        throw 400
-    }
-    return Math.max(MIN_TTL, Math.min(MAX_TTL, body.ttl))
+    return Math.max(MIN_TTL, Math.min(MAX_TTL, body.ttl ?? DEFAULT_TTL))
 }
 const index: NextApiHandler<string | null> = async (req, res) => {
     try {
@@ -46,13 +32,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             res.status(204)
         } else if (req.method === "POST") {
             const ttl = getTTL(req.body)
-            let token: JWT
-            const client = new S3Client({})
-            try {
-                token = await handlePost(client, req.headers.authorization, ttl)
-            } finally {
-                client.destroy()
-            }
+            const token = await handlePost(req.headers.authorization, ttl)
             res.setHeader("content-type", "application/jwt")
             res.status(200)
             res.send(token)

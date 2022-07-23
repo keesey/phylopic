@@ -1,14 +1,13 @@
-import { PutObjectCommand, S3Client, ListObjectsV2Command, GetObjectTaggingCommand } from "@aws-sdk/client-s3"
+import { GetObjectTaggingCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 import {
-    createSearch,
     EmailAddress,
     isEmailAddress,
     isString,
     isUUID,
     normalizeUUID,
     stringifyNormalized,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { randomUUID } from "crypto"
 import { NextApiHandler } from "next"
