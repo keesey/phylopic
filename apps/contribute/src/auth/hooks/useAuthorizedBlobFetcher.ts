@@ -1,4 +1,3 @@
-import { IMAGE_MEDIA_TYPES } from "@phylopic/utils"
 import axios, { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
 import useAuthToken from "./useAuthToken"

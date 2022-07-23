@@ -1,14 +1,18 @@
 import { JwtPayload, verify } from "jsonwebtoken"
 import { JWT } from "../models/JWT"
 import Payload from "../models/Payload"
+import DOMAIN from "./DOMAIN"
 const verifyJWT = (token: JWT) =>
     new Promise<(JwtPayload & Payload) | null>((resolve, reject) => {
+        if (!process.env.AUTH_SECRET_KEY) {
+            throw new Error("The server is missing certain data required for authentication.")
+        }
         verify(
             token,
-            process.env.AUTH_SECRET_KEY ?? "",
+            process.env.AUTH_SECRET_KEY,
             {
-                audience: "https://contribute.phylopic.org",
-                issuer: "https://contribute.phylopic.org",
+                audience: DOMAIN,
+                issuer: DOMAIN,
             },
             (err, decoded) => {
                 if (err) {

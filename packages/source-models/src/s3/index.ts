@@ -1,3 +1,4 @@
+export * from "./AUTH_BUCKET_NAME"
 export * from "./CONTRIBUTE_BUCKET_NAME"
 export * from "./findImageSourceFile"
 export * from "./getLineage"

@@ -1,6 +1,7 @@
 import { useRouter } from "next/router"
 import { FC, ReactNode, useEffect, useState } from "react"
 import useAuthorized from "./hooks/useAuthorized"
+import useExpireEffect from "./hooks/useExpireEffect"
 type Props = {
     children: ReactNode
 }
@@ -14,6 +15,7 @@ const AuthorizedOnly: FC<Props> = ({ children }) => {
             router.push("/")
         }
     }, [authorized, mounted, router])
+    useExpireEffect(1000)
     return <>{children}</>
 }
 export default AuthorizedOnly

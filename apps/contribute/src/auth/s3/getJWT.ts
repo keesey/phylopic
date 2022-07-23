@@ -1,4 +1,5 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 import { EmailAddress, UUID } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"
 import { Readable } from "stream"
@@ -9,7 +10,7 @@ import decodeJWT from "../jwt/decodeJWT"
 const getJWT = async (client: S3Client, email: EmailAddress, jti: UUID, verify = false): Promise<JWT> => {
     const response = await client.send(
         new GetObjectCommand({
-            Bucket: "contribute.phylopic.org",
+            Bucket: CONTRIBUTE_BUCKET_NAME,
             Key: getContributorTokenKey(email, jti),
         }),
     )

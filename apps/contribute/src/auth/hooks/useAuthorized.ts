@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import isJWTExpired from "../jwt/isJWTExpired"
 import useAuthToken from "./useAuthToken"
 import useExpirationHandler from "./useExpirationHandler"

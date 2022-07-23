@@ -28,7 +28,7 @@ Open this link to start uploading images to PhyloPic: https://contribute.phylopi
         )}/${encodeURIComponent(payload.jti)}
 This link will expire at ${expirationDate.toUTCString()}.
 
-Thanks! Can't wait to see them.
+Thanks! Can't wait to see your silhouettes.
 `,
         to: payload.sub,
     }

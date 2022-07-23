@@ -4,7 +4,7 @@ const getBearerJWT = (authorization: string | undefined) => {
     }
     const match = authorization.match(/^Bearer\s+(.+)$/)
     if (!match) {
-        throw 400 // Or 401?
+        throw 401
     }
     return match[1]
 }

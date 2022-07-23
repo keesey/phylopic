@@ -1,4 +1,5 @@
 import { GetObjectCommand, GetObjectCommandOutput, GetObjectTaggingCommand, S3Client } from "@aws-sdk/client-s3"
+import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
 import { EmailAddress } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"
 import { Readable } from "stream"
@@ -6,7 +7,7 @@ import getContributorMetaKey from "~/s3/keys/contribute/getContributorMetaKey"
 import Payload from "../models/Payload"
 const getMetadata = async (client: S3Client, email: EmailAddress, verify = false): Promise<Payload> => {
     const options = {
-        Bucket: "contribute.phylopic.org",
+        Bucket: CONTRIBUTE_BUCKET_NAME,
         Key: getContributorMetaKey(email),
     }
     let response: GetObjectCommandOutput
