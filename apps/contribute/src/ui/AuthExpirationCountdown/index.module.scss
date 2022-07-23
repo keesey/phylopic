@@ -1,0 +1,11 @@
+@use "@phylopic/styles/colors.scss";
+.main {
+    background-color: colors.$dandelion;
+    color: colors.$black;
+    font-size: smaller;
+    > a {
+        color: colors.$ink;
+        cursor: pointer;
+    }
+    padding: 0.25rem;
+}

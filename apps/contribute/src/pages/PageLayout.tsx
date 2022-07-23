@@ -7,6 +7,7 @@ import PageHead, { Props as PageHeadProps } from "~/metadata/PageHead"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
+import AuthExpirationCountdown from "~/ui/AuthExpirationCountdown"
 export type Props = {
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
@@ -20,6 +21,9 @@ const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
                 <PageHead {...head} />
                 <BuildContainer>
                     <AuthContainer>
+                        <aside>
+                            <AuthExpirationCountdown />
+                        </aside>
                         <header>
                             <SiteNav />
                         </header>

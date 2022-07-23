@@ -8,10 +8,12 @@ type Props = {
 }
 const Page: NextPage<Props> = ({ uuid }) => {
     return (
-        <PageLayout head={{
-            title: "PhyloPic: Upload Image",
-            url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/file`,
-        }}>
+        <PageLayout
+            head={{
+                title: "PhyloPic: Upload Image",
+                url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/file`,
+            }}
+        >
             <AuthorizedOnly>
                 <Uploader uuid={uuid} />
             </AuthorizedOnly>

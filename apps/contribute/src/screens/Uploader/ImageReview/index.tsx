@@ -67,8 +67,12 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                         <p>(I tried to vectorize it, but ran into a problem: {String(vectorized.error)}.)</p>
                     )}
                     <nav>
-                        <button className="cta" onClick={handleSelectButtonClick}>Looks good.</button>
-                        <button className="cta" onClick={onCancel}>Wait, I want to change it.</button>
+                        <button className="cta" onClick={handleSelectButtonClick}>
+                            Looks good.
+                        </button>
+                        <button className="cta" onClick={onCancel}>
+                            Wait, I want to change it.
+                        </button>
                     </nav>
                 </div>
             </section>

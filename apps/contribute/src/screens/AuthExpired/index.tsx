@@ -45,7 +45,11 @@ const AuthExpired: FC<Props> = ({ onSubmit }) => {
                 <em>{emailAddress}</em>.
             </p>
             <div className={styles.field}>
-                <TTLSelector onChange={setTTL} value={ttl} />
+                <label>
+                    Authorize this device for <TTLSelector onChange={setTTL} value={ttl} />.
+                </label>
+                <br />
+                <small>(You may log out at any time.)</small>
             </div>
             <button className="cta" onClick={handleReauthorizeClick}>
                 Send Authorization

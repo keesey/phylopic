@@ -38,7 +38,11 @@ const SignIn: FC<Props> = ({ onSubmit }) => {
                     <EmailInput value={email} onChange={setEmail} />
                 </div>
                 <div className={styles.field}>
-                    <TTLSelector onChange={setTTL} value={ttl} />
+                    <label>
+                        Authorize this device for <TTLSelector onChange={setTTL} value={ttl} />.
+                    </label>
+                    <br />
+                    <small>(You may log out at any time.)</small>
                 </div>
                 <div>
                     <input type="submit" value="Continue" />
