@@ -5,6 +5,7 @@ import { getJSON } from "@phylopic/utils-aws"
 import { randomUUID } from "crypto"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import handleAPIError from "~/errors/handleAPIError"
 import extractUUIDFromSubmissionKey from "~/s3/keys/submissions/extractUUIDFromSubmissionKey"
 import getSubmissionKey from "~/s3/keys/submissions/getSubmissionKey"
 import getSubmissionsPrefix from "~/s3/keys/submissions/getSubmissionsPrefix"
@@ -82,12 +83,7 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
             throw 405
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     }
     res.end()
 }

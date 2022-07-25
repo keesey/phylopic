@@ -4,6 +4,7 @@ import { isDefined, isString, isUUID, stringifyNormalized, UUID } from "@phylopi
 import { getJSON } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import handleAPIError from "~/errors/handleAPIError"
 import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
 import getImageKey from "~/s3/keys/source/getImageKey"
 const index: NextApiHandler<string> = async (req, res) => {
@@ -53,8 +54,6 @@ const index: NextApiHandler<string> = async (req, res) => {
             }
             case "OPTIONS": {
                 res.setHeader("allow", "GET, HEAD, OPTIONS")
-                res.setHeader("cache-control", "max-age=3600")
-                res.setHeader("date", new Date().toUTCString())
                 res.status(204)
                 break
             }
@@ -63,12 +62,7 @@ const index: NextApiHandler<string> = async (req, res) => {
             }
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     } finally {
         client?.destroy()
     }

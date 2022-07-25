@@ -1,11 +1,11 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { SUBMISSIONS_BUCKET_NAME, Contributor, isContributor, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import { Contributor, isContributor, SOURCE_BUCKET_NAME, SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
 import { isObject, isUUID, stringifyNormalized, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import handleAPIError from "~/errors/handleAPIError"
 import handlePut from "~/s3/api/handlePut"
-import sendHeadOrGet from "~/s3/api/sendHeadOrGet"
 import getContributorSourceKey from "~/s3/keys/source/getContributorSourceKey"
 const parseJSON = (json: string): unknown => {
     try {
@@ -49,8 +49,6 @@ const index: NextApiHandler<Contributor | null> = async (req, res) => {
             }
             case "OPTIONS": {
                 res.setHeader("allow", "GET, HEAD, OPTIONS, PATCH, PUT")
-                res.setHeader("cache-control", "max-age=3600")
-                res.setHeader("date", new Date().toUTCString())
                 res.status(204)
                 break
             }
@@ -111,12 +109,7 @@ const index: NextApiHandler<Contributor | null> = async (req, res) => {
             }
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     }
     res.end()
 }

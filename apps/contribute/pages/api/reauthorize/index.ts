@@ -8,6 +8,7 @@ import DEFAULT_TTL from "~/auth/ttl/DEFAULT_TTL"
 import isTTLPayload from "~/auth/ttl/isTTLPayload"
 import MAX_TTL from "~/auth/ttl/MAX_TTL"
 import MIN_TTL from "~/auth/ttl/MIN_TTL"
+import handleAPIError from "~/errors/handleAPIError"
 const handlePost = async (authorization: string | undefined, ttl: number): Promise<JWT> => {
     const now = new Date()
     const token = getBearerJWT(authorization)
@@ -40,12 +41,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             throw 405
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     }
     res.end()
 }

@@ -2,6 +2,7 @@ import { S3Client } from "@aws-sdk/client-s3"
 import { SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { isUUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
+import handleAPIError from "~/errors/handleAPIError"
 import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
 import findImageFileExtension from "~/s3/keys/source/findImageFileExtension"
 import getImageFileKey from "~/s3/keys/source/getImageFileKey"
@@ -32,8 +33,6 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
             }
             case "OPTIONS": {
                 res.setHeader("allow", "GET, HEAD, OPTIONS")
-                res.setHeader("cache-control", "max-age=3600")
-                res.setHeader("date", new Date().toUTCString())
                 res.status(204)
                 break
             }
@@ -42,12 +41,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
             }
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     } finally {
         client?.destroy()
     }

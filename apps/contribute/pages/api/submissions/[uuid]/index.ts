@@ -3,6 +3,7 @@ import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
 import { isUUIDv4, stringifyNormalized, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import handleAPIError from "~/errors/handleAPIError"
 import handleDelete from "~/s3/api/handleDelete"
 import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
 import handlePatch from "~/s3/api/handlePatch"
@@ -53,8 +54,6 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             }
             case "OPTIONS": {
                 res.setHeader("allow", "DELETE, GET, HEAD, OPTIONS, PATCH, PUT")
-                res.setHeader("cache-control", "max-age=3600")
-                res.setHeader("date", new Date().toUTCString())
                 res.status(204)
                 break
             }
@@ -88,12 +87,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             }
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     } finally {
         client?.destroy()
     }

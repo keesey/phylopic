@@ -4,6 +4,7 @@ import { NextApiHandler } from "next"
 import decodeJWT from "~/auth/jwt/decodeJWT"
 import { JWT } from "~/auth/models/JWT"
 import getToken from "~/auth/s3/getToken"
+import handleAPIError from "~/errors/handleAPIError"
 const index: NextApiHandler<string | null> = async (req, res) => {
     try {
         if (req.method === "OPTIONS") {
@@ -44,12 +45,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             res.send(token)
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     }
     res.end()
 }

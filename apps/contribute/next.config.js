@@ -11,7 +11,14 @@ module.exports = {
         locales: ["en"],
     },
     images: {
-        domains: ["images.phylopic.org"],
+        domains: ["contribute.phylopic.org"],
     },
     reactStrictMode: true,
+    webpack: {
+        resolve: {
+            fallback: {
+                async_hooks: false,
+            },
+        },
+    },
 }

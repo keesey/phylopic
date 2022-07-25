@@ -1,8 +1,9 @@
 import { ListObjectsV2Command, ListObjectsV2CommandInput, S3Client } from "@aws-sdk/client-s3"
 import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
-import { isDefined, isNonemptyString, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
+import { isDefined, isNonemptyString, UUID } from "@phylopic/utils"
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import handleAPIError from "~/errors/handleAPIError"
 import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
 import extractUUIDFromSubmissionKey from "~/s3/keys/submissions/extractUUIDFromSubmissionKey"
 import getSubmissionsPrefix from "~/s3/keys/submissions/getSubmissionsPrefix"
@@ -57,8 +58,6 @@ const index: NextApiHandler<UUIDList | null> = async (req, res) => {
             }
             case "OPTIONS": {
                 res.setHeader("allow", "GET, HEAD, OPTIONS")
-                res.setHeader("cache-control", "max-age=3600")
-                res.setHeader("date", new Date().toUTCString())
                 res.status(204)
                 break
             }
@@ -67,12 +66,7 @@ const index: NextApiHandler<UUIDList | null> = async (req, res) => {
             }
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     }
     res.end()
 }

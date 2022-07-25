@@ -10,6 +10,7 @@ import getToken from "~/auth/s3/getToken"
 import putToken from "~/auth/s3/putToken"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
 import isTTLPayload from "~/auth/ttl/isTTLPayload"
+import handleAPIError from "~/errors/handleAPIError"
 const getExistingPayload = async (client: S3Client, email: EmailAddress) => {
     try {
         const [token] = await getToken(client, email)
@@ -57,12 +58,7 @@ const index: NextApiHandler<Payload | null> = async (req, res) => {
             throw 405
         }
     } catch (e) {
-        if (typeof e === "number") {
-            res.status(e)
-        } else {
-            console.error(e)
-            res.status(500)
-        }
+        handleAPIError(res, e)
     }
     res.end()
 }
