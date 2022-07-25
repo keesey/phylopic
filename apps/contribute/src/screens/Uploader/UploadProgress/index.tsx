@@ -1,10 +1,10 @@
 import { UUID } from "@phylopic/utils"
 import axios from "axios"
 import { FC, useContext, useEffect, useState } from "react"
-import { v4 } from "uuid"
 import AuthContext from "~/auth/AuthContext"
-import useEmailAddress from "~/auth/hooks/useEmailAddress"
+import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import getSubmissionSourceKey from "~/s3/keys/submissions/getSubmissionSourceKey"
 export interface Props {
     buffer: Buffer
     onComplete?: (uuid: UUID) => void
@@ -12,15 +12,15 @@ export interface Props {
     uuid: UUID
 }
 const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
-    const emailAddress = useEmailAddress()
+    const contributorUUID = useContributorUUID()
     const [token] = useContext(AuthContext) ?? []
     const [loaded, setLoaded] = useState(0)
     const [total, setTotal] = useState(NaN)
     const [error, setError] = useState<Error | undefined>()
     useEffect(() => {
-        if (buffer && emailAddress && token) {
+        if (buffer && contributorUUID && token) {
             const controller = new AbortController()
-            const promise = axios.put<void>(`/api/s3/source/submissionfiles/${encodeURIComponent(uuid)}`, buffer, {
+            const promise = axios.put<void>("/api/" + getSubmissionSourceKey(contributorUUID, uuid), buffer, {
                 headers: {
                     authorization: `Bearer ${token}`,
                     "content-type": type,
@@ -41,7 +41,7 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
             })()
             return () => controller.abort()
         }
-    }, [buffer, emailAddress, onComplete, token, type, uuid])
+    }, [buffer, onComplete, token, type, uuid])
     if (error) {
         return (
             <DialogueScreen>
@@ -49,7 +49,7 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
                     <p>
                         <strong>Ack!</strong> There was some kind of error:
                     </p>
-                    <p>&ldquo;{String(error)}&rdquo;</p>
+                    <p>“{String(error)}”</p>
                     {/* :TODO: button */}
                 </section>
             </DialogueScreen>

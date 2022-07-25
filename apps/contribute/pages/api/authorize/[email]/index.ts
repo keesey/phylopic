@@ -18,7 +18,7 @@ const getExistingPayload = async (client: S3Client, email: EmailAddress) => {
         }
     } catch {
         return null
-    } 
+    }
 }
 const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRequest["body"]) => {
     if (!isTTLPayload(body)) {

@@ -1,6 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import {
-    CONTRIBUTE_BUCKET_NAME,
+    SUBMISSIONS_BUCKET_NAME,
     Contribution,
     findImageSourceFile,
     getLineage,
@@ -143,12 +143,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ params }) 
             getJSON<Contribution>(
                 client,
                 {
-                    Bucket: CONTRIBUTE_BUCKET_NAME,
+                    Bucket: SUBMISSIONS_BUCKET_NAME,
                     Key: s`${path}meta.json`,
                 },
                 isContribution,
             ),
-            findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `${path}source.`),
+            findImageSourceFile(client, SUBMISSIONS_BUCKET_NAME, `${path}source.`),
             getJSON<Source>(
                 client,
                 {

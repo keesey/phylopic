@@ -1,5 +1,5 @@
 import { ListObjectsV2Command, ListObjectsV2CommandOutput, S3Client } from "@aws-sdk/client-s3"
-import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
+import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
 import { isUUID, UUID } from "@phylopic/utils"
 import { GetServerSideProps, NextPage } from "next"
 import Head from "next/head"
@@ -63,7 +63,7 @@ const getPageContributions = async (
     ContinuationToken?: string,
 ): Promise<Readonly<[readonly UUID[], boolean]>> => {
     const command = new ListObjectsV2Command({
-        Bucket: CONTRIBUTE_BUCKET_NAME,
+        Bucket: SUBMISSIONS_BUCKET_NAME,
         ContinuationToken,
         Delimiter: "/",
         MaxKeys: PAGE_SIZE,

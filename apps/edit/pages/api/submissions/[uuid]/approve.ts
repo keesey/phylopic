@@ -1,6 +1,6 @@
 import { CopyObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import {
-    CONTRIBUTE_BUCKET_NAME,
+    SUBMISSIONS_BUCKET_NAME,
     Contribution,
     findImageSourceFile,
     getLineage,
@@ -17,12 +17,12 @@ const isInternal = (identifier: Identifier | null) =>
     Boolean(identifier && identifier.startsWith("phylopic.org/nodes/"))
 export const post = async (client: S3Client, contributor: EmailAddress, uuid: UUID, res: NextApiResponse) => {
     const metaInput = {
-        Bucket: CONTRIBUTE_BUCKET_NAME,
+        Bucket: SUBMISSIONS_BUCKET_NAME,
         Key: `contributions/${uuid}/meta.json`,
     }
     const [exists, file] = await Promise.all([
         objectExists(client, metaInput),
-        findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `contributions/${uuid}/source.`),
+        findImageSourceFile(client, SUBMISSIONS_BUCKET_NAME, `contributions/${uuid}/source.`),
     ])
     if (!file?.Key || !exists) {
         return res.status(404)
@@ -77,7 +77,7 @@ export const post = async (client: S3Client, contributor: EmailAddress, uuid: UU
         ])
         await client.send(
             new DeleteObjectsCommand({
-                Bucket: CONTRIBUTE_BUCKET_NAME,
+                Bucket: SUBMISSIONS_BUCKET_NAME,
                 Delete: {
                     Objects: [{ Key: file.Key }, { Key: metaInput.Key }],
                 },

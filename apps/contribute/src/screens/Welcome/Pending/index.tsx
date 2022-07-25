@@ -1,17 +1,21 @@
 import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
 import { FC, useMemo } from "react"
-import useEmailAddress from "~/auth/hooks/useEmailAddress"
-import getContributorSubmissionsKeyPrefix from "~/s3/keys/contribute/getContributorSubmissionsKeyPrefix"
+import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import getSubmissionSourceKey from "~/s3/keys/submissions/getSubmissionSourceKey"
+import getSubmissionsPrefix from "~/s3/keys/submissions/getSubmissionsPrefix"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
 import FileThumbnailView from "~/ui/FileThumbnailView"
 import SpawnLink from "~/ui/SpawnLink"
 const Pending: FC = () => {
-    const emailAddress = useEmailAddress()
+    const contributorUUID = useContributorUUID()
     const endpoint = useMemo(
-        () => (emailAddress ? "/api/s3/contribute/" + getContributorSubmissionsKeyPrefix(emailAddress) : null),
-        [emailAddress],
+        () => (contributorUUID ? "/api/" + getSubmissionsPrefix(contributorUUID) : null),
+        [contributorUUID],
     )
+    if (!contributorUUID) {
+        return null
+    }
     return (
         <UUIDPaginationContainer endpoint={endpoint}>
             {(uuids, isValidating) => (
@@ -36,7 +40,7 @@ const Pending: FC = () => {
                         {uuids.map(uuid => (
                             <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
                                 <FileThumbnailView
-                                    src={`/api/s3/contribute/submissionfiles/${encodeURIComponent(uuid)}`}
+                                    src={"/api/" + getSubmissionSourceKey(contributorUUID, uuid)}
                                 />
                             </AnchorLink>
                         ))}

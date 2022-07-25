@@ -1,14 +1,18 @@
 import { UUID } from "@phylopic/utils"
 import { FC } from "react"
 import useSWR from "swr"
+import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import useEmailAddress from "~/auth/hooks/useEmailAddress"
+import getSubmissionKey from "~/s3/keys/submissions/getSubmissionKey"
 import fetchExists from "~/swr/fetchExists"
 import FileView from "~/ui/FileView"
 export type Props = {
     uuid: UUID
 }
 const ImageView: FC<Props> = ({ uuid }) => {
-    const sourceKey = `/api/s3/source/images/${encodeURIComponent(uuid)}/source`
-    const submissionKey = `/api/s3/contribute/submissionfiles/${encodeURIComponent(uuid)}`
+    const contributorUUID = useContributorUUID()
+    const sourceKey = `/api/images/${encodeURIComponent(uuid)}/source`
+    const submissionKey = contributorUUID ? "/api/" + getSubmissionKey(contributorUUID, uuid) : null
     const { data: hasSource } = useSWR(sourceKey, fetchExists)
     const { data: hasSubmission } = useSWR(submissionKey, fetchExists)
     return (

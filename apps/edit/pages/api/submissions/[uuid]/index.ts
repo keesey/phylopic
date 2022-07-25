@@ -1,5 +1,5 @@
 import { DeleteObjectCommand, HeadObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import { CONTRIBUTE_BUCKET_NAME, isContribution } from "@phylopic/source-models"
+import { SUBMISSIONS_BUCKET_NAME, isContribution } from "@phylopic/source-models"
 import { isUUID, normalizeUUID } from "@phylopic/utils"
 import { isAWSError, putJSON } from "@phylopic/utils-aws"
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
@@ -13,7 +13,7 @@ const deleteSubmission = async (client: S3Client, req: NextApiRequest, res: Next
     try {
         await client.send(
             new DeleteObjectCommand({
-                Bucket: CONTRIBUTE_BUCKET_NAME,
+                Bucket: SUBMISSIONS_BUCKET_NAME,
                 Key: `contributions/${normalizeUUID(uuid)}/meta.json`,
             }),
         )
@@ -31,7 +31,7 @@ const head = async (client: S3Client, req: NextApiRequest, res: NextApiResponse<
         return
     }
     const command = new HeadObjectCommand({
-        Bucket: CONTRIBUTE_BUCKET_NAME,
+        Bucket: SUBMISSIONS_BUCKET_NAME,
         Key: `contributions/${normalizeUUID(uuid)}/meta.json`,
     })
     try {
@@ -57,7 +57,7 @@ const put = async (client: S3Client, req: NextApiRequest, res: NextApiResponse<v
     await putJSON(
         client,
         {
-            Bucket: CONTRIBUTE_BUCKET_NAME,
+            Bucket: SUBMISSIONS_BUCKET_NAME,
             Key: `contributions/${normalizeUUID(uuid)}/meta.json`,
         },
         req.body,

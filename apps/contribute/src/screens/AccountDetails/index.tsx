@@ -1,12 +1,14 @@
 import { Contributor, isContributor } from "@phylopic/source-models"
-import { EmailAddress, ValidationFaultCollector } from "@phylopic/utils"
+import { EmailAddress, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { ChangeEvent, FC, FormEvent, useCallback, useState } from "react"
+import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import SiteTitle from "~/ui/SiteTitle"
 export interface Props {
-    emailAddress?: EmailAddress
+    emailAddress?: EmailAddress | null
     onSubmit?: (payload: Contributor) => void
+    uuid?: UUID | null
 }
-const AccountDetails: FC<Props> = ({ emailAddress, onSubmit }) => {
+const AccountDetails: FC<Props> = ({ emailAddress, onSubmit, uuid }) => {
     const [name, setName] = useState("")
     const [showEmailAddress, setShowEmailAddress] = useState(true)
     const handleNameInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -46,33 +48,35 @@ const AccountDetails: FC<Props> = ({ emailAddress, onSubmit }) => {
         [emailAddress, name, showEmailAddress],
     )
     return (
-        <form onSubmit={handleFormSubmit}>
-            <input
-                autoComplete="name"
-                id="name"
-                maxLength={128}
-                name="name"
-                onChange={handleNameInputChange}
-                placeholder="Your Full Name, or Alias"
-                required
-                type="text"
-                value={name}
-            />
-            <div>
+        <DialogueScreen>
+            <form onSubmit={handleFormSubmit}>
                 <input
-                    checked={showEmailAddress}
-                    id="showEmailAddress"
-                    name="showEmailAddress"
-                    onChange={handleShowEmailAddressInputChange}
+                    autoComplete="name"
+                    id="name"
+                    maxLength={128}
+                    name="name"
+                    onChange={handleNameInputChange}
+                    placeholder="Your Full Name, or Alias"
                     required
-                    type="checkbox"
+                    type="text"
+                    value={name}
                 />
-                <label htmlFor="showEmailAddress">
-                    Allow people to contact you through <SiteTitle />.
-                </label>
-            </div>
-            <input type="submit" value="Continue" />
-        </form>
+                <div>
+                    <input
+                        checked={showEmailAddress}
+                        id="showEmailAddress"
+                        name="showEmailAddress"
+                        onChange={handleShowEmailAddressInputChange}
+                        required
+                        type="checkbox"
+                    />
+                    <label htmlFor="showEmailAddress">
+                        Allow people to contact you through <SiteTitle />.
+                    </label>
+                </div>
+                <input type="submit" value="Continue" />
+            </form>
+        </DialogueScreen>
     )
 }
 export default AccountDetails

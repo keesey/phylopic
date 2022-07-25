@@ -23,8 +23,7 @@ const verifyJWT = (token: JWT) =>
                     try {
                         const payload: JwtPayload & Payload = JSON.parse(decoded)
                         if (!isPayload(payload)) {
-                            throw new Error("Invalid payload.");
-                            
+                            throw new Error("Invalid payload.")
                         }
                         return resolve(payload)
                     } catch (e) {

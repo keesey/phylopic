@@ -6,6 +6,7 @@ import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
 import sendHeadOrGet from "~/s3/api/sendHeadOrGet"
+import getImageFileKey from "~/s3/keys/source/getImageFileKey"
 import getImageKey from "~/s3/keys/source/getImageKey"
 import getImageFileExtension from "~/utils/getImageFileExtension"
 const index: NextApiHandler<string> = async (req, res) => {
@@ -17,26 +18,21 @@ const index: NextApiHandler<string> = async (req, res) => {
         }
         switch (req.method) {
             case "DELETE": {
-                const payload = await verifyAuthorization(req.headers)
                 client = new S3Client({})
                 const [image, imageOutput] = await getJSON<Image>(client, {
                     Bucket: SOURCE_BUCKET_NAME,
                     Key: getImageKey(uuid),
                 })
                 checkMetadataBearer(imageOutput)
-                if (image.contributor !== payload?.uuid) {
-                    throw 403
-                }
+                await verifyAuthorization(req.headers, { uuid: image.contributor })
                 await client.send(
                     new DeleteObjectsCommand({
                         Bucket: SOURCE_BUCKET_NAME,
                         Delete: {
                             Objects: [
-                                {
-                                    Key: getImageKey(uuid),
-                                },
+                                { Key: getImageKey(uuid) },
                                 ...Array.from(IMAGE_MEDIA_TYPES).map(type => ({
-                                    Key: `images/${uuid}/source.${getImageFileExtension(type)}`,
+                                    Key: getImageFileKey(uuid, getImageFileExtension(type)),
                                 })),
                             ],
                         },
@@ -46,16 +42,12 @@ const index: NextApiHandler<string> = async (req, res) => {
             }
             case "GET":
             case "HEAD": {
-                const payload = await verifyAuthorization(req.headers)
                 client = new S3Client({})
-                const [image, imageOutput] = await getJSON<Image>(client, {
+                const [, imageOutput] = await getJSON<Image>(client, {
                     Bucket: SOURCE_BUCKET_NAME,
                     Key: `images/${uuid}/meta.json`,
                 })
                 checkMetadataBearer(imageOutput)
-                if (image.contributor !== payload?.uuid) {
-                    throw 403
-                }
                 sendHeadOrGet(req, res, imageOutput)
                 break
             }

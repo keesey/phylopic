@@ -6,7 +6,7 @@ import ImageGrid from "~/ui/ImageGrid"
 const Images: FC = () => {
     return (
         <FullScreen>
-            <UUIDPaginationContainer endpoint="/api/s3/source/images">
+            <UUIDPaginationContainer endpoint="/api/images">
                 {(uuids, isValidating) => (
                     <>
                         <p className="dialogue">
@@ -23,7 +23,7 @@ const Images: FC = () => {
                         <ImageGrid
                             entries={uuids.map(uuid => ({
                                 href: `/edit/${encodeURIComponent(uuid)}`,
-                                src: `/api/s3/source/images/${encodeURIComponent(uuid)}/source`,
+                                src: `/api/images/${encodeURIComponent(uuid)}/source`,
                                 uuid,
                             }))}
                         />

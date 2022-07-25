@@ -5,10 +5,7 @@ import useContributorUUID from "./useContributorUUID"
 const useContributor = (): Contributor | null => {
     const uuid = useContributorUUID()
     const fetcher = useAuthorizedJSONFetcher<Contributor>()
-    const { data } = useSWR<Contributor>(
-        uuid ? `/api/s3/source/contributors/${encodeURIComponent(uuid)}` : null,
-        fetcher,
-    )
+    const { data } = useSWR<Contributor>(uuid ? `/api/contributors/${encodeURIComponent(uuid)}` : null, fetcher)
     return data ?? null
 }
 export default useContributor

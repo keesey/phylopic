@@ -11,13 +11,13 @@ const approve = (_client: S3Client, cliData: CLIData, _contributor?: EmailAddres
     /*
     if (contributor && uuid) {
         const metaInput = {
-            Bucket: CONTRIBUTE_BUCKET_NAME,
+            Bucket: SUBMISSIONS_BUCKET_NAME,
             Key: `contributors/${encodeURIComponent(contributor)}/images/${uuid}/meta.json`,
         }
         const [exists, file] = await Promise.all([
             objectExists(metaInput),
             findImageSourceFile(
-                CONTRIBUTE_BUCKET_NAME,
+                SUBMISSIONS_BUCKET_NAME,
                 `contributors/${encodeURIComponent(contributor)}/images/${uuid}/source.`,
             ),
         ])
@@ -63,7 +63,7 @@ const approve = (_client: S3Client, cliData: CLIData, _contributor?: EmailAddres
         ])
         await client.send(
             new DeleteObjectsCommand({
-                Bucket: CONTRIBUTE_BUCKET_NAME,
+                Bucket: SUBMISSIONS_BUCKET_NAME,
                 Delete: {
                     Objects: [{ Key: file.Key }, { Key: metaInput.Key }],
                 },

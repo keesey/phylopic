@@ -1,14 +1,14 @@
-import { EmailAddress, isEmailAddress, isUUID, UUID } from "@phylopic/utils"
+import { isUUID, UUID } from "@phylopic/utils"
 import { useMemo } from "react"
-const useSubmissionKey = (emailAddress: EmailAddress | null, uuid: UUID | null) => {
+const useSubmissionKey = (uuid: UUID | null) => {
     return useMemo(
         () =>
-            isEmailAddress(emailAddress) && isUUID(uuid)
-                ? `/api/s3/contribute/contributors/${encodeURIComponent(emailAddress)}/submissions/${encodeURIComponent(
+            isUUID(uuid)
+                ? `/api/submissions/${encodeURIComponent(
                       uuid,
-                  )}`
+                  )}/meta.json`
                 : null,
-        [emailAddress, uuid],
+        [uuid],
     )
 }
 export default useSubmissionKey

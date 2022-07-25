@@ -25,7 +25,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             let token: JWT | null
             try {
                 let expires: Date | null
-                [token, expires] = await getToken(client, email)
+                ;[token, expires] = await getToken(client, email)
                 if (!token) {
                     throw 404
                 }

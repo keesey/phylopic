@@ -1,6 +1,5 @@
 import { Contributor } from "@phylopic/source-models"
-import { isUUID, UUID } from "@phylopic/utils"
-import { useMemo } from "react"
+import { UUID } from "@phylopic/utils"
 import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import useContributorKey from "./useContributorKey"

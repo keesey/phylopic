@@ -1,5 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { CONTRIBUTE_BUCKET_NAME, Contributor, isContributor, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import { SUBMISSIONS_BUCKET_NAME, Contributor, isContributor, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
 import { isObject, isUUID, stringifyNormalized, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
@@ -39,7 +39,7 @@ const index: NextApiHandler<Contributor | null> = async (req, res) => {
                     if (!contributor.emailAddress) {
                         throw 403
                     }
-                    verifyAuthorization(req.headers, contributor.emailAddress)
+                    verifyAuthorization(req.headers, { sub: contributor.emailAddress })
                     res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
                     res.json(contributor)
                 } finally {
@@ -97,7 +97,7 @@ const index: NextApiHandler<Contributor | null> = async (req, res) => {
                     }
                     await handlePut(res, client, {
                         Body: stringifyNormalized(contributor!),
-                        Bucket: CONTRIBUTE_BUCKET_NAME,
+                        Bucket: SUBMISSIONS_BUCKET_NAME,
                         ContentType: "application/json",
                         Key: getContributorSourceKey(uuid),
                     })

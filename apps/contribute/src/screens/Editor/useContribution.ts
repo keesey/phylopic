@@ -2,18 +2,16 @@ import { Node } from "@phylopic/api-models"
 import { Contribution } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { useAPIFetcher } from "@phylopic/utils-api"
+import axios from "axios"
 import { useCallback, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
-import useEmailAddress from "~/auth/hooks/useEmailAddress"
 import useImageSWR from "~/s3/swr/useImageSWR"
-import axios from "axios"
-import useSubmissionSWR from "~/s3/swr/useSubmissionSWR"
 import useSubmissionKey from "~/s3/swr/useSubmissionKey"
+import useSubmissionSWR from "~/s3/swr/useSubmissionSWR"
 type ContributionPatch = Partial<Omit<Contribution, "contributor" | "created" | "uuid">>
 const useContribution = (uuid: UUID): Readonly<[Partial<Contribution>, (value: ContributionPatch) => void]> => {
-    const email = useEmailAddress()
-    const submissionKey = useSubmissionKey(email, uuid)
-    const { data: submission, mutate } = useSubmissionSWR(email, uuid)
+    const submissionKey = useSubmissionKey(uuid)
+    const { data: submission, mutate } = useSubmissionSWR(uuid)
     const { data: image } = useImageSWR(uuid)
     const apiFetcher = useAPIFetcher<Node>()
     const { data: generalNode } = useSWRImmutable(
@@ -65,7 +63,7 @@ const useContribution = (uuid: UUID): Readonly<[Partial<Contribution>, (value: C
                 return newData
             }, options)
         },
-        [email, mutate, submission, submissionKey, uuid],
+        [mutate, submission, submissionKey, uuid],
     )
     return [contribution, setContribution]
 }

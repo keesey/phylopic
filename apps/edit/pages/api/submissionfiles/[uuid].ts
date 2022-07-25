@@ -5,7 +5,7 @@ import {
     PutObjectCommand,
     S3Client,
 } from "@aws-sdk/client-s3"
-import { CONTRIBUTE_BUCKET_NAME, findImageSourceFile } from "@phylopic/source-models"
+import { SUBMISSIONS_BUCKET_NAME, findImageSourceFile } from "@phylopic/source-models"
 import {
     ImageMediaType,
     IMAGE_MEDIA_TYPES,
@@ -20,14 +20,14 @@ import { NextApiHandler, NextApiRequest, NextApiResponse, NextConfig } from "nex
 import type { Readable } from "stream"
 
 const deleteFile = async (client: S3Client, uuid: UUID, res: NextApiResponse) => {
-    const file = await findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `contributions/${uuid}/source.`)
+    const file = await findImageSourceFile(client, SUBMISSIONS_BUCKET_NAME, `contributions/${uuid}/source.`)
     if (!file?.Key) {
         return res.status(404).end()
     }
     try {
         await client.send(
             new DeleteObjectCommand({
-                Bucket: CONTRIBUTE_BUCKET_NAME,
+                Bucket: SUBMISSIONS_BUCKET_NAME,
                 Key: file.Key,
             }),
         )
@@ -87,12 +87,12 @@ const getKey = (uuid: UUID, contentType: ImageMediaType | undefined) => {
     }
 }
 const get = async (client: S3Client, uuid: UUID, download: boolean, res: NextApiResponse) => {
-    const file = await findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `contributions/${uuid}/source.`)
+    const file = await findImageSourceFile(client, SUBMISSIONS_BUCKET_NAME, `contributions/${uuid}/source.`)
     if (!file?.Key) {
         return res.status(404)
     }
     const getCommand = new GetObjectCommand({
-        Bucket: CONTRIBUTE_BUCKET_NAME,
+        Bucket: SUBMISSIONS_BUCKET_NAME,
         Key: file.Key,
     })
     let getResult: GetObjectCommandOutput
@@ -110,7 +110,7 @@ const get = async (client: S3Client, uuid: UUID, download: boolean, res: NextApi
     await writeToReponse(getResult.Body, res)
 }
 const head = async (client: S3Client, uuid: UUID, download: boolean, res: NextApiResponse) => {
-    const file = await findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `contributions/${uuid}/source.`)
+    const file = await findImageSourceFile(client, SUBMISSIONS_BUCKET_NAME, `contributions/${uuid}/source.`)
     if (!file?.Key) {
         return res.status(404)
     }
@@ -134,13 +134,13 @@ const put = async (client: S3Client, uuid: UUID, req: NextApiRequest, res: NextA
     const path = `contributions/${uuid}/`
     if (
         !(await objectExists(client, {
-            Bucket: CONTRIBUTE_BUCKET_NAME,
+            Bucket: SUBMISSIONS_BUCKET_NAME,
             Key: `${path}meta.json`,
         }))
     ) {
         return res.status(404)
     }
-    const existingFile = await findImageSourceFile(client, CONTRIBUTE_BUCKET_NAME, `${path}source.`)
+    const existingFile = await findImageSourceFile(client, SUBMISSIONS_BUCKET_NAME, `${path}source.`)
     const ContentType = req.headers["content-type"]
     if (!isImageMediaType(ContentType)) {
         return res.status(400)
@@ -151,7 +151,7 @@ const put = async (client: S3Client, uuid: UUID, req: NextApiRequest, res: NextA
     }
     const command = new PutObjectCommand({
         Body: await streamToBuffer(req),
-        Bucket: CONTRIBUTE_BUCKET_NAME,
+        Bucket: SUBMISSIONS_BUCKET_NAME,
         ContentType,
         Key: newKey,
     })
@@ -165,7 +165,7 @@ const put = async (client: S3Client, uuid: UUID, req: NextApiRequest, res: NextA
         console.info("Deleting old image file...")
         await client.send(
             new DeleteObjectCommand({
-                Bucket: CONTRIBUTE_BUCKET_NAME,
+                Bucket: SUBMISSIONS_BUCKET_NAME,
                 Key: existingFile.Key,
             }),
         )

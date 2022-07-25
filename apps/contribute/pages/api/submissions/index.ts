@@ -1,10 +1,11 @@
 import { ListObjectsV2Command, ListObjectsV2CommandInput, S3Client } from "@aws-sdk/client-s3"
-import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
-import { isDefined, isEmailAddress, isNonemptyString, UUID } from "@phylopic/utils"
+import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
+import { isDefined, isNonemptyString, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
-import getContributorSubmissionsKeyPrefix from "~/s3/keys/contribute/getContributorSubmissionsKeyPrefix"
-import extractUUIDFromSubmissionKey from "~/s3/keys/source/extractUUIDFromSubmissionKey"
+import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
+import extractUUIDFromSubmissionKey from "~/s3/keys/submissions/extractUUIDFromSubmissionKey"
+import getSubmissionsPrefix from "~/s3/keys/submissions/getSubmissionsPrefix"
 import { UUIDList } from "~/s3/models/UUIDList"
 const handleHeadOrGet = async (
     req: NextApiRequest,
@@ -14,20 +15,21 @@ const handleHeadOrGet = async (
 ) => {
     const client = new S3Client({})
     try {
-        const response = await client.send(new ListObjectsV2Command(input))
-        if (typeof response.$metadata.httpStatusCode === "number" && response.$metadata.httpStatusCode >= 400) {
-            throw response.$metadata.httpStatusCode
-        }
+        const output = await client.send(new ListObjectsV2Command(input))
+        checkMetadataBearer(output)
         const submissions: UUIDList = {
-            nextToken: response.NextContinuationToken || undefined,
+            nextToken: output.NextContinuationToken || undefined,
             uuids:
-                response.Contents?.map(content => content.Key)
+                output.Contents?.map(content => content.Key)
                     .filter(isNonemptyString)
                     .map(extractUUIDFromKey)
                     .filter(isDefined) ?? [],
         }
         res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
-        if (req.method === "GET") {
+        if (req.method === "HEAD") {
+            res.setHeader("content-length", JSON.stringify(submissions).length)
+            res.setHeader("content-type", "application/json")
+        } else {
             res.json(submissions)
         }
     } finally {
@@ -36,11 +38,7 @@ const handleHeadOrGet = async (
 }
 const index: NextApiHandler<UUIDList | null> = async (req, res) => {
     try {
-        const email = req.query.email
-        if (!isEmailAddress(email)) {
-            throw 404
-        }
-        verifyAuthorization(req.headers, email)
+        const payload = await verifyAuthorization(req.headers)
         switch (req.method) {
             case "GET":
             case "HEAD": {
@@ -48,9 +46,10 @@ const index: NextApiHandler<UUIDList | null> = async (req, res) => {
                     req,
                     res,
                     {
-                        Bucket: CONTRIBUTE_BUCKET_NAME,
+                        Bucket: SUBMISSIONS_BUCKET_NAME,
                         ContinuationToken: typeof req.query.token === "string" ? req.query.token : undefined,
-                        Prefix: getContributorSubmissionsKeyPrefix(email),
+                        Delimiter: "/",
+                        Prefix: getSubmissionsPrefix(payload.uuid),
                     },
                     extractUUIDFromSubmissionKey,
                 )

@@ -6,7 +6,7 @@ import FileThumbnailView from "~/ui/FileThumbnailView"
 const MAX_ITEMS = 24
 const Accepted: FC = () => {
     return (
-        <UUIDPaginationContainer endpoint="/api/s3/source/images" maxItems={MAX_ITEMS}>
+        <UUIDPaginationContainer endpoint="/api/images" maxItems={MAX_ITEMS}>
             {(uuids, isValidating) => (
                 <>
                     <p>
@@ -31,7 +31,7 @@ const Accepted: FC = () => {
                         {uuids.length === 0 && isValidating && <Loader />}
                         {uuids.map(uuid => (
                             <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
-                                <FileThumbnailView src={`/api/s3/source/images/${encodeURIComponent(uuid)}/source`} />
+                                <FileThumbnailView src={`/api/images/${encodeURIComponent(uuid)}/source`} />
                             </AnchorLink>
                         ))}
                     </Banner>

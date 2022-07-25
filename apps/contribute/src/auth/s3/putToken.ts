@@ -3,7 +3,7 @@ import { AUTH_BUCKET_NAME } from "@phylopic/source-models"
 import { isEmailAddress, isUUID } from "@phylopic/utils"
 import decodeJWT from "../jwt/decodeJWT"
 import { JWT } from "../models/JWT"
-import getTokenKey from "./getTOkenKey"
+import getTokenKey from "./getTokenKey"
 const putToken = async (client: S3Client, token: JWT, expires: Date) => {
     const { sub: email, jti } = decodeJWT(token) ?? {}
     if (!isEmailAddress(email) || !isUUID(jti)) {

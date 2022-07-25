@@ -4,7 +4,7 @@ import { EmailAddress } from "@phylopic/utils"
 import { streamToString } from "@phylopic/utils-aws"
 import { Readable } from "stream"
 import { JWT } from "~/auth/models/JWT"
-import getTokenKey from "./getTOkenKey"
+import getTokenKey from "./getTokenKey"
 const getToken = async (client: S3Client, email: EmailAddress): Promise<Readonly<[JWT | null, Date | null]>> => {
     try {
         const response = await client.send(

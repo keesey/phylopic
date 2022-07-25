@@ -8,7 +8,7 @@ const useImagesSWR = () => {
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: UUIDList | null) =>
             authorized && (index === 0 || previousPageData?.uuids.length)
-                ? `/api/s3/source/images` +
+                ? `/api/images` +
                   (previousPageData?.nextToken ? `?token=${encodeURIComponent(previousPageData.nextToken)}` : "")
                 : null,
         [authorized],

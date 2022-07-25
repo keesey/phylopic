@@ -20,7 +20,7 @@ const approveSubmission = async (
         const body = stringifyNormalized(modified)
         if (!original || body !== stringifyNormalized(original)) {
             const putResult = await fetch(
-                `/api/submissions/${encodeURIComponent(modified.contributor)}/${encodeURIComponent(uuid)}`,
+                `/api/submissions/${encodeURIComponent(uuid)}`,
                 {
                     method: "PUT",
                     body,
@@ -34,7 +34,7 @@ const approveSubmission = async (
             }
         }
         const result = await fetch(
-            `/api/submissions/${encodeURIComponent(modified.contributor)}/${encodeURIComponent(uuid)}/approve`,
+            `/api/submissions/${encodeURIComponent(uuid)}/approve`,
             { method: "POST" },
         )
         if (!result.ok) {

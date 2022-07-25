@@ -1,12 +1,13 @@
 import { AnchorLink, Loader } from "@phylopic/ui"
 import { FC } from "react"
-import useEmailAddress from "~/auth/hooks/useEmailAddress"
+import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import FullScreen from "~/pages/screenTypes/FullScreen"
+import getSubmissionSourceKey from "~/s3/keys/submissions/getSubmissionSourceKey"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import ImageGrid from "~/ui/ImageGrid"
 const Submissions: FC = () => {
-    const email = useEmailAddress()
-    if (!email) {
+    const contributorUUID = useContributorUUID()
+    if (!contributorUUID) {
         return (
             <FullScreen>
                 <Loader />
@@ -15,9 +16,7 @@ const Submissions: FC = () => {
     }
     return (
         <FullScreen>
-            <UUIDPaginationContainer
-                endpoint={`/api/s3/contribute/contributors/${encodeURIComponent(email)}/submissions`}
-            >
+            <UUIDPaginationContainer endpoint={`/api/submissions`}>
                 {(uuids, isValidating) => (
                     <>
                         <p className="dialogue">
@@ -34,7 +33,7 @@ const Submissions: FC = () => {
                         <ImageGrid
                             entries={uuids.map(uuid => ({
                                 href: `/edit/${encodeURIComponent(uuid)}`,
-                                src: `/api/s3/contribute/submissionfiles/${encodeURIComponent(uuid)}`,
+                                src: `/api/${getSubmissionSourceKey(contributorUUID, uuid)}`,
                                 uuid,
                             }))}
                         />

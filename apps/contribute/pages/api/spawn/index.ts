@@ -1,48 +1,40 @@
-import { GetObjectTaggingCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import { CONTRIBUTE_BUCKET_NAME } from "@phylopic/source-models"
-import {
-    EmailAddress,
-    isEmailAddress,
-    isString,
-    isUUID,
-    normalizeUUID,
-    stringifyNormalized,
-    UUID
-} from "@phylopic/utils"
+import { ListObjectsV2Command, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
+import { isObject, isString, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
+import { getJSON } from "@phylopic/utils-aws"
 import { randomUUID } from "crypto"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
-import getContributorSubmissionsKeyPrefix from "~/s3/keys/contribute/getContributorSubmissionsKeyPrefix"
-import getSubmissionKey from "~/s3/keys/contribute/getSubmissionKey"
-import extractUUIDFromSubmissionKey from "~/s3/keys/source/extractUUIDFromSubmissionKey"
-const findExistingUUID = async (
+import extractUUIDFromSubmissionKey from "~/s3/keys/submissions/extractUUIDFromSubmissionKey"
+import getSubmissionKey from "~/s3/keys/submissions/getSubmissionKey"
+import getSubmissionsPrefix from "~/s3/keys/submissions/getSubmissionsPrefix"
+import { Submission } from "~/submission/Submission"
+const isEmptySubmission = (x: unknown): x is {} => isObject(x) && Object.keys(x).length === 0
+const findEmptySubmission = async (
     client: S3Client,
-    email: EmailAddress,
+    contributorUUID: UUID,
     ContinuationToken?: string,
 ): Promise<UUID | undefined> => {
     const output = await client.send(
         new ListObjectsV2Command({
-            Bucket: CONTRIBUTE_BUCKET_NAME,
+            Bucket: SUBMISSIONS_BUCKET_NAME,
             ContinuationToken,
             Delimiter: "/",
-            Prefix: getContributorSubmissionsKeyPrefix(email),
+            Prefix: getSubmissionsPrefix(contributorUUID),
         }),
     )
     if (output.CommonPrefixes?.length) {
         const result = await Promise.all(
-            output.CommonPrefixes.map(async cp => {
-                const Key = cp.Prefix + "meta.json"
-                const tagging = cp.Prefix
-                    ? await client.send(
-                          new GetObjectTaggingCommand({
-                              Bucket: CONTRIBUTE_BUCKET_NAME,
-                              Key,
-                          }),
-                      )
-                    : null
-                return tagging?.TagSet?.some(tag => tag.Key === "started" && tag.Value === "false")
-                    ? extractUUIDFromSubmissionKey(Key)
-                    : null
+            output.CommonPrefixes.map(async commonPrefix => {
+                const Key = commonPrefix.Prefix + "meta.json"
+                const [submission] = await getJSON<Partial<Submission>>(client, {
+                    Bucket: SUBMISSIONS_BUCKET_NAME,
+                    Key,
+                })
+                if (isEmptySubmission(submission)) {
+                    return extractUUIDFromSubmissionKey(Key)
+                }
+                return null
             }),
         )
         const uuid = result.find(isString)
@@ -51,7 +43,7 @@ const findExistingUUID = async (
         }
     }
     if (output.NextContinuationToken) {
-        return findExistingUUID(client, email, output.NextContinuationToken)
+        return findEmptySubmission(client, contributorUUID, output.NextContinuationToken)
     }
 }
 const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
@@ -63,31 +55,29 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
             res.status(204)
         } else if (req.method === "POST") {
             const payload = await verifyAuthorization(req.headers)
-            const email = payload?.sub
-            console.debug(payload)
-            if (!isEmailAddress(email)) {
+            const contributorUUID = payload.uuid
+            if (!isUUID(contributorUUID)) {
                 throw 401
             }
             const client = new S3Client({})
-            let uuid: UUID | undefined
+            let imageUUID: UUID | undefined
             try {
-                uuid = await findExistingUUID(client, email)
-                if (!uuid) {
-                    uuid = normalizeUUID(randomUUID())
+                imageUUID = await findEmptySubmission(client, contributorUUID)
+                if (!imageUUID) {
+                    imageUUID = normalizeUUID(randomUUID())
                     await client.send(
                         new PutObjectCommand({
-                            Body: stringifyNormalized({}),
-                            Bucket: CONTRIBUTE_BUCKET_NAME,
+                            Body: "{}",
+                            Bucket: SUBMISSIONS_BUCKET_NAME,
                             ContentType: "application/json",
-                            Key: getSubmissionKey(email, uuid),
-                            Tagging: "finalized=false&started=false",
+                            Key: getSubmissionKey(contributorUUID, imageUUID),
                         }),
                     )
                 }
             } finally {
                 client.destroy()
             }
-            res.json({ uuid })
+            res.json({ uuid: imageUUID })
         } else {
             throw 405
         }

@@ -11,7 +11,7 @@ import MIN_TTL from "~/auth/ttl/MIN_TTL"
 const handlePost = async (authorization: string | undefined, ttl: number): Promise<JWT> => {
     const now = new Date()
     const token = getBearerJWT(authorization)
-    const { sub: email, exp, uuid } = await verifyJWT(token) ?? {}
+    const { sub: email, exp, uuid } = (await verifyJWT(token)) ?? {}
     if (!isEmailAddress(email) || !isUUID(uuid) || !isPositiveInteger(exp) || exp * 1000 <= now.valueOf()) {
         throw 401
     }
