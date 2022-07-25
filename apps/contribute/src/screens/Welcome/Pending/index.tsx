@@ -1,6 +1,5 @@
 import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
 import { FC } from "react"
-import getSubmissionSourceKey from "~/s3/keys/submissions/getSubmissionSourceKey"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
 import FileThumbnailView from "~/ui/FileThumbnailView"
