@@ -12,10 +12,7 @@ const putSubmission = async (key: string, token: JWT, newValue: Partial<Submissi
     })
     return newValue
 }
-const useSubmissionMutator = (
-    uuid: UUID | null,
-    swr: Pick<SWRResponse<Partial<Submission>>, "data" | "mutate">,
-) => {
+const useSubmissionMutator = (uuid: UUID | null, swr: Pick<SWRResponse<Partial<Submission>>, "data" | "mutate">) => {
     const token = useAuthToken()
     const key = useSubmissionKey(uuid)
     return useCallback(

@@ -39,9 +39,7 @@ const Pending: FC = () => {
                         {uuids.length === 0 && isValidating && <Loader />}
                         {uuids.map(uuid => (
                             <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
-                                <FileThumbnailView
-                                    src={"/api/" + getSubmissionSourceKey(contributorUUID, uuid)}
-                                />
+                                <FileThumbnailView src={"/api/" + getSubmissionSourceKey(contributorUUID, uuid)} />
                             </AnchorLink>
                         ))}
                     </Banner>

@@ -7,8 +7,7 @@ const useSubmissionsSWR = (contributorUUID: UUID | null) => {
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: UUIDList | null) =>
             (index === 0 || previousPageData?.uuids.length) && isUUID(contributorUUID)
-                ? `/api/submissions` +
-                  createSearch({ token: previousPageData?.nextToken })
+                ? `/api/submissions` + createSearch({ token: previousPageData?.nextToken })
                 : null,
         [contributorUUID],
     )

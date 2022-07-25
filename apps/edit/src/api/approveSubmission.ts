@@ -19,24 +19,18 @@ const approveSubmission = async (
         }
         const body = stringifyNormalized(modified)
         if (!original || body !== stringifyNormalized(original)) {
-            const putResult = await fetch(
-                `/api/submissions/${encodeURIComponent(uuid)}`,
-                {
-                    method: "PUT",
-                    body,
-                    headers: {
-                        "content-type": "application/json",
-                    },
+            const putResult = await fetch(`/api/submissions/${encodeURIComponent(uuid)}`, {
+                method: "PUT",
+                body,
+                headers: {
+                    "content-type": "application/json",
                 },
-            )
+            })
             if (!putResult.ok) {
                 throw new Error(putResult.statusText)
             }
         }
-        const result = await fetch(
-            `/api/submissions/${encodeURIComponent(uuid)}/approve`,
-            { method: "POST" },
-        )
+        const result = await fetch(`/api/submissions/${encodeURIComponent(uuid)}/approve`, { method: "POST" })
         if (!result.ok) {
             throw new Error(result.statusText)
         }
