@@ -1,23 +1,13 @@
 import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
-import { FC, useMemo } from "react"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import { FC } from "react"
 import getSubmissionSourceKey from "~/s3/keys/submissions/getSubmissionSourceKey"
-import getSubmissionsPrefix from "~/s3/keys/submissions/getSubmissionsPrefix"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
 import FileThumbnailView from "~/ui/FileThumbnailView"
 import SpawnLink from "~/ui/SpawnLink"
 const Pending: FC = () => {
-    const contributorUUID = useContributorUUID()
-    const endpoint = useMemo(
-        () => (contributorUUID ? "/api/" + getSubmissionsPrefix(contributorUUID) : null),
-        [contributorUUID],
-    )
-    if (!contributorUUID) {
-        return null
-    }
     return (
-        <UUIDPaginationContainer endpoint={endpoint}>
+        <UUIDPaginationContainer endpoint="/api/submissions">
             {(uuids, isValidating) => (
                 <>
                     <p>
@@ -39,7 +29,7 @@ const Pending: FC = () => {
                         {uuids.length === 0 && isValidating && <Loader />}
                         {uuids.map(uuid => (
                             <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
-                                <FileThumbnailView src={"/api/" + getSubmissionSourceKey(contributorUUID, uuid)} />
+                                <FileThumbnailView src={`/api/submissions/${encodeURIComponent(uuid)}`} />
                             </AnchorLink>
                         ))}
                     </Banner>
