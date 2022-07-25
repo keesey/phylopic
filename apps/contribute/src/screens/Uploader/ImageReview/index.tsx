@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
+import { isImageMediaType } from "@phylopic/utils"
 import clsx from "clsx"
 import { FC, useCallback, useMemo } from "react"
-import FullScreen from "~/pages/screenTypes/FullScreen"
+import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import useFileIsVector from "../hooks/useFileIsVector"
 import useVectorization from "../hooks/useVectorization"
 import useVectorizedImageSource from "../hooks/useVectorizedImageSource"
@@ -22,7 +23,11 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     const vectorizedSource = useVectorizedImageSource(vectorized.data)
     const mode = useMemo(() => (size[0] >= size[1] ? "landscape" : "portrait"), [size])
     const handleSelectButtonClick = useCallback(() => {
-        onComplete?.({ buffer, source, type: file.type })
+        if (isImageMediaType(file.type)) {
+            onComplete?.({ buffer, source, type: file.type })
+        } else {
+            alert("Invalid image type: " + file.type)
+        }
     }, [buffer, file.type, onComplete, source])
     const handleSelectVectorizedButtonClick = useCallback(() => {
         if (vectorized.data && vectorizedSource) {
@@ -34,29 +39,31 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     }
     if (vectorizedSource) {
         return (
-            <section className={styles.main}>
-                <div className={clsx(styles.imageContainer, styles.compare, styles[mode])}>
-                    <img className={styles.image} src={source} alt={file.name} />
-                    <img className={styles.image} src={vectorizedSource} alt="vectorized" />
-                </div>
-                <div>
-                    <p>Which one looks better?</p>
-                    <nav>
-                        <button onClick={handleSelectButtonClick}>
-                            The {mode === "portrait" ? "left" : "top"} one.
-                        </button>
-                        <button onClick={handleSelectVectorizedButtonClick}>
-                            The {mode === "portrait" ? "right" : "bottom"} one.
-                        </button>
-                        <button onClick={handleSelectVectorizedButtonClick}>They&apos;re the same picture.</button>
-                        <button onClick={onCancel}>Neither. I want to change it.</button>
-                    </nav>
-                </div>
-            </section>
+            <DialogueScreen>
+                <section className={styles.main}>
+                    <div className={clsx(styles.imageContainer, styles.compare, styles[mode])}>
+                        <img className={styles.image} src={source} alt={file.name} />
+                        <img className={styles.image} src={vectorizedSource} alt="vectorized" />
+                    </div>
+                    <div>
+                        <p>Which one looks better?</p>
+                        <nav className={styles.nav}>
+                            <button className="cta" onClick={handleSelectButtonClick}>
+                                The {mode === "portrait" ? "left" : "top"} one.
+                            </button>
+                            <button className="cta" onClick={handleSelectVectorizedButtonClick}>
+                                The {mode === "portrait" ? "right" : "bottom"} one.
+                            </button>
+                            <button className="cta" onClick={handleSelectVectorizedButtonClick}>They&apos;re the same picture.</button>
+                            <button className="cta" onClick={onCancel}>Neither. I want to change it.</button>
+                        </nav>
+                    </div>
+                </section>
+            </DialogueScreen>
         )
     }
     return (
-        <FullScreen>
+        <DialogueScreen>
             <section className={styles.main}>
                 <div className={clsx(styles.imageContainer, styles[mode])}>
                     <img className={styles.image} src={source} alt={file.name} />
@@ -76,7 +83,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                     </nav>
                 </div>
             </section>
-        </FullScreen>
+        </DialogueScreen>
     )
 }
 export default ImageReview

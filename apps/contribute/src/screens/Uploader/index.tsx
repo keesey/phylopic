@@ -2,6 +2,7 @@
 import { UUID } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { FC, useCallback, useState } from "react"
+import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import ImageReview from "./ImageReview"
 import { ReviewResult } from "./ImageReview/ReviewResult"
 import SelectFile from "./SelectFile"

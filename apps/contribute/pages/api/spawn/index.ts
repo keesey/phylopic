@@ -47,7 +47,7 @@ const findEmptySubmission = async (
         return findEmptySubmission(client, contributorUUID, output.NextContinuationToken)
     }
 }
-const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
+const index: NextApiHandler<{ existing: boolean; uuid: UUID }> = async (req, res) => {
     try {
         if (req.method === "OPTIONS") {
             res.setHeader("allow", "OPTIONS, POST")
@@ -62,9 +62,12 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
             }
             const client = new S3Client({})
             let imageUUID: UUID | undefined
+            let existing = false
             try {
                 imageUUID = await findEmptySubmission(client, contributorUUID)
-                if (!imageUUID) {
+                if (imageUUID) {
+                    existing = true
+                } else {
                     imageUUID = normalizeUUID(randomUUID())
                     await client.send(
                         new PutObjectCommand({
@@ -78,7 +81,7 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
             } finally {
                 client.destroy()
             }
-            res.json({ uuid: imageUUID })
+            res.json({ existing, uuid: imageUUID })
         } else {
             throw 405
         }

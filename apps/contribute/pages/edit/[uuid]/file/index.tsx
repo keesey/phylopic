@@ -1,5 +1,5 @@
-import { UUID } from "@phylopic/utils"
-import type { NextPage } from "next"
+import { isUUIDv4, UUID } from "@phylopic/utils"
+import type { GetServerSideProps, NextPage } from "next"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
 import Uploader from "~/screens/Uploader"
@@ -21,3 +21,10 @@ const Page: NextPage<Props> = ({ uuid }) => {
     )
 }
 export default Page
+export const getServerSideProps: GetServerSideProps<Props> = async context => {
+    const uuid = context.params?.uuid
+    if (!isUUIDv4(uuid)) {
+        return { notFound: true }
+    }
+    return { props: { uuid } }
+}

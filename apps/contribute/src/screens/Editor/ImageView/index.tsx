@@ -3,17 +3,15 @@ import { UUID } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { FC, useEffect } from "react"
 import useSWR from "swr"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
-import getSubmissionKey from "~/s3/keys/submissions/getSubmissionKey"
-import fetchExists from "~/swr/fetchExists"
+import useAuthorizedExistenceFetcher from "~/auth/hooks/useAuthorizedExistenceFetcher"
 import FileView from "~/ui/FileView"
 export type Props = {
     uuid: UUID
 }
 const ImageView: FC<Props> = ({ uuid }) => {
-    const contributorUUID = useContributorUUID()
-    const sourceKey = `/api/images/${encodeURIComponent(uuid)}/source`
-    const submissionKey = contributorUUID ? "/api/" + getSubmissionKey(contributorUUID, uuid) : null
+    const sourceKey = uuid ? `/api/images/${encodeURIComponent(uuid)}/source` : null
+    const submissionKey = uuid ? `/api/submissions/${encodeURIComponent(uuid)}/source` : null
+    const fetchExists = useAuthorizedExistenceFetcher()
     const { data: hasSource, isValidating: sourceIsValidating } = useSWR(sourceKey, fetchExists)
     const { data: hasSubmission, isValidating: submissionIsValidating } = useSWR(submissionKey, fetchExists)
     const isValidating = sourceIsValidating || submissionIsValidating
@@ -29,21 +27,26 @@ const ImageView: FC<Props> = ({ uuid }) => {
     }
     return (
         <section>
-            {hasSource && (
+            {hasSource && sourceKey && (
                 <figure key="source">
                     <FileView src={sourceKey} />
                     <figcaption>Accepted Image</figcaption>
                 </figure>
             )}
-            {hasSubmission && (
+            {hasSubmission && submissionKey && (
                 <figure key="submission">
-                    <FileView src={sourceKey} />
+                    <FileView src={submissionKey} />
                     <figcaption>Pending Submission</figcaption>
                 </figure>
             )}
             {!hasSource && !hasSubmission && (
                 <>
-                    You need to <AnchorLink className="text" href={fileHRef}> upload an image</AnchorLink>.
+                    You need to{" "}
+                    <AnchorLink className="text" href={fileHRef}>
+                        {" "}
+                        upload an image
+                    </AnchorLink>
+                    .
                 </>
             )}
         </section>

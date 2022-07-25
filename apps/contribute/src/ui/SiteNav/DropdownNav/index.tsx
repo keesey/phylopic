@@ -88,8 +88,8 @@ const DropdownNav: FC<Props> = ({ onClose }) => {
                         </li>
                     )}
                     {authorized && (
-                        <li key="contribute:/images/new">
-                            <AnchorLink href="/images/new">Upload an Image</AnchorLink>
+                        <li key="contribute:/spawn">
+                            <SpawnLink>Upload an Image</SpawnLink>
                         </li>
                     )}
                     <li key="contribute:/donate">
