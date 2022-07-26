@@ -1,13 +1,11 @@
-import { EmailAddress, UUID } from "@phylopic/utils"
+import { UUID } from "@phylopic/utils"
 import { sign } from "jsonwebtoken"
-import Payload from "../models/Payload"
 import DOMAIN from "./DOMAIN"
 export interface Args {
-    email: EmailAddress
     expiration: Date
     issuedAt: Date
     jti: UUID
-    payload: Payload
+    subject: UUID
 }
 const createJWT = (args: Args) =>
     new Promise<string | undefined>((resolve, reject) => {
@@ -16,7 +14,6 @@ const createJWT = (args: Args) =>
         }
         sign(
             {
-                ...args.payload,
                 exp: Math.floor(args.expiration.valueOf() / 1000),
                 iat: Math.floor(args.issuedAt.valueOf() / 1000),
             },
@@ -25,7 +22,7 @@ const createJWT = (args: Args) =>
                 audience: DOMAIN,
                 issuer: DOMAIN,
                 jwtid: args.jti,
-                subject: args.email,
+                subject: args.subject,
             },
             (err, encoded) => (err ? reject(err) : resolve(encoded)),
         )

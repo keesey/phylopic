@@ -25,7 +25,7 @@ const index: NextApiHandler<string> = async (req, res) => {
                     Key: getImageKey(uuid),
                 })
                 checkMetadataBearer(imageOutput)
-                await verifyAuthorization(req.headers, { uuid: image.contributor })
+                await verifyAuthorization(req.headers, { sub: image.contributor })
                 await client.send(
                     new DeleteObjectsCommand({
                         Bucket: SOURCE_BUCKET_NAME,

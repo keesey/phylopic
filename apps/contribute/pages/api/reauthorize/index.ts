@@ -16,7 +16,7 @@ const handlePost = async (authorization: string | undefined, ttl: number): Promi
     if (!isEmailAddress(email) || !isUUID(uuid) || !isPositiveInteger(exp) || exp * 1000 <= now.valueOf()) {
         throw 401
     }
-    return await issueJWT(email, { uuid }, ttl, now)
+    return await issueJWT(uuid, ttl, now)
 }
 const getTTL = (body: unknown) => {
     if (!isTTLPayload(body)) {

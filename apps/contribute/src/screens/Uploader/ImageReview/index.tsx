@@ -54,8 +54,12 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                             <button className="cta" onClick={handleSelectVectorizedButtonClick}>
                                 The {mode === "portrait" ? "right" : "bottom"} one.
                             </button>
-                            <button className="cta" onClick={handleSelectVectorizedButtonClick}>They&apos;re the same picture.</button>
-                            <button className="cta" onClick={onCancel}>Neither. I want to change it.</button>
+                            <button className="cta" onClick={handleSelectVectorizedButtonClick}>
+                                They&apos;re the same picture.
+                            </button>
+                            <button className="cta" onClick={onCancel}>
+                                Neither. I want to change it.
+                            </button>
                         </nav>
                     </div>
                 </section>

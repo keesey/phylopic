@@ -56,7 +56,7 @@ const index: NextApiHandler<{ existing: boolean; uuid: UUID }> = async (req, res
             res.status(204)
         } else if (req.method === "POST") {
             const payload = await verifyAuthorization(req.headers)
-            const contributorUUID = payload.uuid
+            const contributorUUID = payload?.sub
             if (!isUUID(contributorUUID)) {
                 throw 401
             }

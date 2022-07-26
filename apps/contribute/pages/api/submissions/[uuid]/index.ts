@@ -29,7 +29,10 @@ const index: NextApiHandler<string | null> = async (req, res) => {
     let client: S3Client | undefined
     try {
         const payload = await verifyAuthorization(req.headers)
-        const contributorUUID = payload.uuid
+        const contributorUUID = payload?.sub
+        if (!isUUIDv4(contributorUUID)) {
+            throw 401
+        }
         const imageUUID = req.query.uuid
         if (!isUUIDv4(imageUUID)) {
             throw 404

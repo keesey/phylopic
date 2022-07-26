@@ -1,6 +1,6 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
 import { Image, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { isDefined, isString, isUUID, stringifyNormalized, UUID } from "@phylopic/utils"
+import { isDefined, isString, isUUID, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
@@ -15,6 +15,10 @@ const index: NextApiHandler<string> = async (req, res) => {
             case "HEAD": {
                 client = new S3Client({})
                 const payload = await verifyAuthorization(req.headers)
+                const contributorUUID = payload?.sub
+                if (!isUUIDv4(contributorUUID)) {
+                    throw 401
+                }
                 let { token } = req.query
                 let uuids: UUID[]
                 do {
@@ -35,7 +39,7 @@ const index: NextApiHandler<string> = async (req, res) => {
                                   Key: getImageKey(uuid),
                               })
                             : []
-                        return image?.contributor === payload?.uuid ? uuid : null
+                        return image?.contributor === contributorUUID ? uuid : null
                     })
                     uuids = (await Promise.all(imagePromises ?? [])).filter(isDefined)
                     token = listOutput.NextContinuationToken

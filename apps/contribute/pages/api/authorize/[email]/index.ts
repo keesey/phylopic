@@ -1,11 +1,9 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { EmailAddress, isEmailAddress, UUID, ValidationFaultCollector } from "@phylopic/utils"
+import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { randomUUID } from "crypto"
 import { NextApiHandler, NextApiRequest } from "next"
 import decodeJWT from "~/auth/jwt/decodeJWT"
 import issueJWT from "~/auth/jwt/issueJWT"
-import isPayload from "~/auth/models/isPayload"
-import Payload from "~/auth/models/Payload"
 import getToken from "~/auth/s3/getToken"
 import putToken from "~/auth/s3/putToken"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
@@ -26,14 +24,14 @@ const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRe
         throw 400
     }
     const now = new Date()
-    const existingPayload = await getExistingPayload(client, email)
-    const uuid: UUID = isPayload(existingPayload) ? existingPayload.uuid : randomUUID()
-    const token = await issueJWT(email, { uuid }, body.ttl, now)
+    const { sub } = (await getExistingPayload(client, email)) ?? {}
+    const uuid: UUID = isUUIDv4(sub) ? sub : randomUUID()
+    const token = await issueJWT(uuid, body.ttl, now)
     const expires = new Date(now.valueOf() + 24 * 60 * 60 * 1000)
-    await putToken(client, token, expires)
-    await sendAuthEmail(token, now, expires)
+    await putToken(client, email, token, expires)
+    await sendAuthEmail(email, token, now, expires)
 }
-const index: NextApiHandler<Payload | null> = async (req, res) => {
+const index: NextApiHandler<{ uuid: UUID } | null> = async (req, res) => {
     try {
         if (req.method === "OPTIONS") {
             res.setHeader("allow", "OPTIONS, POST")

@@ -65,7 +65,7 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
         )
     }
     if (!buffer || !token || !uuid) {
-        <DialogueScreen>
+        ;<DialogueScreen>
             <section>
                 <p>Unknown error.</p>
                 <pre>1. {buffer}</pre>

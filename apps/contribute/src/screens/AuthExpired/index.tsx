@@ -1,8 +1,8 @@
 import { ContributorContainer } from "@phylopic/ui"
 import { EmailAddress } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
+import useContributor from "~/auth/hooks/useContributor"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
-import useEmailAddress from "~/auth/hooks/useEmailAddress"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import TTLSelector from "~/ui/TTLSelector"
 import { TTL } from "~/ui/TTLSelector/TTL"
@@ -24,14 +24,16 @@ const TTL_VALUES = {
 }
 const AuthExpired: FC<Props> = ({ onSubmit }) => {
     const [ttl, setTTL] = useState<TTL>("DAY")
-    const emailAddress = useEmailAddress()
     const uuid = useContributorUUID()
+    const contributor = useContributor()
     const handleClearClick = useCallback(() => {
         onSubmit?.(null)
     }, [onSubmit])
     const handleReauthorizeClick = useCallback(() => {
-        onSubmit?.(emailAddress, TTL_VALUES[ttl] ?? DAY)
-    }, [emailAddress, onSubmit, ttl])
+        if (contributor?.emailAddress) {
+            onSubmit?.(contributor?.emailAddress, TTL_VALUES[ttl] ?? DAY)
+        }
+    }, [contributor?.emailAddress, onSubmit, ttl])
     return (
         <DialogueScreen>
             {uuid && (
@@ -41,24 +43,34 @@ const AuthExpired: FC<Props> = ({ onSubmit }) => {
             )}
             {!uuid && <p>Welcome back!</p>}
             <p>
-                Your authorization has expired. Please click below to send another authorization email to{" "}
-                <em>{emailAddress}</em>.
+                Your authorization has expired.{" "}
+                {contributor?.emailAddress ? (
+                    <>
+                        Please click below to send another authorization email to <em>{contributor.emailAddress}</em>.
+                    </>
+                ) : (
+                    "Loading email address…"
+                )}
             </p>
-            <div className={styles.field}>
-                <label>
-                    Authorize this device for <TTLSelector onChange={setTTL} value={ttl} />.
-                </label>
-                <br />
-                <small>(You may log out at any time.)</small>
-            </div>
-            <button className="cta" onClick={handleReauthorizeClick}>
-                Send Authorization
-            </button>
-            <p>
-                <a className="text" onClick={handleClearClick}>
-                    Wait, that isn't my email address!
-                </a>
-            </p>
+            {contributor?.emailAddress && (
+                <>
+                    <div className={styles.field}>
+                        <label>
+                            Authorize this device for <TTLSelector onChange={setTTL} value={ttl} />.
+                        </label>
+                        <br />
+                        <small>(You may log out at any time.)</small>
+                    </div>
+                    <button className="cta" onClick={handleReauthorizeClick}>
+                        Send Authorization
+                    </button>
+                    <p>
+                        <a className="text" onClick={handleClearClick}>
+                            Wait, that isn't my email address!
+                        </a>
+                    </p>
+                </>
+            )}
         </DialogueScreen>
     )
 }

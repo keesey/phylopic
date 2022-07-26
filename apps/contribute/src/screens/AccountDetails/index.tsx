@@ -3,6 +3,7 @@ import { EmailAddress, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { ChangeEvent, FC, FormEvent, useCallback, useState } from "react"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import SiteTitle from "~/ui/SiteTitle"
+import styles from "./index.module.scss"
 export interface Props {
     emailAddress?: EmailAddress | null
     onSubmit?: (payload: Contributor) => void
@@ -49,7 +50,7 @@ const AccountDetails: FC<Props> = ({ emailAddress, onSubmit, uuid }) => {
     )
     return (
         <DialogueScreen>
-            <form onSubmit={handleFormSubmit}>
+            <form className={styles.main} onSubmit={handleFormSubmit}>
                 <input
                     autoComplete="name"
                     id="name"
@@ -61,7 +62,7 @@ const AccountDetails: FC<Props> = ({ emailAddress, onSubmit, uuid }) => {
                     type="text"
                     value={name}
                 />
-                <div>
+                <div className={styles.field}>
                     <input
                         checked={showEmailAddress}
                         id="showEmailAddress"

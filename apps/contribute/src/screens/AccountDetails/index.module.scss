@@ -1,0 +1,13 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.field {
+    align-items: center;
+    display: flex;
+    gap: 0.5em;
+    input {
+        width: unset;
+    }
+}

@@ -1,6 +1,6 @@
 import { ListObjectsV2Command, ListObjectsV2CommandInput, S3Client } from "@aws-sdk/client-s3"
 import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
-import { isDefined, isNonemptyString, UUID } from "@phylopic/utils"
+import { isDefined, isNonemptyString, isUUIDv4, UUID } from "@phylopic/utils"
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
@@ -40,6 +40,10 @@ const handleHeadOrGet = async (
 const index: NextApiHandler<UUIDList | null> = async (req, res) => {
     try {
         const payload = await verifyAuthorization(req.headers)
+        const contributorUUID = payload?.sub
+        if (!isUUIDv4(contributorUUID)) {
+            throw 401
+        }
         switch (req.method) {
             case "GET":
             case "HEAD": {
@@ -50,7 +54,7 @@ const index: NextApiHandler<UUIDList | null> = async (req, res) => {
                         Bucket: SUBMISSIONS_BUCKET_NAME,
                         ContinuationToken: typeof req.query.token === "string" ? req.query.token : undefined,
                         Delimiter: "/",
-                        Prefix: getSubmissionsPrefix(payload.uuid),
+                        Prefix: getSubmissionsPrefix(contributorUUID),
                     },
                     extractUUIDFromSubmissionKey,
                 )
