@@ -17,7 +17,6 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
     const [error, setError] = useState<Error | undefined>()
     useEffect(() => {
         if (buffer && token && uuid) {
-            console.debug("READY TO UPLOAD")
             const controller = new AbortController()
             const promise = axios.put<void>(`/api/submissions/${encodeURIComponent(uuid)}/source`, buffer, {
                 headers: {
@@ -30,19 +29,19 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
                 },
                 signal: controller.signal,
             })
-            console.debug({
-                authorization: `Bearer ${token}`,
-                "content-type": type,
-            })
             ;(async () => {
                 try {
-                    console.debug("UPLOAD STARTED!")
                     await promise
-                    console.debug("UPLOAD COMPLETE!")
                     onComplete?.(uuid)
                 } catch (e) {
-                    if (e instanceof Error && !axios.isCancel(e)) {
-                        setError(e)
+                    if (e instanceof Error) {
+                        if (axios.isCancel(e)) {
+                            console.warn("Upload canceled.")
+                        } else {
+                            setError(e)
+                        }
+                    } else {
+                        setError(new Error(String(e)))
                     }
                 }
             })()

@@ -4,25 +4,32 @@ import { useRouter } from "next/router"
 import { FC, useEffect } from "react"
 import useSWR from "swr"
 import useAuthorizedExistenceFetcher from "~/auth/hooks/useAuthorizedExistenceFetcher"
+import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import FileView from "~/ui/FileView"
 export type Props = {
     uuid: UUID
 }
 const ImageView: FC<Props> = ({ uuid }) => {
+    const contributorUUID = useContributorUUID()
     const sourceKey = uuid ? `/api/images/${encodeURIComponent(uuid)}/source` : null
-    const submissionKey = uuid ? `/api/submissions/${encodeURIComponent(uuid)}/source` : null
-    const fetchExists = useAuthorizedExistenceFetcher()
-    const { data: hasSource, isValidating: sourceIsValidating } = useSWR(sourceKey, fetchExists)
-    const { data: hasSubmission, isValidating: submissionIsValidating } = useSWR(submissionKey, fetchExists)
-    const isValidating = sourceIsValidating || submissionIsValidating
+    const submissionKey =
+        uuid && contributorUUID
+            ? `/api/submissions/${encodeURIComponent(uuid)}/source/${encodeURIComponent(contributorUUID)}`
+            : null
+    const fetchExistence = useAuthorizedExistenceFetcher()
+    const sourceExistsSWR = useSWR(sourceKey, fetchExistence)
+    const submissionExistsSWR = useSWR(submissionKey, fetchExistence)
+    const hasSource = sourceExistsSWR.data
+    const hasSubmission = submissionExistsSWR.data
+    const isValidating = sourceExistsSWR.isValidating || submissionExistsSWR.isValidating
     const fileHRef = `/edit/${encodeURIComponent(uuid)}/file`
     const router = useRouter()
     useEffect(() => {
-        if (!isValidating && !hasSource && !hasSubmission) {
+        if (!isValidating && hasSource === false && hasSubmission === false) {
             router.push(fileHRef)
         }
     }, [fileHRef, hasSource, hasSubmission, isValidating, router])
-    if (!hasSource && !hasSubmission && isValidating) {
+    if ((hasSource === undefined || hasSubmission === undefined) && isValidating) {
         return <Loader />
     }
     return (
@@ -33,13 +40,13 @@ const ImageView: FC<Props> = ({ uuid }) => {
                     <figcaption>Accepted Image</figcaption>
                 </figure>
             )}
-            {hasSubmission && submissionKey && (
+            {hasSubmission && submissionKey && contributorUUID && (
                 <figure key="submission">
                     <FileView src={submissionKey} />
                     <figcaption>Pending Submission</figcaption>
                 </figure>
             )}
-            {!hasSource && !hasSubmission && (
+            {hasSource === false && hasSubmission === false && (
                 <>
                     You need to{" "}
                     <AnchorLink className="text" href={fileHRef}>

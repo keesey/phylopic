@@ -3,6 +3,7 @@ import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
 import { isImageMediaType, isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import verifyJWT from "~/auth/jwt/verifyJWT"
 import handleAPIError from "~/errors/handleAPIError"
 import handleDelete from "~/s3/api/handleDelete"
 import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
@@ -11,17 +12,14 @@ import getSubmissionSourceKey from "~/s3/keys/submissions/getSubmissionSourceKey
 const index: NextApiHandler<string | null> = async (req, res) => {
     let client: S3Client | undefined
     try {
-        const payload = await verifyAuthorization(req.headers)
-        const contributorUUID = payload?.uuid
-        if (!isUUIDv4(contributorUUID)) {
-            throw 401
-        }
         const imageUUID = req.query.uuid
-        if (!isUUIDv4(imageUUID)) {
+        const contributorUUID = req.query.contributorUUID
+        if (!isUUIDv4(imageUUID) || !isUUIDv4(contributorUUID)) {
             throw 404
         }
         switch (req.method) {
             case "DELETE": {
+                await verifyAuthorization(req.headers, { sub: contributorUUID })
                 client = new S3Client({})
                 await handleDelete(res, client, {
                     Bucket: SUBMISSIONS_BUCKET_NAME,
@@ -44,6 +42,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                 break
             }
             case "PUT": {
+                await verifyAuthorization(req.headers, { sub: contributorUUID })
                 if (!req.body) {
                     throw 400
                 }

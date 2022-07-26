@@ -8,13 +8,20 @@ const useAuthorizedExistenceFetcher = <T>(config?: AuthorizedJSONFetcherConfig) 
     const token = useAuthToken()
     return useCallback(
         async (url: string) => {
-            const response = await axios({
-                method: "HEAD",
-                ...config,
-                headers: token ? { ...config?.headers, authorization: `Bearer ${token}` } : config?.headers,
-                url,
-            })
-            return response.status >= 200 && response.status < 400
+            try {
+                const response = await axios({
+                    method: "HEAD",
+                    ...config,
+                    headers: token ? { ...config?.headers, authorization: `Bearer ${token}` } : config?.headers,
+                    url,
+                })
+                return response.status >= 200 && response.status < 400
+            } catch (e) {
+                if (axios.isAxiosError(e) && typeof e.response?.status === "number" && e.response.status < 500) {
+                    return false
+                }
+                throw e
+            }
         },
         [config, token],
     )
