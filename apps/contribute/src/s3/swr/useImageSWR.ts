@@ -6,6 +6,8 @@ import useImageKey from "./useImageKey"
 const useImageSWR = (uuid: UUID | null) => {
     const key = useImageKey(uuid)
     const fetcher = useAuthorizedJSONFetcher<Image>()
-    return useSWR<Image>(key, fetcher)
+    return useSWR<Image>(key, fetcher, {
+        errorRetryInterval: 60 * 1000,
+    })
 }
 export default useImageSWR

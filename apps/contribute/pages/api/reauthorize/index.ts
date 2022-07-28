@@ -1,4 +1,4 @@
-import { isEmailAddress, isPositiveInteger, isUUID } from "@phylopic/utils"
+import { isEmailAddress, isPositiveInteger, isUUID, isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import getBearerJWT from "~/auth/http/getBearerJWT"
 import issueJWT from "~/auth/jwt/issueJWT"
@@ -12,8 +12,8 @@ import handleAPIError from "~/errors/handleAPIError"
 const handlePost = async (authorization: string | undefined, ttl: number): Promise<JWT> => {
     const now = new Date()
     const token = getBearerJWT(authorization)
-    const { sub: email, exp, uuid } = (await verifyJWT(token)) ?? {}
-    if (!isEmailAddress(email) || !isUUID(uuid) || !isPositiveInteger(exp) || exp * 1000 <= now.valueOf()) {
+    const { sub: uuid, exp } = (await verifyJWT(token)) ?? {}
+    if (!isUUIDv4(uuid) || !isPositiveInteger(exp) || exp * 1000 <= now.valueOf()) {
         throw 401
     }
     return await issueJWT(uuid, ttl, now)

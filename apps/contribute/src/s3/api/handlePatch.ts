@@ -10,7 +10,7 @@ const handlePatch = async (
     input: GetObjectCommandInput,
     detector?: FaultDetector<unknown>,
 ) => {
-    const newValue = JSON.parse(req.body as string)
+    const newValue = req.body
     const [oldValue, oldOutput] = await getJSON<object>(client, input)
     checkMetadataBearer(oldOutput)
     const value = {

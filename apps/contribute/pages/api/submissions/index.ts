@@ -1,38 +1,33 @@
 import { ListObjectsV2Command, ListObjectsV2CommandInput, S3Client } from "@aws-sdk/client-s3"
 import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
 import { isDefined, isNonemptyString, isUUIDv4, UUID } from "@phylopic/utils"
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
+import { NextApiHandler, NextApiResponse } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
 import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
-import extractUUIDFromSubmissionKey from "~/s3/keys/submissions/extractUUIDFromSubmissionKey"
+import extractUUIDFromSubmissionPrefix from "~/s3/keys/submissions/extractUUIDFromSubmissionPrefix"
 import getSubmissionsPrefix from "~/s3/keys/submissions/getSubmissionsPrefix"
 import { UUIDList } from "~/s3/models/UUIDList"
 const handleHeadOrGet = async (
-    req: NextApiRequest,
     res: NextApiResponse<UUIDList>,
     input: ListObjectsV2CommandInput,
-    extractUUIDFromKey: (key: string) => UUID | null,
+    extractUUIDFromPrefix: (key: string) => UUID | null,
 ) => {
     const client = new S3Client({})
     try {
         const output = await client.send(new ListObjectsV2Command(input))
         checkMetadataBearer(output)
+        console.debug(output)
         const submissions: UUIDList = {
             nextToken: output.NextContinuationToken || undefined,
             uuids:
-                output.Contents?.map(content => content.Key)
+                output.CommonPrefixes?.map(commonPrefix => commonPrefix.Prefix)
                     .filter(isNonemptyString)
-                    .map(extractUUIDFromKey)
+                    .map(extractUUIDFromPrefix)
                     .filter(isDefined) ?? [],
         }
         res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
-        if (req.method === "HEAD") {
-            res.setHeader("content-length", JSON.stringify(submissions).length)
-            res.setHeader("content-type", "application/json")
-        } else {
-            res.json(submissions)
-        }
+        res.json(submissions)
     } finally {
         client.destroy()
     }
@@ -48,7 +43,6 @@ const index: NextApiHandler<UUIDList | null> = async (req, res) => {
             case "GET":
             case "HEAD": {
                 await handleHeadOrGet(
-                    req,
                     res,
                     {
                         Bucket: SUBMISSIONS_BUCKET_NAME,
@@ -56,7 +50,7 @@ const index: NextApiHandler<UUIDList | null> = async (req, res) => {
                         Delimiter: "/",
                         Prefix: getSubmissionsPrefix(contributorUUID),
                     },
-                    extractUUIDFromSubmissionKey,
+                    extractUUIDFromSubmissionPrefix,
                 )
                 break
             }

@@ -1,0 +1,10 @@
+.main {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 143.5px - 4rem);
+    max-height: calc(100vh - 143.5px - 4rem);
+    min-height: calc(100vh - 143.5px - 4rem);
+    padding: 2rem;
+    overflow-y: auto;
+}

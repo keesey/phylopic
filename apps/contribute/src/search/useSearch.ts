@@ -1,7 +1,8 @@
 import { Node, PageWithEmbedded } from "@phylopic/api-models"
 import { Identifier, Nomen } from "@phylopic/utils"
+import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { parseNomen } from "parse-nomen"
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import useSWR from "swr"
 import fetchJSON from "~/swr/fetchJSON"
 import useAsyncMemo from "~/utils/useAsyncMemo"
@@ -12,8 +13,16 @@ export interface SearchEntry {
     readonly name: Nomen
 }
 const useSearch = (text: string) => {
+    const [build] = useContext(BuildContext) ?? []
+    const apiFetcher = useAPIFetcher()
+    useSWR(`${process.env.NEXT_PUBLIC_API_URL}`, apiFetcher) // get build
     const phyloPicKey = useMemo(
-        () => (text ? `${process.env.NEXT_PUBLIC_API_URL}/nodes?name=${encodeURIComponent(text)}&page=1` : null),
+        () =>
+            text && build
+                ? `${process.env.NEXT_PUBLIC_API_URL}/nodes?build=${encodeURIComponent(
+                      build,
+                  )}&embed_items=true&filter_name=${encodeURIComponent(text)}&page=0`
+                : null,
         [text],
     )
     const phyloPic = useSWR<PageWithEmbedded<Node>>(phyloPicKey, fetchJSON)

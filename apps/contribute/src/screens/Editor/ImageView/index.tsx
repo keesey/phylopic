@@ -1,7 +1,6 @@
 import { AnchorLink, Loader } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
-import { useRouter } from "next/router"
-import { FC, useEffect } from "react"
+import { FC } from "react"
 import useSWR from "swr"
 import useAuthorizedExistenceFetcher from "~/auth/hooks/useAuthorizedExistenceFetcher"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
@@ -23,12 +22,6 @@ const ImageView: FC<Props> = ({ uuid }) => {
     const hasSubmission = submissionExistsSWR.data
     const isValidating = sourceExistsSWR.isValidating || submissionExistsSWR.isValidating
     const fileHRef = `/edit/${encodeURIComponent(uuid)}/file`
-    const router = useRouter()
-    useEffect(() => {
-        if (!isValidating && hasSource === false && hasSubmission === false) {
-            router.push(fileHRef)
-        }
-    }, [fileHRef, hasSource, hasSubmission, isValidating, router])
     if ((hasSource === undefined || hasSubmission === undefined) && isValidating) {
         return <Loader />
     }
@@ -40,7 +33,7 @@ const ImageView: FC<Props> = ({ uuid }) => {
                     <figcaption>Accepted Image</figcaption>
                 </figure>
             )}
-            {hasSubmission && submissionKey && contributorUUID && (
+            {hasSubmission && submissionKey && (
                 <figure key="submission">
                     <FileView src={submissionKey} />
                     <figcaption>Pending Submission</figcaption>

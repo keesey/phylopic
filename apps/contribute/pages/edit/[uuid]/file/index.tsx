@@ -1,8 +1,9 @@
 import { isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
+import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
-import Uploader from "~/screens/Uploader"
+const Uploader = dynamic(() => import("~/screens/Uploader"))
 type Props = {
     uuid: UUID
 }

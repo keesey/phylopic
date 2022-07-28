@@ -2,6 +2,7 @@
 .main {
     filter: blur(32px);
     height: 512px;
+    mix-blend-mode: lighten;
     position: relative;
     width: 512px;
     transition: color 0.5s, filter 0.5s;
@@ -14,7 +15,6 @@
     }
     & img {
         filter: invert(100%);
-        mix-blend-mode: lighten;
         object-fit: contain;
     }
     &.loaded {
@@ -29,6 +29,7 @@
         border-radius: 50%;
         color: colors.$black;
         filter: none;
+        mix-blend-mode: unset;
         & img {
             opacity: 0;
             visibility: hidden;

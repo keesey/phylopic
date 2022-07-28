@@ -4,7 +4,7 @@ import useAuthToken from "./useAuthToken"
 export type AuthorizedJSONFetcherConfig = Omit<AxiosRequestConfig<void>, "url"> & {
     headers?: Omit<AxiosRequestConfig["headers"], "authorization">
 }
-const useAuthorizedExistenceFetcher = <T>(config?: AuthorizedJSONFetcherConfig) => {
+const useAuthorizedExistenceFetcher = (config?: AuthorizedJSONFetcherConfig) => {
     const token = useAuthToken()
     return useCallback(
         async (url: string) => {

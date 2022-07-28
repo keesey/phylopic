@@ -29,6 +29,7 @@
         border-radius: 50%;
         color: colors.$black;
         filter: none;
+        mix-blend-mode: unset;
         & img {
             opacity: 0;
             visibility: hidden;
