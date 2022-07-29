@@ -1,5 +1,9 @@
 @use "@phylopic/styles/colors.scss";
 .main {
+    display: inline-block;
+    min-height: 120px;
+}
+.container {
     filter: blur(8px);
     height: 96px;
     mix-blend-mode: lighten;
@@ -44,4 +48,12 @@
             text-transform: uppercase;
         }
     }
+}
+.caption {
+    height: 24px;
+    text-align: center;
+}
+.progress {
+    height: 24px;
+    width: 96px;
 }

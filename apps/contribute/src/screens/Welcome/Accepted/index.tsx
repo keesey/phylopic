@@ -31,7 +31,7 @@ const Accepted: FC = () => {
                         {uuids.length === 0 && isValidating && <Loader />}
                         {uuids.map(uuid => (
                             <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
-                                <FileThumbnailView src={`/api/images/${encodeURIComponent(uuid)}/source`} />
+                                <FileThumbnailView uuid={uuid} />
                             </AnchorLink>
                         ))}
                     </Banner>

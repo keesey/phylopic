@@ -1,6 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { isUUID } from "@phylopic/utils"
+import { isUUID, isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import handleAPIError from "~/errors/handleAPIError"
 import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
@@ -10,7 +10,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
     let client: S3Client | undefined
     try {
         const { uuid } = req.query
-        if (!isUUID(uuid)) {
+        if (!isUUIDv4(uuid)) {
             throw 404
         }
         client = new S3Client({

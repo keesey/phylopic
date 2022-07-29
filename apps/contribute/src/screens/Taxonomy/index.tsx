@@ -1,13 +1,12 @@
 import { NodeIdentifier } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
-import axios from "axios"
 import { useRouter } from "next/router"
 import { FC, useCallback, useEffect, useMemo, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useFileSource from "~/editing/useFileSource"
 import useSpecific from "~/editing/useSpecific"
 import StandardScreen from "~/pages/screenTypes/StandardScreen"
-import useSubmissionSWR from "~/s3/swr/useSubmissionSWR"
+import useSubmissionPatcher from "~/s3/swr/useSubmissionPatcher"
 import FileView from "~/ui/FileView"
 import Form from "./Form"
 import IdentifierResults from "./IdentifierResults"
@@ -18,7 +17,6 @@ const Taxonomy: FC<Props> = ({ uuid }) => {
     const token = useAuthToken()
     const { data: specific } = useSpecific(uuid)
     const { data: source, isSource } = useFileSource(uuid)
-    const { data: submission, mutate } = useSubmissionSWR(uuid)
     const suggestionText = useMemo(() => specific?.name.map(({ text }) => text).join(" ") ?? "", [specific])
     const [searchTerm, setSearchTerm] = useState("")
     const handleFormComplete = useCallback((text: string) => {
@@ -28,24 +26,11 @@ const Taxonomy: FC<Props> = ({ uuid }) => {
         setSearchTerm("")
     }, [])
     const router = useRouter()
+    const handlePatchComplete = useCallback(() => router.push(`/edit/${encodeURIComponent(uuid)}`), [router, uuid])
+    const patch = useSubmissionPatcher(uuid, handlePatchComplete)
     const handleComplete = useCallback(
-        (identifier: NodeIdentifier) => {
-            mutate(
-                async () => {
-                    const patch = { general: null, specific: identifier }
-                    const result = { ...submission, ...patch }
-                    await axios.patch(`/api/submissions/${encodeURIComponent(uuid)}`, patch, {
-                        headers: {
-                            authorization: `Bearer ${token}`,
-                        },
-                    })
-                    router.push(`/edit/${encodeURIComponent(uuid)}`) // Don't await
-                    return result
-                },
-                { revalidate: true },
-            )
-        },
-        [mutate, router],
+        (identifier: NodeIdentifier) => patch({ general: null, specific: identifier }),
+        [patch],
     )
     useEffect(() => {
         if (isSource) {

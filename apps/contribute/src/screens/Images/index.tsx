@@ -20,13 +20,7 @@ const Images: FC = () => {
                                 ← Return to Home Screen.
                             </AnchorLink>
                         </p>
-                        <ImageGrid
-                            entries={uuids.map(uuid => ({
-                                href: `/edit/${encodeURIComponent(uuid)}`,
-                                src: `/api/images/${encodeURIComponent(uuid)}/source`,
-                                uuid,
-                            }))}
-                        />
+                        <ImageGrid uuids={uuids} />
                     </>
                 )}
             </UUIDPaginationContainer>

@@ -3,19 +3,19 @@ import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
-const Taxonomy = dynamic(() => import("~/screens/Taxonomy"))
+const Usage = dynamic(() => import("~/screens/Usage"))
 type Props = {
     uuid: UUID
 }
 const Page: NextPage<Props> = ({ uuid }) => (
     <PageLayout
         head={{
-            title: "PhyloPic: Your Image's Taxonomic Assignment",
-            url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/nodes`,
+            title: "PhyloPic: Usage of Your Image",
+            url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/usage`,
         }}
     >
         <AuthorizedOnly>
-            <Taxonomy uuid={uuid} />
+            <Usage uuid={uuid} />
         </AuthorizedOnly>
     </PageLayout>
 )

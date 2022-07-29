@@ -16,7 +16,7 @@ const Submissions: FC = () => {
     }
     return (
         <FullScreen>
-            <UUIDPaginationContainer endpoint={`/api/submissions`}>
+            <UUIDPaginationContainer endpoint="/api/submissions">
                 {(uuids, isValidating) => (
                     <>
                         <p className="dialogue">
@@ -30,13 +30,7 @@ const Submissions: FC = () => {
                                 ← Return to Home Screen.
                             </AnchorLink>
                         </p>
-                        <ImageGrid
-                            entries={uuids.map(uuid => ({
-                                href: `/edit/${encodeURIComponent(uuid)}`,
-                                src: `/api/${getSubmissionSourceKey(contributorUUID, uuid)}`,
-                                uuid,
-                            }))}
-                        />
+                        <ImageGrid uuids={uuids} />
                     </>
                 )}
             </UUIDPaginationContainer>

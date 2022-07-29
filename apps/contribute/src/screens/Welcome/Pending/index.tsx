@@ -1,10 +1,10 @@
-import { Loader, NumberView } from "@phylopic/ui"
+import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
 import { FC } from "react"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
+import FileThumbnailView from "~/ui/FileThumbnailView"
 import SpawnLink from "~/ui/SpawnLink"
-import Item from "./Item"
 const Pending: FC = () => {
     const contributorUUID = useContributorUUID()
     if (!contributorUUID) {
@@ -32,7 +32,9 @@ const Pending: FC = () => {
                     <Banner>
                         {uuids.length === 0 && isValidating && <Loader />}
                         {uuids.map(uuid => (
-                            <Item key={uuid} uuid={uuid} />
+                            <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
+                                <FileThumbnailView uuid={uuid} />
+                            </AnchorLink>
                         ))}
                     </Banner>
                 </>

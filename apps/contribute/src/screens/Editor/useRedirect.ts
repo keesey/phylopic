@@ -2,12 +2,12 @@ import { UUID } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { useEffect, useMemo } from "react"
 import useFileSourceComplete from "~/editing/useFileSourceComplete"
-import useLicenseComplete from "~/editing/useLicenseComplete"
+import useUsageComplete from "~/editing/useUsageComplete"
 import useNodesComplete from "~/editing/useNodesComplete"
 const useRedirect = (uuid: UUID) => {
     const fileSourceComplete = useFileSourceComplete(uuid)
     const nodesComplete = useNodesComplete(uuid)
-    const licenseComplete = useLicenseComplete(uuid)
+    const licenseComplete = useUsageComplete(uuid)
     const router = useRouter()
     useEffect(() => {
         if (fileSourceComplete === false) {
@@ -15,7 +15,7 @@ const useRedirect = (uuid: UUID) => {
         } else if (nodesComplete === false) {
             router.push(`/edit/${encodeURIComponent(uuid)}/nodes`)
         } else if (licenseComplete === false) {
-            router.push(`/edit/${encodeURIComponent(uuid)}/license`)
+            router.push(`/edit/${encodeURIComponent(uuid)}/usage`)
         }
     }, [fileSourceComplete, licenseComplete, nodesComplete, router, uuid])
     const pending = useMemo(

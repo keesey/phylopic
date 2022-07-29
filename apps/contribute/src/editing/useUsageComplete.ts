@@ -1,13 +1,18 @@
 import { isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
 import { useMemo } from "react"
+import useImageSWR from "~/s3/swr/useImageSWR"
 import useAttribution from "./useAttribution"
 import useLicense from "./useLicense"
-const useLicenseComplete = (uuid: UUID) => {
+const useUsageComplete = (uuid: UUID) => {
+    const { data: image } = useImageSWR(uuid)
     const attribution = useAttribution(uuid)
     const license = useLicense(uuid)
     const hasError = Boolean(attribution.error ?? license.error)
     const isValidating = attribution.isValidating || license.isValidating
     return useMemo(() => {
+        if (image) {
+            return true
+        }
         if (license.data) {
             if (attribution.data) {
                 return true
@@ -16,10 +21,10 @@ const useLicenseComplete = (uuid: UUID) => {
                 return true
             }
         }
-        if (hasError || isValidating) {
+        if (hasError || ((!attribution.data || !license.data) && isValidating)) {
             return undefined
         }
         return false
-    }, [attribution.data, hasError, isValidating, license.data])
+    }, [attribution.data, hasError, image, isValidating, license.data])
 }
-export default useLicenseComplete
+export default useUsageComplete

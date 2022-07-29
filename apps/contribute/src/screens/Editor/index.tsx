@@ -12,10 +12,10 @@ export type Props = {
     uuid: UUID
 }
 const Editor: FC<Props> = ({ uuid }) => {
-    const license = useLicense(uuid)
-    const attribution = useAttribution(uuid)
-    const specific = useSpecific(uuid)
-    const general = useGeneral(uuid)
+    const { data: license } = useLicense(uuid)
+    const { data: attribution } = useAttribution(uuid)
+    const { data: specific } = useSpecific(uuid)
+    const { data: general } = useGeneral(uuid)
     // const sponsor = useSponsor(uuid)
     const { pending } = useRedirect(uuid)
     if (pending) {
@@ -32,14 +32,20 @@ const Editor: FC<Props> = ({ uuid }) => {
                 <dl>
                     <dt>Taxonomy</dt>
                     <dl>
-                        {specific.data?.name ? <NomenView value={specific.data.name} /> : "[None Selected]"}
-                        {general.data?.name && specific.data?.name && <NomenView value={general.data.name} />}
+                        {specific ? <NomenView value={specific.name} /> : "[None Selected]"}
+                        {general && specific && <NomenView value={general.name} />}
                     </dl>
                     <dt>Attribution</dt>
-                    <dl>{attribution.data ?? "[Anonymous]"}</dl>
+                    <dl>{attribution ?? "[Anonymous]"}</dl>
                     <dt>License</dt>
                     <dl>
-                        {license.data ? <a href={license.data}>{LICENSE_NAMES[license.data]}</a> : "[None Selected]"}
+                        {license ? (
+                            <a href={license} className="text" target="_blank" rel="noopener noferrer">
+                                {LICENSE_NAMES[license] ?? "[Unknown]"}
+                            </a>
+                        ) : (
+                            "[None Selected]"
+                        )}
                     </dl>
                 </dl>
             </section>
