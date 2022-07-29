@@ -2,7 +2,7 @@ import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
 import { FC } from "react"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
-import FileThumbnailView from "~/ui/FileThumbnailView"
+import SourceFileThumbnailView from "~/ui/SourceFileThumbnailView copy"
 const MAX_ITEMS = 24
 const Accepted: FC = () => {
     return (
@@ -31,7 +31,7 @@ const Accepted: FC = () => {
                         {uuids.length === 0 && isValidating && <Loader />}
                         {uuids.map(uuid => (
                             <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
-                                <FileThumbnailView uuid={uuid} />
+                                <SourceFileThumbnailView uuid={uuid} />
                             </AnchorLink>
                         ))}
                     </Banner>

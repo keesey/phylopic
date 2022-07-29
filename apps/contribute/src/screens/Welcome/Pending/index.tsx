@@ -3,7 +3,7 @@ import { FC } from "react"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
-import FileThumbnailView from "~/ui/FileThumbnailView"
+import SubmissionFileThumbnailView from "~/ui/SubmissionFileThumbnailView"
 import SpawnLink from "~/ui/SpawnLink"
 const Pending: FC = () => {
     const contributorUUID = useContributorUUID()
@@ -33,7 +33,7 @@ const Pending: FC = () => {
                         {uuids.length === 0 && isValidating && <Loader />}
                         {uuids.map(uuid => (
                             <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
-                                <FileThumbnailView uuid={uuid} />
+                                <SubmissionFileThumbnailView uuid={uuid} />
                             </AnchorLink>
                         ))}
                     </Banner>

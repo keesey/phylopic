@@ -5,6 +5,7 @@ import FullScreen from "~/pages/screenTypes/FullScreen"
 import getSubmissionSourceKey from "~/s3/keys/submissions/getSubmissionSourceKey"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import ImageGrid from "~/ui/ImageGrid"
+import SubmissionFileThumbnailView from "~/ui/SubmissionFileThumbnailView"
 const Submissions: FC = () => {
     const contributorUUID = useContributorUUID()
     if (!contributorUUID) {
@@ -30,7 +31,13 @@ const Submissions: FC = () => {
                                 ← Return to Home Screen.
                             </AnchorLink>
                         </p>
-                        <ImageGrid uuids={uuids} />
+                        <ImageGrid>
+                            {uuids.map(uuid => (
+                                <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
+                                    <SubmissionFileThumbnailView uuid={uuid} />
+                                </AnchorLink>
+                            ))}
+                        </ImageGrid>
                     </>
                 )}
             </UUIDPaginationContainer>

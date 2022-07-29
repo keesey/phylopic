@@ -3,6 +3,7 @@ import { FC } from "react"
 import FullScreen from "~/pages/screenTypes/FullScreen"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import ImageGrid from "~/ui/ImageGrid"
+import SourceFileThumbnailView from "~/ui/SourceFileThumbnailView copy"
 const Images: FC = () => {
     return (
         <FullScreen>
@@ -20,7 +21,13 @@ const Images: FC = () => {
                                 ← Return to Home Screen.
                             </AnchorLink>
                         </p>
-                        <ImageGrid uuids={uuids} />
+                        <ImageGrid>
+                            {uuids.map(uuid => (
+                                <AnchorLink key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
+                                    <SourceFileThumbnailView uuid={uuid} />
+                                </AnchorLink>
+                            ))}
+                        </ImageGrid>
                     </>
                 )}
             </UUIDPaginationContainer>

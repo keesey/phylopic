@@ -14,7 +14,9 @@ const useFileSource = (uuid: UUID) => {
         [contributorUUID, uuid],
     )
     const fetchExistence = useAuthorizedExistenceFetcher()
-    const sourceExistsSWR = useSWR(sourceKey, fetchExistence)
+    const sourceExistsSWR = useSWR(sourceKey, fetchExistence, {
+        errorRetryInterval: 60 * 1000,
+    })
     const submissionExistsSWR = useSWR(submissionKey, fetchExistence)
     const isValidating = sourceExistsSWR.isValidating || submissionExistsSWR.isValidating
     const error = submissionExistsSWR.error ?? sourceExistsSWR.error

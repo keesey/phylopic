@@ -16,7 +16,9 @@ const ImageView: FC<Props> = ({ uuid }) => {
             ? `/api/submissions/${encodeURIComponent(uuid)}/source/${encodeURIComponent(contributorUUID)}`
             : null
     const fetchExistence = useAuthorizedExistenceFetcher()
-    const sourceExistsSWR = useSWR(sourceKey, fetchExistence)
+    const sourceExistsSWR = useSWR(sourceKey, fetchExistence, {
+        errorRetryInterval: 60 * 1000,
+    })
     const submissionExistsSWR = useSWR(submissionKey, fetchExistence)
     const hasSource = sourceExistsSWR.data
     const hasSubmission = submissionExistsSWR.data
