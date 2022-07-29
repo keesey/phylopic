@@ -1,8 +1,8 @@
 import { ImageMediaType, UUID } from "@phylopic/utils"
 import axios from "axios"
-import { FC, useContext, useEffect, useState } from "react"
-import AuthContext from "~/auth/AuthContext"
+import { FC, useEffect, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
+import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 export interface Props {
     buffer: Buffer
@@ -12,23 +12,28 @@ export interface Props {
 }
 const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
     const token = useAuthToken()
+    const contributorUUID = useContributorUUID()
     const [loaded, setLoaded] = useState(0)
     const [total, setTotal] = useState(NaN)
     const [error, setError] = useState<Error | undefined>()
     useEffect(() => {
-        if (buffer && token && uuid) {
+        if (buffer && contributorUUID && token && uuid) {
             const controller = new AbortController()
-            const promise = axios.put<void>(`/api/submissions/${encodeURIComponent(uuid)}/source`, buffer, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                    "content-type": type,
+            const promise = axios.put<void>(
+                `/api/submissions/${encodeURIComponent(uuid)}/source/${encodeURIComponent(contributorUUID)}`,
+                buffer,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                        "content-type": type,
+                    },
+                    onUploadProgress: (event: ProgressEvent) => {
+                        setLoaded(event.loaded)
+                        setTotal(event.total)
+                    },
+                    signal: controller.signal,
                 },
-                onUploadProgress: (event: ProgressEvent) => {
-                    setLoaded(event.loaded)
-                    setTotal(event.total)
-                },
-                signal: controller.signal,
-            })
+            )
             ;(async () => {
                 try {
                     await promise
@@ -49,7 +54,7 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
         } else {
             console.debug("NOT READY TO UPLOAD", buffer, token, uuid)
         }
-    }, [buffer, onComplete, token, type, uuid])
+    }, [buffer, contributorUUID, onComplete, token, type, uuid])
     if (error) {
         return (
             <DialogueScreen>

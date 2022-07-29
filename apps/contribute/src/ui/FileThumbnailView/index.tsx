@@ -26,21 +26,23 @@ const FileThumbnailView: FC<Props> = ({ alt, src }) => {
         <div
             className={clsx(
                 styles.main,
-                imgLoaded && styles.loaded,
-                imgError && styles.error,
-                imgPending && styles.pending,
+                imgLoaded && src && styles.loaded,
+                imgError && src && styles.error,
+                (imgPending || !src) && styles.pending,
             )}
         >
-            <Image
-                alt={alt ?? "silhouette image"}
-                height={96}
-                onErrorCapture={handleImgError}
-                onLoad={handleImgLoad}
-                onLoadStart={handleImgLoadStart}
-                src={src ?? "data:"}
-                unoptimized
-                width={96}
-            />
+            {src && (
+                <Image
+                    alt={alt ?? "silhouette image"}
+                    height={96}
+                    onErrorCapture={handleImgError}
+                    onLoad={handleImgLoad}
+                    onLoadStart={handleImgLoadStart}
+                    src={src}
+                    unoptimized
+                    width={96}
+                />
+            )}
             {imgError && <p>image missing</p>}
         </div>
     )

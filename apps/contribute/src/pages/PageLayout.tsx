@@ -1,13 +1,13 @@
-import { BuildContainer } from "@phylopic/utils-api"
 import { LoaderContext } from "@phylopic/ui"
+import { BuildContainer } from "@phylopic/utils-api"
 import { FC, ReactNode } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
 import AuthContainer from "~/auth/AuthContainer"
 import PageHead, { Props as PageHeadProps } from "~/metadata/PageHead"
+import AuthExpirationCountdown from "~/ui/AuthExpirationCountdown"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
-import AuthExpirationCountdown from "~/ui/AuthExpirationCountdown"
 export type Props = {
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
