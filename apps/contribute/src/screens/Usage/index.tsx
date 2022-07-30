@@ -22,7 +22,7 @@ const Usage: FC<Props> = ({ uuid }) => {
     return (
         <DialogueScreen>
             <figure>
-                <FileView src={source ?? "data:"} />
+                <FileView src={source ?? "data:"} mode="dark" />
                 <figcaption>
                     {specific && <NameView value={specific.name} />}
                     {!specific && (

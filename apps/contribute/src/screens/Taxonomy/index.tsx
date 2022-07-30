@@ -40,7 +40,7 @@ const Taxonomy: FC<Props> = ({ uuid }) => {
     }, [isSource, uuid])
     return (
         <StandardScreen>
-            {source && <FileView src={source} />}
+            {source && <FileView src={source} mode="dark" />}
             {!specific && (
                 <>
                     <p>

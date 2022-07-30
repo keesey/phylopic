@@ -1,0 +1,22 @@
+@use "@phylopic/styles/colors.scss";
+.main {
+    background-color: colors.$vellum;
+    border-radius: 2rem;
+    border: colors.$ink 2px solid;
+    color: colors.$ink;
+    padding: 2rem;
+    a.text {
+        color: colors.$cerulean;
+    }
+    dl {
+        display: grid;
+        grid-template-columns: 5em auto;
+    }
+    dt {
+        font-weight: bold;
+    }
+}
+.edit {
+    color: colors.$cerulean;
+    margin-left: 1em;
+}

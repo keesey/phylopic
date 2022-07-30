@@ -10,6 +10,9 @@ a {
 .cta {
     @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
 }
+.cta-delete {
+    @include buttons.cta(colors.$dandelion, colors.$black);
+}
 a.text {
     @include buttons.text(colors.$sunshine, colors.$sunshineFade);
 }

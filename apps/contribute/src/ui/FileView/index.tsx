@@ -4,9 +4,10 @@ import React, { useCallback, useState } from "react"
 import styles from "./index.module.scss"
 export interface Props {
     alt?: string
+    mode: "dark" | "light"
     src: string
 }
-const FileView: React.FC<Props> = ({ alt, src }) => {
+const FileView: React.FC<Props> = ({ alt, mode, src }) => {
     const [error, setError] = useState(false)
     const [pending, setPending] = useState(true)
     const handleError = useCallback(() => {
@@ -25,6 +26,7 @@ const FileView: React.FC<Props> = ({ alt, src }) => {
         <div
             className={clsx(
                 styles.main,
+                styles[mode],
                 !error && !pending && styles.loaded,
                 error && styles.error,
                 pending && styles.pending,

@@ -31,13 +31,13 @@ const ImageView: FC<Props> = ({ uuid }) => {
         <section>
             {hasSource && sourceKey && (
                 <figure key="source">
-                    <FileView src={sourceKey} />
+                    <FileView src={sourceKey} mode="dark" />
                     <figcaption>Accepted Image</figcaption>
                 </figure>
             )}
             {hasSubmission && submissionKey && (
                 <figure key="submission">
-                    <FileView src={submissionKey} />
+                    <FileView src={submissionKey} mode="dark" />
                     <figcaption>Pending Submission</figcaption>
                 </figure>
             )}

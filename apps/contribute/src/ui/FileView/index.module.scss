@@ -2,7 +2,6 @@
 .main {
     filter: blur(32px);
     height: 512px;
-    mix-blend-mode: lighten;
     position: relative;
     width: 512px;
     transition: color 0.3s, filter 0.3s;
@@ -14,15 +13,26 @@
         right: 0;
     }
     & img {
-        filter: invert(100%);
         object-fit: contain;
+    }
+    &.dark {
+        mix-blend-mode: lighten;
+        & img {
+            filter: invert(100%);
+        }
+    }
+    &.light {
+        mix-blend-mode: darken;
     }
     &.loaded {
         filter: none;
     }
     &.pending {
-        background-color: colors.$wash;
+        background-color: colors.$black;
         border-radius: 50%;
+    }
+    &.dark &.pending {
+        background-color: colors.$wash;
     }
     &.error {
         background-color: colors.$dandelion;

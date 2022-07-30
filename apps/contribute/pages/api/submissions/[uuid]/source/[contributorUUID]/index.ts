@@ -30,6 +30,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             case "GET":
             case "HEAD": {
                 client = new S3Client({})
+                res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
                 await handleHeadOrGet(req, res, client, {
                     Bucket: SUBMISSIONS_BUCKET_NAME,
                     Key: getSubmissionSourceKey(contributorUUID, imageUUID),
