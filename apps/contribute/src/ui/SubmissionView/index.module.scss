@@ -15,6 +15,15 @@
     dt {
         font-weight: bold;
     }
+    figure {
+        background-color: colors.$white;
+        border: colors.$wash 2px solid;
+        border-radius: 1rem;
+        padding: 1rem;
+    }
+    figcaption {
+        text-align: center;
+    }
 }
 .edit {
     color: colors.$cerulean;

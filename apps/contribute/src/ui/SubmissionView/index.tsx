@@ -1,18 +1,20 @@
 import { LICENSE_NAMES } from "@phylopic/utils"
-import { FC } from "react"
+import { FC, ReactNode } from "react"
 import { Submission } from "~/submission/Submission"
 import FileView from "../FileView"
 import NameView from "../NameView"
 import styles from "./index.module.scss"
 export type Props = {
+    header?: ReactNode
     imageSrc: string
     submission: Submission
     onEdit?: (section: "file" | "nodes" | "usage") => void
 }
-const SubmissionView: FC<Props> = ({ imageSrc, onEdit, submission }) => {
+const SubmissionView: FC<Props> = ({ header, imageSrc, onEdit, submission }) => {
     const { attribution, license, general, specific } = submission
     return (
         <section className={styles.main}>
+            <header>{header ?? "Image"}</header>
             <figure>
                 <FileView mode="light" src={imageSrc} />
                 {onEdit && (

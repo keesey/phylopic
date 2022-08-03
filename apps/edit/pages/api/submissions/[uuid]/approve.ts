@@ -62,7 +62,7 @@ export const post = async (client: S3Client, contributor: EmailAddress, uuid: UU
             client.send(
                 new CopyObjectCommand({
                     Bucket: SOURCE_BUCKET_NAME,
-                    CopySource: encodeURI(`contribute.phylopic.org/${file.Key}`),
+                    CopySource: encodeURI(`${SUBMISSIONS_BUCKET_NAME}/${file.Key}`),
                     Key: file.Key?.replace(/^contributors\/[^/]+\//, ""),
                 }),
             ),

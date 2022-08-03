@@ -77,6 +77,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                 {sourceData && (
                     <SubmissionView
                         key="source"
+                        header="Accepted Image"
                         imageSrc={`/api/images/${encodeURIComponent(uuid)}/source`}
                         onEdit={handleEdit}
                         submission={sourceData}
@@ -87,7 +88,8 @@ const Editor: FC<Props> = ({ uuid }) => {
                 )}
                 {submissionData && contributorUUID && (
                     <SubmissionView
-                        key="source"
+                        key="submission"
+                        header={hasSource ? "Pending Changes" : "Your Submission"}
                         imageSrc={`/api/submissions/${encodeURIComponent(uuid)}/source/${encodeURIComponent(
                             contributorUUID,
                         )}`}
