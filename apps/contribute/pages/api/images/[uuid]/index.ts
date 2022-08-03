@@ -25,26 +25,32 @@ const index: NextApiHandler<string> = async (req, res) => {
                 const [image, imageOutput] = await getJSON<Image>(client, { Bucket: SOURCE_BUCKET_NAME, Key })
                 checkMetadataBearer(imageOutput)
                 await verifyAuthorization(req.headers, { sub: image.contributor })
-                const copyCommands: CopyObjectCommand[] = [new CopyObjectCommand({
-                    Bucket: SOURCE_BUCKET_NAME,
-                    CopySource: `${SOURCE_BUCKET_NAME}/${Key}`,
-                    Key: `trash/${Key}`,
-                })]
+                const copyCommands: CopyObjectCommand[] = [
+                    new CopyObjectCommand({
+                        Bucket: SOURCE_BUCKET_NAME,
+                        CopySource: `${SOURCE_BUCKET_NAME}/${Key}`,
+                        Key: `trash/${Key}`,
+                    }),
+                ]
                 let ContinuationToken: string | undefined
                 do {
-                    const listOutput = await client.send(new ListObjectsV2Command({
-                        Bucket: SOURCE_BUCKET_NAME,
-                        ContinuationToken,
-                        Prefix: getImageFileKeyPrefix(uuid),
-                    }))
+                    const listOutput = await client.send(
+                        new ListObjectsV2Command({
+                            Bucket: SOURCE_BUCKET_NAME,
+                            ContinuationToken,
+                            Prefix: getImageFileKeyPrefix(uuid),
+                        }),
+                    )
                     if (listOutput.Contents) {
                         for (const content of listOutput.Contents) {
                             if (content.Key) {
-                                copyCommands.push(new CopyObjectCommand({
-                                    Bucket: SOURCE_BUCKET_NAME,
-                                    CopySource: `${SOURCE_BUCKET_NAME}/${content.Key}`,
-                                    Key: `trash/${content.Key}`,
-                                }))
+                                copyCommands.push(
+                                    new CopyObjectCommand({
+                                        Bucket: SOURCE_BUCKET_NAME,
+                                        CopySource: `${SOURCE_BUCKET_NAME}/${content.Key}`,
+                                        Key: `trash/${content.Key}`,
+                                    }),
+                                )
                             }
                         }
                     }

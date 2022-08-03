@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, HeadObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { CopyObjectCommand, DeleteObjectCommand, HeadObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { SUBMISSIONS_BUCKET_NAME, isContribution } from "@phylopic/source-models"
 import { isUUID, normalizeUUID } from "@phylopic/utils"
 import { isAWSError, putJSON } from "@phylopic/utils-aws"
@@ -11,6 +11,13 @@ const deleteSubmission = async (client: S3Client, req: NextApiRequest, res: Next
         return
     }
     try {
+        await client.send(
+            new CopyObjectCommand({
+                Bucket: SUBMISSIONS_BUCKET_NAME,
+                CopySource: SUBMISSIONS_BUCKET_NAME + `/contributions/${normalizeUUID(uuid)}/meta.json`,
+                Key: `trash/contributions/${normalizeUUID(uuid)}/meta.json`,
+            }),
+        )
         await client.send(
             new DeleteObjectCommand({
                 Bucket: SUBMISSIONS_BUCKET_NAME,

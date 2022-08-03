@@ -1,4 +1,5 @@
 import {
+    CopyObjectCommand,
     DeleteObjectCommand,
     GetObjectCommand,
     GetObjectCommandOutput,
@@ -25,6 +26,13 @@ const deleteFile = async (client: S3Client, uuid: UUID, res: NextApiResponse) =>
         return res.status(404).end()
     }
     try {
+        await client.send(
+            new CopyObjectCommand({
+                Bucket: SUBMISSIONS_BUCKET_NAME,
+                CopySource: SUBMISSIONS_BUCKET_NAME + "/" + file.Key,
+                Key: "trash/" + file.Key,
+            }),
+        )
         await client.send(
             new DeleteObjectCommand({
                 Bucket: SUBMISSIONS_BUCKET_NAME,
