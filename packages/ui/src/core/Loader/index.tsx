@@ -1,7 +1,6 @@
-import dynamic from "next/dynamic"
 import React from "react"
+import { PropagateLoader } from "react-spinners"
 import { LoaderContext } from "../LoaderContext"
-const PropagateLoader = dynamic(() => import("react-spinners/PropagateLoader"), { ssr: false })
 export const Loader: React.FC = () => {
     const props = React.useContext(LoaderContext)
     return (
