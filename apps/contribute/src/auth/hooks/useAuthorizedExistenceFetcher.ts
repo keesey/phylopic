@@ -7,13 +7,11 @@ export type AuthorizedJSONFetcherConfig = Omit<AxiosRequestConfig<void>, "url"> 
 const useAuthorizedExistenceFetcher = (config?: AuthorizedJSONFetcherConfig) => {
     const token = useAuthToken()
     return useCallback(
-        async (url: string) => {
+        async (key: { url: string; method: "HEAD" }) => {
             try {
-                const response = await axios({
-                    method: "HEAD",
+                const response = await axios.head(key.url, {
                     ...config,
                     headers: token ? { ...config?.headers, authorization: `Bearer ${token}` } : config?.headers,
-                    url,
                 })
                 return response.status >= 200 && response.status < 400
             } catch (e) {

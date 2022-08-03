@@ -5,9 +5,13 @@ import useAuthorizedExistenceFetcher from "~/auth/hooks/useAuthorizedExistenceFe
 const useHasSourceImage = (uuid: UUID) => {
     const sourceKey = useMemo(() => (uuid ? `/api/images/${encodeURIComponent(uuid)}` : null), [uuid])
     const fetchExistence = useAuthorizedExistenceFetcher()
-    const { data } = useSWR(sourceKey, fetchExistence, {
-        errorRetryInterval: 60 * 1000,
-    })
+    const { data } = useSWR<boolean, any, { url: string; method: "HEAD" } | null>(
+        sourceKey ? { url: sourceKey, method: "HEAD" } : null,
+        fetchExistence,
+        {
+            errorRetryInterval: 60 * 1000,
+        },
+    )
     return data
 }
 export default useHasSourceImage

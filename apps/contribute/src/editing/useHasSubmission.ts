@@ -10,7 +10,10 @@ const useHasSubmission = (uuid: UUID) => {
         [contributorUUID, uuid],
     )
     const fetchExistence = useAuthorizedExistenceFetcher()
-    const { data } = useSWR(submissionKey, fetchExistence)
+    const { data } = useSWR<boolean, any, { url: string; method: "HEAD" } | null>(
+        submissionKey ? { url: submissionKey, method: "HEAD" } : null,
+        fetchExistence,
+    )
     return data
 }
 export default useHasSubmission

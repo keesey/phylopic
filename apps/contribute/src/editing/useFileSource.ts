@@ -14,10 +14,17 @@ const useFileSource = (uuid: UUID) => {
         [contributorUUID, uuid],
     )
     const fetchExistence = useAuthorizedExistenceFetcher()
-    const sourceExistsSWR = useSWR(sourceKey, fetchExistence, {
-        errorRetryInterval: 60 * 1000,
-    })
-    const submissionExistsSWR = useSWR(submissionKey, fetchExistence)
+    const sourceExistsSWR = useSWR<boolean, any, { url: string; method: "HEAD" } | null>(
+        sourceKey ? { url: sourceKey, method: "HEAD" } : null,
+        fetchExistence,
+        {
+            errorRetryInterval: 60 * 1000,
+        },
+    )
+    const submissionExistsSWR = useSWR<boolean, any, { url: string; method: "HEAD" } | null>(
+        submissionKey ? { url: submissionKey, method: "HEAD" } : null,
+        fetchExistence,
+    )
     const isValidating = sourceExistsSWR.isValidating || submissionExistsSWR.isValidating
     const error = submissionExistsSWR.error ?? sourceExistsSWR.error
     const data = useMemo(() => {
