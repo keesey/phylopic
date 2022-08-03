@@ -9,7 +9,7 @@ export const convertS3BodyToString = async (
     if (typeof body === "string") {
         return body
     }
-    if (body instanceof Blob) {
+    if (typeof Blob !== "undefined" && body instanceof Blob) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader()
             reader.onload = () => resolve(convertS3BodyToString(reader.result as string))

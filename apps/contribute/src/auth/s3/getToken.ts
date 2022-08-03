@@ -1,7 +1,7 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { AUTH_BUCKET_NAME } from "@phylopic/source-models"
 import { EmailAddress } from "@phylopic/utils"
-import { convertS3BodyToString } from "@phylopic/utils-aws"
+import { convertS3BodyToString, isAWSError } from "@phylopic/utils-aws"
 import { JWT } from "~/auth/models/JWT"
 import getTokenKey from "./getTokenKey"
 const getToken = async (client: S3Client, email: EmailAddress): Promise<Readonly<[JWT | null, Date | null]>> => {
@@ -16,7 +16,11 @@ const getToken = async (client: S3Client, email: EmailAddress): Promise<Readonly
             return [await convertS3BodyToString(response.Body), response.Expires ?? null]
         }
     } catch (e) {
-        console.error(e)
+        if (isAWSError(e) && e.$metadata.httpStatusCode >= 400 && e.$metadata.httpStatusCode < 500) {
+            console.error(e)
+        } else {
+            throw e
+        }
     }
     return [null, null]
 }
