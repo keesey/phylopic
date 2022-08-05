@@ -68,6 +68,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
         console.warn(faultCollector.list())
         return { notFound: true }
     }
+
     return {
         props: { email, jti } as Props,
     }

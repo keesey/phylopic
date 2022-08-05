@@ -7,9 +7,8 @@ import styles from "./index.module.scss"
 export interface Props {
     emailAddress?: EmailAddress | null
     onSubmit?: (payload: Contributor) => void
-    uuid?: UUID | null
 }
-const AccountDetails: FC<Props> = ({ emailAddress, onSubmit, uuid }) => {
+const AccountDetails: FC<Props> = ({ emailAddress, onSubmit }) => {
     const [name, setName] = useState("")
     const [showEmailAddress, setShowEmailAddress] = useState(true)
     const handleNameInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {

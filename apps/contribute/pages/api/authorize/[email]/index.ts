@@ -7,7 +7,10 @@ import issueJWT from "~/auth/jwt/issueJWT"
 import getToken from "~/auth/s3/getToken"
 import putToken from "~/auth/s3/putToken"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
+import DEFAULT_TTL from "~/auth/ttl/DEFAULT_TTL"
 import isTTLPayload from "~/auth/ttl/isTTLPayload"
+import MAX_TTL from "~/auth/ttl/MAX_TTL"
+import MIN_TTL from "~/auth/ttl/MIN_TTL"
 import handleAPIError from "~/errors/handleAPIError"
 const getExistingPayload = async (client: S3Client, email: EmailAddress) => {
     try {
@@ -26,8 +29,18 @@ const handlePost = async (client: S3Client, email: EmailAddress, body: NextApiRe
     const now = new Date()
     const { sub } = (await getExistingPayload(client, email)) ?? {}
     const uuid: UUID = isUUIDv4(sub) ? sub : randomUUID()
-    const token = await issueJWT(uuid, body.ttl, now)
-    const expires = new Date(now.valueOf() + 24 * 60 * 60 * 1000)
+    let { ttl } = body
+    if (typeof ttl !== "number") {
+        ttl = DEFAULT_TTL
+    } else if (ttl < MIN_TTL) {
+        ttl = MIN_TTL
+    } else if (ttl > MAX_TTL) {
+        ttl = MAX_TTL
+    } else if (!isFinite(ttl)) {
+        ttl = DEFAULT_TTL
+    }
+    const token = await issueJWT(uuid, ttl, now)
+    const expires = new Date(now.valueOf() + ttl)
     await putToken(client, email, token, expires)
     await sendAuthEmail(email, token, now, expires)
 }

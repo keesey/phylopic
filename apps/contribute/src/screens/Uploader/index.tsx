@@ -20,7 +20,6 @@ const Uploader: FC<Props> = ({ uuid }) => {
     }, [])
     const handleUploadProgressComplete = useCallback(
         (uuid: UUID) => {
-            console.debug("COMPLETED UPLOAD", uuid)
             router.push(`/edit/${encodeURIComponent(uuid)}`)
         },
         [router],

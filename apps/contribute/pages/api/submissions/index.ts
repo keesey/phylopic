@@ -4,7 +4,6 @@ import { isDefined, isNonemptyString, isUUIDv4, UUID } from "@phylopic/utils"
 import { NextApiHandler, NextApiResponse } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
 import extractUUIDFromSubmissionPrefix from "~/s3/keys/submissions/extractUUIDFromSubmissionPrefix"
 import getSubmissionsPrefix from "~/s3/keys/submissions/getSubmissionsPrefix"
 import { UUIDList } from "~/s3/models/UUIDList"
@@ -16,8 +15,6 @@ const handleHeadOrGet = async (
     const client = new S3Client({})
     try {
         const output = await client.send(new ListObjectsV2Command(input))
-        checkMetadataBearer(output)
-        console.debug(output)
         const submissions: UUIDList = {
             nextToken: output.NextContinuationToken || undefined,
             uuids:

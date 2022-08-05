@@ -22,8 +22,7 @@ const index: NextApiHandler<string> = async (req, res) => {
             case "DELETE": {
                 client = new S3Client({})
                 const Key = getImageKey(uuid)
-                const [image, imageOutput] = await getJSON<Image>(client, { Bucket: SOURCE_BUCKET_NAME, Key })
-                checkMetadataBearer(imageOutput)
+                const [image] = await getJSON<Image>(client, { Bucket: SOURCE_BUCKET_NAME, Key })
                 await verifyAuthorization(req.headers, { sub: image.contributor })
                 const copyCommands: CopyObjectCommand[] = [
                     new CopyObjectCommand({

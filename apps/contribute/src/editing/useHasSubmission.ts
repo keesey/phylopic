@@ -1,19 +1,9 @@
 import { UUID } from "@phylopic/utils"
-import { useMemo } from "react"
-import useSWR from "swr"
-import useAuthorizedExistenceFetcher from "~/auth/hooks/useAuthorizedExistenceFetcher"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import useSubmissionSWR from "~/s3/swr/useSubmissionSWR"
 const useHasSubmission = (uuid: UUID) => {
     const contributorUUID = useContributorUUID()
-    const submissionKey = useMemo(
-        () => (uuid && contributorUUID ? `/api/submissions/${encodeURIComponent(uuid)}` : null),
-        [contributorUUID, uuid],
-    )
-    const fetchExistence = useAuthorizedExistenceFetcher()
-    const { data } = useSWR<boolean, any, { url: string; method: "HEAD" } | null>(
-        submissionKey ? { url: submissionKey, method: "HEAD" } : null,
-        fetchExistence,
-    )
-    return data
+    const { data } = useSubmissionSWR(uuid)
+    return Boolean(data)
 }
 export default useHasSubmission

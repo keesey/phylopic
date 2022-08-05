@@ -51,8 +51,6 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
                 }
             })()
             return () => controller.abort()
-        } else {
-            console.debug("NOT READY TO UPLOAD", buffer, token, uuid)
         }
     }, [buffer, contributorUUID, onComplete, token, type, uuid])
     if (error) {

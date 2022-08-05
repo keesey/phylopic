@@ -13,6 +13,7 @@ import useContributorMutator from "~/s3/swr/useContributorMutator"
 import useContributorSWR from "~/s3/swr/useContributorSWR"
 import AccountDetails from "~/screens/AccountDetails"
 import { DAY } from "~/ui/TTLSelector/TTL_VALUES"
+import DialogueScreen from "./screenTypes/DialogueScreen"
 const LoadingState = dynamic(() => import("~/screens/LoadingState"), { ssr: false })
 const SignIn = dynamic(() => import("~/screens/SignIn"), { ssr: false })
 const AuthExpired = dynamic(() => import("~/screens/AuthExpired"), { ssr: false })
@@ -52,11 +53,6 @@ const Home: FC = () => {
     const contributorUUID = useContributorUUID()
     const contributorSWR = useContributorSWR(contributorUUID)
     const handleContributorSubmit = useContributorMutator(contributorUUID, contributorSWR)
-    useEffect(() => {
-        if (authorizeSWR.error || contributorSWR.error) {
-            alert(authorizeSWR.error || contributorSWR.error)
-        }
-    }, [authorizeSWR.error, contributorSWR.error])
     const router = useRouter()
     useEffect(() => {
         if (authorizeSWR.data) {
@@ -65,6 +61,9 @@ const Home: FC = () => {
     }, [authorizeSWR.data, router])
     if (authorizeSWR.isValidating) {
         return <LoadingState>Sending email…</LoadingState>
+    }
+    if (authorizeSWR.error) {
+        return <DialogueScreen>{String(authorizeSWR.error)}</DialogueScreen>
     }
     if (!contributorSWR.data && contributorSWR.isValidating) {
         return <LoadingState>Checking account…</LoadingState>
@@ -75,8 +74,8 @@ const Home: FC = () => {
     if (expired) {
         return <AuthExpired onSubmit={handleSubmit} />
     }
-    if (!contributorSWR.data) {
-        return <AccountDetails emailAddress={email} uuid={contributorUUID} onSubmit={handleContributorSubmit} />
+    if (!contributorSWR.data?.name || contributorSWR.data?.name === "Anonymous") {
+        return <AccountDetails emailAddress={contributorSWR.data?.emailAddress} onSubmit={handleContributorSubmit} />
     }
     return <Welcome />
 }
