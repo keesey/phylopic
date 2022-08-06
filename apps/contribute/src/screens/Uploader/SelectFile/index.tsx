@@ -143,7 +143,11 @@ const SelectFile: FC<Props> = ({ onComplete }) => {
                         <p>Any of that make sense to you?</p>
                     </>
                 )}
-                {hasBlockingError && <button onClick={handleResetClick}>Start over</button>}
+                {hasBlockingError && (
+                    <button className="cta" onClick={handleResetClick}>
+                        Start over
+                    </button>
+                )}
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <label className={styles.uploadLabel}>
                         Select a File

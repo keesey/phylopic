@@ -3,6 +3,7 @@ import { isImageMediaType } from "@phylopic/utils"
 import clsx from "clsx"
 import { FC, useCallback, useMemo } from "react"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import ButtonNav from "~/ui/ButtonNav"
 import useFileIsVector from "../hooks/useFileIsVector"
 import useVectorization from "../hooks/useVectorization"
 import useVectorizedImageSource from "../hooks/useVectorizedImageSource"
@@ -47,7 +48,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                     </div>
                     <div>
                         <p>Which one looks better?</p>
-                        <nav className={styles.nav}>
+                        <ButtonNav mode="vertical">
                             <button className="cta" onClick={handleSelectButtonClick}>
                                 The {mode === "portrait" ? "left" : "top"} one.
                             </button>
@@ -60,7 +61,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                             <button className="cta" onClick={onCancel}>
                                 Neither. I want to change it.
                             </button>
-                        </nav>
+                        </ButtonNav>
                     </div>
                 </section>
             </DialogueScreen>
