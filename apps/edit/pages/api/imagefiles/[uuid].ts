@@ -58,7 +58,7 @@ const get = async (client: S3Client, uuid: string, download: boolean, res: NextA
     res.end()
 }
 const head = async (client: S3Client, uuid: string, download: boolean, res: NextApiResponse) => {
-    const file = await findImageSourceFile(client, "source.phylopic.org", `images/${uuid}/source.`)
+    const file = await findImageSourceFile(client, SOURCE_BUCKET_NAME, `images/${uuid}/source.`)
     if (!file?.Key) {
         return res.status(404).end()
     }
@@ -88,7 +88,7 @@ const put = async (client: S3Client, uuid: string, req: NextApiRequest, res: Nex
     ) {
         return res.status(404).end()
     }
-    const existingFile = await findImageSourceFile(client, "source.phylopic.org", `images/${uuid}/source.`)
+    const existingFile = await findImageSourceFile(client, SOURCE_BUCKET_NAME, `images/${uuid}/source.`)
     const ContentType = req.headers["content-type"]
     const newKey = getKey(uuid, ContentType)
     if (!newKey) {

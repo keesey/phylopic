@@ -1,5 +1,15 @@
 import { TitledLink } from "@phylopic/api-models"
-import { Contributor, Image, isContributor, isImage, isNode, isSource, Node, Source } from "@phylopic/source-models"
+import {
+    Contributor,
+    Image,
+    isContributor,
+    isImage,
+    isNode,
+    isSource,
+    Node,
+    Source,
+    SOURCE_BUCKET_NAME,
+} from "@phylopic/source-models"
 import { compareStrings, normalizeUUID, UUID } from "@phylopic/utils"
 import { Arc, Digraph } from "simple-digraph"
 import listDir from "../fsutils/listDir.js"
@@ -43,19 +53,19 @@ const loadSource = async (): Promise<Source> => {
 }
 const loadImage = async (uuid: UUID, args: Pick<ProcessArgs, "images">): Promise<void> => {
     const path = `images/${normalizeUUID(uuid)}/meta.json`
-    const image = await readJSON<Image>(`.s3/source.phylopic.org/${path}`, isImage)
+    const image = await readJSON<Image>(`.s3/${SOURCE_BUCKET_NAME}/${path}`, isImage)
     args.images.set(uuid, image)
 }
 const loadImages = async (args: Pick<ProcessArgs, "images">): Promise<void> => {
     console.info("Looking up images...")
-    const uuids = await listDir(".s3/source.phylopic.org/images/")
+    const uuids = await listDir(`.s3/${SOURCE_BUCKET_NAME}/images/`)
     console.info(`Loading ${uuids.length} images...`)
     await Promise.all(uuids.map(uuid => loadImage(uuid, args)))
     console.info(`Loaded ${uuids.length} images.`)
 }
 const loadNode = async (uuid: UUID, args: Pick<ProcessArgs, "nodes">): Promise<void> => {
     const path = `nodes/${normalizeUUID(uuid)}/meta.json`
-    const node = await readJSON<Node>(`.s3/source.phylopic.org/${path}`)
+    const node = await readJSON<Node>(`.s3/${SOURCE_BUCKET_NAME}/${path}`)
     if (!isNode(node)) {
         throw new Error(`Invalid node (UUID: "${uuid}").`)
     }
@@ -63,14 +73,14 @@ const loadNode = async (uuid: UUID, args: Pick<ProcessArgs, "nodes">): Promise<v
 }
 const loadNodes = async (args: Pick<ProcessArgs, "nodes">): Promise<void> => {
     console.info("Looking up nodes...")
-    const uuids = await listDir(".s3/source.phylopic.org/nodes/")
+    const uuids = await listDir(`.s3/${SOURCE_BUCKET_NAME}/nodes/`)
     console.info(`Loading ${uuids.length} nodes...`)
     await Promise.all(uuids.map(uuid => loadNode(uuid, args)))
     console.info(`Loaded ${uuids.length} nodes.`)
 }
 const loadContributor = async (uuid: UUID, args: Pick<ProcessArgs, "contributors">): Promise<void> => {
     const path = `contributors/${normalizeUUID(uuid)}/meta.json`
-    const contributor = await readJSON<Contributor>(`.s3/source.phylopic.org/${path}`)
+    const contributor = await readJSON<Contributor>(`.s3/${SOURCE_BUCKET_NAME}/${path}`)
     if (!isContributor(contributor)) {
         throw new Error(`Invalid contributor (UUID: "${uuid}").`)
     }
@@ -78,7 +88,7 @@ const loadContributor = async (uuid: UUID, args: Pick<ProcessArgs, "contributors
 }
 const loadContributors = async (args: Pick<ProcessArgs, "contributors">): Promise<void> => {
     console.info("Looking up contributors...")
-    const uuids = await listDir(".s3/source.phylopic.org/contributors/")
+    const uuids = await listDir(`.s3/${SOURCE_BUCKET_NAME}/contributors/`)
     console.info(`Loading ${uuids.length} contributors...`)
     await Promise.all(uuids.map(uuid => loadContributor(uuid, args)))
     console.info(`Loaded ${uuids.length} contributors.`)
@@ -200,7 +210,7 @@ const loadExternalObjectIDs = (
                 const identifier = `${encodeURIComponent(authority)}/${encodeURIComponent(
                     namespace,
                 )}/${encodeURIComponent(objectID)}`
-                const path = `.s3/source.phylopic.org/externals/${identifier}/meta.json`
+                const path = `.s3/${SOURCE_BUCKET_NAME}/externals/${identifier}/meta.json`
                 try {
                     const link = await readJSON<TitledLink>(path)
                     externals.set(identifier, link)
@@ -220,7 +230,7 @@ const loadExternalNamespaces = async (
 ): Promise<void> => {
     await Promise.all(
         namespaces.map(async namespace => {
-            const objectIDs = (await listDir(`.s3/source.phylopic.org/externals/${authority}/${namespace}`)).map(
+            const objectIDs = (await listDir(`.s3/${SOURCE_BUCKET_NAME}/externals/${authority}/${namespace}`)).map(
                 decodeURIComponent,
             )
             loadExternalObjectIDs(externals, authority, namespace, objectIDs, objectPromises)
@@ -234,7 +244,7 @@ const loadExternalAuthorities = async (
 ): Promise<void> => {
     await Promise.all(
         authorities.map(async authority => {
-            const namespaces = (await listDir(`.s3/source.phylopic.org/externals/${authority}/`)).map(
+            const namespaces = (await listDir(`.s3/${SOURCE_BUCKET_NAME}/externals/${authority}/`)).map(
                 decodeURIComponent,
             )
             await loadExternalNamespaces(externals, authority, namespaces, objectPromises)
@@ -244,7 +254,7 @@ const loadExternalAuthorities = async (
 const loadExternals = async (externals: Map<string, TitledLink>): Promise<void> => {
     console.info("Looking up externals...")
     const objectPromises: Promise<void>[] = []
-    const authorities = (await listDir(".s3/source.phylopic.org/externals/")).map(decodeURIComponent)
+    const authorities = (await listDir(`.s3/${SOURCE_BUCKET_NAME}/externals/`)).map(decodeURIComponent)
     await loadExternalAuthorities(externals, authorities, objectPromises)
     console.info(`Loading ${objectPromises.length} externals...`)
     await Promise.all(objectPromises)
