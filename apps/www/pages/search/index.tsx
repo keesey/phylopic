@@ -7,53 +7,28 @@ import {
     QueryMatches,
 } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
-import { BuildContainer, fetchResult } from "@phylopic/utils-api"
+import { fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
-import React from "react"
-import { SWRConfig } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import PageHead from "~/metadata/PageHead"
-import SearchContainer from "~/search/SearchContainer"
+import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import getMatchingText from "~/search/sources/getMatchingText"
 import Breadcrumbs from "~/ui/Breadcrumbs"
-import PageLoader from "~/ui/PageLoader"
 import SearchAside from "~/ui/SearchAside"
-import SearchOverlay from "~/ui/SearchOverlay"
-import SiteFooter from "~/ui/SiteFooter"
-import SiteNav from "~/ui/SiteNav"
-interface Props {
-    build?: number
-    fallback?: PublicConfiguration["fallback"]
-    initialText?: string
-}
-const PageComponent: NextPage<Props> = ({ build, fallback, initialText }) => (
-    <SWRConfig value={{ fallback }}>
-        <BuildContainer initialValue={build}>
-            <PageLoader />
-            <PageHead
-                title="Search for Silhouette Images on PhyloPic"
-                url="https://www.phylopic.org/search"
-                description="Search for free silhouette images of animals, plants, and other life forms."
-            />
-            <SearchContainer initialText={initialText}>
-                <header>
-                    <SiteNav />
-                </header>
-                <main>
-                    <SearchOverlay>
-                        <header>
-                            <Breadcrumbs
-                                items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]}
-                            />
-                            <h1>Search</h1>
-                        </header>
-                        <SearchAside />
-                    </SearchOverlay>
-                </main>
-                <SiteFooter />
-            </SearchContainer>
-        </BuildContainer>
-    </SWRConfig>
+type Props = Omit<PageLayoutProps, "children">
+const PageComponent: NextPage<Props> = props => (
+    <PageLayout {...props}>
+        <PageHead
+            title="Search for Silhouette Images on PhyloPic"
+            url="https://www.phylopic.org/search"
+            description="Search for free silhouette images of animals, plants, and other life forms."
+        />
+        <header>
+            <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />
+            <h1>Search</h1>
+        </header>
+        <SearchAside />
+    </PageLayout>
 )
 export default PageComponent
 const getInitialText = (q?: string | string[]) => {

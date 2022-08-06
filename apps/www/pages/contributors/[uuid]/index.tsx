@@ -1,9 +1,9 @@
 import { Contributor, ImageListParameters, ImageWithEmbedded, List, PageWithEmbedded } from "@phylopic/api-models"
 import { ContributorContainer } from "@phylopic/ui"
-import { createSearch, isUUIDv4, Query } from "@phylopic/utils"
+import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, BuildContainer, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
-import { useMemo } from "react"
+import { FC, useMemo } from "react"
 import { SWRConfig, unstable_serialize } from "swr"
 import { PublicConfiguration } from "swr/dist/types"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
@@ -26,84 +26,67 @@ import SiteNav from "~/ui/SiteNav"
 import ContributorDetailsView from "~/views/ContributorDetailsView"
 import ContributorNameView from "~/views/ContributorNameView"
 import ImageListView from "~/views/ImageListView"
-export type Props = {
-    fallback: PublicConfiguration["fallback"]
-} & Pick<Contributor, "build" | "uuid">
-const PageComponent: NextPage<Props> = ({ build, fallback, uuid }) => {
-    const imagesQuery = useMemo(
-        () => ({ filter_contributor: uuid, embed_specificNode: "true" } as ImageListParameters & Query),
-        [uuid],
-    )
+import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+type Props = Omit<PageLayoutProps, "children"> & { uuid: UUID }
+const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
     return (
-        <SWRConfig value={{ fallback }}>
-            <BuildContainer initialValue={build}>
-                <ContributorContainer uuid={uuid}>
-                    {contributor => (
-                        <LicenseTypeFilterContainer>
-                            <PageLoader />
-                            <ImageLicensePaginator query={imagesQuery} hideControls>
-                                {images => (
-                                    <PageHead
-                                        description={`All free silhouette images that have been contributed to PhyloPic by ${getContributorName(
-                                            contributor,
-                                        )}.`}
-                                        socialImage={
-                                            (images[0] as ImageWithEmbedded)?._links["http://ogp.me/ns#image"] ?? null
-                                        }
-                                        title={`PhyloPic: Silhouette Images Contributed by ${getContributorName(
-                                            contributor,
-                                        )}`}
-                                        url={`https://www.phylopic.org/contributors/${uuid}`}
-                                    >
-                                        {contributor && <PersonSchemaScript contributor={contributor} />}
-                                    </PageHead>
-                                )}
-                            </ImageLicensePaginator>
-                            <SearchContainer>
-                                <header>
-                                    <SiteNav />
-                                </header>
-                                <main>
-                                    <SearchOverlay>
-                                        <header>
-                                            <Breadcrumbs
-                                                items={[
-                                                    { children: "Home", href: "/" },
-                                                    { children: "Contributors", href: "/contributors" },
-                                                    {
-                                                        children: (
-                                                            <strong>
-                                                                <ContributorNameView value={contributor} />
-                                                            </strong>
-                                                        ),
-                                                    },
-                                                ]}
-                                            />
-                                            <h1>
-                                                Silhouette Images Contributed by{" "}
-                                                <ContributorNameView value={contributor} />
-                                            </h1>
-                                            <ContributorDetailsView value={contributor} />
-                                        </header>
-                                        <ImageLicensePaginator query={imagesQuery}>
-                                            {(images, totalImages) => (
-                                                <>
-                                                    <ImageLicenseControls total={totalImages} />
-                                                    <br />
-                                                    {isNaN(totalImages) && <Loader key="loader" />}
-                                                    <ImageListView value={images} />
-                                                </>
-                                            )}
-                                        </ImageLicensePaginator>
-                                    </SearchOverlay>
-                                </main>
-                                <SiteFooter />
-                            </SearchContainer>
-                        </LicenseTypeFilterContainer>
-                    )}
-                </ContributorContainer>
-            </BuildContainer>
-        </SWRConfig>
+        <PageLayout {...pageLayoutProps}>
+            <ContributorContainer uuid={uuid}>
+                {contributor => (contributor ? <Content contributor={contributor} /> : null)}
+            </ContributorContainer>
+        </PageLayout>
+    )
+}
+const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
+    const imagesQuery = useMemo(
+        () => ({ filter_contributor: contributor.uuid, embed_specificNode: "true" } as ImageListParameters & Query),
+        [contributor.uuid],
+    )
+    const name = useMemo(() => getContributorName(contributor), [contributor])
+    return (
+        <LicenseTypeFilterContainer>
+            <ImageLicensePaginator query={imagesQuery} hideControls>
+                {images => (
+                    <PageHead
+                        description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
+                        socialImage={(images[0] as ImageWithEmbedded)?._links["http://ogp.me/ns#image"] ?? null}
+                        title={`PhyloPic: Silhouette Images Contributed by ${name}`}
+                        url={`https://www.phylopic.org/contributors/${contributor.uuid}`}
+                    >
+                        <PersonSchemaScript contributor={contributor} />
+                    </PageHead>
+                )}
+            </ImageLicensePaginator>
+            <header>
+                <Breadcrumbs
+                    items={[
+                        { children: "Home", href: "/" },
+                        { children: "Contributors", href: "/contributors" },
+                        {
+                            children: (
+                                <strong>
+                                    <ContributorNameView value={contributor} />
+                                </strong>
+                            ),
+                        },
+                    ]}
+                />
+                <h1>
+                    Silhouette Images Contributed by <ContributorNameView value={contributor} />
+                </h1>
+                <ContributorDetailsView value={contributor} />
+            </header>
+            <ImageLicensePaginator query={imagesQuery}>
+                {(images, totalImages) => (
+                    <>
+                        <ImageLicenseControls total={totalImages} />
+                        <br />
+                        {isNaN(totalImages) && <Loader key="loader" />}
+                        <ImageListView key="images" value={images} />
+                    </>
+                )}
+            </ImageLicensePaginator>
+        </LicenseTypeFilterContainer>
     )
 }
 export default PageComponent
@@ -132,7 +115,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         uuid,
     }
     if (listImagesResponse.ok) {
-        props.fallback[unstable_serialize(addBuildToURL(listImagesKey, build))] = listImagesResponse.data
+        props.fallback![unstable_serialize(addBuildToURL(listImagesKey, build))] = listImagesResponse.data
         if (listImagesResponse.data.totalItems > 0) {
             const getImagesPageKey = (page: number) =>
                 process.env.NEXT_PUBLIC_API_URL +
@@ -140,7 +123,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
                 createSearch({ ...imagesQuery, build, embed_items: true, embed_specificNode: true, page })
             const imagesPageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getImagesPageKey(0))
             if (imagesPageResponse.ok) {
-                props.fallback[unstable_serialize_infinite(getImagesPageKey)] = [imagesPageResponse.data]
+                props.fallback![unstable_serialize_infinite(getImagesPageKey)] = [imagesPageResponse.data]
             }
         }
     }

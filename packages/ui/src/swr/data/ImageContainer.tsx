@@ -1,8 +1,8 @@
-import { Contributor, ImageParameters } from "@phylopic/api-models"
+import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
 import React from "react"
 import { DataContainer, DataContainerProps } from "./DataContainer"
-export type ImageContainerProps = Omit<DataContainerProps<Contributor>, "endpoint"> & {
+export type ImageContainerProps = Omit<DataContainerProps<ImageWithEmbedded>, "endpoint"> & {
     query?: Omit<ImageParameters, "uuid">
     uuid: UUID
 }
