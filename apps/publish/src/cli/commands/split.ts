@@ -1,6 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { Entity, isNode, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import { Entity, isNode, Node } from "@phylopic/source-models"
 import { Nomen, normalizeNomina, stringifyNomen, stringifyNormalized, UUID } from "@phylopic/utils"
+import SOURCE_BUCKET_NAME from "../../paths/SOURCE_BUCKET_NAME.js"
 import { CLIData } from "../getCLIData.js"
 import { CommandResult } from "./CommandResult.js"
 import checkNewUUID from "./utils/checkNewUUID.js"

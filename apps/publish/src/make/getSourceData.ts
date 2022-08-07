@@ -7,14 +7,14 @@ import {
     isNode,
     isSource,
     Node,
-    Source,
-    SOURCE_BUCKET_NAME,
+    Source
 } from "@phylopic/source-models"
 import { compareStrings, normalizeUUID, UUID } from "@phylopic/utils"
 import { Arc, Digraph } from "simple-digraph"
 import listDir from "../fsutils/listDir.js"
 import readJSON from "../fsutils/readJSON.js"
 import getPhylogeny from "../models/getPhylogeny.js"
+import SOURCE_BUCKET_NAME from "../paths/SOURCE_BUCKET_NAME.js"
 import SOURCE_PATH from "../paths/SOURCE_PATH.js"
 export type SourceData = Readonly<{
     build: number

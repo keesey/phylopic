@@ -1,6 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { TitledLink } from "@phylopic/api-models"
-import { Entity, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import { Entity, Node } from "@phylopic/source-models"
 import {
     createSearch,
     isScientific,
@@ -10,9 +10,10 @@ import {
     shortenNomen,
     stringifyNomen,
     stringifyNormalized,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import axios from "axios"
+import SOURCE_BUCKET_NAME from "../../../paths/SOURCE_BUCKET_NAME.js"
 import type { CLIData } from "../../getCLIData.js"
 import { CommandResult, SourceUpdate } from "../CommandResult.js"
 import succeeds from "../utils/succeeds.js"

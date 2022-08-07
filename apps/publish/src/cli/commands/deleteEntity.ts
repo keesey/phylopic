@@ -1,6 +1,7 @@
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3"
-import { Entity, Image, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import { Entity, Image, Node } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
+import SOURCE_BUCKET_NAME from "../../paths/SOURCE_BUCKET_NAME.js"
 import { CLIData } from "../getCLIData.js"
 import { CommandResult, SourceUpdate } from "./CommandResult.js"
 import succeed from "./succeed.js"

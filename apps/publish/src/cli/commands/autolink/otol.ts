@@ -1,8 +1,9 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { TitledLink } from "@phylopic/api-models"
-import { Entity, Node, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import { Entity, Node } from "@phylopic/source-models"
 import { isScientific, Nomen, normalizeText, stringifyNormalized, UUID } from "@phylopic/utils"
 import axios from "axios"
+import SOURCE_BUCKET_NAME from "../../../paths/SOURCE_BUCKET_NAME.js"
 import type { CLIData } from "../../getCLIData.js"
 import { CommandResult, SourceUpdate } from "../CommandResult.js"
 interface OTOLTaxon {

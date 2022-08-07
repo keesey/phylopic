@@ -1,10 +1,11 @@
 import { ListObjectsV2Command, S3Client, _Object } from "@aws-sdk/client-s3"
 import { isTitledLink, TitledLink } from "@phylopic/api-models"
-import { Contributor, Image, isSource, Node, Source, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import { Contributor, Image, isSource, Node, Source } from "@phylopic/source-models"
 import { isString, isUUID, normalizeUUID, UUID } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import { Digraph } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
+import SOURCE_BUCKET_NAME from "../paths/SOURCE_BUCKET_NAME.js"
 const SOURCE_FILE_EXTENSIONS = ["jpeg", "gif", "bmp", "tiff", "png", "svg"]
 export type HealData = Readonly<{
     contributors: ReadonlyMap<UUID, Contributor>
