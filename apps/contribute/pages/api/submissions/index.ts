@@ -21,7 +21,7 @@ const index: NextApiHandler<UUIDList | null> = async (req, res) => {
                 res.status(200)
                 res.json({
                     uuids: list.items,
-                    ...(list.nextToken ? { nextToken: list.nextToken } : null)
+                    ...(list.nextToken ? { nextToken: list.nextToken } : null),
                 })
                 break
             }

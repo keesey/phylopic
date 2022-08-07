@@ -1,14 +1,5 @@
 import { TitledLink } from "@phylopic/api-models"
-import {
-    Contributor,
-    Image,
-    isContributor,
-    isImage,
-    isNode,
-    isSource,
-    Node,
-    Source
-} from "@phylopic/source-models"
+import { Contributor, Image, isContributor, isImage, isNode, isSource, Node, Source } from "@phylopic/source-models"
 import { compareStrings, normalizeUUID, UUID } from "@phylopic/utils"
 import { Arc, Digraph } from "simple-digraph"
 import listDir from "../fsutils/listDir.js"

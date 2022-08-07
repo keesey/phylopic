@@ -1,6 +1,6 @@
+import { Submission } from "@phylopic/source-models"
 import { LICENSE_NAMES } from "@phylopic/utils"
 import { FC, ReactNode } from "react"
-import { Submission } from "~/submission/Submission"
 import FileView from "../FileView"
 import NameView from "../NameView"
 import styles from "./index.module.scss"

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import useAsyncMemo from "~/utils/useAsyncMemo"
+import useAsyncMemo from "~/hooks/useAsyncMemo"
 const useImageSize = (source: string | undefined) => {
     const [pending, setPending] = useState(false)
     const [error, setError] = useState<Error | undefined>()

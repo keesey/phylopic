@@ -29,10 +29,12 @@ const index: NextApiHandler<string> = async (req, res) => {
                     token = list.nextToken
                 } while (!uuids.length && token)
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
-                res.json(stringifyNormalized({
-                    nextToken: token,
-                    uuids,
-                }))
+                res.json(
+                    stringifyNormalized({
+                        nextToken: token,
+                        uuids,
+                    }),
+                )
                 break
             }
             case "OPTIONS": {

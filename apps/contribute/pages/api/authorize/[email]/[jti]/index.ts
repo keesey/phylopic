@@ -1,16 +1,12 @@
 import SourceClient from "@phylopic/source-client"
-import {
-    EmailAddress,
-    isEmailAddress, isUUIDv4, UUID,
-    ValidationFaultCollector
-} from "@phylopic/utils"
+import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import decodeJWT from "~/auth/jwt/decodeJWT"
 import { JWT } from "~/auth/models/JWT"
 import handleAPIError from "~/errors/handleAPIError"
 const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, emailAddress: EmailAddress) => {
     const contributor = client.sourceContributor(uuid)
-    const existing = (await contributor.exists() ? await contributor.get() : null)
+    const existing = (await contributor.exists()) ? await contributor.get() : null
     if (existing?.emailAddress === emailAddress) {
         return null
     }

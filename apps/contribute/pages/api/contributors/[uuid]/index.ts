@@ -18,7 +18,7 @@ const index: NextApiHandler<Contributor | null> = async (req, res) => {
                 client = new SourceClient()
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
                 res.json(await client.sourceContributor(uuid).get())
-                break;
+                break
             }
             case "OPTIONS": {
                 res.setHeader("allow", "GET, HEAD, OPTIONS, PATCH, PUT")
@@ -29,7 +29,7 @@ const index: NextApiHandler<Contributor | null> = async (req, res) => {
                 client = new SourceClient()
                 await client.sourceContributor(uuid).patch(req.body)
                 res.status(204)
-                break;
+                break
             }
             case "PUT": {
                 client = new SourceClient()

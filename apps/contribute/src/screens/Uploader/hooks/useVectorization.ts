@@ -1,6 +1,6 @@
 import { trace } from "potrace"
 import { useEffect, useState } from "react"
-import useAsyncMemo from "~/utils/useAsyncMemo"
+import useAsyncMemo from "~/hooks/useAsyncMemo"
 const useVectorization = (buffer: Buffer | undefined, enabled: boolean) => {
     const [pending, setPending] = useState(false)
     const [error, setError] = useState<Error | undefined>()

@@ -10,7 +10,7 @@ import {
     shortenNomen,
     stringifyNomen,
     stringifyNormalized,
-    UUID
+    UUID,
 } from "@phylopic/utils"
 import axios from "axios"
 import SOURCE_BUCKET_NAME from "../../../paths/SOURCE_BUCKET_NAME.js"

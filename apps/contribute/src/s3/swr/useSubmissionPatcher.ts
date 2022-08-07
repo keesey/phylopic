@@ -1,8 +1,8 @@
+import { Submission } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useCallback } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
-import { Submission } from "~/submission/Submission"
 import useSubmissionSWR from "./useSubmissionSWR"
 const useSubmissionPatcher = (uuid: UUID, onComplete?: () => void) => {
     const token = useAuthToken()
