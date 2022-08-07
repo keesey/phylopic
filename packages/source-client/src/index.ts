@@ -39,8 +39,7 @@ import readJSON from "./io/readJSON"
 import readJWT from "./io/readJWT"
 import writeJWT from "./io/writeJWT"
 export default class SourceClient {
-    public constructor(private client?: S3Client) {
-    }
+    public constructor(private client?: S3Client) {}
     public authEmails(token?: string): Promise<List<EmailAddress>> {
         return list<EmailAddress>(this.getClient(), AUTH_BUCKET_NAME, "emails/", isEmailAddress, token)
     }

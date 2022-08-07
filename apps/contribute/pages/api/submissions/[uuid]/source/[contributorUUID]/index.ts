@@ -3,7 +3,7 @@ import { isImageMediaType, isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-const index: NextApiHandler<string | null> = async (req, res) => {
+const index: NextApiHandler<Buffer> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const imageUUID = req.query.uuid
@@ -19,7 +19,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                 res.status(200)
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
                 res.setHeader("content-type", type)
-                res.send(data as any)
+                res.send(data)
                 break
             }
             case "OPTIONS": {
@@ -41,6 +41,7 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                     data: req.body,
                     type,
                 })
+                res.status(204)
                 break
             }
             default: {

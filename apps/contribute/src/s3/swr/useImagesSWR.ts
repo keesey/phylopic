@@ -2,7 +2,7 @@ import { useCallback } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
-import { UUIDList } from "../models/UUIDList"
+import { UUIDList } from "../../models/UUIDList"
 const useImagesSWR = () => {
     const authorized = useAuthorized()
     const getKey = useCallback<SWRInfiniteKeyLoader>(

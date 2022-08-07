@@ -4,7 +4,7 @@ import React, { Fragment, useCallback, useEffect, useMemo } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
-import { UUIDList } from "../models/UUIDList"
+import { UUIDList } from "../../models/UUIDList"
 export type Props = {
     children: (value: readonly UUID[], isValidating: boolean) => React.ReactNode
     endpoint: URL | null

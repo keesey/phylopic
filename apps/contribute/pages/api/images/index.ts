@@ -3,7 +3,8 @@ import { isDefined, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-const index: NextApiHandler<string> = async (req, res) => {
+import { UUIDList } from "~/models/UUIDList"
+const index: NextApiHandler<UUIDList> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const payload = await verifyAuthorization(req.headers)
@@ -29,12 +30,10 @@ const index: NextApiHandler<string> = async (req, res) => {
                     token = list.nextToken
                 } while (!uuids.length && token)
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
-                res.json(
-                    stringifyNormalized({
-                        nextToken: token,
-                        uuids,
-                    }),
-                )
+                res.json({
+                    nextToken: token,
+                    uuids,
+                })
                 break
             }
             case "OPTIONS": {

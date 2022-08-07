@@ -3,8 +3,8 @@ import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-import { UUIDList } from "~/s3/models/UUIDList"
-const index: NextApiHandler<UUIDList | null> = async (req, res) => {
+import { UUIDList } from "~/models/UUIDList"
+const index: NextApiHandler<UUIDList> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const payload = await verifyAuthorization(req.headers)

@@ -18,7 +18,7 @@ const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, e
         emailAddress,
     })
 }
-const index: NextApiHandler<string | null> = async (req, res) => {
+const index: NextApiHandler<JWT> = async (req, res) => {
     const now = new Date()
     try {
         if (req.method === "OPTIONS") {

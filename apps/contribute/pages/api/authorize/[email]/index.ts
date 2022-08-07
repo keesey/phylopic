@@ -17,7 +17,7 @@ const handlePost = async (client: SourceClient, email: EmailAddress, body: NextA
     await authToken.put(token)
     await sendAuthEmail(email, token, now, new Date(now.valueOf() + ttl))
 }
-const index: NextApiHandler<{ uuid: UUID } | null> = async (req, res) => {
+const index: NextApiHandler<void> = async (req, res) => {
     try {
         if (req.method === "OPTIONS") {
             res.setHeader("allow", "OPTIONS, POST")

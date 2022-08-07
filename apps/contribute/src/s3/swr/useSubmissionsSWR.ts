@@ -2,7 +2,7 @@ import { createSearch, isUUID, UUID } from "@phylopic/utils"
 import { useCallback } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
-import { UUIDList } from "../models/UUIDList"
+import { UUIDList } from "../../models/UUIDList"
 const useSubmissionsSWR = (contributorUUID: UUID | null) => {
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: UUIDList | null) =>

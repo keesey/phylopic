@@ -66,10 +66,7 @@ const readImageMeta = async (
     })
     result.images.set(uuid, image)
 }
-const readImageSource = async (
-    result: Pick<BucketResult, "keysToDelete">,
-    uuid: UUID,
-): Promise<void> => {
+const readImageSource = async (result: Pick<BucketResult, "keysToDelete">, uuid: UUID): Promise<void> => {
     const Key = `images/${uuid}/source`
     if (!isUUID(uuid)) {
         console.warn(`Invalid image source file UUID: <${uuid}>.`)

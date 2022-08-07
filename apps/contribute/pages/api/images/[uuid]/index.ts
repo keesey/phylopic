@@ -1,9 +1,10 @@
 import SourceClient from "@phylopic/source-client"
+import { Image } from "@phylopic/source-models"
 import { isUUIDv4, stringifyNormalized } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-const index: NextApiHandler<string> = async (req, res) => {
+const index: NextApiHandler<Image> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const uuid = req.query.uuid
@@ -23,7 +24,7 @@ const index: NextApiHandler<string> = async (req, res) => {
             case "GET":
             case "HEAD": {
                 res.status(200)
-                res.json(stringifyNormalized(image))
+                res.json(image)
                 break
             }
             case "OPTIONS": {

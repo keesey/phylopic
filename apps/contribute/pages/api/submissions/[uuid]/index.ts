@@ -1,9 +1,10 @@
 import SourceClient from "@phylopic/source-client"
-import { isUUIDv4, stringifyNormalized } from "@phylopic/utils"
+import { Submission } from "@phylopic/source-models"
+import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-const index: NextApiHandler<string | null> = async (req, res) => {
+const index: NextApiHandler<Submission> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const payload = await verifyAuthorization(req.headers)
@@ -24,9 +25,9 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             case "GET":
             case "HEAD": {
                 client = new SourceClient()
-                const contributor = await client.submission(contributorUUID, imageUUID).get()
+                const submission = await client.submission(contributorUUID, imageUUID).get()
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
-                res.json(stringifyNormalized(contributor))
+                res.json(submission)
                 break
             }
             case "OPTIONS": {
@@ -37,11 +38,13 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             case "PATCH": {
                 client = new SourceClient()
                 await client.submission(contributorUUID, imageUUID).patch(req.body)
+                res.status(204)
                 break
             }
             case "PUT": {
                 client = new SourceClient()
                 await client.submission(contributorUUID, imageUUID).put(req.body)
+                res.status(204)
                 break
             }
             default: {

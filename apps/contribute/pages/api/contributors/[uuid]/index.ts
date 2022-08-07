@@ -4,7 +4,7 @@ import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-const index: NextApiHandler<Contributor | null> = async (req, res) => {
+const index: NextApiHandler<Contributor> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const { uuid } = req.query

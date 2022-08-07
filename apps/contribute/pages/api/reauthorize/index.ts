@@ -15,7 +15,7 @@ const handlePost = async (authorization: string | undefined, ttl: number): Promi
     }
     return await issueJWT(uuid, ttl, now)
 }
-const index: NextApiHandler<string | null> = async (req, res) => {
+const index: NextApiHandler<JWT> = async (req, res) => {
     try {
         if (req.method === "OPTIONS") {
             res.setHeader("allow", "OPTIONS, POST")
