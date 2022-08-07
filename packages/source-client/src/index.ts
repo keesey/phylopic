@@ -180,7 +180,7 @@ export default class SourceClient {
         }
         return new ImagePatcher<Submission>(
             this.getClient,
-            SOURCE_BUCKET_NAME,
+            SUBMISSIONS_BUCKET_NAME,
             `contributors/${encodeURIComponent(contributorUUID)}/submissions/${encodeURIComponent(imageUUID)}`,
             readJSON,
             createJSONWriter(isSubmission),

@@ -1,19 +1,26 @@
 import SourceClient from "@phylopic/source-client"
+import { isJWT } from "@phylopic/source-models"
 import { isImageMediaType, isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import verifyJWT from "~/auth/jwt/verifyJWT"
 import handleAPIError from "~/errors/handleAPIError"
 const index: NextApiHandler<Buffer> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const imageUUID = req.query.uuid
-        const contributorUUID = req.query.contributorUUID
-        if (!isUUIDv4(imageUUID) || !isUUIDv4(contributorUUID)) {
+        if (!isUUIDv4(imageUUID)) {
             throw 404
         }
         switch (req.method) {
             case "GET":
             case "HEAD": {
+                const token = req.query.token
+                const payload = typeof token === "string" ? await verifyJWT(token) : null
+                const contributorUUID = payload?.sub
+                if (!isUUIDv4(contributorUUID)) {
+                    throw 401
+                }
                 client = new SourceClient()
                 const { data, type } = await client.submission(contributorUUID, imageUUID).file.get()
                 res.status(200)
@@ -28,7 +35,10 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                 break
             }
             case "PUT": {
-                await verifyAuthorization(req.headers, { sub: contributorUUID })
+                const { sub: contributorUUID } = await verifyAuthorization(req.headers) ?? {}
+                if (!isUUIDv4(contributorUUID)) {
+                    throw 401
+                }
                 if (!req.body) {
                     throw 400
                 }
@@ -37,6 +47,13 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                     throw 415
                 }
                 client = new SourceClient()
+                const sourceImage = client.sourceImage(imageUUID)
+                if (await sourceImage.exists()) {
+                    const image = await sourceImage.get()
+                    if (image.contributor !== contributorUUID) {
+                        throw 403
+                    }
+                }
                 await client.submission(contributorUUID, imageUUID).file.put({
                     data: req.body,
                     type,

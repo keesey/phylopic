@@ -10,10 +10,10 @@ const handleAPIError = (res: NextApiResponse, e: unknown) => {
         res.json({ message: e.message, faults: e.faults })
     } else if (isAWSError(e)) {
         res.status(e.$metadata.httpStatusCode)
-        res.json(String(e))
+        res.json({ message: String(e) })
     } else {
         res.status(500)
-        res.json(String(e))
+        res.json({ message: String(e) })
     }
 }
 export default handleAPIError
