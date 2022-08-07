@@ -1,59 +1,38 @@
-import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
-import { Image, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { isDefined, isString, isUUID, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
-import { getJSON } from "@phylopic/utils-aws"
+import SourceClient from "@phylopic/source-client"
+import { isDefined, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
-import getImageKey from "~/s3/keys/source/getImageKey"
 const index: NextApiHandler<string> = async (req, res) => {
-    let client: S3Client | undefined
+    let client: SourceClient | undefined
     try {
+        const payload = await verifyAuthorization(req.headers)
+        const contributorUUID = payload?.sub
+        if (!isUUIDv4(contributorUUID)) {
+            throw 401
+        }
         switch (req.method) {
             case "GET":
             case "HEAD": {
-                client = new S3Client({})
-                const payload = await verifyAuthorization(req.headers)
-                const contributorUUID = payload?.sub
-                if (!isUUIDv4(contributorUUID)) {
-                    throw 401
-                }
-                let { token } = req.query
+                let token = typeof req.query.token === "string" ? req.query.token : undefined
                 let uuids: UUID[]
+                client = new SourceClient()
                 do {
-                    const listOutput = await client.send(
-                        new ListObjectsV2Command({
-                            Bucket: SOURCE_BUCKET_NAME,
-                            ContinuationToken: isString(token) ? token : undefined,
-                            Delimiter: "/",
-                            Prefix: "images/",
-                        }),
-                    )
-                    checkMetadataBearer(listOutput)
-                    const imagePromises = listOutput.CommonPrefixes?.map(async commonPrefix => {
-                        const uuid = commonPrefix.Prefix?.replace(/^images\//, "").replace(/\/$/, "")
-                        const [image] = isUUID(uuid)
-                            ? await getJSON<Image>(client!, {
-                                  Bucket: SOURCE_BUCKET_NAME,
-                                  Key: getImageKey(uuid),
-                              })
-                            : []
-                        return image?.contributor === contributorUUID ? uuid : null
+                    const list = await client.sourceImages(token)
+                    const imageUUIDPromises = list.items.map(async uuid => {
+                        const image = await client?.sourceImage(uuid).get()
+                        if (image?.contributor === contributorUUID) {
+                            return uuid
+                        }
                     })
-                    uuids = (await Promise.all(imagePromises ?? [])).filter(isDefined)
-                    token = listOutput.NextContinuationToken
+                    uuids = (await Promise.all(imageUUIDPromises)).filter(isDefined)
+                    token = list.nextToken
                 } while (!uuids.length && token)
-                const json = stringifyNormalized({
+                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
+                res.json(stringifyNormalized({
                     nextToken: token,
                     uuids,
-                })
-                res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
-                res.setHeader("content-length", json.length)
-                res.setHeader("content-type", "application/json")
-                if (req.method === "GET") {
-                    res.send(json)
-                }
+                }))
                 break
             }
             case "OPTIONS": {

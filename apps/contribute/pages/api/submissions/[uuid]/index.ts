@@ -1,32 +1,10 @@
-import { S3Client } from "@aws-sdk/client-s3"
-import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
-import { isUUIDv4, stringifyNormalized, ValidationFaultCollector } from "@phylopic/utils"
+import SourceClient from "@phylopic/source-client"
+import { isUUIDv4, stringifyNormalized } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-import handleDelete from "~/s3/api/handleDelete"
-import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
-import handlePatch from "~/s3/api/handlePatch"
-import handlePut from "~/s3/api/handlePut"
-import getSubmissionKey from "~/s3/keys/submissions/getSubmissionKey"
-import { isPartialSubmission } from "~/submission/isPartialSubmission"
-import { Submission } from "~/submission/Submission"
-const parseSubmission = (json: string): Partial<Submission> => {
-    try {
-        const submission = JSON.parse(json)
-        const faultCollector = new ValidationFaultCollector()
-        if (!isPartialSubmission(submission, faultCollector)) {
-            console.error(faultCollector.list())
-            throw 400
-        }
-        return submission
-    } catch (e) {
-        console.error(e)
-        throw 400
-    }
-}
 const index: NextApiHandler<string | null> = async (req, res) => {
-    let client: S3Client | undefined
+    let client: SourceClient | undefined
     try {
         const payload = await verifyAuthorization(req.headers)
         const contributorUUID = payload?.sub
@@ -39,20 +17,16 @@ const index: NextApiHandler<string | null> = async (req, res) => {
         }
         switch (req.method) {
             case "DELETE": {
-                client = new S3Client({})
-                await handleDelete(res, client, {
-                    Bucket: SUBMISSIONS_BUCKET_NAME,
-                    Key: getSubmissionKey(contributorUUID, imageUUID),
-                })
+                client = new SourceClient()
+                client.submission(contributorUUID, imageUUID).delete()
                 break
             }
             case "GET":
             case "HEAD": {
-                client = new S3Client({})
-                await handleHeadOrGet(req, res, client, {
-                    Bucket: SUBMISSIONS_BUCKET_NAME,
-                    Key: getSubmissionKey(contributorUUID, imageUUID),
-                })
+                client = new SourceClient()
+                const contributor = await client.submission(contributorUUID, imageUUID).get()
+                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
+                res.json(stringifyNormalized(contributor))
                 break
             }
             case "OPTIONS": {
@@ -61,28 +35,13 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                 break
             }
             case "PATCH": {
-                client = new S3Client({})
-                await handlePatch(
-                    req,
-                    res,
-                    client,
-                    {
-                        Bucket: SUBMISSIONS_BUCKET_NAME,
-                        Key: getSubmissionKey(contributorUUID, imageUUID),
-                    },
-                    isPartialSubmission,
-                )
+                client = new SourceClient()
+                await client.submission(contributorUUID, imageUUID).patch(req.body)
                 break
             }
             case "PUT": {
-                const submission = parseSubmission(req.body)
-                client = new S3Client({})
-                await handlePut(res, client, {
-                    Body: stringifyNormalized(submission),
-                    Bucket: SUBMISSIONS_BUCKET_NAME,
-                    ContentType: "application/json",
-                    Key: getSubmissionKey(contributorUUID, imageUUID),
-                })
+                client = new SourceClient()
+                await client.submission(contributorUUID, imageUUID).put(req.body)
                 break
             }
             default: {

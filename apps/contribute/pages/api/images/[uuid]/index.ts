@@ -1,85 +1,29 @@
-import { CopyObjectCommand, DeleteObjectsCommand, ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
-import { Image, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
-import { IMAGE_MEDIA_TYPES, isUUID } from "@phylopic/utils"
-import { getJSON } from "@phylopic/utils-aws"
+import SourceClient from "@phylopic/source-client"
+import { isUUIDv4, stringifyNormalized } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-import checkMetadataBearer from "~/s3/api/checkMetadataBearer"
-import sendHeadOrGet from "~/s3/api/sendHeadOrGet"
-import getImageFileKey from "~/s3/keys/source/getImageFileKey"
-import getImageFileKeyPrefix from "~/s3/keys/source/getImageFileKeyPrefix"
-import getImageKey from "~/s3/keys/source/getImageKey"
-import getImageFileExtension from "~/utils/getImageFileExtension"
 const index: NextApiHandler<string> = async (req, res) => {
-    let client: S3Client | undefined
+    let client: SourceClient | undefined
     try {
         const uuid = req.query.uuid
-        if (!isUUID(uuid)) {
+        if (!isUUIDv4(uuid)) {
             throw 404
         }
+        client = new SourceClient()
+        const sourceImage = client.sourceImage(uuid)
+        const image = await sourceImage.get()
+        await verifyAuthorization(req.headers, { sub: image.contributor })
         switch (req.method) {
             case "DELETE": {
-                client = new S3Client({})
-                const Key = getImageKey(uuid)
-                const [image] = await getJSON<Image>(client, { Bucket: SOURCE_BUCKET_NAME, Key })
-                await verifyAuthorization(req.headers, { sub: image.contributor })
-                const copyCommands: CopyObjectCommand[] = [
-                    new CopyObjectCommand({
-                        Bucket: SOURCE_BUCKET_NAME,
-                        CopySource: `${SOURCE_BUCKET_NAME}/${Key}`,
-                        Key: `trash/${Key}`,
-                    }),
-                ]
-                let ContinuationToken: string | undefined
-                do {
-                    const listOutput = await client.send(
-                        new ListObjectsV2Command({
-                            Bucket: SOURCE_BUCKET_NAME,
-                            ContinuationToken,
-                            Prefix: getImageFileKeyPrefix(uuid),
-                        }),
-                    )
-                    if (listOutput.Contents) {
-                        for (const content of listOutput.Contents) {
-                            if (content.Key) {
-                                copyCommands.push(
-                                    new CopyObjectCommand({
-                                        Bucket: SOURCE_BUCKET_NAME,
-                                        CopySource: `${SOURCE_BUCKET_NAME}/${content.Key}`,
-                                        Key: `trash/${content.Key}`,
-                                    }),
-                                )
-                            }
-                        }
-                    }
-                    ContinuationToken = listOutput.NextContinuationToken
-                } while (ContinuationToken)
-                await Promise.all(copyCommands.map(command => client?.send(command)))
-                await client.send(
-                    new DeleteObjectsCommand({
-                        Bucket: SOURCE_BUCKET_NAME,
-                        Delete: {
-                            Objects: [
-                                { Key: getImageKey(uuid) },
-                                ...Array.from(IMAGE_MEDIA_TYPES).map(type => ({
-                                    Key: getImageFileKey(uuid, getImageFileExtension(type)),
-                                })),
-                            ],
-                        },
-                    }),
-                )
+                await sourceImage.delete()
+                res.status(204)
                 break
             }
             case "GET":
             case "HEAD": {
-                client = new S3Client({})
-                const [, imageOutput] = await getJSON<Image>(client, {
-                    Bucket: SOURCE_BUCKET_NAME,
-                    Key: getImageKey(uuid),
-                })
-                checkMetadataBearer(imageOutput)
-                sendHeadOrGet(req, res, imageOutput)
+                res.status(200)
+                res.json(stringifyNormalized(image))
                 break
             }
             case "OPTIONS": {

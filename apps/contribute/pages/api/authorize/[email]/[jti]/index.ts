@@ -1,70 +1,34 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import { Contributor, isContributor, SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import SourceClient from "@phylopic/source-client"
 import {
     EmailAddress,
-    isEmailAddress,
-    isUUID,
-    isUUIDv4,
-    stringifyNormalized,
-    UUID,
-    ValidationFaultCollector,
+    isEmailAddress, isUUIDv4, UUID,
+    ValidationFaultCollector
 } from "@phylopic/utils"
-import { getJSON, isAWSError } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import decodeJWT from "~/auth/jwt/decodeJWT"
 import { JWT } from "~/auth/models/JWT"
-import getToken from "~/auth/s3/getToken"
 import handleAPIError from "~/errors/handleAPIError"
-import getContributorSourceKey from "~/s3/keys/source/getContributorSourceKey"
-const getExistingContributor = async (client: S3Client, uuid: UUID) => {
-    try {
-        const [contributor] = await getJSON(
-            client,
-            {
-                Bucket: SOURCE_BUCKET_NAME,
-                Key: getContributorSourceKey(uuid),
-            },
-            isContributor,
-        )
-        return contributor
-    } catch (e) {
-        if (isAWSError(e) && e.$metadata.httpStatusCode >= 400 && e.$metadata.httpStatusCode < 500) {
-            return null
-        }
-        throw e
-    }
-}
-const updateContributor = async (client: S3Client, uuid: UUID, emailAddress: EmailAddress) => {
-    const existing = await getExistingContributor(client, uuid)
+const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, emailAddress: EmailAddress) => {
+    const contributor = client.sourceContributor(uuid)
+    const existing = (await contributor.exists() ? await contributor.get() : null)
     if (existing?.emailAddress === emailAddress) {
         return null
     }
-    await client.send(
-        new PutObjectCommand({
-            Body: stringifyNormalized({
-                created: new Date().toISOString(),
-                name: "Anonymous",
-                showEmailAddress: true,
-                ...existing,
-                emailAddress,
-            } as Contributor),
-            Bucket: SOURCE_BUCKET_NAME,
-            ContentType: "application/json",
-            Key: getContributorSourceKey(uuid),
-        }),
-    )
+    await contributor.put({
+        created: new Date().toISOString(),
+        name: "Anonymous",
+        showEmailAddress: true,
+        ...existing,
+        emailAddress,
+    })
 }
 const index: NextApiHandler<string | null> = async (req, res) => {
     const now = new Date()
     try {
         if (req.method === "OPTIONS") {
-            res.setHeader("allow", "GET, OPTIONS")
-            res.setHeader("cache-control", "max-age=3600")
-            res.setHeader("date", now.toUTCString())
+            res.setHeader("allow", "GET, HEAD, OPTIONS")
             res.status(204)
-        } else if (req.method !== "GET") {
-            throw 405
-        } else {
+        } else if (req.method === "GET" || req.method === "HEAD") {
             const email = req.query.email as EmailAddress
             const jti = req.query.jti as UUID
             const faultCollector = new ValidationFaultCollector()
@@ -72,22 +36,20 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                 console.warn(faultCollector.list())
                 throw 404
             }
-            const client = new S3Client({})
-            let token: JWT | null
+            const client = new SourceClient()
+            let token: JWT | undefined
             let expires: Date | null
             try {
-                ;[token, expires] = await getToken(client, email)
-                if (!token || !expires) {
-                    throw 404
-                }
-                if (expires.valueOf() <= now.valueOf()) {
-                    throw 410
-                }
+                token = await client.authToken(email).get()
                 const payload = decodeJWT(token)
                 if (payload?.jti !== jti || !isUUIDv4(payload.sub)) {
                     throw 404
                 }
-                await updateContributor(client, payload.sub, email)
+                if (typeof payload.exp !== "number" || payload.exp * 1000 <= now.valueOf()) {
+                    throw 410
+                }
+                expires = new Date(payload.exp * 1000)
+                await updateContributorEmailAddress(client, payload.sub, email)
             } finally {
                 client.destroy()
             }
@@ -95,6 +57,8 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             res.setHeader("content-type", "application/jwt")
             res.status(200)
             res.send(token)
+        } else {
+            throw 405
         }
     } catch (e) {
         handleAPIError(res, e)

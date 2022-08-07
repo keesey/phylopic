@@ -1,34 +1,23 @@
-import { S3Client } from "@aws-sdk/client-s3"
-import { SOURCE_BUCKET_NAME } from "@phylopic/source-models"
+import SourceClient from "@phylopic/source-client"
 import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import handleAPIError from "~/errors/handleAPIError"
-import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
-import findImageFileExtension from "~/s3/keys/source/findImageFileExtension"
-import getImageFileKey from "~/s3/keys/source/getImageFileKey"
 const index: NextApiHandler<Buffer> = async (req, res) => {
-    let client: S3Client | undefined
+    let client: SourceClient | undefined
     try {
         const { uuid } = req.query
         if (!isUUIDv4(uuid)) {
             throw 404
         }
-        client = new S3Client({
-            maxAttempts: 100,
-        })
         switch (req.method) {
             case "GET":
             case "HEAD": {
-                client = new S3Client({})
-                const extension = await findImageFileExtension(client, uuid)
-                if (!extension) {
-                    throw 404
-                }
-                res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
-                await handleHeadOrGet(req, res, client, {
-                    Bucket: SOURCE_BUCKET_NAME,
-                    Key: getImageFileKey(uuid, extension),
-                })
+                client = new SourceClient()
+                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
+                const { data, type } = await client.sourceImage(uuid).file.get()
+                res.status(200)
+                res.setHeader("content-type", type)
+                res.send(data)
                 break
             }
             case "OPTIONS": {

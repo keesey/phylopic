@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "@phylopic/api-models": "*",
+        "@phylopic/source-client": "*",
         "@phylopic/source-models": "*",
         "@phylopic/styles": "*",
         "@phylopic/ui": "*",
@@ -39,6 +40,18 @@
     },
     "license": "MIT",
     "name": "@phylopic/contribute",
+    "next-unused": {
+        "alias": {
+            "~/": "src/"
+        },
+        "entrypoints": [
+            "pages"
+        ],
+        "include": [
+            "pages",
+            "src"
+        ]
+    },
     "private": true,
     "scripts": {
         "build": "next build",

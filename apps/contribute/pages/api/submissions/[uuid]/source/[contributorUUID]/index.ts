@@ -1,16 +1,10 @@
-import { S3Client } from "@aws-sdk/client-s3"
-import { SUBMISSIONS_BUCKET_NAME } from "@phylopic/source-models"
+import SourceClient from "@phylopic/source-client"
 import { isImageMediaType, isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
-import verifyJWT from "~/auth/jwt/verifyJWT"
 import handleAPIError from "~/errors/handleAPIError"
-import handleDelete from "~/s3/api/handleDelete"
-import handleHeadOrGet from "~/s3/api/handleHeadOrGet"
-import handlePut from "~/s3/api/handlePut"
-import getSubmissionSourceKey from "~/s3/keys/submissions/getSubmissionSourceKey"
 const index: NextApiHandler<string | null> = async (req, res) => {
-    let client: S3Client | undefined
+    let client: SourceClient | undefined
     try {
         const imageUUID = req.query.uuid
         const contributorUUID = req.query.contributorUUID
@@ -18,27 +12,18 @@ const index: NextApiHandler<string | null> = async (req, res) => {
             throw 404
         }
         switch (req.method) {
-            case "DELETE": {
-                await verifyAuthorization(req.headers, { sub: contributorUUID })
-                client = new S3Client({})
-                await handleDelete(res, client, {
-                    Bucket: SUBMISSIONS_BUCKET_NAME,
-                    Key: getSubmissionSourceKey(contributorUUID, imageUUID),
-                })
-                break
-            }
             case "GET":
             case "HEAD": {
-                client = new S3Client({})
-                res.setHeader("cache-control", "max-age=180, stale-while-revalidate=86400")
-                await handleHeadOrGet(req, res, client, {
-                    Bucket: SUBMISSIONS_BUCKET_NAME,
-                    Key: getSubmissionSourceKey(contributorUUID, imageUUID),
-                })
+                client = new SourceClient()
+                const { data, type } = await client.submission(contributorUUID, imageUUID).file.get()
+                res.status(200)
+                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
+                res.setHeader("content-type", type)
+                res.send(data as any)
                 break
             }
             case "OPTIONS": {
-                res.setHeader("allow", "DELETE, GET, HEAD, OPTIONS, PUT")
+                res.setHeader("allow", "GET, HEAD, OPTIONS, PUT")
                 res.status(204)
                 break
             }
@@ -47,16 +32,14 @@ const index: NextApiHandler<string | null> = async (req, res) => {
                 if (!req.body) {
                     throw 400
                 }
-                const contentType = req.headers["content-type"]
-                if (!isImageMediaType(contentType)) {
+                const type = req.headers["content-type"]
+                if (!isImageMediaType(type)) {
                     throw 415
                 }
-                client = new S3Client({})
-                await handlePut(res, client, {
-                    Body: req.body,
-                    Bucket: SUBMISSIONS_BUCKET_NAME,
-                    ContentType: contentType,
-                    Key: getSubmissionSourceKey(contributorUUID, imageUUID),
+                client = new SourceClient()
+                await client.submission(contributorUUID, imageUUID).file.put({
+                    data: req.body,
+                    type,
                 })
                 break
             }
