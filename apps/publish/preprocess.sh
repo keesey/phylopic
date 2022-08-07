@@ -34,31 +34,34 @@ echo "Setting up scratch and destination..."
 wait
 
 echo "Set up scratch and destination. Copying source files to scratch..."
-for file in .s3/source.phylopic.org/images/**/source.svg; do
-    dest=$(echo $file |
-        sed 's/^\.s3\/source\.phylopic\.org\/images\//.scratch\/vector\//' |
-        sed 's/\/source\.svg$/.source.svg/')
-    comparison=$(echo $file |
-        sed 's/^\.s3\/source\.phylopic\.org\//.s3\/images.phylopic.org\//')
-    changed=$(cmp --silent $file $comparison && echo 0 || echo 1)
-    if [[ $changed -eq 1 ]]
-    then
-        cp $file $dest
-    fi
-done &
-for file in .s3/source.phylopic.org/images/**/source.(bmp|gif|jpeg|png); do
-    dest=$(echo $file |
-        sed 's/^\.s3\/source\.phylopic\.org\/images\//.scratch\/raster\//' |
-        sed 's/\/source\./.source./')
-    comparison=$(echo $file |
-        sed 's/^\.s3\/source\.phylopic\.org\//.s3\/images.phylopic.org\//')
-    changed=$(cmp --silent $file $comparison && echo 0 || echo 1)
-    if [[ $changed -eq 1 ]]
-    then
-        cp $file $dest
+for file in .s3/source.phylopic.org/images/**/source; do
+    type=$(file --mime-type --brief $file 2>&1)
+    if [ "$type" = "image/svg+xml" ]; then
+        comparison=$(echo $file |
+            sed 's/^\.s3\/source\.phylopic\.org\//.s3\/images.phylopic.org\//' |
+            sed 's/source$/source.svg/')
+        changed=$(cmp --silent $file $comparison && echo 0 || echo 1)
+        if [[ $changed -eq 1 ]]; then
+            dest=$(echo $file |
+                sed 's/^\.s3\/source\.phylopic\.org\/images\//.scratch\/vector\//' |
+                sed 's/\/source$/.source.svg/')
+            cp $file $dest
+        fi
+    else
+        extension=$(echo $type |
+            sed 's/^image\///')
+        comparison=$(echo $file |
+            sed 's/^\.s3\/source\.phylopic\.org\//.s3\/images.phylopic.org\//' |
+            sed 's/source$/source.'$extension'/')
+        changed=$(cmp --silent $file $comparison && echo 0 || echo 1)
+        if [[ $changed -eq 1 ]]; then
+            dest=$(echo $file |
+                sed 's/^\.s3\/source\.phylopic\.org\/images\//.scratch\/raster\//' |
+                sed 's/\/source$/.source.'$extension'/')
+            cp $file $dest
+        fi
     fi
 done
-wait
 
 echo "Copied source files to scratch."
 
