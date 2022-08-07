@@ -6,7 +6,6 @@ import { getJSON } from "@phylopic/utils-aws"
 import SOURCE_BUCKET_NAME from "../paths/SOURCE_BUCKET_NAME"
 export type CLIData = Readonly<{
     externals: ReadonlyMap<string, TitledLink>
-    imageFileKeys: ReadonlyMap<UUID, string>
     images: ReadonlyMap<UUID, Image>
     source: Source
     nodes: ReadonlyMap<UUID, Node>
@@ -116,26 +115,6 @@ const getExternals = async (client: S3Client) => {
     console.info("Loaded externals.")
     return result
 }
-const getImageFileKeys = async (client: S3Client, uuids: readonly UUID[]): Promise<ReadonlyMap<UUID, string>> => {
-    console.info("Getting image file keys...")
-    const entries = await Promise.all(
-        uuids.map<Promise<[UUID, string]>>(async uuid => {
-            const listResult = await client.send(
-                new ListObjectsV2Command({
-                    Bucket: SOURCE_BUCKET_NAME,
-                    MaxKeys: 2,
-                    Prefix: `images/${uuid}/source.`,
-                }),
-            )
-            if (listResult.Contents?.length !== 1 || !listResult.Contents[0].Key) {
-                throw new Error(`Cannot find source file for image: ${JSON.stringify(uuid)}.`)
-            }
-            return [uuid, listResult.Contents[0].Key]
-        }),
-    )
-    console.info("Got image file keys.")
-    return new Map(entries)
-}
 const getCLIData = async (client: S3Client): Promise<CLIData> => {
     const [externals, images, source, nodes] = await Promise.all([
         getExternals(client),
@@ -143,10 +122,8 @@ const getCLIData = async (client: S3Client): Promise<CLIData> => {
         getSource(client),
         getEntities<Node>(client, "nodes", isNode),
     ])
-    const imageFileKeys = await getImageFileKeys(client, [...images.keys()])
     return {
         externals,
-        imageFileKeys,
         images,
         source,
         nodes,

@@ -12,7 +12,6 @@ export type HealData = Readonly<{
     contributorsToPut: ReadonlySet<UUID>
     externals: ReadonlyMap<string, TitledLink>
     externalsToPut: ReadonlySet<string>
-    imageFileKeys: ReadonlyMap<UUID, string>
     images: ReadonlyMap<UUID, Image>
     imagesToPut: ReadonlySet<UUID>
     keysToDelete: ReadonlySet<string>
@@ -28,7 +27,6 @@ type BucketResult = {
     contributorsToPut: Set<UUID>
     externals: Map<string, TitledLink>
     externalsToPut: Set<string>
-    imageFileKeys: Map<UUID, string>
     images: Map<UUID, Image>
     imagesToPut: Set<UUID>
     keysToDelete: Set<string>
@@ -69,11 +67,10 @@ const readImageMeta = async (
     result.images.set(uuid, image)
 }
 const readImageSource = async (
-    result: Pick<BucketResult, "imageFileKeys" | "keysToDelete">,
+    result: Pick<BucketResult, "keysToDelete">,
     uuid: UUID,
-    extension: string,
 ): Promise<void> => {
-    const Key = `images/${uuid}/source.${extension}`
+    const Key = `images/${uuid}/source`
     if (!isUUID(uuid)) {
         console.warn(`Invalid image source file UUID: <${uuid}>.`)
         result.keysToDelete.add(Key)
@@ -84,19 +81,6 @@ const readImageSource = async (
         result.keysToDelete.add(Key)
         return
     }
-    const existingKey = result.imageFileKeys.get(uuid)
-    if (existingKey) {
-        const existingExtension = existingKey.split(".", 2)[1]
-        const existingExtensionIndex = SOURCE_FILE_EXTENSIONS.indexOf(existingExtension)
-        const extensionIndex = SOURCE_FILE_EXTENSIONS.indexOf(extension)
-        const keyToDelete = extensionIndex < existingExtensionIndex ? Key : existingKey
-        console.warn(`Two or more source files for image: <${uuid}>.\n\tMarking <${keyToDelete}> for deletion.`)
-        result.keysToDelete.add(keyToDelete)
-        result.imageFileKeys.set(uuid, extensionIndex < existingExtensionIndex ? Key : existingKey)
-        return
-    }
-    // :TODO: Validate image file?
-    result.imageFileKeys.set(uuid, Key)
 }
 const readContributorMeta = async (
     client: S3Client,
@@ -173,9 +157,9 @@ const addToResult = async (client: S3Client, result: BucketResult, object: _Obje
     if (match) {
         return readImageMeta(client, result, match[1])
     }
-    match = object.Key?.match(/^images\/([^/]+)\/source\.(svg|png|bmp|gif|jpeg|tiff)$/)
+    match = object.Key?.match(/^images\/([^/]+)\/source$/)
     if (match) {
-        return readImageSource(result, match[1], match[2])
+        return readImageSource(result, match[1])
     }
     match = object.Key?.match(/^nodes\/([^/]+)\/meta.json$/)
     if (match) {
@@ -246,7 +230,6 @@ const getHealData = async (client: S3Client): Promise<HealData> => {
         contributorsToPut: new Set<UUID>(),
         externals: new Map<string, TitledLink>(),
         externalsToPut: new Set<string>(),
-        imageFileKeys: new Map<UUID, string>(),
         images: new Map<UUID, Image>(),
         imagesToPut: new Set<UUID>(),
         keysToDelete: new Set<string>(),

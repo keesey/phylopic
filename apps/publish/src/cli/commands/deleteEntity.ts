@@ -10,14 +10,13 @@ const deleteImage = (cliData: CLIData, uuid: UUID): CommandResult => {
     return {
         cliData: {
             ...cliData,
-            imageFileKeys: deleteFromMap(cliData.imageFileKeys, uuid),
             images: deleteFromMap(cliData.images, uuid),
         },
         sourceUpdates: [
             new DeleteObjectsCommand({
                 Bucket: SOURCE_BUCKET_NAME,
                 Delete: {
-                    Objects: [{ Key: `images/${uuid}/meta.json` }, { Key: cliData.imageFileKeys.get(uuid) }],
+                    Objects: [{ Key: `images/${uuid}/meta.json` }, { Key: `images/${uuid}/source` }],
                 },
             }),
         ],

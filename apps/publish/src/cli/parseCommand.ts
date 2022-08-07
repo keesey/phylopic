@@ -1,15 +1,14 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { Nomen } from "@phylopic/utils"
-import approve from "./commands/approve.js"
 import autolink from "./commands/autolink.js"
 import { CommandResult } from "./commands/CommandResult.js"
 import deleteEntity from "./commands/deleteEntity.js"
 import identify from "./commands/identify.js"
 import link from "./commands/link.js"
-import source from "./commands/source.js"
 import merge from "./commands/merge.js"
 import search from "./commands/search.js"
 import show from "./commands/show.js"
+import source from "./commands/source.js"
 import spawn from "./commands/spawn.js"
 import split from "./commands/split.js"
 import succeed from "./commands/succeed.js"
@@ -26,19 +25,6 @@ type Command = {
     usage: string
 }
 const COMMANDS: Readonly<Record<string, Command>> = {
-    approve: {
-        description: "Approves a submission, or all submissions",
-        execute: (cliData, reader, args) => {
-            if (reader.atEnd) {
-                return () => approve(args.s3Client, cliData)
-            }
-            const contributor = reader.readEmailAddress()
-            const uuid = reader.readUUID4()
-            reader.expectEnd()
-            return () => approve(args.s3Client, cliData, contributor, uuid)
-        },
-        usage: "approve ?<uuid>",
-    },
     autolink: {
         description: "Automatically pulls external links from an external source within a given clade",
         execute: (cliData, reader) => {

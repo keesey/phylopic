@@ -251,9 +251,6 @@ const analyze = (data: HealData): HealData => {
             if (nodes.has(uuid)) {
                 throw `UUID shared by an image and a node: <${uuid}>.`
             }
-            if (!data.imageFileKeys.has(uuid)) {
-                throw `Image without source file: <${uuid}>.`
-            }
             let modified = image
             if (!isUUID(modified.contributor)) {
                 throw `Invalid contributor UUID (<${modified.contributor}>) in image: <${uuid}>.`
@@ -329,12 +326,6 @@ const analyze = (data: HealData): HealData => {
             }
         } catch (e) {
             console.error(e)
-            error = true
-        }
-    }
-    for (const uuid of data.imageFileKeys.keys()) {
-        if (!images.has(uuid)) {
-            console.error(`Image source file without metadata: <${uuid}>.`)
             error = true
         }
     }
