@@ -1,4 +1,3 @@
-import { Contributor } from "@phylopic/api-models"
 import { EmailAddress, isEmailAddress } from "@phylopic/utils"
 import axios from "axios"
 import dynamic from "next/dynamic"
