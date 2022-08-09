@@ -19,7 +19,9 @@ const Pending: FC = () => {
                             <>
                                 You have <NumberView value={uuids.length} /> pending submission
                                 {uuids.length === 1 ? "" : "s"}.{" "}
-                                {uuids.length === 1 ? "Click on it to edit it." : "Click on any to edit them."}
+                                {uuids.length === 1
+                                    ? "Click on it to edit it."
+                                    : `Click on ${uuids.length === 2 ? "either" : "any"} to edit them.`}
                             </>
                         )}
                         {uuids.length === 0 && isValidating && "Looking for pending submissions…"}

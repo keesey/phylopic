@@ -13,7 +13,13 @@ export interface Props {
 }
 const SubmissionFileThumbnailView: FC<Props> = ({ uuid }) => {
     const token = useAuthToken()
-    const src = useMemo(() => isUUIDv4(uuid) && isJWT(token) ? `/api/submissions/${encodeURIComponent(uuid)}/source?token=${encodeURIComponent(token)}` : undefined, [token, uuid])
+    const src = useMemo(
+        () =>
+            isUUIDv4(uuid) && isJWT(token)
+                ? `/api/submissions/${encodeURIComponent(uuid)}/source?token=${encodeURIComponent(token)}`
+                : undefined,
+        [token, uuid],
+    )
     const { data: specific } = useSpecific(uuid)
     const ratioComplete = useRatioComplete(uuid)
     const alt = useNomenText(specific?.name)

@@ -14,7 +14,10 @@ const Images: FC = () => {
                             {uuids.length === 0 && isValidating && "Loading images…"}
                             {uuids.length === 0 && !isValidating && "None of your submissions have been accepted yet."}
                             {uuids.length === 1 && "One submission has been accepted. Click on it to edit it."}
-                            {uuids.length > 1 && "These submissions have been accepted. Click on any to edit them."}
+                            {uuids.length > 1 &&
+                                `These submissions have been accepted. Click on ${
+                                    uuids.length === 2 ? "either" : "any"
+                                } to edit them.`}
                         </p>
                         <p>
                             <AnchorLink href="/" className="text">

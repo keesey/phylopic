@@ -21,7 +21,9 @@ const Accepted: FC = () => {
                         {uuids.length > 0 && uuids.length < MAX_ITEMS && (
                             <>
                                 You have <NumberView value={uuids.length} /> accepted image
-                                {uuids.length === 1 ? "" : "s"}. Click on any to edit them.
+                                {uuids.length === 1 ? "" : "s"}. Click on{" "}
+                                {uuids.length === 1 ? "it" : uuids.length === 2 ? "either" : "any"} to edit{" "}
+                                {uuids.length === 1 ? "it" : "them"}.
                             </>
                         )}
                         {uuids.length === 0 && isValidating && "Looking for accepted images…"}

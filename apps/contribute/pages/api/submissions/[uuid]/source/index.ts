@@ -35,7 +35,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                 break
             }
             case "PUT": {
-                const { sub: contributorUUID } = await verifyAuthorization(req.headers) ?? {}
+                const { sub: contributorUUID } = (await verifyAuthorization(req.headers)) ?? {}
                 if (!isUUIDv4(contributorUUID)) {
                     throw 401
                 }

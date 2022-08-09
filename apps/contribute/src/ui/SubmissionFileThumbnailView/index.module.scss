@@ -1,12 +1,17 @@
+@use "@phylopic/styles/colors";
+
 .main {
     display: inline-block;
     min-height: 120px;
 }
+
 .caption {
     height: 24px;
     text-align: center;
 }
+
 .progress {
-    height: 24px;
+    accent-color: colors.$dandelion;
+    color: colors.$aquatic;
     width: 96px;
 }

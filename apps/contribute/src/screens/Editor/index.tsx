@@ -6,7 +6,7 @@ import { useAPIFetcher } from "@phylopic/utils-api"
 import { useRouter } from "next/router"
 import { FC, useCallback, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import useAuthToken from "~/auth/hooks/useAuthToken"
 import useHasSourceImage from "~/editing/useHasSourceImage"
 import useHasSubmission from "~/editing/useHasSubmission"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
@@ -21,7 +21,7 @@ export type Props = {
     uuid: UUID
 }
 const Editor: FC<Props> = ({ uuid }) => {
-    const contributorUUID = useContributorUUID()
+    const token = useAuthToken()
     const hasSource = useHasSourceImage(uuid)
     const hasSubmission = useHasSubmission(uuid)
     const { data: image } = useImageSWR(hasSource ? uuid : null)
@@ -83,15 +83,13 @@ const Editor: FC<Props> = ({ uuid }) => {
                         submission={sourceData}
                     />
                 )}
-                {sourceData && submissionData && contributorUUID && (
-                    <span key="divider" className={styles.divider}></span>
-                )}
-                {submissionData && contributorUUID && (
+                {sourceData && submissionData && token && <span key="divider" className={styles.divider}></span>}
+                {submissionData && token && (
                     <SubmissionView
                         key="submission"
                         header={hasSource ? "Pending Changes" : "Your Submission"}
-                        imageSrc={`/api/submissions/${encodeURIComponent(uuid)}/source/${encodeURIComponent(
-                            contributorUUID,
+                        imageSrc={`/api/submissions/${encodeURIComponent(uuid)}/source?token=${encodeURIComponent(
+                            token,
                         )}`}
                         onEdit={handleEdit}
                         submission={submissionData}
