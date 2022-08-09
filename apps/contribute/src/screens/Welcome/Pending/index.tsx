@@ -1,10 +1,11 @@
-import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
+import { AnchorLink, Loader } from "@phylopic/ui"
 import { FC } from "react"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
-import SubmissionFileThumbnailView from "~/ui/SubmissionFileThumbnailView"
+import NumberAsWords from "~/ui/NumberAsWords"
 import SpawnLink from "~/ui/SpawnLink"
+import SubmissionFileThumbnailView from "~/ui/SubmissionFileThumbnailView"
 const Pending: FC = () => {
     const contributorUUID = useContributorUUID()
     if (!contributorUUID) {
@@ -17,7 +18,7 @@ const Pending: FC = () => {
                     <p>
                         {uuids.length > 0 && (
                             <>
-                                You have <NumberView value={uuids.length} /> pending submission
+                                You have <NumberAsWords value={uuids.length} /> pending submission
                                 {uuids.length === 1 ? "" : "s"}.{" "}
                                 {uuids.length === 1
                                     ? "Click on it to edit it."

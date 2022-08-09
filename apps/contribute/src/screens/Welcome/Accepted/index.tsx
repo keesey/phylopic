@@ -1,7 +1,8 @@
-import { AnchorLink, Loader, NumberView } from "@phylopic/ui"
+import { AnchorLink, Loader } from "@phylopic/ui"
 import { FC } from "react"
 import UUIDPaginationContainer from "~/s3/pagination/UUIDPaginationContainer"
 import Banner from "~/ui/Banner"
+import NumberAsWords from "~/ui/NumberAsWords"
 import SourceFileThumbnailView from "~/ui/SourceFileThumbnailView copy"
 const MAX_ITEMS = 24
 const Accepted: FC = () => {
@@ -20,7 +21,7 @@ const Accepted: FC = () => {
                         )}
                         {uuids.length > 0 && uuids.length < MAX_ITEMS && (
                             <>
-                                You have <NumberView value={uuids.length} /> accepted image
+                                You have <NumberAsWords value={uuids.length} /> accepted image
                                 {uuids.length === 1 ? "" : "s"}. Click on{" "}
                                 {uuids.length === 1 ? "it" : uuids.length === 2 ? "either" : "any"} to edit{" "}
                                 {uuids.length === 1 ? "it" : "them"}.

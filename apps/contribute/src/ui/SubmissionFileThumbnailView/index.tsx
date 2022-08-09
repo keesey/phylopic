@@ -23,14 +23,17 @@ const SubmissionFileThumbnailView: FC<Props> = ({ uuid }) => {
     const { data: specific } = useSpecific(uuid)
     const ratioComplete = useRatioComplete(uuid)
     const alt = useNomenText(specific?.name)
+    const determinate = !isNaN(ratioComplete) && ratioComplete < 1
     return (
         <figure className={styles.main}>
             <FileThumbnailView src={src} alt={alt} />
-            {!isNaN(ratioComplete) && ratioComplete < 1 && (
-                <figcaption className={styles.caption}>
-                    <progress className={styles.progress} value={ratioComplete} max={1} />
-                </figcaption>
-            )}
+            <figcaption className={styles.caption}>
+                <progress
+                    className={styles.progress}
+                    value={determinate ? ratioComplete : undefined}
+                    max={determinate ? 1 : undefined}
+                />
+            </figcaption>
         </figure>
     )
 }

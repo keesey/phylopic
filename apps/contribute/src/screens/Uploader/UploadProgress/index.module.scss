@@ -1,0 +1,7 @@
+@use "@phylopic/styles/colors";
+
+.progress {
+    accent-color: colors.$dandelion;
+    color: colors.$aquatic;
+    height: 1rem;
+}

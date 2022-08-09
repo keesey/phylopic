@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import styles from "./index.module.scss"
 export interface Props {
     buffer: Buffer
     onComplete?: (uuid: UUID) => void
@@ -66,21 +67,11 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
             </DialogueScreen>
         )
     }
-    if (!buffer || !token || !uuid) {
-        ;<DialogueScreen>
-            <section>
-                <p>Unknown error.</p>
-                <pre>1. {buffer}</pre>
-                <pre>2. {token}</pre>
-                <pre>3. {uuid}</pre>
-            </section>
-        </DialogueScreen>
-    }
     return (
         <DialogueScreen>
             <section>
                 <p>Uploading your image…</p>
-                <progress value={loaded} max={isNaN(total) ? undefined : total} />
+                <progress className={styles.progress} value={loaded} max={isNaN(total) ? undefined : total} />
             </section>
         </DialogueScreen>
     )
