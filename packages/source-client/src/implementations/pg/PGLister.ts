@@ -1,7 +1,7 @@
-import { ClientBase } from "pg"
+import type { ClientBase } from "pg"
 import { Listable } from "../../interfaces/Listable"
 import getFields from "./fields/getFields"
-import { IdentifyingField } from "./fields/IdentifyingField"
+import { IDField } from "./fields/IDField"
 import { ReadField } from "./fields/ReadField"
 export default class PGLister<TValue, TIdentifier> implements Listable<TValue & Readonly<TIdentifier>, number> {
     constructor(
@@ -11,7 +11,7 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
         protected fields: ReadonlyArray<(string & keyof TValue & TIdentifier) | ReadField<TValue & TIdentifier>>,
         protected normalize?: (value: TValue & TIdentifier) => TValue & TIdentifier,
         protected order: string = '"uuid"',
-        protected where?: readonly IdentifyingField[],
+        protected where?: readonly IDField[],
     ) {}
     public async page(index = 0) {
         const output = await this.getClient().query<TValue & TIdentifier>(

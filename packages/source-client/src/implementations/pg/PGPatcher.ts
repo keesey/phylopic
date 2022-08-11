@@ -1,13 +1,13 @@
-import { ClientBase } from "pg"
+import type { ClientBase } from "pg"
 import { Patchable } from "../../interfaces/Patchable"
 import { EditField } from "./fields/EditField"
-import { IdentifyingField } from "./fields/IdentifyingField"
+import { IDField } from "./fields/IDField"
 import PGEditor from "./PGEditor"
 export default class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
     constructor(
         getClient: () => ClientBase,
         table: string,
-        identifiers: readonly IdentifyingField[],
+        identifiers: readonly IDField[],
         fields: readonly EditField<T>[],
         normalize?: (value: T) => T,
     ) {

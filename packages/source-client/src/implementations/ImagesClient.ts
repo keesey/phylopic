@@ -1,14 +1,17 @@
 import { Image } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
-import { ClientBase } from "pg"
+import type { ClientBase } from "pg"
 import { ImagesClient as IImagesClient } from "../interfaces/SourceClient"
 import IMAGE_FIELDS from "./pg/constants/IMAGE_FIELDS"
 import IMAGE_TABLE from "./pg/constants/IMAGE_TABLE"
-import { IdentifyingField } from "./pg/fields/IdentifyingField"
+import { IDField } from "./pg/fields/IDField"
 import normalizeImage from "./pg/normalization/normalizeImage"
 import PGLister from "./pg/PGLister"
 export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implements IImagesClient {
-    constructor(protected readonly getClient: () => ClientBase, protected readonly where: readonly IdentifyingField[] = []) {
+    constructor(
+        protected readonly getClient: () => ClientBase,
+        protected readonly where: readonly IDField[] = [],
+    ) {
         super(getClient, IMAGE_TABLE, 64, IMAGE_FIELDS, normalizeImage, "modified DESC", where)
         this.accepted = new PGLister<Image, { uuid: UUID }>(
             getClient,
@@ -68,44 +71,8 @@ export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implem
                 },
             ],
         )
-    
     }
     accepted
-    submitted = new PGLister<Image, { uuid: UUID }>(
-        this.getClient,
-        IMAGE_TABLE,
-        64,
-        IMAGE_FIELDS,
-        normalizeImage,
-        "modified DESC",
-        [
-            ...this.where,
-            {
-                column: "accepted",
-                type: "bit",
-                value: 0,
-            },
-            {
-                column: "submitted",
-                type: "bit",
-                value: 1,
-            },
-        ],
-    )
-    withdrawn = new PGLister<Image, { uuid: UUID }>(
-        this.getClient,
-        IMAGE_TABLE,
-        64,
-        IMAGE_FIELDS,
-        normalizeImage,
-        "modified DESC",
-        [
-            ...this.where,
-            {
-                column: "submitted",
-                type: "bit",
-                value: 0,
-            },
-        ],
-    )
+    submitted
+    withdrawn
 }

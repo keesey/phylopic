@@ -1,13 +1,13 @@
-import { ClientBase } from "pg"
+import type { ClientBase } from "pg"
 import { Editable } from "../../interfaces/Editable"
 import { EditField } from "./fields/EditField"
-import { IdentifyingField } from "./fields/IdentifyingField"
+import { IDField } from "./fields/IDField"
 import PGReader from "./PGReader"
 export default class PGEditor<T> extends PGReader<T> implements Editable<T> {
     constructor(
         getClient: () => ClientBase,
         table: string,
-        identifiers: readonly IdentifyingField[],
+        identifiers: readonly IDField[],
         protected fields: readonly EditField<T>[],
         normalize?: (value: T) => T,
     ) {

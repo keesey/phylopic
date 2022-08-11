@@ -8,11 +8,11 @@ import {
     isUUIDv4,
     Namespace,
     ObjectID,
-    UUID
+    UUID,
 } from "@phylopic/utils"
 import { Editable } from "../interfaces/Editable"
 import { SourceClient } from "../interfaces/SourceClient"
-import ClientProvider from "./ClientProvider"
+import type { ClientProvider } from "./ClientProvider"
 import ContributorClient from "./ContributorClient"
 import ExternalAuthorityLister from "./ExternalAuthorityLister"
 import ExternalNamespaceLister from "./ExternalNamespaceLister"
@@ -49,7 +49,14 @@ export default class Client implements SourceClient {
         )
         this.externalAuthorities = new ExternalAuthorityLister(provider.getPG, 128)
         this.images = new ImagesClient(provider.getPG)
-        this.nodes = new PGLister<Node, { uuid: UUID }>(provider.getPG, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, "name")
+        this.nodes = new PGLister<Node, { uuid: UUID }>(
+            provider.getPG,
+            NODE_TABLE,
+            128,
+            NODE_FIELDS,
+            normalizeNode,
+            "name",
+        )
         this.uploads = new S3Lister(provider.getS3, UPLOAD_BUCKET_NAME, "images/", isUUIDv4, 32)
     }
     authEmails
@@ -129,7 +136,13 @@ export default class Client implements SourceClient {
         if (!isUUIDv4(uuid)) {
             throw new Error("Invalid UUID.")
         }
-        return new S3Editor(this.provider.getS3, UPLOAD_BUCKET_NAME, `images/${encodeURIComponent(uuid)}/source`, readImageFile, writeImageFile)
+        return new S3Editor(
+            this.provider.getS3,
+            UPLOAD_BUCKET_NAME,
+            `images/${encodeURIComponent(uuid)}/source`,
+            readImageFile,
+            writeImageFile,
+        )
     }
     uploads
 }

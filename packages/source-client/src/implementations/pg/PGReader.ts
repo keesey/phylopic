@@ -1,14 +1,14 @@
 import { UUID } from "@phylopic/utils"
-import { ClientBase } from "pg"
+import type { ClientBase } from "pg"
 import { Readable } from "../../interfaces/Readable"
 import getFields from "./fields/getFields"
-import { IdentifyingField } from "./fields/IdentifyingField"
+import { IDField } from "./fields/IDField"
 import { ReadField } from "./fields/ReadField"
 export default class PGReader<T> implements Readable<T> {
     constructor(
         protected getClient: () => ClientBase,
         protected table: string,
-        protected identifiers: readonly IdentifyingField[],
+        protected identifiers: readonly IDField[],
         protected fields: ReadonlyArray<(string & keyof T) | ReadField<T>>,
         protected normalize?: (value: T) => T,
     ) {}

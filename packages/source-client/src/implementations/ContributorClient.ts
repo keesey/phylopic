@@ -1,7 +1,7 @@
 import { Contributor } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { SourceClient } from "../interfaces/SourceClient"
-import ClientProvider from "./ClientProvider"
+import type { ClientProvider } from "./ClientProvider"
 import ImagesClient from "./ImagesClient"
 import CONTRIBUTOR_FIELDS from "./pg/constants/CONTRIBUTOR_FIELDS"
 import CONTRIBUTOR_TABLE from "./pg/constants/CONTRIBUTOR_TABLE"

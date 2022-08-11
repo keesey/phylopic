@@ -1,5 +1,5 @@
 import { Authority } from "@phylopic/utils"
-import { ClientBase } from "pg"
+import type { ClientBase } from "pg"
 import { Listable } from "../interfaces/Listable"
 import { Page } from "../interfaces/Page"
 import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"

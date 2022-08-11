@@ -1,7 +1,7 @@
 import { Node } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { SourceClient } from "../interfaces/SourceClient"
-import ClientProvider from "./ClientProvider"
+import type { ClientProvider } from "./ClientProvider"
 import NODE_FIELDS from "./pg/constants/NODE_FIELDS"
 import NODE_TABLE from "./pg/constants/NODE_TABLE"
 import normalizeNode from "./pg/normalization/normalizeNode"
