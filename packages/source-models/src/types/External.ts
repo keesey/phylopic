@@ -1,4 +1,5 @@
+import { UUID } from "@phylopic/utils"
 export type External = {
-    readonly href: string
+    readonly node: UUID
     readonly title: string
 }

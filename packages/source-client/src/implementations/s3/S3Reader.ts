@@ -1,7 +1,7 @@
 import { GetObjectCommand, GetObjectOutput, HeadObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { isAWSError } from "@phylopic/utils-aws"
-import { Readable } from "../interfaces"
-export default class Reader<T> implements Readable<T> {
+import { Readable } from "../../interfaces/Readable"
+export default class S3Reader<T> implements Readable<T> {
     constructor(
         protected getClient: () => S3Client,
         protected bucket: string,

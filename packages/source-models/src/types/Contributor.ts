@@ -1,7 +1,8 @@
 import type { EmailAddress, ISOTimestamp } from "@phylopic/utils"
 export type Contributor = Readonly<{
-    emailAddress: EmailAddress | null
     created: ISOTimestamp
+    emailAddress: EmailAddress | null
+    modified: ISOTimestamp
     name: string
     showEmailAddress: boolean
 }>

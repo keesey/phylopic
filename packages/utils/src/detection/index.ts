@@ -1,5 +1,6 @@
 export type { FaultDetector } from "./FaultDetector"
 export * from "./isArray"
+export * from "./isBoolean"
 export * from "./isNonemptyArray"
 export * from "./isNonnegativeInteger"
 export * from "./isNormalizedText"
