@@ -1,8 +1,9 @@
 import { Image } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { ImageFile } from "../interfaces/ImageFile"
+import { PGClientProvider } from "../interfaces/PGClientProvider"
+import { S3ClientProvider } from "../interfaces/S3ClientProvider"
 import { SourceClient } from "../interfaces/SourceClient"
-import type { ClientProvider } from "./ClientProvider"
 import IMAGE_FIELDS from "./pg/constants/IMAGE_FIELDS"
 import IMAGE_TABLE from "./pg/constants/IMAGE_TABLE"
 import normalizeImage from "./pg/normalization/normalizeImage"
@@ -15,16 +16,10 @@ export default class ImageClient
     extends PGPatcher<Image & { uuid: UUID }>
     implements ReturnType<SourceClient["image"]>
 {
-    constructor(protected readonly provider: ClientProvider, protected readonly uuid: UUID) {
-        super(
-            provider.getPG,
-            IMAGE_TABLE,
-            [{ column: "uuid", type: "uuid", value: uuid }],
-            IMAGE_FIELDS,
-            normalizeImage,
-        )
+    constructor(protected readonly provider: PGClientProvider & S3ClientProvider, protected readonly uuid: UUID) {
+        super(provider, IMAGE_TABLE, [{ column: "uuid", type: "uuid", value: uuid }], IMAGE_FIELDS, normalizeImage)
         this.file = new S3Editor<ImageFile>(
-            provider.getS3,
+            provider,
             UPLOAD_BUCKET_NAME,
             `images/${encodeURIComponent(this.uuid)}/source`,
             readImageFile,

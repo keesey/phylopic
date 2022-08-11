@@ -1,5 +1,6 @@
 import { Contributor } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
+import { PGClientProvider } from "../interfaces/PGClientProvider"
 import { SourceClient } from "../interfaces/SourceClient"
 import type { ClientProvider } from "./ClientProvider"
 import ImagesClient from "./ImagesClient"
@@ -11,15 +12,15 @@ export default class ContributorClient
     extends PGPatcher<Contributor & { uuid: UUID }>
     implements ReturnType<SourceClient["contributor"]>
 {
-    constructor(protected readonly provider: ClientProvider, uuid: UUID) {
+    constructor(provider: PGClientProvider, uuid: UUID) {
         super(
-            provider.getPG,
+            provider,
             CONTRIBUTOR_TABLE,
             [{ column: "uuid", type: "uuid", value: uuid }],
             CONTRIBUTOR_FIELDS,
             normalizeContributor,
         )
-        this.images = new ImagesClient(provider.getPG, [
+        this.images = new ImagesClient(provider, [
             {
                 column: "contributor_uuid",
                 type: "uuid",

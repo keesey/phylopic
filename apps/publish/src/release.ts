@@ -31,7 +31,7 @@ import SOURCE_PATH from "./paths/SOURCE_PATH.js"
         process.exit(1)
     } finally {
         s3Client.destroy()
-        pgClient.end()
+        await pgClient.end()
     }
     process.exit(0)
 })()

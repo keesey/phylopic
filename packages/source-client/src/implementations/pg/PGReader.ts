@@ -1,19 +1,18 @@
-import { UUID } from "@phylopic/utils"
-import type { ClientBase } from "pg"
+import { PGClientProvider } from "../../interfaces/PGClientProvider"
 import { Readable } from "../../interfaces/Readable"
 import getFields from "./fields/getFields"
 import { IDField } from "./fields/IDField"
 import { ReadField } from "./fields/ReadField"
 export default class PGReader<T> implements Readable<T> {
     constructor(
-        protected getClient: () => Promise<ClientBase>,
+        protected provider: PGClientProvider,
         protected table: string,
         protected identifiers: readonly IDField[],
         protected fields: ReadonlyArray<(string & keyof T) | ReadField<T>>,
         protected normalize?: (value: T) => T,
     ) {}
     public async get() {
-        const client = await this.getClient()
+        const client = await this.provider.getPG()
         const output = await client.query<T>(
             `SELECT ${this.getFields()} FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
             this.identificationValues(),
@@ -24,8 +23,8 @@ export default class PGReader<T> implements Readable<T> {
         return this.normalize ? this.normalize(output.rows[0]) : output.rows[0]
     }
     public async exists(): Promise<boolean> {
-        const client = await this.getClient()
-        const output = await client.query<{ uuid: UUID }>(
+        const client = await this.provider.getPG()
+        const output = await client.query(
             `SELECT ${this.identificationColumns()} FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
             this.identificationValues(),
         )

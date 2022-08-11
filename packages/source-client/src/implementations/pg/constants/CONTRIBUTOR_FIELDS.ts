@@ -17,7 +17,7 @@ const CONTRIBUTOR_FIELDS: ReadonlyArray<EditField<Contributor & { uuid: UUID }>>
         type: "timestamp without time zone",
         updateable: true,
     },
-    { column: "name", insertable: true, property: "name", type: "character varying", updateable: true },
+    { column: '"name"', insertable: true, property: "name", type: "character varying", updateable: true },
     { column: "show_email", insertable: true, property: "showEmailAddress", type: "bit", updateable: true },
     { column: "uuid", insertable: true, property: "uuid", type: "uuid", updateable: false },
 ]

@@ -1,16 +1,17 @@
-import { ListObjectsV2Command, ListObjectsV2Output, S3Client } from "@aws-sdk/client-s3"
+import { ListObjectsV2Command, ListObjectsV2Output } from "@aws-sdk/client-s3"
 import { FaultDetector } from "@phylopic/utils"
 import { Listable } from "../../interfaces/Listable"
+import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 export default class S3Lister<TValue extends string = string> implements Listable<TValue, string> {
     constructor(
-        protected getClient: () => S3Client,
-        protected bucket: string,
-        protected prefix: string,
-        protected validate: FaultDetector<TValue>,
-        protected pageSize: number | undefined = undefined,
+        protected readonly provider: S3ClientProvider,
+        protected readonly bucket: string,
+        protected readonly prefix: string,
+        protected readonly validate: FaultDetector<TValue>,
+        protected readonly pageSize: number | undefined = undefined,
     ) {}
     public async page(token?: string) {
-        const output = await this.getClient().send(this.getCommand(token))
+        const output = await this.provider.getS3().send(this.getCommand(token))
         return {
             items: this.getItems(output),
             next: output.NextContinuationToken,
@@ -20,7 +21,7 @@ export default class S3Lister<TValue extends string = string> implements Listabl
         let total = 0
         let token: string | undefined
         do {
-            const output = await this.getClient().send(this.getCommand(token))
+            const output = await this.provider.getS3().send(this.getCommand(token))
             total += this.getItems(output).length
             token = output.NextContinuationToken
         } while (token)
@@ -30,7 +31,7 @@ export default class S3Lister<TValue extends string = string> implements Listabl
         let total = 0
         let token: string | undefined
         do {
-            const output = await this.getClient().send(this.getCommand(token))
+            const output = await this.provider.getS3().send(this.getCommand(token))
             total++
             token = output.NextContinuationToken
         } while (token)

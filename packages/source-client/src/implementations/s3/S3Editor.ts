@@ -4,23 +4,23 @@ import {
     GetObjectOutput,
     PutObjectCommand,
     PutObjectCommandInput,
-    S3Client,
 } from "@aws-sdk/client-s3"
 import { Editable } from "../../interfaces/Editable"
-import Reader from "./S3Reader"
-export default class S3Editor<T> extends Reader<T> implements Editable<T> {
+import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
+import S3Reader from "./S3Reader"
+export default class S3Editor<T> extends S3Reader<T> implements Editable<T> {
     constructor(
-        getClient: () => S3Client,
+        provider: S3ClientProvider,
         bucket: string,
         key: string,
         readOutput: (output: GetObjectOutput) => Promise<T>,
-        protected writeOutput: (value: T) => Promise<Partial<PutObjectCommandInput>>,
+        protected readonly writeOutput: (value: T) => Promise<Partial<PutObjectCommandInput>>,
     ) {
-        super(getClient, bucket, key, readOutput)
+        super(provider, bucket, key, readOutput)
     }
     public async delete() {
         await this.copyToTrash()
-        await this.getClient().send(
+        await this.provider.getS3().send(
             new DeleteObjectCommand({
                 Bucket: this.bucket,
                 Key: this.key,
@@ -31,7 +31,7 @@ export default class S3Editor<T> extends Reader<T> implements Editable<T> {
         if (await this.exists()) {
             await this.copyToTrash()
         }
-        await this.getClient().send(
+        await this.provider.getS3().send(
             new PutObjectCommand({
                 ...(await this.writeOutput(value)),
                 Bucket: this.bucket,
@@ -40,7 +40,7 @@ export default class S3Editor<T> extends Reader<T> implements Editable<T> {
         )
     }
     protected async copyToTrash() {
-        await this.getClient().send(
+        await this.provider.getS3().send(
             new CopyObjectCommand({
                 Bucket: this.bucket,
                 CopySource: `${this.bucket}/${this.key}`,

@@ -1,6 +1,8 @@
 import { S3Client, S3ClientConfig } from "@aws-sdk/client-s3"
 import pg from "pg"
-export class ClientProvider {
+import { PGClientProvider } from "../interfaces/PGClientProvider"
+import { S3ClientProvider } from "../interfaces/S3ClientProvider"
+export class ClientProvider implements PGClientProvider, S3ClientProvider {
     protected pg: pg.Client | null = null
     protected s3: S3Client | null = null
     constructor(

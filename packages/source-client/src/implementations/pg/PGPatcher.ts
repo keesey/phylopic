@@ -1,22 +1,22 @@
-import type { ClientBase } from "pg"
 import { Patchable } from "../../interfaces/Patchable"
+import { PGClientProvider } from "../../interfaces/PGClientProvider"
 import { EditField } from "./fields/EditField"
 import { IDField } from "./fields/IDField"
 import PGEditor from "./PGEditor"
 export default class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
     constructor(
-        getClient: () => Promise<ClientBase>,
+        provider: PGClientProvider,
         table: string,
         identifiers: readonly IDField[],
         fields: readonly EditField<T>[],
         normalize?: (value: T) => T,
     ) {
-        super(getClient, table, identifiers, fields, normalize)
+        super(provider, table, identifiers, fields, normalize)
     }
     public async patch(value: Partial<T>) {
         const keys = Object.keys(value)
         if (keys.length >= 1) {
-            const client = await this.getClient()
+            const client = await this.provider.getPG()
             await client.query(
                 `UPDATE ${this.table} SET ${this.patchUpdates(keys)} WHERE ${this.identification()} LIMIT 1`,
                 [this.identificationValues(), ...this.patchValues(value)],
