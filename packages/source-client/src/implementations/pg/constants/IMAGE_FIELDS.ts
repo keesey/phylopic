@@ -1,6 +1,7 @@
 import { Image } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
 import { EditField } from "../fields/EditField"
-const IMAGE_FIELDS: ReadonlyArray<EditField<Image>> = [
+const IMAGE_FIELDS: ReadonlyArray<EditField<Image & { uuid: UUID }>> = [
     { column: "accepted", insertable: true, property: "accepted", type: "bit", updateable: true },
     { column: "attribution", insertable: true, property: "attribution", type: "character varying", updateable: true },
     { column: "contributor_uuid", insertable: true, property: "contributor", type: "uuid", updateable: false },
@@ -23,5 +24,6 @@ const IMAGE_FIELDS: ReadonlyArray<EditField<Image>> = [
     { column: "specific_uuid", insertable: true, property: "specific", type: "uuid", updateable: true },
     { column: "sponsor", insertable: true, property: "sponsor", type: "character varying", updateable: true },
     { column: "submitted", insertable: true, property: "submitted", type: "bit", updateable: true },
+    { column: "uuid", insertable: true, property: "uuid", type: "uuid", updateable: false },
 ]
 export default IMAGE_FIELDS

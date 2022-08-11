@@ -4,7 +4,7 @@ import { Listable } from "../interfaces/Listable"
 import { Page } from "../interfaces/Page"
 import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
 export default class ExternalAuthorityLister implements Listable<Authority, number> {
-    constructor(protected getClient: () => ClientBase, protected pageSize: number) {}
+    constructor(protected readonly getClient: () => ClientBase, protected readonly pageSize: number) {}
     async page(index = 0): Promise<Page<string, number>> {
         const output = await this.getClient().query<{ authority: Authority }>(
             `SELECT authority FROM ${EXTERNAL_TABLE} GROUP BY authority ORDER BY authority OFFSET $1::bigint LIMIT $2::bigint`,

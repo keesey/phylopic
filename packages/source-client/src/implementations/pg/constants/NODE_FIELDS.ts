@@ -1,6 +1,7 @@
 import { Node } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
 import { EditField } from "../fields/EditField"
-const NODE_FIELDS: ReadonlyArray<EditField<Node>> = [
+const NODE_FIELDS: ReadonlyArray<EditField<Node & { uuid: UUID }>> = [
     {
         column: "created",
         insertable: false,
@@ -17,5 +18,6 @@ const NODE_FIELDS: ReadonlyArray<EditField<Node>> = [
     },
     { column: "names", insertable: true, property: "names", type: "json", updateable: true },
     { column: "parent_uuid", insertable: true, property: "parent", type: "uuid", updateable: true },
+    { column: "uuid", insertable: true, property: "uuid", type: "uuid", updateable: false },
 ]
 export default NODE_FIELDS

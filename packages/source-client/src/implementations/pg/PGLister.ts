@@ -3,7 +3,7 @@ import { Listable } from "../../interfaces/Listable"
 import getFields from "./fields/getFields"
 import { IdentifyingField } from "./fields/IdentifyingField"
 import { ReadField } from "./fields/ReadField"
-export default class PGLister<TValue, TIdentifier> implements Listable<TValue & TIdentifier, number> {
+export default class PGLister<TValue, TIdentifier> implements Listable<TValue & Readonly<TIdentifier>, number> {
     constructor(
         protected getClient: () => ClientBase,
         protected table: string,

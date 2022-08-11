@@ -4,10 +4,10 @@ import { Editable } from "./Editable"
 import { ImageFile } from "./ImageFile"
 import { Listable } from "./Listable"
 import { Patchable } from "./Patchable"
-export type ImagesClient = Listable<Image, number> & {
-    accepted: Listable<Image, number>
-    submitted: Listable<Image, number>
-    withdrawn: Listable<Image, number>
+export type ImagesClient = Listable<Image & { uuid: UUID }, number> & {
+    accepted: Listable<Image & { uuid: UUID }, number>
+    submitted: Listable<Image & { uuid: UUID }, number>
+    withdrawn: Listable<Image & { uuid: UUID }, number>
 }
 export type SourceClient = Readonly<{
     authEmails: Listable<EmailAddress, string>
@@ -15,15 +15,20 @@ export type SourceClient = Readonly<{
     contributor(uuid: UUID): Patchable<Contributor> & {
         images: ImagesClient
     }
-    contributors: Listable<Contributor, number>
+    contributors: Listable<Contributor & { uuid: UUID }, number>
     external(authority: Authority, namespace: Namespace, objectID: ObjectID): Editable<External>
     externalAuthorities: Listable<Authority, number>
     externalNamespaces(authority: Authority): Listable<Namespace, number>
-    externals(authority: Authority, namespace: Namespace): Listable<External, number>
+    externals(
+        authority: Authority,
+        namespace: Namespace,
+    ): Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
     image(uuid: UUID): Patchable<Image> & {
         file: Editable<ImageFile>
     }
     images: ImagesClient
     node(uuid: UUID): Patchable<Node>
     nodes: Listable<Node, number>
+    upload(uuid: UUID): Editable<ImageFile>
+    uploads: Listable<UUID, string>
 }>

@@ -11,8 +11,11 @@ import UPLOAD_BUCKET_NAME from "./s3/constants/UPLOAD_BUCKET_NAME"
 import readImageFile from "./s3/io/readImageFile"
 import writeImageFile from "./s3/io/writeImageFile"
 import S3Editor from "./s3/S3Editor"
-export default class ImageClient extends PGPatcher<Image> implements ReturnType<SourceClient["image"]> {
-    constructor(protected provider: ClientProvider, protected uuid: UUID) {
+export default class ImageClient
+    extends PGPatcher<Image & { uuid: UUID }>
+    implements ReturnType<SourceClient["image"]>
+{
+    constructor(protected readonly provider: ClientProvider, protected readonly uuid: UUID) {
         super(
             provider.getPG,
             IMAGE_TABLE,
@@ -20,12 +23,13 @@ export default class ImageClient extends PGPatcher<Image> implements ReturnType<
             IMAGE_FIELDS,
             normalizeImage,
         )
+        this.file = new S3Editor<ImageFile>(
+            provider.getS3,
+            UPLOAD_BUCKET_NAME,
+            `images/${encodeURIComponent(this.uuid)}/source`,
+            readImageFile,
+            writeImageFile,
+        )
     }
-    file = new S3Editor<ImageFile>(
-        this.provider.getS3,
-        UPLOAD_BUCKET_NAME,
-        `images/${encodeURIComponent(this.uuid)}/source`,
-        readImageFile,
-        writeImageFile,
-    )
+    file
 }

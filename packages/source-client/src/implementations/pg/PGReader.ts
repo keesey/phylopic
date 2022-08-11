@@ -24,13 +24,16 @@ export default class PGReader<T> implements Readable<T> {
     }
     public async exists(): Promise<boolean> {
         const output = await this.getClient().query<{ uuid: UUID }>(
-            `SELECT "uuid" FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
+            `SELECT ${this.identificationColumns()} FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
             this.identificationValues(),
         )
         return output.rowCount === 1
     }
     protected identification() {
         return this.identifiers.map((field, index) => `${field.column}=$${index + 1}::${field.type}`).join(" AND ")
+    }
+    protected identificationColumns() {
+        return this.identifiers.map(field => field.column).join(",")
     }
     protected identificationValues() {
         return this.identifiers.map(field => field.value)

@@ -1,4 +1,4 @@
-import { Contributor, External, Image, Node } from "@phylopic/source-models"
+import { Contributor, External, Node } from "@phylopic/source-models"
 import {
     Authority,
     isAuthority,
@@ -8,39 +8,55 @@ import {
     isUUIDv4,
     Namespace,
     ObjectID,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { Editable } from "../interfaces/Editable"
-import { Listable } from "../interfaces/Listable"
 import { SourceClient } from "../interfaces/SourceClient"
 import ClientProvider from "./ClientProvider"
 import ContributorClient from "./ContributorClient"
 import ExternalAuthorityLister from "./ExternalAuthorityLister"
 import ExternalNamespaceLister from "./ExternalNamespaceLister"
 import ImageClient from "./ImageClient"
+import ImagesClient from "./ImagesClient"
 import NodeClient from "./NodeClient"
 import CONTRIBUTOR_FIELDS from "./pg/constants/CONTRIBUTOR_FIELDS"
 import CONTRIBUTOR_TABLE from "./pg/constants/CONTRIBUTOR_TABLE"
 import EXTERNAL_FIELDS from "./pg/constants/EXTERNAL_FIELDS"
 import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
-import IMAGE_FIELDS from "./pg/constants/IMAGE_FIELDS"
-import IMAGE_TABLE from "./pg/constants/IMAGE_TABLE"
 import NODE_FIELDS from "./pg/constants/NODE_FIELDS"
 import NODE_TABLE from "./pg/constants/NODE_TABLE"
 import normalizeContributor from "./pg/normalization/normalizeContributor"
-import normalizeImage from "./pg/normalization/normalizeImage"
 import normalizeNode from "./pg/normalization/normalizeNode"
 import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
 import AUTH_BUCKET_NAME from "./s3/constants/AUTH_BUCKET_NAME"
+import UPLOAD_BUCKET_NAME from "./s3/constants/UPLOAD_BUCKET_NAME"
+import readImageFile from "./s3/io/readImageFile"
 import readJWT from "./s3/io/readJWT"
+import writeImageFile from "./s3/io/writeImageFile"
 import writeJWT from "./s3/io/writeJWT"
 import S3Editor from "./s3/S3Editor"
 import S3Lister from "./s3/S3Lister"
 export default class Client implements SourceClient {
-    constructor(protected provider: ClientProvider) {}
-    public authEmails = new S3Lister(this.provider.getS3, AUTH_BUCKET_NAME, "emails/", isEmailAddress)
+    constructor(protected readonly provider: ClientProvider) {
+        this.authEmails = new S3Lister(provider.getS3, AUTH_BUCKET_NAME, "emails/", isEmailAddress)
+        this.contributors = new PGLister<Contributor, { uuid: UUID }>(
+            provider.getPG,
+            CONTRIBUTOR_TABLE,
+            128,
+            CONTRIBUTOR_FIELDS,
+            normalizeContributor,
+        )
+        this.externalAuthorities = new ExternalAuthorityLister(provider.getPG, 128)
+        this.images = new ImagesClient(provider.getPG)
+        this.nodes = new PGLister<Node, { uuid: UUID }>(provider.getPG, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, "name")
+        this.uploads = new S3Lister(provider.getS3, UPLOAD_BUCKET_NAME, "images/", isUUIDv4, 32)
+    }
+    authEmails
     authToken(emailAddress: string) {
+        if (!isEmailAddress(emailAddress)) {
+            throw new Error("Invalid email address.")
+        }
         return new S3Editor(
             this.provider.getS3,
             AUTH_BUCKET_NAME,
@@ -55,13 +71,7 @@ export default class Client implements SourceClient {
         }
         return new ContributorClient(this.provider, uuid)
     }
-    contributors: Listable<Readonly<Contributor>, number> = new PGLister<Contributor>(
-        this.provider.getPG,
-        CONTRIBUTOR_TABLE,
-        128,
-        CONTRIBUTOR_FIELDS,
-        normalizeContributor,
-    )
+    contributors
     external(authority: Authority, namespace: Namespace, objectID: ObjectID): Editable<External> {
         if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
             throw new Error("Invalid external object specification.")
@@ -77,7 +87,7 @@ export default class Client implements SourceClient {
             EXTERNAL_FIELDS,
         )
     }
-    externalAuthorities = new ExternalAuthorityLister(this.provider.getPG, 128)
+    externalAuthorities
     externalNamespaces(authority: Authority) {
         if (!isAuthority(authority)) {
             throw new Error("Invalid external authority.")
@@ -88,7 +98,7 @@ export default class Client implements SourceClient {
         if (!isAuthority(authority) || !isNamespace(namespace)) {
             throw new Error("Invalid external namespace specification.")
         }
-        return new PGLister<External>(
+        return new PGLister<External, { authority: Authority; namespace: Namespace; objectID: ObjectID }>(
             this.provider.getPG,
             EXTERNAL_TABLE,
             128,
@@ -107,12 +117,19 @@ export default class Client implements SourceClient {
         }
         return new ImageClient(this.provider, uuid)
     }
-    images = new PGLister<Image>(this.provider.getPG, IMAGE_TABLE, 64, IMAGE_FIELDS, normalizeImage, "modified DESC")
+    images
     node(uuid: UUID) {
         if (!isUUIDv4(uuid)) {
             throw new Error("Invalid UUID.")
         }
         return new NodeClient(this.provider, uuid)
     }
-    nodes = new PGLister<Node>(this.provider.getPG, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, "name")
+    nodes
+    upload(uuid: UUID) {
+        if (!isUUIDv4(uuid)) {
+            throw new Error("Invalid UUID.")
+        }
+        return new S3Editor(this.provider.getS3, UPLOAD_BUCKET_NAME, `images/${encodeURIComponent(uuid)}/source`, readImageFile, writeImageFile)
+    }
+    uploads
 }
