@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS public.contributor
 (
     uuid uuid NOT NULL,
     name character varying(128) COLLATE pg_catalog."default",
-    email character varying(128) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(128) COLLATE pg_catalog."default",
     show_email bit(1) NOT NULL DEFAULT (1)::bit(1),
     created timestamp without time zone NOT NULL DEFAULT now(),
     modified timestamp without time zone NOT NULL DEFAULT now(),

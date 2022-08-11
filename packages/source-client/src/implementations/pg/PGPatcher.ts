@@ -3,6 +3,7 @@ import { PGClientProvider } from "../../interfaces/PGClientProvider"
 import { EditField } from "./fields/EditField"
 import { IDField } from "./fields/IDField"
 import PGEditor from "./PGEditor"
+import prepareValue from "./preparation/prepareValue"
 export default class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
     constructor(
         provider: PGClientProvider,
@@ -33,6 +34,6 @@ export default class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
         const keys = Object.keys(value)
         return this.fields
             .filter(field => field.updateable && keys.includes(field.property))
-            .map(field => value[field.property])
+            .map(field => prepareValue(value[field.property]))
     }
 }
