@@ -6,14 +6,15 @@ import { IDField } from "./fields/IDField"
 import { ReadField } from "./fields/ReadField"
 export default class PGReader<T> implements Readable<T> {
     constructor(
-        protected getClient: () => ClientBase,
+        protected getClient: () => Promise<ClientBase>,
         protected table: string,
         protected identifiers: readonly IDField[],
         protected fields: ReadonlyArray<(string & keyof T) | ReadField<T>>,
         protected normalize?: (value: T) => T,
     ) {}
     public async get() {
-        const output = await this.getClient().query<T>(
+        const client = await this.getClient()
+        const output = await client.query<T>(
             `SELECT ${this.getFields()} FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
             this.identificationValues(),
         )
@@ -23,7 +24,8 @@ export default class PGReader<T> implements Readable<T> {
         return this.normalize ? this.normalize(output.rows[0]) : output.rows[0]
     }
     public async exists(): Promise<boolean> {
-        const output = await this.getClient().query<{ uuid: UUID }>(
+        const client = await this.getClient()
+        const output = await client.query<{ uuid: UUID }>(
             `SELECT ${this.identificationColumns()} FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
             this.identificationValues(),
         )

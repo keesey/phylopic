@@ -5,12 +5,13 @@ import { Page } from "../interfaces/Page"
 import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
 export default class ExternalNamespaceLister implements Listable<Namespace, number> {
     constructor(
-        protected readonly getClient: () => ClientBase,
+        protected readonly getClient: () => Promise<ClientBase>,
         protected readonly pageSize: number,
         protected readonly authority: Authority,
     ) {}
     async page(index = 0): Promise<Page<string, number>> {
-        const output = await this.getClient().query<{ namespace: Namespace }>(
+        const client = await this.getClient()
+        const output = await client.query<{ namespace: Namespace }>(
             `SELECT "namespace" FROM ${EXTERNAL_TABLE} WHERE authority=$1::character varying GROUP BY authority,"namespace" ORDER BY "namespace" OFFSET $2::bigint LIMIT $3::bigint`,
             [this.authority, index * this.pageSize, this.pageSize],
         )
@@ -20,7 +21,8 @@ export default class ExternalNamespaceLister implements Listable<Namespace, numb
         }
     }
     public async totalItems() {
-        const output = await this.getClient().query<{ total: number }>(
+        const client = await this.getClient()
+        const output = await client.query<{ total: number }>(
             `SELECT COUNT("namespace") AS total FROM ${EXTERNAL_TABLE} WHERE authority=$1::character varying GROUP BY authority,"namespace"`,
             [this.authority],
         )

@@ -11,12 +11,25 @@ export class ClientProvider {
         this.s3?.destroy()
         this.s3 = null
         if (this.pg) {
-            await this.pg.end()
+            try {
+                await this.pg.end()
+            } catch (e) {
+                console.error(e)
+            }
             this.pg = null
         }
     }
-    public getPG(): pg.ClientBase {
-        return this.pg ?? (this.pg = new pg.Client(this.pgConfig))
+    public async getPG(): Promise<pg.ClientBase> {
+        if (!this.pg) {
+            this.pg = new pg.Client(this.pgConfig)
+            try {
+                await this.pg.connect()
+            } catch (e) {
+                this.pg = null
+                throw e
+            }
+        }
+        return this.pg
     }
     public getS3(): S3Client {
         return this.s3 ?? (this.s3 = new S3Client(this.s3Config))

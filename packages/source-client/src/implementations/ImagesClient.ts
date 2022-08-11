@@ -9,7 +9,7 @@ import normalizeImage from "./pg/normalization/normalizeImage"
 import PGLister from "./pg/PGLister"
 export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implements IImagesClient {
     constructor(
-        protected readonly getClient: () => ClientBase,
+        protected readonly getClient: () => Promise<ClientBase>,
         protected readonly where: readonly IDField[] = [],
     ) {
         super(getClient, IMAGE_TABLE, 64, IMAGE_FIELDS, normalizeImage, "modified DESC", where)

@@ -5,7 +5,7 @@ import { IDField } from "./fields/IDField"
 import PGEditor from "./PGEditor"
 export default class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
     constructor(
-        getClient: () => ClientBase,
+        getClient: () => Promise<ClientBase>,
         table: string,
         identifiers: readonly IDField[],
         fields: readonly EditField<T>[],
@@ -16,7 +16,8 @@ export default class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
     public async patch(value: Partial<T>) {
         const keys = Object.keys(value)
         if (keys.length >= 1) {
-            await this.getClient().query(
+            const client = await this.getClient()
+            await client.query(
                 `UPDATE ${this.table} SET ${this.patchUpdates(keys)} WHERE ${this.identification()} LIMIT 1`,
                 [this.identificationValues(), ...this.patchValues(value)],
             )

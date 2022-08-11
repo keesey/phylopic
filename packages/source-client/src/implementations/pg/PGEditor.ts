@@ -5,7 +5,7 @@ import { IDField } from "./fields/IDField"
 import PGReader from "./PGReader"
 export default class PGEditor<T> extends PGReader<T> implements Editable<T> {
     constructor(
-        getClient: () => ClientBase,
+        getClient: () => Promise<ClientBase>,
         table: string,
         identifiers: readonly IDField[],
         protected fields: readonly EditField<T>[],
@@ -14,19 +14,21 @@ export default class PGEditor<T> extends PGReader<T> implements Editable<T> {
         super(getClient, table, identifiers, fields, normalize)
     }
     public async delete() {
-        await this.getClient().query(
+        const client = await this.getClient()
+        await client.query(
             `DELETE FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
             this.identificationValues(),
         )
     }
     public async put(value: T) {
+        const client = await this.getClient()
         if (await this.exists()) {
-            await this.getClient().query(
-                `UPDATE ${this.table} SET ${this.updates()} WHERE ${this.identification()} LIMIT 1`,
-                [...this.identificationValues(), ...this.putValues(value)],
-            )
+            await client.query(`UPDATE ${this.table} SET ${this.updates()} WHERE ${this.identification()} LIMIT 1`, [
+                ...this.identificationValues(),
+                ...this.putValues(value),
+            ])
         } else {
-            await this.getClient().query(
+            await client.query(
                 `INSERT INTO ${
                     this.table
                 } ("uuid",${this.insertFields()}) VALUES (${this.identificationValuesInQuery()},${this.insertValues()})`,
