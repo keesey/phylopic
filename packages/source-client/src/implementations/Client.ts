@@ -73,7 +73,11 @@ export default class Client implements SourceClient {
         return new ContributorClient(this.provider, uuid)
     }
     contributors
-    external(authority: Authority, namespace: Namespace, objectID: ObjectID): Editable<External> {
+    external(
+        authority: Authority,
+        namespace: Namespace,
+        objectID: ObjectID,
+    ): Editable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }> {
         if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
             throw new Error("Invalid external object specification.")
         }

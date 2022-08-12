@@ -16,15 +16,12 @@ export default class PGEditor<T> extends PGReader<T> implements Editable<T> {
     }
     public async delete() {
         const client = await this.provider.getPG()
-        await client.query(
-            `DELETE FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
-            this.identificationValues(),
-        )
+        await client.query(`DELETE FROM ${this.table} WHERE ${this.identification()}`, this.identificationValues())
     }
     public async put(value: T) {
         const client = await this.provider.getPG()
         if (await this.exists()) {
-            await client.query(`UPDATE ${this.table} SET ${this.updates()} WHERE ${this.identification()} LIMIT 1`, [
+            await client.query(`UPDATE ${this.table} SET ${this.updates()} WHERE ${this.identification()}`, [
                 ...this.identificationValues(),
                 ...this.updateValues(value),
             ])

@@ -14,21 +14,24 @@ export default class PGReader<T> implements Readable<T> {
     public async get() {
         const client = await this.provider.getPG()
         const output = await client.query<T>(
-            `SELECT ${this.getFields()} FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
+            `SELECT ${this.getFields()} FROM ${this.table} WHERE ${this.identification()}`,
             this.identificationValues(),
         )
-        if (output.rowCount !== 1) {
+        if (!output.rowCount) {
             throw new Error("Entity not found.")
+        }
+        if (output.rowCount > 1) {
+            throw new Error("Multiple entities found.")
         }
         return this.normalize ? this.normalize(output.rows[0]) : output.rows[0]
     }
     public async exists(): Promise<boolean> {
         const client = await this.provider.getPG()
         const output = await client.query(
-            `SELECT ${this.identificationColumns()} FROM ${this.table} WHERE ${this.identification()} LIMIT 1`,
+            `SELECT ${this.identificationColumns()} FROM ${this.table} WHERE ${this.identification()}`,
             this.identificationValues(),
         )
-        return output.rowCount === 1
+        return output.rowCount >= 1
     }
     protected identification() {
         return this.identifiers.map((field, index) => `${field.column}=$${index + 1}::${field.type}`).join(" AND ")

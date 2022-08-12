@@ -18,7 +18,7 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
         const output = await client.query<TValue & TIdentifier>(
             `SELECT ${getFields(this.fields)} FROM ${
                 this.table
-            } OFFSET $2::bigint LIMIT $1::bigint${this.whereClause()} ORDER BY ${this.order}`,
+            } OFFSET $1::bigint LIMIT $2::bigint${this.whereClause()} ORDER BY ${this.order}`,
             [index * this.pageSize, this.pageSize, ...this.whereValues()],
         )
         return {

@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS public.external
     namespace character varying(64) COLLATE pg_catalog."default" NOT NULL,
     object_id character varying(64) COLLATE pg_catalog."default" NOT NULL,
     node_uuid uuid NOT NULL,
+    title character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT external_pkey PRIMARY KEY (authority, namespace, object_id),
     CONSTRAINT external_node_uuid_fkey FOREIGN KEY (node_uuid)
         REFERENCES public.node (uuid) MATCH SIMPLE

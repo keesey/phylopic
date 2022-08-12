@@ -16,7 +16,11 @@ export type SourceClient = Readonly<{
         images: ImagesClient
     }
     contributors: Listable<Contributor & { uuid: UUID }, number>
-    external(authority: Authority, namespace: Namespace, objectID: ObjectID): Editable<External>
+    external(
+        authority: Authority,
+        namespace: Namespace,
+        objectID: ObjectID,
+    ): Editable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }>
     externalAuthorities: Listable<Authority, number>
     externalNamespaces(authority: Authority): Listable<Namespace, number>
     externals(
