@@ -1,9 +1,9 @@
-import SourceClient from "@phylopic/source-client"
 import { Contributor } from "@phylopic/source-models"
 import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
+import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Contributor> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -17,7 +17,7 @@ const index: NextApiHandler<Contributor> = async (req, res) => {
             case "HEAD": {
                 client = new SourceClient()
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
-                res.json(await client.sourceContributor(uuid).get())
+                res.json(await client.contributor(uuid).get())
                 break
             }
             case "OPTIONS": {
@@ -27,13 +27,13 @@ const index: NextApiHandler<Contributor> = async (req, res) => {
             }
             case "PATCH": {
                 client = new SourceClient()
-                await client.sourceContributor(uuid).patch(req.body)
+                await client.contributor(uuid).patch(req.body)
                 res.status(204)
                 break
             }
             case "PUT": {
                 client = new SourceClient()
-                await client.sourceContributor(uuid).put(req.body)
+                await client.contributor(uuid).put(req.body)
                 res.status(204)
                 break
             }
@@ -44,7 +44,7 @@ const index: NextApiHandler<Contributor> = async (req, res) => {
     } catch (e) {
         handleAPIError(res, e)
     } finally {
-        client?.destroy()
+        await client?.destroy()
     }
     res.end()
 }

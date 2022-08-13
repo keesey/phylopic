@@ -1,39 +1,38 @@
-import SourceClient from "@phylopic/source-client"
-import { isDefined, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import { Image } from "@phylopic/source-models"
+import { isUUIDv4, UUID } from "@phylopic/utils"
+import { NextApiHandler, NextApiRequest } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-import { UUIDList } from "~/models/UUIDList"
-const index: NextApiHandler<UUIDList> = async (req, res) => {
+import SourceClient from "~/source/SourceClient"
+const getFilter = (query: NextApiRequest["query"]): "accepted" | "submitted" | "withdrawn" => {
+    const filter = query.filter
+    if (filter === "accepted" || filter === "withdrawn") {
+        return filter
+    }
+    return "submitted"
+}
+const getPageIndex = (query: NextApiRequest["query"]): number => {
+    if (typeof query.page === "string") {
+        return parseInt(query.page, 10) ?? 0
+    }
+    return 0
+}
+const index: NextApiHandler<{ items: ReadonlyArray<Image & { uuid: UUID }>; next?: number }> = async (req, res) => {
     let client: SourceClient | undefined
     try {
-        const payload = await verifyAuthorization(req.headers)
-        const contributorUUID = payload?.sub
+        const { sub: contributorUUID } = (await verifyAuthorization(req.headers)) ?? {}
         if (!isUUIDv4(contributorUUID)) {
-            throw 401
+            throw 403
         }
         switch (req.method) {
             case "GET":
             case "HEAD": {
-                let token = typeof req.query.token === "string" ? req.query.token : undefined
-                let uuids: UUID[]
+                const filter = getFilter(req.query)
+                const pageIndex = getPageIndex(req.query)
                 client = new SourceClient()
-                do {
-                    const list = await client.sourceImages(token)
-                    const imageUUIDPromises = list.items.map(async uuid => {
-                        const image = await client?.sourceImage(uuid).get()
-                        if (image?.contributor === contributorUUID) {
-                            return uuid
-                        }
-                    })
-                    uuids = (await Promise.all(imageUUIDPromises)).filter(isDefined)
-                    token = list.nextToken
-                } while (!uuids.length && token)
+                const page = await client.contributor(contributorUUID).images[filter].page(pageIndex)
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
-                res.json({
-                    nextToken: token,
-                    uuids,
-                })
+                res.json(page)
                 break
             }
             case "OPTIONS": {
@@ -48,7 +47,7 @@ const index: NextApiHandler<UUIDList> = async (req, res) => {
     } catch (e) {
         handleAPIError(res, e)
     } finally {
-        client?.destroy()
+        await client?.destroy()
     }
     res.end()
 }

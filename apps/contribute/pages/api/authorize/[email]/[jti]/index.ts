@@ -1,11 +1,11 @@
-import SourceClient from "@phylopic/source-client"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import decodeJWT from "~/auth/jwt/decodeJWT"
 import { JWT } from "~/auth/models/JWT"
 import handleAPIError from "~/errors/handleAPIError"
+import SourceClient from "~/source/SourceClient"
 const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, emailAddress: EmailAddress) => {
-    const contributor = client.sourceContributor(uuid)
+    const contributor = client.contributor(uuid)
     const existing = (await contributor.exists()) ? await contributor.get() : null
     if (existing?.emailAddress === emailAddress) {
         return null
@@ -16,9 +16,12 @@ const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, e
         showEmailAddress: true,
         ...existing,
         emailAddress,
+        modified: new Date().toISOString(),
+        uuid,
     })
 }
 const index: NextApiHandler<JWT> = async (req, res) => {
+    let client: SourceClient | undefined
     const now = new Date()
     try {
         if (req.method === "OPTIONS") {
@@ -32,23 +35,23 @@ const index: NextApiHandler<JWT> = async (req, res) => {
                 console.warn(faultCollector.list())
                 throw 404
             }
-            const client = new SourceClient()
+            client = new SourceClient()
             let token: JWT | undefined
             let expires: Date | null
-            try {
-                token = await client.authToken(email).get()
-                const payload = decodeJWT(token)
-                if (payload?.jti !== jti || !isUUIDv4(payload.sub)) {
-                    throw 404
-                }
-                if (typeof payload.exp !== "number" || payload.exp * 1000 <= now.valueOf()) {
-                    throw 410
-                }
-                expires = new Date(payload.exp * 1000)
-                await updateContributorEmailAddress(client, payload.sub, email)
-            } finally {
-                client.destroy()
+            const authTokenClient = client.authToken(email)
+            if (!(await authTokenClient.exists())) {
+                throw 404
             }
+            token = await authTokenClient.get()
+            const payload = decodeJWT(token)
+            if (payload?.jti !== jti || !isUUIDv4(payload.sub)) {
+                throw 404
+            }
+            if (typeof payload.exp !== "number" || payload.exp * 1000 <= now.valueOf()) {
+                throw 410
+            }
+            expires = new Date(payload.exp * 1000)
+            await updateContributorEmailAddress(client, payload.sub, email)
             res.setHeader("expires", expires.toString())
             res.setHeader("content-type", "application/jwt")
             res.status(200)
@@ -58,6 +61,8 @@ const index: NextApiHandler<JWT> = async (req, res) => {
         }
     } catch (e) {
         handleAPIError(res, e)
+    } finally {
+        await client?.destroy()
     }
     res.end()
 }

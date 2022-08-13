@@ -1,4 +1,3 @@
-import SourceClient from "@phylopic/source-client"
 import { EmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
 import { randomUUID } from "crypto"
 import { NextApiHandler, NextApiRequest } from "next"
@@ -7,17 +6,19 @@ import issueJWT from "~/auth/jwt/issueJWT"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
 import getTTLFromBody from "~/auth/ttl/getTTLFromBody"
 import handleAPIError from "~/errors/handleAPIError"
+import SourceClient from "~/source/SourceClient"
 const handlePost = async (client: SourceClient, email: EmailAddress, body: NextApiRequest["body"]) => {
     const ttl = getTTLFromBody(body)
     const now = new Date()
-    const authToken = client.authToken(email)
-    const { sub } = decodeJWT(await authToken.get()) ?? {}
+    const authTokenClient = client.authToken(email)
+    const { sub } = decodeJWT(await authTokenClient.get()) ?? {}
     const uuid: UUID = isUUIDv4(sub) ? sub : randomUUID()
     const token = await issueJWT(uuid, ttl, now)
-    await authToken.put(token)
+    await authTokenClient.put(token)
     await sendAuthEmail(email, token, now, new Date(now.valueOf() + ttl))
 }
 const index: NextApiHandler<void> = async (req, res) => {
+    let client: SourceClient | undefined
     try {
         if (req.method === "OPTIONS") {
             res.setHeader("allow", "OPTIONS, POST")
@@ -36,6 +37,8 @@ const index: NextApiHandler<void> = async (req, res) => {
         }
     } catch (e) {
         handleAPIError(res, e)
+    } finally {
+        await client?.destroy()
     }
     res.end()
 }

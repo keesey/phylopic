@@ -1,9 +1,9 @@
-import SourceClient from "@phylopic/source-client"
 import { Image } from "@phylopic/source-models"
-import { isUUIDv4, stringifyNormalized } from "@phylopic/utils"
+import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
+import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Image> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -12,15 +12,10 @@ const index: NextApiHandler<Image> = async (req, res) => {
             throw 404
         }
         client = new SourceClient()
-        const sourceImage = client.sourceImage(uuid)
-        const image = await sourceImage.get()
+        const imageClient = client.image(uuid)
+        const image = await imageClient.get()
         await verifyAuthorization(req.headers, { sub: image.contributor })
         switch (req.method) {
-            case "DELETE": {
-                await sourceImage.delete()
-                res.status(204)
-                break
-            }
             case "GET":
             case "HEAD": {
                 res.status(200)
@@ -28,7 +23,17 @@ const index: NextApiHandler<Image> = async (req, res) => {
                 break
             }
             case "OPTIONS": {
-                res.setHeader("allow", "DELETE, GET, HEAD, OPTIONS")
+                res.setHeader("allow", "GET, HEAD, OPTIONS, PATCH, PUT")
+                res.status(204)
+                break
+            }
+            case "PATCH": {
+                await imageClient.patch(req.body)
+                res.status(204)
+                break
+            }
+            case "PUT": {
+                await imageClient.patch(req.body)
                 res.status(204)
                 break
             }
@@ -39,7 +44,7 @@ const index: NextApiHandler<Image> = async (req, res) => {
     } catch (e) {
         handleAPIError(res, e)
     } finally {
-        client?.destroy()
+        await client?.destroy()
     }
     res.end()
 }

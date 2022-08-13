@@ -1,17 +1,22 @@
-import { S3Client, S3ClientConfig } from "@aws-sdk/client-s3"
+import { S3ClientConfig } from "@aws-sdk/client-s3"
 import pg from "pg"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
 import { S3ClientProvider } from "../interfaces/S3ClientProvider"
-export class ClientProvider implements PGClientProvider, S3ClientProvider {
+import { BaseClientProvider } from "./BaseClientProvider"
+export class ClientProvider extends BaseClientProvider implements PGClientProvider, S3ClientProvider {
     protected pg: pg.Client | null = null
-    protected s3: S3Client | null = null
     constructor(
         protected readonly pgConfig: string | pg.ClientConfig | undefined = undefined,
-        protected readonly s3Config: S3ClientConfig = {},
-    ) {}
+        s3Config: S3ClientConfig = {},
+    ) {
+        super(s3Config)
+    }
     public async destroy() {
-        this.s3?.destroy()
-        this.s3 = null
+        try {
+            await super.destroy()
+        } catch (e) {
+            console.error(e)
+        }
         if (this.pg) {
             try {
                 await this.pg.end()
@@ -32,8 +37,5 @@ export class ClientProvider implements PGClientProvider, S3ClientProvider {
             }
         }
         return this.pg
-    }
-    public getS3(): S3Client {
-        return this.s3 ?? (this.s3 = new S3Client(this.s3Config))
     }
 }
