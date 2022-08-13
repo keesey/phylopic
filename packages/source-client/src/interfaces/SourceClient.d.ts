@@ -6,6 +6,7 @@ import { Listable } from "./Listable"
 import { Patchable } from "./Patchable"
 export type ImagesClient = Listable<Image & { uuid: UUID }, number> & {
     accepted: Listable<Image & { uuid: UUID }, number>
+    incomplete: Listable<Image & { uuid: UUID }, number>
     submitted: Listable<Image & { uuid: UUID }, number>
     withdrawn: Listable<Image & { uuid: UUID }, number>
 }

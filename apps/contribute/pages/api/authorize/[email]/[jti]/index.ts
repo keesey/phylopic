@@ -1,7 +1,7 @@
+import { INCOMPLETE_STRING, JWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import decodeJWT from "~/auth/jwt/decodeJWT"
-import { JWT } from "~/auth/models/JWT"
 import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
 const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, emailAddress: EmailAddress) => {
@@ -12,7 +12,7 @@ const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, e
     }
     await contributor.put({
         created: new Date().toISOString(),
-        name: "Anonymous",
+        name: INCOMPLETE_STRING,
         showEmailAddress: true,
         ...existing,
         emailAddress,

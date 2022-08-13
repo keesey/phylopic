@@ -1,14 +1,17 @@
 import Link from "next/link"
-import { FC } from "react"
+import { FC, useCallback, useContext } from "react"
+import AuthContext from "~/auth/AuthContext"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
-export type Props = {
-    onConfirm?: () => void
-}
-const ConfirmLogout: FC<Props> = ({ onConfirm }) => {
+const ConfirmLogout: FC = () => {
+    const [, setToken] = useContext(AuthContext) ?? []
+    const handleLogOutButtonClick = useCallback(() => {
+        setToken?.(null)
+        localStorage.removeItem("auth")
+    }, [setToken])
     return (
         <DialogueScreen>
             <p>Are you sure you want to log out?</p>
-            <button className="cta" onClick={onConfirm}>
+            <button className="cta" onClick={handleLogOutButtonClick}>
                 Yes, log me out
             </button>
             <p>

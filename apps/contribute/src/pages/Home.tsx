@@ -1,3 +1,4 @@
+import { INCOMPLETE_STRING } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress } from "@phylopic/utils"
 import axios from "axios"
 import dynamic from "next/dynamic"
@@ -6,10 +7,9 @@ import { FC, useCallback, useContext, useEffect, useMemo, useState } from "react
 import useSWR from "swr"
 import AuthContext from "~/auth/AuthContext"
 import useAuthorized from "~/auth/hooks/useAuthorized"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import useExpired from "~/auth/hooks/useExpired"
-import useContributorMutator from "~/s3/swr/useContributorMutator"
-import useContributorSWR from "~/s3/swr/useContributorSWR"
+import useContributorMutator from "~/profile/useContributorMutator"
+import useContributorSWR from "~/profile/useContributorSWR"
 import AccountDetails from "~/screens/AccountDetails"
 import { DAY } from "~/ui/TTLSelector/TTL_VALUES"
 import DialogueScreen from "./screenTypes/DialogueScreen"
@@ -49,9 +49,8 @@ const Home: FC = () => {
         [email, ttl],
     )
     const authorizeSWR = useSWR(authorizeKey, postJSON)
-    const contributorUUID = useContributorUUID()
-    const contributorSWR = useContributorSWR(contributorUUID)
-    const handleContributorSubmit = useContributorMutator(contributorUUID, contributorSWR)
+    const contributorSWR = useContributorSWR()
+    const handleContributorSubmit = useContributorMutator()
     const router = useRouter()
     useEffect(() => {
         if (authorizeSWR.data) {
@@ -73,8 +72,12 @@ const Home: FC = () => {
     if (expired) {
         return <AuthExpired onSubmit={handleSubmit} />
     }
-    if (!contributorSWR.data?.name || contributorSWR.data?.name === "Anonymous") {
-        return <AccountDetails emailAddress={contributorSWR.data?.emailAddress} onSubmit={handleContributorSubmit} />
+    if (!contributorSWR.data?.name || contributorSWR.data?.name === INCOMPLETE_STRING) {
+        return (
+            <AccountDetails submitLabel="Continue">
+                <p>Welcome! What should we call you here?</p>
+            </AccountDetails>
+        )
     }
     return <Welcome />
 }

@@ -1,5 +1,5 @@
+import { JWT } from "@phylopic/source-models"
 import { JwtPayload, verify } from "jsonwebtoken"
-import { JWT } from "../models/JWT"
 import DOMAIN from "./DOMAIN"
 const verifyJWT = (token: JWT) =>
     new Promise<JwtPayload | null>((resolve, reject) => {

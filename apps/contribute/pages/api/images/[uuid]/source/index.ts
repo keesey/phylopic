@@ -1,32 +1,39 @@
-import { isJWT } from "@phylopic/source-models"
-import { isImageMediaType, isUUIDv4 } from "@phylopic/utils"
+import { Image } from "@phylopic/source-models"
+import { isImageMediaType, isUUIDv4, UUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
-import verifyJWT from "~/auth/jwt/verifyJWT"
+import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import MAX_INCOMPLETE_IMAGES from "~/editing/MAX_INCOMPLETE_IMAGES"
 import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Buffer> = async (req, res) => {
+    const now = new Date()
     let client: SourceClient | undefined
     try {
-        const { uuid, token } = req.query
+        const { uuid } = req.query
         if (!isUUIDv4(uuid)) {
             throw 404
         }
-        if (!isJWT(token)) {
-            throw 401
-        }
-        const { sub: contributorUUID } = (await verifyJWT(token)) ?? {}
-        if (!isUUIDv4(contributorUUID)) {
-            throw 403
-        }
         client = new SourceClient()
         const imageClient = client.image(uuid)
-        const image = await imageClient.get()
-        if (image.contributor !== contributorUUID) {
-            throw 403
+        let image: Image | null = null
+        let contributorUUID: UUID
+        if (await imageClient.exists()) {
+            image = await imageClient.get()
+            ;(await verifyAuthorization(req.headers, { sub: image.contributor })) ?? {}
+            contributorUUID = image.contributor
+        } else {
+            const { sub } = (await verifyAuthorization(req.headers)) ?? {}
+            if (!isUUIDv4(sub)) {
+                throw 403
+            }
+            contributorUUID = sub
         }
         switch (req.method) {
             case "GET":
             case "HEAD": {
+                if (!image) {
+                    throw 404
+                }
                 const { data, type } = await imageClient.file.get()
                 res.status(200)
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
@@ -44,12 +51,34 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                 if (!isImageMediaType(type)) {
                     throw 415
                 }
+                if (!image) {
+                    if (
+                        (await client.contributor(contributorUUID).images.incomplete.totalItems()) >=
+                        MAX_INCOMPLETE_IMAGES
+                    ) {
+                        throw 507
+                    }
+                }
                 await Promise.all([
                     imageClient.file.put({
                         data: req.body,
                         type,
                     }),
-                    imageClient.patch({ modified: new Date().toISOString() }),
+                    image
+                        ? imageClient.patch({ modified: now.toISOString() })
+                        : imageClient.put({
+                              accepted: false,
+                              attribution: null,
+                              contributor: contributorUUID,
+                              created: now.toISOString(),
+                              general: null,
+                              license: null,
+                              modified: now.toISOString(),
+                              specific: null,
+                              sponsor: null,
+                              submitted: false,
+                              uuid,
+                          }),
                 ])
                 res.status(204)
                 break

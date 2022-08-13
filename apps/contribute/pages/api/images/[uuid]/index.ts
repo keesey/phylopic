@@ -1,4 +1,4 @@
-import { Image } from "@phylopic/source-models"
+import { Image, isSubmittableImage } from "@phylopic/source-models"
 import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
@@ -23,17 +23,16 @@ const index: NextApiHandler<Image> = async (req, res) => {
                 break
             }
             case "OPTIONS": {
-                res.setHeader("allow", "GET, HEAD, OPTIONS, PATCH, PUT")
+                res.setHeader("allow", "GET, HEAD, OPTIONS, PATCH")
                 res.status(204)
                 break
             }
             case "PATCH": {
-                await imageClient.patch(req.body)
-                res.status(204)
-                break
-            }
-            case "PUT": {
-                await imageClient.patch(req.body)
+                const combined = { ...image, ...(req.body as Partial<Image>) }
+                if (combined.submitted && !isSubmittableImage(combined)) {
+                    throw 409
+                }
+                await imageClient.put(combined)
                 res.status(204)
                 break
             }

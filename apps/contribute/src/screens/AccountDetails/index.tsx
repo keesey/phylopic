@@ -1,14 +1,17 @@
-import { Contributor, isContributor } from "@phylopic/source-models"
-import { EmailAddress, UUID, ValidationFaultCollector } from "@phylopic/utils"
-import { ChangeEvent, FC, FormEvent, useCallback, useState } from "react"
+import { ChangeEvent, FC, FormEvent, ReactNode, useCallback, useState } from "react"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import useContributorMutator from "~/profile/useContributorMutator"
+import useContributorSWR from "~/profile/useContributorSWR"
 import SiteTitle from "~/ui/SiteTitle"
+import ErrorState from "../ErrorState"
+import LoadingState from "../LoadingState"
 import styles from "./index.module.scss"
-export interface Props {
-    emailAddress?: EmailAddress | null
-    onSubmit?: (payload: Contributor) => void
+export type Props = {
+    children?: ReactNode
+    submitLabel: string
 }
-const AccountDetails: FC<Props> = ({ emailAddress, onSubmit }) => {
+const AccountDetails: FC<Props> = ({ children, submitLabel }) => {
+    const { data: contributor, error } = useContributorSWR()
     const [name, setName] = useState("")
     const [showEmailAddress, setShowEmailAddress] = useState(true)
     const handleNameInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -17,38 +20,39 @@ const AccountDetails: FC<Props> = ({ emailAddress, onSubmit }) => {
     const handleShowEmailAddressInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setShowEmailAddress(event.target.checked)
     }, [])
+    const mutate = useContributorMutator()
     const handleFormSubmit = useCallback(
         (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault()
-            if (emailAddress && name) {
+            if (contributor && name) {
                 const normalized = name.replaceAll(/\s+/g, " ").trim()
                 setName(normalized)
                 if (!normalized.length) {
                     alert("You have to give me some kind of name.")
-                } else if (onSubmit) {
-                    const value = {
-                        created: new Date().toISOString(),
-                        emailAddress,
+                } else {
+                    mutate({
                         name,
                         showEmailAddress,
-                    }
-                    const collector = new ValidationFaultCollector()
-                    if (!isContributor(value, collector)) {
-                        alert(
-                            `Whoops!\n\n${collector
-                                .list()
-                                .map(fault => fault.message)
-                                .join("\n")}`,
-                        )
-                    }
-                    onSubmit(value)
+                    })
                 }
             }
         },
-        [emailAddress, name, showEmailAddress],
+        [contributor, name, showEmailAddress],
     )
+    if (error) {
+        return (
+            <ErrorState>
+                <p>I'm having some trouble loading your profile. Does this mean anything to you?</p>
+                <p>“{String(error)}”</p>
+            </ErrorState>
+        )
+    }
+    if (!contributor) {
+        return <LoadingState>Checking account…</LoadingState>
+    }
     return (
         <DialogueScreen>
+            {children}
             <form className={styles.main} onSubmit={handleFormSubmit}>
                 <input
                     autoComplete="name"
@@ -74,7 +78,7 @@ const AccountDetails: FC<Props> = ({ emailAddress, onSubmit }) => {
                         Allow people to contact you through <SiteTitle />.
                     </label>
                 </div>
-                <input type="submit" value="Continue" />
+                <input type="submit" value={submitLabel} />
             </form>
         </DialogueScreen>
     )

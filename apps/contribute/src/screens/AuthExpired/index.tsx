@@ -1,12 +1,12 @@
 import { ContributorContainer } from "@phylopic/ui"
 import { EmailAddress } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
-import useContributor from "~/auth/hooks/useContributor"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
+import useContributor from "~/profile/useContributor"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import TTLSelector from "~/ui/TTLSelector"
 import { TTL } from "~/ui/TTLSelector/TTL"
 import styles from "./index.module.scss"
+import useContributorUUID from "~/profile/useContributorUUID"
 export interface Props {
     onSubmit?: (email: EmailAddress | null, ttl?: number) => void
 }

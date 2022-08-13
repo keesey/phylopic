@@ -31,6 +31,27 @@ export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implem
                 },
             ],
         )
+        this.incomplete = new PGLister<Image, { uuid: UUID }>(
+            provider,
+            IMAGE_TABLE,
+            32,
+            IMAGE_FIELDS,
+            normalizeImage,
+            "created",
+            [
+                ...where,
+                {
+                    column: "accepted",
+                    type: "bit",
+                    value: 0,
+                },
+                {
+                    column: "submitted",
+                    type: "bit",
+                    value: 0,
+                },
+            ],
+        )
         this.submitted = new PGLister<Image, { uuid: UUID }>(
             provider,
             IMAGE_TABLE,
@@ -62,6 +83,11 @@ export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implem
             [
                 ...where,
                 {
+                    column: "accepted",
+                    type: "bit",
+                    value: 1,
+                },
+                {
                     column: "submitted",
                     type: "bit",
                     value: 0,
@@ -70,6 +96,7 @@ export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implem
         )
     }
     accepted
+    incomplete
     submitted
     withdrawn
 }

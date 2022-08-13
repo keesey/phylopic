@@ -4,10 +4,10 @@ export type Image = Readonly<{
     attribution: string | null
     created: ISOTimestamp
     contributor: UUID
-    license: LicenseURL
+    license: LicenseURL | null
     modified: ISOTimestamp
     general: UUID | null
-    specific: UUID
+    specific: UUID | null
     sponsor: string | null
     submitted: boolean
 }>

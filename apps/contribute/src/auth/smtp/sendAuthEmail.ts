@@ -1,9 +1,9 @@
-import { EmailAddress, isEmailAddress, isUUID, isUUIDv4 } from "@phylopic/utils"
+import { JWT } from "@phylopic/source-models"
+import { EmailAddress, isEmailAddress, isUUIDv4 } from "@phylopic/utils"
 import formData from "form-data"
 import Mailgun from "mailgun.js"
 import { MailgunMessageData } from "mailgun.js/interfaces/Messages"
 import decodeJWT from "../jwt/decodeJWT"
-import { JWT } from "../models/JWT"
 const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date, expires: Date) => {
     if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
         throw new Error("The server is missing certain data required to send email.")

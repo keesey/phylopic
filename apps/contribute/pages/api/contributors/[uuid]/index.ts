@@ -26,12 +26,18 @@ const index: NextApiHandler<Contributor> = async (req, res) => {
                 break
             }
             case "PATCH": {
+                if ((req.body as Partial<Contributor>).emailAddress === null) {
+                    throw 400
+                }
                 client = new SourceClient()
                 await client.contributor(uuid).patch(req.body)
                 res.status(204)
                 break
             }
             case "PUT": {
+                if ((req.body as Partial<Contributor>).emailAddress === null) {
+                    throw 400
+                }
                 client = new SourceClient()
                 await client.contributor(uuid).put(req.body)
                 res.status(204)

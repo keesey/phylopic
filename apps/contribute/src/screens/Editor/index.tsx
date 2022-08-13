@@ -1,31 +1,37 @@
-import { Node } from "@phylopic/api-models"
-import { Submission } from "@phylopic/source-models"
-import { Loader } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
-import { useAPIFetcher } from "@phylopic/utils-api"
 import { useRouter } from "next/router"
 import { FC, useCallback, useMemo } from "react"
-import useSWRImmutable from "swr/immutable"
-import useAuthToken from "~/auth/hooks/useAuthToken"
-import useHasSourceImage from "~/editing/useHasSourceImage"
-import useHasSubmission from "~/editing/useHasSubmission"
+import useImage from "~/editing/hooks/useImage"
+import useImageSrc from "~/editing/hooks/useImageSrc"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
-import useImageSWR from "~/s3/swr/useImageSWR"
-import useSubmissionSWR from "~/s3/swr/useSubmissionSWR"
-import SubmissionView from "~/ui/SubmissionView"
-import CompleteButton from "./CompleteButton"
-import DeleteButton from "./DeleteButton"
-import styles from "./index.module.scss"
+import ImageView from "~/ui/ImageView"
+import LoadingState from "../LoadingState"
+import SubmitButton from "./SubmitButton"
 import useRedirect from "./useRedirect"
+import WithdrawButton from "./WithdrawButton"
+import useSWRImmutable from "swr/immutable"
+import { useAPIFetcher } from "@phylopic/utils-api"
+import { Node } from "@phylopic/api-models"
+import useImageMutator from "~/editing/hooks/useImageMutator"
+import useFileSourceComplete from "~/editing/hooks/steps/useFileSourceComplete"
+import useNodesComplete from "~/editing/hooks/steps/useNodesComplete"
+import { isSubmittableImage } from "@phylopic/source-models"
 export type Props = {
     uuid: UUID
 }
 const Editor: FC<Props> = ({ uuid }) => {
-    const token = useAuthToken()
-    const hasSource = useHasSourceImage(uuid)
-    const hasSubmission = useHasSubmission(uuid)
-    const { data: image } = useImageSWR(hasSource ? uuid : null)
-    const { data: submission } = useSubmissionSWR(hasSubmission ? uuid : null)
+    const image = useImage()
+    const src = useImageSrc()
+    const mutate = useImageMutator()
+    const apiFetcher = useAPIFetcher<Node>()
+    const { data: specific } = useSWRImmutable(
+        image?.specific ? `${process.env.NEXT_PUBLIC_API_URL}/nodes/${encodeURIComponent(image.specific)}` : null,
+        apiFetcher,
+    )
+    const { data: general } = useSWRImmutable(
+        image?.general ? `${process.env.NEXT_PUBLIC_API_URL}/nodes/${encodeURIComponent(image.general)}` : null,
+        apiFetcher,
+    )
     const router = useRouter()
     const handleEdit = useCallback(
         (section: "file" | "nodes" | "usage") => {
@@ -33,72 +39,23 @@ const Editor: FC<Props> = ({ uuid }) => {
         },
         [router],
     )
-    const { pending } = useRedirect(uuid)
-    const apiFetcher = useAPIFetcher<Node>()
-    const { data: imageSpecificNode } = useSWRImmutable(
-        image?.specific ? `${process.env.NEXT_PUBLIC_API_URL}/nodes/${encodeURIComponent(image.specific)}` : null,
-        apiFetcher,
-    )
-    const { data: imageGeneralNode } = useSWRImmutable(
-        image?.general ? `${process.env.NEXT_PUBLIC_API_URL}/nodes/${encodeURIComponent(image.general)}` : null,
-        apiFetcher,
-    )
-    const sourceData = useMemo<Submission | null>(() => {
-        if (!image) {
-            return null
-        }
-        return {
-            ...image,
-            specific: {
-                identifier: `phylopic.org/nodes/${encodeURIComponent(image.specific)}`,
-                name: imageSpecificNode ? imageSpecificNode.names[0] : [{ class: "vernacular", text: "..." }],
-            },
-            general: image.general
-                ? {
-                      identifier: `phylopic.org/nodes/${encodeURIComponent(image.general)}`,
-                      name: imageGeneralNode ? imageGeneralNode.names[0] : [{ class: "vernacular", text: "..." }],
-                  }
-                : null,
-        }
-    }, [image, imageGeneralNode, imageSpecificNode])
-    const submissionData = useMemo<Submission | null>(() => {
-        return submission ? { ...sourceData, ...submission } : null
-    }, [sourceData, submission])
-    if (pending || hasSource == undefined || hasSubmission === undefined) {
-        return (
-            <DialogueScreen>
-                <Loader />
-            </DialogueScreen>
-        )
+    const { pending, redirecting } = useRedirect(uuid)
+    if (!image || pending || redirecting) {
+        return <LoadingState>Checking contribution status…</LoadingState>
     }
     return (
         <DialogueScreen>
-            <div className={styles.submissions}>
-                {sourceData && (
-                    <SubmissionView
-                        key="source"
-                        header="Accepted Image"
-                        imageSrc={`/api/images/${encodeURIComponent(uuid)}/source`}
-                        onEdit={handleEdit}
-                        submission={sourceData}
-                    />
-                )}
-                {sourceData && submissionData && token && <span key="divider" className={styles.divider}></span>}
-                {submissionData && token && (
-                    <SubmissionView
-                        key="submission"
-                        header={hasSource ? "Pending Changes" : "Your Submission"}
-                        imageSrc={`/api/submissions/${encodeURIComponent(uuid)}/source?token=${encodeURIComponent(
-                            token,
-                        )}`}
-                        onEdit={handleEdit}
-                        submission={submissionData}
-                    />
-                )}
-            </div>
+            <ImageView
+                attribution={image.attribution}
+                general={general}
+                license={image.license}
+                onEdit={handleEdit}
+                specific={specific}
+                src={src}
+            />
             <nav>
-                <CompleteButton uuid={uuid} />
-                <DeleteButton uuid={uuid} />
+                <SubmitButton />
+                <WithdrawButton />
             </nav>
         </DialogueScreen>
     )

@@ -1,5 +1,5 @@
 import { FC } from "react"
-import useContributor from "~/auth/hooks/useContributor"
+import useContributor from "~/profile/useContributor"
 const Greeting: FC = () => {
     const contributor = useContributor()
     return <h2>Hey there{contributor?.name ? `, ${contributor.name}` : ""}!</h2>
