@@ -1,16 +1,17 @@
 import type { NextPage } from "next"
+import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
-import Submissions from "~/screens/Submissions"
+const Images = dynamic(() => import("~/screens/Images"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
         head={{
-            title: "PhyloPic: Pending Submissions",
-            url: "https://contribute.phylopic.org/submissions",
+            title: "PhyloPic: Submitted Images",
+            url: "https://contribute.phylopic.org/images/submitted",
         }}
     >
         <AuthorizedOnly>
-            <Submissions />
+            <Images filter="submitted" />
         </AuthorizedOnly>
     </PageLayout>
 )

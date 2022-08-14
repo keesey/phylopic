@@ -18,7 +18,7 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
         const output = await client.query<TValue & TIdentifier>(
             `SELECT ${getFields(this.fields)} FROM ${
                 this.table
-            } OFFSET $1::bigint LIMIT $2::bigint${this.whereClause()} ORDER BY ${this.order}`,
+            } OFFSET $1::bigint LIMIT $2::bigint${this.whereClause(3)} ORDER BY ${this.order}`,
             [index * this.pageSize, this.pageSize, ...this.whereValues()],
         )
         return {
@@ -29,7 +29,7 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
     public async totalItems() {
         const client = await this.provider.getPG()
         const output = await client.query<{ total: number }>(
-            `SELECT COUNT(*) AS total FROM ${this.table}${this.whereClause()}`,
+            `SELECT COUNT(*) AS total FROM ${this.table}${this.whereClause(1)}`,
             this.whereValues(),
         )
         return output.rows?.[0]?.total ?? 0
@@ -37,12 +37,12 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
     public async totalPages() {
         return Math.ceil((await this.totalItems()) / this.pageSize)
     }
-    protected whereClause() {
+    protected whereClause(startIndex: number) {
         if (!this.where?.length) {
             return ""
         }
         return ` WHERE ${this.where
-            .map((identifier, index) => `${identifier.column}=$${index + 3}::${identifier.type}`)
+            .map((identifier, index) => `${identifier.column}=$${index + startIndex}::${identifier.type}`)
             .join(" AND ")}`
     }
     protected whereValues() {

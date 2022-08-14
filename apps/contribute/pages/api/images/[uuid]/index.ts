@@ -28,6 +28,9 @@ const index: NextApiHandler<Image> = async (req, res) => {
                 break
             }
             case "PATCH": {
+                if (typeof req.body.accepted === "boolean" && req.body.accepted !== image.accepted) {
+                    throw 403
+                }
                 const combined = { ...image, ...(req.body as Partial<Image>) }
                 if (combined.submitted && !isSubmittableImage(combined)) {
                     throw 409

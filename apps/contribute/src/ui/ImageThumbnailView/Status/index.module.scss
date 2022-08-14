@@ -1,0 +1,7 @@
+@use "@phylopic/styles/colors";
+
+.main {
+    accent-color: colors.$dandelion;
+    color: colors.$aquatic;
+    width: 96px;
+}

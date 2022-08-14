@@ -1,10 +1,12 @@
 import { useMemo } from "react"
+import useContributorUUID from "~/profile/useContributorUUID"
 import useFileSourceComplete from "./useFileSourceComplete"
 import useNodesComplete from "./useNodesComplete"
 import useSubmissionComplete from "./useSubmissionComplete"
 import useUsageComplete from "./useUsageComplete"
 const useRatioComplete = () => {
-    const fileSource = useFileSourceComplete()
+    const uuid = useContributorUUID()
+    const fileSource = useFileSourceComplete(uuid ?? undefined)
     const license = useUsageComplete()
     const nodes = useNodesComplete()
     const submission = useSubmissionComplete()

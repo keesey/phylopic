@@ -5,7 +5,7 @@ import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import useImageUUID from "./useImageUUID"
 const useImageSWR = () => {
     const uuid = useImageUUID()
-    const key = useMemo(() => (uuid ? `/api/images/${uuid}` : null), [uuid])
+    const key = useMemo(() => (uuid ? `/api/images/${encodeURIComponent(uuid)}` : null), [uuid])
     const fetcher = useAuthorizedJSONFetcher()
     return useSWR<Image>(key, fetcher)
 }

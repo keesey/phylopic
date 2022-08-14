@@ -6,7 +6,7 @@ const getFields = <T>(fields: ReadonlyArray<(string & keyof T) | ReadField<T>>) 
                 ? field
                 : field.column === field.property
                 ? field.column
-                : `${field.column} AS ${field.property}`,
+                : `${field.column} AS ${JSON.stringify(field.property)}`,
         )
         .join(",")
 }
