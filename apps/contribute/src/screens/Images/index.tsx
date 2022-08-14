@@ -1,17 +1,21 @@
 import { AnchorLink } from "@phylopic/ui"
-import { FC } from "react"
+import { FC, ReactNode } from "react"
+import useImageCount from "~/editing/hooks/useImageCount"
 import FullScreen from "~/pages/screenTypes/FullScreen"
 import { ImageFilter } from "~/pagination/ImageFilter"
 import ImagePaginator from "~/pagination/ImagePaginator"
 import ImageGrid from "~/ui/ImageGrid"
 import ImageThumbnailView from "~/ui/ImageThumbnailView"
 export type Props = {
+    children: (total: number | undefined) => ReactNode
     filter: ImageFilter
 }
-const Images: FC<Props> = ({ filter }) => {
+const Images: FC<Props> = ({ children, filter }) => {
+    const total = useImageCount(filter)
     return (
         <FullScreen>
-            <ImagePaginator filter={filter}>
+            {children(total)}
+            <ImagePaginator key="images" filter={filter}>
                 {images => (
                     <>
                         <p>

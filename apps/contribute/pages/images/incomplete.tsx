@@ -11,7 +11,19 @@ const Page: NextPage = () => (
         }}
     >
         <AuthorizedOnly>
-            <Images filter="incomplete" />
+            <Images filter="incomplete">
+                {total =>
+                    typeof total !== "number" ? (
+                        <p>Loading submissions…</p>
+                    ) : (
+                        <p>
+                            {total === 1 ? "This is a submission" : "These are submissions"} you have started. Very
+                            cool! You can click on {total === 1 ? "the image" : "any of the images"} below to complete{" "}
+                            {total === 1 ? "it" : "them"}.
+                        </p>
+                    )
+                }
+            </Images>
         </AuthorizedOnly>
     </PageLayout>
 )

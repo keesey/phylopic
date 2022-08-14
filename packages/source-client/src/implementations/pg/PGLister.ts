@@ -16,9 +16,9 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
     public async page(index = 0) {
         const client = await this.provider.getPG()
         const output = await client.query<TValue & TIdentifier>(
-            `SELECT ${getFields(this.fields)} FROM ${
-                this.table
-            } OFFSET $1::bigint LIMIT $2::bigint${this.whereClause(3)} ORDER BY ${this.order}`,
+            `SELECT ${getFields(this.fields)} FROM ${this.table}${this.whereClause(3)} ORDER BY ${
+                this.order
+            } OFFSET $1::bigint LIMIT $2::bigint`,
             [index * this.pageSize, this.pageSize, ...this.whereValues()],
         )
         return {
@@ -28,11 +28,12 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
     }
     public async totalItems() {
         const client = await this.provider.getPG()
-        const output = await client.query<{ total: number }>(
+        const output = await client.query<{ total: string }>(
             `SELECT COUNT(*) AS total FROM ${this.table}${this.whereClause(1)}`,
             this.whereValues(),
         )
-        return output.rows?.[0]?.total ?? 0
+        const value = parseInt(output.rows?.[0]?.total ?? "0", 10)
+        return isNaN(value) ? 0 : value
     }
     public async totalPages() {
         return Math.ceil((await this.totalItems()) / this.pageSize)

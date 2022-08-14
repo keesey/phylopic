@@ -11,7 +11,19 @@ const Page: NextPage = () => (
         }}
     >
         <AuthorizedOnly>
-            <Images filter="submitted" />
+            <Images filter="submitted">
+                {total =>
+                    typeof total !== "number" ? (
+                        <p>Loading submissions…</p>
+                    ) : (
+                        <p>
+                            {total === 1 ? "This is the image" : "These are the images"} you have submitted, which{" "}
+                            {total === 1 ? "is" : "are"} pending review. Click on {total === 1 ? "it" : "any of them"}{" "}
+                            if you want to make any changes first.
+                        </p>
+                    )
+                }
+            </Images>
         </AuthorizedOnly>
     </PageLayout>
 )

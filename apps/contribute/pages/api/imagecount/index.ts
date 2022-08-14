@@ -4,7 +4,7 @@ import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
 import getImageFilter from "~/pagination/getImageFilter"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<number> = async (req, res) => {
+const index: NextApiHandler<{ total: number }> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const { sub: contributorUUID } = (await verifyAuthorization(req.headers)) ?? {}
@@ -18,7 +18,7 @@ const index: NextApiHandler<number> = async (req, res) => {
                 client = new SourceClient()
                 const total = await client.contributor(contributorUUID).images[filter].totalItems()
                 res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
-                res.json(total)
+                res.json({ total })
                 break
             }
             case "OPTIONS": {
