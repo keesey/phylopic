@@ -1,9 +1,9 @@
 import { Image, isImage, isSubmittableImage, JWT } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useCallback } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useImageSWR from "./useImageSWR"
-import useImageUUID from "./useImageUUID"
 const put = async (key: string, token: JWT, newValue: Image) => {
     await axios.put(key, newValue, {
         headers: { authorization: `Bearer ${token}` },
@@ -16,10 +16,9 @@ const patch = async (key: string, token: JWT, newValue: Partial<Image>, newData:
     })
     return newData
 }
-const useImageMutator = () => {
-    const { data, mutate } = useImageSWR()
+const useImageMutator = (uuid: UUID | undefined) => {
+    const { data, mutate } = useImageSWR(uuid)
     const token = useAuthToken()
-    const uuid = useImageUUID()
     return useCallback(
         (newValue: Partial<Image>) => {
             if (uuid && token) {

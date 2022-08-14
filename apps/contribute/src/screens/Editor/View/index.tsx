@@ -9,7 +9,7 @@ import useImageUUID from "~/editing/hooks/useImageUUID"
 import ImageView from "~/ui/ImageView"
 const View: FC = () => {
     const uuid = useImageUUID()
-    const image = useImage()
+    const image = useImage(uuid)
     const src = useImageSrc(uuid)
     const apiFetcher = useAPIFetcher<Node>()
     const { data: specific } = useSWRImmutable(

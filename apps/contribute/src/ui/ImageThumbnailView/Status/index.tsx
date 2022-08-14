@@ -1,7 +1,7 @@
 import { Image } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { FC, useMemo } from "react"
-import useFileSourceComplete from "~/editing/hooks/steps/useFileSourceComplete"
+import useRatioComplete from "~/editing/hooks/steps/useRatioComplete"
 import useLiveImageExists from "~/editing/hooks/useLiveImageExists"
 import styles from "./index.module.scss"
 export type Props = {
@@ -9,7 +9,7 @@ export type Props = {
 }
 const Status: FC<Props> = ({ image }) => {
     const isLive = useLiveImageExists(image?.uuid)
-    const fileComplete = useFileSourceComplete(image?.uuid)
+    const ratioComplete = useRatioComplete(image?.uuid)
     const ratio = useMemo(() => {
         if (!image) {
             return NaN
@@ -23,23 +23,8 @@ const Status: FC<Props> = ({ image }) => {
         if (image.submitted) {
             return 1
         }
-        if (fileComplete === undefined) {
-            return NaN
-        }
-        {
-            let ratio = 0
-            if (fileComplete) {
-                ratio += 0.25
-            }
-            if (image.license) {
-                ratio += 0.25
-            }
-            if (image.specific) {
-                ratio += 0.25
-            }
-            return ratio
-        }
-    }, [fileComplete, image, isLive])
+        return ratioComplete
+    }, [image, isLive, ratioComplete])
     if (ratio < 0) {
         return null
     }

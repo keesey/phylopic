@@ -1,6 +1,5 @@
 import { trace } from "potrace"
 import { useEffect, useState } from "react"
-import useAsyncMemo from "~/hooks/useAsyncMemo"
 const useVectorization = (buffer: Buffer | undefined, enabled: boolean) => {
     const [pending, setPending] = useState(false)
     const [error, setError] = useState<Error | undefined>()
@@ -28,6 +27,6 @@ const useVectorization = (buffer: Buffer | undefined, enabled: boolean) => {
             setPending(false)
         }
     }, [buffer, enabled])
-    return useAsyncMemo(svgData, error, pending)
+    return { data: svgData, error, pending }
 }
 export default useVectorization

@@ -1,10 +1,9 @@
 import { Image } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
 import { useMemo } from "react"
 import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
-import useImageUUID from "./useImageUUID"
-const useImageSWR = () => {
-    const uuid = useImageUUID()
+const useImageSWR = (uuid: UUID | undefined) => {
     const key = useMemo(() => (uuid ? `/api/images/${encodeURIComponent(uuid)}` : null), [uuid])
     const fetcher = useAuthorizedJSONFetcher()
     return useSWR<Image>(key, fetcher)

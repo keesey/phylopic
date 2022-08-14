@@ -4,7 +4,6 @@ import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { parseNomen } from "parse-nomen"
 import { useContext, useMemo } from "react"
 import useSWR from "swr"
-import useAsyncMemo from "~/hooks/useAsyncMemo"
 import fetchJSON from "~/swr/fetchJSON"
 import useEOLResults from "./useEOLResults"
 import useOTOLResults from "./useOTOLResults"
@@ -58,10 +57,10 @@ const useSearch = (text: string) => {
     )
     const data = Boolean(phyloPic.data && otol.data && eol.data)
     const error = phyloPic.error || otol.error || eol.error
-    return useAsyncMemo(
-        entry,
+    return {
+        data: entry,
         error,
-        !data && !error && (phyloPic.isValidating || otol.isValidating || eol.isValidating),
-    )
+        pending: !data && !error && (phyloPic.isValidating || otol.isValidating || eol.isValidating),
+    }
 }
 export default useSearch

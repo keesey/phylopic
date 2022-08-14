@@ -2,8 +2,8 @@ import { ImageMediaType, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { FC, useEffect, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import useContributorUUID from "~/profile/useContributorUUID"
 import styles from "./index.module.scss"
 export interface Props {
     buffer: Buffer

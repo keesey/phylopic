@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import useAsyncMemo from "~/hooks/useAsyncMemo"
 const useImageSize = (source: string | undefined) => {
     const [pending, setPending] = useState(false)
     const [error, setError] = useState<Error | undefined>()
@@ -34,6 +33,6 @@ const useImageSize = (source: string | undefined) => {
             setPending(false)
         }
     }, [source])
-    return useAsyncMemo(size, error, pending)
+    return { data: size, error, pending }
 }
 export default useImageSize

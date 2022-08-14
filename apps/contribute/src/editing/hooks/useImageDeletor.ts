@@ -1,21 +1,20 @@
 import { Image, JWT } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { useCallback } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import decodeJWT from "~/auth/jwt/decodeJWT"
 import useImageSWR from "./useImageSWR"
-import useImageUUID from "./useImageUUID"
 const deleteImage = async (key: string, token: JWT, result: Image): Promise<Image> => {
     await axios.delete(key, {
         headers: { authorization: `Bearer ${token}` },
     })
     return result
 }
-const useImageDeletor = () => {
-    const { mutate } = useImageSWR()
+const useImageDeletor = (uuid: UUID | undefined) => {
+    const { mutate } = useImageSWR(uuid)
     const token = useAuthToken()
-    const uuid = useImageUUID()
     const router = useRouter()
     return useCallback(() => {
         if (uuid && token) {

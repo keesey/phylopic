@@ -1,6 +1,7 @@
 import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
+import useImageCount from "~/editing/hooks/useImageCount"
 import SiteTitle from "~/ui/SiteTitle"
 import SpawnLink from "~/ui/SpawnLink"
 import styles from "./index.module.scss"
@@ -9,6 +10,10 @@ export type Props = {
 }
 const DropdownNav: FC<Props> = ({ onClose }) => {
     const authorized = useAuthorized()
+    const accepted = useImageCount("accepted")
+    const incomplete = useImageCount("incomplete")
+    const submitted = useImageCount("submitted")
+    const withdrawn = useImageCount("withdrawn")
     return (
         <nav className={styles.main}>
             <div className={styles.menuButton}>
@@ -39,14 +44,24 @@ const DropdownNav: FC<Props> = ({ onClose }) => {
                             <AnchorLink href="/">Overview</AnchorLink>
                         </li>
                     )}
-                    {authorized && (
-                        <li key="account:/submissions">
-                            <AnchorLink href="/submissions">Your Pending Submissions</AnchorLink>
+                    {incomplete! > 0 && (
+                        <li key="account:/incomplete">
+                            <AnchorLink href="/images/incomplete">Your Submissions in Progress</AnchorLink>
                         </li>
                     )}
-                    {authorized && (
-                        <li key="account:/images">
-                            <AnchorLink href="/images">Your Accepted Images</AnchorLink>
+                    {submitted! > 0 && (
+                        <li key="account:/submitted">
+                            <AnchorLink href="/images/submitted">Your Pending Submissions</AnchorLink>
+                        </li>
+                    )}
+                    {accepted!> 0 && (
+                        <li key="account:/accepted">
+                            <AnchorLink href="/images/accepted">Your Accepted Images</AnchorLink>
+                        </li>
+                    )}
+                    {withdrawn! > 0 && (
+                        <li key="account:/withdrawn">
+                            <AnchorLink href="/images/accepted">Your Withdrawn Images</AnchorLink>
                         </li>
                     )}
                     {authorized && (

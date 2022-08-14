@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import useAsyncMemo from "~/hooks/useAsyncMemo"
 const useBuffer = (file: File | undefined, enabled: boolean) => {
     const [pending, setPending] = useState(false)
     const [error, setError] = useState<Error | undefined>()
@@ -34,6 +33,6 @@ const useBuffer = (file: File | undefined, enabled: boolean) => {
             setPending(false)
         }
     }, [enabled, file])
-    return useAsyncMemo(buffer, error, pending)
+    return { data: buffer, error, pending }
 }
 export default useBuffer

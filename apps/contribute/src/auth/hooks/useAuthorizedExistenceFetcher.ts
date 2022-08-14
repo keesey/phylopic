@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
+import is4xxError from "~/http/is4xxError"
 import useAuthToken from "./useAuthToken"
 export type AuthorizedJSONFetcherConfig = Omit<AxiosRequestConfig<void>, "method" | "url"> & {
     headers?: Omit<AxiosRequestConfig["headers"], "authorization">
@@ -9,13 +10,15 @@ const useAuthorizedExistenceFetcher = (config?: AuthorizedJSONFetcherConfig) => 
     return useCallback(
         async (key: { url: string; method: "HEAD" }) => {
             try {
-                const response = await axios.head(key.url, {
+                const response = await axios({
                     ...config,
                     headers: token ? { ...config?.headers, authorization: `Bearer ${token}` } : config?.headers,
+                    method: "HEAD",
+                    url: key.url,
                 })
-                return response.status >= 200 && response.status < 400
+                return response.status >= 200 && response.status < 300
             } catch (e) {
-                if (axios.isAxiosError(e) && typeof e.response?.status === "number" && e.response.status < 500) {
+                if (is4xxError(e)) {
                     return false
                 }
                 throw e

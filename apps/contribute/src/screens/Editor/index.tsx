@@ -11,7 +11,7 @@ export type Props = {
     uuid: UUID
 }
 const Editor: FC<Props> = ({ uuid }) => {
-    const image = useImage()
+    const image = useImage(uuid)
     const { pending, redirecting } = useRedirect(uuid)
     if (!image || pending || redirecting) {
         return <LoadingState>Checking contribution status…</LoadingState>
