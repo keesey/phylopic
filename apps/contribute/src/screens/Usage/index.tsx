@@ -37,7 +37,7 @@ const Usage: FC<Props> = ({ uuid }) => {
             {hasLicense && <Attribution key="attribution" uuid={uuid} />}
             {complete && (
                 <AnchorLink key="completeLink" className="cta" href={`/edit/${encodeURIComponent(uuid)}`}>
-                    I'm all done
+                    I'm all done.
                 </AnchorLink>
             )}
         </DialogueScreen>

@@ -78,14 +78,14 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                     {vectorized.error && (
                         <p>(I tried to vectorize it, but ran into a problem: {String(vectorized.error)}.)</p>
                     )}
-                    <nav>
+                    <ButtonNav mode="horizontal">
                         <button className="cta" onClick={handleSelectButtonClick}>
                             Looks good.
                         </button>
-                        <button className="cta" onClick={onCancel}>
+                        <button className="cta-delete" onClick={onCancel}>
                             Wait, I want to change it.
                         </button>
-                    </nav>
+                    </ButtonNav>
                 </div>
             </section>
         </DialogueScreen>

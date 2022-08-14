@@ -12,7 +12,7 @@ const ConfirmLogout: FC = () => {
         <DialogueScreen>
             <p>Are you sure you want to log out?</p>
             <button className="cta" onClick={handleLogOutButtonClick}>
-                Yes, log me out
+                Yes, log me out.
             </button>
             <p>
                 <Link href="/">

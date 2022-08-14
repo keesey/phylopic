@@ -11,7 +11,7 @@ const Page: NextPage<Props> = ({ uuid }) => {
     return (
         <PageLayout
             head={{
-                title: "PhyloPic: Upload Image",
+                title: "PhyloPic: Upload Image File",
                 url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/file`,
             }}
         >

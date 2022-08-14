@@ -145,7 +145,7 @@ const SelectFile: FC<Props> = ({ onComplete }) => {
                 )}
                 {hasBlockingError && (
                     <button className="cta" onClick={handleResetClick}>
-                        Start over
+                        Start over.
                     </button>
                 )}
                 <form className={styles.form} onSubmit={handleSubmit}>

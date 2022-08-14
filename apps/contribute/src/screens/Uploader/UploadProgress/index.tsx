@@ -1,9 +1,11 @@
 import { ImageMediaType, UUID } from "@phylopic/utils"
 import axios from "axios"
+import Link from "next/link"
 import { FC, useEffect, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import useContributorUUID from "~/profile/useContributorUUID"
+import ButtonNav from "~/ui/ButtonNav"
 import styles from "./index.module.scss"
 export interface Props {
     buffer: Buffer
@@ -21,7 +23,7 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
         if (buffer && contributorUUID && token && uuid) {
             const controller = new AbortController()
             const promise = axios.put<void>(
-                `/api/submissions/${encodeURIComponent(uuid)}/source/${encodeURIComponent(contributorUUID)}`,
+                `/api/images/${encodeURIComponent(uuid)}/source`,
                 buffer,
                 {
                     headers: {
@@ -62,6 +64,11 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
                         <strong>Ack!</strong> There was some kind of error:
                     </p>
                     <p>“{String(error)}”</p>
+                    <ButtonNav mode="horizontal">
+                        <Link href={`/edit/${encodeURIComponent(uuid)}`}>
+                            <button className="cta">Start over.</button>
+                        </Link>
+                    </ButtonNav>
                     {/* :TODO: button */}
                 </section>
             </DialogueScreen>

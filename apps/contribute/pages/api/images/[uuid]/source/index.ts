@@ -1,8 +1,8 @@
 import { Image } from "@phylopic/source-models"
 import { isImageMediaType, isUUIDv4, UUID } from "@phylopic/utils"
+import { convertS3BodyToBuffer } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
-import MAX_INCOMPLETE_IMAGES from "~/editing/MAX_INCOMPLETE_IMAGES"
 import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Buffer> = async (req, res) => {
@@ -47,38 +47,19 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                 break
             }
             case "PUT": {
+                if (!image) {
+                    throw 409
+                }
                 const type = req.headers["content-type"]
                 if (!isImageMediaType(type)) {
                     throw 415
                 }
-                if (!image) {
-                    if (
-                        (await client.contributor(contributorUUID).images.incomplete.totalItems()) >=
-                        MAX_INCOMPLETE_IMAGES
-                    ) {
-                        throw 507
-                    }
-                }
                 await Promise.all([
                     imageClient.file.put({
-                        data: req.body,
+                        data: await convertS3BodyToBuffer(req.body),
                         type,
                     }),
-                    image
-                        ? imageClient.patch({ modified: now.toISOString() })
-                        : imageClient.put({
-                              accepted: false,
-                              attribution: null,
-                              contributor: contributorUUID,
-                              created: now.toISOString(),
-                              general: null,
-                              license: null,
-                              modified: now.toISOString(),
-                              specific: null,
-                              sponsor: null,
-                              submitted: false,
-                              uuid,
-                          }),
+                    imageClient.patch({ modified: now.toISOString() })
                 ])
                 res.status(204)
                 break

@@ -7,7 +7,7 @@ const Page: NextPage = () => (
         <DialogueScreen>
             <p>Something weird happened.</p>
             <AnchorLink href="/" className="cta">
-                Start Over
+                Start over.
             </AnchorLink>
         </DialogueScreen>
     </PageLayout>

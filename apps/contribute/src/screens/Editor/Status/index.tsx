@@ -3,6 +3,7 @@ import { FC, useCallback, useMemo } from "react"
 import useImage from "~/editing/hooks/useImage"
 import useImageDeletor from "~/editing/hooks/useImageDeletor"
 import useImageMutator from "~/editing/hooks/useImageMutator"
+import useImageUUID from "~/editing/hooks/useImageUUID"
 import useLiveImageExists from "~/editing/hooks/useLiveImageExists"
 import useContributorUUID from "~/profile/useContributorUUID"
 import ButtonNav from "~/ui/ButtonNav"
@@ -23,9 +24,10 @@ const Status: FC = () => {
     return <Incomplete />
 }
 const Accepted: FC = () => {
-    const uuid = useContributorUUID()
+    const contributorUUID = useContributorUUID()
+    const uuid = useImageUUID()
     const isLive = useLiveImageExists(uuid)
-    const mutate = useImageMutator()
+    const mutate = useImageMutator(uuid)
     const handleButtonClick = useCallback(() => {
         if (
             confirm(
@@ -47,7 +49,7 @@ const Accepted: FC = () => {
                     <>
                         It is currently{" "}
                         <a
-                            href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images/${encodeURIComponent(uuid)}`}
+                            href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images/${encodeURIComponent(contributorUUID)}`}
                             rel="noreferrer noopener"
                             target="_blank"
                         >
@@ -62,7 +64,7 @@ const Accepted: FC = () => {
             {isLive !== undefined && (
                 <ButtonNav mode="horizontal">
                     <button className="cta-delete" onClick={handleButtonClick}>
-                        Withdraw this {isLive ? "image" : "submission"}
+                        Withdraw this {isLive ? "image" : "submission"}.
                     </button>
                 </ButtonNav>
             )}
@@ -70,10 +72,11 @@ const Accepted: FC = () => {
     )
 }
 const Incomplete: FC = () => {
-    const image = useImage()
+    const uuid = useImageUUID()
+    const image = useImage(uuid)
     const submittable = useMemo(() => isSubmittableImage(image), [image])
-    const mutate = useImageMutator()
-    const deleteImage = useImageDeletor()
+    const mutate = useImageMutator(uuid)
+    const deleteImage = useImageDeletor(uuid)
     const handleSubmitButtonClick = useCallback(() => {
         mutate({ submitted: true })
     }, [mutate])
@@ -88,18 +91,19 @@ const Incomplete: FC = () => {
             <ButtonNav mode="horizontal">
                 {submittable && (
                     <button className="cta" onClick={handleSubmitButtonClick}>
-                        Submit it
+                        Submit it.
                     </button>
                 )}
                 <button className="cta-delete" onClick={handleDeleteButtonClick}>
-                    Cancel
+                    Cancel.
                 </button>
             </ButtonNav>
         </>
     )
 }
 const Submitted: FC = () => {
-    const mutate = useImageMutator()
+    const uuid = useImageUUID()
+    const mutate = useImageMutator(uuid)
     const handleButtonClick = useCallback(() => {
         if (confirm("Are you sure you don’t want this image to be published on the site?")) {
             mutate({ submitted: false })
@@ -110,15 +114,16 @@ const Submitted: FC = () => {
             <p>Your image has been submitted and will be reviewed.</p>
             <ButtonNav mode="horizontal">
                 <button className="cta-delete" onClick={handleButtonClick}>
-                    Withdraw this submission
+                    Withdraw this submission.
                 </button>
             </ButtonNav>
         </>
     )
 }
 const Withdrawn: FC = () => {
-    const mutate = useImageMutator()
-    const deleteImage = useImageDeletor()
+    const uuid = useImageUUID()
+    const mutate = useImageMutator(uuid)
+    const deleteImage = useImageDeletor(uuid)
     const handleDeleteButtonClick = useCallback(() => {
         if (confirm("Are you sure you want remove this image PERMANENTLY?")) {
             deleteImage()
@@ -132,10 +137,10 @@ const Withdrawn: FC = () => {
             <p>This image was previously accepted, but you have withdrawn it.</p>
             <ButtonNav mode="horizontal">
                 <button className="cta" onClick={handleSubmitButtonClick}>
-                    Submit it again
+                    Submit it again.
                 </button>
                 <button className="cta-delete" onClick={handleDeleteButtonClick}>
-                    Delete it permanently
+                    Delete it permanently.
                 </button>
             </ButtonNav>
         </>

@@ -62,7 +62,7 @@ const AuthExpired: FC<Props> = ({ onSubmit }) => {
                         <small>(You may log out at any time.)</small>
                     </div>
                     <button className="cta" onClick={handleReauthorizeClick}>
-                        Send Authorization
+                        Send authorization.
                     </button>
                     <p>
                         <a className="text" onClick={handleClearClick}>

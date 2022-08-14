@@ -7,7 +7,7 @@ const Prompt: FC = () => {
             <p>Ready to get started?</p>
             <ButtonNav mode="horizontal">
                 <SpawnLink>
-                    <button className="cta">Upload Silhouette Image</button>
+                    <button className="cta">Upload a silhouette image.</button>
                 </SpawnLink>
             </ButtonNav>
         </>
