@@ -3,6 +3,7 @@ import { Loader } from "@phylopic/ui"
 import { parseNomen } from "parse-nomen"
 import { FC, useCallback, useEffect, useMemo } from "react"
 import useSearch from "~/search/useSearch"
+import ButtonNav from "~/ui/ButtonNav"
 import NameView from "~/ui/NameView"
 interface Props {
     onCancel?: () => void
@@ -43,14 +44,14 @@ const IdentifierResults: FC<Props> = ({ onCancel, onComplete, searchTerm }) => {
                     .” I have never heard of that.
                 </p>
                 <p>Are you sure you spelled it right?</p>
-                <nav>
+                <ButtonNav mode="horizontal">
                     <button className="cta" onClick={handleUnknownButtonClick}>
-                        Oh, I&apos;m sure.
+                        Oh, I&rsquo;m sure.
                     </button>
                     <button className="cta" onClick={onCancel}>
-                        Actually … maybe not?
+                        Actually &hellip; maybe not?
                     </button>
-                </nav>
+                </ButtonNav>
             </section>
         )
     }

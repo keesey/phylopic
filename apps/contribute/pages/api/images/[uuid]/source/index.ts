@@ -19,7 +19,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
         let contributorUUID: UUID
         if (await imageClient.exists()) {
             image = await imageClient.get()
-            ;(await verifyAuthorization(req.headers, { sub: image.contributor })) ?? {}
+            ;(await verifyAuthorization(req.headers, { sub: image.contributor }))
             contributorUUID = image.contributor
         } else {
             const { sub } = (await verifyAuthorization(req.headers)) ?? {}
@@ -59,7 +59,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                         data: await convertS3BodyToBuffer(req.body),
                         type,
                     }),
-                    imageClient.patch({ modified: now.toISOString() })
+                    imageClient.patch({ modified: now.toISOString() }),
                 ])
                 res.status(204)
                 break

@@ -24,7 +24,7 @@ const Uploader: FC<Props> = ({ uuid }) => {
         [router],
     )
     if (!fileResult) {
-        return <SelectFile onComplete={setFileResult} />
+        return <SelectFile onComplete={setFileResult} uuid={uuid} />
     }
     if (!reviewResult) {
         return <ImageReview {...fileResult} onCancel={handleImageReviewCancel} onComplete={setReviewResult} />

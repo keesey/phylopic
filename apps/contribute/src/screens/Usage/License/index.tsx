@@ -1,15 +1,19 @@
 import { LICENSE_NAMES, UUID, ValidLicenseURL } from "@phylopic/utils"
 import { FC, useCallback } from "react"
-import useLicense from "~/editing/useLicense"
-import useSubmissionPatcher from "~/s3/swr/useSubmissionPatcher"
+import useImage from "~/editing/hooks/useImage"
+import useImageMutator from "~/editing/hooks/useImageMutator"
 import styles from "./index.module.scss"
 export interface Props {
     uuid: UUID
 }
 const License: FC<Props> = ({ uuid }) => {
-    const { data: license } = useLicense(uuid)
-    const patch = useSubmissionPatcher(uuid)
-    const updateLicense = useCallback((value: ValidLicenseURL) => patch({ license: value }), [patch])
+    const image = useImage(uuid)
+    const license = image?.license
+    const mutate = useImageMutator(uuid)
+    const updateLicense = useCallback((value: ValidLicenseURL) => mutate({ license: value }), [mutate])
+    if (!image) {
+        return null
+    }
     return (
         <form>
             {!license && <p>Please select one:</p>}

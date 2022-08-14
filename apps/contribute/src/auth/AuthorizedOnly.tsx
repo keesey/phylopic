@@ -16,6 +16,9 @@ const AuthorizedOnly: FC<Props> = ({ children }) => {
         }
     }, [authorized, mounted, router])
     useExpireEffect(1000)
+    if (!authorized) {
+        return null
+    }
     return <>{children}</>
 }
 export default AuthorizedOnly

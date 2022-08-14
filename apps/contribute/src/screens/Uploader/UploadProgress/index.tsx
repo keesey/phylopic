@@ -22,21 +22,17 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
     useEffect(() => {
         if (buffer && contributorUUID && token && uuid) {
             const controller = new AbortController()
-            const promise = axios.put<void>(
-                `/api/images/${encodeURIComponent(uuid)}/source`,
-                buffer,
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                        "content-type": type,
-                    },
-                    onUploadProgress: (event: ProgressEvent) => {
-                        setLoaded(event.loaded)
-                        setTotal(event.total)
-                    },
-                    signal: controller.signal,
+            const promise = axios.put<void>(`/api/images/${encodeURIComponent(uuid)}/source`, buffer, {
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    "content-type": type,
                 },
-            )
+                onUploadProgress: (event: ProgressEvent) => {
+                    setLoaded(event.loaded)
+                    setTotal(event.total)
+                },
+                signal: controller.signal,
+            })
             ;(async () => {
                 try {
                     await promise

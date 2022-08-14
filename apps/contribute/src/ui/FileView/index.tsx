@@ -5,7 +5,7 @@ import styles from "./index.module.scss"
 export interface Props {
     alt?: string
     mode: "dark" | "light"
-    src: string
+    src?: string
 }
 const FileView: React.FC<Props> = ({ alt, mode, src }) => {
     const [error, setError] = useState(false)
@@ -38,7 +38,7 @@ const FileView: React.FC<Props> = ({ alt, mode, src }) => {
                 onErrorCapture={handleError}
                 onLoad={handleLoad}
                 onLoadStart={handleLoadStart}
-                src={src}
+                src={src ?? "data:<svg></svg>"}
                 unoptimized
                 width={512}
             />

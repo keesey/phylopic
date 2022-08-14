@@ -7,11 +7,11 @@ import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import MAX_INCOMPLETE_IMAGES from "~/editing/MAX_INCOMPLETE_IMAGES"
 import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<{ existing: boolean, uuid: UUID }> = async (req, res) => {
+const index: NextApiHandler<{ existing: boolean; uuid: UUID }> = async (req, res) => {
     const now = new Date()
     let client: SourceClient | undefined
     try {
-        const { sub } = await verifyAuthorization(req.headers) ?? {}
+        const { sub } = (await verifyAuthorization(req.headers)) ?? {}
         if (!isUUIDv4(sub)) {
             throw 403
         }

@@ -1,35 +1,42 @@
 import { AnchorLink } from "@phylopic/ui"
 import { isValidLicenseURL, UUID } from "@phylopic/utils"
 import { FC, useMemo } from "react"
-import useFileSource from "~/editing/useFileSource"
-import useLicense from "~/editing/useLicense"
-import useSpecific from "~/editing/useSpecific"
-import useUsageComplete from "~/editing/hooks/useUsageComplete"
+import useUsageComplete from "~/editing/hooks/steps/useUsageComplete"
+import useImage from "~/editing/hooks/useImage"
+import useImageNode from "~/editing/hooks/useImageNode"
+import useImageSrc from "~/editing/hooks/useImageSrc"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import FileView from "~/ui/FileView"
 import NameView from "~/ui/NameView"
+import LoadingState from "../LoadingState"
 import Attribution from "./Attribution"
 import License from "./License"
 export type Props = {
     uuid: UUID
 }
 const Usage: FC<Props> = ({ uuid }) => {
-    const { data: license } = useLicense(uuid)
-    const { data: specific } = useSpecific(uuid)
-    const { data: source } = useFileSource(uuid)
-    const hasLicense = useMemo(() => isValidLicenseURL(license), [license])
+    const image = useImage(uuid)
+    const src = useImageSrc(uuid)
+    const hasLicense = useMemo(() => isValidLicenseURL(image?.license), [image?.license])
     const complete = useUsageComplete(uuid)
+    const specific = useImageNode(uuid, "specific")
+    if (!image) {
+        return <LoadingState>One moment&hellip;</LoadingState>
+    }
     return (
         <DialogueScreen>
             <figure>
-                <FileView src={source ?? "data:"} mode="dark" />
+                {src && <FileView src={src} mode="dark" />}
                 <figcaption>
-                    {specific && <NameView value={specific.name} />}
-                    {!specific && (
-                        <AnchorLink className="text" href={`/edit/${encodeURIComponent(uuid)}/nodes`}>
-                            [No taxon selected.]
-                        </AnchorLink>
-                    )}
+                    {
+                        image?.specific ? (
+                            specific ? <NameView value={specific.names[0]} /> : "…"
+                        ) : (
+                            <AnchorLink className="text" href={`/edit/${encodeURIComponent(uuid)}/nodes`}>
+                                [No taxon selected.]
+                            </AnchorLink>
+                        )
+                    }
                 </figcaption>
             </figure>
             <p>How would you like to make your image available for reuse?</p>

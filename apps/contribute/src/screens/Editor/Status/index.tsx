@@ -5,10 +5,10 @@ import useImageDeletor from "~/editing/hooks/useImageDeletor"
 import useImageMutator from "~/editing/hooks/useImageMutator"
 import useImageUUID from "~/editing/hooks/useImageUUID"
 import useLiveImageExists from "~/editing/hooks/useLiveImageExists"
-import useContributorUUID from "~/profile/useContributorUUID"
 import ButtonNav from "~/ui/ButtonNav"
 const Status: FC = () => {
-    const image = useImage()
+    const uuid = useImageUUID()
+    const image = useImage(uuid)
     if (!image) {
         return null
     }
@@ -24,7 +24,6 @@ const Status: FC = () => {
     return <Incomplete />
 }
 const Accepted: FC = () => {
-    const contributorUUID = useContributorUUID()
     const uuid = useImageUUID()
     const isLive = useLiveImageExists(uuid)
     const mutate = useImageMutator(uuid)
@@ -45,11 +44,13 @@ const Accepted: FC = () => {
         <>
             <p>
                 Your image has been accepted.{" "}
-                {isLive && (
+                {isLive && uuid && (
                     <>
                         It is currently{" "}
                         <a
-                            href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images/${encodeURIComponent(contributorUUID)}`}
+                            href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images/${encodeURIComponent(
+                                uuid,
+                            )}`}
                             rel="noreferrer noopener"
                             target="_blank"
                         >
@@ -95,7 +96,7 @@ const Incomplete: FC = () => {
                     </button>
                 )}
                 <button className="cta-delete" onClick={handleDeleteButtonClick}>
-                    Cancel.
+                    Cancel this submission.
                 </button>
             </ButtonNav>
         </>

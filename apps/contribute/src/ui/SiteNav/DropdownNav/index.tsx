@@ -54,7 +54,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => {
                             <AnchorLink href="/images/submitted">Your Pending Submissions</AnchorLink>
                         </li>
                     )}
-                    {accepted!> 0 && (
+                    {accepted! > 0 && (
                         <li key="account:/accepted">
                             <AnchorLink href="/images/accepted">Your Accepted Images</AnchorLink>
                         </li>

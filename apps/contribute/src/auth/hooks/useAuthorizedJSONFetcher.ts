@@ -8,10 +8,13 @@ const useAuthorizedJSONFetcher = <T>(config?: AuthorizedJSONFetcherConfig) => {
     const token = useAuthToken()
     return useCallback(
         async (url: string) => {
+            if (!token) {
+                throw new Error("Unauthorized.")
+            }
             const response = await axios({
                 method: "GET",
                 ...config,
-                headers: token ? { ...config?.headers, authorization: `Bearer ${token}` } : config?.headers,
+                headers: { ...config?.headers, authorization: `Bearer ${token}` },
                 responseType: "json",
                 url,
             })

@@ -1,10 +1,11 @@
 import { Image, isSubmittableImage } from "@phylopic/source-models"
-import { isUUIDv4 } from "@phylopic/utils"
+import { isUUIDv4, UUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Image> = async (req, res) => {
+    const now = new Date()
     let client: SourceClient | undefined
     try {
         const uuid = req.query.uuid
@@ -31,7 +32,13 @@ const index: NextApiHandler<Image> = async (req, res) => {
                 if (typeof req.body.accepted === "boolean" && req.body.accepted !== image.accepted) {
                     throw 403
                 }
-                const combined = { ...image, ...(req.body as Partial<Image>) }
+                const combined: Image & { uuid: UUID } = {
+                    ...image,
+                    ...(req.body as Partial<Image>),
+                    contributor: image.contributor,
+                    modified: now.toISOString(),
+                    uuid,
+                }
                 if (combined.submitted && !isSubmittableImage(combined)) {
                     throw 409
                 }

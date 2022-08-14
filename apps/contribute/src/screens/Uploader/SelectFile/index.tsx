@@ -1,6 +1,10 @@
+import { NumberView } from "@phylopic/ui"
+import { UUID } from "@phylopic/utils"
 import clsx from "clsx"
 import { ChangeEvent, FC, FormEvent, useCallback, useEffect, useMemo } from "react"
+import useFileSourceComplete from "~/editing/hooks/steps/useFileSourceComplete"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import LoadingState from "~/screens/LoadingState"
 import useBuffer from "../hooks/useBuffer"
 import useFileIsVector from "../hooks/useFileIsVector"
 import useFileState from "../hooks/useFileState"
@@ -22,8 +26,10 @@ const MIN_LENGTH_PIXELS = 512
 const MIN_AREA_PIXELS_SQUARED = 128 * MIN_LENGTH_PIXELS
 export interface Props {
     onComplete?: (result: FileResult) => void
+    uuid: UUID
 }
-const SelectFile: FC<Props> = ({ onComplete }) => {
+const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
+    const hasExisting = useFileSourceComplete(uuid)
     const [file, setFile] = useFileState()
     const highlightDrag = useWindowDragHighlight(file === undefined)
     const handleFileInputChange = useCallback(
@@ -52,6 +58,9 @@ const SelectFile: FC<Props> = ({ onComplete }) => {
             onComplete?.({ buffer: buffer.data, file, size: size.data, source })
         }
     }, [buffer.data, file, onComplete, size.data, source])
+    if (hasExisting === undefined) {
+        return <LoadingState>One moment&hellip;</LoadingState>
+    }
     if (buffer.pending) {
         return <Pending />
     }
@@ -60,7 +69,7 @@ const SelectFile: FC<Props> = ({ onComplete }) => {
             <section className={clsx(styles.selectFile, highlightDrag && styles.highlighted)}>
                 {!hasBlockingError && (
                     <>
-                        <p>Drag and drop a silhouette image file here to get started.</p>
+                        <p>Drag and drop a silhouette image file here to {hasExisting ? "replace the one you uploaded earlier" : "get started"}.</p>
                         <p>
                             (
                             <a href="https://www.w3.org/TR/SVG/" target="_blank" rel="noopener noreferrer">
@@ -101,13 +110,13 @@ const SelectFile: FC<Props> = ({ onComplete }) => {
                 )}
                 {hasBlockingError && (
                     <p>
-                        <strong>Whoa!</strong>
+                        <strong>{buffer.error ? "Whoops!" : "Whoa!"}</strong>
                     </p>
                 )}
                 {tooBig && (
                     <>
                         <p>
-                            That&apos;s a big file. That&apos;s, like, {mebibytes}{" "}
+                            That&rsquo;s a big file. That&rsquo;s, like, {mebibytes}{" "}
                             <a
                                 href="https://physics.nist.gov/cuu/Units/binary.html"
                                 target="_blank"
@@ -118,8 +127,8 @@ const SelectFile: FC<Props> = ({ onComplete }) => {
                             !
                         </p>
                         <p>
-                            Can you get it under {MAX_FILE_SIZE_MEBIBYTES.toLocaleString("en-us")}{" "}
-                            <abbr title="mebibytes">MiB</abbr> ({MAX_FILE_SIZE.toLocaleString("en-us")} bytes)?
+                            Can you get it under <NumberView value={MAX_FILE_SIZE_MEBIBYTES} />{" "}
+                            <abbr title="mebibytes">MiB</abbr> (<NumberView value={MAX_FILE_SIZE} /> bytes)?
                         </p>
                     </>
                 )}
@@ -127,18 +136,15 @@ const SelectFile: FC<Props> = ({ onComplete }) => {
                     <>
                         <p>That image is a bit small.{sizeText && ` Only ${sizeText} pixels, by my calculations.`}</p>
                         <p>
-                            Can you make it at least {MIN_LENGTH_PIXELS.toLocaleString("en-us")} pixels vertically or
-                            horizontally and at least {MIN_AREA_PIXELS_SQUARED.toLocaleString("en-us")} square pixels in
-                            area?
+                            Can you make it at least <NumberView value={MIN_LENGTH_PIXELS} /> pixels vertically or
+                            horizontally <strong>and</strong> at least <NumberView value={MIN_AREA_PIXELS_SQUARED} />{" "}
+                            square pixels in area?
                         </p>
                     </>
                 )}
-                {buffer.error && (
+                {Boolean(buffer.error) && (
                     <>
-                        <p>
-                            <strong>Whoops!</strong> I had trouble processing that file. Can you check it? Here are some
-                            details:
-                        </p>
+                        <p>Had some trouble processing that file. Can you check it? Here are some details:</p>
                         <p>&ldquo;{String(buffer.error)}&rdquo;</p>
                         <p>Any of that make sense to you?</p>
                     </>
@@ -150,7 +156,7 @@ const SelectFile: FC<Props> = ({ onComplete }) => {
                 )}
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <label className={styles.uploadLabel}>
-                        Select a File
+                        Select a file.
                         <input
                             accept=".bmp,,gif,.png,.svg,.jpeg,.jpg,image/bmp,image/gif,image/png,image/svg+xml,image/jpeg"
                             type="file"

@@ -19,22 +19,24 @@ const Complete: FC = () => {
             {hasSubmitted && (
                 <>
                     <p>
-                        You have <NumberAsWords max={100} value={submitted} /> submission{submitted === 1 ? "" : "s"} awaiting
-                        review. You may click on {submitted === 1 ? "it" : "any of them"} to make revisions first, if
-                        you want. Or, <SpawnLink>upload a new one!</SpawnLink>
+                        You have <NumberAsWords max={100} value={submitted} /> submission{submitted === 1 ? "" : "s"}{" "}
+                        awaiting review. You may click on {submitted === 1 ? "it" : "any of them"} to make revisions
+                        first, if you want. Or, <SpawnLink>upload a new one!</SpawnLink>
                     </p>
                     {(hasAccepted || hasWithdrawn) && (
                         <p>
                             You also have{" "}
                             {hasAccepted && (
                                 <AnchorLink href="/images/accepted">
-                                    <NumberAsWords max={100} value={accepted} /> accepted submission{accepted === 1 ? "" : "s"}
+                                    <NumberAsWords max={100} value={accepted} /> accepted submission
+                                    {accepted === 1 ? "" : "s"}
                                 </AnchorLink>
                             )}
                             {hasAccepted && hasWithdrawn && " and "}
                             {hasWithdrawn && (
                                 <AnchorLink href="/images/withdrawn">
-                                    <NumberAsWords max={100} value={withdrawn} /> withdrawn submission{withdrawn === 1 ? "" : "s"}
+                                    <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
+                                    {withdrawn === 1 ? "" : "s"}
                                 </AnchorLink>
                             )}
                             .
@@ -45,15 +47,16 @@ const Complete: FC = () => {
             {!hasSubmitted && hasAccepted && (
                 <>
                     <p>
-                        You have <NumberAsWords max={100} value={accepted} /> accepted submission{accepted === 1 ? "" : "s"}.
-                        Click on {accepted === 1 ? "it" : "any of them"} to edit {accepted === 1 ? "it" : "them"}, if
-                        you want. Or, <SpawnLink>upload a new one!</SpawnLink>
+                        You have <NumberAsWords max={100} value={accepted} /> accepted submission
+                        {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to edit{" "}
+                        {accepted === 1 ? "it" : "them"}, if you want. Or, <SpawnLink>upload a new one!</SpawnLink>
                     </p>
                     {hasWithdrawn && (
                         <p>
                             You also have{" "}
                             <AnchorLink href="/images/withdrawn">
-                                <NumberAsWords max={100} value={withdrawn} /> withdrawn submission{withdrawn === 1 ? "" : "s"}
+                                <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
+                                {withdrawn === 1 ? "" : "s"}
                             </AnchorLink>
                             .
                         </p>
@@ -63,8 +66,9 @@ const Complete: FC = () => {
             {!hasSubmitted && !hasAccepted && hasWithdrawn && (
                 <>
                     <p>
-                        You have <NumberAsWords max={100} value={withdrawn} /> withdrawn submission{accepted === 1 ? "" : "s"}.
-                        Click on {accepted === 1 ? "it" : "any of them"} to reconsider, if you like. Or, <SpawnLink>upload a new one!</SpawnLink>
+                        You have <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
+                        {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to reconsider, if
+                        you like. Or, <SpawnLink>upload a new one!</SpawnLink>
                     </p>
                 </>
             )}
