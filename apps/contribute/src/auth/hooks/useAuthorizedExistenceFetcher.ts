@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
-import is4xxError from "~/http/isNotFoundError"
+import isNotFoundError from "~/http/isNotFoundError"
 import useAuthToken from "./useAuthToken"
 export type AuthorizedJSONFetcherConfig = Omit<AxiosRequestConfig<void>, "method" | "url"> & {
     headers?: Omit<AxiosRequestConfig["headers"], "authorization">
@@ -21,8 +21,7 @@ const useAuthorizedExistenceFetcher = (config?: AuthorizedJSONFetcherConfig) => 
                 })
                 return response.status >= 200 && response.status < 300
             } catch (e) {
-                if (is4xxError(e)) {
-                    console.debug("NOT FOUND")
+                if (isNotFoundError(e)) {
                     return false
                 }
                 throw e

@@ -18,7 +18,6 @@ const useRedirect = (uuid: UUID) => {
             router.push(`/edit/${encodeURIComponent(uuid)}/usage`)
         }
     }, [fileSourceComplete, licenseComplete, nodesComplete, router, uuid])
-    console.log(fileSourceComplete, nodesComplete, licenseComplete)
     const pending = fileSourceComplete === undefined || nodesComplete === undefined || licenseComplete === undefined
     const redirecting = fileSourceComplete === false || nodesComplete === false || licenseComplete === false
     return { pending, redirecting }

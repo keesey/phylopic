@@ -17,7 +17,6 @@ const Welcome: FC = () => {
     const hasWithdrawn = typeof withdrawn === "number" && withdrawn > 0
     const pending =
         accepted === undefined || incomplete === undefined || submitted === undefined || withdrawn === undefined
-    console.log(accepted, typeof accepted, hasAccepted)
     const hasNothing = !hasAccepted && !hasIncomplete && !hasSubmitted && !hasWithdrawn
     return (
         <FullScreen>

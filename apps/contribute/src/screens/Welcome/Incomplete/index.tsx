@@ -16,7 +16,7 @@ const Incomplete: FC = () => {
                 {images => (
                     <ImageGrid>
                         {images.map(image => (
-                            <AnchorLink key={image.uuid} href={`/images/${encodeURIComponent(image.uuid)}`}>
+                            <AnchorLink key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
                                 <ImageThumbnailView value={image} />
                             </AnchorLink>
                         ))}
