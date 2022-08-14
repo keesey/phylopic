@@ -95,10 +95,10 @@ CREATE TABLE IF NOT EXISTS public.image
 (
     uuid uuid NOT NULL,
     contributor_uuid uuid NOT NULL,
-    specific_uuid uuid NOT NULL,
+    specific_uuid uuid,
     general_uuid uuid,
-    attribution character varying(128) COLLATE pg_catalog."default",
-    license character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    attribution character varying(192) COLLATE pg_catalog."default",
+    license character varying(64) COLLATE pg_catalog."default",
     sponsor character varying(128) COLLATE pg_catalog."default",
     created timestamp without time zone NOT NULL DEFAULT now(),
     modified timestamp without time zone NOT NULL DEFAULT now(),
@@ -112,13 +112,11 @@ CREATE TABLE IF NOT EXISTS public.image
     CONSTRAINT image_general_uuid_fkey FOREIGN KEY (general_uuid)
         REFERENCES public.node (uuid) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
+        ON DELETE NO ACTION,
     CONSTRAINT image_specific_uuid_fkey FOREIGN KEY (specific_uuid)
         REFERENCES public.node (uuid) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-        NOT VALID
 )
 
 TABLESPACE pg_default;

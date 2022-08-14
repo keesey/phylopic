@@ -34,13 +34,13 @@ const FileThumbnailView: FC<Props> = ({ alt, src }) => {
             {src && (
                 <Image
                     alt={alt ?? "silhouette image"}
-                    height={96}
+                    height={128}
                     onErrorCapture={handleImgError}
                     onLoad={handleImgLoad}
                     onLoadStart={handleImgLoadStart}
                     src={src}
                     unoptimized
-                    width={96}
+                    width={128}
                 />
             )}
             {imgError && <p>image missing</p>}

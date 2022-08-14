@@ -28,12 +28,12 @@ export type SourceClient = Readonly<{
         authority: Authority,
         namespace: Namespace,
     ): Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
-    image(uuid: UUID): Patchable<Image> & {
+    image(uuid: UUID): Patchable<Image & { uuid: UUID }> & {
         file: Editable<ImageFile>
     }
     images: ImagesClient
-    node(uuid: UUID): Patchable<Node>
-    nodes: Listable<Node, number>
+    node(uuid: UUID): Patchable<Node & { uuid: UUID }>
+    nodes: Listable<Node & { uuid: UUID }, number>
     upload(uuid: UUID): Editable<ImageFile>
     uploads: Listable<UUID, string>
 }>
