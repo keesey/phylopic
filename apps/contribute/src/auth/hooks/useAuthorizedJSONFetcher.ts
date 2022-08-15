@@ -18,7 +18,7 @@ const useAuthorizedJSONFetcher = <T>(config?: AuthorizedJSONFetcherConfig) => {
                 responseType: "json",
                 url,
             })
-            return response.data
+            return response.data as T
         },
         [config, token],
     )

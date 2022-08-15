@@ -17,14 +17,22 @@ const index: NextApiHandler<Image> = async (req, res) => {
         const image = await imageClient.get()
         await verifyAuthorization(req.headers, { sub: image.contributor })
         switch (req.method) {
+            case "DELETE": {
+                if (image.submitted) {
+                    res.status(409)
+                }
+                await Promise.all([imageClient.delete(), imageClient.file.delete()])
+                res.status(204)
+            }
             case "GET":
             case "HEAD": {
                 res.status(200)
+                res.setHeader("cache-control", "max-age=0, stale-while-revalidate=86400")
                 res.json(image)
                 break
             }
             case "OPTIONS": {
-                res.setHeader("allow", "GET, HEAD, OPTIONS, PATCH")
+                res.setHeader("allow", "DELETE, GET, HEAD, OPTIONS, PATCH")
                 res.status(204)
                 break
             }

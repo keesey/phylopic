@@ -27,14 +27,14 @@ const Complete: FC = () => {
                         <p>
                             You also have{" "}
                             {hasAccepted && (
-                                <AnchorLink href="/images/accepted">
+                                <AnchorLink href="/images/accepted" className="text">
                                     <NumberAsWords max={100} value={accepted} /> accepted submission
                                     {accepted === 1 ? "" : "s"}
                                 </AnchorLink>
                             )}
                             {hasAccepted && hasWithdrawn && " and "}
                             {hasWithdrawn && (
-                                <AnchorLink href="/images/withdrawn">
+                                <AnchorLink href="/images/withdrawn" className="text">
                                     <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
                                     {withdrawn === 1 ? "" : "s"}
                                 </AnchorLink>

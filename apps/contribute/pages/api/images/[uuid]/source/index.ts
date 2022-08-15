@@ -19,7 +19,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
         let contributorUUID: UUID
         if (await imageClient.exists()) {
             image = await imageClient.get()
-            ;(await verifyAuthorization(req.headers, { sub: image.contributor }))
+            await verifyAuthorization(req.headers, { sub: image.contributor })
             contributorUUID = image.contributor
         } else {
             const { sub } = (await verifyAuthorization(req.headers)) ?? {}
@@ -36,7 +36,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                 }
                 const { data, type } = await imageClient.file.get()
                 res.status(200)
-                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
+                res.setHeader("cache-control", "max-age=0, stale-while-revalidate=86400")
                 res.setHeader("content-type", type)
                 res.send(data)
                 break

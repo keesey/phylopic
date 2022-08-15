@@ -3,9 +3,10 @@ import useAutocomplete from "~/search/useAutocomplete"
 import styles from "./index.module.scss"
 interface Props {
     onComplete?: (searchTerm: string) => void
+    placeholder: string
     suggestion?: string
 }
-const Form: FC<Props> = ({ onComplete, suggestion = "" }) => {
+const Form: FC<Props> = ({ onComplete, placeholder, suggestion = "" }) => {
     const [text, setText] = useState("")
     const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value)
@@ -33,7 +34,7 @@ const Form: FC<Props> = ({ onComplete, suggestion = "" }) => {
                 name="searchName"
                 onBlur={complete}
                 onChange={handleInputChange}
-                placeholder="Species or other taxonomic group"
+                placeholder={placeholder}
                 type="search"
                 value={text || suggestion}
             />

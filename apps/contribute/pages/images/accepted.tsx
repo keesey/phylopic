@@ -19,8 +19,10 @@ const Page: NextPage = () => (
                     ) : (
                         <p>
                             {total >= 6 && "Wow! "}
-                            <NumberAsWords caps value={total} /> of your submissions {total === 1 ? "has" : "have"} been
-                            accepted.
+                            <strong>
+                                <NumberAsWords caps value={total} />
+                            </strong>{" "}
+                            of your submissions {total === 1 ? "has" : "have"} been accepted.
                             {total < 6 && " Nice!"}
                             {total >= 12 && " Great job! "}
                         </p>

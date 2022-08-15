@@ -48,9 +48,7 @@ const Accepted: FC = () => {
                     <>
                         It is currently{" "}
                         <a
-                            href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images/${encodeURIComponent(
-                                uuid,
-                            )}`}
+                            href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images/${encodeURIComponent(uuid)}`}
                             rel="noreferrer noopener"
                             target="_blank"
                         >

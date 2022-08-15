@@ -1,4 +1,4 @@
-import { Contributor, External, Node } from "@phylopic/source-models"
+import { Contributor, External } from "@phylopic/source-models"
 import {
     Authority,
     isAuthority,
@@ -20,14 +20,12 @@ import ExternalNamespaceLister from "./ExternalNamespaceLister"
 import ImageClient from "./ImageClient"
 import ImagesClient from "./ImagesClient"
 import NodeClient from "./NodeClient"
+import NodesClient from "./NodesClient"
 import CONTRIBUTOR_FIELDS from "./pg/constants/CONTRIBUTOR_FIELDS"
 import CONTRIBUTOR_TABLE from "./pg/constants/CONTRIBUTOR_TABLE"
 import EXTERNAL_FIELDS from "./pg/constants/EXTERNAL_FIELDS"
 import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
-import NODE_FIELDS from "./pg/constants/NODE_FIELDS"
-import NODE_TABLE from "./pg/constants/NODE_TABLE"
 import normalizeContributor from "./pg/normalization/normalizeContributor"
-import normalizeNode from "./pg/normalization/normalizeNode"
 import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
 import AUTH_BUCKET_NAME from "./s3/constants/AUTH_BUCKET_NAME"
@@ -50,7 +48,7 @@ export default class Client implements SourceClient {
         )
         this.externalAuthorities = new ExternalAuthorityLister(provider, 128)
         this.images = new ImagesClient(provider)
-        this.nodes = new PGLister<Node, { uuid: UUID }>(provider, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, "name")
+        this.nodes = new NodesClient(provider)
         this.uploads = new S3Lister(provider, UPLOAD_BUCKET_NAME, "images/", isUUIDv4, 32)
     }
     authEmails

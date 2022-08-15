@@ -1,3 +1,4 @@
+import { AnchorLink } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC, useCallback, useMemo, useState } from "react"
 import useImage from "~/editing/hooks/useImage"
@@ -7,8 +8,9 @@ import useImageSrc from "~/editing/hooks/useImageSrc"
 import ImageContext from "~/editing/ImageContext"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import FileView from "~/ui/FileView"
+import NameView from "~/ui/NameView"
 import Form from "./Form"
-import IdentifierResults from "./IdentifierResults"
+import TaxonUUIDResult from "./TaxonUUIDResult"
 export type Props = {
     uuid: UUID
 }
@@ -26,6 +28,7 @@ const Taxonomy: FC<Props> = ({ uuid }) => {
     }, [])
     const mutate = useImageMutator(uuid)
     const handleComplete = useCallback((uuid: UUID) => mutate({ general: null, specific: uuid }), [mutate])
+    const [changeRequested, setChangeRequested] = useState(false)
     if (!image) {
         return null
     }
@@ -33,7 +36,7 @@ const Taxonomy: FC<Props> = ({ uuid }) => {
         <DialogueScreen>
             <ImageContext.Provider value={uuid}>
                 <FileView src={src} mode="dark" />
-                {!image.submitted && Boolean(src) && (
+                {!specific && !image.submitted && src && (
                     <>
                         <p>
                             <strong>Looks great!</strong> What is it?
@@ -41,15 +44,49 @@ const Taxonomy: FC<Props> = ({ uuid }) => {
                         <p>(Please be as specific as possible.)</p>
                     </>
                 )}
-                {(image.submitted || !src) && (
+                {!specific && image.submitted && src && (
                     <>
-                        <p>So what is it?</p>
+                        <p>So, what is it?</p>
                         <p>(Please be as specific as possible.)</p>
                     </>
                 )}
-                <Form onComplete={handleFormComplete} suggestion={suggestionText} />
+                {(!specific || changeRequested) && (
+                    <Form
+                        onComplete={handleFormComplete}
+                        placeholder="Species or other taxonomic group"
+                        suggestion={suggestionText}
+                    />
+                )}
                 <br />
-                <IdentifierResults searchTerm={searchTerm} onCancel={handleResultsCancel} onComplete={handleComplete} />
+                {specific && (
+                    <p>
+                        Assigned to{" "}
+                        <strong>
+                            <NameView value={specific.names[0]} />
+                        </strong>
+                        .
+                        {!changeRequested && (
+                            <>
+                                {" "}
+                                <a className="text" onClick={() => setChangeRequested(true)}>
+                                    Change it?
+                                </a>
+                            </>
+                        )}
+                    </p>
+                )}
+                {(!specific || changeRequested) && (
+                    <TaxonUUIDResult
+                        onCancel={handleResultsCancel}
+                        onComplete={handleComplete}
+                        searchTerm={searchTerm}
+                    />
+                )}
+                {specific && (
+                    <AnchorLink key="completeLink" className="cta" href={`/edit/${encodeURIComponent(uuid)}`}>
+                        All set.
+                    </AnchorLink>
+                )}
             </ImageContext.Provider>
         </DialogueScreen>
     )

@@ -1,10 +1,10 @@
-import { Node } from "@phylopic/source-models";
-import { isUUIDv4, UUID } from "@phylopic/utils";
-import { useMemo } from "react";
-import useSWRImmutable from "swr/immutable";
-import isServerError from "~/http/isServerError";
-import fetchJSON from "~/swr/fetchJSON";
-import useImage from "./useImage";
+import { Node } from "@phylopic/source-models"
+import { isUUIDv4, UUID } from "@phylopic/utils"
+import { useMemo } from "react"
+import useSWRImmutable from "swr/immutable"
+import isServerError from "~/http/isServerError"
+import fetchJSON from "~/swr/fetchJSON"
+import useImage from "./useImage"
 const useImageNode = (uuid: UUID | undefined, property: "general" | "specific") => {
     const image = useImage(uuid)
     const key = useMemo(() => {

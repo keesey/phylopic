@@ -10,6 +10,9 @@ export type ImagesClient = Listable<Image & { uuid: UUID }, number> & {
     submitted: Listable<Image & { uuid: UUID }, number>
     withdrawn: Listable<Image & { uuid: UUID }, number>
 }
+export type NodesClient = Listable<Node & { uuid: UUID }, number> & {
+    search(text: string): Listable<Node & { uuid: UUID }, number>
+}
 export type SourceClient = Readonly<{
     authEmails: Listable<EmailAddress, string>
     authToken(emailAddress: EmailAddress): Editable<JWT>
@@ -33,7 +36,7 @@ export type SourceClient = Readonly<{
     }
     images: ImagesClient
     node(uuid: UUID): Patchable<Node & { uuid: UUID }>
-    nodes: Listable<Node & { uuid: UUID }, number>
+    nodes: NodesClient
     upload(uuid: UUID): Editable<ImageFile>
     uploads: Listable<UUID, string>
 }>

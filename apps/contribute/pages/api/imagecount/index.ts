@@ -17,7 +17,7 @@ const index: NextApiHandler<{ total: number }> = async (req, res) => {
                 const filter = getImageFilter(req.query)
                 client = new SourceClient()
                 const total = await client.contributor(contributorUUID).images[filter].totalItems()
-                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
+                res.setHeader("cache-control", "max-age=0, stale-while-revalidate=86400")
                 res.json({ total })
                 break
             }

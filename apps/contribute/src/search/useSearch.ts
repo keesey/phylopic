@@ -1,56 +1,35 @@
-import { Node, PageWithEmbedded } from "@phylopic/api-models"
-import { Identifier, Nomen } from "@phylopic/utils"
-import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { parseNomen } from "parse-nomen"
-import { useContext, useMemo } from "react"
-import useSWR from "swr"
-import fetchJSON from "~/swr/fetchJSON"
+import { useMemo } from "react"
+import { SearchEntry } from "./SearchEntry"
 import useEOLResults from "./useEOLResults"
 import useOTOLResults from "./useOTOLResults"
-export interface SearchEntry {
-    readonly identifier: Identifier
-    readonly name: Nomen
-}
+import usePhyloPicResults from "./usePhyloPicResults"
+const EMPTY: readonly never[] = []
 const useSearch = (text: string) => {
-    const [build] = useContext(BuildContext) ?? []
-    const apiFetcher = useAPIFetcher()
-    useSWR(`${process.env.NEXT_PUBLIC_API_URL}`, apiFetcher) // get build
-    const phyloPicKey = useMemo(
-        () =>
-            text && build
-                ? `${process.env.NEXT_PUBLIC_API_URL}/nodes?build=${encodeURIComponent(
-                      build,
-                  )}&embed_items=true&filter_name=${encodeURIComponent(text)}&page=0`
-                : null,
-        [text],
-    )
-    const phyloPic = useSWR<PageWithEmbedded<Node>>(phyloPicKey, fetchJSON)
+    const phyloPic = usePhyloPicResults(text)
     const otol = useOTOLResults(text)
     const eol = useEOLResults(text)
-    const phyloPicEntries = useMemo(
-        () =>
-            phyloPic.data?._embedded.items?.map<SearchEntry>(item => ({
-                identifier: `phylopic.org/nodes/${encodeURIComponent(item.uuid)}`,
-                name: item.names[0],
-            })) ?? [],
-        [phyloPic.data],
-    )
     const otolEntries = useMemo(
         () =>
             otol.data?.map<SearchEntry>(name => ({
-                identifier: `opentreeoflife.org/taxonomy/${encodeURIComponent(name.ott_id.toString(10))}`,
+                authority: "opentreeoflife.org",
+                namespace: "taxonomy",
+                objectID: name.ott_id.toString(10),
                 name: parseNomen(name.unique_name),
-            })) ?? [],
+            })) ?? EMPTY,
         [otol.data],
     )
     const eolEntries = useMemo(
         () =>
             eol.data?.results.map<SearchEntry>(result => ({
-                identifier: `eol.org/pages/${encodeURIComponent(result.id.toString(10))}`,
+                authority: "eol.org",
+                namespace: "pages",
+                objectID: result.id.toString(10),
                 name: parseNomen(result.title),
-            })) ?? [],
+            })) ?? EMPTY,
         [eol.data],
     )
+    const phyloPicEntries = phyloPic.data ?? EMPTY
     const entry = useMemo<SearchEntry | undefined>(
         () => [...phyloPicEntries, ...otolEntries, ...eolEntries][0],
         [eolEntries, otolEntries, phyloPicEntries],

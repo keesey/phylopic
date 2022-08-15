@@ -1,16 +1,16 @@
-import { NodeIdentifier } from "@phylopic/source-models"
 import { Loader } from "@phylopic/ui"
 import { parseNomen } from "parse-nomen"
 import { FC, useCallback, useEffect, useMemo } from "react"
+import { SearchEntry } from "~/search/SearchEntry"
 import useSearch from "~/search/useSearch"
 import ButtonNav from "~/ui/ButtonNav"
 import NameView from "~/ui/NameView"
 interface Props {
     onCancel?: () => void
-    onComplete?: (result: NodeIdentifier) => void
+    onComplete?: (result: SearchEntry) => void
     searchTerm: string
 }
-const IdentifierResults: FC<Props> = ({ onCancel, onComplete, searchTerm }) => {
+const SearchEntryResult: FC<Props> = ({ onCancel, onComplete, searchTerm }) => {
     const search = useSearch(searchTerm)
     useEffect(() => {
         if (search.data) {
@@ -20,7 +20,9 @@ const IdentifierResults: FC<Props> = ({ onCancel, onComplete, searchTerm }) => {
     const parsedSearchTerm = useMemo(() => parseNomen(searchTerm), [searchTerm])
     const handleUnknownButtonClick = useCallback(() => {
         onComplete?.({
-            identifier: null,
+            authority: "phylopic.org",
+            namespace: "nodes",
+            objectID: "",
             name: parsedSearchTerm,
         })
     }, [onComplete, parsedSearchTerm])
@@ -40,14 +42,16 @@ const IdentifierResults: FC<Props> = ({ onCancel, onComplete, searchTerm }) => {
             <section>
                 <p>
                     Huh. “
-                    <NameView defaultText="<redacted>" value={parsedSearchTerm} />
+                    <NameView defaultText="<name not found>" value={parsedSearchTerm} />
                     .” I have never heard of that.
                 </p>
                 <p>Are you sure you spelled it right?</p>
                 <ButtonNav mode="horizontal">
-                    <button className="cta" onClick={handleUnknownButtonClick}>
-                        Oh, I&rsquo;m sure.
-                    </button>
+                    {parsedSearchTerm.length > 0 && (
+                        <button className="cta" onClick={handleUnknownButtonClick}>
+                            Oh, I&rsquo;m sure.
+                        </button>
+                    )}
                     <button className="cta" onClick={onCancel}>
                         Actually &hellip; maybe not?
                     </button>
@@ -62,9 +66,11 @@ const IdentifierResults: FC<Props> = ({ onCancel, onComplete, searchTerm }) => {
                     <NameView value={search.data.name} />
                 </strong>
             </p>
-            <p>{search.data.identifier.startsWith("phylopic.org/") && "Cool!"}</p>
-            <p>{!search.data.identifier.startsWith("phylopic.org/") && "Nice, this will be our first one!"}</p>
+            <p>
+                {search.data.authority === "phylopic.org" && "Cool!"}
+                {search.data.authority !== "phylopic.org" && "Nice, this will be our first one!"}
+            </p>
         </section>
     )
 }
-export default IdentifierResults
+export default SearchEntryResult

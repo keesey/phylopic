@@ -16,7 +16,7 @@ const index: NextApiHandler<Contributor> = async (req, res) => {
             case "GET":
             case "HEAD": {
                 client = new SourceClient()
-                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=86400")
+                res.setHeader("cache-control", "max-age=0, stale-while-revalidate=86400")
                 res.json(await client.contributor(uuid).get())
                 break
             }

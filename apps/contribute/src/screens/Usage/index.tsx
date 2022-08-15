@@ -28,15 +28,17 @@ const Usage: FC<Props> = ({ uuid }) => {
             <figure>
                 {src && <FileView src={src} mode="dark" />}
                 <figcaption>
-                    {
-                        image?.specific ? (
-                            specific ? <NameView value={specific.names[0]} /> : "…"
+                    {image?.specific ? (
+                        specific ? (
+                            <NameView value={specific.names[0]} />
                         ) : (
-                            <AnchorLink className="text" href={`/edit/${encodeURIComponent(uuid)}/nodes`}>
-                                [No taxon selected.]
-                            </AnchorLink>
+                            "…"
                         )
-                    }
+                    ) : (
+                        <AnchorLink className="text" href={`/edit/${encodeURIComponent(uuid)}/nodes`}>
+                            [No taxon selected.]
+                        </AnchorLink>
+                    )}
                 </figcaption>
             </figure>
             <p>How would you like to make your image available for reuse?</p>

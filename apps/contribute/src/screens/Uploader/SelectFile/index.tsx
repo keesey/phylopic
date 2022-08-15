@@ -69,7 +69,10 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
             <section className={clsx(styles.selectFile, highlightDrag && styles.highlighted)}>
                 {!hasBlockingError && (
                     <>
-                        <p>Drag and drop a silhouette image file here to {hasExisting ? "replace the one you uploaded earlier" : "get started"}.</p>
+                        <p>
+                            Drag and drop a silhouette image file here to{" "}
+                            {hasExisting ? "replace the one you uploaded earlier" : "get started"}.
+                        </p>
                         <p>
                             (
                             <a href="https://www.w3.org/TR/SVG/" target="_blank" rel="noopener noreferrer">
