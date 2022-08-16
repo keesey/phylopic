@@ -1,21 +1,17 @@
-import clsx from "clsx"
+import { Loader, LoaderContext } from "@phylopic/ui"
 import { FC, ReactNode, useEffect } from "react"
 import useImageSpawn from "~/editing/hooks/useImageSpawn"
-import styles from "./index.module.scss"
+import UserButton from "../UserButton"
 export type Props = {
     children: ReactNode
 }
-const SpawnLink: FC<Props> = ({ children }) => {
+const SpawnButton: FC<Props> = ({ children }) => {
     const [spawn, error, pending] = useImageSpawn()
     useEffect(() => {
         if (error) {
             alert(error)
         }
     }, [error])
-    return (
-        <a className={clsx(pending && styles.pending)} onClick={spawn}>
-            {children}
-        </a>
-    )
+    return <UserButton onClick={pending ? undefined : spawn}>{pending ? <Loader /> : <>{children}</>}</UserButton>
 }
-export default SpawnLink
+export default SpawnButton

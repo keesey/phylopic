@@ -1,3 +1,9 @@
 .field {
     margin-bottom: 1em;
 }
+
+.form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+}

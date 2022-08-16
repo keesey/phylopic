@@ -1,7 +1,10 @@
-import Link from "next/link"
 import { FC, useCallback, useContext } from "react"
 import AuthContext from "~/auth/AuthContext"
-import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import Dialogue from "~/ui/Dialogue"
+import Speech from "~/ui/Speech"
+import UserButton from "~/ui/UserButton"
+import UserLinkButton from "~/ui/UserLinkButton"
+import UserOptions from "~/ui/UserOptions"
 const ConfirmLogout: FC = () => {
     const [, setToken] = useContext(AuthContext) ?? []
     const handleLogOutButtonClick = useCallback(() => {
@@ -9,17 +12,17 @@ const ConfirmLogout: FC = () => {
         localStorage.removeItem("auth")
     }, [setToken])
     return (
-        <DialogueScreen>
-            <p>Are you sure you want to log out?</p>
-            <button className="cta" onClick={handleLogOutButtonClick}>
-                Yes, log me out.
-            </button>
-            <p>
-                <Link href="/">
-                    <a className="text">No, I changed my mind.</a>
-                </Link>
-            </p>
-        </DialogueScreen>
+        <Dialogue>
+            <Speech mode="system">
+                <p>Are you sure you want to log out?</p>
+            </Speech>
+            <UserOptions>
+                <UserButton danger onClick={handleLogOutButtonClick}>
+                    Yes, log me out.
+                </UserButton>
+                <UserLinkButton href="/">No, I changed my mind.</UserLinkButton>
+            </UserOptions>
+        </Dialogue>
     )
 }
 export default ConfirmLogout

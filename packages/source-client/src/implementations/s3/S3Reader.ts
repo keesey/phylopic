@@ -26,11 +26,7 @@ export default class S3Reader<T> implements Readable<T> {
                     Key: this.key,
                 }),
             )
-            return (
-                typeof output.$metadata.httpStatusCode === "number" &&
-                output.$metadata.httpStatusCode >= 200 &&
-                output.$metadata.httpStatusCode < 300
-            )
+            return typeof output.$metadata.httpStatusCode === "number" && output.$metadata.httpStatusCode === 200
         } catch (e) {
             if (isAWSError(e) && e.$metadata.httpStatusCode >= 400 && e.$metadata.httpStatusCode < 500) {
                 return false

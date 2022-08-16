@@ -8,11 +8,12 @@ import useSWR from "swr"
 import AuthContext from "~/auth/AuthContext"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useExpired from "~/auth/hooks/useExpired"
-import useContributorMutator from "~/profile/useContributorMutator"
+import isServerError from "~/http/isServerError"
 import useContributorSWR from "~/profile/useContributorSWR"
 import AccountDetails from "~/screens/AccountDetails"
+import ErrorState from "~/screens/ErrorState"
+import getTTL from "~/ui/TTLSelector/getTTL"
 import { DAY } from "~/ui/TTLSelector/TTL_VALUES"
-import DialogueScreen from "./screenTypes/DialogueScreen"
 const LoadingState = dynamic(() => import("~/screens/LoadingState"), { ssr: false })
 const SignIn = dynamic(() => import("~/screens/SignIn"), { ssr: false })
 const AuthExpired = dynamic(() => import("~/screens/AuthExpired"), { ssr: false })
@@ -48,20 +49,26 @@ const Home: FC = () => {
         () => (email ? { url: `/api/authorize/${encodeURIComponent(email)}`, data: { ttl } } : null),
         [email, ttl],
     )
-    const authorizeSWR = useSWR(authorizeKey, postJSON)
+    const authorizeSWR = useSWR(authorizeKey, postJSON, {
+        shouldRetryOnError: isServerError,
+    })
     const contributorSWR = useContributorSWR()
-    const handleContributorSubmit = useContributorMutator()
     const router = useRouter()
     useEffect(() => {
         if (authorizeSWR.data) {
-            router.push("/checkemail")
+            router.push(`/checkemail?ttl=${encodeURIComponent(getTTL(ttl) ?? "")}`)
         }
-    }, [authorizeSWR.data, router])
+    }, [authorizeSWR.data, router, ttl])
+    if (authorizeSWR.error) {
+        return (
+            <ErrorState>
+                <p>Not sure what happened, but here are some details:</p>
+                <p>&ldquo;{String(authorizeSWR.error)}&rdquo;</p>
+            </ErrorState>
+        )
+    }
     if (authorizeSWR.isValidating) {
         return <LoadingState>Sending email…</LoadingState>
-    }
-    if (authorizeSWR.error) {
-        return <DialogueScreen>{String(authorizeSWR.error)}</DialogueScreen>
     }
     if (!contributorSWR.data && contributorSWR.isValidating) {
         return <LoadingState>Checking account…</LoadingState>
@@ -74,7 +81,7 @@ const Home: FC = () => {
     }
     if (!contributorSWR.data?.name || contributorSWR.data?.name === INCOMPLETE_STRING) {
         return (
-            <AccountDetails submitLabel="Continue">
+            <AccountDetails submitLabel="Continue.">
                 <p>Welcome! What should we call you here?</p>
             </AccountDetails>
         )

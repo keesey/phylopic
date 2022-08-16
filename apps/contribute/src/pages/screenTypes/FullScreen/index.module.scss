@@ -6,4 +6,8 @@
     max-height: calc(100vh - 143.5px);
     min-height: calc(100vh - 143.5px);
     overflow-y: auto;
+
+    p {
+        max-width: min(8.5in, calc(100vw - 4rem));
+    }
 }

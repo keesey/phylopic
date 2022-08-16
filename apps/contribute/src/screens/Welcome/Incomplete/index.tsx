@@ -4,14 +4,17 @@ import useImageCount from "~/editing/hooks/useImageCount"
 import ImagePaginator from "~/pagination/ImagePaginator"
 import ImageGrid from "~/ui/ImageGrid"
 import ImageThumbnailView from "~/ui/ImageThumbnailView"
+import Speech from "~/ui/Speech"
 const Incomplete: FC = () => {
     const incomplete = useImageCount("incomplete")
     return (
         <>
-            <p>
-                Looks like you have some unfinished business. Click on{" "}
-                {incomplete === 1 ? "the image" : "one of the images"} below to continue.
-            </p>
+            <Speech mode="system">
+                <p>
+                    Looks like you have some unfinished business. Click on{" "}
+                    {incomplete === 1 ? "the image" : "one of the images"} below to continue.
+                </p>
+            </Speech>
             <ImagePaginator filter="incomplete">
                 {images => (
                     <ImageGrid>

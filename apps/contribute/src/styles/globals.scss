@@ -2,78 +2,50 @@
 @use "@phylopic/styles/mixins/buttons.scss";
 @import "@phylopic/styles/globals.scss";
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap");
-a {
-    &:hover {
-        opacity: 0.5;
-    }
-}
-.cta {
-    @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
-}
-.cta-delete {
-    @include buttons.cta(colors.$dandelion, colors.$black);
-}
-a.text {
-    @include buttons.text(colors.$sunshine, colors.$sunshineFade);
-}
+
 body {
     background-color: colors.$ink;
-    height: 100vh;
-    max-height: 100vh;
-    min-height: 100vh;
-    overflow-y: hidden;
+    min-width: 380px;
 }
+
 body,
 html {
     color: colors.$white;
     margin: 0;
     padding: 0;
+
     @media (max-width: 1200px) {
         font-size: medium;
     }
 }
+
 html {
-    background-color: colors.$black;
+    background-color: colors.$cerulean;
 }
-input {
-    background-color: colors.$vellum;
-    border-radius: 1rem;
-    border: none;
-    color: colors.$ink;
-    font-size: x-large;
-    width: 100%;
-    padding: 0.5em;
-    @media (max-width: 1200px) {
-        font-size: large;
-    }
-    @media (max-width: 768px) {
-        font-size: medium;
-    }
-    &::placeholder {
-        color: colors.$wash;
-    }
-    &[type="submit"] {
-        @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
-    }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-block-start: 0;
 }
+
 main {
     align-items: center;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     font-size: x-large;
-    height: calc(100vh - 143.5px);
+    height: 100%;
     justify-content: center;
-    max-height: calc(100vh - 143.5px);
-    min-height: calc(100vh - 143.5px);
+
     @media (max-width: 1200px) {
         font-size: large;
     }
+
     @media (max-width: 768px) {
         font-size: medium;
     }
-}
-p {
-    margin-bottom: 1em;
-    text-align: left;
 }

@@ -19,13 +19,15 @@ export default class S3Editor<T> extends S3Reader<T> implements Editable<T> {
         super(provider, bucket, key, readOutput)
     }
     public async delete() {
-        await this.copyToTrash()
-        await this.provider.getS3().send(
-            new DeleteObjectCommand({
-                Bucket: this.bucket,
-                Key: this.key,
-            }),
-        )
+        if (await this.exists()) {
+            await this.copyToTrash()
+            await this.provider.getS3().send(
+                new DeleteObjectCommand({
+                    Bucket: this.bucket,
+                    Key: this.key,
+                }),
+            )
+        }
     }
     public async put(value: T): Promise<void> {
         if (await this.exists()) {
@@ -43,7 +45,7 @@ export default class S3Editor<T> extends S3Reader<T> implements Editable<T> {
         await this.provider.getS3().send(
             new CopyObjectCommand({
                 Bucket: this.bucket,
-                CopySource: `${this.bucket}/${this.key}`,
+                CopySource: encodeURI(`/${this.bucket}/${this.key}`),
                 Key: `trash/${this.key}`,
             }),
         )

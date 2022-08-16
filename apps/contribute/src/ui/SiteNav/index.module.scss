@@ -1,4 +1,5 @@
 @use "@phylopic/styles/colors.scss";
+
 .main {
     align-items: center;
     background-color: colors.$cerulean;
@@ -9,20 +10,25 @@
     gap: 1rem;
     justify-content: space-between;
     padding: 1rem;
+
     @media (max-width: 222px) {
         flex-direction: column;
     }
+
     a {
         color: inherit;
     }
 }
+
 .siteTitle {
     font-family: Georgia, serif;
-    font-size: xx-large;
+    font-size: x-large;
     font-weight: normal;
 }
+
 .menuButton {
     text-align: right;
+
     button {
         background: none;
         border: 1.5pt solid colors.$white;
@@ -31,6 +37,7 @@
         font-size: larger;
         font-weight: bold;
         transition: all 0.3s;
+
         &:hover {
             background-color: colors.$white;
             color: colors.$deep;

@@ -20,7 +20,7 @@ const Images: FC<Props> = ({ children, filter }) => {
                     <>
                         <p>
                             <AnchorLink href="/" className="text">
-                                ← Return to Home Screen.
+                                ← Return to Overview.
                             </AnchorLink>
                         </p>
                         <ImageGrid>

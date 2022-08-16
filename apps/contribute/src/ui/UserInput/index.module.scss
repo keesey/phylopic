@@ -1,0 +1,41 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$white;
+    border-radius: 1em;
+    border: 2px solid colors.$black;
+    color: colors.$black;
+    font-size: xx-large;
+    width: 100%;
+    padding: 0.5em;
+
+    @media (max-width: 1200px) {
+        font-size: x-large;
+    }
+
+    @media (max-width: 768px) {
+        font-size: large;
+    }
+
+    &::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+        font-weight: normal
+    }
+
+    &[type=submit] {
+        background-color: colors.$dandelion;
+        border: none;
+        color: colors.$black;
+        cursor: pointer;
+        font-size: larger;
+        font-weight: bold;
+        padding: 1em 2em;
+        text-align: center;
+        text-transform: uppercase;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: colors.$sunshine;
+        }
+    }
+}

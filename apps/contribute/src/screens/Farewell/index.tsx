@@ -1,14 +1,18 @@
-import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
-import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import Dialogue from "~/ui/Dialogue"
+import Speech from "~/ui/Speech"
+import UserLinkButton from "~/ui/UserLinkButton"
+import UserOptions from "~/ui/UserOptions"
 const Farewell: FC = () => {
     return (
-        <DialogueScreen>
-            <p>You have logged out.</p>
-            <AnchorLink href="/" className="cta">
-                Log me back in.
-            </AnchorLink>
-        </DialogueScreen>
+        <Dialogue>
+            <Speech mode="system">
+                <p>You have logged out.</p>
+            </Speech>
+            <UserOptions>
+                <UserLinkButton href="/">Log me back in.</UserLinkButton>
+            </UserOptions>
+        </Dialogue>
     )
 }
 export default Farewell

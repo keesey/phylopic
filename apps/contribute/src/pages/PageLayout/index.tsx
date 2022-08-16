@@ -8,6 +8,7 @@ import AuthExpirationCountdown from "~/ui/AuthExpirationCountdown"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
+import styles from "./index.module.scss"
 export type Props = {
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
@@ -24,11 +25,15 @@ const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
                         <aside>
                             <AuthExpirationCountdown key="expiration" />
                         </aside>
-                        <header>
-                            <SiteNav key="nav" />
-                        </header>
-                        <main>{children}</main>
-                        <SiteFooter key="footer" />
+                        <div className={styles.main}>
+                            <header>
+                                <SiteNav key="nav" />
+                            </header>
+                            <main>{children}</main>
+                            <footer>
+                                <SiteFooter key="footer" />
+                            </footer>
+                        </div>
                     </AuthContainer>
                 </BuildContainer>
             </LoaderContext.Provider>

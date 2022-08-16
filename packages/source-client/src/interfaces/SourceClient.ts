@@ -4,6 +4,9 @@ import { Editable } from "./Editable"
 import { ImageFile } from "./ImageFile"
 import { Listable } from "./Listable"
 import { Patchable } from "./Patchable"
+export type ContributorsClient = Listable<Contributor & { uuid: UUID }, number> & {
+    byEmail(email: EmailAddress): Patchable<Contributor>
+}
 export type ImagesClient = Listable<Image & { uuid: UUID }, number> & {
     accepted: Listable<Image & { uuid: UUID }, number>
     incomplete: Listable<Image & { uuid: UUID }, number>
@@ -19,7 +22,7 @@ export type SourceClient = Readonly<{
     contributor(uuid: UUID): Patchable<Contributor> & {
         images: ImagesClient
     }
-    contributors: Listable<Contributor & { uuid: UUID }, number>
+    contributors: ContributorsClient
     external(
         authority: Authority,
         namespace: Namespace,

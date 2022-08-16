@@ -29,7 +29,7 @@ const deleteFile = async (client: S3Client, uuid: UUID, res: NextApiResponse) =>
         await client.send(
             new CopyObjectCommand({
                 Bucket: SUBMISSIONS_BUCKET_NAME,
-                CopySource: SUBMISSIONS_BUCKET_NAME + "/" + file.Key,
+                CopySource: encodeURI("/" + SUBMISSIONS_BUCKET_NAME + "/" + file.Key),
                 Key: "trash/" + file.Key,
             }),
         )

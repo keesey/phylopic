@@ -10,7 +10,7 @@ import logoTwitter from "../../../public/logos/twitter.svg"
 import styles from "./index.module.scss"
 const YEAR = new Date().getFullYear()
 const SiteFooter: FC = () => (
-    <footer className={styles.main}>
+    <nav className={styles.main}>
         <ul>
             <li className={styles.item}>
                 Version 2.0 <abbr title="beta version">βɛτα</abbr>
@@ -38,6 +38,6 @@ const SiteFooter: FC = () => (
                 </a>
             </li>
         </ul>
-    </footer>
+    </nav>
 )
 export default SiteFooter

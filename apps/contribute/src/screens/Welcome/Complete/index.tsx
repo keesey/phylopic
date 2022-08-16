@@ -6,6 +6,7 @@ import ImageGrid from "~/ui/ImageGrid"
 import ImageThumbnailView from "~/ui/ImageThumbnailView"
 import NumberAsWords from "~/ui/NumberAsWords"
 import SpawnLink from "~/ui/SpawnLink"
+import Speech from "~/ui/Speech"
 const Complete: FC = () => {
     const accepted = useImageCount("accepted")
     const submitted = useImageCount("submitted")
@@ -17,11 +18,15 @@ const Complete: FC = () => {
     return (
         <>
             {hasSubmitted && (
-                <>
+                <Speech mode="system">
                     <p>
-                        You have <NumberAsWords max={100} value={submitted} /> submission{submitted === 1 ? "" : "s"}{" "}
-                        awaiting review. You may click on {submitted === 1 ? "it" : "any of them"} to make revisions
-                        first, if you want. Or, <SpawnLink>upload a new one!</SpawnLink>
+                        You have{" "}
+                        <strong>
+                            <NumberAsWords max={100} value={submitted} />
+                        </strong>{" "}
+                        submission{submitted === 1 ? "" : "s"} awaiting review. You may click on{" "}
+                        {submitted === 1 ? "it" : "any of them"} to make revisions first, if you want. Or,{" "}
+                        <SpawnLink>upload a new one!</SpawnLink>
                     </p>
                     {(hasAccepted || hasWithdrawn) && (
                         <p>
@@ -42,10 +47,10 @@ const Complete: FC = () => {
                             .
                         </p>
                     )}
-                </>
+                </Speech>
             )}
             {!hasSubmitted && hasAccepted && (
-                <>
+                <Speech mode="system">
                     <p>
                         You have <NumberAsWords max={100} value={accepted} /> accepted submission
                         {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to edit{" "}
@@ -61,16 +66,16 @@ const Complete: FC = () => {
                             .
                         </p>
                     )}
-                </>
+                </Speech>
             )}
             {!hasSubmitted && !hasAccepted && hasWithdrawn && (
-                <>
+                <Speech mode="system">
                     <p>
                         You have <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
                         {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to reconsider, if
                         you like. Or, <SpawnLink>upload a new one!</SpawnLink>
                     </p>
-                </>
+                </Speech>
             )}
             <ImagePaginator filter={filter}>
                 {images => (

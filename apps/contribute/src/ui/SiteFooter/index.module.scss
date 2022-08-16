@@ -1,5 +1,6 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/bullet.scss";
+
 .main {
     background-color: colors.$cerulean;
     color: colors.$white;
@@ -9,9 +10,11 @@
     min-height: 75px;
     overflow: hidden;
     padding: 1em;
+
     a {
         text-decoration: none;
     }
+
     ul {
         align-items: center;
         display: flex;
@@ -19,9 +22,11 @@
         justify-content: center;
     }
 }
+
 .item {
     @include bullet.item;
 }
+
 .logos {
     align-items: center;
     display: flex;

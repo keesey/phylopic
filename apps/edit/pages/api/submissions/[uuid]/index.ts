@@ -14,7 +14,9 @@ const deleteSubmission = async (client: S3Client, req: NextApiRequest, res: Next
         await client.send(
             new CopyObjectCommand({
                 Bucket: SUBMISSIONS_BUCKET_NAME,
-                CopySource: SUBMISSIONS_BUCKET_NAME + `/contributions/${normalizeUUID(uuid)}/meta.json`,
+                CopySource: encodeURI(
+                    "/" + SUBMISSIONS_BUCKET_NAME + `/contributions/${normalizeUUID(uuid)}/meta.json`,
+                ),
                 Key: `trash/contributions/${normalizeUUID(uuid)}/meta.json`,
             }),
         )

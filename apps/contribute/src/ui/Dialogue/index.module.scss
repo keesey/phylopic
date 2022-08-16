@@ -1,0 +1,10 @@
+.main {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 2rem;
+    row-gap: 1rem;
+    max-width: 11in;
+    overflow-y: auto;
+}

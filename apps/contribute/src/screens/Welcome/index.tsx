@@ -2,6 +2,8 @@ import { Loader } from "@phylopic/ui"
 import { FC, Fragment } from "react"
 import useImageCount from "~/editing/hooks/useImageCount"
 import FullScreen from "~/pages/screenTypes/FullScreen"
+import Dialogue from "~/ui/Dialogue"
+import Speech from "~/ui/Speech"
 import Complete from "./Complete"
 import Greeting from "./Greeting"
 import Incomplete from "./Incomplete"
@@ -19,20 +21,20 @@ const Welcome: FC = () => {
         accepted === undefined || incomplete === undefined || submitted === undefined || withdrawn === undefined
     const hasNothing = !hasAccepted && !hasIncomplete && !hasSubmitted && !hasWithdrawn
     return (
-        <FullScreen>
+        <Dialogue>
             <Greeting />
             {pending && (
-                <div key="pending">
+                <Speech mode="system" key="pending">
                     <p>Looking up your images…</p>
                     <Loader />
-                </div>
+                </Speech>
             )}
             {!pending && (
                 <Fragment key="content">
                     {hasNothing ? <Prompt /> : hasIncomplete ? <Incomplete /> : <Complete />}
                 </Fragment>
             )}
-        </FullScreen>
+        </Dialogue>
     )
 }
 export default Welcome

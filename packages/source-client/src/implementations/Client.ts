@@ -1,4 +1,4 @@
-import { Contributor, External } from "@phylopic/source-models"
+import { External } from "@phylopic/source-models"
 import {
     Authority,
     isAuthority,
@@ -15,17 +15,15 @@ import { PGClientProvider } from "../interfaces/PGClientProvider"
 import { S3ClientProvider } from "../interfaces/S3ClientProvider"
 import { SourceClient } from "../interfaces/SourceClient"
 import ContributorClient from "./ContributorClient"
+import { ContributorsClient } from "./ContributorsClient"
 import ExternalAuthorityLister from "./ExternalAuthorityLister"
 import ExternalNamespaceLister from "./ExternalNamespaceLister"
 import ImageClient from "./ImageClient"
 import ImagesClient from "./ImagesClient"
 import NodeClient from "./NodeClient"
 import NodesClient from "./NodesClient"
-import CONTRIBUTOR_FIELDS from "./pg/constants/CONTRIBUTOR_FIELDS"
-import CONTRIBUTOR_TABLE from "./pg/constants/CONTRIBUTOR_TABLE"
 import EXTERNAL_FIELDS from "./pg/constants/EXTERNAL_FIELDS"
 import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
-import normalizeContributor from "./pg/normalization/normalizeContributor"
 import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
 import AUTH_BUCKET_NAME from "./s3/constants/AUTH_BUCKET_NAME"
@@ -39,13 +37,7 @@ import S3Lister from "./s3/S3Lister"
 export default class Client implements SourceClient {
     constructor(protected readonly provider: PGClientProvider & S3ClientProvider) {
         this.authEmails = new S3Lister(provider, AUTH_BUCKET_NAME, "emails/", isEmailAddress)
-        this.contributors = new PGLister<Contributor, { uuid: UUID }>(
-            provider,
-            CONTRIBUTOR_TABLE,
-            128,
-            CONTRIBUTOR_FIELDS,
-            normalizeContributor,
-        )
+        this.contributors = new ContributorsClient(provider)
         this.externalAuthorities = new ExternalAuthorityLister(provider, 128)
         this.images = new ImagesClient(provider)
         this.nodes = new NodesClient(provider)
