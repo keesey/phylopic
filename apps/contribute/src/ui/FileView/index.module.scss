@@ -1,49 +1,61 @@
 @use "@phylopic/styles/colors.scss";
+
 .main {
     filter: blur(32px);
-    height: 512px;
+    height: 256px;
     position: relative;
-    width: 512px;
+    width: 256px;
     transition: color 0.3s, filter 0.3s;
-    & > * {
+
+    &>* {
         position: absolute;
         bottom: 0;
         left: 0;
         top: 0;
         right: 0;
     }
+
     & img {
         object-fit: contain;
     }
+
     &.dark {
         mix-blend-mode: lighten;
+
         & img {
             filter: invert(100%);
         }
     }
+
     &.light {
         mix-blend-mode: darken;
     }
+
     &.loaded {
         filter: none;
     }
+
     &.pending {
         background-color: colors.$black;
         border-radius: 50%;
     }
+
     &.dark &.pending {
         background-color: colors.$wash;
     }
+
     &.error {
         background-color: colors.$dandelion;
         border-radius: 50%;
         color: colors.$black;
         filter: none;
         mix-blend-mode: unset;
+
         & img {
             opacity: 0;
             visibility: hidden;
         }
+
         & p {
             align-items: center;
             display: flex;

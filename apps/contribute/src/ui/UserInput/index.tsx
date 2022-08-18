@@ -3,15 +3,31 @@ import styles from "./index.module.scss"
 export interface Props {
     autocomplete?: string
     id?: string
+    list?: string
     maxLength?: number
+    minLength?: number
     name?: string
+    onBlur?: () => void
     onChange?: (value: string) => void
     placeholder?: string
     required?: boolean
     type?: HTMLInputTypeAttribute
     value?: string
 }
-const UserInput: FC<Props> = ({ autocomplete, id, maxLength, name, onChange, placeholder, required, type, value }) => {
+const UserInput: FC<Props> = ({
+    autocomplete,
+    id,
+    list,
+    maxLength,
+    minLength,
+    name,
+    onBlur,
+    onChange,
+    placeholder,
+    required,
+    type,
+    value,
+}) => {
     const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         onChange?.(event.target.value)
     }, [])
@@ -20,8 +36,11 @@ const UserInput: FC<Props> = ({ autocomplete, id, maxLength, name, onChange, pla
             autoComplete={autocomplete}
             className={styles.main}
             id={id}
+            list={list}
             maxLength={maxLength}
+            minLength={minLength}
             name={name}
+            onBlur={onBlur}
             onChange={handleInputChange}
             placeholder={placeholder}
             required={required}

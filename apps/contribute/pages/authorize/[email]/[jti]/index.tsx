@@ -1,7 +1,6 @@
 import { JWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUID, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
-import Link from "next/link"
 import { useRouter } from "next/router"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
@@ -46,13 +45,7 @@ const Content: FC<Props> = ({ email, jti }) => {
         return (
             <ErrorState>
                 <p>Please check the link in your email.</p>
-                <p>
-                    If the link expired, you will need to{" "}
-                    <Link href="/">
-                        <a className="text">request another</a>
-                    </Link>
-                    .
-                </p>
+                <p>If the link expired, you will need to request another.</p>
             </ErrorState>
         )
     }

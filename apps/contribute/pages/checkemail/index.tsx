@@ -18,7 +18,7 @@ const Page: NextPage<Props> = ({ ttl }) => (
     </PageLayout>
 )
 export default Page
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const ttl = context.query.ttl
     if (isTTL(ttl)) {
         return { props: { ttl } }

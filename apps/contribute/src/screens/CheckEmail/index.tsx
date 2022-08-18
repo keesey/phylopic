@@ -12,18 +12,13 @@ const CheckEmail: FC<Props> = ({ ttl }) => (
     <Dialogue>
         <Speech mode="system">
             <p>
-                Check your inbox for an email from{" "}
-                <i>
-                    &ldquo;PhyloPic Contributions&rdquo;
-                </i>
+                Check your inbox for an email from <i>&ldquo;PhyloPic Contributions&rdquo;</i>
                 . Click on the link in that email within the next <TTLView value={ttl} />.
             </p>
             <p>You may close this page. See you soon!</p>
         </Speech>
         <UserOptions>
-            <UserLinkButton href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>
-                Check out the site.
-            </UserLinkButton>
+            <UserLinkButton href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>Check out the site.</UserLinkButton>
         </UserOptions>
     </Dialogue>
 )

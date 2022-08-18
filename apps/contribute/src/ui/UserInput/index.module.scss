@@ -5,7 +5,7 @@
     border-radius: 1em;
     border: 2px solid colors.$black;
     color: colors.$black;
-    font-size: xx-large;
+    font-size: inherit;
     width: 100%;
     padding: 0.5em;
 
@@ -19,7 +19,8 @@
 
     &::placeholder {
         color: rgba(0, 0, 0, 0.5);
-        font-weight: normal
+        font-style: italic;
+        font-weight: normal;
     }
 
     &[type=submit] {
@@ -27,7 +28,6 @@
         border: none;
         color: colors.$black;
         cursor: pointer;
-        font-size: larger;
         font-weight: bold;
         padding: 1em 2em;
         text-align: center;

@@ -34,13 +34,13 @@ const FileView: React.FC<Props> = ({ alt, mode, src }) => {
         >
             <Image
                 alt={alt ?? ""}
-                height={512}
+                height={256}
                 onErrorCapture={handleError}
                 onLoad={handleLoad}
                 onLoadStart={handleLoadStart}
                 src={src ?? "data:<svg></svg>"}
                 unoptimized
-                width={512}
+                width={256}
             />
             {error && <p>image missing</p>}
         </div>

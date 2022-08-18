@@ -27,7 +27,7 @@ const NameView: FC<Props> = ({ defaultText = "", short, value }) => {
         return <span className={`${styles.main} ${styles[parts[0].class]}`}>{parts[0].text}</span>
     }
     return (
-        <span>
+        <span className={styles.main}>
             {parts.map((part, index) =>
                 index ? (
                     <Fragment key={index}>

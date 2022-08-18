@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
-const Taxonomy = dynamic(() => import("~/screens/Taxonomy"))
+const Assignment = dynamic(() => import("~/screens/Assignment"))
 type Props = {
     uuid: UUID
 }
@@ -15,7 +15,7 @@ const Page: NextPage<Props> = ({ uuid }) => (
         }}
     >
         <AuthorizedOnly>
-            <Taxonomy uuid={uuid} />
+            <Assignment uuid={uuid} />
         </AuthorizedOnly>
     </PageLayout>
 )

@@ -1,26 +1,48 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/buttons.scss";
+
 .selectFile {
     align-items: flex-start;
     border: 16px dashed colors.$wash;
     border-radius: 32px;
     display: flex;
     flex-direction: column;
-    padding: 128px;
+    margin: 2rem;
+    max-height: calc(100vh - 192px);
+    padding: 2rem;
     justify-content: center;
     transition: all 0.3s;
+
     input[type="file"] {
         display: none;
     }
 }
+
 .highlighted {
     border-color: colors.$sunshine;
 }
+
 .uploadLabel {
-    @include buttons.cta(colors.$black, colors.$dandelion, colors.$sunshine);
-}
-.form {
-    margin-top: 1em;
+    position: relative;
+    background-color: colors.$dandelion;
+    border-radius: 1em;
+    border: none;
+    color: colors.$black;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 1em 2em;
     text-align: center;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: colors.$sunshine;
+    }
+}
+
+.form {
+    display: inline-block;
+    margin: 1em 0;
+    text-align: right;
     width: 100%;
 }

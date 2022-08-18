@@ -1,16 +1,24 @@
+.main {
+    text-transform: none;
+}
+
 .scientific {
     font-style: italic;
 }
+
 .citation {
     font-size: smaller;
     font-variant: small-caps;
 }
+
 .comment {
     font-size: smaller;
 }
+
 .operator {
     font-family: Roboto, sans-serif;
 }
+
 .rank {
     font-size: smaller;
     font-style: italic;

@@ -4,6 +4,10 @@ import clsx from "clsx"
 import { FC, useCallback, useMemo } from "react"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import ButtonNav from "~/ui/ButtonNav"
+import Dialogue from "~/ui/Dialogue"
+import Speech from "~/ui/Speech"
+import UserButton from "~/ui/UserButton"
+import UserOptions from "~/ui/UserOptions"
 import useFileIsVector from "../hooks/useFileIsVector"
 import useVectorization from "../hooks/useVectorization"
 import useVectorizedImageSource from "../hooks/useVectorizedImageSource"
@@ -46,23 +50,25 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                         <img className={styles.image} src={source} alt={file.name} />
                         <img className={styles.image} src={vectorizedSource} alt="vectorized" />
                     </div>
-                    <div>
-                        <p>Which one looks better?</p>
-                        <ButtonNav mode="vertical">
-                            <button className="cta" onClick={handleSelectButtonClick}>
+                    <Dialogue>
+                        <Speech mode="system">
+                            <p>Which one looks better?</p>
+                        </Speech>
+                        <UserOptions>
+                            <UserButton onClick={handleSelectButtonClick}>
                                 The {mode === "portrait" ? "left" : "top"} one.
-                            </button>
-                            <button className="cta" onClick={handleSelectVectorizedButtonClick}>
+                            </UserButton>
+                            <UserButton onClick={handleSelectVectorizedButtonClick}>
                                 The {mode === "portrait" ? "right" : "bottom"} one.
-                            </button>
-                            <button className="cta" onClick={handleSelectVectorizedButtonClick}>
-                                They&apos;re the same picture.
-                            </button>
-                            <button className="cta" onClick={onCancel}>
+                            </UserButton>
+                            <UserButton onClick={handleSelectVectorizedButtonClick}>
+                                They&rsquo;re the same picture.
+                            </UserButton>
+                            <UserButton danger onClick={onCancel}>
                                 Neither. I want to change it.
-                            </button>
-                        </ButtonNav>
-                    </div>
+                            </UserButton>
+                        </UserOptions>
+                    </Dialogue>
                 </section>
             </DialogueScreen>
         )

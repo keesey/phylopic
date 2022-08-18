@@ -15,7 +15,7 @@ const Speech: FC<Props> = ({ children, mode }) => {
     }, [element])
     return (
         <section className={clsx(styles.main, styles[mode])} ref={setElement}>
-            <LoaderContext.Provider value={{ color: mode === "user" ? "#00000" : "#305860" }}>
+            <LoaderContext.Provider value={{ color: mode === "user" ? "#00000" : "#00809f" }}>
                 {children}
             </LoaderContext.Provider>
         </section>

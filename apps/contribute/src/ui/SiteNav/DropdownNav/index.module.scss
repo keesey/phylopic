@@ -28,7 +28,7 @@
     }
 
     a {
-        color: colors.$cerulean !important;
+        color: colors.$cerulean  !important;
         font-weight: normal;
 
         &:hover {
@@ -58,7 +58,7 @@
             display: flex;
             flex-wrap: wrap;
 
-            > li {
+            >li {
                 @include bullet.item(colors.$black);
             }
         }
@@ -74,7 +74,6 @@
         border: 1.5pt solid colors.$cerulean;
         border-radius: 0.5em;
         color: colors.$cerulean;
-        font-size: larger;
         font-weight: bold;
         transition: all 0.3s;
 

@@ -5,6 +5,7 @@ import useSWR from "swr"
 import fetchJSON from "~/swr/fetchJSON"
 import useEOLResults from "./useEOLResults"
 import useOTOLResults from "./useOTOLResults"
+const MAX_LENGTH = 10
 const getSortIndex = (value: string, query: string) => {
     if (typeof value !== "string") {
         return Number.MAX_SAFE_INTEGER
@@ -44,7 +45,10 @@ const useAutocomplete = (text: string): readonly string[] => {
         return result
     }, [eol.data, otol.data, phyloPic.data])
     return useMemo(
-        () => Array.from(all).sort((a, b) => getSortIndex(text, a) - getSortIndex(text, b) || compareStrings(a, b)),
+        () =>
+            Array.from(all)
+                .sort((a, b) => getSortIndex(text, a) - getSortIndex(text, b) || compareStrings(a, b))
+                .slice(0, MAX_LENGTH),
         [all, text],
     )
 }

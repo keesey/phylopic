@@ -3,11 +3,10 @@ import { useRouter } from "next/router"
 import { useCallback, useEffect, useState } from "react"
 import useSWRImmutable from "swr/immutable"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
-const FETCHER_CONFIG = { method: "POST" }
 const useImageSpawn = () => {
     const [requested, setRequested] = useState(false)
-    const fetcher = useAuthorizedJSONFetcher<{ existing: boolean; uuid: UUID }>(FETCHER_CONFIG)
-    const { data, error, isValidating } = useSWRImmutable(requested ? `/api/spawn` : null, fetcher)
+    const fetcher = useAuthorizedJSONFetcher<{ existing: boolean; uuid: UUID }>()
+    const { data, error, isValidating } = useSWRImmutable(requested ? { method: "POST", url: `/api/spawn` } : null, fetcher)
     const router = useRouter()
     useEffect(() => {
         if (data) {

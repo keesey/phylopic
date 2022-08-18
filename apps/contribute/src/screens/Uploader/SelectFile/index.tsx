@@ -5,6 +5,10 @@ import { ChangeEvent, FC, FormEvent, useCallback, useEffect, useMemo } from "rea
 import useFileSourceComplete from "~/editing/hooks/steps/useFileSourceComplete"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import LoadingState from "~/screens/LoadingState"
+import Dialogue from "~/ui/Dialogue"
+import Speech from "~/ui/Speech"
+import UserButton from "~/ui/UserButton"
+import UserOptions from "~/ui/UserOptions"
 import useBuffer from "../hooks/useBuffer"
 import useFileIsVector from "../hooks/useFileIsVector"
 import useFileState from "../hooks/useFileState"
@@ -67,107 +71,125 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
     return (
         <DialogueScreen>
             <section className={clsx(styles.selectFile, highlightDrag && styles.highlighted)}>
-                {!hasBlockingError && (
-                    <>
+                <Dialogue>
+                    <Speech mode="system">
                         <p>
                             Drag and drop a silhouette image file here to{" "}
                             {hasExisting ? "replace the one you uploaded earlier" : "get started"}.
                         </p>
                         <p>
-                            (
-                            <a href="https://www.w3.org/TR/SVG/" target="_blank" rel="noopener noreferrer">
-                                <abbr title="Scalable Vector Graphics">SVG</abbr>
-                            </a>{" "}
-                            is best, but{" "}
-                            <a
-                                href="http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <abbr title="Portable Network Graphics">PNG</abbr>
-                            </a>
-                            ,{" "}
-                            <a
-                                href="https://www.w3.org/Graphics/GIF/spec-gif89a.txt"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <abbr title="Graphics Interchange Format">GIF</abbr>
-                            </a>
-                            , and{" "}
-                            <a
-                                href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000189.shtml"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <abbr title="Bitmap Image File">BMP</abbr>
-                            </a>{" "}
-                            are also good. Or{" "}
-                            <a href="https://www.w3.org/Graphics/JPEG/" target="_blank" rel="noopener noreferrer">
-                                <abbr title="Joint Photographic Experts Group">JPEG</abbr>
-                            </a>
-                            , I guess.)
+                            <small>
+                                (
+                                <a href="https://www.w3.org/TR/SVG/" target="_blank" rel="noopener noreferrer">
+                                    <abbr title="Scalable Vector Graphics">SVG</abbr>
+                                </a>{" "}
+                                is best, but{" "}
+                                <a
+                                    href="http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <abbr title="Portable Network Graphics">PNG</abbr>
+                                </a>
+                                ,{" "}
+                                <a
+                                    href="https://www.w3.org/Graphics/GIF/spec-gif89a.txt"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <abbr title="Graphics Interchange Format">GIF</abbr>
+                                </a>
+                                , and{" "}
+                                <a
+                                    href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000189.shtml"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <abbr title="Bitmap Image File">BMP</abbr>
+                                </a>{" "}
+                                are also good. Or{" "}
+                                <a href="https://www.w3.org/Graphics/JPEG/" target="_blank" rel="noopener noreferrer">
+                                    <abbr title="Joint Photographic Experts Group">JPEG</abbr>
+                                </a>
+                                , I guess.)
+                            </small>
                         </p>
-                        <p>Or, click here to browse your file system:</p>
-                    </>
-                )}
-                {hasBlockingError && (
-                    <p>
-                        <strong>{buffer.error ? "Whoops!" : "Whoa!"}</strong>
-                    </p>
-                )}
-                {tooBig && (
-                    <>
-                        <p>
-                            That&rsquo;s a big file. That&rsquo;s, like, {mebibytes}{" "}
-                            <a
-                                href="https://physics.nist.gov/cuu/Units/binary.html"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                mebibytes
-                            </a>
-                            !
-                        </p>
-                        <p>
-                            Can you get it under <NumberView value={MAX_FILE_SIZE_MEBIBYTES} />{" "}
-                            <abbr title="mebibytes">MiB</abbr> (<NumberView value={MAX_FILE_SIZE} /> bytes)?
-                        </p>
-                    </>
-                )}
-                {tooSmall && (
-                    <>
-                        <p>That image is a bit small.{sizeText && ` Only ${sizeText} pixels, by my calculations.`}</p>
-                        <p>
-                            Can you make it at least <NumberView value={MIN_LENGTH_PIXELS} /> pixels vertically or
-                            horizontally <strong>and</strong> at least <NumberView value={MIN_AREA_PIXELS_SQUARED} />{" "}
-                            square pixels in area?
-                        </p>
-                    </>
-                )}
-                {Boolean(buffer.error) && (
-                    <>
-                        <p>Had some trouble processing that file. Can you check it? Here are some details:</p>
-                        <p>&ldquo;{String(buffer.error)}&rdquo;</p>
-                        <p>Any of that make sense to you?</p>
-                    </>
-                )}
-                {hasBlockingError && (
-                    <button className="cta" onClick={handleResetClick}>
-                        Start over.
-                    </button>
-                )}
-                <form className={styles.form} onSubmit={handleSubmit}>
-                    <label className={styles.uploadLabel}>
-                        Select a file.
-                        <input
-                            accept=".bmp,,gif,.png,.svg,.jpeg,.jpg,image/bmp,image/gif,image/png,image/svg+xml,image/jpeg"
-                            type="file"
-                            name="file"
-                            onChange={handleFileInputChange}
-                        />
-                    </label>
-                </form>
+                    </Speech>
+                    <Speech mode="system">
+                        <p>Or, browse your file system.</p>
+                    </Speech>
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                        <label className={styles.uploadLabel}>
+                            Select a file.
+                            <input
+                                accept=".bmp,,gif,.png,.svg,.jpeg,.jpg,image/bmp,image/gif,image/png,image/svg+xml,image/jpeg"
+                                type="file"
+                                name="file"
+                                onChange={handleFileInputChange}
+                            />
+                        </label>
+                    </form>
+                    {hasBlockingError && (
+                        <>
+                            <Speech mode="system">
+                                <p>
+                                    <strong>{buffer.error ? "Whoops!" : "Whoa!"}</strong>
+                                </p>
+                                {tooBig && (
+                                    <>
+                                        <p>
+                                            That&rsquo;s a big file. That&rsquo;s, like, {mebibytes}{" "}
+                                            <a
+                                                href="https://physics.nist.gov/cuu/Units/binary.html"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                mebibytes
+                                            </a>
+                                            !
+                                        </p>
+                                        <p>
+                                            Can you get it under <NumberView value={MAX_FILE_SIZE_MEBIBYTES} />{" "}
+                                            <abbr title="mebibytes">MiB</abbr>{" "}
+                                            <small>
+                                                (<NumberView value={MAX_FILE_SIZE} /> bytes)
+                                            </small>
+                                            ?
+                                        </p>
+                                    </>
+                                )}
+                                {tooSmall && (
+                                    <>
+                                        <p>
+                                            That image is a bit small.
+                                            {sizeText && ` Only ${sizeText} pixels, by my calculations.`}
+                                        </p>
+                                        <p>
+                                            Can you make it at least <NumberView value={MIN_LENGTH_PIXELS} /> pixels
+                                            vertically or horizontally <strong>and</strong> at least{" "}
+                                            <NumberView value={MIN_AREA_PIXELS_SQUARED} /> square pixels in area?
+                                        </p>
+                                    </>
+                                )}
+                                {Boolean(buffer.error) && (
+                                    <>
+                                        <p>
+                                            Had some trouble processing that file. Can you check it? Here are some
+                                            details:
+                                        </p>
+                                        <p>&ldquo;{String(buffer.error)}&rdquo;</p>
+                                        <p>Any of that make sense to you?</p>
+                                    </>
+                                )}{" "}
+                            </Speech>
+                            <UserOptions>
+                                <UserButton danger onClick={handleResetClick}>
+                                    Reset.
+                                </UserButton>
+                            </UserOptions>
+                        </>
+                    )}
+                </Dialogue>
             </section>
         </DialogueScreen>
     )
