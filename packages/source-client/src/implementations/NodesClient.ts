@@ -13,20 +13,6 @@ export default class NodesClient extends PGLister<Node, { uuid: UUID }> implemen
     }
     async resolve(externals: readonly Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>[]) {
         const client = await this.provider.getPG()
-        console.debug(
-                `SELECT "external".authority, "external"."namespace", "external".object_id AS "objectID", node."uuid", node.created, node.modified, node."names"::json, node.parent_uuid AS parent FROM "external" LEFT JOIN node ON "external".node_uuid=node."uuid" WHERE ${externals
-                    .map(
-                        (_, index) =>
-                            `("external".authority=$${index * 3 + 1}::character varying AND "external"."namespace"=$${
-                                index * 3 + 2
-                            }::character varying AND "external".object_id=$${index * 3 + 3}::character varying)`,
-                    )
-                    .join(" OR ")}`,
-                externals.reduce<string[]>(
-                    (prev, { authority, namespace, objectID }) => [...prev, authority, namespace, objectID],
-                    [],
-                ),
-        )
         const output = await client.query<
             Node & { authority: string; namespace: string; objectID: string; uuid: UUID }
         >(

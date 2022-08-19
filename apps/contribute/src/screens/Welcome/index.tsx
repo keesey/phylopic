@@ -1,7 +1,6 @@
 import { Loader } from "@phylopic/ui"
 import { FC, Fragment } from "react"
 import useImageCount from "~/editing/hooks/useImageCount"
-import FullScreen from "~/pages/screenTypes/FullScreen"
 import Dialogue from "~/ui/Dialogue"
 import Speech from "~/ui/Speech"
 import Complete from "./Complete"

@@ -29,7 +29,6 @@ const usePhyloPicResults = (text: string) => {
     const authorizedFetcher = useAuthorizedJSONFetcher<Page<SourceNode & { uuid: UUID }, number>>()
     const source = useSWR(sourceKey, authorizedFetcher)
     const liveIsEmpty = useMemo(() => live.error instanceof APISWRError && live.error.statusCode === 404, [live.error])
-    console.debug(live.error)
     const liveEntries = useMemo(
         () =>
             live.data?._embedded.items?.map<SearchEntry>(item => ({

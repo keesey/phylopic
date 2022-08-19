@@ -33,7 +33,6 @@ const useExternalResults = (text: string) => {
         [eol.data, eolEntries, otol.data, otolEntries],
     )
     const translated = useTranslatedResults(combined)
-    console.debug({ translated })
     return {
         data: translated.data,
         error: otol.error || eol.error || translated.error,

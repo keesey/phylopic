@@ -20,7 +20,7 @@ const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader,
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: Page<Image & { uuid: UUID }, number> | null) => {
             return authorized && (index === 0 || previousPageData?.next)
-                ? "/api/images/" + createSearch({ filter, page: previousPageData?.next ?? 0 })
+                ? "/api/images" + createSearch({ filter, page: previousPageData?.next ?? 0 })
                 : null
         },
         [authorized, filter],

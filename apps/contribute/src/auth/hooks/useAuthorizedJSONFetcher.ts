@@ -12,12 +12,6 @@ const useAuthorizedJSONFetcher = <T>() => {
                 throw new Error("Unauthorized.")
             }
             const config: AxiosRequestConfig = typeof key === "string" ? { url: key } : key
-            console.debug({
-                method: "GET",
-                ...config,
-                headers: { ...config?.headers, authorization: `Bearer ${token}` },
-                responseType: "json",
-            })
             const response = await axios({
                 method: "GET",
                 ...config,

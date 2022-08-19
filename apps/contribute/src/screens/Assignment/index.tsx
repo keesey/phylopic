@@ -7,6 +7,7 @@ import useImageNode from "~/editing/hooks/useImageNode"
 import useImageSrc from "~/editing/hooks/useImageSrc"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
+import { ICON_CHECK, ICON_X } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
@@ -65,8 +66,8 @@ const Assignment: FC<Props> = ({ uuid }) => {
                     </Speech>
                     {!changeRequested && (
                         <UserOptions>
-                            <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}`}>Yep.</UserLinkButton>
-                            <UserButton danger onClick={() => setChangeRequested(true)}>
+                            <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(uuid)}`}>Yep.</UserLinkButton>
+                            <UserButton danger icon={ICON_X} onClick={() => setChangeRequested(true)}>
                                 Nope.
                             </UserButton>
                         </UserOptions>
