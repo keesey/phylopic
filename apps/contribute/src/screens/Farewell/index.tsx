@@ -11,7 +11,9 @@ const Farewell: FC = () => {
                 <p>You have logged out.</p>
             </Speech>
             <UserOptions>
-                <UserLinkButton icon={ICON_ARROW_RIGHT} href="/">Log me back in.</UserLinkButton>
+                <UserLinkButton icon={ICON_ARROW_RIGHT} href="/">
+                    Log me back in.
+                </UserLinkButton>
             </UserOptions>
         </Dialogue>
     )

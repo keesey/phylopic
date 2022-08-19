@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from "react"
-import useAuthToken from "./useAuthToken"
 import axios, { AxiosRequestConfig } from "axios"
+import { useCallback } from "react"
+import useAuthToken from "./useAuthToken"
 export type AuthorizedImgSrcFetcherConfig = Omit<AxiosRequestConfig, "method" | "responseType" | "url"> & {
     headers?: Omit<AxiosRequestConfig["headers"], "authorization">
 }

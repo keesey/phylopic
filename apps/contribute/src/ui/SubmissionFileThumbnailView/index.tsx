@@ -3,11 +3,8 @@ import { useNomenText } from "@phylopic/ui"
 import { isUUIDv4, UUID } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
-import useContributorUUID from "~/auth/hooks/useContributorUUID"
-import useRatioComplete from "~/editing/hooks/useRatioComplete"
-import useSpecific from "~/editing/useSpecific"
+import useImageNode from "~/editing/hooks/useImageNode"
 import FileThumbnailView from "../FileThumbnailView"
-import styles from "./index.module.scss"
 export interface Props {
     uuid: UUID
 }
@@ -20,21 +17,8 @@ const SubmissionFileThumbnailView: FC<Props> = ({ uuid }) => {
                 : undefined,
         [token, uuid],
     )
-    const { data: specific } = useSpecific(uuid)
-    const ratioComplete = useRatioComplete(uuid)
-    const alt = useNomenText(specific?.name)
-    const determinate = !isNaN(ratioComplete) && ratioComplete < 1
-    return (
-        <figure className={styles.main}>
-            <FileThumbnailView src={src} alt={alt} />
-            <figcaption className={styles.caption}>
-                <progress
-                    className={styles.progress}
-                    value={determinate ? ratioComplete : undefined}
-                    max={determinate ? 1 : undefined}
-                />
-            </figcaption>
-        </figure>
-    )
+    const specific = useImageNode(uuid, "specific")
+    const alt = useNomenText(specific?.names[0])
+    return <FileThumbnailView src={src} alt={alt} />
 }
 export default SubmissionFileThumbnailView

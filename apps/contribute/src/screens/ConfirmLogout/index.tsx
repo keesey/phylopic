@@ -21,7 +21,9 @@ const ConfirmLogout: FC = () => {
                 <UserButton danger icon={ICON_X} onClick={handleLogOutButtonClick}>
                     Yes, log me out.
                 </UserButton>
-                <UserLinkButton icon={ICON_ARROW_LEFT} href="/">No, I changed my mind.</UserLinkButton>
+                <UserLinkButton icon={ICON_ARROW_LEFT} href="/">
+                    No, I changed my mind.
+                </UserLinkButton>
             </UserOptions>
         </Dialogue>
     )

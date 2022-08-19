@@ -66,7 +66,9 @@ const Assignment: FC<Props> = ({ uuid }) => {
                     </Speech>
                     {!changeRequested && (
                         <UserOptions>
-                            <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(uuid)}`}>Yep.</UserLinkButton>
+                            <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(uuid)}`}>
+                                Yep.
+                            </UserLinkButton>
                             <UserButton danger icon={ICON_X} onClick={() => setChangeRequested(true)}>
                                 Nope.
                             </UserButton>
