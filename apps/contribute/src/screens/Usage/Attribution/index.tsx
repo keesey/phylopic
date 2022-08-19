@@ -3,9 +3,8 @@ import { FC, FormEvent, useCallback, useMemo, useState } from "react"
 import useImage from "~/editing/hooks/useImage"
 import useImageMutator from "~/editing/hooks/useImageMutator"
 import Speech from "~/ui/Speech"
-import UserButton from "~/ui/UserButton"
+import SpeechStack from "~/ui/SpeechStack"
 import UserInput from "~/ui/UserInput"
-import UserOptions from "~/ui/UserOptions"
 export interface Props {
     uuid: UUID
 }
@@ -31,37 +30,37 @@ const Attribution: FC<Props> = ({ uuid }) => {
     return (
         <>
             <Speech mode="system">
-                <p>Who gets the credit for this?</p>
-                {!required && (
-                    <p>
-                        <small>(This is optional.)</small>
-                    </p>
-                )}
+                <p>
+                    Who gets the credit for this?
+                    {!required && (
+                        <>
+                            {" "}
+                            <small>(Optional.)</small>
+                        </>
+                    )}
+                </p>
             </Speech>
             {!image?.attribution && (
                 <form onSubmit={handleFormSubmit}>
                     <Speech mode="user">
-                        <UserInput
-                            maxLength={192}
-                            onChange={setValue}
-                            onBlur={submit}
-                            required={required}
-                            placeholder="Attribution"
-                        />
+                        <SpeechStack compact fullWidth>
+                            <span>By&nbsp;</span>
+                            <UserInput
+                                maxLength={192}
+                                onChange={setValue}
+                                onBlur={submit}
+                                required={required}
+                                placeholder="Attribution"
+                            />
+                            .
+                        </SpeechStack>
                     </Speech>
                 </form>
             )}
             {image?.attribution && (
-                <>
-                    <Speech mode="user">
-                        <p>{image.attribution || "Nobody"}.</p>
-                    </Speech>
-                    <UserOptions>
-                        <UserButton danger onClick={() => mutate({ attribution: null })}>
-                            Change the attribution.
-                        </UserButton>
-                    </UserOptions>
-                </>
+                <Speech mode="user">
+                    <p>{image.attribution || "Nobody"}.</p>
+                </Speech>
             )}
         </>
     )

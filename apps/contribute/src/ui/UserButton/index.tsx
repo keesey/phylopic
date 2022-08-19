@@ -1,13 +1,15 @@
 import { LoaderContext } from "@phylopic/ui"
 import clsx from "clsx"
 import { FC, ReactNode, useEffect, useState } from "react"
+import SpeechStack from "../SpeechStack"
 import styles from "./index.module.scss"
 export type Props = {
     children: ReactNode
+    icon?: string
     danger?: boolean
     onClick?: () => void
 }
-const UserButton: FC<Props> = ({ children, danger, onClick }) => {
+const UserButton: FC<Props> = ({ children, icon, danger, onClick }) => {
     const [element, setElement] = useState<HTMLElement | null>(null)
     useEffect(() => {
         if (element && typeof window !== "undefined") {
@@ -20,7 +22,16 @@ const UserButton: FC<Props> = ({ children, danger, onClick }) => {
             onClick={onClick}
             ref={setElement}
         >
-            <LoaderContext.Provider value={{ color: "#000" }}>{children}</LoaderContext.Provider>
+            <LoaderContext.Provider value={{ color: "#000" }}>
+                {icon ? (
+                    <SpeechStack>
+                        <strong>{icon}</strong>
+                        {children}
+                    </SpeechStack>
+                ) : (
+                    children
+                )}
+            </LoaderContext.Provider>
         </button>
     )
 }

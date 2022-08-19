@@ -3,6 +3,14 @@ import { isImageMediaType } from "@phylopic/utils"
 import clsx from "clsx"
 import { FC, useCallback, useMemo } from "react"
 import Dialogue from "~/ui/Dialogue"
+import {
+    ICON_ARROW_DOWN,
+    ICON_ARROW_LEFT,
+    ICON_ARROW_RIGHT,
+    ICON_ARROW_UP,
+    ICON_EQUALITY,
+    ICON_PENCIL,
+} from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
@@ -52,16 +60,22 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                         <p>Which one looks better?</p>
                     </Speech>
                     <UserOptions>
-                        <UserButton onClick={handleSelectButtonClick}>
+                        <UserButton
+                            icon={mode === "portrait" ? ICON_ARROW_LEFT : ICON_ARROW_UP}
+                            onClick={handleSelectButtonClick}
+                        >
                             The {mode === "portrait" ? "left" : "top"} one.
                         </UserButton>
-                        <UserButton onClick={handleSelectVectorizedButtonClick}>
+                        <UserButton
+                            icon={mode === "portrait" ? ICON_ARROW_RIGHT : ICON_ARROW_DOWN}
+                            onClick={handleSelectVectorizedButtonClick}
+                        >
                             The {mode === "portrait" ? "right" : "bottom"} one.
                         </UserButton>
-                        <UserButton onClick={handleSelectVectorizedButtonClick}>
+                        <UserButton icon={ICON_EQUALITY} onClick={handleSelectVectorizedButtonClick}>
                             They&rsquo;re the same picture.
                         </UserButton>
-                        <UserButton danger onClick={onCancel}>
+                        <UserButton danger icon={ICON_PENCIL} onClick={onCancel}>
                             Neither. I want to change it.
                         </UserButton>
                     </UserOptions>
@@ -76,7 +90,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
             </div>
             <Dialogue>
                 <Speech mode="system">
-                    <p>How&rquo;s that?</p>
+                    <p>How&rsquo;s that?</p>
                 </Speech>
                 {vectorized.error && (
                     <Speech mode="system">

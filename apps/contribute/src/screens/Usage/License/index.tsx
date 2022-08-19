@@ -16,32 +16,35 @@ const License: FC<Props> = ({ uuid }) => {
     }
     if (image.license) {
         return (
-            <>
-                <Speech mode="user">
-                    <p>
-                        <a href={image.license} target="_blank" rel="noopener noferrer">
-                            {LICENSE_NAMES[image.license]}
-                        </a>
-                        .
-                    </p>
-                </Speech>
-                <UserOptions>
-                    <UserButton danger onClick={() => mutate({ license: null })}>
-                        Pick another license.
-                    </UserButton>
-                </UserOptions>
-            </>
+            <Speech mode="user">
+                <p>
+                    The{" "}
+                    <a href={image.license} target="_blank" rel="noopener noferrer">
+                        {LICENSE_NAMES[image.license]}
+                    </a>{" "}
+                    license.
+                </p>
+            </Speech>
         )
     }
     return (
         <UserOptions>
-            <UserButton onClick={() => mutate({ license: "https://creativecommons.org/publicdomain/mark/1.0/" })}>
-                This is a preexisting image in the public domain.
+            <UserButton
+                icon="PDM"
+                onClick={() => mutate({ license: "https://creativecommons.org/publicdomain/mark/1.0/" })}
+            >
+                This is already in the public domain.
             </UserButton>
-            <UserButton onClick={() => mutate({ license: "https://creativecommons.org/publicdomain/zero/1.0/" })}>
-                Release this work into the public domain.
+            <UserButton
+                icon="CC0"
+                onClick={() => mutate({ license: "https://creativecommons.org/publicdomain/zero/1.0/" })}
+            >
+                Release it into the public domain.
             </UserButton>
-            <UserButton onClick={() => mutate({ license: "https://creativecommons.org/licenses/by/4.0/" })}>
+            <UserButton
+                icon="CC-BY"
+                onClick={() => mutate({ license: "https://creativecommons.org/licenses/by/4.0/" })}
+            >
                 Attribution should always be given.
             </UserButton>
         </UserOptions>

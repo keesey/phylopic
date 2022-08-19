@@ -3,6 +3,7 @@ import { FC, FormEvent, useCallback, useMemo, useState } from "react"
 import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import Dialogue from "~/ui/Dialogue"
 import EmailInput from "~/ui/EmailInput"
+import { ICON_ARROW_RIGHT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import TTLSelector from "~/ui/TTLSelector"
 import { TTL } from "~/ui/TTLSelector/TTL"
@@ -66,7 +67,7 @@ const SignIn: FC<Props> = ({ onSubmit }) => {
                             <small>(You may log out at any time.)</small>
                         </Speech>
                         <UserOptions>
-                            <UserInput type="submit" value="Continue" />
+                            <UserInput type="submit" value={`${ICON_ARROW_RIGHT} Continue`} />
                         </UserOptions>
                     </>
                 )}

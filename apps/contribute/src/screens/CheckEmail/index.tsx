@@ -1,5 +1,6 @@
 import { FC } from "react"
 import Dialogue from "~/ui/Dialogue"
+import { ICON_ARROW_RIGHT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import type { TTL } from "~/ui/TTLSelector/TTL"
 import TTLView from "~/ui/TTLView"
@@ -18,7 +19,7 @@ const CheckEmail: FC<Props> = ({ ttl }) => (
             <p>You may close this page. See you soon!</p>
         </Speech>
         <UserOptions>
-            <UserLinkButton href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>Check out the site.</UserLinkButton>
+            <UserLinkButton icon={ICON_ARROW_RIGHT} href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>Check out the site.</UserLinkButton>
         </UserOptions>
     </Dialogue>
 )

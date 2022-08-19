@@ -5,7 +5,6 @@ import useAutocomplete from "~/search/useAutocomplete"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
-import styles from "./index.module.scss"
 interface Props {
     onSubmit: (name: Nomen) => void
     placeholder: string
@@ -41,7 +40,7 @@ const NameForm: FC<Props> = ({ onSubmit, placeholder }) => {
                 </p>
             )}
             {!name && (
-                <form key="form" className={styles.form} onSubmit={handleFormSubmit}>
+                <form key="form" onSubmit={handleFormSubmit}>
                     <UserInput
                         id="searchName"
                         list="autocomplete"

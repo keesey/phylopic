@@ -47,20 +47,30 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                 break
             }
             case "PUT": {
-                if (!image) {
-                    throw 409
-                }
                 const type = req.headers["content-type"]
                 if (!isImageMediaType(type)) {
                     throw 415
                 }
-                await Promise.all([
-                    imageClient.file.put({
-                        data: await convertS3BodyToBuffer(req.body),
-                        type,
-                    }),
-                    imageClient.patch({ modified: now.toISOString() }),
-                ])
+                const filePromise = imageClient.file.put({
+                    data: await convertS3BodyToBuffer(req.body),
+                    type,
+                })
+                const imagePromise = image
+                    ? imageClient.patch({ modified: now.toISOString() })
+                    : imageClient.put({
+                          accepted: false,
+                          attribution: null,
+                          contributor: contributorUUID,
+                          created: now.toISOString(),
+                          general: null,
+                          license: null,
+                          modified: now.toISOString(),
+                          specific: null,
+                          sponsor: null,
+                          submitted: false,
+                          uuid,
+                      })
+                await Promise.all([filePromise, imagePromise])
                 res.status(204)
                 break
             }

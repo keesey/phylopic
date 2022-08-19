@@ -1,0 +1,13 @@
+.main {
+    align-items: center;
+    display: flex;
+    gap: 1em;
+
+    &.compact {
+        gap: 0;
+    }
+
+    &.fullWidth {
+        width: 100%;
+    }
+}

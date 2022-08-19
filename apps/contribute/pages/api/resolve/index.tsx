@@ -4,12 +4,8 @@ import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
 import isResolveExternalsPost from "~/models/detection/isResolveExternalsPost"
-import getIdentifier from "~/search/getIdentifier"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<Record<Identifier, (Node & { uuid: UUID }) | null> | ValidationFault[]> = async (
-    req,
-    res,
-) => {
+const index: NextApiHandler<Record<Identifier, Node & { uuid: UUID }> | ValidationFault[]> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         await verifyAuthorization(req.headers)
@@ -27,23 +23,7 @@ const index: NextApiHandler<Record<Identifier, (Node & { uuid: UUID }) | null> |
                     res.status(400)
                 } else {
                     client = new SourceClient()
-                    const result: Record<Identifier, (Node & { uuid: UUID }) | null> = {}
-                    await Promise.all(
-                        body.map(async external => {
-                            const externalClient = client!.external(
-                                external.authority,
-                                external.namespace,
-                                external.objectID,
-                            )
-                            const identifier = getIdentifier(external)
-                            if (await externalClient.exists()) {
-                                const uuid = (await externalClient.get()).node
-                                result[identifier] = { ...(await client!.node(uuid).get()), uuid }
-                            } else {
-                                result[identifier] = null
-                            }
-                        }),
-                    )
+                    const result = await client.nodes.resolve(body)
                     res.json(result)
                     res.status(200)
                 }

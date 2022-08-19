@@ -6,7 +6,7 @@ import { Identifier, UUID } from "@phylopic/utils"
 import { Node } from "@phylopic/source-models"
 import getIdentifier from "./getIdentifier"
 const useTranslatedResults = (entries: readonly SearchEntry[]) => {
-    const fetcher = useAuthorizedJSONFetcher<Record<Identifier, (Node & { uuid: UUID }) | null>>()
+    const fetcher = useAuthorizedJSONFetcher<Record<Identifier, Node & { uuid: UUID }>>()
     const key = useMemo(
         () => (entries.length ? { data: entries, method: "POST", url: `/api/resolve` } : null),
         [entries],

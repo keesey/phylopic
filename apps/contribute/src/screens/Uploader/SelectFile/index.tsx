@@ -7,7 +7,9 @@ import useFileSourceComplete from "~/editing/hooks/steps/useFileSourceComplete"
 import useImageDeletor from "~/editing/hooks/useImageDeletor"
 import LoadingState from "~/screens/LoadingState"
 import Dialogue from "~/ui/Dialogue"
+import { ICON_ARROW_UP, ICON_X } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
+import SpeechStack from "~/ui/SpeechStack"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 import useBuffer from "../hooks/useBuffer"
@@ -130,7 +132,10 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
                 <UserOptions>
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <label className={styles.uploadLabel}>
-                            Select a file.
+                            <SpeechStack>
+                                {ICON_ARROW_UP}
+                                <span>Select a file.</span>
+                            </SpeechStack>
                             <input
                                 accept=".bmp,,gif,.png,.svg,.jpeg,.jpg,image/bmp,image/gif,image/png,image/svg+xml,image/jpeg"
                                 type="file"
@@ -139,7 +144,7 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
                             />
                         </label>
                     </form>
-                    <UserButton danger onClick={handleCancelButtonClick}>
+                    <UserButton danger icon={ICON_X} onClick={handleCancelButtonClick}>
                         Never mind.
                     </UserButton>
                 </UserOptions>

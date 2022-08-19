@@ -33,7 +33,7 @@ const FileView: React.FC<Props> = ({ alt, mode, src }) => {
             )}
         >
             <Image
-                alt={alt ?? ""}
+                alt={alt ?? "silhouette"}
                 height={256}
                 onErrorCapture={handleError}
                 onLoad={handleLoad}

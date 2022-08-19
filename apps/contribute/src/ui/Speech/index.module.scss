@@ -12,6 +12,10 @@
         text-decoration: underline;
     }
 
+    form {
+        width: 100%;
+    }
+
     p {
         margin-block-start: 0;
 
@@ -72,12 +76,11 @@
         }
 
         a {
-            opacity: 0.5;
-            transition: opacity 0.3s;
+            color: colors.$ink;
 
             &:active,
             &:hover {
-                opacity: 1;
+                color: colors.$black;
             }
         }
 

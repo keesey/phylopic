@@ -2,6 +2,7 @@ import { FC, ReactNode, useCallback, useState } from "react"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
+import { ICON_CHECK, ICON_X } from "../ICON_SYMBOLS"
 export type Props = {
     affirmation: ReactNode
     denial: ReactNode
@@ -20,8 +21,10 @@ const UserVerification: FC<Props> = ({ affirmation, denial, onAffirm, onDeny }) 
     if (result === null) {
         return (
             <UserOptions>
-                <UserButton onClick={() => respond(true)}>{affirmation}</UserButton>
-                <UserButton danger onClick={() => respond(false)}>
+                <UserButton icon={ICON_CHECK} onClick={() => respond(true)}>
+                    {affirmation}
+                </UserButton>
+                <UserButton danger icon={ICON_X} onClick={() => respond(false)}>
                     {denial}
                 </UserButton>
             </UserOptions>

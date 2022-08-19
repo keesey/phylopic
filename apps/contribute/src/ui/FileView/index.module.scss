@@ -3,6 +3,8 @@
 .main {
     filter: blur(32px);
     height: 256px;
+    min-height: 256px;
+    min-width: 256px;
     position: relative;
     width: 256px;
     transition: color 0.3s, filter 0.3s;

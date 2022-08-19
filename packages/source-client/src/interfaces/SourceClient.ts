@@ -1,5 +1,5 @@
 import { Contributor, External, Image, JWT, Node } from "@phylopic/source-models"
-import { Authority, EmailAddress, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import { Authority, EmailAddress, Identifier, Namespace, ObjectID, UUID } from "@phylopic/utils"
 import { Editable } from "./Editable"
 import { ImageFile } from "./ImageFile"
 import { Listable } from "./Listable"
@@ -14,6 +14,9 @@ export type ImagesClient = Listable<Image & { uuid: UUID }, number> & {
     withdrawn: Listable<Image & { uuid: UUID }, number>
 }
 export type NodesClient = Listable<Node & { uuid: UUID }, number> & {
+    resolve(
+        externals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
+    ): Promise<Record<Identifier, Node & { uuid: UUID }>>
     search(text: string): Listable<Node & { uuid: UUID }, number>
 }
 export type SourceClient = Readonly<{

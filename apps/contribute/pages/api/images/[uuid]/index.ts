@@ -23,6 +23,7 @@ const index: NextApiHandler<Image> = async (req, res) => {
                 }
                 await Promise.all([imageClient.delete(), imageClient.file.delete()])
                 res.status(204)
+                break
             }
             case "GET":
             case "HEAD": {

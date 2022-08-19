@@ -3,7 +3,7 @@
 
 .selectFile {
     align-items: flex-start;
-    border: 16px dashed colors.$wash;
+    border: 16px dashed colors.$sunshine;
     border-radius: 32px;
     display: flex;
     flex-direction: column;
@@ -21,7 +21,7 @@
 }
 
 .highlighted {
-    border-color: colors.$sunshine;
+    border-color: colors.$dandelion;
 }
 
 .uploadLabel {

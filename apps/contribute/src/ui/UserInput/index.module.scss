@@ -7,8 +7,8 @@
     border: 2px solid colors.$black;
     color: colors.$black;
     font-size: inherit;
-    width: 100%;
     padding: 0.5em;
+    width: 100%;
 
     @media (max-width: 1200px) {
         font-size: x-large;
@@ -22,9 +22,11 @@
         color: rgba(0, 0, 0, 0.5);
         font-style: italic;
         font-weight: normal;
+        text-align: center
     }
 
     &[type=submit] {
         @include buttons.user;
+        width: unset;
     }
 }
