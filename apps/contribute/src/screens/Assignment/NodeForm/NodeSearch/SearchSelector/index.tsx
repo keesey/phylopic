@@ -1,7 +1,7 @@
 import { UUID } from "@phylopic/utils"
 import { FC, useEffect, useMemo } from "react"
 import { SearchEntry } from "~/search/SearchEntry"
-import ExternalImporter from "../ExternalImporter"
+import ExternalImporter from "./ExternalImporter"
 export type Props = {
     entry: SearchEntry
     onComplete: (uuid: UUID) => void

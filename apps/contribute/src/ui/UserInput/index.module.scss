@@ -1,4 +1,5 @@
 @use "@phylopic/styles/colors.scss";
+@use "../../styles/buttons.scss";
 
 .main {
     background-color: colors.$white;
@@ -24,18 +25,6 @@
     }
 
     &[type=submit] {
-        background-color: colors.$dandelion;
-        border: none;
-        color: colors.$black;
-        cursor: pointer;
-        font-weight: bold;
-        padding: 1em 2em;
-        text-align: center;
-        text-transform: uppercase;
-        transition: background-color 0.3s;
-
-        &:hover {
-            background-color: colors.$sunshine;
-        }
+        @include buttons.user;
     }
 }

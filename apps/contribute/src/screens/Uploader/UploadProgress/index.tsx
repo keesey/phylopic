@@ -3,9 +3,12 @@ import axios from "axios"
 import Link from "next/link"
 import { FC, useEffect, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
-import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import useContributorUUID from "~/profile/useContributorUUID"
 import ButtonNav from "~/ui/ButtonNav"
+import Dialogue from "~/ui/Dialogue"
+import Speech from "~/ui/Speech"
+import UserLinkButton from "~/ui/UserLinkButton"
+import UserOptions from "~/ui/UserOptions"
 import styles from "./index.module.scss"
 export interface Props {
     buffer: Buffer
@@ -54,29 +57,26 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
     }, [buffer, contributorUUID, onComplete, token, type, uuid])
     if (error) {
         return (
-            <DialogueScreen>
-                <section>
+            <Dialogue>
+                <Speech mode="system">
                     <p>
                         <strong>Ack!</strong> There was some kind of error:
                     </p>
                     <p>“{String(error)}”</p>
-                    <ButtonNav mode="horizontal">
-                        <Link href={`/edit/${encodeURIComponent(uuid)}`}>
-                            <button className="cta">Start over.</button>
-                        </Link>
-                    </ButtonNav>
-                    {/* :TODO: button */}
-                </section>
-            </DialogueScreen>
+                </Speech>
+                <UserOptions>
+                    <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}`}>Start over.</UserLinkButton>
+                </UserOptions>
+            </Dialogue>
         )
     }
     return (
-        <DialogueScreen>
-            <section>
-                <p>Uploading your image…</p>
+        <Dialogue>
+            <Speech mode="system">
+                <p>Uploading your image&hellip;</p>
                 <progress className={styles.progress} value={loaded} max={isNaN(total) ? undefined : total} />
-            </section>
-        </DialogueScreen>
+            </Speech>
+        </Dialogue>
     )
 }
 export default UploadProgress

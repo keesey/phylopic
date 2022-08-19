@@ -2,8 +2,6 @@
 import { isImageMediaType } from "@phylopic/utils"
 import clsx from "clsx"
 import { FC, useCallback, useMemo } from "react"
-import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
-import ButtonNav from "~/ui/ButtonNav"
 import Dialogue from "~/ui/Dialogue"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
@@ -44,57 +42,56 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     }
     if (vectorizedSource) {
         return (
-            <DialogueScreen>
-                <section className={styles.main}>
-                    <div className={clsx(styles.imageContainer, styles.compare, styles[mode])}>
-                        <img className={styles.image} src={source} alt={file.name} />
-                        <img className={styles.image} src={vectorizedSource} alt="vectorized" />
-                    </div>
-                    <Dialogue>
-                        <Speech mode="system">
-                            <p>Which one looks better?</p>
-                        </Speech>
-                        <UserOptions>
-                            <UserButton onClick={handleSelectButtonClick}>
-                                The {mode === "portrait" ? "left" : "top"} one.
-                            </UserButton>
-                            <UserButton onClick={handleSelectVectorizedButtonClick}>
-                                The {mode === "portrait" ? "right" : "bottom"} one.
-                            </UserButton>
-                            <UserButton onClick={handleSelectVectorizedButtonClick}>
-                                They&rsquo;re the same picture.
-                            </UserButton>
-                            <UserButton danger onClick={onCancel}>
-                                Neither. I want to change it.
-                            </UserButton>
-                        </UserOptions>
-                    </Dialogue>
-                </section>
-            </DialogueScreen>
+            <section className={styles.main}>
+                <div className={clsx(styles.imageContainer, styles.compare, styles[mode])}>
+                    <img className={styles.image} src={source} alt={file.name} />
+                    <img className={styles.image} src={vectorizedSource} alt="vectorized" />
+                </div>
+                <Dialogue>
+                    <Speech mode="system">
+                        <p>Which one looks better?</p>
+                    </Speech>
+                    <UserOptions>
+                        <UserButton onClick={handleSelectButtonClick}>
+                            The {mode === "portrait" ? "left" : "top"} one.
+                        </UserButton>
+                        <UserButton onClick={handleSelectVectorizedButtonClick}>
+                            The {mode === "portrait" ? "right" : "bottom"} one.
+                        </UserButton>
+                        <UserButton onClick={handleSelectVectorizedButtonClick}>
+                            They&rsquo;re the same picture.
+                        </UserButton>
+                        <UserButton danger onClick={onCancel}>
+                            Neither. I want to change it.
+                        </UserButton>
+                    </UserOptions>
+                </Dialogue>
+            </section>
         )
     }
     return (
-        <DialogueScreen>
-            <section className={styles.main}>
-                <div className={clsx(styles.imageContainer, styles[mode])}>
-                    <img className={styles.image} src={source} alt={file.name} />
-                </div>
-                <div>
-                    <p>How&apos;s that?</p>
-                    {vectorized.error && (
-                        <p>(I tried to vectorize it, but ran into a problem: {String(vectorized.error)}.)</p>
-                    )}
-                    <ButtonNav mode="horizontal">
-                        <button className="cta" onClick={handleSelectButtonClick}>
-                            Looks good.
-                        </button>
-                        <button className="cta-delete" onClick={onCancel}>
-                            Wait, I want to change it.
-                        </button>
-                    </ButtonNav>
-                </div>
-            </section>
-        </DialogueScreen>
+        <section className={styles.main}>
+            <div className={clsx(styles.imageContainer, styles[mode])}>
+                <img className={styles.image} src={source} alt={file.name} />
+            </div>
+            <Dialogue>
+                <Speech mode="system">
+                    <p>How&rquo;s that?</p>
+                </Speech>
+                {vectorized.error && (
+                    <Speech mode="system">
+                        <p>(I tried to vectorize it, but ran into a problem.</p>
+                        <p>&ldquo;{String(vectorized.error)}&rdquo;)</p>
+                    </Speech>
+                )}
+                <UserOptions>
+                    <UserButton onClick={handleSelectButtonClick}>Looks good.</UserButton>
+                    <UserButton danger onClick={onCancel}>
+                        Wait, I want to change it.
+                    </UserButton>
+                </UserOptions>
+            </Dialogue>
+        </section>
     )
 }
 export default ImageReview

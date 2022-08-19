@@ -2,8 +2,8 @@ import { Nomen, UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
-import NameForm from "../NameForm"
-import ParentSearch from "../ParentSearch"
+import NameForm from "../../NameForm"
+import ParentSearch from "./ParentSearch"
 export type Props = {
     childName: Nomen
     onComplete: (uuid: UUID) => void

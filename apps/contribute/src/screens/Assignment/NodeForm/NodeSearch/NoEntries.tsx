@@ -2,8 +2,8 @@ import { Nomen, UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
-import ParentSelector from "../ParentSelector"
-import Verification from "../Verification"
+import ParentSelector from "./ParentSelector"
+import UserVerification from "../../../../ui/UserVerification"
 export type Props = {
     name: Nomen
     onCancel: () => void
@@ -20,7 +20,7 @@ const NoEntries: FC<Props> = ({ name, onCancel, onComplete }) => {
                     &rdquo;. I have never heard of that. Are you sure you spelled it right?
                 </p>
             </Speech>
-            <Verification
+            <UserVerification
                 affirmation={<>Oh, I&rsquo;m sure.</>}
                 denial={<>Actually &hellip; maybe not?</>}
                 onAffirm={() => setParentRequested(true)}

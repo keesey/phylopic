@@ -5,9 +5,9 @@ import { SearchEntry } from "~/search/SearchEntry"
 import usePhyloPicSearch from "~/search/usePhyloPicSearch"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
-import BroaderParentPrompt from "../BroaderParentPrompt"
-import NewNodeCreator from "../NewNodeCreator"
-import SearchOptions from "../SearchOptions"
+import BroaderParentPrompt from "./BroaderParentPrompt"
+import NewNodeCreator from "./NewNodeCreator"
+import SearchOptions from "../../../SearchOptions"
 export type Props = {
     name: Nomen
     onComplete: (uuid: UUID) => void

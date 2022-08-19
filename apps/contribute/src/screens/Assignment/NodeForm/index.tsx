@@ -1,7 +1,7 @@
 import { Nomen, UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
-import NameForm from "../NameForm"
-import NodeSearch from "../NodeSearch"
+import NameForm from "./NameForm"
+import NodeSearch from "./NodeSearch"
 export type Props = {
     onComplete: (uuid: UUID) => void
 }

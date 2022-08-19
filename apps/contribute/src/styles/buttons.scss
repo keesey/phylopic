@@ -1,0 +1,35 @@
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/buttons.scss";
+
+@mixin user-base {
+    align-items: center;
+    display: inline-flex;
+    font-size: inherit;
+    justify-content: center;
+    max-width: 20em;
+    padding: 1em 2em;
+    text-align: center;
+    text-transform: none;
+}
+
+@mixin user {
+    @include buttons.cta(colors.$black, colors.$dandelion, colors.$dandelion);
+    @include user-base;
+
+    &:hover {
+        background-color: colors.$sunshine;
+        border-color: colors.$sunshine;
+        color: colors.$ink;
+    }
+}
+
+@mixin user-danger {
+    @include buttons.cta(colors.$dandelion, colors.$black);
+    @include user-base;
+
+    &:hover {
+        background-color: #600000;
+        border-color: colors.$sunshine;
+        color: colors.$sunshine;
+    }
+}

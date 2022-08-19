@@ -6,7 +6,10 @@ import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 const useImageSpawn = () => {
     const [requested, setRequested] = useState(false)
     const fetcher = useAuthorizedJSONFetcher<{ existing: boolean; uuid: UUID }>()
-    const { data, error, isValidating } = useSWRImmutable(requested ? { method: "POST", url: `/api/spawn` } : null, fetcher)
+    const { data, error, isValidating } = useSWRImmutable(
+        requested ? { method: "POST", url: `/api/spawn` } : null,
+        fetcher,
+    )
     const router = useRouter()
     useEffect(() => {
         if (data) {

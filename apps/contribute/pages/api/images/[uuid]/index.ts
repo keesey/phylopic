@@ -47,10 +47,11 @@ const index: NextApiHandler<Image> = async (req, res) => {
                     modified: now.toISOString(),
                     uuid,
                 }
-                if (combined.submitted && !isSubmittableImage(combined)) {
-                    throw 409
-                }
-                await imageClient.put(combined)
+                const submittable = isSubmittableImage(combined)
+                await imageClient.put({
+                    ...combined,
+                    submitted: combined.submitted && submittable,
+                })
                 res.status(204)
                 break
             }

@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, FormEvent, ReactNode, useCallback, useState } from "react"
-import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
 import useContributorMutator from "~/profile/useContributorMutator"
 import useContributorSWR from "~/profile/useContributorSWR"
+import Dialogue from "~/ui/Dialogue"
 import SiteTitle from "~/ui/SiteTitle"
 import ErrorState from "../ErrorState"
 import LoadingState from "../LoadingState"
@@ -43,15 +43,15 @@ const AccountDetails: FC<Props> = ({ children, submitLabel }) => {
         return (
             <ErrorState>
                 <p>I'm having some trouble loading your profile. Does this mean anything to you?</p>
-                <p>“{String(error)}”</p>
+                <p>&ldquo;{String(error)}&rdquo;</p>
             </ErrorState>
         )
     }
     if (!contributor) {
-        return <LoadingState>Checking account…</LoadingState>
+        return <LoadingState>Checking account&hellip;</LoadingState>
     }
     return (
-        <DialogueScreen>
+        <Dialogue>
             {children}
             <form className={styles.main} onSubmit={handleFormSubmit}>
                 <input
@@ -80,7 +80,7 @@ const AccountDetails: FC<Props> = ({ children, submitLabel }) => {
                 </div>
                 <input type="submit" value={submitLabel} />
             </form>
-        </DialogueScreen>
+        </Dialogue>
     )
 }
 export default AccountDetails

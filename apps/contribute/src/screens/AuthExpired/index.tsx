@@ -1,12 +1,15 @@
-import { ContributorContainer } from "@phylopic/ui"
+import { Loader } from "@phylopic/ui"
 import { EmailAddress } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
 import useContributor from "~/profile/useContributor"
-import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import useContributorUUID from "~/profile/useContributorUUID"
+import Dialogue from "~/ui/Dialogue"
+import Speech from "~/ui/Speech"
 import TTLSelector from "~/ui/TTLSelector"
 import { TTL } from "~/ui/TTLSelector/TTL"
+import UserButton from "~/ui/UserButton"
+import UserOptions from "~/ui/UserOptions"
 import styles from "./index.module.scss"
-import useContributorUUID from "~/profile/useContributorUUID"
 export interface Props {
     onSubmit?: (email: EmailAddress | null, ttl?: number) => void
 }
@@ -24,7 +27,6 @@ const TTL_VALUES = {
 }
 const AuthExpired: FC<Props> = ({ onSubmit }) => {
     const [ttl, setTTL] = useState<TTL>("DAY")
-    const uuid = useContributorUUID()
     const contributor = useContributor()
     const handleClearClick = useCallback(() => {
         onSubmit?.(null)
@@ -35,43 +37,43 @@ const AuthExpired: FC<Props> = ({ onSubmit }) => {
         }
     }, [contributor?.emailAddress, onSubmit, ttl])
     return (
-        <DialogueScreen>
-            {uuid && (
-                <ContributorContainer uuid={uuid}>
-                    {contributor => <p>Welcome back{contributor?.name && `, ${contributor.name}`}!</p>}
-                </ContributorContainer>
-            )}
-            {!uuid && <p>Welcome back!</p>}
-            <p>
-                Your authorization has expired.{" "}
-                {contributor?.emailAddress ? (
-                    <>
-                        Please click below to send another authorization email to <em>{contributor.emailAddress}</em>.
-                    </>
-                ) : (
-                    "Loading email address…"
-                )}
-            </p>
+        <Dialogue>
+            <Speech mode="system">
+                <p>Welcome back{contributor?.name && `, ${contributor.name}`}!</p>
+            </Speech>
+            <Speech mode="system">
+                <p>
+                    Your authorization has expired.{" "}
+                    {contributor?.emailAddress ? (
+                        <>
+                            Please click below to send another authorization email to{" "}
+                            <em>{contributor.emailAddress}</em>.
+                        </>
+                    ) : (
+                        <>Loading email address&hellip;</>
+                    )}
+                </p>
+                {!contributor?.emailAddress && <Loader />}
+            </Speech>
             {contributor?.emailAddress && (
                 <>
-                    <div className={styles.field}>
-                        <label>
-                            Authorize this device for <TTLSelector onChange={setTTL} value={ttl} />.
-                        </label>
-                        <br />
+                    <Speech mode="user">
+                        <div className={styles.field}>
+                            <label>
+                                Authorize this device for <TTLSelector onChange={setTTL} value={ttl} />.
+                            </label>
+                        </div>
+                    </Speech>
+                    <Speech mode="system">
                         <small>(You may log out at any time.)</small>
-                    </div>
-                    <button className="cta" onClick={handleReauthorizeClick}>
-                        Send authorization.
-                    </button>
-                    <p>
-                        <a className="text" onClick={handleClearClick}>
-                            Wait, that isn't my email address!
-                        </a>
-                    </p>
+                    </Speech>
+                    <UserOptions>
+                        <UserButton onClick={handleReauthorizeClick}>Send authorization.</UserButton>
+                        <UserButton onClick={handleClearClick}>Wait, that isn't my email address!</UserButton>
+                    </UserOptions>
                 </>
             )}
-        </DialogueScreen>
+        </Dialogue>
     )
 }
 export default AuthExpired

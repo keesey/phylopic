@@ -1,5 +1,5 @@
 @use "@phylopic/styles/colors.scss";
-@use "@phylopic/styles/mixins/buttons.scss";
+@use "../../../styles/buttons.scss";
 
 .selectFile {
     align-items: flex-start;
@@ -7,11 +7,13 @@
     border-radius: 32px;
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 256px);
     margin: 2rem;
-    max-height: calc(100vh - 192px);
+    max-width: 11in;
     padding: 2rem;
     justify-content: center;
     transition: all 0.3s;
+    width: calc(100% - 4rem);
 
     input[type="file"] {
         display: none;
@@ -23,26 +25,9 @@
 }
 
 .uploadLabel {
-    position: relative;
-    background-color: colors.$dandelion;
-    border-radius: 1em;
-    border: none;
-    color: colors.$black;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 1em 2em;
-    text-align: center;
-    text-transform: uppercase;
-    transition: background-color 0.3s;
-
-    &:hover {
-        background-color: colors.$sunshine;
-    }
+    @include buttons.user;
 }
 
 .form {
     display: inline-block;
-    margin: 1em 0;
-    text-align: right;
-    width: 100%;
 }

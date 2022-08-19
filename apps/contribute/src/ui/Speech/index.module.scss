@@ -30,18 +30,13 @@
     }
 
     a {
-        color: colors.$aquatic;
         transition: color 0.3s;
-
-        &:active,
-        &:hover {
-            color: colors.$ink;
-        }
     }
 
     &.system {
         background-color: colors.$foam;
         color: colors.$cerulean;
+        margin-right: 1rem;
 
         &::after {
             border-bottom: 0;
@@ -51,11 +46,21 @@
             margin-left: -1em;
             top: 20%;
         }
+
+        a {
+            color: colors.$aquatic;
+
+            &:active,
+            &:hover {
+                color: colors.$ink;
+            }
+        }
     }
 
     &.user {
         background-color: colors.$sunshine;
         color: colors.$black;
+        margin-left: 1rem;
 
         &::after {
             border-left-color: colors.$sunshine;

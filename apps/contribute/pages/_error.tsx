@@ -1,15 +1,19 @@
-import { AnchorLink } from "@phylopic/ui"
 import type { NextPage } from "next"
 import PageLayout from "~/pages/PageLayout"
-import DialogueScreen from "~/pages/screenTypes/DialogueScreen"
+import Dialogue from "~/ui/Dialogue"
+import Speech from "~/ui/Speech"
+import UserLinkButton from "~/ui/UserLinkButton"
+import UserOptions from "~/ui/UserOptions"
 const Page: NextPage = () => (
     <PageLayout head={{ title: "PhyloPic: Error" }}>
-        <DialogueScreen>
-            <p>Something weird happened.</p>
-            <AnchorLink href="/" className="cta">
-                Start over.
-            </AnchorLink>
-        </DialogueScreen>
+        <Dialogue>
+            <Speech mode="system">
+                <p>Something weird happened.</p>
+            </Speech>
+            <UserOptions>
+                <UserLinkButton href="/">Start over.</UserLinkButton>
+            </UserOptions>
+        </Dialogue>
     </PageLayout>
 )
 export default Page

@@ -2,10 +2,10 @@ import { Nomen, UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
 import { SearchEntry } from "~/search/SearchEntry"
 import Speech from "~/ui/Speech"
-import ParentSelector from "../ParentSelector"
+import ParentSelector from "./ParentSelector"
 import SearchOptions from "../SearchOptions"
-import SearchSelector from "../SearchSelector"
-import Verification from "../Verification"
+import SearchSelector from "./SearchSelector"
+import UserVerification from "../../../../ui/UserVerification"
 export type Props = {
     entries: readonly SearchEntry[]
     name: Nomen
@@ -26,7 +26,7 @@ const Entries: FC<Props> = ({ entries, name, onCancel, onComplete }) => {
                     <Speech mode="system">
                         <p>But you spelled it right?</p>
                     </Speech>
-                    <Verification
+                    <UserVerification
                         affirmation="Yes, I did."
                         denial={<>Uh, maybe not.</>}
                         onAffirm={() => setParentRequested(true)}

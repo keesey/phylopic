@@ -1,33 +1,10 @@
-@use "@phylopic/styles/colors.scss";
+@use "../../styles/buttons.scss";
 
 .main {
-    position: relative;
-    background-color: colors.$dandelion;
-    border-radius: 1em;
-    border: none;
-    color: colors.$black;
-    cursor: pointer;
-    font-size: inherit;
-    font-weight: bold;
-    padding: 1em 2em;
-    text-align: center;
-    text-transform: uppercase;
-    transition: background-color 0.3s;
-
-    &:hover {
-        background-color: colors.$sunshine;
-    }
+    @include buttons.user;
 
     &.danger {
-        background-color: colors.$black;
-        border: 2px solid colors.$dandelion;
-        color: colors.$dandelion;
-        transition: border-color 0.3s;
-
-        &:hover {
-            border-color: colors.$sunshine;
-            color: colors.$sunshine;
-        }
+        @include buttons.user-danger;
     }
 }
 

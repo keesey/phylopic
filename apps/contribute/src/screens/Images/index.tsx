@@ -1,7 +1,6 @@
 import { AnchorLink } from "@phylopic/ui"
 import { FC, ReactNode } from "react"
 import useImageCount from "~/editing/hooks/useImageCount"
-import FullScreen from "~/pages/screenTypes/FullScreen"
 import { ImageFilter } from "~/pagination/ImageFilter"
 import ImagePaginator from "~/pagination/ImagePaginator"
 import ImageGrid from "~/ui/ImageGrid"
@@ -13,7 +12,7 @@ export type Props = {
 const Images: FC<Props> = ({ children, filter }) => {
     const total = useImageCount(filter)
     return (
-        <FullScreen>
+        <>
             {children(total)}
             <ImagePaginator key="images" filter={filter}>
                 {images => (
@@ -33,7 +32,7 @@ const Images: FC<Props> = ({ children, filter }) => {
                     </>
                 )}
             </ImagePaginator>
-        </FullScreen>
+        </>
     )
 }
 export default Images

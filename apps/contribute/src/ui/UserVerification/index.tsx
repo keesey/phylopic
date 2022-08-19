@@ -8,7 +8,7 @@ export type Props = {
     onAffirm: () => void
     onDeny: () => void
 }
-const Verification: FC<Props> = ({ affirmation, denial, onAffirm, onDeny }) => {
+const UserVerification: FC<Props> = ({ affirmation, denial, onAffirm, onDeny }) => {
     const [result, setResult] = useState<boolean | null>(null)
     const respond = useCallback(
         (value: boolean) => {
@@ -33,4 +33,4 @@ const Verification: FC<Props> = ({ affirmation, denial, onAffirm, onDeny }) => {
         </Speech>
     )
 }
-export default Verification
+export default UserVerification
