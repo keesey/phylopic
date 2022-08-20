@@ -20,6 +20,7 @@ import useImageSize from "../hooks/useImageSize"
 import useImageSource from "../hooks/useImageSource"
 import useImageTooSmall from "../hooks/useImageTooSmall"
 import useWindowDragHighlight from "../hooks/useWindowDragHighlight"
+import useWindowDrop from "../hooks/useWindowDrop"
 import MEBIBYTE from "../MEBIBYTE"
 import Pending from "../Pending"
 import { FileResult } from "./FileResult"
@@ -39,7 +40,8 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
     const hasExisting = useImageHasSourceFile(uuid)
     const deletor = useImageDeletor(uuid)
     const [file, setFile] = useFileState()
-    const highlightDrag = useWindowDragHighlight(file === undefined)
+    const highlightDrag = useWindowDragHighlight(true)
+    useWindowDrop(setFile)
     const handleFileInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             setFile(Array.from(event.target.files ?? [])[0] ?? undefined)
