@@ -3,7 +3,7 @@ import { UUID } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import { ChangeEvent, FC, FormEvent, useCallback, useEffect, useMemo } from "react"
-import useFileSourceComplete from "~/editing/hooks/steps/useFileSourceComplete"
+import useImageHasSourceFile from "~/editing/hooks/useImageHasSourceFile"
 import useImageDeletor from "~/editing/hooks/useImageDeletor"
 import LoadingState from "~/screens/LoadingState"
 import Dialogue from "~/ui/Dialogue"
@@ -36,7 +36,7 @@ export interface Props {
     uuid: UUID
 }
 const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
-    const hasExisting = useFileSourceComplete(uuid)
+    const hasExisting = useImageHasSourceFile(uuid)
     const deletor = useImageDeletor(uuid)
     const [file, setFile] = useFileState()
     const highlightDrag = useWindowDragHighlight(file === undefined)

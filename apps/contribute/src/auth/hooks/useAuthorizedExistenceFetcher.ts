@@ -2,20 +2,20 @@ import axios, { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
 import isNotFoundError from "~/http/isNotFoundError"
 import useAuthToken from "./useAuthToken"
-export type AuthorizedJSONFetcherConfig = Omit<AxiosRequestConfig<void>, "method" | "url"> & {
+export type AuthorizedExistenceKey = Omit<AxiosRequestConfig<void>, "method"> & {
     headers?: Omit<AxiosRequestConfig["headers"], "authorization">
+    method: "HEAD"
 }
-const useAuthorizedExistenceFetcher = (config?: AuthorizedJSONFetcherConfig) => {
+const useAuthorizedExistenceFetcher = () => {
     const token = useAuthToken()
     return useCallback(
-        async (key: { url: string; method: "HEAD" }) => {
+        async (key: AuthorizedExistenceKey) => {
             if (!token) {
                 throw new Error("Unauthorized.")
             }
             try {
                 const response = await axios({
-                    ...config,
-                    headers: { ...config?.headers, authorization: `Bearer ${token}` },
+                    headers: { ...key.headers, authorization: `Bearer ${token}` },
                     method: "HEAD",
                     url: key.url,
                 })
@@ -27,7 +27,7 @@ const useAuthorizedExistenceFetcher = (config?: AuthorizedJSONFetcherConfig) => 
                 throw e
             }
         },
-        [config, token],
+        [token],
     )
 }
 export default useAuthorizedExistenceFetcher

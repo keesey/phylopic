@@ -2,7 +2,7 @@ import { UUID } from "@phylopic/utils"
 import { useAPIFetcher } from "@phylopic/utils-api"
 import { useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
-import is4xxError from "~/http/isNotFoundError"
+import isNotFoundError from "~/http/isNotFoundError"
 import isServerError from "~/http/isServerError"
 const useLiveImageExists = (uuid?: UUID) => {
     const apiFetcher = useAPIFetcher()
@@ -13,7 +13,7 @@ const useLiveImageExists = (uuid?: UUID) => {
     const { data, error } = useSWRImmutable(imageKey, apiFetcher, {
         shouldRetryOnError: isServerError,
     })
-    const notFound = useMemo(() => is4xxError(error), [error])
+    const notFound = useMemo(() => isNotFoundError(error), [error])
     if (Boolean(data)) {
         return true
     }
