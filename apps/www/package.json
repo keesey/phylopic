@@ -19,7 +19,6 @@
         "parse-nomen": "^2.1.2",
         "react": "^18.1.0",
         "react-dom": "^18.1.0",
-        "react-spinners": "^0.11.0",
         "slugify": "^1.6.5"
     },
     "description": "Primary public web application for *PhyloPic*.",

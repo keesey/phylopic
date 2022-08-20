@@ -1,7 +1,5 @@
 import React from "react"
-import dynamic from "next/dynamic"
 import { Loader } from "../../core/Loader"
-const PropagateLoader = dynamic(() => import("react-spinners/PropagateLoader"), { ssr: false })
 export interface InfiniteScrollProps {
     hideLoader?: boolean
     onInViewport?: () => void

@@ -1,11 +1,10 @@
 import { Contributor, ImageListParameters, ImageWithEmbedded, List, PageWithEmbedded } from "@phylopic/api-models"
-import { ContributorContainer } from "@phylopic/ui"
+import { ContributorContainer, Loader } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
-import { addBuildToURL, BuildContainer, fetchData, fetchResult } from "@phylopic/utils-api"
+import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
 import { FC, useMemo } from "react"
-import { SWRConfig, unstable_serialize } from "swr"
-import { PublicConfiguration } from "swr/dist/types"
+import { unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
@@ -14,19 +13,13 @@ import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PageHead from "~/metadata/PageHead"
 import PersonSchemaScript from "~/metadata/SchemaScript/PersonSchemaScript"
 import getContributorName from "~/models/getContributorName"
-import SearchContainer from "~/search/SearchContainer"
+import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import Breadcrumbs from "~/ui/Breadcrumbs"
-import Loader from "~/ui/Loader"
-import PageLoader from "~/ui/PageLoader"
-import SearchOverlay from "~/ui/SearchOverlay"
-import SiteFooter from "~/ui/SiteFooter"
-import SiteNav from "~/ui/SiteNav"
 import ContributorDetailsView from "~/views/ContributorDetailsView"
 import ContributorNameView from "~/views/ContributorNameView"
 import ImageListView from "~/views/ImageListView"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 type Props = Omit<PageLayoutProps, "children"> & { uuid: UUID }
 const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
     return (
@@ -80,8 +73,8 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
                 {(images, totalImages) => (
                     <>
                         <ImageLicenseControls total={totalImages} />
-                        <br />
                         {isNaN(totalImages) && <Loader key="loader" />}
+                        <br />
                         <ImageListView key="images" value={images} />
                     </>
                 )}

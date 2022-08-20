@@ -1,8 +1,7 @@
-import dynamic from "next/dynamic"
+import { Loader } from "@phylopic/ui"
 import { useRouter } from "next/router"
 import { FC, useEffect, useState } from "react"
 import styles from "./index.module.scss"
-const PropagateLoader = dynamic(() => import("react-spinners/PropagateLoader"), { ssr: false })
 const PageLoader: FC = () => {
     const [active, setActive] = useState(false)
     const { events } = useRouter()
@@ -23,7 +22,7 @@ const PageLoader: FC = () => {
     }
     return (
         <div className={styles.main}>
-            <PropagateLoader color="#00809f" css="" loading size={15} speedMultiplier={1} />
+            <Loader />
         </div>
     )
 }

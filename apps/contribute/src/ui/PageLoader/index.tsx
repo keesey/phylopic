@@ -1,6 +1,6 @@
+import { Loader, LoaderContext } from "@phylopic/ui"
 import { useRouter } from "next/router"
 import { FC, useEffect, useState } from "react"
-import PropagateLoader from "react-spinners/PropagateLoader"
 import styles from "./index.module.scss"
 const PageLoader: FC = () => {
     const [active, setActive] = useState(false)
@@ -22,7 +22,9 @@ const PageLoader: FC = () => {
     }
     return (
         <div className={styles.main}>
-            <PropagateLoader color="#fade85" />
+            <LoaderContext.Provider value={{ color: "#fade85" }}>
+                <Loader />
+            </LoaderContext.Provider>
         </div>
     )
 }

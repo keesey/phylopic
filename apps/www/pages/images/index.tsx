@@ -1,4 +1,5 @@
 import { ImageListParameters, ImageWithEmbedded } from "@phylopic/api-models"
+import { Loader } from "@phylopic/ui"
 import type { NextPage } from "next"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
@@ -7,7 +8,6 @@ import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import Breadcrumbs from "~/ui/Breadcrumbs"
-import Loader from "~/ui/Loader"
 import ImageListView from "~/views/ImageListView"
 export type ImageFilter = Pick<ImageListParameters, "filter_license_by" | "filter_license_nc" | "filter_license_sa">
 type Props = Omit<PageLayoutProps, "children">
@@ -30,8 +30,8 @@ const PageComponent: NextPage<Props> = props => {
                     {(items, total) => (
                         <>
                             <ImageLicenseControls total={total} />
-                            <br />
                             {isNaN(total) && <Loader key="loader" />}
+                            <br />
                             <ImageListView value={items} />
                         </>
                     )}
