@@ -26,7 +26,7 @@ const Editor: FC<Props> = ({ uuid }) => {
     const src = useImageSrc(uuid)
     const general = useImageNode(uuid, "general")
     const specific = useImageNode(uuid, "specific")
-    const [unready, setUnready] = useState(false)
+    const [unready, setUnready] = useState<boolean | null>(null)
     const deletor = useImageDeletor(uuid)
     const mutate = useImageMutator(uuid)
     const submit = useCallback(() => mutate({ submitted: true }), [mutate])
@@ -96,6 +96,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                         </p>
                     </Speech>
                     <UserVerification
+                        affirmed={unready === null ? null : !unready}
                         affirmation={<>Let&rsquo;s do it.</>}
                         denial={<>Not quite.</>}
                         onAffirm={submit}

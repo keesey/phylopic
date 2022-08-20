@@ -4,7 +4,6 @@ import getIdentifier from "./getIdentifier"
 import { SearchEntry } from "./SearchEntry"
 import useExternalResults from "./useExternalResults"
 import usePhyloPicResults from "./usePhyloPicResults"
-const EMPTY: readonly never[] = []
 const compareEntries = (a: SearchEntry, b: SearchEntry) => {
     const aIsPhyloPic = a.authority === "phylopic.org" ? 0 : 1
     const bIsPhyloPic = b.authority === "phylopic.org" ? 0 : 1

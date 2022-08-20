@@ -16,7 +16,11 @@ const SpawnButton: FC<Props> = ({ children }) => {
     return (
         <UserButton icon={ICON_PLUS} onClick={pending ? undefined : spawn}>
             {children}
-            {pending && <Loader />}
+            {pending && (
+                <p>
+                    <Loader />
+                </p>
+            )}
         </UserButton>
     )
 }

@@ -1,16 +1,17 @@
 import { Nomen, UUID } from "@phylopic/utils"
-import { FC, useState } from "react"
+import { FC } from "react"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
-import ParentSelector from "./ParentSelector"
 import UserVerification from "../../../../ui/UserVerification"
+import ParentSelector from "./ParentSelector"
 export type Props = {
     name: Nomen
     onCancel: () => void
     onComplete: (uuid: UUID) => void
+    onParentRequest: () => void
+    parentRequested: boolean | null
 }
-const NoEntries: FC<Props> = ({ name, onCancel, onComplete }) => {
-    const [parentRequested, setParentRequested] = useState(false)
+const NoEntries: FC<Props> = ({ name, onCancel, onComplete, onParentRequest, parentRequested }) => {
     return (
         <>
             <Speech mode="system">
@@ -21,9 +22,10 @@ const NoEntries: FC<Props> = ({ name, onCancel, onComplete }) => {
                 </p>
             </Speech>
             <UserVerification
-                affirmation={<>Oh, I&rsquo;m sure.</>}
+                        affirmed={parentRequested}
+                        affirmation={<>Oh, I&rsquo;m sure.</>}
                 denial={<>Actually &hellip; maybe not?</>}
-                onAffirm={() => setParentRequested(true)}
+                onAffirm={onParentRequest}
                 onDeny={onCancel}
             />
             {parentRequested && <ParentSelector childName={name} onComplete={onComplete} />}

@@ -5,14 +5,15 @@ import { SearchEntry } from "~/search/SearchEntry"
 import usePhyloPicSearch from "~/search/usePhyloPicSearch"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
+import SearchOptions from "../../../SearchOptions"
 import BroaderParentPrompt from "./BroaderParentPrompt"
 import NewNodeCreator from "./NewNodeCreator"
-import SearchOptions from "../../../SearchOptions"
 export type Props = {
+    childName: Nomen
     name: Nomen
     onComplete: (uuid: UUID) => void
 }
-export const ParentSearch: FC<Props> = ({ name, onComplete }) => {
+    export const ParentSearch: FC<Props> = ({ childName, name, onComplete }) => {
     const searchText = useMemo(() => stringifyNomen(name), [name])
     const { data: entries, error, pending } = usePhyloPicSearch(searchText)
     const [selected, setSelected] = useState<SearchEntry | null>(null)
@@ -40,7 +41,7 @@ export const ParentSearch: FC<Props> = ({ name, onComplete }) => {
                         <NameView value={selected.name} />.
                     </p>
                 </Speech>
-                <NewNodeCreator name={name} onComplete={onComplete} parentUUID={selected.objectID} />
+                <NewNodeCreator name={childName} onComplete={onComplete} parentUUID={selected.objectID} />
             </>
         )
     }

@@ -3,7 +3,7 @@ const UserScrollTo: FC = () => {
     const [element, setElement] = useState<HTMLElement | null>(null)
     useEffect(() => {
         if (element && typeof window !== "undefined") {
-            element.scrollIntoView({ behavior: "smooth" })
+            element.scrollIntoView({ behavior: "smooth", block: "nearest" })
         }
     }, [element])
     return <div ref={setElement} aria-hidden />

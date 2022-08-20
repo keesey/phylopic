@@ -3,11 +3,11 @@ import { UUID } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import { ChangeEvent, FC, FormEvent, useCallback, useEffect, useMemo } from "react"
-import useImageHasSourceFile from "~/editing/hooks/useImageHasSourceFile"
 import useImageDeletor from "~/editing/hooks/useImageDeletor"
+import useImageHasSourceFile from "~/editing/hooks/useImageHasSourceFile"
 import LoadingState from "~/screens/LoadingState"
 import Dialogue from "~/ui/Dialogue"
-import { ICON_ARROW_UP, ICON_X } from "~/ui/ICON_SYMBOLS"
+import { ICON_ARROW_CIRCLE, ICON_ARROW_UP, ICON_X } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
 import UserButton from "~/ui/UserButton"
@@ -198,7 +198,7 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
                             )}{" "}
                         </Speech>
                         <UserOptions>
-                            <UserButton danger onClick={handleResetClick}>
+                            <UserButton danger icon={ICON_ARROW_CIRCLE} onClick={handleResetClick}>
                                 Reset.
                             </UserButton>
                         </UserOptions>

@@ -1,29 +1,24 @@
-import axios from "axios"
 import { useMemo } from "react"
-import useSWR, { Fetcher } from "swr"
+import useSWRImmutable from "swr/immutable"
+import fetchJSON from "~/swr/fetchJSON"
 export interface OTOLAutocompleteName {
     readonly is_higher: boolean
     readonly is_suppressed: boolean
     readonly ott_id: number
     readonly unique_name: string
 }
-const fetcher: Fetcher<readonly OTOLAutocompleteName[], [string, string]> = async (url, name) => {
-    const response = await axios.post<readonly OTOLAutocompleteName[]>(
-        url,
-        { name },
-        {
-            headers: {
-                "content-type": "application/json",
-            },
-        },
-    )
-    return response.data
-}
-const useOTOLResults = (text: string) => {
+const useOTOLResults = (name: string) => {
     const key = useMemo(
-        () => (text ? (["https://api.opentreeoflife.org/v3/tnrs/autocomplete_name", text] as [string, string]) : null),
-        [text],
+        () =>
+            name.length >= 2
+                ? {
+                      data: { name },
+                      method: "POST",
+                      url: "https://api.opentreeoflife.org/v3/tnrs/autocomplete_name",
+                  }
+                : null,
+        [name],
     )
-    return useSWR(key, fetcher)
+    return useSWRImmutable<readonly OTOLAutocompleteName[]>(key, fetchJSON)
 }
 export default useOTOLResults

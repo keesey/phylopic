@@ -5,6 +5,7 @@ import { normalizeText, UUID } from "@phylopic/utils"
 import { APISWRError, BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { useContext, useMemo } from "react"
 import useSWR from "swr"
+import useSWRImmutable from "swr/immutable"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import { SearchEntry } from "./SearchEntry"
 const usePhyloPicResults = (text: string) => {
@@ -21,13 +22,13 @@ const usePhyloPicResults = (text: string) => {
                 : null,
         [build, normalized],
     )
-    const live = useSWR(liveKey, apiFetcher)
+    const live = useSWRImmutable(liveKey, apiFetcher)
     const sourceKey = useMemo(
         () => (normalized ? `/api/nodes?filter=${encodeURIComponent(normalized.toLowerCase())}` : null),
         [normalized],
     )
     const authorizedFetcher = useAuthorizedJSONFetcher<Page<SourceNode & { uuid: UUID }, number>>()
-    const source = useSWR(sourceKey, authorizedFetcher)
+    const source = useSWRImmutable(sourceKey, authorizedFetcher)
     const liveIsEmpty = useMemo(() => live.error instanceof APISWRError && live.error.statusCode === 404, [live.error])
     const liveEntries = useMemo(
         () =>

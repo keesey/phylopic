@@ -1,14 +1,14 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
+import { Image, ImageWithEmbedded } from "@phylopic/api-models"
 import { useMemo } from "react"
 import useLicenseText from "./useLicenseText"
 import useNomenText from "./useNomenText"
-export const useImageAlt = (image: ImageWithEmbedded) => {
-    const specificName = useNomenText(image._embedded?.specificNode?.names[0], true)
+export const useImageAlt = (image: Image | ImageWithEmbedded) => {
+    const specificName = useNomenText((image as ImageWithEmbedded)._embedded?.specificNode?.names[0], true)
     const license = useLicenseText(image._links.license.href, true)
     return useMemo(
         () =>
             [
-                specificName ?? "Untitled",
+                specificName ?? "Image",
                 "by",
                 image.attribution ?? "Anonymous",
                 image.sponsor ? `, sponsored by ${image.sponsor}` : null,

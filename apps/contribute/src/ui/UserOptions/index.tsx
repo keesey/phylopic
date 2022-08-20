@@ -7,8 +7,8 @@ export type Props = {
 const UserOptions: FC<Props> = ({ children }) => {
     return (
         <nav className={styles.main}>
-            {children}
             <UserScrollTo />
+            {children}
         </nav>
     )
 }

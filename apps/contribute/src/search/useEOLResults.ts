@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import useSWR from "swr"
+import useSWRImmutable from "swr/immutable"
 import fetchJSON from "~/swr/fetchJSON"
 export interface EOLSearch {
     readonly itemsPerPage: number
@@ -18,6 +18,6 @@ const useEOLResults = (text: string) => {
         () => (text ? `https://eol.org/api/search/1.0.json?q=${encodeURIComponent(text)}` : null),
         [text],
     )
-    return useSWR<EOLSearch>(key, fetchJSON)
+    return useSWRImmutable<EOLSearch>(key, fetchJSON)
 }
 export default useEOLResults

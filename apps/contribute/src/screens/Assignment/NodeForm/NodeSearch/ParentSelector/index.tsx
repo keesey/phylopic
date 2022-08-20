@@ -19,7 +19,7 @@ export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
                 </p>
             </Speech>
             <NameForm onSubmit={setName} placeholder="More general group" />
-            {name && <ParentSearch name={name} onComplete={onComplete} />}
+            {name && <ParentSearch childName={childName} name={name} onComplete={onComplete} />}
         </>
     )
 }

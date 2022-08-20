@@ -4,21 +4,20 @@ import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 import { ICON_CHECK, ICON_X } from "../ICON_SYMBOLS"
 export type Props = {
+    affirmed: boolean | null
     affirmation: ReactNode
     denial: ReactNode
     onAffirm: () => void
     onDeny: () => void
 }
-const UserVerification: FC<Props> = ({ affirmation, denial, onAffirm, onDeny }) => {
-    const [result, setResult] = useState<boolean | null>(null)
+const UserVerification: FC<Props> = ({ affirmed, affirmation, denial, onAffirm, onDeny }) => {
     const respond = useCallback(
         (value: boolean) => {
-            setResult(value)
             value ? onAffirm() : onDeny()
         },
         [onAffirm, onDeny],
     )
-    if (result === null) {
+    if (affirmed === null) {
         return (
             <UserOptions>
                 <UserButton icon={ICON_CHECK} onClick={() => respond(true)}>
@@ -32,7 +31,7 @@ const UserVerification: FC<Props> = ({ affirmation, denial, onAffirm, onDeny }) 
     }
     return (
         <Speech mode="user">
-            <p>{result ? affirmation : denial}</p>
+            <p>{affirmed ? affirmation : denial}</p>
         </Speech>
     )
 }
