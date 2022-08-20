@@ -38,13 +38,23 @@ const License: FC<Props> = ({ uuid }) => {
                 It&rsquo;s already in the public domain.
             </UserButton>
             <UserButton
-                icon={<span className={styles.iconContainer}><Icon alt="Creative Commons" src="/logos/cc.svg" /> <Icon alt="Public Domain Dedication" src="/logos/cc-zero.svg" /></span>}
+                icon={
+                    <span className={styles.iconContainer}>
+                        <Icon alt="Creative Commons" src="/logos/cc.svg" />{" "}
+                        <Icon alt="Public Domain Dedication" src="/logos/cc-zero.svg" />
+                    </span>
+                }
                 onClick={() => mutate({ license: "https://creativecommons.org/publicdomain/zero/1.0/" })}
             >
                 Release it into the public domain.
             </UserButton>
             <UserButton
-                icon={<span className={styles.iconContainer}><Icon alt="Creative Commons" src="/logos/cc.svg" /> <Icon alt="Attribution" src="/logos/cc-by.svg" /></span>}
+                icon={
+                    <span className={styles.iconContainer}>
+                        <Icon alt="Creative Commons" src="/logos/cc.svg" />{" "}
+                        <Icon alt="Attribution" src="/logos/cc-by.svg" />
+                    </span>
+                }
                 onClick={() => mutate({ license: "https://creativecommons.org/licenses/by/4.0/" })}
             >
                 Attribution should always be given.

@@ -5,6 +5,7 @@ import useImageMutator from "~/editing/hooks/useImageMutator"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
 import UserInput from "~/ui/UserInput"
+import UserOptions from "~/ui/UserOptions"
 export interface Props {
     uuid: UUID
 }

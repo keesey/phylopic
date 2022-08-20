@@ -1,4 +1,4 @@
-import { Loader, LoaderContext } from "@phylopic/ui"
+import { Loader } from "@phylopic/ui"
 import { FC, ReactNode, useEffect } from "react"
 import useImageSpawn from "~/editing/hooks/useImageSpawn"
 import { ICON_PLUS } from "../ICON_SYMBOLS"
@@ -15,7 +15,8 @@ const SpawnButton: FC<Props> = ({ children }) => {
     }, [error])
     return (
         <UserButton icon={ICON_PLUS} onClick={pending ? undefined : spawn}>
-            {pending ? <Loader /> : <>{children}</>}
+            {children}
+            {pending && <Loader />}
         </UserButton>
     )
 }

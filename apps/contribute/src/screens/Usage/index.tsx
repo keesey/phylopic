@@ -1,12 +1,13 @@
-import { isPublicDomainLicenseURL, isValidLicenseURL, UUID } from "@phylopic/utils"
+import { isLicenseURL, isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import useImage from "~/editing/hooks/useImage"
 import useImageMutator from "~/editing/hooks/useImageMutator"
 import useImageNode from "~/editing/hooks/useImageNode"
 import useImageSrc from "~/editing/hooks/useImageSrc"
+import useContributor from "~/profile/useContributor"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_CHECK, ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
+import { ICON_CHECK, ICON_HAND_POINT_RIGHT, ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
@@ -22,7 +23,9 @@ export type Props = {
 const Usage: FC<Props> = ({ uuid }) => {
     const image = useImage(uuid)
     const src = useImageSrc(uuid)
-    const hasLicense = useMemo(() => isValidLicenseURL(image?.license), [image?.license])
+    const contributor = useContributor()
+    const hasLicense = useMemo(() => isLicenseURL(image?.license), [image?.license])
+    // const hasValidLicense = useMemo(() => isValidLicenseURL(image?.license), [image?.license])
     const complete = useMemo(() => {
         return image?.license && (image.attribution || isPublicDomainLicenseURL(image.license))
     }, [image?.attribution, image?.license])
@@ -51,6 +54,11 @@ const Usage: FC<Props> = ({ uuid }) => {
             <License uuid={uuid} />
             {hasLicense && <Attribution key="attribution" uuid={uuid} />}
             <UserOptions>
+                {hasLicense && !image.attribution && contributor?.name && (
+                    <UserButton icon={ICON_HAND_POINT_RIGHT} onClick={() => mutate({ attribution: contributor.name })}>
+                        I get the credit.
+                    </UserButton>
+                )}
                 {hasLicense && (
                     <UserButton danger icon={ICON_PENCIL} onClick={() => mutate({ license: null })}>
                         Pick another license.

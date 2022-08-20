@@ -7,13 +7,13 @@
     display: flex;
     flex-wrap: wrap;
     font-weight: bold;
+    height: 75px;
+    max-height: 75px;
+    min-height: 75px;
+    overflow: hidden;
     gap: 1em;
     justify-content: space-between;
     padding: 1em;
-
-    @media (max-width: 222px) {
-        flex-direction: column;
-    }
 
     a {
         color: inherit;
@@ -27,6 +27,8 @@
 }
 
 .menuButton {
+    align-self: flex-start;
+    font-size: large;
     text-align: right;
 
     button {

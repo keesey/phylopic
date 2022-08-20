@@ -10,16 +10,10 @@ export type Props = {
     href: string
     icon?: string
 }
-const UserLinkButton: FC<Props> = ({ children, danger, download, href, icon }) => {
-    const [element, setElement] = useState<HTMLElement | null>(null)
-    useEffect(() => {
-        if (element && typeof window !== "undefined") {
-            element.scrollIntoView({ behavior: "smooth" })
-        }
-    }, [element])
+const UserLinkButton: FC<Props> = ({ children, danger, href, icon }) => {
     if (href.startsWith("https://") || href.startsWith("http://")) {
         return (
-            <a key="a" href={href} className={clsx(styles.main, danger && styles.danger)} ref={setElement}>
+            <a key="a" href={href} className={clsx(styles.main, danger && styles.danger)}>
                 <LoaderContext.Provider value={{ color: "#000" }}>
                     {" "}
                     {icon ? (
@@ -36,7 +30,7 @@ const UserLinkButton: FC<Props> = ({ children, danger, download, href, icon }) =
     }
     return (
         <Link href={href}>
-            <a key="a" className={clsx(styles.main, danger && styles.danger)} ref={setElement}>
+            <a key="a" className={clsx(styles.main, danger && styles.danger)}>
                 <LoaderContext.Provider value={{ color: "#000" }}>
                     {" "}
                     {icon ? (

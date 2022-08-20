@@ -10,18 +10,8 @@ export type Props = {
     onClick?: () => void
 }
 const UserButton: FC<Props> = ({ children, icon, danger, onClick }) => {
-    const [element, setElement] = useState<HTMLElement | null>(null)
-    useEffect(() => {
-        if (element && typeof window !== "undefined") {
-            element.scrollIntoView({ behavior: "smooth" })
-        }
-    }, [element])
     return (
-        <button
-            className={clsx(styles.main, danger && styles.danger, !onClick && styles.wait)}
-            onClick={onClick}
-            ref={setElement}
-        >
+        <button className={clsx(styles.main, danger && styles.danger, !onClick && styles.wait)} onClick={onClick}>
             <LoaderContext.Provider value={{ color: "#000" }}>
                 {icon ? (
                     <SpeechStack>

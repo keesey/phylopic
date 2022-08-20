@@ -150,7 +150,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                             </UserButton>
                         )}
                         {!image.submitted && (
-                            <UserButton danger onClick={deleteImage}>
+                            <UserButton icon={ICON_DANGER} danger onClick={deleteImage}>
                                 Delete this submission.
                             </UserButton>
                         )}
