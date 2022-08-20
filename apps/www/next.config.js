@@ -8,7 +8,6 @@ const pwa = process.env.NODE_ENV === "production" ? withPWA : x => x
 module.exports = withBundleAnalyzer(
     pwa({
         experimental: {
-            esmExternals: "loose",
             images: {
                 allowFutureImage: true,
             },
