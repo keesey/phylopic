@@ -3,12 +3,13 @@ import UserScrollTo from "../UserScrollTo"
 import styles from "./index.module.scss"
 export type Props = {
     children: ReactNode
+    noAutoScroll?: boolean
 }
-const UserOptions: FC<Props> = ({ children }) => {
+const UserOptions: FC<Props> = ({ children, noAutoScroll }) => {
     return (
         <nav className={styles.main}>
-            <UserScrollTo />
             {children}
+            {!noAutoScroll && <UserScrollTo />}
         </nav>
     )
 }

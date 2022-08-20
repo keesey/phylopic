@@ -15,7 +15,7 @@ const Incomplete: FC = () => {
                     {incomplete === 1 ? "the image" : "one of the images"} below to continue.
                 </p>
             </Speech>
-            <UserOptions>
+            <UserOptions noAutoScroll>
                 <ImagePaginator filter="incomplete">
                     {images => (
                         <>

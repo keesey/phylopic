@@ -22,8 +22,8 @@ const NoEntries: FC<Props> = ({ name, onCancel, onComplete, onParentRequest, par
                 </p>
             </Speech>
             <UserVerification
-                        affirmed={parentRequested}
-                        affirmation={<>Oh, I&rsquo;m sure.</>}
+                affirmed={parentRequested}
+                affirmation={<>Oh, I&rsquo;m sure.</>}
                 denial={<>Actually &hellip; maybe not?</>}
                 onAffirm={onParentRequest}
                 onDeny={onCancel}

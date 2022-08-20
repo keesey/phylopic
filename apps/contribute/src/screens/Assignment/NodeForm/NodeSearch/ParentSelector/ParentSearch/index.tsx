@@ -13,7 +13,7 @@ export type Props = {
     name: Nomen
     onComplete: (uuid: UUID) => void
 }
-    export const ParentSearch: FC<Props> = ({ childName, name, onComplete }) => {
+export const ParentSearch: FC<Props> = ({ childName, name, onComplete }) => {
     const searchText = useMemo(() => stringifyNomen(name), [name])
     const { data: entries, error, pending } = usePhyloPicSearch(searchText)
     const [selected, setSelected] = useState<SearchEntry | null>(null)

@@ -77,7 +77,7 @@ const Complete: FC = () => {
                     </p>
                 </Speech>
             )}
-            <UserOptions>
+            <UserOptions noAutoScroll>
                 <SpawnButton>Upload a new silhouette.</SpawnButton>
                 <ImagePaginator filter={filter}>
                     {images => (
