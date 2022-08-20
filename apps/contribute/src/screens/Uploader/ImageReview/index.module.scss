@@ -29,7 +29,7 @@
 
 .imageContainer {
     background-color: colors.$wash;
-    justify-content: space-between;
+    justify-content: space-around;
     max-height: calc(100vh - 150px);
 
     &.landscape {
