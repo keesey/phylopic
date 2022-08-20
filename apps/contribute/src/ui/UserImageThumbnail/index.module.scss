@@ -10,5 +10,12 @@
 }
 
 .caption {
+    display: block;
     font-size: 75%;
+    max-width: 128px;
+    min-width: 64px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    width: calc((100vw - 768px) * (64 / (1056 - 768)) + 64px);
 }
