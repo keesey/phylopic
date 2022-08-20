@@ -2,11 +2,12 @@ import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
 import useImageCount from "~/editing/hooks/useImageCount"
 import ImagePaginator from "~/pagination/ImagePaginator"
-import ImageGrid from "~/ui/ImageGrid"
-import ImageThumbnailView from "~/ui/ImageThumbnailView"
 import NumberAsWords from "~/ui/NumberAsWords"
-import SpawnLink from "~/ui/SpawnLink"
+import SpawnButton from "~/ui/SpawnButton"
 import Speech from "~/ui/Speech"
+import UserImageThumbnail from "~/ui/UserImageThumbnail"
+import UserLinkButton from "~/ui/UserLinkButton"
+import UserOptions from "~/ui/UserOptions"
 const Complete: FC = () => {
     const accepted = useImageCount("accepted")
     const submitted = useImageCount("submitted")
@@ -25,8 +26,7 @@ const Complete: FC = () => {
                             <NumberAsWords max={100} value={submitted} />
                         </strong>{" "}
                         submission{submitted === 1 ? "" : "s"} awaiting review. You may click on{" "}
-                        {submitted === 1 ? "it" : "any of them"} to make revisions first, if you want. Or,{" "}
-                        <SpawnLink>upload a new one!</SpawnLink>
+                        {submitted === 1 ? "it" : "any of them"} to make revisions first, if you want.
                     </p>
                     {(hasAccepted || hasWithdrawn) && (
                         <p>
@@ -54,7 +54,7 @@ const Complete: FC = () => {
                     <p>
                         You have <NumberAsWords max={100} value={accepted} /> accepted submission
                         {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to edit{" "}
-                        {accepted === 1 ? "it" : "them"}, if you want. Or, <SpawnLink>upload a new one!</SpawnLink>
+                        {accepted === 1 ? "it" : "them"}, if you want.
                     </p>
                     {hasWithdrawn && (
                         <p>
@@ -73,21 +73,24 @@ const Complete: FC = () => {
                     <p>
                         You have <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
                         {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to reconsider, if
-                        you like. Or, <SpawnLink>upload a new one!</SpawnLink>
+                        you like.
                     </p>
                 </Speech>
             )}
-            <ImagePaginator filter={filter}>
-                {images => (
-                    <ImageGrid>
-                        {images.map(image => (
-                            <AnchorLink key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                <ImageThumbnailView value={image} />
-                            </AnchorLink>
-                        ))}
-                    </ImageGrid>
-                )}
-            </ImagePaginator>
+            <UserOptions>
+                <SpawnButton>Upload a new silhouette.</SpawnButton>
+                <ImagePaginator filter={filter}>
+                    {images => (
+                        <>
+                            {images.map(image => (
+                                <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
+                                    <UserImageThumbnail uuid={image.uuid} />
+                                </UserLinkButton>
+                            ))}
+                        </>
+                    )}
+                </ImagePaginator>
+            </UserOptions>
         </>
     )
 }

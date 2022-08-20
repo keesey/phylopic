@@ -40,7 +40,7 @@
     &.system {
         background-color: colors.$foam;
         color: colors.$cerulean;
-        margin-right: 1rem;
+        margin-right: 1em;
 
         &::after {
             border-bottom: 0;
@@ -64,7 +64,7 @@
     &.user {
         background-color: colors.$sunshine;
         color: colors.$black;
-        margin-left: 1rem;
+        margin-left: 1em;
 
         &::after {
             border-left-color: colors.$sunshine;

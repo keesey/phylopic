@@ -1,23 +1,28 @@
 @use "@phylopic/styles/colors.scss";
+
 .main {
     background-color: colors.$dandelion;
     color: colors.$black;
     display: grid;
     font-size: smaller;
     grid-template-columns: auto min-content;
-    padding: 0.25rem;
+    padding: 0.25em;
+
     a {
         color: colors.$ink;
         cursor: pointer;
     }
 }
+
 .link {
     text-decoration: underline;
 }
+
 .close {
-    font-size: 1rem;
+    font-size: 1em;
     font-weight: bold;
 }
+
 .pending {
     cursor: progress;
     opacity: 0.5;

@@ -35,9 +35,11 @@ const Assignment: FC<Props> = ({ uuid }) => {
     }
     return (
         <Dialogue>
-            <Speech mode="user">
-                <FileView src={src} mode="light" />
-            </Speech>
+            {src && (
+                <Speech mode="user">
+                    <FileView src={src} mode="light" />
+                </Speech>
+            )}
             {(!src || (image.specific && !specific)) && (
                 <Speech mode="system">
                     <p>Loading&hellip;</p>

@@ -1,6 +1,7 @@
 import { useRouter } from "next/router"
 import { FC, ReactNode, useCallback } from "react"
 import Dialogue from "~/ui/Dialogue"
+import { ICON_ARROW_LEFT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
@@ -19,7 +20,9 @@ const ErrorState: FC<Props> = ({ children }) => {
                 {children}
             </Speech>
             <UserOptions>
-                <UserButton onClick={handleUserButtonClick}>Start over.</UserButton>
+                <UserButton icon={ICON_ARROW_LEFT} onClick={handleUserButtonClick}>
+                    Start over.
+                </UserButton>
             </UserOptions>
         </Dialogue>
     )

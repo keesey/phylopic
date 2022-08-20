@@ -38,15 +38,43 @@ main {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    font-size: x-large;
+    font-size: 16px;
     height: 100%;
     justify-content: center;
 
-    @media (max-width: 1200px) {
-        font-size: large;
+    @media (min-width: 768px) {
+        font-size: 17px;
     }
 
-    @media (max-width: 768px) {
-        font-size: medium;
+    @media (min-width: 804px) {
+        font-size: 18px;
+    }
+
+    @media (min-width: 840px) {
+        font-size: 19px;
+    }
+
+    @media (min-width: 876px) {
+        font-size: 20px;
+    }
+
+    @media (min-width: 912px) {
+        font-size: 21px;
+    }
+
+    @media (min-width: 948px) {
+        font-size: 22px;
+    }
+
+    @media (min-width: 984px) {
+        font-size: 23px;
+    }
+
+    @media (min-width: 1020px) {
+        font-size: 24px;
+    }
+
+    @media (min-width: 1056px) {
+        font-size: 25px;
     }
 }

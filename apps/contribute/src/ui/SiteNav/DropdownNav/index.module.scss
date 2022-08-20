@@ -5,7 +5,7 @@
     background-color: colors.$white;
     border-bottom: 1px solid colors.$cerulean;
     border-left: 1px solid colors.$cerulean;
-    border-bottom-left-radius: 1rem;
+    border-bottom-left-radius: 1em;
     color: colors.$ink;
     display: flex;
     filter: drop-shadow(-10px 10px 10px colors.$shadow);
@@ -13,9 +13,9 @@
     flex-direction: column;
     max-width: 100vw;
     max-height: 100vh;
-    min-width: 10rem;
+    min-width: 10em;
     overflow: scroll;
-    padding: 1rem;
+    padding: 1em;
     position: fixed;
     right: 0;
     top: 0;
@@ -39,14 +39,14 @@
     h2 {
         border-bottom: none;
         color: colors.$ink;
-        font-size: 1.1rem;
-        margin: 0 0 0.5rem;
+        font-size: 1.1em;
+        margin: 0 0 0.5em;
     }
 
     section {
         border-bottom: 0.5px solid colors.$inkFade;
-        margin: 0 0 1rem;
-        padding: 0 0 1rem;
+        margin: 0 0 1em;
+        padding: 0 0 1em;
 
         &:last-of-type {
             border-bottom: none;
@@ -85,10 +85,10 @@
 }
 
 .siteLink {
-    margin: 0 0 1.4rem;
+    margin: 0 0 1.4em;
 
     a {
-        font-size: 1.4rem;
+        font-size: 1.4em;
     }
 }
 

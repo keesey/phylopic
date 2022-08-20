@@ -11,6 +11,10 @@
     padding: 0.5em 1em;
     text-align: center;
     text-transform: none;
+
+    img {
+        transition: filter 0.3s;
+    }
 }
 
 @mixin user {
@@ -21,6 +25,10 @@
         background-color: colors.$sunshine;
         border-color: colors.$sunshine;
         color: colors.$ink;
+
+        img {
+            filter: invert(30%) sepia(48%) saturate(364%) hue-rotate(142deg) brightness(92%) contrast(94%);
+        }
     }
 }
 
@@ -28,9 +36,17 @@
     @include buttons.cta(colors.$dandelion, colors.$black);
     @include user-base;
 
+    img {
+        filter: invert(52%) sepia(97%) saturate(612%) hue-rotate(14deg) brightness(113%) contrast(103%);
+    }
+
     &:hover {
         background-color: #600000;
         border-color: colors.$sunshine;
         color: colors.$sunshine;
+
+        img {
+            filter: invert(84%) sepia(50%) saturate(355%) hue-rotate(349deg) brightness(97%) contrast(102%);
+        }
     }
 }

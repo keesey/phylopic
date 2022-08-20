@@ -68,11 +68,8 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
     }, [buffer.data, file, onComplete, size.data, source])
     const router = useRouter()
     const handleCancelButtonClick = useCallback(() => {
-        if (hasExisting) {
-            router.push(`/edit/${encodeURIComponent(uuid)}`)
-        } else {
-            deletor()
-        }
+        deletor()
+        router.push("/")
     }, [hasExisting, uuid])
     if (hasExisting === undefined) {
         return <LoadingState>One moment&hellip;</LoadingState>

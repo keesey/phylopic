@@ -8,12 +8,12 @@
     display: flex;
     flex-direction: column;
     height: calc(100vh - 256px);
-    margin: 2rem;
+    margin: 2em;
     max-width: 11in;
-    padding: 2rem;
+    padding: 2em;
     justify-content: center;
     transition: all 0.3s;
-    width: calc(100% - 4rem);
+    width: calc(100% - 4em);
 
     input[type="file"] {
         display: none;

@@ -1,42 +1,61 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/buttons.scss";
+
 .main {
     display: flex;
-    gap: 2rem;
+    flex-grow: 1;
+    gap: 2em;
+    width: 100vw;
 }
+
 .image {
-    background-color: colors.$vellum;
-    background-image: url(/assets/grid.png);
-    border: 1px solid colors.$dandelion;
     height: auto;
     object-fit: contain;
-    position: relative;
     width: auto;
 }
+
+.imageButton {
+    background-image: url(/assets/grid.png);
+    border: 4px solid colors.$dandelion;
+    cursor: pointer;
+    transition: border-color 0.3s;
+
+    &:hover,
+    &:active {
+        border-color: colors.$sunshine;
+    }
+}
+
 .imageContainer {
-    flex-grow: 1;
+    background-color: colors.$wash;
+    justify-content: space-between;
+
     &.landscape {
         .image {
-            max-height: none;
-            max-width: 75vw;
+            max-height: calc(50vh - 128px);
+            max-width: 70vw;
         }
     }
+
     &.portrait {
         .image {
-            max-height: calc(100vh - 182px);
-            max-width: none;
+            max-height: calc(100vh - 256px);
+            max-width: 100vw;
         }
     }
+
     &.compare {
         display: flex;
-        gap: 1rem;
+
         &.landscape {
             flex-direction: column;
+
             .image {
-                max-height: calc(50vh - 82px - 1rem);
-                max-width: none;
+                max-height: calc(50vh - 128px);
+                max-width: 50vw;
             }
         }
+
         &.portrait {
             flex-direction: row;
         }

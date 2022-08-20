@@ -13,7 +13,7 @@ const SpawnLink: FC<Props> = ({ children }) => {
         }
     }, [error])
     return (
-        <a className={clsx(pending && styles.pending)} onClick={spawn}>
+        <a className={clsx(styles.main, pending && styles.pending)} onClick={spawn}>
             {children}
         </a>
     )

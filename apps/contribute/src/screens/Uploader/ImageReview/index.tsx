@@ -8,6 +8,7 @@ import {
     ICON_ARROW_LEFT,
     ICON_ARROW_RIGHT,
     ICON_ARROW_UP,
+    ICON_CHECK,
     ICON_EQUALITY,
     ICON_PENCIL,
 } from "~/ui/ICON_SYMBOLS"
@@ -33,14 +34,14 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     const vectorized = useVectorization(buffer, !isVector)
     const vectorizedSource = useVectorizedImageSource(vectorized.data)
     const mode = useMemo(() => (size[0] >= size[1] ? "landscape" : "portrait"), [size])
-    const handleSelectButtonClick = useCallback(() => {
+    const selectOriginal = useCallback(() => {
         if (isImageMediaType(file.type)) {
             onComplete?.({ buffer, source, type: file.type })
         } else {
             alert("Invalid image type: " + file.type)
         }
     }, [buffer, file.type, onComplete, source])
-    const handleSelectVectorizedButtonClick = useCallback(() => {
+    const selectVectorized = useCallback(() => {
         if (vectorized.data && vectorizedSource) {
             onComplete?.({ buffer: Buffer.from(vectorized.data), source: vectorizedSource, type: "image/svg+xml" })
         }
@@ -52,8 +53,12 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
         return (
             <section className={styles.main}>
                 <div className={clsx(styles.imageContainer, styles.compare, styles[mode])}>
-                    <img className={styles.image} src={source} alt={file.name} />
-                    <img className={styles.image} src={vectorizedSource} alt="vectorized" />
+                    <a className={styles.imageButton} onClick={selectOriginal} role="button" title={file.name}>
+                        <img className={styles.image} src={source} alt={file.name} />
+                    </a>
+                    <a className={styles.imageButton} onClick={selectVectorized} role="button" title="vectorized image">
+                        <img className={styles.image} src={vectorizedSource} alt="vectorized image" />
+                    </a>
                 </div>
                 <Dialogue>
                     <Speech mode="system">
@@ -62,17 +67,17 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                     <UserOptions>
                         <UserButton
                             icon={mode === "portrait" ? ICON_ARROW_LEFT : ICON_ARROW_UP}
-                            onClick={handleSelectButtonClick}
+                            onClick={selectOriginal}
                         >
                             The {mode === "portrait" ? "left" : "top"} one.
                         </UserButton>
                         <UserButton
                             icon={mode === "portrait" ? ICON_ARROW_RIGHT : ICON_ARROW_DOWN}
-                            onClick={handleSelectVectorizedButtonClick}
+                            onClick={selectVectorized}
                         >
                             The {mode === "portrait" ? "right" : "bottom"} one.
                         </UserButton>
-                        <UserButton icon={ICON_EQUALITY} onClick={handleSelectVectorizedButtonClick}>
+                        <UserButton icon={ICON_EQUALITY} onClick={selectVectorized}>
                             They&rsquo;re the same picture.
                         </UserButton>
                         <UserButton danger icon={ICON_PENCIL} onClick={onCancel}>
@@ -86,7 +91,9 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     return (
         <section className={styles.main}>
             <div className={clsx(styles.imageContainer, styles[mode])}>
-                <img className={styles.image} src={source} alt={file.name} />
+                <a className={styles.imageButton} onClick={selectOriginal} role="button" title={file.name}>
+                    <img className={styles.image} src={source} alt={file.name} />
+                </a>
             </div>
             <Dialogue>
                 <Speech mode="system">
@@ -94,13 +101,19 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                 </Speech>
                 {vectorized.error && (
                     <Speech mode="system">
-                        <p>(I tried to vectorize it, but ran into a problem.</p>
-                        <p>&ldquo;{String(vectorized.error)}&rdquo;)</p>
+                        <p>
+                            <small>I tried to vectorize it, but ran into a problem.</small>
+                        </p>
+                        <p>
+                            <small>&ldquo;{String(vectorized.error)}&rdquo;</small>
+                        </p>
                     </Speech>
                 )}
                 <UserOptions>
-                    <UserButton onClick={handleSelectButtonClick}>Looks good.</UserButton>
-                    <UserButton danger onClick={onCancel}>
+                    <UserButton icon={ICON_CHECK} onClick={selectOriginal}>
+                        Looks good.
+                    </UserButton>
+                    <UserButton danger icon={ICON_PENCIL} onClick={onCancel}>
                         Wait, I want to change it.
                     </UserButton>
                 </UserOptions>

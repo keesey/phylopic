@@ -1,10 +1,10 @@
-import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
 import useImageCount from "~/editing/hooks/useImageCount"
 import ImagePaginator from "~/pagination/ImagePaginator"
-import ImageGrid from "~/ui/ImageGrid"
-import ImageThumbnailView from "~/ui/ImageThumbnailView"
 import Speech from "~/ui/Speech"
+import UserImageThumbnail from "~/ui/UserImageThumbnail"
+import UserLinkButton from "~/ui/UserLinkButton"
+import UserOptions from "~/ui/UserOptions"
 const Incomplete: FC = () => {
     const incomplete = useImageCount("incomplete")
     return (
@@ -15,17 +15,19 @@ const Incomplete: FC = () => {
                     {incomplete === 1 ? "the image" : "one of the images"} below to continue.
                 </p>
             </Speech>
-            <ImagePaginator filter="incomplete">
-                {images => (
-                    <ImageGrid>
-                        {images.map(image => (
-                            <AnchorLink key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                <ImageThumbnailView value={image} />
-                            </AnchorLink>
-                        ))}
-                    </ImageGrid>
-                )}
-            </ImagePaginator>
+            <UserOptions>
+                <ImagePaginator filter="incomplete">
+                    {images => (
+                        <>
+                            {images.map(image => (
+                                <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
+                                    <UserImageThumbnail uuid={image.uuid} />
+                                </UserLinkButton>
+                            ))}
+                        </>
+                    )}
+                </ImagePaginator>
+            </UserOptions>
         </>
     )
 }

@@ -5,7 +5,7 @@ import SpeechStack from "../SpeechStack"
 import styles from "./index.module.scss"
 export type Props = {
     children: ReactNode
-    icon?: string
+    icon?: ReactNode
     danger?: boolean
     onClick?: () => void
 }

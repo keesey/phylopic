@@ -1,11 +1,10 @@
-import { AnchorLink } from "@phylopic/ui"
 import { FC, ReactNode } from "react"
 import useImageCount from "~/editing/hooks/useImageCount"
 import { ImageFilter } from "~/pagination/ImageFilter"
 import ImagePaginator from "~/pagination/ImagePaginator"
 import Dialogue from "~/ui/Dialogue"
-import ImageGrid from "~/ui/ImageGrid"
-import ImageThumbnailView from "~/ui/ImageThumbnailView"
+import Speech from "~/ui/Speech"
+import UserImageThumbnail from "~/ui/UserImageThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 export type Props = {
@@ -15,27 +14,23 @@ export type Props = {
 const Images: FC<Props> = ({ children, filter }) => {
     const total = useImageCount(filter)
     return (
-        <>
-            {children(total)}
-            <ImagePaginator key="images" filter={filter}>
-                {images => (
-                    <>
-                        <Dialogue>
-                            <UserOptions>
-                                <UserLinkButton href="/">← Return to Overview.</UserLinkButton>
-                            </UserOptions>
-                        </Dialogue>
-                        <ImageGrid>
+        <Dialogue>
+            <Speech mode="system">{children(total)}</Speech>
+            <UserOptions>
+                <UserLinkButton href="/">← Return to Overview.</UserLinkButton>
+                <ImagePaginator key="images" filter={filter}>
+                    {images => (
+                        <>
                             {images.map(image => (
-                                <AnchorLink key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                    <ImageThumbnailView value={image} />
-                                </AnchorLink>
+                                <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
+                                    <UserImageThumbnail uuid={image.uuid} />
+                                </UserLinkButton>
                             ))}
-                        </ImageGrid>
-                    </>
-                )}
-            </ImagePaginator>
-        </>
+                        </>
+                    )}
+                </ImagePaginator>
+            </UserOptions>
+        </Dialogue>
     )
 }
 export default Images

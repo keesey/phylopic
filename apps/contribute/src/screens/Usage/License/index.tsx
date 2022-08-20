@@ -5,6 +5,8 @@ import useImageMutator from "~/editing/hooks/useImageMutator"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
+import Icon from "./Icon"
+import styles from "./index.module.scss"
 export interface Props {
     uuid: UUID
 }
@@ -30,19 +32,19 @@ const License: FC<Props> = ({ uuid }) => {
     return (
         <UserOptions>
             <UserButton
-                icon="PDM"
+                icon={<Icon alt="No Copyright" src="/logos/publicdomain.svg" />}
                 onClick={() => mutate({ license: "https://creativecommons.org/publicdomain/mark/1.0/" })}
             >
-                This is already in the public domain.
+                It&rsquo;s already in the public domain.
             </UserButton>
             <UserButton
-                icon="CC0"
+                icon={<span className={styles.iconContainer}><Icon alt="Creative Commons" src="/logos/cc.svg" /> <Icon alt="Public Domain Dedication" src="/logos/cc-zero.svg" /></span>}
                 onClick={() => mutate({ license: "https://creativecommons.org/publicdomain/zero/1.0/" })}
             >
                 Release it into the public domain.
             </UserButton>
             <UserButton
-                icon="CC-BY"
+                icon={<span className={styles.iconContainer}><Icon alt="Creative Commons" src="/logos/cc.svg" /> <Icon alt="Attribution" src="/logos/cc-by.svg" /></span>}
                 onClick={() => mutate({ license: "https://creativecommons.org/licenses/by/4.0/" })}
             >
                 Attribution should always be given.
