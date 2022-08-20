@@ -33,6 +33,7 @@ const PageComponent: NextPage<Props> = props => (
             description="PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses."
         >
             <SchemaScript
+                id="WebSite"
                 object={{
                     "@context": "https://schema.org",
                     "@type": "WebSite",
@@ -48,6 +49,7 @@ const PageComponent: NextPage<Props> = props => (
                 }}
             />
             <SchemaScript
+                id="Person"
                 object={{
                     "@context": "https://schema.org",
                     "@id": "http://tmkeesey.net",

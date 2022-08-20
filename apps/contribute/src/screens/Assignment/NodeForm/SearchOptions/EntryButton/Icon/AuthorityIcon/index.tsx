@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Authority } from "@phylopic/utils"
 import { FC } from "react"
 import styles from "./index.module.scss"

@@ -15,7 +15,7 @@ const useImageSpawn = () => {
         if (data) {
             router.push(`/edit/${encodeURIComponent(data.uuid)}${data.existing ? "" : "/file"}`)
         }
-    }, [data])
+    }, [data, router])
     const spawn = useCallback(() => setRequested(true), [])
     return [spawn, error, isValidating] as Readonly<[() => void, any, boolean]>
 }

@@ -46,7 +46,7 @@ const AuthExpirationCountdown: FC = () => {
         } finally {
             setPending(false)
         }
-    }, [newTTL, token])
+    }, [newTTL, setToken, token])
     if (dismissed || !token || typeof payload?.exp !== "number" || !isFinite(payload.exp)) {
         return null
     }

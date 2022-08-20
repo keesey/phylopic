@@ -13,6 +13,7 @@ const PageComponent: NextPage = () => (
             url="https://www.phylopic.org/mailinglist"
         >
             <SchemaScript
+                id="MediaSubscription"
                 object={{
                     "@context": "https://schema.org",
                     "@type": "MediaSubscription",

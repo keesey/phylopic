@@ -40,7 +40,7 @@ const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader,
     const displayedItems = useMemo(() => (maxItems ? items.slice(0, maxItems) : items), [items, maxItems])
     const isLastPage = useMemo(
         () => Boolean(data?.length && !data[data.length - 1].next) || Boolean(maxItems && items.length >= maxItems),
-        [data],
+        [data, items.length, maxItems],
     )
     const loadNextPage = useCallback(() => {
         if (!isLastPage) {

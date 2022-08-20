@@ -69,7 +69,7 @@ const AuthExpired: FC<Props> = ({ onSubmit }) => {
                     </Speech>
                     <UserOptions>
                         <UserButton onClick={handleReauthorizeClick}>Send authorization.</UserButton>
-                        <UserButton onClick={handleClearClick}>Wait, that isn't my email address!</UserButton>
+                        <UserButton onClick={handleClearClick}>Wait, that isn&rsquo;lt my email address!</UserButton>
                     </UserOptions>
                 </>
             )}

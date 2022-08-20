@@ -28,9 +28,12 @@ const UserInput: FC<Props> = ({
     type,
     value,
 }) => {
-    const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        onChange?.(event.target.value)
-    }, [])
+    const handleInputChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            onChange?.(event.target.value)
+        },
+        [onChange],
+    )
     return (
         <input
             autoComplete={autocomplete}

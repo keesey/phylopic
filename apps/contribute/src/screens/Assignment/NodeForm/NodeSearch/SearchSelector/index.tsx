@@ -15,7 +15,7 @@ const SearchSelector: FC<Props> = ({ entry, onComplete }) => {
         if (!isExternal) {
             onComplete(entry.objectID)
         }
-    }, [isExternal])
+    }, [entry.objectID, isExternal, onComplete])
     if (!isExternal) {
         return null
     }

@@ -39,6 +39,6 @@ const TaxonSchemaScript: FC<Props> = ({ node }) => {
             url,
         }
     }, [node])
-    return <SchemaScript object={object} />
+    return <SchemaScript id="Taxon" object={object} />
 }
 export default TaxonSchemaScript

@@ -55,6 +55,6 @@ const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
             url,
         }
     }, [image])
-    return <SchemaScript object={object} />
+    return <SchemaScript id="VisualArtwork" object={object} />
 }
 export default VisualArtworkSchemaScript

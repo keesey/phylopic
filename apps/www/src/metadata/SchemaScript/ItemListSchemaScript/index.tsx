@@ -19,6 +19,6 @@ const ItemListSchemaScript: FC<Props> = ({ urls }) => {
         }),
         [urls],
     )
-    return <SchemaScript object={object} />
+    return <SchemaScript id="ItemList" object={object} />
 }
 export default ItemListSchemaScript

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { FC } from "react"
 import styles from "./index.module.scss"
 export type Props = {

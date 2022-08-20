@@ -30,7 +30,7 @@ const SignIn: FC<Props> = ({ onSubmit }) => {
                 onSubmit?.(email, TTL_VALUES[ttl])
             }
         },
-        [onSubmit, email],
+        [onSubmit, email, ttl],
     )
     const hasEmail = useMemo(() => isEmailAddress(email), [email])
     return (

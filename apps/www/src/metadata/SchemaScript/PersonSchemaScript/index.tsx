@@ -19,6 +19,6 @@ const PersonSchemaScript: FC<Props> = ({ contributor }) => {
             url,
         }
     }, [contributor])
-    return <SchemaScript object={object} />
+    return <SchemaScript id="Person" object={object} />
 }
 export default PersonSchemaScript

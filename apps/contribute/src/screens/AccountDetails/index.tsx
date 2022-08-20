@@ -37,12 +37,12 @@ const AccountDetails: FC<Props> = ({ children, submitLabel }) => {
                 }
             }
         },
-        [contributor, name, showEmailAddress],
+        [contributor, mutate, name, showEmailAddress],
     )
     if (error) {
         return (
             <ErrorState>
-                <p>I'm having some trouble loading your profile. Does this mean anything to you?</p>
+                <p>I&rsquo;m having some trouble loading your profile. Does this mean anything to you?</p>
                 <p>&ldquo;{String(error)}&rdquo;</p>
             </ErrorState>
         )

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { stringifyNomen, UUID } from "@phylopic/utils"
 import { FC } from "react"
 import useImageNode from "~/editing/hooks/useImageNode"

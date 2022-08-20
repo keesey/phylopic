@@ -1,5 +1,5 @@
 import { ImageMediaType } from "@phylopic/utils"
-import Image from "next/image"
+import Image from "next/future/image"
 import { ChangeEvent, DragEvent, FC, useCallback, useState } from "react"
 import styles from "./index.module.scss"
 import upload from "./upload"

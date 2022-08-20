@@ -79,7 +79,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                         {image.license && (
                             <p>
                                 It is available under the{" "}
-                                <a href={image.license} className="text" target="_blank" rel="noopener noferrer">
+                                <a href={image.license} className="text" target="_blank" rel="noreferrer">
                                     {LICENSE_NAMES[image.license] ?? "[Unknown License]"}
                                 </a>{" "}
                                 license.

@@ -9,9 +9,12 @@ export interface Props {
     value?: TTL
 }
 const TTLSelector: FC<Props> = ({ disabled, mode, onChange, value }) => {
-    const handleTTLChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-        onChange?.(event.target.value as TTL)
-    }, [])
+    const handleTTLChange = useCallback(
+        (event: ChangeEvent<HTMLSelectElement>) => {
+            onChange?.(event.target.value as TTL)
+        },
+        [onChange],
+    )
     return (
         <select
             className={clsx(styles.select, mode && styles[mode], disabled && styles.disabled)}

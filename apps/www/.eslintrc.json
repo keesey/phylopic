@@ -6,7 +6,7 @@
             {
                 "ignoreExports": ["pages"],
                 "missingExports": true,
-                "unusedExports": true
+                "unusedExports": false
             }
         ]
     }

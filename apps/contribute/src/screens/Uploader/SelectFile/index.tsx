@@ -72,7 +72,7 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
     const handleCancelButtonClick = useCallback(() => {
         deletor()
         router.push("/")
-    }, [hasExisting, uuid])
+    }, [deletor, router])
     if (hasExisting === undefined) {
         return <LoadingState>One moment&hellip;</LoadingState>
     }
@@ -90,35 +90,31 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
                     <p>
                         <small>
                             (
-                            <a href="https://www.w3.org/TR/SVG/" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.w3.org/TR/SVG/" target="_blank" rel="noreferrer">
                                 <abbr title="Scalable Vector Graphics">SVG</abbr>
                             </a>{" "}
                             is best, but{" "}
                             <a
                                 href="http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html"
                                 target="_blank"
-                                rel="noopener noreferrer"
+                                rel="noreferrer"
                             >
                                 <abbr title="Portable Network Graphics">PNG</abbr>
                             </a>
                             ,{" "}
-                            <a
-                                href="https://www.w3.org/Graphics/GIF/spec-gif89a.txt"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <a href="https://www.w3.org/Graphics/GIF/spec-gif89a.txt" target="_blank" rel="noreferrer">
                                 <abbr title="Graphics Interchange Format">GIF</abbr>
                             </a>
                             , and{" "}
                             <a
                                 href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000189.shtml"
                                 target="_blank"
-                                rel="noopener noreferrer"
+                                rel="noreferrer"
                             >
                                 <abbr title="Bitmap Image File">BMP</abbr>
                             </a>{" "}
                             are also good. Or{" "}
-                            <a href="https://www.w3.org/Graphics/JPEG/" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.w3.org/Graphics/JPEG/" target="_blank" rel="noreferrer">
                                 <abbr title="Joint Photographic Experts Group">JPEG</abbr>
                             </a>
                             , I guess.)
@@ -160,7 +156,7 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
                                         <a
                                             href="https://physics.nist.gov/cuu/Units/binary.html"
                                             target="_blank"
-                                            rel="noopener noreferrer"
+                                            rel="noreferrer"
                                         >
                                             mebibytes
                                         </a>
