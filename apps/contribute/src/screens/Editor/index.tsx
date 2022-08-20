@@ -88,7 +88,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                     </figcaption>
                 </SpeechStack>
             </Speech>
-            {!image.submitted && (
+            {!image.accepted && !image.submitted && (
                 <>
                     <Speech mode="system">
                         <p>
@@ -101,6 +101,20 @@ const Editor: FC<Props> = ({ uuid }) => {
                         denial={<>Not quite.</>}
                         onAffirm={submit}
                         onDeny={() => setUnready(true)}
+                    />
+                </>
+            )}
+            {image.accepted && !image.submitted && (
+                <>
+                    <Speech mode="system">
+                        <p>Would you like to reconsider your decision to withdraw this image?</p>
+                    </Speech>
+                    <UserVerification
+                        affirmed={unready === null ? null : !unready}
+                        affirmation={<>Yes, add it back to the site.</>}
+                        denial={<>No, I want to delete it.</>}
+                        onAffirm={submit}
+                        onDeny={deleteImage}
                     />
                 </>
             )}

@@ -61,7 +61,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => {
                     )}
                     {withdrawn! > 0 && (
                         <li key="account:/withdrawn">
-                            <AnchorLink href="/images/accepted">Your Withdrawn Images</AnchorLink>
+                            <AnchorLink href="/images/withdrawn">Your Withdrawn Images</AnchorLink>
                         </li>
                     )}
                     {authorized && (
