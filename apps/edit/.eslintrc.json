@@ -1,3 +1,13 @@
 {
-    "extends": ["phylopic"]
+    "extends": ["phylopic"],
+    "rules": {
+        "import/no-unused-modules": [
+            1,
+            {
+                "ignoreExports": ["pages"],
+                "missingExports": true,
+                "unusedExports": true
+            }
+        ]
+    }
 }

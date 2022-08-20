@@ -50,7 +50,6 @@
             "pages"
         ],
         "include": [
-            "pages",
             "src"
         ]
     },

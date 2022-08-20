@@ -9,7 +9,7 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import styles from "./index.module.scss"
-export type Props = {
+type Props = {
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
     head: PageHeadProps
