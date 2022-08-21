@@ -1,5 +1,6 @@
+import { canChange } from "@phylopic/api-models"
 import { Image, isSubmittableImage } from "@phylopic/source-models"
-import { isUUIDv4, UUID } from "@phylopic/utils"
+import { isUUIDv4, isValidLicenseURL, UUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
@@ -47,6 +48,13 @@ const index: NextApiHandler<Image> = async (req, res) => {
                     contributor: image.contributor,
                     modified: now.toISOString(),
                     uuid,
+                }
+                if (
+                    image.license &&
+                    image.license !== combined.license &&
+                    (!isValidLicenseURL(combined.license) || !canChange(image.license, combined.license))
+                ) {
+                    throw 400
                 }
                 const submittable = isSubmittableImage(combined)
                 await imageClient.put({
