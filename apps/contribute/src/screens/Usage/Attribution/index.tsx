@@ -32,7 +32,7 @@ const Attribution: FC<Props> = ({ uuid }) => {
         <>
             <Speech mode="system">
                 <p>
-                    Who gets the credit for this?
+                    So who gets the credit for this?
                     {!required && (
                         <>
                             {" "}

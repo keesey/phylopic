@@ -10,6 +10,8 @@
 
 .image {
     height: auto;
+    min-height: 128px;
+    min-width: 128px;
     mix-blend-mode: darken;
     object-fit: contain;
     width: auto;

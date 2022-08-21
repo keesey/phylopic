@@ -9,7 +9,7 @@ export const createAPIFetcher =
     async key => {
         try {
             const response = await axios.get<T>(key, { responseType: "json" })
-            if (setBuild && typeof response.data.build === "number") {
+            if (setBuild && typeof response.data?.build === "number") {
                 setBuild(response.data.build)
             }
             return response.data

@@ -10,12 +10,15 @@ const useLiveImageExists = (uuid?: UUID) => {
         () => (uuid ? `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(uuid)}` : null),
         [uuid],
     )
-    const { data, error } = useSWRImmutable(imageKey, apiFetcher, {
+    const { data, error, isValidating } = useSWRImmutable(imageKey, apiFetcher, {
         shouldRetryOnError: isServerError,
     })
     const notFound = useMemo(() => isNotFoundError(error), [error])
     if (Boolean(data)) {
         return true
+    }
+    if (data === null) {
+        return false
     }
     return notFound ? false : undefined
 }

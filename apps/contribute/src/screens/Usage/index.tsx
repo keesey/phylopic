@@ -41,7 +41,11 @@ const Usage: FC<Props> = ({ uuid }) => {
                     <FileView src={src} mode="light" />
                     {specific && (
                         <p>
-                            This image shows <NameView value={specific.names[0]} />.
+                            This image shows{" "}
+                            <strong>
+                                <NameView value={specific.names[0]} />
+                            </strong>
+                            .
                         </p>
                     )}
                 </SpeechStack>

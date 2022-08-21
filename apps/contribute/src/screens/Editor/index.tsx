@@ -9,7 +9,7 @@ import useImageSrc from "~/editing/hooks/useImageSrc"
 import useLiveImageExists from "~/editing/hooks/useLiveImageExists"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_ARROW_LEFT, ICON_ARROW_UP, ICON_DANGER, ICON_PENCIL, ICON_X } from "~/ui/ICON_SYMBOLS"
+import { ICON_ARROW_LEFT, ICON_DANGER, ICON_PENCIL, ICON_X } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
@@ -34,7 +34,7 @@ const Editor: FC<Props> = ({ uuid }) => {
         if (
             confirm(
                 `Are you really sure you want to ${
-                    image?.accepted ? "remove this image from the site" : "withdraw this submission"
+                    image?.accepted ? "delete this image PERMANENTLY" : "withdraw this submission"
                 }? It's so nice!`,
             )
         ) {
@@ -75,16 +75,33 @@ const Editor: FC<Props> = ({ uuid }) => {
                             {specific && (
                                 <>
                                     {" "}
-                                    of <NameView value={specific.names[0]} />
+                                    of{" "}
+                                    <strong>
+                                        <NameView value={specific.names[0]} />
+                                    </strong>
                                 </>
                             )}
-                            {image.attribution && <> by {image.attribution}</>}.
-                            {image.sponsor && <> Its inclusion on the site was sponsored by {image.sponsor}.</>}
+                            {image.attribution && (
+                                <>
+                                    {" "}
+                                    by <strong>{image.attribution}</strong>
+                                </>
+                            )}
+                            .
+                            {image.sponsor && (
+                                <>
+                                    {" "}
+                                    Its inclusion on the site was sponsored by <strong>{image.sponsor}</strong>.
+                                </>
+                            )}
                         </p>
                         {general && (
                             <p>
                                 <small>
-                                    (It also represents the ancestral state of <NameView value={general.names[0]} />
+                                    (It also represents the ancestral state of{" "}
+                                    <strong>
+                                        <NameView value={general.names[0]} />
+                                    </strong>
                                     .)
                                 </small>
                             </p>
@@ -92,9 +109,11 @@ const Editor: FC<Props> = ({ uuid }) => {
                         {image.license && (
                             <p>
                                 It is available under the{" "}
-                                <a href={image.license} className="text" target="_blank" rel="noreferrer">
-                                    {LICENSE_NAMES[image.license] ?? "[Unknown License]"}
-                                </a>{" "}
+                                <strong>
+                                    <a href={image.license} className="text" target="_blank" rel="noreferrer">
+                                        {LICENSE_NAMES[image.license] ?? "[Unknown License]"}
+                                    </a>
+                                </strong>{" "}
                                 license.
                             </p>
                         )}
@@ -153,16 +172,21 @@ const Editor: FC<Props> = ({ uuid }) => {
                                         .
                                     </>
                                 )}
+                                {isLive === false && <> <strong>Congrats!</strong> It will be added to the site in the next build.</>}
                             </p>
                         )}
-                        {!image.accepted && image.submitted && <p>This image has been submitted for review.</p>}
+                        {!image.accepted && image.submitted && (
+                            <p>
+                                <strong>Sweet.</strong> This image has been submitted for review.
+                            </p>
+                        )}
                         <p>What would you like to do?</p>
                     </Speech>
                     <UserOptions>
                         <UserLinkButton href="/" icon={ICON_ARROW_LEFT}>
-                            Go back to the Home Page.
+                            Go back to the overview.
                         </UserLinkButton>
-                        <UserButton onClick={() => openWithConfirmation("file")} icon={ICON_ARROW_UP}>
+                        <UserButton onClick={() => openWithConfirmation("file")} icon={ICON_PENCIL}>
                             Upload a different file.
                         </UserButton>
                         <UserButton onClick={() => openWithConfirmation("nodes")} icon={ICON_PENCIL}>
@@ -174,7 +198,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                         {image.submitted && (
                             <UserButton danger icon={image.accepted ? ICON_DANGER : ICON_X} onClick={withdraw}>
                                 {!image.accepted && "Withdraw this submission."}
-                                {image.accepted && "Remove this image from the site."}
+                                {image.accepted && "Delete this image."}
                             </UserButton>
                         )}
                         {!image.submitted && (
