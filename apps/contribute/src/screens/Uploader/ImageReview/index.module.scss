@@ -50,6 +50,7 @@
 
     &.compare {
         display: flex;
+        gap: 1em;
 
         &.landscape {
             flex-direction: column;

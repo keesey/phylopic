@@ -34,17 +34,21 @@ const Editor: FC<Props> = ({ uuid }) => {
         if (
             confirm(
                 `Are you really sure you want to ${
-                    image?.accepted ? "delete this image PERMANENTLY" : "withdraw this submission"
+                    image?.accepted ? "remove this image from the site" : "withdraw this submission"
                 }? It's so nice!`,
             )
         ) {
             mutate({ submitted: false })
+            if (image?.accepted) {
+                alert("The image will be removed in the next build.")
+            }
         }
     }, [image?.accepted, mutate])
     const deletor = useImageDeletor(uuid)
     const deleteImage = useCallback(() => {
         if (confirm("Are you sure you want to PERMANENTLY delete this submission?")) {
             deletor()
+            alert("The image has been deleted and will be removed from the site in the next build.")
         }
     }, [deletor])
     const router = useRouter()
@@ -192,18 +196,18 @@ const Editor: FC<Props> = ({ uuid }) => {
                             Go back to the overview.
                         </UserLinkButton>
                         <UserButton onClick={() => openWithConfirmation("file")} icon={ICON_PENCIL}>
-                            Upload a different file.
+                            Revise the image file.
                         </UserButton>
                         <UserButton onClick={() => openWithConfirmation("nodes")} icon={ICON_PENCIL}>
-                            Change the taxonomic assignment.
+                            Revise the taxonomic assignment.
                         </UserButton>
                         <UserButton onClick={() => openWithConfirmation("usage")} icon={ICON_PENCIL}>
-                            Change the license or attribution.
+                            Revise the license or attribution.
                         </UserButton>
                         {image.submitted && (
                             <UserButton danger icon={image.accepted ? ICON_DANGER : ICON_X} onClick={withdraw}>
                                 {!image.accepted && "Withdraw this submission."}
-                                {image.accepted && "Delete this image."}
+                                {image.accepted && "Remove this image."}
                             </UserButton>
                         )}
                         {!image.submitted && (
