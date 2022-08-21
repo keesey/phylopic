@@ -12,7 +12,7 @@ export default class ExternalNamespaceLister implements Listable<Namespace, numb
     async page(index = 0): Promise<Page<string, number>> {
         const client = await this.provider.getPG()
         const output = await client.query<{ namespace: Namespace }>(
-            `SELECT "namespace" FROM ${EXTERNAL_TABLE} WHERE authority=$1::character varying GROUP BY authority,"namespace" ORDER BY "namespace" OFFSET $2::bigint LIMIT $3::bigint`,
+            `SELECT "namespace" FROM ${EXTERNAL_TABLE} WHERE authority=$1::character varying GROUP BY authority,"namespace" ORDER BY authority,"namespace" OFFSET $2::bigint LIMIT $3::bigint`,
             [this.authority, index * this.pageSize, this.pageSize],
         )
         return {

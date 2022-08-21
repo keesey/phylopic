@@ -80,15 +80,13 @@ const Complete: FC = () => {
             <UserOptions noAutoScroll>
                 <SpawnButton>Upload a new silhouette.</SpawnButton>
                 <ImagePaginator filter={filter}>
-                    {images => (
-                        <>
-                            {images.map(image => (
-                                <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                    <UserImageThumbnail uuid={image.uuid} />
-                                </UserLinkButton>
-                            ))}
-                        </>
-                    )}
+                    {images =>
+                        images.map(image => (
+                            <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
+                                <UserImageThumbnail uuid={image.uuid} />
+                            </UserLinkButton>
+                        ))
+                    }
                 </ImagePaginator>
             </UserOptions>
         </>

@@ -12,10 +12,9 @@ export type Props = {
     filter: ImageFilter
     hideControls?: boolean
     hideLoader?: boolean
-    maxItems?: number
     onError?: (error: Error) => void
 }
-const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader, maxItems, onError }) => {
+const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader, onError }) => {
     const authorized = useAuthorized()
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: Page<Image & { uuid: UUID }, number> | null) => {
@@ -37,11 +36,7 @@ const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader,
                 : [],
         [data],
     )
-    const displayedItems = useMemo(() => (maxItems ? items.slice(0, maxItems) : items), [items, maxItems])
-    const isLastPage = useMemo(
-        () => Boolean(data?.length && !data[data.length - 1].next) || Boolean(maxItems && items.length >= maxItems),
-        [data, items.length, maxItems],
-    )
+    const isLastPage = useMemo(() => Boolean(data?.length && !data[data.length - 1].next), [data])
     const loadNextPage = useCallback(() => {
         if (!isLastPage) {
             setSize(size + 1)
@@ -54,7 +49,7 @@ const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader,
     }, [error, onError])
     return (
         <>
-            <Fragment key="items">{children(displayedItems, isValidating)}</Fragment>
+            <Fragment key="items">{children(items, isValidating)}</Fragment>
             {!isLastPage && !error && !hideControls && (
                 <InfiniteScroll
                     hideLoader={hideLoader}

@@ -27,7 +27,6 @@ const Editor: FC<Props> = ({ uuid }) => {
     const general = useImageNode(uuid, "general")
     const specific = useImageNode(uuid, "specific")
     const [unready, setUnready] = useState<boolean | null>(null)
-    const deletor = useImageDeletor(uuid)
     const mutate = useImageMutator(uuid)
     const submit = useCallback(() => mutate({ submitted: true }), [mutate])
     const withdraw = useCallback(() => {
@@ -41,6 +40,7 @@ const Editor: FC<Props> = ({ uuid }) => {
             mutate({ submitted: false })
         }
     }, [image?.accepted, mutate])
+    const deletor = useImageDeletor(uuid)
     const deleteImage = useCallback(() => {
         if (confirm("Are you sure you want to PERMANENTLY delete this submission?")) {
             deletor()
@@ -65,8 +65,8 @@ const Editor: FC<Props> = ({ uuid }) => {
                                     of <NameView value={specific.names[0]} />
                                 </>
                             )}
-                            {image.attribution && <> by {image.attribution}</>}
-                            {image.sponsor && <> (sponsored by {image.sponsor})</>}.
+                            {image.attribution && <> by {image.attribution}</>}.
+                            {image.sponsor && <> Its inclusion on the site was sponsored by {image.sponsor}.</>}
                         </p>
                         {general && (
                             <p>

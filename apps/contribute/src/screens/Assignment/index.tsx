@@ -2,12 +2,13 @@ import { Loader } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
 import useImage from "~/editing/hooks/useImage"
+import useImageDeletor from "~/editing/hooks/useImageDeletor"
 import useImageMutator from "~/editing/hooks/useImageMutator"
 import useImageNode from "~/editing/hooks/useImageNode"
 import useImageSrc from "~/editing/hooks/useImageSrc"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_CHECK, ICON_X } from "~/ui/ICON_SYMBOLS"
+import { ICON_CHECK, ICON_DANGER, ICON_X } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
@@ -30,6 +31,12 @@ const Assignment: FC<Props> = ({ uuid }) => {
         },
         [mutate],
     )
+    const deletor = useImageDeletor(uuid)
+    const deleteImage = useCallback(() => {
+        if (confirm("Are you sure you want to PERMANENTLY delete this submission?")) {
+            deletor()
+        }
+    }, [deletor])
     if (!image) {
         return null
     }
@@ -84,6 +91,13 @@ const Assignment: FC<Props> = ({ uuid }) => {
                         </>
                     )}
                 </>
+            )}
+            {!image.submitted && (
+                <UserOptions>
+                    <UserButton danger icon={ICON_DANGER} onClick={deleteImage}>
+                        Cancel this submission.
+                    </UserButton>
+                </UserOptions>
             )}
         </Dialogue>
     )

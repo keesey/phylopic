@@ -19,15 +19,13 @@ const Images: FC<Props> = ({ children, filter }) => {
             <UserOptions noAutoScroll>
                 <UserLinkButton href="/">← Return to Overview.</UserLinkButton>
                 <ImagePaginator key="images" filter={filter}>
-                    {images => (
-                        <>
-                            {images.map(image => (
-                                <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                    <UserImageThumbnail uuid={image.uuid} />
-                                </UserLinkButton>
-                            ))}
-                        </>
-                    )}
+                    {images =>
+                        images.map(image => (
+                            <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
+                                <UserImageThumbnail uuid={image.uuid} />
+                            </UserLinkButton>
+                        ))
+                    }
                 </ImagePaginator>
             </UserOptions>
         </Dialogue>

@@ -17,15 +17,13 @@ const Incomplete: FC = () => {
             </Speech>
             <UserOptions noAutoScroll>
                 <ImagePaginator filter="incomplete">
-                    {images => (
-                        <>
-                            {images.map(image => (
-                                <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                    <UserImageThumbnail uuid={image.uuid} />
-                                </UserLinkButton>
-                            ))}
-                        </>
-                    )}
+                    {images =>
+                        images.map(image => (
+                            <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
+                                <UserImageThumbnail uuid={image.uuid} />
+                            </UserLinkButton>
+                        ))
+                    }
                 </ImagePaginator>
             </UserOptions>
         </>
