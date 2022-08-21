@@ -3,6 +3,7 @@ import { normalizeUUID } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSON from "../entities/selectEntityJSON"
+import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
@@ -36,6 +37,16 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
         body = await selectEntityJSON(client, "contributor", normalizedUUID, "contributor")
     } finally {
         await service.deletePgClient(client)
+    }
+    if (body === "null") {
+        throw new APIError(404, [
+            {
+                developerMessage: "Cannot find entity.",
+                field: "uuid",
+                type: "RESOURCE_NOT_FOUND",
+                userMessage: "That contributor account could not be found.",
+            },
+        ])
     }
     return {
         body,

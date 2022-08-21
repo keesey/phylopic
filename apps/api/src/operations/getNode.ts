@@ -13,6 +13,7 @@ import { normalizeUUID } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"
+import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
@@ -58,6 +59,16 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
         )
     } finally {
         await service.deletePgClient(client)
+    }
+    if (body === "null") {
+        throw new APIError(404, [
+            {
+                developerMessage: "Cannot find entity.",
+                field: "uuid",
+                type: "RESOURCE_NOT_FOUND",
+                userMessage: "That taxonomic group could not be found.",
+            },
+        ])
     }
     return {
         body,

@@ -89,7 +89,7 @@ const getItemLinksAndJSON =
             }),
         )
     }
-export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
+export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {
@@ -118,4 +118,4 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
         validEmbeds: ["childNodes", "parentNode", "primaryImage"],
     })
 }
-export default getNodes
+export default getNodeLineage
