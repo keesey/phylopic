@@ -1,6 +1,6 @@
 import { LoaderContext } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
-import { FC, ReactNode } from "react"
+import { FC, ReactNode, useEffect } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
 import AuthContainer from "~/auth/AuthContainer"
 import PageHead, { Props as PageHeadProps } from "~/metadata/PageHead"
@@ -15,6 +15,13 @@ type Props = {
     head: PageHeadProps
 }
 const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
+    useEffect(() => {
+        try {
+            document.domain = "phylopic.org"
+        } catch (e) {
+            console.warn(e)
+        }
+    }, [])
     return (
         <SWRConfig key="swrConfig" value={{ fallback }}>
             <LoaderContext.Provider value={{ color: "#fff" }}>

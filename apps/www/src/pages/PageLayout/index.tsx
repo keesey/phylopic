@@ -1,6 +1,6 @@
 import { LoaderContext } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
-import { FC, ReactNode } from "react"
+import { FC, ReactNode, useEffect } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
 import SearchContainer from "~/search/SearchContainer"
 import PageLoader from "~/ui/PageLoader"
@@ -8,17 +8,26 @@ import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 export type Props = {
+    aside?: ReactNode
     build?: number
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
     initialText?: string
 }
-const PageLayout: FC<Props> = ({ build, children, fallback = {}, initialText }) => {
+const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialText }) => {
+    useEffect(() => {
+        try {
+            document.domain = "phylopic.org"
+        } catch (e) {
+            console.warn(e)
+        }
+    }, [])
     return (
         <SWRConfig value={{ fallback }}>
             <BuildContainer initialValue={build}>
                 <LoaderContext.Provider value={{ color: "#00809f" }}>
                     <PageLoader />
+                    {aside && <aside>{aside}</aside>}
                     <SearchContainer initialText={initialText}>
                         <header>
                             <SiteNav />

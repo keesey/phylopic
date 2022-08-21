@@ -3,6 +3,7 @@ import { AnchorLink, ImageContainer, TimestampView, useLicenseText, useNomenText
 import { createSearch, extractPath, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
+import dynamic from "next/dynamic"
 import { FC, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
@@ -20,9 +21,10 @@ import LicenseDetailsView from "~/views/LicenseDetailsView"
 import LicenseView from "~/views/LicenseView"
 import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
+const ContributorBanner = dynamic(() => import("~/contribute/ContributorBanner"), { ssr: false })
 const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
-    embed_nodes: "true",
     embed_contributor: "true",
+    embed_nodes: "true",
     embed_specificNode: "true",
 }
 type Props = Omit<PageLayoutProps, "children"> & {
@@ -30,7 +32,7 @@ type Props = Omit<PageLayoutProps, "children"> & {
 }
 const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
     return (
-        <PageLayout {...pageLayoutProps}>
+        <PageLayout aside={<ContributorBanner imageUUID={uuid} />} {...pageLayoutProps}>
             <ImageContainer uuid={uuid} query={IMAGE_QUERY}>
                 {image => (image ? <Content image={image} /> : null)}
             </ImageContainer>
