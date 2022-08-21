@@ -13,7 +13,10 @@ export type Props = {
 const ContributorBanner: FC<Props> = ({ imageUUID }) => {
     const [dismissed, setDismissed] = useState(false)
     const fetcher = useAPIFetcher<Image>()
-    const { data: image } = useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(imageUUID)}`, fetcher)
+    const { data: image } = useSWRImmutable(
+        `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(imageUUID)}`,
+        fetcher,
+    )
     const [token] = useStoredState<JWT>("auth")
     const decoded = useMemo(() => (isJWT(token) ? decode(token) : null), [token])
     const { sub } = decoded ?? {}

@@ -1,4 +1,5 @@
 import { LICENSE_NAMES, UUID } from "@phylopic/utils"
+import { useRouter } from "next/router"
 import { FC, useCallback, useState } from "react"
 import useImage from "~/editing/hooks/useImage"
 import useImageDeletor from "~/editing/hooks/useImageDeletor"
@@ -46,6 +47,18 @@ const Editor: FC<Props> = ({ uuid }) => {
             deletor()
         }
     }, [deletor])
+    const router = useRouter()
+    const openWithConfirmation = useCallback(
+        (path: "file" | "nodes" | "usage") => {
+            if (
+                !image?.accepted ||
+                confirm("This submission has already been accepted. Are you sure you want to edit it?")
+            ) {
+                router.push(`/edit/${encodeURIComponent(uuid)}/${path}`)
+            }
+        },
+        [image?.accepted, router, uuid],
+    )
     if (!image || !src) {
         return <LoadingState>Checking contribution status&hellip;</LoadingState>
     }
@@ -149,15 +162,15 @@ const Editor: FC<Props> = ({ uuid }) => {
                         <UserLinkButton href="/" icon={ICON_ARROW_LEFT}>
                             Go back to the Home Page.
                         </UserLinkButton>
-                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/file`} icon={ICON_ARROW_UP}>
+                        <UserButton onClick={() => openWithConfirmation("file")} icon={ICON_ARROW_UP}>
                             Upload a different file.
-                        </UserLinkButton>
-                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/nodes`} icon={ICON_PENCIL}>
+                        </UserButton>
+                        <UserButton onClick={() => openWithConfirmation("nodes")} icon={ICON_PENCIL}>
                             Change the taxonomic assignment.
-                        </UserLinkButton>
-                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
+                        </UserButton>
+                        <UserButton onClick={() => openWithConfirmation("usage")} icon={ICON_PENCIL}>
                             Change the license or attribution.
-                        </UserLinkButton>
+                        </UserButton>
                         {image.submitted && (
                             <UserButton danger icon={image.accepted ? ICON_DANGER : ICON_X} onClick={withdraw}>
                                 {!image.accepted && "Withdraw this submission."}

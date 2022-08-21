@@ -9,14 +9,14 @@ import normalizeImage from "./pg/normalization/normalizeImage"
 import PGLister from "./pg/PGLister"
 export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implements IImagesClient {
     constructor(protected readonly provider: PGClientProvider, protected readonly where: readonly IDField[] = []) {
-        super(provider, IMAGE_TABLE, 32, IMAGE_FIELDS, normalizeImage, "modified DESC", where)
+        super(provider, IMAGE_TABLE, 32, IMAGE_FIELDS, normalizeImage, 'modified DESC,created DESC,"uuid"', where)
         this.accepted = new PGLister<Image, { uuid: UUID }>(
             provider,
             IMAGE_TABLE,
             32,
             IMAGE_FIELDS,
             normalizeImage,
-            'modified DESC,"uuid"',
+            'modified DESC,created DESC,"uuid"',
             [
                 ...where,
                 {
@@ -37,7 +37,7 @@ export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implem
             16,
             IMAGE_FIELDS,
             normalizeImage,
-            'created,"uuid"',
+            'created,modified,"uuid"',
             [
                 ...where,
                 {
@@ -58,7 +58,7 @@ export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implem
             32,
             IMAGE_FIELDS,
             normalizeImage,
-            'modified DESC,"uuid"',
+            'modified DESC,created DESC,"uuid"',
             [
                 ...where,
                 {
@@ -79,7 +79,7 @@ export default class ImagesClient extends PGLister<Image, { uuid: UUID }> implem
             32,
             IMAGE_FIELDS,
             normalizeImage,
-            'modified DESC,"uuid"',
+            'modified DESC,created DESC,"uuid"',
             [
                 ...where,
                 {
