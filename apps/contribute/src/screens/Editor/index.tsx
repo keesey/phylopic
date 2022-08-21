@@ -172,7 +172,12 @@ const Editor: FC<Props> = ({ uuid }) => {
                                         .
                                     </>
                                 )}
-                                {isLive === false && <> <strong>Congrats!</strong> It will be added to the site in the next build.</>}
+                                {isLive === false && (
+                                    <>
+                                        {" "}
+                                        <strong>Congrats!</strong> It will be added to the site in the next build.
+                                    </>
+                                )}
                             </p>
                         )}
                         {!image.accepted && image.submitted && (

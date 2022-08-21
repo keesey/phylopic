@@ -1,7 +1,5 @@
-import { Editable } from "@phylopic/source-client"
 import { Node } from "@phylopic/source-models"
-import { normalizeUUID, UUID, ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
-import { randomUUID } from "crypto"
+import { UUID, ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
@@ -9,7 +7,6 @@ import isExternalPost from "~/models/detection/isExternalPost"
 import getResolver from "~/resolvers/getResolver"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<(Node & { uuid: UUID }) | ValidationFault[]> = async (req, res) => {
-    const now = new Date()
     let client: SourceClient | undefined
     try {
         await verifyAuthorization(req.headers)
@@ -34,8 +31,8 @@ const index: NextApiHandler<(Node & { uuid: UUID }) | ValidationFault[]> = async
                         res.json(node)
                         res.status(200)
                     } else {
-                        const resolver = getResolver(body.authority, body.namespace)
-                        if (!resolver) {
+                        const resolve = getResolver(body.authority, body.namespace)
+                        if (!resolve) {
                             res.json([
                                 {
                                     field: "body.namespace",
@@ -44,20 +41,7 @@ const index: NextApiHandler<(Node & { uuid: UUID }) | ValidationFault[]> = async
                             ])
                             res.status(400)
                         } else {
-                            const resolved = await resolver(client, body.objectID)
-                            let uuid: UUID
-                            let nodeClient: Editable<Node & { uuid: UUID }>
-                            do {
-                                uuid = normalizeUUID(randomUUID())
-                                nodeClient = client.node(uuid)
-                            } while (await nodeClient.exists())
-                            const node: Node & { uuid: UUID } = {
-                                ...resolved,
-                                created: now.toISOString(),
-                                modified: now.toISOString(),
-                                uuid,
-                            }
-                            await nodeClient.put(node)
+                            const node = await resolve(client, body.objectID)
                             res.json(node)
                             res.status(200)
                         }
