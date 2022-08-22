@@ -3,10 +3,10 @@ import type { NextPage } from "next"
 import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
-import Speech from "~/ui/Speech"
 const Images = dynamic(() => import("~/screens/Images"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
+        breadcrumbs={<a>Submitted Images</a>}
         head={{
             title: "PhyloPic: Submitted Images",
             url: "https://contribute.phylopic.org/images/submitted",

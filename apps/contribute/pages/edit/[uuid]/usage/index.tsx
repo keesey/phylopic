@@ -1,3 +1,4 @@
+import { AnchorLink } from "@phylopic/ui"
 import { isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
@@ -10,6 +11,14 @@ type Props = {
 }
 const Page: NextPage<Props> = ({ uuid }) => (
     <PageLayout
+        breadcrumbs={[
+            <AnchorLink href={`/edit/${encodeURIComponent(uuid)}`}>
+                <span>Your Image</span>
+            </AnchorLink>,
+            <a>
+                <span>Usage</span>
+            </a>,
+        ]}
         head={{
             title: "PhyloPic: Usage of Your Image",
             url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/usage`,

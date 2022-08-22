@@ -5,6 +5,7 @@ import PageLayout from "~/pages/PageLayout"
 const Images = dynamic(() => import("~/screens/Images"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
+        breadcrumbs={<a>Submissions in Progress</a>}
         head={{
             title: "PhyloPic: Submissions in Progress",
             url: "https://contribute.phylopic.org/images/incomplete",

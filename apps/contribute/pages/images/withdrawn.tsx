@@ -6,6 +6,7 @@ import NumberAsWords from "~/ui/NumberAsWords"
 const Images = dynamic(() => import("~/screens/Images"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
+        breadcrumbs={<a>Withdrawn Submissions</a>}
         head={{
             title: "PhyloPic: Withdrawn Submissions",
             url: "https://contribute.phylopic.org/images/withdrawn",

@@ -10,6 +10,7 @@ type Props = {
 }
 const Page: NextPage<Props> = ({ uuid }) => (
     <PageLayout
+        breadcrumbs={<a>Your Image</a>}
         head={{
             title: "PhyloPic: Your Image",
             url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}`,

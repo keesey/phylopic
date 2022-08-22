@@ -8,8 +8,9 @@ const ConfirmLogout = dynamic(() => import("~/screens/ConfirmLogout"), { ssr: fa
 const Farewell = dynamic(() => import("~/screens/Farewell"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
+        breadcrumbs={<a>Sign Out</a>}
         head={{
-            title: "PhyloPic: Signed Out",
+            title: "PhyloPic: Sign Out",
             url: "https://contribute.phylopic.org/logout",
         }}
     >
