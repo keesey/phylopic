@@ -58,6 +58,7 @@ const index: NextApiHandler<{ existing: boolean; uuid: UUID }> = async (req, res
                         submitted: false,
                         uuid,
                     })
+                    res.setHeader("cache-control", "no-cache")
                     res.json({ existing: false, uuid })
                 }
                 res.status(200)

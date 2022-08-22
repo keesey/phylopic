@@ -10,11 +10,12 @@ import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import styles from "./index.module.scss"
 type Props = {
+    breadcrumbs?: ReactNode
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
     head: PageHeadProps
 }
-const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
+const PageLayout: FC<Props> = ({ breadcrumbs, children, fallback = {}, head }) => {
     useEffect(() => {
         try {
             document.domain = "phylopic.org"
@@ -34,7 +35,7 @@ const PageLayout: FC<Props> = ({ children, fallback = {}, head }) => {
                         </aside>
                         <div className={styles.main}>
                             <header>
-                                <SiteNav key="nav" />
+                                <SiteNav key="nav">{breadcrumbs}</SiteNav>
                             </header>
                             <main>{children}</main>
                             <footer>

@@ -1,22 +1,24 @@
 import { UUID } from "@phylopic/utils"
 import { useRouter } from "next/router"
-import { useCallback, useEffect, useState } from "react"
-import useSWRImmutable from "swr/immutable"
+import { useCallback, useState } from "react"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 const useImageSpawn = () => {
-    const [requested, setRequested] = useState(false)
+    const [pending, setPending] = useState(false)
+    const [error, setError] = useState<any>()
     const fetcher = useAuthorizedJSONFetcher<{ existing: boolean; uuid: UUID }>()
-    const { data, error, isValidating } = useSWRImmutable(
-        requested ? { method: "POST", url: `/api/spawn` } : null,
-        fetcher,
-    )
     const router = useRouter()
-    useEffect(() => {
-        if (data) {
-            router.push(`/edit/${encodeURIComponent(data.uuid)}${data.existing ? "" : "/file"}`)
+    const spawn = useCallback(async () => {
+        setPending(true)
+        setError(false)
+        try {
+            const result = await fetcher({ method: "POST", url: "/api/spawn" })
+            router.push(`/edit/${encodeURIComponent(result.uuid)}/file`)
+        } catch (e) {
+            setError(e)
+        } finally {
+            setPending(false)
         }
-    }, [data, router])
-    const spawn = useCallback(() => setRequested(true), [])
-    return [spawn, error, isValidating] as Readonly<[() => void, any, boolean]>
+    }, [fetcher, router])
+    return [spawn, error, pending] as Readonly<[() => void, any, boolean]>
 }
 export default useImageSpawn

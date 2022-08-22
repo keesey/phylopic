@@ -1,4 +1,5 @@
 @use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/hierarchy.scss";
 
 .main {
     align-items: center;
@@ -20,10 +21,14 @@
     }
 }
 
-.siteTitle {
+.breadcrumbs {
     font-family: Georgia, serif;
     font-size: x-large;
     font-weight: normal;
+
+    >* {
+        @include hierarchy.item;
+    }
 }
 
 .menuButton {

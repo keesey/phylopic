@@ -51,6 +51,7 @@ const Editor: FC<Props> = ({ uuid }) => {
             alert("The image has been deleted and will be removed from the site in the next build.")
         }
     }, [deletor])
+    const [revisionRequested, setRevisionRequested] = useState(false)
     const router = useRouter()
     const openWithConfirmation = useCallback(
         (path: "file" | "nodes" | "usage") => {
@@ -191,31 +192,51 @@ const Editor: FC<Props> = ({ uuid }) => {
                         )}
                         <p>What would you like to do?</p>
                     </Speech>
-                    <UserOptions>
-                        <UserLinkButton href="/" icon={ICON_ARROW_LEFT}>
-                            Go back to the overview.
-                        </UserLinkButton>
-                        <UserButton onClick={() => openWithConfirmation("file")} icon={ICON_PENCIL}>
-                            Revise the image file.
-                        </UserButton>
-                        <UserButton onClick={() => openWithConfirmation("nodes")} icon={ICON_PENCIL}>
-                            Revise the taxonomic assignment.
-                        </UserButton>
-                        <UserButton onClick={() => openWithConfirmation("usage")} icon={ICON_PENCIL}>
-                            Revise the license or attribution.
-                        </UserButton>
-                        {image.submitted && (
-                            <UserButton danger icon={image.accepted ? ICON_DANGER : ICON_X} onClick={withdraw}>
-                                {!image.accepted && "Withdraw this submission."}
-                                {image.accepted && "Remove this image."}
+                    {!revisionRequested && (
+                        <UserOptions>
+                            <UserLinkButton href="/" icon={ICON_ARROW_LEFT}>
+                                Go back to the overview.
+                            </UserLinkButton>
+                            <UserButton onClick={() => setRevisionRequested(true)} icon={ICON_PENCIL}>
+                                Revise the submission.
                             </UserButton>
-                        )}
-                        {!image.submitted && (
-                            <UserButton icon={ICON_DANGER} danger onClick={deleteImage}>
-                                Delete this submission.
-                            </UserButton>
-                        )}
-                    </UserOptions>
+                            {image.submitted && (
+                                <UserButton danger icon={image.accepted ? ICON_DANGER : ICON_X} onClick={withdraw}>
+                                    {!image.accepted && "Withdraw this submission."}
+                                    {image.accepted && "Remove this image."}
+                                </UserButton>
+                            )}
+                            {!image.submitted && (
+                                <UserButton icon={ICON_DANGER} danger onClick={deleteImage}>
+                                    Delete this submission.
+                                </UserButton>
+                            )}
+                        </UserOptions>
+                    )}
+                    {revisionRequested && (
+                        <>
+                            <Speech mode="user">
+                                <p>Revise the submission.</p>
+                            </Speech>
+                            <Speech mode="system">
+                                <p>Oh yeah? What do you want to revise?</p>
+                            </Speech>
+                            <UserOptions>
+                                <UserButton onClick={() => openWithConfirmation("file")} icon={ICON_PENCIL}>
+                                    The image file.
+                                </UserButton>
+                                <UserButton onClick={() => openWithConfirmation("nodes")} icon={ICON_PENCIL}>
+                                    The taxonomic assignment.
+                                </UserButton>
+                                <UserButton onClick={() => openWithConfirmation("usage")} icon={ICON_PENCIL}>
+                                    The license or attribution.
+                                </UserButton>
+                                <UserButton icon={ICON_X} danger onClick={() => setRevisionRequested(false)}>
+                                    Never mind.
+                                </UserButton>
+                            </UserOptions>
+                        </>
+                    )}
                 </>
             )}
         </Dialogue>
