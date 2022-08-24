@@ -1,6 +1,6 @@
+import { isSubmittableImage } from "@phylopic/source-models"
 import { LICENSE_NAMES, UUID } from "@phylopic/utils"
-import { useRouter } from "next/router"
-import { FC, useCallback, useState } from "react"
+import { FC, useCallback, useMemo, useState } from "react"
 import useImage from "~/editing/hooks/useImage"
 import useImageDeletor from "~/editing/hooks/useImageDeletor"
 import useImageMutator from "~/editing/hooks/useImageMutator"
@@ -9,11 +9,10 @@ import useImageSrc from "~/editing/hooks/useImageSrc"
 import useLiveImageExists from "~/editing/hooks/useLiveImageExists"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_ARROW_LEFT, ICON_DANGER, ICON_PENCIL, ICON_X } from "~/ui/ICON_SYMBOLS"
+import { ICON_CHECK, ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
-import UserButton from "~/ui/UserButton"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 import UserVerification from "../../ui/UserVerification"
@@ -23,6 +22,7 @@ export type Props = {
 }
 const Editor: FC<Props> = ({ uuid }) => {
     const image = useImage(uuid)
+    const submittable = useMemo(() => isSubmittableImage(image), [image])
     const isLive = useLiveImageExists(uuid)
     const src = useImageSrc(uuid)
     const general = useImageNode(uuid, "general")
@@ -30,20 +30,6 @@ const Editor: FC<Props> = ({ uuid }) => {
     const [unready, setUnready] = useState<boolean | null>(null)
     const mutate = useImageMutator(uuid)
     const submit = useCallback(() => mutate({ submitted: true }), [mutate])
-    const withdraw = useCallback(() => {
-        if (
-            confirm(
-                `Are you really sure you want to ${
-                    image?.accepted ? "remove this image from the site" : "withdraw this submission"
-                }? It's so nice!`,
-            )
-        ) {
-            mutate({ submitted: false })
-            if (image?.accepted) {
-                alert("The image will be removed in the next build.")
-            }
-        }
-    }, [image?.accepted, mutate])
     const deletor = useImageDeletor(uuid)
     const deleteImage = useCallback(() => {
         if (confirm("Are you sure you want to PERMANENTLY delete this submission?")) {
@@ -51,26 +37,13 @@ const Editor: FC<Props> = ({ uuid }) => {
             alert("The image has been deleted and will be removed from the site in the next build.")
         }
     }, [deletor])
-    const [revisionRequested, setRevisionRequested] = useState(false)
-    const router = useRouter()
-    const openWithConfirmation = useCallback(
-        (path: "file" | "nodes" | "usage") => {
-            if (
-                !image?.accepted ||
-                confirm("This submission has already been accepted. Are you sure you want to edit it?")
-            ) {
-                router.push(`/edit/${encodeURIComponent(uuid)}/${path}`)
-            }
-        },
-        [image?.accepted, router, uuid],
-    )
     if (!image || !src) {
         return <LoadingState>Checking contribution status&hellip;</LoadingState>
     }
     return (
         <Dialogue>
             <Speech mode="user">
-                <SpeechStack>
+                <SpeechStack collapsible>
                     <figure>
                         <FileView mode="light" src={src} />
                     </figure>
@@ -125,7 +98,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                     </figcaption>
                 </SpeechStack>
             </Speech>
-            {!image.accepted && !image.submitted && (
+            {!image.accepted && !image.submitted && submittable && (
                 <>
                     <Speech mode="system">
                         <p>
@@ -139,6 +112,42 @@ const Editor: FC<Props> = ({ uuid }) => {
                         onAffirm={submit}
                         onDeny={() => setUnready(true)}
                     />
+                    {unready && (
+                        <>
+                            <Speech mode="system">
+                                <p>Well then, what do you want to do?</p>
+                            </Speech>
+                            <UserOptions>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/file`} icon={ICON_PENCIL}>
+                                    {src ? "Change the file." : "Upload the file."}
+                                </UserLinkButton>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/nodes`} icon={ICON_PENCIL}>
+                                    {image.specific ? "Change the taxonomic assignment." : "Assign the taxon."}
+                                </UserLinkButton>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
+                                    {image.license ? "Change the license or attribution." : "Pick a license."}
+                                </UserLinkButton>
+                            </UserOptions>
+                        </>
+                    )}
+                </>
+            )}
+            {!image.accepted && !image.submitted && !submittable && (
+                <>
+                    <Speech mode="system">
+                        <p>Looks like you&rsquo;ve got some work left to do on this. Where do you want to start?</p>
+                    </Speech>
+                    <UserOptions>
+                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/file`} icon={ICON_PENCIL}>
+                            {src ? "Change the file." : "Upload the file."}
+                        </UserLinkButton>
+                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/nodes`} icon={ICON_PENCIL}>
+                            {image.specific ? "Change the taxonomic assignment." : "Assign the taxon."}
+                        </UserLinkButton>
+                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
+                            {image.license ? "Change the license or attribution." : "Pick a license."}
+                        </UserLinkButton>
+                    </UserOptions>
                 </>
             )}
             {image.accepted && !image.submitted && (
@@ -155,7 +164,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                     />
                 </>
             )}
-            {(image.submitted || unready) && (
+            {image.submitted && (
                 <>
                     <Speech mode="system">
                         {image.accepted && (
@@ -185,58 +194,17 @@ const Editor: FC<Props> = ({ uuid }) => {
                                 )}
                             </p>
                         )}
-                        {!image.accepted && image.submitted && (
+                        {!image.accepted && (
                             <p>
                                 <strong>Sweet.</strong> This image has been submitted for review.
                             </p>
                         )}
-                        <p>What would you like to do?</p>
                     </Speech>
-                    {!revisionRequested && (
-                        <UserOptions>
-                            <UserLinkButton href="/" icon={ICON_ARROW_LEFT}>
-                                Go back to the overview.
-                            </UserLinkButton>
-                            <UserButton onClick={() => setRevisionRequested(true)} icon={ICON_PENCIL}>
-                                Revise the submission.
-                            </UserButton>
-                            {image.submitted && (
-                                <UserButton danger icon={image.accepted ? ICON_DANGER : ICON_X} onClick={withdraw}>
-                                    {!image.accepted && "Withdraw this submission."}
-                                    {image.accepted && "Remove this image."}
-                                </UserButton>
-                            )}
-                            {!image.submitted && (
-                                <UserButton icon={ICON_DANGER} danger onClick={deleteImage}>
-                                    Delete this submission.
-                                </UserButton>
-                            )}
-                        </UserOptions>
-                    )}
-                    {revisionRequested && (
-                        <>
-                            <Speech mode="user">
-                                <p>Revise the submission.</p>
-                            </Speech>
-                            <Speech mode="system">
-                                <p>Oh yeah? What do you want to revise?</p>
-                            </Speech>
-                            <UserOptions>
-                                <UserButton onClick={() => openWithConfirmation("file")} icon={ICON_PENCIL}>
-                                    The image file.
-                                </UserButton>
-                                <UserButton onClick={() => openWithConfirmation("nodes")} icon={ICON_PENCIL}>
-                                    The taxonomic assignment.
-                                </UserButton>
-                                <UserButton onClick={() => openWithConfirmation("usage")} icon={ICON_PENCIL}>
-                                    The license or attribution.
-                                </UserButton>
-                                <UserButton icon={ICON_X} danger onClick={() => setRevisionRequested(false)}>
-                                    Never mind.
-                                </UserButton>
-                            </UserOptions>
-                        </>
-                    )}
+                    <UserOptions>
+                        <UserLinkButton href="/" icon={ICON_CHECK}>
+                            Cool.
+                        </UserLinkButton>
+                    </UserOptions>
                 </>
             )}
         </Dialogue>

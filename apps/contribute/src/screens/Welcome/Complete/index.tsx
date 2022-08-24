@@ -25,8 +25,8 @@ const Complete: FC = () => {
                         <strong>
                             <NumberAsWords max={100} value={submitted} />
                         </strong>{" "}
-                        submission{submitted === 1 ? "" : "s"} awaiting review. You may click on{" "}
-                        {submitted === 1 ? "it" : "any of them"} to make revisions first, if you want.
+                        submission{submitted === 1 ? "" : "s"} awaiting review. There&rsquo;s still time to make
+                        revisions, if you want&mdash;just click on the image.
                     </p>
                     {(hasAccepted || hasWithdrawn) && (
                         <p>
@@ -78,7 +78,6 @@ const Complete: FC = () => {
                 </Speech>
             )}
             <UserOptions noAutoScroll>
-                <SpawnButton>Upload a new silhouette.</SpawnButton>
                 <ImagePaginator filter={filter}>
                     {images =>
                         images.map(image => (

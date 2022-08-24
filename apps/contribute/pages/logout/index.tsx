@@ -2,13 +2,12 @@
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
 import { FC } from "react"
-import useAuthToken from "~/auth/hooks/useAuthToken"
+import useAuthorized from "~/auth/hooks/useAuthorized"
 import PageLayout from "~/pages/PageLayout"
 const ConfirmLogout = dynamic(() => import("~/screens/ConfirmLogout"), { ssr: false })
 const Farewell = dynamic(() => import("~/screens/Farewell"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
-        breadcrumbs={<a>Sign Out</a>}
         head={{
             title: "PhyloPic: Sign Out",
             url: "https://contribute.phylopic.org/logout",
@@ -19,8 +18,8 @@ const Page: NextPage = () => (
 )
 export default Page
 const Content: FC = () => {
-    const token = useAuthToken()
-    if (token) {
+    const authorized = useAuthorized()
+    if (authorized) {
         return <ConfirmLogout />
     }
     return <Farewell />

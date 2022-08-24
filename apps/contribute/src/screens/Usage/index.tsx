@@ -37,7 +37,7 @@ const Usage: FC<Props> = ({ uuid }) => {
     return (
         <Dialogue>
             <Speech mode="user">
-                <SpeechStack>
+                <SpeechStack collapsible>
                     <FileView src={src} mode="light" />
                     {specific && (
                         <p>

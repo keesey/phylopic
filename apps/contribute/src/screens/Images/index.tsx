@@ -17,7 +17,6 @@ const Images: FC<Props> = ({ children, filter }) => {
         <Dialogue>
             <Speech mode="system">{children(total)}</Speech>
             <UserOptions noAutoScroll>
-                <UserLinkButton href="/">← Return to Overview.</UserLinkButton>
                 <ImagePaginator key="images" filter={filter}>
                     {images =>
                         images.map(image => (

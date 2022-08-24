@@ -11,18 +11,11 @@ type Props = {
 }
 const Page: NextPage<Props> = ({ uuid }) => (
     <PageLayout
-        breadcrumbs={[
-            <AnchorLink href={`/edit/${encodeURIComponent(uuid)}`}>
-                <span>Your Image</span>
-            </AnchorLink>,
-            <a>
-                <span>Usage</span>
-            </a>,
-        ]}
         head={{
             title: "PhyloPic: Usage of Your Image",
             url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/usage`,
         }}
+        imageUUID={uuid}
     >
         <AuthorizedOnly>
             <Usage uuid={uuid} />

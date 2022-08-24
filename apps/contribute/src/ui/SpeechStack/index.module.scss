@@ -10,4 +10,10 @@
     &.fullWidth {
         width: 100%;
     }
+
+    @media screen and (max-width: 640px) {
+        &.collapsible {
+            flex-direction: column;
+        }
+    }
 }

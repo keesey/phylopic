@@ -1,7 +1,7 @@
 import { FC, useCallback, useContext } from "react"
 import AuthContext from "~/auth/AuthContext"
 import Dialogue from "~/ui/Dialogue"
-import { ICON_ARROW_LEFT, ICON_DANGER, ICON_X } from "~/ui/ICON_SYMBOLS"
+import { ICON_ARROW_LEFT, ICON_X } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserLinkButton from "~/ui/UserLinkButton"
@@ -15,11 +15,11 @@ const ConfirmLogout: FC = () => {
     return (
         <Dialogue>
             <Speech mode="system">
-                <p>Are you sure you want to log out?</p>
+                <p>Are you sure you want to sign out?</p>
             </Speech>
             <UserOptions>
                 <UserButton danger icon={ICON_X} onClick={handleLogOutButtonClick}>
-                    Yes, log me out.
+                    Yes, sign me out.
                 </UserButton>
                 <UserLinkButton icon={ICON_ARROW_LEFT} href="/">
                     No, I changed my mind.

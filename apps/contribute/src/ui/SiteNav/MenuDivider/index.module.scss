@@ -1,0 +1,9 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    hr {
+        background: none;
+        border: none;
+        border-top: 1px solid colors.$wash;
+    }
+}
