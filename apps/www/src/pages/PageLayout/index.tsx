@@ -9,13 +9,12 @@ import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 export type Props = {
     aside?: ReactNode
-    breadcrumbs?: ReactNode
     build?: number
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
     initialText?: string
 }
-const PageLayout: FC<Props> = ({ aside, breadcrumbs, build, children, fallback = {}, initialText }) => {
+const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialText }) => {
     useEffect(() => {
         try {
             document.domain = "phylopic.org"
@@ -31,7 +30,7 @@ const PageLayout: FC<Props> = ({ aside, breadcrumbs, build, children, fallback =
                     {aside && <aside>{aside}</aside>}
                     <SearchContainer initialText={initialText}>
                         <header>
-                            <SiteNav>{breadcrumbs}</SiteNav>
+                            <SiteNav />
                         </header>
                         <main>
                             <SearchOverlay>{children}</SearchOverlay>

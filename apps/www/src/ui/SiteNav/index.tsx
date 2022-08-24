@@ -1,15 +1,12 @@
 import { AnchorLink } from "@phylopic/ui"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import { FC, ReactNode, useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import SearchBar from "../SearchBar"
 import SiteTitle from "../SiteTitle"
 import styles from "./index.module.scss"
 const DropdownNav = dynamic(() => import("./DropdownNav"), { ssr: false })
-export type Props = {
-    children?: ReactNode
-}
-const SiteNav: FC<Props> = ({ children }) => {
+const SiteNav: FC = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const router = useRouter()
     const handleMenuButtonClick = useCallback(() => setDropdownOpen(!dropdownOpen), [dropdownOpen])
