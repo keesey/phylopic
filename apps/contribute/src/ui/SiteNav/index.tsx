@@ -1,18 +1,13 @@
 import { AnchorLink } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
-import clsx from "clsx"
-import dynamic from "next/dynamic"
 import { FC, useState } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useImage from "~/editing/hooks/useImage"
 import useContributor from "~/profile/useContributor"
 import SiteTitle from "../SiteTitle"
+import DropDownMenu from "./DropDownMenu"
 import styles from "./index.module.scss"
 import NavItem from "./NavItem"
-const AccountMenu = dynamic(() => import("./menus/AccountMenu"), { ssr: false })
-const EditMenu = dynamic(() => import("./menus/EditMenu"), { ssr: false })
-const FileMenu = dynamic(() => import("./menus/FileMenu"), { ssr: false })
-const ViewMenu = dynamic(() => import("./menus/ViewMenu"), { ssr: false })
 export type Props = {
     imageUUID?: UUID
 }
@@ -52,16 +47,7 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
                     </>
                 )}
             </nav>
-            {selected && (
-                <div className={clsx(styles.menu, styles[`menu-${selected}`])} role="menu">
-                    <ul>
-                        {selected === "account" && <AccountMenu />}
-                        {selected === "edit" && image && <EditMenu image={image} />}
-                        {selected === "file" && <FileMenu image={image} />}
-                        {selected === "view" && <ViewMenu />}
-                    </ul>
-                </div>
-            )}
+            <DropDownMenu image={image} onClose={() => setSelected(undefined)} selected={selected} />
         </>
     )
 }

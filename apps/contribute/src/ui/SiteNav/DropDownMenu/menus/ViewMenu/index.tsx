@@ -1,5 +1,3 @@
-import { Image } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
 import { FC } from "react"
 import useImageCount from "~/editing/hooks/useImageCount"
 import { ICON_BOX, ICON_CHECK, ICON_ELLIPSIS, ICON_X } from "~/ui/ICON_SYMBOLS"

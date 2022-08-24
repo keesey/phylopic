@@ -11,7 +11,7 @@ export type Props = {
 const MenuLink: FC<Props> = ({ disabled, href, icon, label }) => {
     return (
         <li className={clsx(styles.main, disabled && styles.disabled)} role="menuitem">
-            <AnchorLink className={styles.link} href={href}>
+            <AnchorLink className={styles.link} href={disabled ? "#" : href}>
                 <span className={styles.icon}>{icon}</span>
                 <span className={styles.label}>{label}</span>
             </AnchorLink>

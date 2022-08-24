@@ -6,8 +6,8 @@ import useImageDeletor from "~/editing/hooks/useImageDeletor"
 import useImageMutator from "~/editing/hooks/useImageMutator"
 import useImageSpawn from "~/editing/hooks/useImageSpawn"
 import { ICON_CHECK, ICON_DANGER, ICON_PLUS, ICON_X } from "~/ui/ICON_SYMBOLS"
-import MenuDivider from "../../MenuDivider"
 import MenuButton from "../../MenuButton"
+import MenuDivider from "../../MenuDivider"
 export type Props = {
     image?: Image & { uuid: UUID }
 }
