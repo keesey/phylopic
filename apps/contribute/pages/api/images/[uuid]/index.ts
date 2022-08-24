@@ -29,7 +29,6 @@ const index: NextApiHandler<Image> = async (req, res) => {
             case "GET":
             case "HEAD": {
                 res.status(200)
-                res.setHeader("cache-control", "max-age=0, stale-while-revalidate=86400")
                 res.json(image)
                 break
             }

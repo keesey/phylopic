@@ -2,23 +2,27 @@ import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
-import getImageFilter from "~/pagination/getImageFilter"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<{ total: number }> = async (req, res) => {
+const index: NextApiHandler<{ accepted: number, incomplete: number, submitted: number, withdrawn: number }> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const { sub: contributorUUID } = (await verifyAuthorization(req.headers)) ?? {}
+        if (!contributorUUID) {
+            throw 401
+        }
         if (!isUUIDv4(contributorUUID)) {
             throw 403
         }
         switch (req.method) {
             case "GET":
             case "HEAD": {
-                const filter = getImageFilter(req.query)
                 client = new SourceClient()
-                const total = await client.contributor(contributorUUID).images[filter].totalItems()
-                res.setHeader("cache-control", "max-age=0, stale-while-revalidate=86400")
-                res.json({ total })
+                res.json({
+                    accepted: await client.contributor(contributorUUID).images.accepted.totalItems(),
+                    incomplete: await client.contributor(contributorUUID).images.incomplete.totalItems(),
+                    submitted: await client.contributor(contributorUUID).images.submitted.totalItems(),
+                    withdrawn: await client.contributor(contributorUUID).images.withdrawn.totalItems(),
+                })
                 break
             }
             case "OPTIONS": {

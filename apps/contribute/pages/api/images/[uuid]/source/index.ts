@@ -36,7 +36,6 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
                 }
                 const { data, type } = await imageClient.file.get()
                 res.status(200)
-                res.setHeader("cache-control", "max-age=0, stale-while-revalidate=86400")
                 res.setHeader("content-type", type)
                 res.send(data)
                 break

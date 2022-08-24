@@ -22,7 +22,6 @@ const index: NextApiHandler<Page<Node, number> | (Node & { uuid: UUID }) | Valid
                 client = new SourceClient()
                 const page = await (filter ? client.nodes.search(filter).page(pageIndex) : client.nodes.page(pageIndex))
                 res.status(200)
-                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=2592000")
                 res.json(page)
                 break
             }

@@ -16,7 +16,6 @@ const index: NextApiHandler<Node> = async (req, res) => {
                 client = new SourceClient()
                 const node = await client.node(uuid).get()
                 res.status(200)
-                res.setHeader("cache-control", "max-age=30, stale-while-revalidate=2592000")
                 res.json(node)
                 break
             }

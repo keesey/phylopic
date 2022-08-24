@@ -20,7 +20,6 @@ const index: NextApiHandler<{ items: ReadonlyArray<Image & { uuid: UUID }>; next
                 const pageIndex = getPageIndex(req.query)
                 client = new SourceClient()
                 const page = await client.contributor(contributorUUID).images[filter].page(pageIndex)
-                res.setHeader("cache-control", "max-age=0, stale-while-revalidate=86400")
                 res.json(page)
                 break
             }
