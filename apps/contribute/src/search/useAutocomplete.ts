@@ -3,7 +3,6 @@ import { compareStrings } from "@phylopic/utils"
 import { useMemo } from "react"
 import useSWR from "swr"
 import fetchJSON from "~/swr/fetchJSON"
-import useEOLResults from "./useEOLResults"
 import useOTOLResults from "./useOTOLResults"
 const MAX_LENGTH = 10
 const getSortIndex = (value: string, query: string) => {
@@ -30,12 +29,8 @@ const useAutocomplete = (text: string): readonly string[] => {
     )
     const phyloPic = useSWR<QueryMatches>(phyloPicKey, fetchJSON)
     const otol = useOTOLResults(normalized)
-    const eol = useEOLResults(normalized)
     const all = useMemo(() => {
         const result = new Set<string>()
-        if (eol.data) {
-            eol.data.results.forEach(eolResult => result.add(normalizeQuery(eolResult.title)))
-        }
         if (otol.data) {
             otol.data.forEach(otolName => result.add(normalizeQuery(otolName.unique_name)))
         }
@@ -43,7 +38,7 @@ const useAutocomplete = (text: string): readonly string[] => {
             phyloPic.data.matches.forEach(value => result.add(normalizeQuery(value)))
         }
         return result
-    }, [eol.data, otol.data, phyloPic.data])
+    }, [otol.data, phyloPic.data])
     return useMemo(
         () =>
             Array.from(all)
