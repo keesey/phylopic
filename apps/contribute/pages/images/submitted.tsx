@@ -22,11 +22,11 @@ const Page: NextPage = () => (
                     ) : total ? (
                         <p>
                             {total === 1 ? "This is the image" : "These are the images"} you have submitted which{" "}
-                            {total === 1 ? "is" : "are"} pending review. There's still time to make revisions, if you want&mdash;just click on {total === 1 ? "it" : "any of them"}{" "}
-                            to make changes.
+                            {total === 1 ? "is" : "are"} pending review. There's still time to make revisions, if you
+                            want&mdash;just click on {total === 1 ? "it" : "any of them"} to make changes.
                         </p>
                     ) : (
-                        <p>You do not have any images pending review.</p>   
+                        <p>You do not have any images pending review.</p>
                     )
                 }
             </Images>

@@ -47,7 +47,7 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
                             label={contributor.name}
                             onToggle={() => setSelected(selected === "account" ? undefined : "account")}
                             selected={selected === "account"}
-                            />
+                        />
                     </>
                 )}
             </nav>

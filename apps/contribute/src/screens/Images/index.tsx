@@ -27,9 +27,7 @@ const Images: FC<Props> = ({ children, filter }) => {
                         ))
                     }
                 </ImagePaginator>
-                {total === 0 && (
-                    <SpawnButton>Upload a Silhouette</SpawnButton>
-                )}
+                {total === 0 && <SpawnButton>Upload a Silhouette</SpawnButton>}
             </UserOptions>
         </Dialogue>
     )

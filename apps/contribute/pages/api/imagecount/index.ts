@@ -3,7 +3,10 @@ import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<{ accepted: number, incomplete: number, submitted: number, withdrawn: number }> = async (req, res) => {
+const index: NextApiHandler<{ accepted: number; incomplete: number; submitted: number; withdrawn: number }> = async (
+    req,
+    res,
+) => {
     let client: SourceClient | undefined
     try {
         const { sub: contributorUUID } = (await verifyAuthorization(req.headers)) ?? {}

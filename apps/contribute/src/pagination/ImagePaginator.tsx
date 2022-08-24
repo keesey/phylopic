@@ -26,7 +26,7 @@ const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader,
     )
     const fetcher = useAuthorizedJSONFetcher<Page<Image & { uuid: UUID }, number>>()
     const { data, error, isValidating, setSize, size } = useSWRInfinite(getKey, fetcher, {
-        revalidateFirstPage: true
+        revalidateFirstPage: true,
     })
     const items = useMemo(
         () =>

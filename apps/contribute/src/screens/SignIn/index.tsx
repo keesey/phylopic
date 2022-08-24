@@ -44,7 +44,7 @@ const SignIn: FC<Props> = ({ onSubmit }) => {
             <form className={styles.form} onSubmit={handleFormSubmit}>
                 <Speech mode="user">
                     <UserInput
-                        autocomplete="email"
+                        autoComplete="email"
                         id="email"
                         maxLength={128}
                         name="email"

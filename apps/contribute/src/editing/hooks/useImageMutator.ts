@@ -27,11 +27,11 @@ const useImageMutator = (uuid: UUID | undefined) => {
                 const key = `/api/images/${encodeURIComponent(uuid)}`
                 let promise: Promise<Image & { uuid: UUID }> | undefined
                 if (isSubmittableImage(newValue)) {
-                    promise = put(key, token, {...newValue, uuid})
-                    mutate(promise, { optimisticData: {...newValue, uuid}, rollbackOnError: true })
+                    promise = put(key, token, { ...newValue, uuid })
+                    mutate(promise, { optimisticData: { ...newValue, uuid }, rollbackOnError: true })
                 } else if (isImage(newValue) && !newValue.submitted) {
-                    promise = put(key, token, {...newValue, uuid})
-                    mutate(promise, { optimisticData: {...newValue, uuid}, rollbackOnError: true })
+                    promise = put(key, token, { ...newValue, uuid })
+                    mutate(promise, { optimisticData: { ...newValue, uuid }, rollbackOnError: true })
                 } else if (data) {
                     const newData = { ...data, ...newValue, uuid }
                     promise = patch(key, token, newValue, newData)

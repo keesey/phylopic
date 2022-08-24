@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, HTMLInputTypeAttribute, useCallback } from "react"
 import styles from "./index.module.scss"
 export interface Props {
-    autocomplete?: string
+    autoComplete?: string
     id?: string
     list?: string
     maxLength?: number
@@ -15,7 +15,7 @@ export interface Props {
     value?: string
 }
 const UserInput: FC<Props> = ({
-    autocomplete,
+    autoComplete,
     id,
     list,
     maxLength,
@@ -36,7 +36,7 @@ const UserInput: FC<Props> = ({
     )
     return (
         <input
-            autoComplete={autocomplete}
+            autoComplete={autoComplete}
             className={styles.main}
             id={id}
             list={list}

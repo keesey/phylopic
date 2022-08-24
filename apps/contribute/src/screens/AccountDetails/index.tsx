@@ -1,44 +1,26 @@
+import { INCOMPLETE_STRING } from "@phylopic/source-models"
 import { ChangeEvent, FC, FormEvent, ReactNode, useCallback, useState } from "react"
 import useContributorMutator from "~/profile/useContributorMutator"
 import useContributorSWR from "~/profile/useContributorSWR"
 import Dialogue from "~/ui/Dialogue"
+import { ICON_CHECK, ICON_X } from "~/ui/ICON_SYMBOLS"
 import SiteTitle from "~/ui/SiteTitle"
+import Speech from "~/ui/Speech"
+import SpeechStack from "~/ui/SpeechStack"
+import UserButton from "~/ui/UserButton"
+import UserInput from "~/ui/UserInput"
+import UserOptions from "~/ui/UserOptions"
+import UserVerification from "~/ui/UserVerification"
 import ErrorState from "../ErrorState"
 import LoadingState from "../LoadingState"
 import styles from "./index.module.scss"
 export type Props = {
     children?: ReactNode
-    submitLabel: string
+    onComplete?: () => void
 }
-const AccountDetails: FC<Props> = ({ children, submitLabel }) => {
+const AccountDetails: FC<Props> = ({ children, onComplete }) => {
     const { data: contributor, error } = useContributorSWR()
-    const [name, setName] = useState("")
-    const [showEmailAddress, setShowEmailAddress] = useState(true)
-    const handleNameInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setName(event.target.value)
-    }, [])
-    const handleShowEmailAddressInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setShowEmailAddress(event.target.checked)
-    }, [])
     const mutate = useContributorMutator()
-    const handleFormSubmit = useCallback(
-        (event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault()
-            if (contributor && name) {
-                const normalized = name.replaceAll(/\s+/g, " ").trim()
-                setName(normalized)
-                if (!normalized.length) {
-                    alert("You have to give me some kind of name.")
-                } else {
-                    mutate({
-                        name,
-                        showEmailAddress,
-                    })
-                }
-            }
-        },
-        [contributor, mutate, name, showEmailAddress],
-    )
     if (error) {
         return (
             <ErrorState>
@@ -50,36 +32,46 @@ const AccountDetails: FC<Props> = ({ children, submitLabel }) => {
     if (!contributor) {
         return <LoadingState>Checking account&hellip;</LoadingState>
     }
+    const complete = Boolean(contributor.name && contributor.name !== INCOMPLETE_STRING)
     return (
         <Dialogue>
             {children}
-            <form className={styles.main} onSubmit={handleFormSubmit}>
-                <input
-                    autoComplete="name"
-                    id="name"
-                    maxLength={128}
-                    name="name"
-                    onChange={handleNameInputChange}
-                    placeholder="Your Full Name, or Alias"
-                    required
-                    type="text"
-                    value={name}
-                />
-                <div className={styles.field}>
-                    <input
-                        checked={showEmailAddress}
-                        id="showEmailAddress"
-                        name="showEmailAddress"
-                        onChange={handleShowEmailAddressInputChange}
+            <Speech mode="user">
+                <SpeechStack compact fullWidth>
+                    <span className={styles.nameLabel}>My name is&nbsp;</span>
+                    <UserInput
+                        autoComplete="name"
+                        id="name"
+                        maxLength={128}
+                        name="name"
+                        onChange={name => mutate({ name })}
+                        placeholder="Full Name, or Alias"
                         required
-                        type="checkbox"
+                        type="text"
+                        value={contributor.name}
                     />
-                    <label htmlFor="showEmailAddress">
-                        Allow people to contact you through <SiteTitle />.
-                    </label>
-                </div>
-                <input type="submit" value={submitLabel} />
-            </form>
+                    <span>.</span>
+                </SpeechStack>
+            </Speech>
+            <Speech mode="system">
+                <p>
+                    Do you want your email address to be visible?
+                    {complete && <> (Currently it is {!contributor.showEmailAddress && " not"}shown.)</>}
+                </p>
+            </Speech>
+            <UserOptions>
+                <UserButton icon={ICON_CHECK} onClick={() => mutate({ showEmailAddress: true })}>
+                    Show my email address.
+                </UserButton>
+                <UserButton danger icon={ICON_X} onClick={() => mutate({ showEmailAddress: false })}>
+                    Hide my email address.
+                </UserButton>
+                {complete && onComplete && (
+                    <UserButton icon={ICON_CHECK} onClick={onComplete}>
+                        All set.
+                    </UserButton>
+                )}
+            </UserOptions>
         </Dialogue>
     )
 }
