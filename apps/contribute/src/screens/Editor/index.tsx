@@ -13,6 +13,7 @@ import { ICON_CHECK, ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
+import UserButton from "~/ui/UserButton"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 import UserVerification from "../../ui/UserVerification"
@@ -127,6 +128,9 @@ const Editor: FC<Props> = ({ uuid }) => {
                                 <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
                                     {image.license ? "Change the license or attribution." : "Pick a license."}
                                 </UserLinkButton>
+                                <UserButton icon={ICON_CHECK} onClick={submit}>
+                                    You know what? I am ready to submit it.
+                                </UserButton>
                             </UserOptions>
                         </>
                     )}

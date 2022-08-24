@@ -16,11 +16,13 @@ const Page: NextPage = () => (
                 {total =>
                     typeof total !== "number" ? (
                         <p>Loading withdrawn submissions…</p>
-                    ) : (
+                    ) : total ? (
                         <p>
                             You have withdrawn <NumberAsWords value={total} /> of your submissions. Click on{" "}
                             {total === 1 ? "it" : "any of them"} to reconsider.
                         </p>
+                    ) : (
+                        <p>You have not withdrawn any submissions.</p>
                     )
                 }
             </Images>

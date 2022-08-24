@@ -15,12 +15,14 @@ const Page: NextPage = () => (
                 {total =>
                     typeof total !== "number" ? (
                         <p>Loading submissions…</p>
-                    ) : (
+                    ) : total ? (
                         <p>
                             {total === 1 ? "This is a submission" : "These are submissions"} you have started. Very
                             cool! You can click on {total === 1 ? "the image" : "any of the images"} below to complete{" "}
                             {total === 1 ? "it" : "them"}.
                         </p>
+                    ) : (
+                        <p>You do not currently have any incomplete submissions.</p>
                     )
                 }
             </Images>

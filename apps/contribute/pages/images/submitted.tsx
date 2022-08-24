@@ -19,12 +19,14 @@ const Page: NextPage = () => (
                             <p>Loading submissions&hellip;</p>
                             <Loader />
                         </>
-                    ) : (
+                    ) : total ? (
                         <p>
                             {total === 1 ? "This is the image" : "These are the images"} you have submitted which{" "}
-                            {total === 1 ? "is" : "are"} pending review. Click on {total === 1 ? "it" : "any of them"}{" "}
-                            if you want to make any changes first.
+                            {total === 1 ? "is" : "are"} pending review. There's still time to make revisions, if you want&mdash;just click on {total === 1 ? "it" : "any of them"}{" "}
+                            to make changes.
                         </p>
+                    ) : (
+                        <p>You do not have any images pending review.</p>   
                     )
                 }
             </Images>

@@ -16,7 +16,7 @@ const Page: NextPage = () => (
                 {total =>
                     typeof total !== "number" ? (
                         <p>Loading accepted submissions…</p>
-                    ) : (
+                    ) : total ? (
                         <p>
                             {total >= 6 && "Wow! "}
                             <strong>
@@ -26,6 +26,8 @@ const Page: NextPage = () => (
                             {total < 6 && " Nice!"}
                             {total >= 12 && " Great job! "}
                         </p>
+                    ) : (
+                        <p>You do not currently have any accepted images.</p>
                     )
                 }
             </Images>

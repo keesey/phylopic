@@ -2,6 +2,7 @@
 
 .main {
     align-items: center;
+    box-shadow: 0 0 1em 0 colors.$shadow;
     display: flex;
     flex-direction: column;
     border-radius: 1em;

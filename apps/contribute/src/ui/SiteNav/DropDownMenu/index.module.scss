@@ -1,27 +1,27 @@
 @use "@phylopic/styles/colors.scss";
 
 .file {
-    left: 136px;
+    left: 143px;
 
-    @media screen and (max-width: 636px) {
+    @media screen and (max-width: 535px) {
         left: unset;
         right: 0;
     }
 }
 
 .edit {
-    left: 196px;
+    left: 238px;
 
-    @media screen and (max-width: 696px) {
+    @media screen and (max-width: 625px) {
         left: unset;
         right: 0;
     }
 }
 
 .view {
-    left: 254px;
+    left: 338px;
 
-    @media screen and (max-width: 754px) {
+    @media screen and (max-width: 730px) {
         left: unset;
         right: 0;
     }
@@ -39,7 +39,7 @@
     border-top: none;
     color: colors.$ink;
     display: flex;
-    filter: drop-shadow(-10px 10px 10px colors.$shadow);
+    filter: drop-shadow(0 1em 1em colors.$shadow);
     font-size: 21px;
     font-weight: normal;
     flex-direction: column;
@@ -50,14 +50,10 @@
     padding: 1em;
     position: fixed;
     top: 75px;
-    width: 500px;
+    width: 392px;
     z-index: 1;
 
-    @media screen and (max-width: 500px) {
-        border: none;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-        height: calc(100vh - 150px);
+    @media screen and (max-width: 392px) {
         left: 0;
         right: 0;
     }

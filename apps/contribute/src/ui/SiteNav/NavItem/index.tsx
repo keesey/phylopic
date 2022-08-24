@@ -5,10 +5,11 @@ export type Props = {
     disabled?: boolean
     label: ReactNode
     onToggle?: () => void
+    selected: boolean
 }
-const NavItem: FC<Props> = ({ disabled, label, onToggle }) => {
+const NavItem: FC<Props> = ({ disabled, label, onToggle, selected }) => {
     return (
-        <div className={styles.main} role="menuitem">
+        <div className={clsx(styles.main, selected && styles.selected )} role="menuitem">
             <a
                 aria-disabled={disabled}
                 className={clsx(styles.main, disabled && styles.disabled)}

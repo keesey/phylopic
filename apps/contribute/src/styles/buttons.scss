@@ -3,6 +3,7 @@
 
 @mixin user-base {
     align-items: center;
+    box-shadow: 0 0 1em 0 colors.$shadow;
     display: inline-flex;
     font-size: inherit;
     font-weight: normal;

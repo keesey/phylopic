@@ -32,6 +32,7 @@ const Uploader: FC<Props> = ({ uuid }) => {
     return (
         <UploadProgress
             buffer={reviewResult.buffer}
+            filename={fileResult?.file.name}
             onComplete={handleUploadProgressComplete}
             type={reviewResult.type}
             uuid={uuid}

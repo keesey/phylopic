@@ -26,16 +26,19 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
                     label="File"
                     disabled={!authorized}
                     onToggle={() => setSelected(selected === "file" ? undefined : "file")}
+                    selected={selected === "file"}
                 />
                 <NavItem
                     label="Edit"
                     disabled={!authorized || !image}
                     onToggle={() => setSelected(selected === "edit" ? undefined : "edit")}
+                    selected={selected === "edit"}
                 />
                 <NavItem
                     label="View"
                     disabled={!authorized}
                     onToggle={() => setSelected(selected === "view" ? undefined : "view")}
+                    selected={selected === "view"}
                 />
                 {authorized && contributor && (
                     <>
@@ -43,7 +46,8 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
                         <NavItem
                             label={contributor.name}
                             onToggle={() => setSelected(selected === "account" ? undefined : "account")}
-                        />
+                            selected={selected === "account"}
+                            />
                     </>
                 )}
             </nav>

@@ -1,4 +1,5 @@
 @use "@phylopic/styles/colors.scss";
+
 .main {
     align-items: center;
     background-color: colors.$vellumFade;
@@ -10,5 +11,5 @@
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 100;
+    z-index: 2;
 }

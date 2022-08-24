@@ -11,11 +11,12 @@ import UserOptions from "~/ui/UserOptions"
 import styles from "./index.module.scss"
 export interface Props {
     buffer: Buffer
+    filename?: string
     onComplete?: (uuid: UUID) => void
     type: ImageMediaType
     uuid: UUID
 }
-const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
+const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid }) => {
     const token = useAuthToken()
     const contributorUUID = useContributorUUID()
     const [loaded, setLoaded] = useState(0)
@@ -74,7 +75,7 @@ const UploadProgress: FC<Props> = ({ buffer, onComplete, type, uuid }) => {
     return (
         <Dialogue>
             <Speech mode="system">
-                <p>Uploading your image&hellip;</p>
+                <p>Uploading {filename || "your image"}&hellip;</p>
                 <progress className={styles.progress} value={loaded} max={isNaN(total) ? undefined : total} />
             </Speech>
         </Dialogue>

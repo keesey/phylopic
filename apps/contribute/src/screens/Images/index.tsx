@@ -3,6 +3,7 @@ import useImageCount from "~/editing/hooks/useImageCount"
 import { ImageFilter } from "~/pagination/ImageFilter"
 import ImagePaginator from "~/pagination/ImagePaginator"
 import Dialogue from "~/ui/Dialogue"
+import SpawnButton from "~/ui/SpawnButton"
 import Speech from "~/ui/Speech"
 import UserImageThumbnail from "~/ui/UserImageThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
@@ -26,6 +27,9 @@ const Images: FC<Props> = ({ children, filter }) => {
                         ))
                     }
                 </ImagePaginator>
+                {total === 0 && (
+                    <SpawnButton>Upload a Silhouette</SpawnButton>
+                )}
             </UserOptions>
         </Dialogue>
     )

@@ -2,6 +2,7 @@
 import { isImageMediaType } from "@phylopic/utils"
 import clsx from "clsx"
 import { FC, useCallback, useMemo } from "react"
+import LoadingState from "~/screens/LoadingState"
 import Dialogue from "~/ui/Dialogue"
 import {
     ICON_ARROW_DOWN,
@@ -10,7 +11,7 @@ import {
     ICON_ARROW_UP,
     ICON_CHECK,
     ICON_EQUALITY,
-    ICON_PENCIL,
+    ICON_PENCIL
 } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
@@ -18,7 +19,6 @@ import UserOptions from "~/ui/UserOptions"
 import useFileIsVector from "../hooks/useFileIsVector"
 import useVectorization from "../hooks/useVectorization"
 import useVectorizedImageSource from "../hooks/useVectorizedImageSource"
-import Pending from "../Pending"
 import styles from "./index.module.scss"
 import { ReviewResult } from "./ReviewResult"
 export interface Props {
@@ -47,7 +47,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
         }
     }, [onComplete, vectorized.data, vectorizedSource])
     if (vectorized.pending) {
-        return <Pending />
+        return <LoadingState>Give me a moment to process that&hellip;</LoadingState>
     }
     if (vectorizedSource) {
         return (

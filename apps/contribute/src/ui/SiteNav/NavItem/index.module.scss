@@ -1,7 +1,16 @@
+@use "@phylopic/styles/colors.scss";
+
 .main {
-    .disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-        min-width: 42px;
-    }
+    min-width: 48px;
+    padding: 0.5em;
+}
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.selected {
+    background-color: colors.$inkFade;
+    border-radius: 0.5em;
 }

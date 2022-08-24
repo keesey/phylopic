@@ -22,7 +22,6 @@ import useImageTooSmall from "../hooks/useImageTooSmall"
 import useWindowDragHighlight from "../hooks/useWindowDragHighlight"
 import useWindowDrop from "../hooks/useWindowDrop"
 import MEBIBYTE from "../MEBIBYTE"
-import Pending from "../Pending"
 import { FileResult } from "./FileResult"
 import styles from "./index.module.scss"
 const handleSubmit = (event: FormEvent) => {
@@ -79,7 +78,7 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
         return <LoadingState>One moment&hellip;</LoadingState>
     }
     if (buffer.pending) {
-        return <Pending />
+        return <LoadingState>Give me a moment to process that&hellip;</LoadingState>
     }
     return (
         <section className={clsx(styles.selectFile, highlightDrag && styles.highlighted)}>
@@ -199,7 +198,7 @@ const SelectFile: FC<Props> = ({ onComplete, uuid }) => {
                         </Speech>
                         <UserOptions>
                             <UserButton danger icon={ICON_ARROW_CIRCLE} onClick={handleResetClick}>
-                                Reset.
+                                Start over.
                             </UserButton>
                         </UserOptions>
                     </>

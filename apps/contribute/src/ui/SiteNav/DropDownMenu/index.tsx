@@ -1,9 +1,8 @@
 import { Image } from "@phylopic/source-models"
-import { useClickOutside } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
-import { FC, useRef, useState } from "react"
+import { FC } from "react"
 import styles from "./index.module.scss"
 const AccountMenu = dynamic(() => import("./menus/AccountMenu"), { ssr: false })
 const EditMenu = dynamic(() => import("./menus/EditMenu"), { ssr: false })
@@ -19,16 +18,8 @@ const DropDownMenu: FC<Props> = ({ image, onClose, selected }) => {
     if (!active) {
         return null
     }
-    return (<Content image={image} onClose={onClose} selected={selected} />)
-}
-type ContentProps = Props & {
-    selected: "account" | "file" | "edit" | "view"
-}
-const Content: FC<ContentProps> = ({ image, onClose, selected }) => {
-    const [element, setElement] = useState<HTMLDivElement | null>(null)
-    useClickOutside(element, onClose)
     return (
-        <div className={clsx(styles.main, styles[selected])} ref={setElement} role="menu">
+        <div className={clsx(styles.main, styles[selected])} role="menu">
             <ul>
                 {selected === "account" && <AccountMenu />}
                 {selected === "edit" && image && <EditMenu image={image} />}
