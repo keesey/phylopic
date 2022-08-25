@@ -14,10 +14,7 @@ const UserImageThumbnail: FC<Props> = ({ uuid }) => {
     const specific = useImageNode(uuid, "specific")
     return (
         <figure>
-            <FileThumbnailView
-                alt={specific ? stringifyNomen(specific.names[0]) : undefined}
-                src={src}
-            />
+            <FileThumbnailView alt={specific ? stringifyNomen(specific.names[0]) : undefined} src={src} />
             <figcaption className={styles.caption}>
                 {specific && <NameView value={specific.names[0]} short />}
                 {!specific && " "}
