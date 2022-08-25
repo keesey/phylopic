@@ -12,7 +12,6 @@ import isServerError from "~/http/isServerError"
 import useContributorSWR from "~/profile/useContributorSWR"
 import AccountDetails from "~/screens/AccountDetails"
 import ErrorState from "~/screens/ErrorState"
-import Speech from "~/ui/Speech"
 import getTTL from "~/ui/TTLSelector/getTTL"
 import { DAY } from "~/ui/TTLSelector/TTL_VALUES"
 const LoadingState = dynamic(() => import("~/screens/LoadingState"), { ssr: false })
@@ -81,13 +80,7 @@ const Home: FC = () => {
         return <AuthExpired onSubmit={handleSubmit} />
     }
     if (!contributorSWR.data?.name || contributorSWR.data?.name === INCOMPLETE_STRING) {
-        return (
-            <AccountDetails onComplete={() => router.push("/")}>
-                <Speech mode="system">
-                    <p><strong>Welcome!</strong> What should we call you here?</p>
-                </Speech>
-            </AccountDetails>
-        )
+        return <AccountDetails />
     }
     return <Welcome />
 }

@@ -16,10 +16,7 @@ const useExternalResults = (text: string) => {
             })) ?? EMPTY,
         [otol.data],
     )
-    const combined = useMemo(
-        () => otol.data ? [...otolEntries] : EMPTY,
-        [otol.data, otolEntries],
-    )
+    const combined = useMemo(() => (otol.data ? [...otolEntries] : EMPTY), [otol.data, otolEntries])
     const translated = useTranslatedResults(combined)
     return {
         data: translated.data,

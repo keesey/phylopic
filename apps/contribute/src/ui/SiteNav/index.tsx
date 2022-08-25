@@ -1,3 +1,4 @@
+import { INCOMPLETE_STRING } from "@phylopic/source-models"
 import { AnchorLink } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
@@ -14,6 +15,7 @@ export type Props = {
 const SiteNav: FC<Props> = ({ imageUUID }) => {
     const authorized = useAuthorized()
     const contributor = useContributor()
+    const enabled = authorized && Boolean(contributor?.name && contributor.name !== INCOMPLETE_STRING)
     const [selected, setSelected] = useState<"account" | "file" | "edit" | "view" | undefined>()
     const image = useImage(imageUUID)
     return (
@@ -24,27 +26,27 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
                 </AnchorLink>
                 <NavItem
                     label="File"
-                    disabled={!authorized}
+                    disabled={!enabled}
                     onToggle={() => setSelected(selected === "file" ? undefined : "file")}
                     selected={selected === "file"}
                 />
                 <NavItem
                     label="Edit"
-                    disabled={!authorized || !image}
+                    disabled={!enabled || !image}
                     onToggle={() => setSelected(selected === "edit" ? undefined : "edit")}
                     selected={selected === "edit"}
                 />
                 <NavItem
                     label="View"
-                    disabled={!authorized}
+                    disabled={!enabled}
                     onToggle={() => setSelected(selected === "view" ? undefined : "view")}
                     selected={selected === "view"}
                 />
-                {authorized && contributor && (
+                {enabled && (
                     <>
                         <div className={styles.spacer} role="separator" />
                         <NavItem
-                            label={contributor.name}
+                            label={contributor!.name}
                             onToggle={() => setSelected(selected === "account" ? undefined : "account")}
                             selected={selected === "account"}
                         />
