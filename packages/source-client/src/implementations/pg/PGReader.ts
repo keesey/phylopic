@@ -28,7 +28,9 @@ export default class PGReader<T> implements Readable<T> {
     public async exists(): Promise<boolean> {
         const client = await this.provider.getPG()
         const output = await client.query(
-            `SELECT ${this.identificationColumns()} FROM ${this.table} WHERE ${this.identification()} AND disabled=0::bit`,
+            `SELECT ${this.identificationColumns()} FROM ${
+                this.table
+            } WHERE ${this.identification()} AND disabled=0::bit`,
             this.identificationValues(),
         )
         return output.rowCount >= 1

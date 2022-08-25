@@ -16,9 +16,9 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
     public async page(index = 0) {
         const client = await this.provider.getPG()
         const output = await client.query<TValue & TIdentifier>(
-            `SELECT ${getFields(this.fields)} FROM ${this.table} WHERE ${this.whereClause(3)} AND disabled=0::bit ORDER BY ${
-                this.order
-            } OFFSET $1::bigint LIMIT $2::bigint`,
+            `SELECT ${getFields(this.fields)} FROM ${this.table} WHERE ${this.whereClause(
+                3,
+            )} AND disabled=0::bit ORDER BY ${this.order} OFFSET $1::bigint LIMIT $2::bigint`,
             [index * this.pageSize, this.pageSize, ...this.whereValues()],
         )
         return {
