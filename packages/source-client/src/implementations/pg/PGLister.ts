@@ -29,7 +29,7 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
     public async totalItems() {
         const client = await this.provider.getPG()
         const output = await client.query<{ total: string }>(
-            `SELECT COUNT(*) AS total FROM WHERE ${this.table}${this.whereClause(1)} AND disabled=0::bit`,
+            `SELECT COUNT(*) AS total FROM ${this.table} WHERE ${this.whereClause(1)} AND disabled=0::bit`,
             this.whereValues(),
         )
         const value = parseInt(output.rows?.[0]?.total ?? "0", 10)
