@@ -18,7 +18,7 @@ export default class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
         const keys = Object.keys(value)
         if (keys.length >= 1) {
             const client = await this.provider.getPG()
-            await client.query(`UPDATE ${this.table} SET ${this.patchUpdates(keys)} WHERE ${this.identification()}`, [
+            await client.query(`UPDATE ${this.table} SET ${this.patchUpdates(keys)} WHERE ${this.identification()} AND disabled=0::bit`, [
                 ...this.identificationValues(),
                 ...this.patchValues(value),
             ])

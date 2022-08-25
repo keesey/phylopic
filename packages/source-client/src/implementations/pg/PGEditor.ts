@@ -16,18 +16,18 @@ export default class PGEditor<T> extends PGReader<T> implements Editable<T> {
     }
     public async delete() {
         const client = await this.provider.getPG()
-        await client.query(`DELETE FROM ${this.table} WHERE ${this.identification()}`, this.identificationValues())
+        await client.query(`UPDATE ${this.table} SET disabled=1::bit WHERE ${this.identification()}`, this.identificationValues())
     }
     public async put(value: T) {
         const client = await this.provider.getPG()
         if (await this.exists()) {
-            await client.query(`UPDATE ${this.table} SET ${this.updates()} WHERE ${this.identification()}`, [
+            await client.query(`UPDATE ${this.table} SET ${this.updates()} WHERE ${this.identification()} AND disabled=0::bit`, [
                 ...this.identificationValues(),
                 ...this.updateValues(value),
             ])
         } else {
             await client.query(
-                `INSERT INTO ${this.table} (${this.insertColumns()}) VALUES (${this.insertValuesInQuery()})`,
+                `INSERT INTO ${this.table} (${this.insertColumns()},disabled) VALUES (${this.insertValuesInQuery()},0::bit)`,
                 this.insertValues(value),
             )
         }

@@ -16,14 +16,14 @@ export default class NodesClient extends PGLister<Node, { uuid: UUID }> implemen
         const output = await client.query<
             Node & { authority: string; namespace: string; objectID: string; uuid: UUID }
         >(
-            `SELECT "external".authority, "external"."namespace", "external".object_id AS "objectID", node."uuid", node.created, node.modified, node."names"::json, node.parent_uuid AS parent FROM "external" LEFT JOIN node ON "external".node_uuid=node."uuid" WHERE ${externals
+            `SELECT "external".authority, "external"."namespace", "external".object_id AS "objectID", node."uuid", node.created, node.modified, node."names"::json, node.parent_uuid AS parent FROM "external" LEFT JOIN node ON "external".node_uuid=node."uuid" WHERE "external".disabled=0::bit AND node.disabled=0::bit AND (${externals
                 .map(
                     (_, index) =>
                         `("external".authority=$${index * 3 + 1}::character varying AND "external"."namespace"=$${
                             index * 3 + 2
                         }::character varying AND "external".object_id=$${index * 3 + 3}::character varying)`,
                 )
-                .join(" OR ")}`,
+                .join(" OR ")})`,
             externals.reduce<string[]>(
                 (prev, { authority, namespace, objectID }) => [...prev, authority, namespace, objectID],
                 [],

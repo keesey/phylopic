@@ -8,7 +8,7 @@ export default class ExternalAuthorityLister implements Listable<Authority, numb
     async page(index = 0): Promise<Page<string, number>> {
         const client = await this.provider.getPG()
         const output = await client.query<{ authority: Authority }>(
-            `SELECT authority FROM ${EXTERNAL_TABLE} GROUP BY authority ORDER BY authority OFFSET $1::bigint LIMIT $2::bigint`,
+            `SELECT authority FROM ${EXTERNAL_TABLE} WHERE disabled=0::bit GROUP BY authority ORDER BY authority OFFSET $1::bigint LIMIT $2::bigint`,
             [index * this.pageSize, this.pageSize],
         )
         return {
@@ -19,7 +19,7 @@ export default class ExternalAuthorityLister implements Listable<Authority, numb
     public async totalItems() {
         const client = await this.provider.getPG()
         const output = await client.query<{ total: number }>(
-            `SELECT COUNT(authority) AS total FROM ${EXTERNAL_TABLE} GROUP BY authority`,
+            `SELECT COUNT(authority) AS total FROM ${EXTERNAL_TABLE} WHERE disabled=0::bit GROUP BY authority`,
         )
         return output.rows?.[0]?.total ?? 0
     }
