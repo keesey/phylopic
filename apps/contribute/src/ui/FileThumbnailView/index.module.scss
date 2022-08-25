@@ -3,7 +3,9 @@
 .main {
     filter: blur(8px);
     height: 128px;
-    mix-blend-mode: lighten;
+    min-height: 128px;
+    min-width: 128px;
+    mix-blend-mode: darken;
     position: relative;
     width: 128px;
     transition: color 0.3s, filter 0.3s;
@@ -17,7 +19,6 @@
     }
 
     & img {
-        filter: invert(100%);
         object-fit: contain;
     }
 
@@ -26,7 +27,7 @@
     }
 
     &.pending {
-        background-color: colors.$wash;
+        background-color: colors.$inkFade;
         border-radius: 50%;
     }
 
