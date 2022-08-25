@@ -3,8 +3,10 @@ import useContributorMutator from "~/profile/useContributorMutator"
 import useContributorSWR from "~/profile/useContributorSWR"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_CHECK, ICON_PENCIL, ICON_X } from "~/ui/ICON_SYMBOLS"
+import UserTextForm from "~/ui/SiteNav/UserTextForm"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
+import UserInput from "~/ui/UserInput"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserNameForm from "~/ui/UserNameForm"
 import UserOptions from "~/ui/UserOptions"
@@ -77,7 +79,31 @@ const AccountProfile: FC = () => {
                     </UserLinkButton>
                 </UserOptions>
             )}
-            {nameChangeRequested && <UserNameForm onSubmit={handleNameFormSubmit} value={contributor.name} />}
+            {nameChangeRequested && (
+                <>
+                    <Speech mode="user">
+                        <p>My name.</p>
+                    </Speech>
+                    <Speech mode="system">
+                        <p>It&rsquo;s not &ldquo;{contributor.name}&rdquo;? What is it?</p>
+                    </Speech>
+                    <UserTextForm editable value="" onSubmit={handleNameFormSubmit}>
+                        {(value, setValue) => (
+                            <UserInput
+                                autoComplete="name"
+                                id="name"
+                                maxLength={128}
+                                name="name"
+                                onChange={setValue}
+                                placeholder="Full Name or Alias"
+                                required
+                                type="text"
+                                value={value}
+                            />
+                        )}
+                    </UserTextForm>
+                </>
+            )}
         </Dialogue>
     )
 }

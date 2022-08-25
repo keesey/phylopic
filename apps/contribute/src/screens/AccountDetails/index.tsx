@@ -1,7 +1,10 @@
 import { useCallback, useState } from "react"
 import useContributorMutator from "~/profile/useContributorMutator"
 import Dialogue from "~/ui/Dialogue"
+import NoBreak from "~/ui/NoBreak"
+import UserTextForm from "~/ui/SiteNav/UserTextForm"
 import Speech from "~/ui/Speech"
+import UserInput from "~/ui/UserInput"
 import UserNameForm from "~/ui/UserNameForm"
 import UserVerification from "~/ui/UserVerification"
 const AccountDetails = () => {
@@ -24,14 +27,23 @@ const AccountDetails = () => {
                     <strong>Welcome!</strong> What should we call you here?
                 </p>
             </Speech>
-            {!name && <UserNameForm value={name} onSubmit={setName} />}
+            <UserTextForm editable={name === ""} value={name} onSubmit={setName} prefix={<NoBreak>My name is{" "}</NoBreak>} postfix=".">
+                {(value, setValue) => (
+                    <UserInput
+                        autoComplete="name"
+                        id="name"
+                        maxLength={128}
+                        name="name"
+                        onChange={setValue}
+                        placeholder="Full Name or Alias"
+                        required
+                        type="text"
+                        value={value}
+                    />
+                )}
+            </UserTextForm>
             {name && (
                 <>
-                    <Speech mode="user">
-                        <p>
-                            My name is <strong>{name}</strong>.
-                        </p>
-                    </Speech>
                     <Speech mode="system">
                         <p>Nice to meet you. Do you want your email address to be shown on the site?</p>
                     </Speech>

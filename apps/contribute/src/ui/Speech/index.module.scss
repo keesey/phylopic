@@ -62,13 +62,12 @@
         }
     }
 
-    &.user {
-        background-color: colors.$sunshine;
+    &.user,
+    &.user-input {
         color: colors.$black;
         margin-left: 1em;
 
         &::after {
-            border-left-color: colors.$sunshine;
             border-right: 0;
             border-top: 0;
             bottom: 20%;
@@ -84,6 +83,21 @@
                 color: colors.$black;
             }
         }
+    }
 
+    &.user {
+        background-color: colors.$sunshine;
+
+        &::after {
+            border-left-color: colors.$sunshine;
+        }
+    }
+
+    &.user-input {
+        background-color: colors.$dandelion;
+
+        &::after {
+            border-left-color: colors.$dandelion;
+        }
     }
 }
