@@ -1,52 +1,10 @@
 @use "@phylopic/styles/colors.scss";
-@use "@phylopic/styles/mixins/buttons.scss";
-
-.main {
-    display: flex;
-    flex-grow: 1;
-    gap: 1em;
-    width: 100vw;
-}
-
-.image {
-    height: auto;
-    min-height: 128px;
-    min-width: 128px;
-    mix-blend-mode: darken;
-    object-fit: contain;
-    width: auto;
-}
-
-.imageButton {
-    background-image: url(/assets/grid.png);
-    border: 4px solid colors.$dandelion;
-    cursor: pointer;
-    transition: border-color 0.3s;
-
-    &:hover,
-    &:active {
-        border-color: colors.$sunshine;
-    }
-}
 
 .imageContainer {
-    justify-content: space-around;
-    max-height: calc(100vh - 150px);
-    padding: 1em;
-
-    &.landscape {
-        .image {
-            max-height: calc(50vh - 75px - 14px - 1em);
-            max-width: 67vw;
-        }
-    }
-
-    &.portrait {
-        .image {
-            max-height: calc(100vh - 150px - 28px - 2em);
-            max-width: 100vw;
-        }
-    }
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 1em 1em 0;
 
     &.compare {
         display: flex;
@@ -54,19 +12,10 @@
 
         &.landscape {
             flex-direction: column;
-
-            .image {
-                max-height: calc(50vh - 75px - 14px - 1em);
-                max-width: 67vw;
-            }
         }
 
         &.portrait {
             flex-direction: row;
-
-            .image {
-                max-width: 25vw;
-            }
         }
     }
 }

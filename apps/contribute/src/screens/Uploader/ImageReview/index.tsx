@@ -19,6 +19,7 @@ import UserOptions from "~/ui/UserOptions"
 import useFileIsVector from "../hooks/useFileIsVector"
 import useVectorization from "../hooks/useVectorization"
 import useVectorizedImageSource from "../hooks/useVectorizedImageSource"
+import ImageBox from "./ImageBox"
 import styles from "./index.module.scss"
 import { ReviewResult } from "./ReviewResult"
 export interface Props {
@@ -53,12 +54,8 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
         return (
             <section className={styles.main}>
                 <div className={clsx(styles.imageContainer, styles.compare, styles[mode])}>
-                    <a className={styles.imageButton} onClick={selectOriginal} role="button" title={file.name}>
-                        <img className={styles.image} src={source} alt={file.name} />
-                    </a>
-                    <a className={styles.imageButton} onClick={selectVectorized} role="button" title="vectorized image">
-                        <img className={styles.image} src={vectorizedSource} alt="vectorized image" />
-                    </a>
+                    <ImageBox source={source} alt={file.name} mode={mode} onClick={selectOriginal} />
+                    <ImageBox source={vectorizedSource} alt="vectorized image" mode={mode} onClick={selectVectorized} />
                 </div>
                 <Dialogue>
                     <Speech mode="system">
@@ -91,9 +88,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     return (
         <section className={styles.main}>
             <div className={clsx(styles.imageContainer, styles[mode])}>
-                <a className={styles.imageButton} onClick={selectOriginal} role="button" title={file.name}>
-                    <img className={styles.image} src={source} alt={file.name} />
-                </a>
+                <ImageBox source={source} alt={file.name} mode={mode} onClick={selectOriginal} />
             </div>
             <Dialogue>
                 <Speech mode="system">

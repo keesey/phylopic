@@ -1,10 +1,23 @@
 import { canChange } from "@phylopic/api-models"
 import { Image, isSubmittableImage } from "@phylopic/source-models"
-import { isUUIDv4, isValidLicenseURL, UUID } from "@phylopic/utils"
+import { isPublicDomainLicenseURL, isUUIDv4, isValidLicenseURL, UUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
+const isAcceptableChange = (a: Image, b: Image) => {
+    if (!b.submitted) {
+        return true
+    }
+    if (a.license && a.license !== b.license) {
+        if (isValidLicenseURL(b.license) && canChange(a.license, b.license)) {
+            return true
+        }
+    }
+    if (a.attribution && !b.attribution) {
+        return isPublicDomainLicenseURL(b.license)
+    }
+}
 const index: NextApiHandler<Image> = async (req, res) => {
     const now = new Date()
     let client: SourceClient | undefined
