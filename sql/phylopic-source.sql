@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS public.contributor
     show_email bit(1) NOT NULL DEFAULT (1)::bit(1),
     created timestamp without time zone NOT NULL DEFAULT now(),
     modified timestamp without time zone NOT NULL DEFAULT now(),
+    disabled bit(1) NOT NULL DEFAULT (0)::bit(1),
     CONSTRAINT contributor_pkey PRIMARY KEY (uuid),
     CONSTRAINT contributor_email_key UNIQUE (email)
 )
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS public.node
     parent_uuid uuid,
     created timestamp without time zone NOT NULL DEFAULT now(),
     modified timestamp without time zone NOT NULL DEFAULT now(),
+    disabled bit(1) NOT NULL DEFAULT (0)::bit(1),
     CONSTRAINT node_pkey PRIMARY KEY (uuid),
     CONSTRAINT node_parent_uuid_fkey FOREIGN KEY (parent_uuid)
         REFERENCES public.node (uuid) MATCH SIMPLE
@@ -63,7 +65,7 @@ CREATE INDEX IF NOT EXISTS fki_node_parent_uuid_fkey
     ON public.node USING btree
     (parent_uuid ASC NULLS LAST)
     TABLESPACE pg_default;
-
+ 
 -- Table: public.external
 
 -- DROP TABLE IF EXISTS public.external;
@@ -75,6 +77,7 @@ CREATE TABLE IF NOT EXISTS public.external
     object_id character varying(64) COLLATE pg_catalog."default" NOT NULL,
     node_uuid uuid NOT NULL,
     title character varying COLLATE pg_catalog."default" NOT NULL,
+    disabled bit(1) NOT NULL DEFAULT (0)::bit(1),
     CONSTRAINT external_pkey PRIMARY KEY (authority, namespace, object_id),
     CONSTRAINT external_node_uuid_fkey FOREIGN KEY (node_uuid)
         REFERENCES public.node (uuid) MATCH SIMPLE
@@ -104,6 +107,7 @@ CREATE TABLE IF NOT EXISTS public.image
     modified timestamp without time zone NOT NULL DEFAULT now(),
     submitted bit(1) NOT NULL DEFAULT (0)::bit(1),
     accepted bit(1) NOT NULL DEFAULT (0)::bit(1),
+    disabled bit(1) NOT NULL DEFAULT (0)::bit(1),
     CONSTRAINT image_pkey PRIMARY KEY (uuid),
     CONSTRAINT image_contributor_uuid_fkey FOREIGN KEY (contributor_uuid)
         REFERENCES public.contributor (uuid) MATCH SIMPLE
