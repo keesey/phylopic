@@ -1,10 +1,13 @@
 import { Loader } from "@phylopic/ui"
 import { Nomen, UUID } from "@phylopic/utils"
-import { FC, useState } from "react"
+import { FC } from "react"
 import { SearchEntry } from "~/search/SearchEntry"
 import usePhyloPicSearch from "~/search/usePhyloPicSearch"
+import { ICON_CHECK } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
+import UserButton from "~/ui/UserButton"
+import UserOptions from "~/ui/UserOptions"
 import SearchOptions from "../../../SearchOptions"
 import BroaderParentPrompt from "./BroaderParentPrompt"
 import NewNodeCreator from "./NewNodeCreator"
@@ -12,10 +15,11 @@ export type Props = {
     childName: Nomen
     nameText: string
     onComplete: (uuid: UUID) => void
+    onSelect: (value: SearchEntry | null) => void
+    selected: SearchEntry | null
 }
-export const ParentSearch: FC<Props> = ({ childName, nameText, onComplete }) => {
+export const ParentSearch: FC<Props> = ({ childName, nameText, selected, onComplete, onSelect }) => {
     const { data: entries, error, pending } = usePhyloPicSearch(nameText)
-    const [selected, setSelected] = useState<SearchEntry | null>(null)
     if (pending) {
         return (
             <Speech mode="system">
@@ -45,14 +49,23 @@ export const ParentSearch: FC<Props> = ({ childName, nameText, onComplete }) => 
         )
     }
     if (!entries.length) {
-        return <BroaderParentPrompt />
+        return (
+            <>
+                <BroaderParentPrompt />
+                <UserOptions>
+                    <UserButton icon={ICON_CHECK} onClick={() => onSelect(null)}>
+                        Okay.
+                    </UserButton>
+                </UserOptions>
+            </>
+        )
     }
     return (
         <>
             <Speech mode="system">
                 <p>{entries.length === 1 ? "This one?" : "Is that one of these?"}</p>
             </Speech>
-            <SearchOptions entries={entries} includeNull={false} onSelect={setSelected} />
+            <SearchOptions entries={entries} onSelect={onSelect} />
         </>
     )
 }

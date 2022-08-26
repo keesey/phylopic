@@ -1,5 +1,6 @@
-import { Nomen, UUID } from "@phylopic/utils"
-import { FC, useState } from "react"
+import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { FC, useCallback, useState } from "react"
+import { SearchEntry } from "~/search/SearchEntry"
 import NameView from "~/ui/NameView"
 import NoBreak from "~/ui/NoBreak"
 import UserTextForm from "~/ui/SiteNav/UserTextForm"
@@ -13,6 +14,11 @@ export type Props = {
 }
 export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
     const [nameText, setNameText] = useState("")
+    const [selected, setSelected] = useState<SearchEntry | null>(null)
+    const onSelect = useCallback((entry: SearchEntry | null) => {
+        setNameText(entry ? stringifyNomen(entry.name) : "")
+        setSelected(entry)
+    }, [])
     return (
         <>
             <Speech mode="system">
@@ -31,7 +37,15 @@ export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
             >
                 {(value, setValue) => <NameInput value={value} onChange={setValue} placeholder="more general group" />}
             </UserTextForm>
-            {nameText && <ParentSearch childName={childName} nameText={nameText} onComplete={onComplete} />}
+            {nameText && (
+                <ParentSearch
+                    childName={childName}
+                    nameText={nameText}
+                    selected={selected}
+                    onSelect={onSelect}
+                    onComplete={onComplete}
+                />
+            )}
         </>
     )
 }

@@ -26,7 +26,7 @@ const UserTextForm: FC<Props> = ({
         </Editable>
     ) : (
         <Speech mode="user">
-            <SpeechStack compact fullWidth>
+            <SpeechStack compact>
                 {prefix}
                 {renderer(value)}
                 {postfix}

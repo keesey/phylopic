@@ -23,7 +23,7 @@ const Entries: FC<Props> = ({ entries, nameText, onCancel, onComplete, onParentR
             <Speech mode="system">
                 <p>{entries.length === 1 ? "Is this it?" : "Is it one of these?"}</p>
             </Speech>
-            <SearchOptions entries={entries} includeNull={true} onSelect={setSelected} />
+            <SearchOptions entries={entries} onSelect={setSelected} />
             {selected && <SearchSelector entry={selected} onComplete={onComplete} />}
             {selected === null && (
                 <>

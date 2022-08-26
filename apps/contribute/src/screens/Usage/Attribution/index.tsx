@@ -13,9 +13,12 @@ const Attribution: FC<Props> = ({ uuid }) => {
     const mutate = useImageMutator(uuid)
     const { attribution, license } = image ?? {}
     const required = useMemo(() => !isPublicDomainLicenseURL(license), [license])
-    const submit = useCallback((value: string) => {
-        mutate({ attribution: value || null })
-    }, [mutate, required])
+    const submit = useCallback(
+        (value: string) => {
+            mutate({ attribution: value || null })
+        },
+        [mutate, required],
+    )
     return (
         <>
             <Speech mode="system">
@@ -35,7 +38,7 @@ const Attribution: FC<Props> = ({ uuid }) => {
                 value={attribution ?? ""}
                 prefix={<>By&nbsp;</>}
                 postfix="."
-                renderer={value => value ? <strong>{value}</strong> : "[Anonymous]"}
+                renderer={value => (value ? <strong>{value}</strong> : "[Anonymous]")}
             >
                 {(value, setValue) => (
                     <UserInput

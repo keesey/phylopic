@@ -1,6 +1,7 @@
 import { FC, useCallback, useState } from "react"
 import getIdentifier from "~/search/getIdentifier"
 import { SearchEntry } from "~/search/SearchEntry"
+import { ICON_X } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
@@ -8,10 +9,9 @@ import UserOptions from "~/ui/UserOptions"
 import EntryButton from "./EntryButton"
 export type Props = {
     entries: readonly SearchEntry[]
-    includeNull: boolean
     onSelect: (value: SearchEntry | null) => void
 }
-const SearchOptions: FC<Props> = ({ entries, includeNull, onSelect }) => {
+const SearchOptions: FC<Props> = ({ entries, onSelect }) => {
     const [selected, setSelected] = useState<SearchEntry | null | undefined>()
     const select = useCallback(
         (value: SearchEntry | null) => {
@@ -31,11 +31,9 @@ const SearchOptions: FC<Props> = ({ entries, includeNull, onSelect }) => {
                         <EntryButton key={getIdentifier(entry)} onClick={() => select(entry)} value={entry} />
                     ))}
                 </>
-                {includeNull && (
-                    <UserButton danger onClick={() => select(null)}>
-                        No.
-                    </UserButton>
-                )}
+                <UserButton danger icon={ICON_X} onClick={() => select(null)}>
+                    No.
+                </UserButton>
             </UserOptions>
         )
     }

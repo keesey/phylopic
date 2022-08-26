@@ -2,10 +2,12 @@ import { Node as APINode, PageWithEmbedded } from "@phylopic/api-models"
 import { Page } from "@phylopic/source-client"
 import { Node as SourceNode } from "@phylopic/source-models"
 import { normalizeText, UUID } from "@phylopic/utils"
-import { APISWRError, BuildContext, useAPIFetcher } from "@phylopic/utils-api"
+import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { useContext, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
+import isNotFoundError from "~/http/isNotFoundError"
+import isServerError from "~/http/isServerError"
 import { SearchEntry } from "./SearchEntry"
 const usePhyloPicResults = (text: string) => {
     const normalized = useMemo(() => normalizeText(text), [text])
@@ -21,14 +23,16 @@ const usePhyloPicResults = (text: string) => {
                 : null,
         [build, normalized],
     )
-    const live = useSWRImmutable(liveKey, apiFetcher)
+    const live = useSWRImmutable(liveKey, apiFetcher, {
+        shouldRetryOnError: isServerError,
+    })
     const sourceKey = useMemo(
         () => (normalized ? `/api/nodes?filter=${encodeURIComponent(normalized.toLowerCase())}` : null),
         [normalized],
     )
     const authorizedFetcher = useAuthorizedJSONFetcher<Page<SourceNode & { uuid: UUID }, number>>()
     const source = useSWRImmutable(sourceKey, authorizedFetcher)
-    const liveIsEmpty = useMemo(() => live.error instanceof APISWRError && live.error.statusCode === 404, [live.error])
+    const liveIsEmpty = useMemo(() => isNotFoundError(live.error), [live.error])
     const liveEntries = useMemo(
         () =>
             live.data?._embedded.items?.map<SearchEntry>(item => ({
