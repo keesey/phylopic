@@ -1,26 +1,25 @@
 import { Loader } from "@phylopic/ui"
-import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
-import { FC, useCallback, useMemo, useState } from "react"
+import { UUID } from "@phylopic/utils"
+import { FC, useCallback, useState } from "react"
 import useSearch from "~/search/useSearch"
-import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
+import NameRenderer from "../NameRenderer"
 import Entries from "./Entries"
 import NoEntries from "./NoEntries"
 export type Props = {
-    name: Nomen
+    nameText: string
     onCancel: () => void
     onComplete: (uuid: UUID) => void
 }
-export const NodeSearch: FC<Props> = ({ name, onCancel, onComplete }) => {
+export const NodeSearch: FC<Props> = ({ nameText, onCancel, onComplete }) => {
     const [parentRequested, setParentRequested] = useState<boolean | null>(null)
-    const searchText = useMemo(() => stringifyNomen(name), [name])
-    const { data: entries, error, pending } = useSearch(searchText)
+    const { data: entries, error, pending } = useSearch(nameText)
     const handleParentRequest = useCallback(() => setParentRequested(true), [])
     if (pending) {
         return (
             <Speech mode="system">
                 <p>
-                    Searching for <NameView value={name} />
+                    Searching for <NameRenderer value={nameText} />
                     &hellip;
                 </p>
                 <Loader />
@@ -39,7 +38,7 @@ export const NodeSearch: FC<Props> = ({ name, onCancel, onComplete }) => {
         return (
             <NoEntries
                 key="noEntries"
-                name={name}
+                nameText={nameText}
                 onCancel={onCancel}
                 onComplete={onComplete}
                 onParentRequest={handleParentRequest}
@@ -51,7 +50,7 @@ export const NodeSearch: FC<Props> = ({ name, onCancel, onComplete }) => {
         <Entries
             entries={entries}
             key="entries"
-            name={name}
+            nameText={nameText}
             onCancel={onCancel}
             onComplete={onComplete}
             onParentRequest={handleParentRequest}

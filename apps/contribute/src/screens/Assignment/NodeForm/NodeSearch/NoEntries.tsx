@@ -1,23 +1,25 @@
-import { Nomen, UUID } from "@phylopic/utils"
-import { FC } from "react"
-import NameView from "~/ui/NameView"
+import { UUID } from "@phylopic/utils"
+import { parseNomen } from "parse-nomen"
+import { FC, useMemo } from "react"
 import Speech from "~/ui/Speech"
-import UserVerification from "../../../../ui/UserVerification"
+import UserVerification from "~/ui/UserVerification"
+import NameRenderer from "../NameRenderer"
 import ParentSelector from "./ParentSelector"
 export type Props = {
-    name: Nomen
+    nameText: string
     onCancel: () => void
     onComplete: (uuid: UUID) => void
     onParentRequest: () => void
     parentRequested: boolean | null
 }
-const NoEntries: FC<Props> = ({ name, onCancel, onComplete, onParentRequest, parentRequested }) => {
+const NoEntries: FC<Props> = ({ nameText, onCancel, onComplete, onParentRequest, parentRequested }) => {
+    const childName = useMemo(() => parseNomen(nameText), [nameText])
     return (
         <>
             <Speech mode="system">
                 <p>
                     Huh. &ldquo;
-                    <NameView value={name} />
+                    <NameRenderer value={nameText} />
                     &rdquo;. I have never heard of that. Are you sure you spelled it right?
                 </p>
             </Speech>
@@ -28,7 +30,7 @@ const NoEntries: FC<Props> = ({ name, onCancel, onComplete, onParentRequest, par
                 onAffirm={onParentRequest}
                 onDeny={onCancel}
             />
-            {parentRequested && <ParentSelector childName={name} onComplete={onComplete} />}
+            {parentRequested && <ParentSelector childName={childName} onComplete={onComplete} />}
         </>
     )
 }

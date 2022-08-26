@@ -1,4 +1,5 @@
-import { isLicenseURL, isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
+import { canChange } from "@phylopic/api-models"
+import { isLicenseURL, isPublicDomainLicenseURL, isValidLicenseURL, UUID, VALID_LICENSE_URLS } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import useImage from "~/editing/hooks/useImage"
 import useImageMutator from "~/editing/hooks/useImageMutator"
@@ -20,12 +21,21 @@ import License from "./License"
 export type Props = {
     uuid: UUID
 }
+const EMPTY: never[] = []
 const Usage: FC<Props> = ({ uuid }) => {
     const image = useImage(uuid)
     const src = useImageSrc(uuid)
     const contributor = useContributor()
     const hasLicense = useMemo(() => isLicenseURL(image?.license), [image?.license])
-    // const hasValidLicense = useMemo(() => isValidLicenseURL(image?.license), [image?.license])
+    const licenseOptions = useMemo(
+        () =>
+            image?.license
+                ? Array.from(VALID_LICENSE_URLS)
+                      .sort()
+                      .filter(url => canChange(image.license!, url))
+                : EMPTY,
+        [image?.license],
+    )
     const complete = useMemo(() => {
         return image?.license && (image.attribution || isPublicDomainLicenseURL(image.license))
     }, [image?.attribution, image?.license])
@@ -63,13 +73,17 @@ const Usage: FC<Props> = ({ uuid }) => {
                         I get the credit.
                     </UserButton>
                 )}
-                {hasLicense && (
-                    <UserButton danger icon={ICON_PENCIL} onClick={() => mutate({ license: null })}>
+                {hasLicense && licenseOptions.length > 0 && (
+                    <UserButton danger icon={ICON_PENCIL} onClick={() => mutate({ license: null, submitted: false })}>
                         Pick another license.
                     </UserButton>
                 )}
                 {hasLicense && image.attribution && (
-                    <UserButton danger icon={ICON_PENCIL} onClick={() => mutate({ attribution: null })}>
+                    <UserButton
+                        danger
+                        icon={ICON_PENCIL}
+                        onClick={() => mutate({ submitted: false, attribution: null })}
+                    >
                         Change the attribution.
                     </UserButton>
                 )}

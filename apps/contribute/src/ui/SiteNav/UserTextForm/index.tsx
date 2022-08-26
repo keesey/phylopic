@@ -46,12 +46,12 @@ const Editable: FC<Pick<Props, "children" | "onSubmit" | "postfix" | "prefix" | 
     const submit = useCallback(
         (event: FormEvent) => {
             event.preventDefault()
-            onSubmit(textValue)
+            onSubmit(textValue.trim().replaceAll(/\s+/g, " "))
         },
         [onSubmit, textValue],
     )
     return (
-        <form onSubmit={submit} onBlur={submit}>
+        <form onBlur={submit} onSubmit={submit}>
             <Speech mode="user-input">
                 <SpeechStack compact fullWidth>
                     {prefix}

@@ -1,15 +1,18 @@
 import { Nomen, UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
 import NameView from "~/ui/NameView"
+import NoBreak from "~/ui/NoBreak"
+import UserTextForm from "~/ui/SiteNav/UserTextForm"
 import Speech from "~/ui/Speech"
-import NameForm from "../../NameForm"
+import NameInput from "../../NameInput"
+import NameRenderer from "../../NameRenderer"
 import ParentSearch from "./ParentSearch"
 export type Props = {
     childName: Nomen
     onComplete: (uuid: UUID) => void
 }
 export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
-    const [name, setName] = useState<Nomen | null>(null)
+    const [nameText, setNameText] = useState("")
     return (
         <>
             <Speech mode="system">
@@ -18,8 +21,17 @@ export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
                     part of?
                 </p>
             </Speech>
-            <NameForm onSubmit={setName} placeholder="More general group" />
-            {name && <ParentSearch childName={childName} name={name} onComplete={onComplete} />}
+            <UserTextForm
+                editable={!nameText}
+                onSubmit={setNameText}
+                value={nameText}
+                prefix={<NoBreak>Sure, how about&nbsp;</NoBreak>}
+                postfix="?"
+                renderer={value => <NameRenderer value={value} />}
+            >
+                {(value, setValue) => <NameInput value={value} onChange={setValue} placeholder="more general group" />}
+            </UserTextForm>
+            {nameText && <ParentSearch childName={childName} nameText={nameText} onComplete={onComplete} />}
         </>
     )
 }

@@ -1,6 +1,6 @@
 import { Loader } from "@phylopic/ui"
-import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
-import { FC, useMemo, useState } from "react"
+import { Nomen, UUID } from "@phylopic/utils"
+import { FC, useState } from "react"
 import { SearchEntry } from "~/search/SearchEntry"
 import usePhyloPicSearch from "~/search/usePhyloPicSearch"
 import NameView from "~/ui/NameView"
@@ -10,12 +10,11 @@ import BroaderParentPrompt from "./BroaderParentPrompt"
 import NewNodeCreator from "./NewNodeCreator"
 export type Props = {
     childName: Nomen
-    name: Nomen
+    nameText: string
     onComplete: (uuid: UUID) => void
 }
-export const ParentSearch: FC<Props> = ({ childName, name, onComplete }) => {
-    const searchText = useMemo(() => stringifyNomen(name), [name])
-    const { data: entries, error, pending } = usePhyloPicSearch(searchText)
+export const ParentSearch: FC<Props> = ({ childName, nameText, onComplete }) => {
+    const { data: entries, error, pending } = usePhyloPicSearch(nameText)
     const [selected, setSelected] = useState<SearchEntry | null>(null)
     if (pending) {
         return (

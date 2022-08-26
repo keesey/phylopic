@@ -1,21 +1,23 @@
-import { Nomen, UUID } from "@phylopic/utils"
-import { FC, useState } from "react"
+import { UUID } from "@phylopic/utils"
+import { parseNomen } from "parse-nomen"
+import { FC, useMemo, useState } from "react"
 import { SearchEntry } from "~/search/SearchEntry"
 import Speech from "~/ui/Speech"
-import UserVerification from "../../../../ui/UserVerification"
+import UserVerification from "~/ui/UserVerification"
 import SearchOptions from "../SearchOptions"
 import ParentSelector from "./ParentSelector"
 import SearchSelector from "./SearchSelector"
 export type Props = {
     entries: readonly SearchEntry[]
-    name: Nomen
+    nameText: string
     onCancel: () => void
     onComplete: (uuid: UUID) => void
     onParentRequest: () => void
     parentRequested: boolean | null
 }
-const Entries: FC<Props> = ({ entries, name, onCancel, onComplete, onParentRequest, parentRequested }) => {
+const Entries: FC<Props> = ({ entries, nameText, onCancel, onComplete, onParentRequest, parentRequested }) => {
     const [selected, setSelected] = useState<SearchEntry | null | undefined>()
+    const childName = useMemo(() => parseNomen(nameText), [nameText])
     return (
         <>
             <Speech mode="system">
@@ -35,7 +37,7 @@ const Entries: FC<Props> = ({ entries, name, onCancel, onComplete, onParentReque
                         onAffirm={onParentRequest}
                         onDeny={onCancel}
                     />
-                    {parentRequested && <ParentSelector childName={name} onComplete={onComplete} />}
+                    {parentRequested && <ParentSelector childName={childName} onComplete={onComplete} />}
                 </>
             )}
         </>

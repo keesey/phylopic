@@ -5,7 +5,6 @@ import NoBreak from "~/ui/NoBreak"
 import UserTextForm from "~/ui/SiteNav/UserTextForm"
 import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
-import UserNameForm from "~/ui/UserNameForm"
 import UserVerification from "~/ui/UserVerification"
 const AccountDetails = () => {
     const mutate = useContributorMutator()
@@ -19,7 +18,7 @@ const AccountDetails = () => {
         if (name && showEmailAddress !== null) {
             mutate({ name, showEmailAddress })
         }
-    }, [name, showEmailAddress])
+    }, [mutate, name, showEmailAddress])
     return (
         <Dialogue>
             <Speech mode="system">
@@ -27,7 +26,13 @@ const AccountDetails = () => {
                     <strong>Welcome!</strong> What should we call you here?
                 </p>
             </Speech>
-            <UserTextForm editable={name === ""} value={name} onSubmit={setName} prefix={<NoBreak>My name is{" "}</NoBreak>} postfix=".">
+            <UserTextForm
+                editable={name === ""}
+                value={name}
+                onSubmit={setName}
+                prefix={<NoBreak>My name is </NoBreak>}
+                postfix="."
+            >
                 {(value, setValue) => (
                     <UserInput
                         autoComplete="name"

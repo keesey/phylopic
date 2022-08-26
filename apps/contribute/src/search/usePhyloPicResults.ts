@@ -4,7 +4,6 @@ import { Node as SourceNode } from "@phylopic/source-models"
 import { normalizeText, UUID } from "@phylopic/utils"
 import { APISWRError, BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { useContext, useMemo } from "react"
-import useSWR from "swr"
 import useSWRImmutable from "swr/immutable"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import { SearchEntry } from "./SearchEntry"
@@ -12,7 +11,7 @@ const usePhyloPicResults = (text: string) => {
     const normalized = useMemo(() => normalizeText(text), [text])
     const apiFetcher = useAPIFetcher<PageWithEmbedded<APINode>>()
     const [build] = useContext(BuildContext) ?? []
-    useSWR(`${process.env.NEXT_PUBLIC_API_URL}/`, apiFetcher)
+    useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/`, apiFetcher)
     const liveKey = useMemo(
         () =>
             build && normalized
