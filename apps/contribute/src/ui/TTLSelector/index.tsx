@@ -23,11 +23,11 @@ const TTLSelector: FC<Props> = ({ disabled, mode, onChange, value }) => {
             onChange={handleTTLChange}
             value={value}
         >
-            <option value="DAY" label="one day" />
-            <option value="WEEK" label="one week" />
-            <option value="MONTH" label="30 days" />
-            <option value="QUARTER" label="90 days" />
-            <option value="YEAR" label="one year" />
+            <option value="DAY">one day</option>
+            <option value="WEEK">one week</option>
+            <option value="MONTH">30 days</option>
+            <option value="QUARTER">90 days</option>
+            <option value="YEAR">one year</option>
         </select>
     )
 }
