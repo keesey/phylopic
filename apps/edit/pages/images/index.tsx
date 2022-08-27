@@ -49,7 +49,10 @@ const ImageView: FC<{ image: Image & { uuid: UUID } }> = ({ image }) => {
         image.general ? `/api/nodes/_/${encodeURIComponent(image.general)}` : null,
         fetchJSON,
     )
-    const { data: contributor } = useSWR<Contributor & { uuid: UUID }>(`/api/contributors/_/${encodeURIComponent(image.contributor)}`, fetchJSON)
+    const { data: contributor } = useSWR<Contributor & { uuid: UUID }>(
+        `/api/contributors/_/${encodeURIComponent(image.contributor)}`,
+        fetchJSON,
+    )
     return (
         <>
             {specific ? <NameView name={specific.names[0]} short /> : "[Unassigned]"}

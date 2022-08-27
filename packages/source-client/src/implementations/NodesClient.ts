@@ -9,7 +9,7 @@ import normalizeNode from "./pg/normalization/normalizeNode"
 import PGLister from "./pg/PGLister"
 export default class NodesClient extends PGLister<Node, { uuid: UUID }> implements INodesClient {
     constructor(protected readonly provider: PGClientProvider) {
-        super(provider, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, "name")
+        super(provider, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, '"names"::character varying')
     }
     async resolve(externals: readonly Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>[]) {
         const client = await this.provider.getPG()
