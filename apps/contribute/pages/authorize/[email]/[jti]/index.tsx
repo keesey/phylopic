@@ -5,10 +5,10 @@ import { useRouter } from "next/router"
 import { FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import AuthContext from "~/auth/AuthContext"
+import fetchJWT from "~/fetch/fetchJWT"
 import PageLayout from "~/pages/PageLayout"
 import ErrorState from "~/screens/ErrorState"
 import LoadingState from "~/screens/LoadingState"
-import fetchJWT from "~/swr/fetchJWT"
 export interface Props {
     email: EmailAddress
     jti: UUID

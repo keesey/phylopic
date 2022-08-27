@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
-import fetchJSON from "~/swr/fetchJSON"
+import fetchJSON from "~/fetch/fetchJSON"
 export interface OTOLAutocompleteName {
     readonly is_higher: boolean
     readonly is_suppressed: boolean

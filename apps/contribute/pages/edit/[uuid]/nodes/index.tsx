@@ -3,9 +3,9 @@ import { isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
+import fetchJSON from "~/fetch/fetchJSON"
 import PageLayout from "~/pages/PageLayout"
 import SourceClient from "~/source/SourceClient"
-import fetchJSON from "~/swr/fetchJSON"
 const Assignment = dynamic(() => import("~/screens/Assignment"))
 type Props = {
     build: number

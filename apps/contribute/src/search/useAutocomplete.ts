@@ -2,7 +2,7 @@ import { normalizeQuery, QueryMatches } from "@phylopic/api-models"
 import { compareStrings } from "@phylopic/utils"
 import { useMemo } from "react"
 import useSWR from "swr"
-import fetchJSON from "~/swr/fetchJSON"
+import fetchJSON from "~/fetch/fetchJSON"
 import useOTOLResults from "./useOTOLResults"
 const MAX_LENGTH = 10
 const getSortIndex = (value: string, query: string) => {
