@@ -5,7 +5,12 @@ const POOL = new Pool({
 })
 export default class SourceClient extends BaseSourceClient {
     constructor() {
-        const provider = new PoolClientProvider(POOL, {})
+        const provider = new PoolClientProvider(POOL, {
+            credentials: {
+                accessKeyId: process.env.S3_ACCESS_KEY_ID!,
+                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
+            }
+        })
         super(provider)
         this.destroy = () => provider.destroy()
     }
