@@ -21,9 +21,11 @@ const License: FC<Props> = ({ uuid }) => {
             <Speech mode="user">
                 <p>
                     The{" "}
-                    <a href={image.license} target="_blank" rel="noreferrer">
-                        {LICENSE_NAMES[image.license]}
-                    </a>{" "}
+                    <strong>
+                        <a href={image.license} target="_blank" rel="noreferrer">
+                            {LICENSE_NAMES[image.license]}
+                        </a>
+                    </strong>{" "}
                     license.
                 </p>
             </Speech>

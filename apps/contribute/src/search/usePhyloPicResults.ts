@@ -11,9 +11,11 @@ import isServerError from "~/http/isServerError"
 import { SearchEntry } from "./SearchEntry"
 const usePhyloPicResults = (text: string) => {
     const normalized = useMemo(() => normalizeText(text), [text])
-    const apiFetcher = useAPIFetcher<PageWithEmbedded<APINode>>()
     const [build] = useContext(BuildContext) ?? []
-    useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/`, apiFetcher)
+    const apiFetcher = useAPIFetcher<PageWithEmbedded<APINode>>()
+    useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/`, apiFetcher, {
+        shouldRetryOnError: true,
+    })
     const liveKey = useMemo(
         () =>
             build && normalized

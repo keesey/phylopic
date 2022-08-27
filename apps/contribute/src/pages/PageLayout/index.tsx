@@ -11,12 +11,13 @@ import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import styles from "./index.module.scss"
 type Props = {
+    build?: number
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
     head: PageHeadProps
     imageUUID?: UUID
 }
-const PageLayout: FC<Props> = ({ children, fallback = {}, head, imageUUID }) => {
+const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, imageUUID }) => {
     useEffect(() => {
         try {
             document.domain = "phylopic.org"
@@ -29,7 +30,7 @@ const PageLayout: FC<Props> = ({ children, fallback = {}, head, imageUUID }) => 
             <LoaderContext.Provider value={{ color: "#fff" }}>
                 <PageLoader />
                 <PageHead {...head} />
-                <BuildContainer>
+                <BuildContainer initialValue={build}>
                     <AuthContainer>
                         <aside>
                             <AuthExpirationCountdown />

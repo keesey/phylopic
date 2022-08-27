@@ -9,7 +9,11 @@ export type Props = {
 const EditMenu: FC<Props> = ({ image }) => {
     return (
         <>
-            <MenuLink href={`/edit/${encodeURIComponent(image.uuid)}/file`} icon={ICON_PENCIL} label="Update File" />
+            <MenuLink
+                href={`/edit/${encodeURIComponent(image.uuid)}/file`}
+                icon={ICON_PENCIL}
+                label="Update Image File"
+            />
             <MenuLink
                 href={`/edit/${encodeURIComponent(image.uuid)}/nodes`}
                 icon={ICON_PENCIL}
@@ -18,7 +22,7 @@ const EditMenu: FC<Props> = ({ image }) => {
             <MenuLink
                 href={`/edit/${encodeURIComponent(image.uuid)}/usage`}
                 icon={ICON_PENCIL}
-                label="Change License or Attribution"
+                label="Change Attribution"
             />
         </>
     )

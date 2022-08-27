@@ -1,5 +1,4 @@
-import { canChange } from "@phylopic/api-models"
-import { isLicenseURL, isPublicDomainLicenseURL, isValidLicenseURL, UUID, VALID_LICENSE_URLS } from "@phylopic/utils"
+import { isLicenseURL, isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import useImage from "~/editing/hooks/useImage"
 import useImageMutator from "~/editing/hooks/useImageMutator"
@@ -27,15 +26,6 @@ const Usage: FC<Props> = ({ uuid }) => {
     const src = useImageSrc(uuid)
     const contributor = useContributor()
     const hasLicense = useMemo(() => isLicenseURL(image?.license), [image?.license])
-    const licenseOptions = useMemo(
-        () =>
-            image?.license
-                ? Array.from(VALID_LICENSE_URLS)
-                      .sort()
-                      .filter(url => canChange(image.license!, url))
-                : EMPTY,
-        [image?.license],
-    )
     const complete = useMemo(() => {
         return image?.license && (image.attribution || isPublicDomainLicenseURL(image.license))
     }, [image?.attribution, image?.license])
@@ -71,11 +61,6 @@ const Usage: FC<Props> = ({ uuid }) => {
                 {hasLicense && !image.attribution && contributor?.name && (
                     <UserButton icon={ICON_HAND_POINT_RIGHT} onClick={() => mutate({ attribution: contributor.name })}>
                         I get the credit.
-                    </UserButton>
-                )}
-                {hasLicense && licenseOptions.length > 0 && (
-                    <UserButton danger icon={ICON_PENCIL} onClick={() => mutate({ license: null, submitted: false })}>
-                        Pick another license.
                     </UserButton>
                 )}
                 {hasLicense && image.attribution && (
