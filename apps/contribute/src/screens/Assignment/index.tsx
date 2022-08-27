@@ -1,5 +1,6 @@
 import { Loader } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
+import { useRouter } from "next/router"
 import { FC, useCallback, useState } from "react"
 import useImage from "~/editing/hooks/useImage"
 import useImageMutator from "~/editing/hooks/useImageMutator"
@@ -23,12 +24,14 @@ const Assignment: FC<Props> = ({ uuid }) => {
     const specific = useImageNode(uuid, "specific")
     const [changeRequested, setChangeRequested] = useState(false)
     const mutate = useImageMutator(uuid)
+    const router = useRouter()
     const handleComplete = useCallback(
-        (uuid: UUID) => {
+        (specific: UUID) => {
             setChangeRequested(false)
-            mutate({ general: null, specific: uuid })
+            mutate({ general: null, specific })
+            router.push(`/edit/${encodeURIComponent(uuid)}`)
         },
-        [mutate],
+        [mutate, router, uuid],
     )
     if (!image) {
         return null
