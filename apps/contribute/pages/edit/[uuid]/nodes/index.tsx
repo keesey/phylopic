@@ -57,8 +57,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
             },
         }
     }
-    return { props: {
-        build: (await buildPromise).build,
-        uuid,
-    } }
+    return {
+        props: {
+            build: (await buildPromise).build,
+            uuid,
+        },
+    }
 }

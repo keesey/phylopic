@@ -26,7 +26,7 @@ const Complete: FC = () => {
                             <NumberAsWords max={100} value={submitted} />
                         </strong>{" "}
                         submission{submitted === 1 ? "" : "s"} awaiting review. There&rsquo;s still time to make
-                        revisions, if you want&mdash;just click on the image.
+                        revisions, if you need to&mdash;just click on the image.
                     </p>
                     {(hasAccepted || hasWithdrawn) && (
                         <p>
@@ -54,7 +54,7 @@ const Complete: FC = () => {
                     <p>
                         You have <NumberAsWords max={100} value={accepted} /> accepted submission
                         {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to edit{" "}
-                        {accepted === 1 ? "it" : "them"}, if you want.
+                        {accepted === 1 ? "it" : "them"}, if you need to.
                     </p>
                     {hasWithdrawn && (
                         <p>
