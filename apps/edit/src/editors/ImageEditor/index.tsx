@@ -1,3 +1,5 @@
+import { UUID } from "@phylopic/utils"
+import clsx from "clsx"
 import { useContext, FC } from "react"
 import Context from "~/contexts/ImageEditorContainer/Context"
 import AttributionEditor from "./AttributionEditor"
@@ -7,16 +9,17 @@ import styles from "./index.module.scss"
 import LicenseEditor from "./LicenseEditor"
 import LineageEditor from "./LineageEditor"
 import SponsorEditor from "./SponsorEditor"
-
-const ImageEditor: FC = () => {
+export type Props = {
+    uuid: UUID
+}
+const ImageEditor: FC<Props> = () => {
     const [state] = useContext(Context) ?? []
     const { modified } = state ?? {}
     if (!modified) {
         return null
     }
-    const className = [styles.main, state?.pending && "pending"].filter(Boolean).join(" ")
     return (
-        <section className={className}>
+        <section className={clsx(styles.main, state?.pending && "pending")}>
             <dl>
                 <dt>Attribution</dt>
                 <dd>

@@ -4,7 +4,7 @@ import NameView from "./NameView"
 
 export interface Props {
     attribution: string | null
-    name: Nomen
+    name: Nomen | null
     sponsor: string | null
 }
 const ImageTitleView: FC<Props> = ({ attribution, name, sponsor }) => (

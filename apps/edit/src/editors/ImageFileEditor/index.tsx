@@ -1,73 +1,88 @@
-import { ImageMediaType } from "@phylopic/utils"
-import Image from "next/future/image"
-import { ChangeEvent, DragEvent, FC, useCallback, useState } from "react"
+import { Image } from "@phylopic/source-models"
+import { isImageMediaType, UUID } from "@phylopic/utils"
+import axios from "axios"
+import clsx from "clsx"
+import NextImage from "next/future/image"
+import { ChangeEvent, DragEvent, FC, useCallback, useMemo, useState } from "react"
+import useSWR from "swr"
+import fetchJSON from "~/fetch/fetchJSON"
+import fetchObjectURLAndType from "~/fetch/fetchObjectURLAndType"
+import getFilename from "~/files/getFilename"
 import styles from "./index.module.scss"
-import upload from "./upload"
-
 export interface Props {
-    apiPath: string
-    mediaType: ImageMediaType
+    uuid: UUID
 }
-const ImageFileEditor: FC<Props> = ({ apiPath, mediaType: fileType }) => {
-    const [replaceKey, setReplaceKey] = useState<string | undefined>()
-    const [cachebuster, setCachebuster] = useState<string | undefined>()
+const ImageFileEditor: FC<Props> = ({ uuid }) => {
     const [pending, setPending] = useState(false)
-    const performUpload = useCallback(
+    const imageKey = `/api/images/_/${encodeURIComponent(uuid)}`
+    const key = imageKey + "/file"
+    const { data: fileData, mutate } = useSWR(key, fetchObjectURLAndType)
+    const { data: image, mutate: mutateImage } = useSWR<Image & { uuid: UUID }>(imageKey, fetchJSON)
+    const { url: imageSrc, type: fileType } = fileData ?? {}
+    const filename = useMemo(
+        () => (image && isImageMediaType(fileType) ? getFilename(image, fileType) : "file.img"),
+        [image, fileType],
+    )
+    const put = useCallback(
         (file: File | undefined) => {
-            if (apiPath && file) {
-                ;(async () => {
-                    setPending(true)
-                    const now = new Date().valueOf().toString()
-                    try {
-                        await upload(apiPath, file)
-                    } catch (e) {
-                        return alert(e)
-                    } finally {
-                        setReplaceKey(now)
-                        setPending(false)
-                    }
-                    setCachebuster(now)
-                })()
+            if (file) {
+                if (!isImageMediaType(file.type)) {
+                    alert("Invalid file type: " + file.type)
+                    return
+                }
+                const newValue = { type: file.type, url: URL.createObjectURL(file) }
+                mutate(
+                    async () => {
+                        setPending(true)
+                        try {
+                            await axios.put(key, Buffer.from(await file.arrayBuffer()), {
+                                headers: {
+                                    "content-type": file.type,
+                                },
+                            })
+                        } finally {
+                            setPending(false)
+                        }
+                        return newValue
+                    },
+                    { optimisticData: newValue, rollbackOnError: true },
+                )
+                mutateImage(undefined, { revalidate: true })
             }
         },
-        [apiPath],
+        [key, mutate, mutateImage],
     )
     const handleFigureDrop = useCallback(
         (event: DragEvent<HTMLElement>) => {
             const file = event.dataTransfer.files[0]
-            performUpload(file)
+            put(file)
         },
-        [performUpload],
+        [put],
     )
     const handleFileChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             const file = event.currentTarget.files?.[0]
-            performUpload(file)
+            put(file)
         },
-        [performUpload],
+        [put],
     )
-    if (!apiPath) {
-        return null
-    }
-    const className = [styles.main, pending && "pending"].filter(Boolean).join(" ")
     return (
-        <figure onDrop={handleFigureDrop} className={className}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <Image
-                alt="Original Submission"
-                src={`${apiPath}${cachebuster ? `?${encodeURIComponent(cachebuster)}` : ""}`}
-                width={512}
-                height={512}
-            />
+        <figure onDrop={handleFigureDrop} className={clsx(styles.main, pending && "pending")}>
+            <NextImage alt="Submission" src={imageSrc ?? "data:"} width={512} height={512} />
             <nav>
-                <a key="download" href={`${apiPath}?download=1`} download role="button">
-                    Download {fileType === "image/png" ? "PNG" : "SVG"} &darr;
+                <a
+                    key="download"
+                    href={`/api/images/_/${encodeURIComponent(uuid)}/file?download=1`}
+                    download={filename}
+                    role="button"
+                >
+                    Download file &darr;
                 </a>
                 <label htmlFor="imagefile">Replace &uarr;</label>
                 <input
                     disabled={pending}
                     id="imagefile"
-                    key={`replace${replaceKey ? `:${replaceKey}` : ""}`}
+                    key={`replace${imageSrc ? `:${imageSrc}` : ""}`}
                     onChange={handleFileChange}
                     type="file"
                 />

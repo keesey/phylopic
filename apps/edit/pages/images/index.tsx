@@ -92,7 +92,7 @@ const ImageView: FC<{ image: Image & { uuid: UUID } }> = ({ image }) => {
     )
     return (
         <>
-            {specific ? <NameView name={specific.names[0]} short /> : "[Unassigned]"}
+            {specific ? <NameView name={specific.names[0]} short /> : INCOMPLETE_STRING}
             {general ? (
                 <>
                     {" "}

@@ -1,12 +1,16 @@
-import { Editable, ImageFile } from "@phylopic/source-client"
-import { isImageMediaType } from "@phylopic/utils"
+import { Editable, ImageFile, Patchable } from "@phylopic/source-client"
+import { Image } from "@phylopic/source-models"
+import { isImageMediaType, UUID } from "@phylopic/utils"
 import { convertS3BodyToBuffer } from "@phylopic/utils-aws"
 import { NextApiRequest, NextApiResponse } from "next"
+import getFilename from "~/files/getFilename"
 const handleWithImageFileEditor = async (
     req: NextApiRequest,
     res: NextApiResponse<Buffer>,
     editor: Editable<ImageFile>,
+    imageClient: Patchable<Image & { uuid: UUID }>,
 ) => {
+    const now = new Date()
     switch (req.method) {
         case "DELETE": {
             await editor.delete()
@@ -15,7 +19,15 @@ const handleWithImageFileEditor = async (
         }
         case "GET":
         case "HEAD": {
+            let imagePromise: Promise<Image & { uuid: UUID }> | null = null
+            if (req.query.download) {
+                imagePromise = imageClient.get()
+            }
             const { data, type } = await editor.get()
+            const image = await imagePromise
+            if (image) {
+                res.setHeader("content-disposition", `attachment; filename=${JSON.stringify(getFilename(image, type))}`)
+            }
             res.setHeader("content-type", type)
             res.send(data)
             res.status(200)
@@ -35,6 +47,7 @@ const handleWithImageFileEditor = async (
                 data: await convertS3BodyToBuffer(req.body),
                 type,
             })
+            await imageClient.patch({ modified: now.toISOString() })
             res.status(204)
             break
         }

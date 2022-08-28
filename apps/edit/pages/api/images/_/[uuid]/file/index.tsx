@@ -11,7 +11,7 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
             throw 404
         }
         client = new SourceClient()
-        await handleWithImageFileEditor(req, res, client.image(uuid).file)
+        await handleWithImageFileEditor(req, res, client.image(uuid).file, client.image(uuid))
     } catch (e) {
         handleAPIError(res, e)
     } finally {
