@@ -16,7 +16,8 @@ const PhyloPicImageSearch: FC = () => {
     const endpoint = useMemo(
         () =>
             matchingText
-                ? process.env.NEXT_PUBLIC_API_URL +
+                ? "https://" +
+                  process.env.NEXT_PUBLIC_API_DOMAIN +
                   "/images" +
                   createSearch({
                       embed_specificNode: "true",

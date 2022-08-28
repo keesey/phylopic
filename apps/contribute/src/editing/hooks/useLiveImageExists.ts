@@ -7,7 +7,7 @@ import isServerError from "~/http/isServerError"
 const useLiveImageExists = (uuid?: UUID) => {
     const apiFetcher = useAPIFetcher()
     const imageKey = useMemo(
-        () => (uuid ? `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(uuid)}` : null),
+        () => (uuid ? `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/images/${encodeURIComponent(uuid)}` : null),
         [uuid],
     )
     const { data, error, isValidating } = useSWRImmutable(imageKey, apiFetcher, {

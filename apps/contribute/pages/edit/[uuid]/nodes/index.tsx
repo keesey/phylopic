@@ -28,7 +28,7 @@ const Page: NextPage<Props> = ({ build, uuid }) => (
 export default Page
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const uuid = context.params?.uuid
-    const buildPromise = fetchJSON<API>(process.env.NEXT_PUBLIC_API_URL + "/")
+    const buildPromise = fetchJSON<API>("https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/")
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }

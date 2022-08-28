@@ -13,13 +13,13 @@ const usePhyloPicResults = (text: string) => {
     const normalized = useMemo(() => normalizeText(text), [text])
     const [build] = useContext(BuildContext) ?? []
     const apiFetcher = useAPIFetcher<PageWithEmbedded<APINode>>()
-    useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/`, apiFetcher, {
+    useSWRImmutable(`https://${process.env.NEXT_PUBLIC_API_DOMAIN}/`, apiFetcher, {
         shouldRetryOnError: true,
     })
     const liveKey = useMemo(
         () =>
             build && normalized
-                ? `${process.env.NEXT_PUBLIC_API_URL}/nodes?build=${encodeURIComponent(
+                ? `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/nodes?build=${encodeURIComponent(
                       build,
                   )}&embed_items=true&filter_name=${encodeURIComponent(normalized.toLowerCase())}&page=0`
                 : null,

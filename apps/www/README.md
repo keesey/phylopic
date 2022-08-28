@@ -14,9 +14,9 @@ The following environment variables are required. They may be stored in `.env.lo
 
 | Variable Name                          | Description                                                                                                                                                        |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `NEXT_PUBLIC_API_URL`                  | _PhyloPic_ API URL (`https://api.phylopic.org`)                                                                                                                    |
+| `NEXT_PUBLIC_API_DOMAIN`               | _PhyloPic_ API Domain (`api.phylopic.org`)                                                                                                                         |
 | `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | ID for the contributing user that is also the site's contact point (`060f03a9-fafd-4d08-81d1-b8f82080573f`)                                                        |
-| `NEXT_PUBLIC_ROOT_UUID`                | ID for the root phylogentic node (`8f901db5-84c1-4dc0-93ba-2300eeddf4ab`)                                                                                          |
+| `NEXT_PUBLIC_ROOT_UUID`                | ID for the root phylogenetic node (`8f901db5-84c1-4dc0-93ba-2300eeddf4ab`)                                                                                         |
 | `REVALIDATE_TOKEN`                     | Secret key for [Next.js on-demand revalidation](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration#using-on-demand-revalidation) |
 
 The following environment variables are optional:

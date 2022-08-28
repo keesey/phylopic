@@ -41,9 +41,9 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
         () =>
             setDirectKey(
                 ott_id
-                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(
-                          ott_id,
-                      )}?embed_primaryImage=true`
+                    ? `https://${
+                          process.env.NEXT_PUBLIC_API_DOMAIN
+                      }/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(ott_id)}?embed_primaryImage=true`
                     : null,
             ),
         [ott_id, setDirectKey],
@@ -62,7 +62,7 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
             setIndirectKey(
                 lineageIDs.length
                     ? ([
-                          `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?embed_primaryImage=true`,
+                          `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/resolve/opentreeoflife.org/taxonomy?embed_primaryImage=true`,
                           lineageIDs,
                       ] as [string, string[]])
                     : null,

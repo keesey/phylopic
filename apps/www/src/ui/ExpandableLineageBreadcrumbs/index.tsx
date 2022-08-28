@@ -21,7 +21,10 @@ const ExpandableLineageBreadcrumbs: FC<Props> = ({ afterItems, beforeItems, uuid
         return <Collapsed afterItems={afterItems} beforeItems={beforeItems} onClick={handleActiveButtonClick} />
     }
     return (
-        <PaginationContainer endpoint={`${process.env.NEXT_PUBLIC_API_URL}/nodes/${uuid}/lineage`} hideLoader>
+        <PaginationContainer
+            endpoint={`https://${process.env.NEXT_PUBLIC_API_DOMAIN}/nodes/${uuid}/lineage`}
+            hideLoader
+        >
             {values => (
                 <Expanded afterItems={afterItems} beforeItems={beforeItems} values={values as readonly Node[]} />
             )}

@@ -47,13 +47,16 @@ export const getServerSideProps: GetServerSideProps<Props, { q?: string | string
     const initialText = getInitialText(context.query.q)
     const fallback: PublicConfiguration["fallback"] = {}
     let build: number | undefined
-    const endpoint = process.env.NEXT_PUBLIC_API_URL ?? ""
+    const endpoint = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN
     const response = await fetchResult<API>(endpoint)
     if (response.status === "success") {
         build = response.data.build
         if (initialText) {
             const endpoint =
-                process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ build, query: initialText })
+                "https://" +
+                process.env.NEXT_PUBLIC_API_DOMAIN +
+                "/autocomplete" +
+                createSearch({ build, query: initialText })
             const response = await fetchResult<QueryMatches>(endpoint)
             if (response.status === "success") {
                 fallback[endpoint] = response.data
@@ -62,7 +65,8 @@ export const getServerSideProps: GetServerSideProps<Props, { q?: string | string
                     const matchingText = getMatchingText(response.data.matches, initialText)
                     if (matchingText) {
                         const searchEndpoint =
-                            process.env.NEXT_PUBLIC_API_URL +
+                            "https://" +
+                            process.env.NEXT_PUBLIC_API_DOMAIN +
                             "/nodes" +
                             createSearch({
                                 build: build.toString(10),

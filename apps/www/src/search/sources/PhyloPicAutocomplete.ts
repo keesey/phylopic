@@ -12,7 +12,7 @@ const PhyloPicAutocomplete: FC = () => {
     const endpoint = useMemo(
         () =>
             text && text.length >= 2
-                ? process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ query: text })
+                ? "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/autocomplete" + createSearch({ query: text })
                 : null,
         [text],
     )

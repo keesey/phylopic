@@ -23,7 +23,7 @@ const useAutocomplete = (text: string): readonly string[] => {
     const phyloPicKey = useMemo(
         () =>
             normalized
-                ? `${process.env.NEXT_PUBLIC_API_URL}/autocomplete?query=${encodeURIComponent(normalized)}`
+                ? `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/autocomplete?query=${encodeURIComponent(normalized)}`
                 : null,
         [normalized],
     )

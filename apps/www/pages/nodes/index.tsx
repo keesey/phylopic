@@ -14,7 +14,7 @@ const PageComponent: NextPage<Props> = props => (
             url="https://www.phylopic.org/nodes"
             description="A list of all taxonomic groups covered by PhyloPic, the open database of freely reusable silhouette images of organisms."
         />
-        <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}>
+        <PaginationContainer endpoint={"https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/nodes"}>
             {(nodes, totalNodes) => (
                 <>
                     <header>

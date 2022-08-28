@@ -63,7 +63,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                     <AnchorLink href="/contributors">All contributors of silhouettes</AnchorLink>
                 </h3>
                 {showContributors && (
-                    <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>
+                    <PaginationContainer endpoint={"https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/contributors"}>
                         {items => (
                             <ul className={styles.list}>
                                 {(items as readonly Contributor[]).map(item => (

@@ -15,7 +15,7 @@ const PageComponent: NextPage<Props> = props => (
             url="https://www.phylopic.org/contributors"
             description="A list of everyone who has contributed free silhouette images to PhyloPic."
         />
-        <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>
+        <PaginationContainer endpoint={"https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/contributors"}>
             {(contributors, totalContributors) => (
                 <>
                     <header>

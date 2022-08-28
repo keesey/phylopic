@@ -67,7 +67,9 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                     Lineage of <NomenView value={name} defaultText="[Unnamed Group]" short />
                 </h1>
             </header>
-            <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes/" + node.uuid + "/lineage"}>
+            <PaginationContainer
+                endpoint={"https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/nodes/" + node.uuid + "/lineage"}
+            >
                 {lineageNodes => <LineageView short value={lineageNodes as readonly NodeWithEmbedded[]} />}
             </PaginationContainer>
         </>
@@ -80,9 +82,9 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + createSearch(NODE_QUERY)
-    const listKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + "/lineage"
-    const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/images/" + createSearch({ filter_node: uuid })
+    const nodeKey = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/nodes/" + uuid + createSearch(NODE_QUERY)
+    const listKey = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/nodes/" + uuid + "/lineage"
+    const imagesKey = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/images/" + createSearch({ filter_node: uuid })
     const [nodeResult, listResult, imagesResult] = await Promise.all([
         fetchResult<NodeWithEmbedded>(nodeKey),
         fetchResult<List>(listKey),
