@@ -13,6 +13,9 @@ export type ImagesClient = Listable<Image & { uuid: UUID }, number> & {
     submitted: Listable<Image & { uuid: UUID }, number>
     withdrawn: Listable<Image & { uuid: UUID }, number>
 }
+export type NodeClient = Patchable<Node & { uuid: UUID }> & {
+    lineage: Listable<Node & { uuid: UUID }, number>
+}
 export type NodesClient = Listable<Node & { uuid: UUID }, number> & {
     resolve(
         externals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
@@ -41,7 +44,7 @@ export type SourceClient = Readonly<{
         file: Editable<ImageFile>
     }
     images: ImagesClient
-    node(uuid: UUID): Patchable<Node & { uuid: UUID }>
+    node(uuid: UUID): NodeClient
     nodes: NodesClient
     upload(uuid: UUID): Editable<ImageFile>
     uploads: Listable<UUID, string>
