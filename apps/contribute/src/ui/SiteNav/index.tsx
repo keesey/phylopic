@@ -20,7 +20,11 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
     return (
         <>
             <nav className={styles.main}>
-                <a className={styles.title} onClick={() => setSelected("site")} role="button">
+                <a
+                    className={styles.title}
+                    onClick={() => setSelected(selected === "site" ? undefined : "site")}
+                    role="button"
+                >
                     <SiteTitle />
                 </a>
                 <NavItem
