@@ -10,7 +10,7 @@ module.exports = {
         locales: ["en"],
     },
     images: {
-        domains: ["contribute.phylopic.org", "images.phylopic.org"],
+        domains: ["contribute.phylopic.org"],
     },
     reactStrictMode: true,
     webpack: {
