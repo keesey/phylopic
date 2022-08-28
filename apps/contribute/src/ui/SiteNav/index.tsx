@@ -20,13 +20,11 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
     return (
         <>
             <nav className={styles.main}>
-                <a
-                    className={styles.title}
-                    onClick={() => setSelected(selected === "site" ? undefined : "site")}
-                    role="button"
-                >
-                    <SiteTitle />
-                </a>
+                <NavItem
+                    label={<SiteTitle />}
+                    onToggle={() => setSelected(selected === "site" ? undefined : "site")}
+                    selected={selected === "site"}
+                />
                 <NavItem
                     label="File"
                     disabled={!enabled}
