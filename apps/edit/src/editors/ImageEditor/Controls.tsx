@@ -1,28 +1,35 @@
-import { stringifyNormalized } from "@phylopic/utils"
-import { useContext, useEffect, useMemo, FC } from "react"
-import Context from "~/contexts/ImageEditorContainer/Context"
-import useSave from "~/contexts/ImageEditorContainer/useSave"
+import { Image, isSubmittableImage } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
+import { FC, useEffect, useMemo } from "react"
+import useSWR from "swr"
+import fetchJSON from "~/fetch/fetchJSON"
+import useDeletor from "~/swr/useDeletor"
+import usePatcher from "~/swr/usePatcher"
 import styles from "./Controls.module.scss"
-
-const Controls: FC = () => {
-    const [state, dispatch] = useContext(Context) ?? []
-    const save = useSave()
-    const { error, modified, original, pending } = state || {}
-    const changed = useMemo(() => stringifyNormalized(modified) !== stringifyNormalized(original), [modified, original])
+export type Props = {
+    uuid: UUID
+}
+const Controls: FC<Props> = ({ uuid }) => {
+    const key = `/api/images/_/${encodeURIComponent(uuid)}`
+    const response = useSWR<Image & { uuid: UUID }>(key, fetchJSON)
+    const { data, error } = response
+    const patcher = usePatcher(key, response)
+    const deletor = useDeletor(key, response)
+    const submittable = useMemo(() => isSubmittableImage(data), [data])
     useEffect(() => {
         if (error) {
             alert(error)
         }
     }, [error])
-    const className = [styles.main, (!changed || !dispatch) && styles.hidden].filter(Boolean).join(" ")
     return (
-        <nav className={className}>
-            <button disabled={pending} onClick={() => dispatch?.({ type: "RESET" })}>
-                Reset
-            </button>
-            <button disabled={Boolean(error) || pending} onClick={!error ? save : undefined}>
-                Save
-            </button>
+        <nav className={styles.main}>
+            {data && !data.accepted && data.submitted && (
+                <button onClick={() => patcher({ accepted: true })}>Accept</button>
+            )}
+            {data && !data.accepted && !data.submitted && submittable && (
+                <button onClick={() => patcher({ accepted: true, submitted: true })}>Submit and Accept</button>
+            )}
+            {data && data.accepted && !data.submitted && <button onClick={deletor}>Delete</button>}
         </nav>
     )
 }

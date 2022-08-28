@@ -1,29 +1,26 @@
 import { normalizeText } from "@phylopic/utils"
-import { KeyboardEvent, useCallback, useEffect, useState, FC } from "react"
+import { FC, KeyboardEvent, useCallback, useEffect, useState } from "react"
 import styles from "./TextEditor.module.scss"
-
 export type Props =
     | {
-          onChange: (value: string | undefined) => void
-          modified: string | null
+          onChange: (value: string | null) => void
           optional: true
-          original: string | null
+          value: string | null
           emptyLabel?: string
       }
     | {
-          modified: string
           onChange: (value: string) => void
           optional: false
-          original: string
+          value: string
       }
 const TextEditor: FC<Props> = props => {
     const [editing, setEditing] = useState(false)
-    const [newValue, setNewValue] = useState(props.modified ?? "")
-    useEffect(() => setNewValue(props.modified ?? ""), [props.modified])
+    const [newValue, setNewValue] = useState(props.value ?? "")
+    useEffect(() => setNewValue(props.value ?? ""), [props.value])
     const inputBlurCallback = useCallback(() => {
-        setNewValue(props.modified ?? "")
+        setNewValue(props.value ?? "")
         setEditing(false)
-    }, [props.modified])
+    }, [props.value])
     const inputKeyDownCallback = useCallback(
         (event: KeyboardEvent<HTMLInputElement>) => {
             switch (event.key) {
@@ -36,7 +33,7 @@ const TextEditor: FC<Props> = props => {
                     event.preventDefault()
                     const normalized = normalizeText(newValue ?? "")
                     if (props.optional) {
-                        props.onChange(normalized || undefined)
+                        props.onChange(normalized || null)
                     } else {
                         props.onChange(normalized)
                     }
@@ -46,19 +43,13 @@ const TextEditor: FC<Props> = props => {
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [newValue, props.modified, props.onChange, props.optional],
+        [newValue, props.onChange, props.optional, props.value],
     )
-    const changed = props.modified !== props.original
-    const className = ["editable", changed && "changed"].filter(Boolean).join(" ")
     if (!editing) {
         return (
             <div className={styles.label}>
-                <button
-                    className={className}
-                    onClick={() => setEditing(true)}
-                    title={changed ? props.original || (props.optional && props.emptyLabel) || undefined : undefined}
-                >
-                    {props.modified || (props.optional && props.emptyLabel)}
+                <button className="editable" onClick={() => setEditing(true)}>
+                    {props.value || (props.optional && props.emptyLabel) || undefined}
                 </button>
             </div>
         )
@@ -67,10 +58,10 @@ const TextEditor: FC<Props> = props => {
         <input
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
-            className={className}
-            onKeyDownCapture={inputKeyDownCallback}
-            onChange={event => setNewValue(event.currentTarget.value)}
+            className="editable"
             onBlur={inputBlurCallback}
+            onChange={event => setNewValue(event.currentTarget.value)}
+            onKeyDownCapture={inputKeyDownCallback}
             type="text"
             value={newValue}
         />

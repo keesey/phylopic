@@ -66,8 +66,9 @@ const Page: NextPage<Props> = ({ uuid }) => {
                         />
                     </h1>
                 </header>
-                {/*<ImageEditor uuid={uuid} />*/}
                 <ImageFileEditor uuid={uuid} />
+                <br />
+                <ImageEditor uuid={uuid} />
                 <footer>
                     <TimesView created={image?.created} modified={image?.modified} />
                 </footer>

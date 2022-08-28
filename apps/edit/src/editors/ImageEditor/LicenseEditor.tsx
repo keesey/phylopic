@@ -1,18 +1,21 @@
-import { useContext, FC } from "react"
-import Context from "~/contexts/ImageEditorContainer/Context"
+import { Image } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
+import { FC } from "react"
+import useSWR from "swr"
+import fetchJSON from "~/fetch/fetchJSON"
+import usePatcher from "~/swr/usePatcher"
 import LicenseURLEditor from "../LicenseURLEditor"
-
-const LicenseEditor: FC = () => {
-    const [state, dispatch] = useContext(Context) ?? []
-    if (!state || !dispatch) {
+export type Props = {
+    uuid: UUID
+}
+const LicenseEditor: FC<Props> = ({ uuid }) => {
+    const key = `/api/images/_/${encodeURIComponent(uuid)}`
+    const response = useSWR<Image & { uuid: UUID }>(key, fetchJSON)
+    const { data } = response
+    const patcher = usePatcher(key, response)
+    if (!data) {
         return null
     }
-    return (
-        <LicenseURLEditor
-            onChange={value => dispatch({ payload: value, type: "SET_LICENSE" })}
-            modified={state.modified.image.license}
-            original={state.original.image.license}
-        />
-    )
+    return <LicenseURLEditor onChange={value => patcher({ license: value })} value={data.license} />
 }
 export default LicenseEditor

@@ -1,19 +1,27 @@
-import { useContext, FC } from "react"
-import Context from "~/contexts/ImageEditorContainer/Context"
+import { Image } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
+import { FC } from "react"
+import useSWR from "swr"
 import TextEditor from "~/editors/TextEditor"
-
-const AttributionEditor: FC = () => {
-    const [state, dispatch] = useContext(Context) ?? []
-    if (!state || !dispatch) {
+import fetchJSON from "~/fetch/fetchJSON"
+import usePatcher from "~/swr/usePatcher"
+export type Props = {
+    uuid: UUID
+}
+const AttributionEditor: FC<Props> = ({ uuid }) => {
+    const key = `/api/images/_/${encodeURIComponent(uuid)}`
+    const response = useSWR<Image & { uuid: UUID }>(key, fetchJSON)
+    const { data } = response
+    const patcher = usePatcher(key, response)
+    if (!data) {
         return null
     }
     return (
         <TextEditor
-            emptyLabel="Anonymous"
-            onChange={value => dispatch({ payload: value || undefined, type: "SET_ATTRIBUTION" })}
-            modified={state.modified.image.attribution}
+            emptyLabel="[Anonymous]"
+            onChange={value => patcher({ attribution: value })}
             optional
-            original={state.original.image.attribution}
+            value={data?.attribution}
         />
     )
 }

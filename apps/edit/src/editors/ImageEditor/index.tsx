@@ -1,48 +1,42 @@
 import { UUID } from "@phylopic/utils"
-import clsx from "clsx"
-import { useContext, FC } from "react"
-import Context from "~/contexts/ImageEditorContainer/Context"
+import { FC } from "react"
 import AttributionEditor from "./AttributionEditor"
-import ContributorEditor from "./ContributorEditor"
+import ContributorViewer from "./ContributorViewer"
 import Controls from "./Controls"
 import styles from "./index.module.scss"
 import LicenseEditor from "./LicenseEditor"
-import LineageEditor from "./LineageEditor"
 import SponsorEditor from "./SponsorEditor"
 export type Props = {
     uuid: UUID
 }
-const ImageEditor: FC<Props> = () => {
-    const [state] = useContext(Context) ?? []
-    const { modified } = state ?? {}
-    if (!modified) {
-        return null
-    }
+const ImageEditor: FC<Props> = ({ uuid }) => {
     return (
-        <section className={clsx(styles.main, state?.pending && "pending")}>
+        <section className={styles.main}>
             <dl>
                 <dt>Attribution</dt>
                 <dd>
-                    <AttributionEditor />
+                    <AttributionEditor uuid={uuid} />
                 </dd>
                 <dt>Contributor</dt>
                 <dd>
-                    <ContributorEditor />
+                    <ContributorViewer uuid={uuid} />
                 </dd>
                 <dt>Sponsor</dt>
                 <dd>
-                    <SponsorEditor />
+                    <SponsorEditor uuid={uuid} />
                 </dd>
                 <dt>License</dt>
                 <dd>
-                    <LicenseEditor />
+                    <LicenseEditor uuid={uuid} />
                 </dd>
+                {/*
                 <dt>Nodes</dt>
                 <dd>
-                    <LineageEditor />
+                    <LineageEditor uuid={uuid} />
                 </dd>
+    */}
             </dl>
-            <Controls />
+            <Controls uuid={uuid} />
         </section>
     )
 }
