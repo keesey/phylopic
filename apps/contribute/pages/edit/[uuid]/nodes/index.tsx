@@ -16,7 +16,7 @@ const Page: NextPage<Props> = ({ build, uuid }) => (
         build={build}
         head={{
             title: "PhyloPic: Your Image's Taxonomic Assignment",
-            url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/nodes`,
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(uuid)}/nodes`,
         }}
         imageUUID={uuid}
     >

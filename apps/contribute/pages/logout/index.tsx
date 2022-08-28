@@ -10,7 +10,7 @@ const Page: NextPage = () => (
     <PageLayout
         head={{
             title: "PhyloPic: Sign Out",
-            url: "https://contribute.phylopic.org/logout",
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/logout`,
         }}
     >
         <Content />

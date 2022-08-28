@@ -13,7 +13,7 @@ const Page: NextPage<Props> = ({ uuid }) => (
     <PageLayout
         head={{
             title: "PhyloPic: Usage of Your Image",
-            url: `https://contribute.phylopic.org/edit/${encodeURIComponent(uuid)}/usage`,
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(uuid)}/usage`,
         }}
         imageUUID={uuid}
     >

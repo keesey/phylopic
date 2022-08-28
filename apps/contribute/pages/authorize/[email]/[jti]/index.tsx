@@ -17,7 +17,9 @@ const Page: NextPage<Props> = ({ email, jti }) => (
     <PageLayout
         head={{
             title: "PhyloPic: Authorization",
-            url: `https://contribute.phylopic.org/authorize/${encodeURIComponent(email)}/${encodeURIComponent(jti)}`,
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/authorize/${encodeURIComponent(
+                email,
+            )}/${encodeURIComponent(jti)}`,
         }}
     >
         <Content email={email} jti={jti} />

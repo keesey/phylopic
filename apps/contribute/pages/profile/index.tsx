@@ -7,7 +7,7 @@ const Page: NextPage = () => (
     <PageLayout
         head={{
             title: "PhyloPic: Your Profile",
-            url: "https://contribute.phylopic.org/profile",
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/profile`,
         }}
     >
         <AuthorizedOnly>

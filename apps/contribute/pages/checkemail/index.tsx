@@ -11,7 +11,7 @@ const Page: NextPage<Props> = ({ ttl }) => (
     <PageLayout
         head={{
             title: "PhyloPic: Check Your Email",
-            url: "https://contribute.phylopic.org/checkemail",
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/checkemail`,
         }}
     >
         <CheckEmail ttl={ttl ?? "DAY"} />

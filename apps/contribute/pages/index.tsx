@@ -8,7 +8,7 @@ const Page: NextPage = () => (
             description: "Upload your own images to PhyloPic, the open database of freely reusable silhouettes.",
             index: true,
             title: "PhyloPic: Contribute",
-            url: "https://contribute.phylopic.org/",
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}`,
         }}
     >
         <Home />

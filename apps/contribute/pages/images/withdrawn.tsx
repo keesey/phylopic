@@ -8,7 +8,7 @@ const Page: NextPage = () => (
     <PageLayout
         head={{
             title: "PhyloPic: Withdrawn Submissions",
-            url: "https://contribute.phylopic.org/images/withdrawn",
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/images/withdrawn`,
         }}
     >
         <AuthorizedOnly>
