@@ -42,7 +42,7 @@ const Page: NextPage<Props> = ({ authority, namespace }) => (
                 <Paginator
                     endpoint={`/api/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`}
                 >
-                    {items =>
+                    {(items, invalidating) =>
                         items.length > 0 ? (
                             <ul>
                                 {(items as ReadonlyArray<External & { objectID: ObjectID }>).map(external => (
@@ -57,7 +57,7 @@ const Page: NextPage<Props> = ({ authority, namespace }) => (
                                     </li>
                                 ))}
                             </ul>
-                        ) : (
+                        ) : invalidating ? null : (
                             <p>No objects found.</p>
                         )
                     }

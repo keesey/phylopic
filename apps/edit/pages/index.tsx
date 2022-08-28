@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+import { AnchorLink } from "@phylopic/ui"
 import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
@@ -20,29 +20,21 @@ const Home: NextPage = () => (
             <nav>
                 <ul>
                     <li>
-                        <Link href="submissions">
-                            <a>Submissions</a>
-                        </Link>
+                        <AnchorLink href="images">Images</AnchorLink>
+                        <ul>
+                            <li>
+                                <AnchorLink href="images?filter=submitted">New Submissions</AnchorLink>
+                            </li>
+                        </ul>
                     </li>
                     <li>
-                        <Link href="images">
-                            <a>Images</a>
-                        </Link>
+                        <AnchorLink href="nodes">Nodes</AnchorLink>
                     </li>
                     <li>
-                        <Link href="nodes">
-                            <a>Nodes</a>
-                        </Link>
+                        <AnchorLink href="phylogeny">Phylogeny</AnchorLink>
                     </li>
                     <li>
-                        <Link href="phylogeny">
-                            <a>Phylogeny</a>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href="externals">
-                            <a>External Namespaces</a>
-                        </Link>
+                        <AnchorLink href="externals">External Authorities</AnchorLink>
                     </li>
                 </ul>
             </nav>

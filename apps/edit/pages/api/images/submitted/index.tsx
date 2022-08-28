@@ -8,7 +8,7 @@ const index: NextApiHandler<Page<Image, number> | number> = async (req, res) => 
     let client: SourceClient | undefined
     try {
         client = new SourceClient()
-        await handleWithLister(req, res, client.images.incomplete)
+        await handleWithLister(req, res, client.images.submitted)
     } catch (e) {
         handleAPIError(res, e)
     } finally {

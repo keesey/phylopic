@@ -17,7 +17,7 @@ const Page: NextPage = () => (
             </header>
             <article>
                 <Paginator endpoint="/api/externals">
-                    {items =>
+                    {(items, invalidating) =>
                         items.length > 0 ? (
                             <ul>
                                 {(items as readonly Authority[]).map(authority => (
@@ -28,7 +28,7 @@ const Page: NextPage = () => (
                                     </li>
                                 ))}
                             </ul>
-                        ) : (
+                        ) : invalidating ? null : (
                             <p>No authorities found.</p>
                         )
                     }

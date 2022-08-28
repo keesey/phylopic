@@ -16,7 +16,7 @@ const Paginator: FC<Props> = ({ children, endpoint, hideControls, hideLoader, on
         return index === 0 || previousPageData?.next
             ? endpoint + createSearch({ page: previousPageData?.next ?? 0 })
             : null
-    }, [])
+    }, [endpoint])
     const { data, error, isValidating, setSize, size } = useSWRInfinite<Page<{ uuid: UUID }, number>>(
         getKey,
         fetchJSON,

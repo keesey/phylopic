@@ -28,7 +28,7 @@ const Page: NextPage<Props> = ({ authority }) => (
             </header>
             <article>
                 <Paginator endpoint={`/api/externals/${encodeURIComponent(authority)}`}>
-                    {items =>
+                    {(items, invalidating) =>
                         items.length > 0 ? (
                             <ul>
                                 {(items as readonly Namespace[]).map(namespace => (
@@ -45,7 +45,7 @@ const Page: NextPage<Props> = ({ authority }) => (
                                     </li>
                                 ))}
                             </ul>
-                        ) : (
+                        ) : invalidating ? null : (
                             <p>No namespaces found.</p>
                         )
                     }

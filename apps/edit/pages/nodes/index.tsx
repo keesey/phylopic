@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/source-models"
-import { AnchorLink } from "@phylopic/ui"
+import { AnchorLink, Loader } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { NextPage } from "next"
 import Head from "next/head"
@@ -20,7 +20,7 @@ const Page: NextPage = () => (
                 <h1>Nodes</h1>
             </header>
             <Paginator endpoint="/api/nodes">
-                {items =>
+                {(items, invalidating) =>
                     items.length ? (
                         <ul>
                             {(items as ReadonlyArray<Node & { uuid: UUID }>).map(node => (
@@ -31,7 +31,7 @@ const Page: NextPage = () => (
                                 </li>
                             ))}
                         </ul>
-                    ) : (
+                    ) : invalidating ? null : (
                         <p>No nodes found.</p>
                     )
                 }
