@@ -1,5 +1,4 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
-import { AnchorLink } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
@@ -16,14 +15,14 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
     const authorized = useAuthorized()
     const contributor = useContributor()
     const enabled = authorized && Boolean(contributor?.name && contributor.name !== INCOMPLETE_STRING)
-    const [selected, setSelected] = useState<"account" | "file" | "edit" | "view" | undefined>()
+    const [selected, setSelected] = useState<"account" | "file" | "edit" | "site" | "view" | undefined>()
     const image = useImage(imageUUID)
     return (
         <>
             <nav className={styles.main}>
-                <AnchorLink className={styles.title} href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>
+                <a className={styles.title} onClick={() => setSelected("site")} role="button">
                     <SiteTitle />
-                </AnchorLink>
+                </a>
                 <NavItem
                     label="File"
                     disabled={!enabled}

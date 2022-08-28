@@ -1,5 +1,14 @@
 @use "@phylopic/styles/colors.scss";
 
+.site {
+    left: 0;
+
+    @media screen and (max-width: 392px) {
+        left: unset;
+        right: 0;
+    }
+}
+
 .file {
     left: 143px;
 
@@ -64,6 +73,13 @@
         &:hover {
             opacity: 0.5;
         }
+    }
+
+    h2 {
+        color: colors.$black;
+        font-size: larger;
+        font-family: Georgia, serif;
+        font-variant: small-caps;
     }
 
     ul {

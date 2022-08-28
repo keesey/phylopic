@@ -8,10 +8,11 @@ const AccountMenu = dynamic(() => import("./menus/AccountMenu"), { ssr: false })
 const EditMenu = dynamic(() => import("./menus/EditMenu"), { ssr: false })
 const FileMenu = dynamic(() => import("./menus/FileMenu"), { ssr: false })
 const ViewMenu = dynamic(() => import("./menus/ViewMenu"), { ssr: false })
+const SiteMenu = dynamic(() => import("./menus/SiteMenu"), { ssr: false })
 export type Props = {
     image?: Image & { uuid: UUID }
     onClose: () => void
-    selected?: "account" | "file" | "edit" | "view"
+    selected?: "account" | "edit" | "file" | "site" | "view"
 }
 const DropDownMenu: FC<Props> = ({ image, onClose, selected }) => {
     const active = selected && (selected !== "edit" || Boolean(image))
@@ -24,6 +25,7 @@ const DropDownMenu: FC<Props> = ({ image, onClose, selected }) => {
                 {selected === "account" && <AccountMenu />}
                 {selected === "edit" && image && <EditMenu image={image} />}
                 {selected === "file" && <FileMenu image={image} />}
+                {selected === "site" && <SiteMenu />}
                 {selected === "view" && <ViewMenu />}
             </ul>
         </div>
