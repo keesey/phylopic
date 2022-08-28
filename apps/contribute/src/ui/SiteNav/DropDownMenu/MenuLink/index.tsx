@@ -13,7 +13,7 @@ const MenuLink: FC<Props> = ({ disabled, href, icon, isExternal, label }) => {
     return (
         <li className={clsx(styles.main, disabled && styles.disabled)} role="menuitem">
             {isExternal ? (
-                <a className={styles.link} href={disabled ? "#" : href} target="_blank" rel="noopener">
+                <a className={styles.link} href={disabled ? "#" : href} target="_blank" rel="noreferrer">
                     <span className={styles.icon}>{icon}</span>
                     <span className={styles.label}>{label}</span>
                 </a>

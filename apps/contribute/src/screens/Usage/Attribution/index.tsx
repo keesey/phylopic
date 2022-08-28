@@ -17,7 +17,7 @@ const Attribution: FC<Props> = ({ uuid }) => {
         (value: string) => {
             mutate({ attribution: value || null })
         },
-        [mutate, required],
+        [mutate],
     )
     return (
         <>
