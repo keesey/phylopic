@@ -10,15 +10,23 @@ See instructions in the [_PhyloPic_ project `README`](../../README.md) for setti
 
 ### Environment Variables
 
-The following environment variables are required. They may be stored in `.env.local` in the root of this project.
+The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
 
-| Variable Name            | Description                                                          |
-| ------------------------ | -------------------------------------------------------------------- |
-| `AUTH_SECRET_KEY`        | Secret key used for authentication                                   |
-| `MAILGUN_API_KEY`        | API key for [Mailgun](https://www.mailgun.com/)                      |
-| `MAILGUN_DOMAIN`         | Domain for [Mailgun](https://www.mailgun.com/) (`mail.phylopic.org`) |
-| `NEXT_PUBLIC_API_URL`    | _PhyloPic_ API URL (`https://api.phylopic.org`)                      |
-| `NEXT_PUBLIC_WWW_DOMAIN` | Domain of the main _PhyloPic_ website (`beta.phylopic.org`)          |
+| Variable Name                   | Description                                                              |
+| ------------------------------- | ------------------------------------------------------------------------ |
+| `AUTH_SECRET_KEY`               | Secret key used for authentication                                       |
+| `MAILGUN_API_KEY`               | API key for [Mailgun](https://www.mailgun.com/)                          |
+| `MAILGUN_DOMAIN`                | Domain for [Mailgun](https://www.mailgun.com/) (`mail.phylopic.org`)     |
+| `NEXT_PUBLIC_API_DOMAIN`        | Domain of the _PhyloPic_ API (`api.phylopic.org`)                        |
+| `NEXT_PUBLIC_CONTRIBUTE_DOMAIN` | Domain of the _PhyloPic: Contribute_ website (`contribute.phylopic.org`) |
+| `NEXT_PUBLIC_WWW_DOMAIN`        | Domain of the main _PhyloPic_ website (`www.phylopic.org`)               |
+| `PGHOST`                        | PostgreSQL host                                                          |
+| `PGPASSWORD`                    | PostgreSQL password                                                      |
+| `PGPORT`                        | PostgreSQL port                                                          |
+| `PGUSER`                        | PostgreSQL user                                                          |
+| `S3_ACCESS_KEY_ID`              | AWS S3 access key ID                                                     |
+| `S3_REGION`                     | AWS S3 region                                                            |
+| `S3_SECRET_ACCESS_KEY`          | AWS S3 secret access key                                                 |
 
 The following environment variables are optional:
 
