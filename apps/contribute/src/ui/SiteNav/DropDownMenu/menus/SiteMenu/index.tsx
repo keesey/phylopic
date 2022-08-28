@@ -14,7 +14,11 @@ const SiteMenu: FC = () => {
                 href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}`}
                 icon={ICON_HAND_POINT_RIGHT}
                 isExternal
-                label={<><SiteTitle /> (Main Site)</>}
+                label={
+                    <>
+                        <SiteTitle /> (Main Site)
+                    </>
+                }
             />
             <MenuLink
                 href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images`}
