@@ -27,7 +27,7 @@ import styles from "./index.module.scss"
 const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 }
-const MAX_FILE_SIZE_MEBIBYTES = 3
+const MAX_FILE_SIZE_MEBIBYTES = 1
 const MAX_FILE_SIZE = MAX_FILE_SIZE_MEBIBYTES * MEBIBYTE
 const MIN_LENGTH_PIXELS = 512
 const MIN_AREA_PIXELS_SQUARED = 128 * MIN_LENGTH_PIXELS

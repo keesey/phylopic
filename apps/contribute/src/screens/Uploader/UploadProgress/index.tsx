@@ -2,6 +2,7 @@ import { ImageMediaType, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { FC, useEffect, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
+import useImageSrcSWR from "~/editing/hooks/useImageSrcSWR"
 import useContributorUUID from "~/profile/useContributorUUID"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_ARROW_LEFT } from "~/ui/ICON_SYMBOLS"
@@ -22,10 +23,11 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid })
     const [loaded, setLoaded] = useState(0)
     const [total, setTotal] = useState(NaN)
     const [error, setError] = useState<Error | undefined>()
+    const { mutate } = useImageSrcSWR(uuid)
     useEffect(() => {
         if (buffer && contributorUUID && token && uuid) {
             const controller = new AbortController()
-            const promise = axios.put<void>(`/api/images/${encodeURIComponent(uuid)}/source`, buffer, {
+            const promise = axios.put(`/api/images/${encodeURIComponent(uuid)}/source`, buffer, {
                 headers: {
                     authorization: `Bearer ${token}`,
                     "content-type": type,
@@ -35,6 +37,13 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid })
                     setTotal(event.total)
                 },
                 signal: controller.signal,
+            })
+            mutate(async () => {
+                await promise
+                return URL.createObjectURL(new Blob([buffer]))
+            }, {
+                revalidate: true,
+                rollbackOnError: true
             })
             ;(async () => {
                 try {
@@ -54,7 +63,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid })
             })()
             return () => controller.abort()
         }
-    }, [buffer, contributorUUID, onComplete, token, type, uuid])
+    }, [buffer, contributorUUID, mutate, onComplete, token, type, uuid])
     if (error) {
         return (
             <Dialogue>
@@ -65,7 +74,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid })
                     <p>“{String(error)}”</p>
                 </Speech>
                 <UserOptions>
-                    <UserLinkButton icon={ICON_ARROW_LEFT} href={`/edit/${encodeURIComponent(uuid)}`}>
+                    <UserLinkButton icon={ICON_ARROW_LEFT} href="/">
                         Start over.
                     </UserLinkButton>
                 </UserOptions>
