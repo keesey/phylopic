@@ -1,13 +1,11 @@
-import { NomenPartClass } from "parse-nomen"
 import { Nomen, stringifyNormalized } from "@phylopic/utils"
-import { useContext, useState, FC } from "react"
-import Context from "~/contexts/NameEditorContainer/Context"
+import { NomenPartClass } from "parse-nomen"
+import { FC, useEffect, useMemo, useState } from "react"
 import NameSelector from "~/selectors/NameSelector"
 import NameView from "~/views/NameView"
 import TextEditor from "../TextEditor"
 import styles from "./index.module.scss"
 import NomenPartEditor from "./NomenPartEditor"
-
 const getNextClass = (name: Nomen): NomenPartClass => {
     if (!name.length) {
         return "vernacular"
@@ -26,51 +24,51 @@ const getNextClass = (name: Nomen): NomenPartClass => {
         }
     }
 }
-const NameEditor: FC = () => {
+export type Props = {
+    onChange: (value: Nomen) => void
+    value: Nomen
+}
+const NameEditor: FC<Props> = ({ onChange, value }) => {
     const [editing, setEditing] = useState(false)
-    const [state, dispatch] = useContext(Context) ?? []
-    if (!state?.modified || !dispatch) {
-        return null
-    }
-    const changed = stringifyNormalized(state.modified) !== stringifyNormalized(state.original)
+    const [modified, setModified] = useState(() => [...value])
+    useEffect(() => setModified([...value]), [value])
+    const changed = useMemo(() => stringifyNormalized(modified) !== stringifyNormalized(value), [modified, value])
     return (
         <section className={styles.main}>
             <header className={changed ? "changed" : undefined}>
                 {!editing && (
                     <button key="view" onClick={() => setEditing(true)}>
-                        <NameView name={state.modified} />
+                        <NameView name={modified} />
                     </button>
                 )}
-                {editing && (
-                    <NameSelector
-                        key="selector"
-                        value={state.modified}
-                        onSelect={payload => dispatch({ type: "UPDATE_NAME", payload })}
-                    />
-                )}
+                {editing && <NameSelector autoFocus key="selector" value={modified} onSelect={onChange} />}
             </header>
             <ul className={styles.partList}>
-                {state.modified.map((_part, index) => (
+                {modified.map((part, index) => (
                     <li key={`part:${index}`}>
-                        <NomenPartEditor index={index} />
+                        <NomenPartEditor
+                            isFirst={index === 0}
+                            onChange={part =>
+                                setModified([...modified.slice(0, index), ...(part ? [part] : []), ...modified.slice(index + 1)])
+                            }
+                            value={part}
+                        />
                     </li>
                 ))}
                 <li key="new">
                     <TextEditor
-                        modified=""
-                        onChange={payload =>
-                            payload &&
-                            dispatch({
-                                type: "APPEND_PART",
-                                payload: { class: getNextClass(state.modified), text: payload },
-                            })
-                        }
+                        onChange={text => {
+                            if (text) {
+                                setModified([...modified, { class: getNextClass(modified), text }])
+                            }
+                        }}
                         emptyLabel="[Append]"
                         optional
-                        original=""
+                        value=""
                     />
                 </li>
             </ul>
+            <button disabled={!changed} onClick={() => onChange(modified)}>Accept</button>
         </section>
     )
 }

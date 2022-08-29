@@ -1,119 +1,107 @@
+import { Node } from "@phylopic/source-models"
+import { Nomen, normalizeNomina, stringifyNormalized, UUID } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
-import { Nomen, normalizeNomina, stringifyNormalized } from "@phylopic/utils"
-import { ChangeEvent, FormEvent, Fragment, useCallback, useContext, useMemo, useState, FC } from "react"
-import Context from "~/contexts/NodeEditorContainer/Context"
+import { FC, FormEvent, useCallback, useState } from "react"
+import useSWR from "swr"
+import fetchJSON from "~/fetch/fetchJSON"
 import NameSelector from "~/selectors/NameSelector"
+import usePatcher from "~/swr/usePatcher"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
 import NameModal from "./NameModal"
-
 export interface Props {
-    onSplit: (name: Nomen) => void
+    onSplit?: (name: Nomen) => void
+    uuid: UUID
 }
-const NamesEditor: FC<Props> = ({ onSplit }) => {
-    const [state, dispatch] = useContext(Context) ?? []
+const NamesEditor: FC<Props> = ({ onSplit, uuid }) => {
+    const key = `/api/nodes/_/${uuid}`
+    const response = useSWR<Node & { uuid: UUID }>(key, fetchJSON)
+    const { data: node } = response
+    const patcher = usePatcher(key, response)
     const [editedNameIndex, setEditedNameIndex] = useState(-1)
-    const modifiedNamesJSONList = useMemo(
-        () => state?.modified.node.names.map(stringifyNormalized) ?? [],
-        [state?.modified.node.names],
-    )
-    const modifiedNamesJSON = useMemo(() => new Set<string>(modifiedNamesJSONList), [modifiedNamesJSONList])
-    const originalNamesJSON = useMemo(
-        () => new Set<string>(state?.original.node.names.map(stringifyNormalized) ?? []),
-        [state?.original.node.names],
-    )
-    const allNames = useMemo(
-        () => normalizeNomina([...(state?.modified.node.names ?? []), ...(state?.original.node.names ?? [])]),
-        [state?.modified.node.names, state?.original.node.names],
-    )
     const [namesText, setNamesText] = useState("")
-    const handleNamesChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {
-        setNamesText(event.currentTarget.value)
-    }, [])
     const handleNamesFormSubmit = useCallback(
         (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault()
-            namesText
-                .trim()
-                .split("\n")
-                .map(line => line.trim())
-                .filter(Boolean)
-                .map(line => parseNomen(line))
-                .filter(n => n?.length > 0)
-                .forEach(payload => dispatch?.({ type: "ADD_NAME", payload }))
+            if (node?.names) {
+                const newNames = namesText
+                    .trim()
+                    .split("\n")
+                    .map(line => line.trim())
+                    .filter(Boolean)
+                    .map(line => parseNomen(line))
+                    .filter(n => n?.length > 0)
+                if (newNames.length) {
+                    patcher({ names: normalizeNomina([...node.names, ...newNames]) })
+                }
+            }
             setNamesText("")
         },
-        [dispatch, namesText],
+        [namesText, node?.names, patcher],
     )
-    if (!state) {
+    if (!node) {
         return null
     }
     return (
         <>
             <BubbleList>
-                {allNames.map((name, index) => {
+                {node.names.map((name, index) => {
                     const json = stringifyNormalized(name)
-                    const deleted = !modifiedNamesJSON.has(json)
-                    const created = !originalNamesJSON.has(json)
-                    const newCanonical = index === 0 && json !== stringifyNormalized(state.original.node.names[0])
                     const canLower =
                         name.length === 1 &&
                         name[0].class === "vernacular" &&
                         name[0].text.toLocaleLowerCase() !== name[0].text
                     return (
-                        <BubbleItem key={`name:${json}`} changed={deleted || created || newCanonical} deleted={deleted}>
-                            <NameView key="name" name={name} />
-                            <button
-                                key="edit"
-                                onClick={() => setEditedNameIndex(modifiedNamesJSONList.indexOf(json))}
-                                title="Edit Name"
-                            >
+                        <BubbleItem key={`name:${json}`}>
+                            <NameView name={name} />
+                            <button onClick={() => setEditedNameIndex(index)} title="Edit Name">
                                 ✎
                             </button>
                             {index > 0 && (
-                                <Fragment key="noncanonical">
+                                <>
                                     <button
                                         title="Make Canonical"
-                                        onClick={() => dispatch?.({ type: "SET_CANONICAL_NAME", payload: name })}
+                                        onClick={() => patcher({ names: normalizeNomina([name, ...node.names]) })}
                                     >
                                         ♛
                                     </button>
-                                    <button title="Split" onClick={() => onSplit(name)}>
+                                    <button title="Split" onClick={() => onSplit?.(name)}>
                                         ⑂
                                     </button>
-                                </Fragment>
+                                </>
                             )}
                             {canLower && (
                                 <button
-                                    key="lower"
                                     title="Lower Case"
-                                    onClick={() => {
-                                        dispatch?.({ type: "REMOVE_NAME", payload: name })
-                                        const payload = name.map(part => ({
-                                            ...part,
-                                            text: part.text.toLocaleLowerCase(),
-                                        }))
-                                        dispatch?.({ type: "ADD_NAME", payload })
-                                    }}
+                                    onClick={() =>
+                                        patcher({
+                                            names: normalizeNomina([
+                                                node.names[0],
+                                                ...node.names
+                                                    .slice(1)
+                                                    .filter(n => stringifyNormalized(n) !== stringifyNormalized(name)),
+                                                name.map(part => ({ ...part, text: part.text.toLocaleLowerCase() })),
+                                            ]),
+                                        })
+                                    }
                                 >
                                     a
                                 </button>
                             )}
-                            {deleted && (
+                            {index > 0 && (
                                 <button
-                                    key="restore-remove"
-                                    title="Restore"
-                                    onClick={() => dispatch?.({ type: "ADD_NAME", payload: name })}
-                                >
-                                    ⎌
-                                </button>
-                            )}
-                            {!deleted && index > 0 && (
-                                <button
-                                    key="restore-remove"
                                     title="Remove"
-                                    onClick={() => dispatch?.({ type: "REMOVE_NAME", payload: name })}
+                                    onClick={() =>
+                                        patcher({
+                                            names: [
+                                                node.names[0],
+                                                ...node.names
+                                                    .slice(1)
+                                                    .filter(n => stringifyNormalized(n) !== stringifyNormalized(name)),
+                                            ],
+                                        })
+                                    }
                                 >
                                     ✕
                                 </button>
@@ -124,7 +112,7 @@ const NamesEditor: FC<Props> = ({ onSplit }) => {
                 <BubbleItem key="add" light>
                     <NameSelector
                         placeholder="Add Name"
-                        onSelect={payload => dispatch?.({ type: "ADD_NAME", payload })}
+                        onSelect={name => patcher({ names: normalizeNomina([...node.names, name]) })}
                     />
                 </BubbleItem>
             </BubbleList>
@@ -133,11 +121,24 @@ const NamesEditor: FC<Props> = ({ onSplit }) => {
                     name="names"
                     placeholder="Enter multiple new names here, one per line."
                     value={namesText}
-                    onChange={handleNamesChange}
+                    onChange={event => setNamesText(event.currentTarget.value)}
                 />
                 <input type="submit" value="Add Multiple Names" />
             </form>
-            <NameModal nameIndex={editedNameIndex} onComplete={() => setEditedNameIndex(-1)} />
+            <NameModal
+                name={editedNameIndex >= 0 ? node.names[editedNameIndex] : null}
+                onComplete={value => {
+                    if (value)
+                        patcher({
+                            names: normalizeNomina([
+                                ...node.names.slice(0, editedNameIndex),
+                                value,
+                                ...node.names.slice(editedNameIndex + 1),
+                            ]),
+                        })
+                    setEditedNameIndex(-1)
+                }}
+            />
         </>
     )
 }

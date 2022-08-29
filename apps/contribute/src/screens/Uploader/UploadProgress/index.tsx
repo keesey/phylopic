@@ -38,13 +38,16 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid })
                 },
                 signal: controller.signal,
             })
-            mutate(async () => {
-                await promise
-                return URL.createObjectURL(new Blob([buffer]))
-            }, {
-                revalidate: true,
-                rollbackOnError: true
-            })
+            mutate(
+                async () => {
+                    await promise
+                    return URL.createObjectURL(new Blob([buffer]))
+                },
+                {
+                    revalidate: true,
+                    rollbackOnError: true,
+                },
+            )
             ;(async () => {
                 try {
                     await promise

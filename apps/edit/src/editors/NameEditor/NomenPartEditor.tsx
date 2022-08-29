@@ -1,38 +1,26 @@
-import { NomenPartClass } from "parse-nomen"
-import { useContext, FC } from "react"
-import Context from "~/contexts/NameEditorContainer/Context"
+import { NomenPart, NomenPartClass } from "parse-nomen"
+import { FC } from "react"
 import TextEditor from "../TextEditor"
 import styles from "./NomenPartEditor.module.scss"
 
 export interface Props {
-    index: number
+    onChange: (value: NomenPart | null) => void
+    value: NomenPart | null
+    isFirst: boolean
 }
-const NomenPartEditor: FC<Props> = meta => {
-    const [state, dispatch] = useContext(Context) ?? []
-    const part = state?.modified?.[meta.index]
-    if (!part || !dispatch) {
+const NomenPartEditor: FC<Props> = ({ isFirst, onChange, value }) => {
+    if (!value) {
         return null
     }
     return (
         <section className={styles.main}>
-            <div className={`nomen ${part.class} ${styles.textEditor}`}>
-                <TextEditor
-                    modified={part.text}
-                    onChange={payload => dispatch({ type: "SET_TEXT", payload, meta })}
-                    optional={false}
-                    original={part.text}
-                />
+            <div className={`nomen ${value.class} ${styles.textEditor}`}>
+                <TextEditor onChange={text => onChange({ ...value, text })} optional={false} value={value.text} />
             </div>
             <select
                 className={styles.classSelector}
-                onChange={event =>
-                    dispatch({
-                        type: "SET_CLASS",
-                        payload: event.currentTarget.value as NomenPartClass,
-                        meta,
-                    })
-                }
-                value={part.class}
+                onChange={event => onChange({ ...value, class: event.currentTarget.value as NomenPartClass })}
+                value={value.class}
             >
                 <option value={"scientific" as NomenPartClass} label="scientific" />
                 <option value={"vernacular" as NomenPartClass} label="vernacular" />
@@ -41,10 +29,7 @@ const NomenPartEditor: FC<Props> = meta => {
                 <option value={"operator" as NomenPartClass} label="operator" />
                 <option value={"rank" as NomenPartClass} label="rank" />
             </select>
-            <button
-                onClick={() => dispatch({ type: "REMOVE_PART", meta })}
-                style={{ visibility: meta.index > 0 ? "visible" : "hidden" }}
-            >
+            <button onClick={() => onChange(null)} style={{ visibility: isFirst ? "hidden" : "visible" }}>
                 ✕
             </button>
         </section>

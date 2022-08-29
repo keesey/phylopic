@@ -1,26 +1,18 @@
-import { useContext, FC } from "react"
-import NameEditorContainer from "~/contexts/NameEditorContainer"
-import Context from "~/contexts/NodeEditorContainer/Context"
+import { Nomen } from "@phylopic/utils"
+import { FC } from "react"
 import NameEditor from "~/editors/NameEditor"
 import Modal from "~/ui/Modal"
-import Controls from "./Controls"
-
 export interface Props {
-    nameIndex: number
-    onComplete: () => void
+    name: Nomen | null
+    onComplete: (value: Nomen | null) => void
 }
-const NameModal: FC<Props> = ({ nameIndex, onComplete }) => {
-    const [state] = useContext(Context) ?? []
-    const name = state?.modified.node.names[nameIndex]
+const NameModal: FC<Props> = ({ name, onComplete }) => {
     if (!name) {
         return null
     }
     return (
-        <Modal onClose={onComplete} title="Edit Name">
-            <NameEditorContainer name={name} index={nameIndex}>
-                <NameEditor />
-                <Controls onComplete={onComplete} />
-            </NameEditorContainer>
+        <Modal onClose={() => onComplete(null)} title="Edit Name">
+            <NameEditor value={name} onChange={value => onComplete(value)} />
         </Modal>
     )
 }
