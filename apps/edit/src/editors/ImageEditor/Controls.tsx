@@ -1,5 +1,6 @@
 import { Image, isSubmittableImage } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
+import { useRouter } from "next/router"
 import { FC, useEffect, useMemo } from "react"
 import useSWR from "swr"
 import fetchJSON from "~/fetch/fetchJSON"
@@ -21,10 +22,14 @@ const Controls: FC<Props> = ({ uuid }) => {
             alert(error)
         }
     }, [error])
+    const router = useRouter()
     return (
         <nav className={styles.main}>
             {data && !data.accepted && data.submitted && (
                 <button onClick={() => patcher({ accepted: true })}>Accept</button>
+            )}
+            {data && data.accepted && data.submitted && (
+                <button onClick={() => router.push("/images?filter=submitted")}>View Submissions</button>
             )}
             {data && !data.accepted && !data.submitted && submittable && (
                 <button onClick={() => patcher({ accepted: true, submitted: true })}>Submit and Accept</button>

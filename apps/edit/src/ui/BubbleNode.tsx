@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import { DetailedHTMLProps, FC, HTMLAttributes } from "react"
 import styles from "./BubbleItemOrNode.module.scss"
 
@@ -9,16 +10,14 @@ export type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivEle
 const BubbleNode: FC<Props> = ({ changed, children, className, deleted, light, ...divProps }) => (
     <div
         {...divProps}
-        className={[
+        className={clsx(
             styles.main,
             light ? styles.light : styles.dark,
             light ? "light" : "dark",
             changed && "changed",
             deleted && "deleted",
             className,
-        ]
-            .filter(Boolean)
-            .join(" ")}
+        )}
     >
         <div className={styles.content}>{children}</div>
     </div>

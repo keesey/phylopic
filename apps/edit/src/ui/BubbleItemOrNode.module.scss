@@ -4,6 +4,7 @@
     display: flex;
     padding: 1em;
 }
+
 .content {
     align-items: baseline;
     display: flex;
@@ -12,50 +13,62 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    > span {
+
+    >span {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    > button {
+
+    >button {
         background: none;
         border: none;
         color: white;
         display: flex;
+
         &:first-child {
             font-size: inherit;
             justify-content: center;
             text-decoration: underline;
         }
+
         &:not(:first-child) {
             font-size: 150%;
             line-height: 0.6667;
             width: 1em;
         }
+
         .light & {
             color: black;
+
             &:global(.changed) {
                 color: red;
             }
         }
     }
-    > input {
+
+    >input {
         border: none;
+
         &:focus {
             outline: none;
         }
     }
 }
+
 .dark {
     background-color: black;
     color: white;
+
     &:global(.changed) {
         background-color: red;
     }
 }
+
 .light {
     background-color: white;
     border: 2px solid black;
     color: black;
+
     &:global(.changed) {
         border-color: red;
         color: red;

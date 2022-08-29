@@ -13,16 +13,22 @@ export default class NodeLineageClient implements Listable<Node & { uuid: UUID }
         const result = await client.query(
             `
             WITH RECURSIVE predecessors AS (
-                SELECT ${NODE_FIELDS.map(value => value.column + (value.type === "json" ? "::character varying" : "")).join(",")},0 AS lineage_index
+                SELECT ${NODE_FIELDS.map(
+                    value => value.column + (value.type === "json" ? "::character varying" : ""),
+                ).join(",")},0 AS lineage_index
                     FROM node
                     WHERE "uuid"=$1::uuid AND disabled=0::bit
                 UNION
-                SELECT ${NODE_FIELDS.map(value => "n." + value.column + (value.type === "json" ? "::character varying" : "")).join(",")},suc.lineage_index + 1
+                SELECT ${NODE_FIELDS.map(
+                    value => "n." + value.column + (value.type === "json" ? "::character varying" : ""),
+                ).join(",")},suc.lineage_index + 1
                     FROM node n
                     INNER JOIN predecessors suc ON suc.parent_uuid=n."uuid"
             )
             SELECT ${getFields(NODE_FIELDS)} FROM predecessors
-            GROUP BY ${NODE_FIELDS.map(value => value.property + (value.type === "json" ? "::character varying" : "")).join(",")},lineage_index ORDER BY lineage_index
+            GROUP BY ${NODE_FIELDS.map(
+                value => value.property + (value.type === "json" ? "::character varying" : ""),
+            ).join(",")},lineage_index ORDER BY lineage_index
             OFFSET $2::bigint LIMIT $3::bigint
         `,
             [this.uuid, index * LINEAGE_PAGE_SIZE, LINEAGE_PAGE_SIZE],
