@@ -81,7 +81,7 @@ components:
 
         Leaving this parameter out will yield a temporary redirect (`307`) to the same URL but with the current `build` value added to the query.
       schema:
-        example: 80
+        example: 85
         type: integer
     embed_childNodes:
       name: embed_childNodes
