@@ -49,7 +49,11 @@ const NameEditor: FC<Props> = ({ onChange, value }) => {
                         <NomenPartEditor
                             isFirst={index === 0}
                             onChange={part =>
-                                setModified([...modified.slice(0, index), ...(part ? [part] : []), ...modified.slice(index + 1)])
+                                setModified([
+                                    ...modified.slice(0, index),
+                                    ...(part ? [part] : []),
+                                    ...modified.slice(index + 1),
+                                ])
                             }
                             value={part}
                         />
@@ -68,7 +72,9 @@ const NameEditor: FC<Props> = ({ onChange, value }) => {
                     />
                 </li>
             </ul>
-            <button disabled={!changed} onClick={() => onChange(modified)}>Accept</button>
+            <button disabled={!changed} onClick={() => onChange(modified)}>
+                Accept
+            </button>
         </section>
     )
 }

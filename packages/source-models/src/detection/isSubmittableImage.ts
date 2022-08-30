@@ -8,10 +8,16 @@ import {
     isObject,
     isPublicDomainLicenseURL,
     isUUIDv4,
+    LicenseURL,
+    UUID,
     ValidationFaultCollector,
 } from "@phylopic/utils"
 import { Image } from "../types/Image"
-export const isSubmittableImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
+export type SubmittableImage = Omit<Image, "license" | "specific"> & {
+    license: LicenseURL
+    specific: UUID
+}
+export const isSubmittableImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is SubmittableImage =>
     isObject(x, faultCollector) &&
     isBoolean((x as Image).accepted, faultCollector?.sub("accepted")) &&
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&

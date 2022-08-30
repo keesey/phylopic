@@ -1,12 +1,9 @@
 import { TitledLink } from "@phylopic/api-models"
-import { Contributor, Image, isContributor, isImage, isNode, isSource, Node, Source } from "@phylopic/source-models"
-import { compareStrings, normalizeUUID, UUID } from "@phylopic/utils"
-import { Arc, Digraph } from "simple-digraph"
-import listDir from "../fsutils/listDir.js"
-import readJSON from "../fsutils/readJSON.js"
+import BaseSourceClient, { ClientProvider, Page, SourceClient as ISourceClient } from "@phylopic/source-client"
+import { Contributor, External, Image, isContributor, isExternal, isImage, isNode, Node } from "@phylopic/source-models"
+import { Authority, compareStrings, isAuthority, isNamespace, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import { Arc, Digraph, sources } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
-import SOURCE_BUCKET_NAME from "../paths/SOURCE_BUCKET_NAME.js"
-import SOURCE_PATH from "../paths/SOURCE_PATH.js"
 export type SourceData = Readonly<{
     build: number
     cladeImages: ReadonlyMap<UUID, ReadonlySet<UUID>>
@@ -19,7 +16,6 @@ export type SourceData = Readonly<{
     nodes: ReadonlyMap<UUID, Node>
     phylogeny: Digraph
     sortIndices: ReadonlyMap<UUID, number>
-    source: Source
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>
 }>
 export type Args = Readonly<{
@@ -27,8 +23,10 @@ export type Args = Readonly<{
 }>
 type ProcessArgs = Args &
     Readonly<{
+        client: ISourceClient
         contributors: Map<UUID, Contributor>
         depths: Map<UUID, number>
+        externals: Map<string, TitledLink>
         illustration: Map<UUID, Set<UUID>>
         images: Map<UUID, Image>
         nodeUUIDsToVertices: Map<UUID, number>
@@ -36,53 +34,120 @@ type ProcessArgs = Args &
         phylogenyArcs: Array<Arc>
         sortIndices: Map<UUID, number>
         verticesToNodeUUIDs: Map<number, UUID>
-    }> & {
-        nextVertex: number
-    }
-const loadSource = async (): Promise<Source> => {
-    return await readJSON<Source>(SOURCE_PATH, isSource)
+    }>
+const loadExternalObjects = async (
+    authority: Authority,
+    namespace: Namespace,
+    args: Pick<ProcessArgs, "client" | "externals">,
+): Promise<void> => {
+    console.info(`Looking up external objects for ${authority}/${namespace}...`)
+    const total = await args.client.externals(authority, namespace).totalItems()
+    console.info(`Loading ${total} external objects for ${authority}/${namespace}...`)
+    let pageIndex: number | undefined = 0
+    do {
+        const page: Page<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number> =
+            await args.client.externals(authority, namespace).page(pageIndex)
+        for (const item of page.items) {
+            if (!isExternal(item as unknown)) {
+                throw new Error(`Invalid external object ("${authority}/${namespace}/${item}").`)
+            }
+            args.externals.set([authority, namespace, item.objectID].map(x => encodeURIComponent(x)).join("/"), {
+                href: `/nodes/${item.node}`,
+                title: item.title,
+            })
+        }
+        pageIndex = page.next
+    } while (pageIndex !== undefined)
+    console.info(`Loaded ${total} external objects for ${authority}/${namespace}.`)
 }
-const loadImage = async (uuid: UUID, args: Pick<ProcessArgs, "images">): Promise<void> => {
-    const path = `images/${normalizeUUID(uuid)}/meta.json`
-    const image = await readJSON<Image>(`.s3/${SOURCE_BUCKET_NAME}/${path}`, isImage)
-    args.images.set(uuid, image)
+const loadExternalNamespaces = async (
+    authority: Authority,
+    args: Pick<ProcessArgs, "client" | "externals">,
+): Promise<void> => {
+    console.info(`Looking up external namespaces for ${authority}...`)
+    const total = await args.client.externalNamespaces(authority).totalItems()
+    console.info(`Loading ${total} external namespace${total === 1 ? "" : "s"} for ${authority}...`)
+    let pageIndex: number | undefined = 0
+    do {
+        const page: Page<Namespace, number> = await args.client.externalNamespaces(authority).page(pageIndex)
+        for (const item of page.items) {
+            if (!isNamespace(item as unknown)) {
+                throw new Error(`Invalid external namespace ("${authority}/${item}").`)
+            }
+            await loadExternalObjects(authority, item, args)
+        }
+        pageIndex = page.next
+    } while (pageIndex !== undefined)
+    console.info(`Loaded ${total} external namespace${total === 1 ? "" : "s"} for ${authority}.`)
 }
-const loadImages = async (args: Pick<ProcessArgs, "images">): Promise<void> => {
+const loadExternals = async (args: Pick<ProcessArgs, "client" | "externals">): Promise<void> => {
+    console.info("Looking up externals...")
+    const total = await args.client.externalAuthorities.totalItems()
+    console.info(`Loading ${total} external authorities...`)
+    let pageIndex: number | undefined = 0
+    do {
+        const page: Page<Authority, number> = await args.client.externalAuthorities.page(pageIndex)
+        for (const item of page.items) {
+            if (!isAuthority(item as unknown)) {
+                throw new Error(`Invalid external authority ("${item}").`)
+            }
+            await loadExternalNamespaces(item, args)
+        }
+        pageIndex = page.next
+    } while (pageIndex !== undefined)
+    console.info(`Loaded ${total} external authorities.`)
+    console.info(`Loaded ${args.externals.size} externals.`)
+}
+const loadImages = async (args: Pick<ProcessArgs, "client" | "images">): Promise<void> => {
     console.info("Looking up images...")
-    const uuids = await listDir(`.s3/${SOURCE_BUCKET_NAME}/images/`)
-    console.info(`Loading ${uuids.length} images...`)
-    await Promise.all(uuids.map(uuid => loadImage(uuid, args)))
-    console.info(`Loaded ${uuids.length} images.`)
+    const total = await args.client.images.totalItems()
+    console.info(`Loading ${total} images...`)
+    let pageIndex: number | undefined = 0
+    do {
+        const page: Page<Image & { uuid: UUID }, number> = await args.client.images.page(pageIndex)
+        for (const item of page.items) {
+            if (!isImage(item as unknown)) {
+                throw new Error(`Invalid image (UUID: "${item.uuid}").`)
+            }
+            args.images.set(item.uuid, item)
+        }
+        pageIndex = page.next
+    } while (pageIndex !== undefined)
+    console.info(`Loaded ${args.images.size} images.`)
 }
-const loadNode = async (uuid: UUID, args: Pick<ProcessArgs, "nodes">): Promise<void> => {
-    const path = `nodes/${normalizeUUID(uuid)}/meta.json`
-    const node = await readJSON<Node>(`.s3/${SOURCE_BUCKET_NAME}/${path}`)
-    if (!isNode(node)) {
-        throw new Error(`Invalid node (UUID: "${uuid}").`)
-    }
-    args.nodes.set(uuid, node)
-}
-const loadNodes = async (args: Pick<ProcessArgs, "nodes">): Promise<void> => {
+const loadNodes = async (args: Pick<ProcessArgs, "client" | "nodes">): Promise<void> => {
     console.info("Looking up nodes...")
-    const uuids = await listDir(`.s3/${SOURCE_BUCKET_NAME}/nodes/`)
-    console.info(`Loading ${uuids.length} nodes...`)
-    await Promise.all(uuids.map(uuid => loadNode(uuid, args)))
-    console.info(`Loaded ${uuids.length} nodes.`)
+    const total = await args.client.nodes.totalItems()
+    console.info(`Loading ${total} nodes...`)
+    let pageIndex: number | undefined = 0
+    do {
+        const page: Page<Node & { uuid: UUID }, number> = await args.client.nodes.page(pageIndex)
+        for (const item of page.items) {
+            if (!isNode(item as unknown)) {
+                throw new Error(`Invalid node (UUID: "${item.uuid}").`)
+            }
+            args.nodes.set(item.uuid, item)
+        }
+        pageIndex = page.next
+    } while (pageIndex !== undefined)
+    console.info(`Loaded ${args.nodes.size} nodes.`)
 }
-const loadContributor = async (uuid: UUID, args: Pick<ProcessArgs, "contributors">): Promise<void> => {
-    const path = `contributors/${normalizeUUID(uuid)}/meta.json`
-    const contributor = await readJSON<Contributor>(`.s3/${SOURCE_BUCKET_NAME}/${path}`)
-    if (!isContributor(contributor)) {
-        throw new Error(`Invalid contributor (UUID: "${uuid}").`)
-    }
-    args.contributors.set(uuid, contributor)
-}
-const loadContributors = async (args: Pick<ProcessArgs, "contributors">): Promise<void> => {
+const loadContributors = async (args: Pick<ProcessArgs, "client" | "contributors">): Promise<void> => {
     console.info("Looking up contributors...")
-    const uuids = await listDir(`.s3/${SOURCE_BUCKET_NAME}/contributors/`)
-    console.info(`Loading ${uuids.length} contributors...`)
-    await Promise.all(uuids.map(uuid => loadContributor(uuid, args)))
-    console.info(`Loaded ${uuids.length} contributors.`)
+    const total = await args.client.contributors.totalItems()
+    console.info(`Loading ${total} contributors...`)
+    let pageIndex: number | undefined = 0
+    do {
+        const page: Page<Contributor & { uuid: UUID }, number> = await args.client.contributors.page(pageIndex)
+        for (const item of page.items) {
+            if (!isContributor(item as unknown)) {
+                throw new Error(`Invalid contributor (UUID: "${item.uuid}").`)
+            }
+            args.contributors.set(item.uuid, item)
+        }
+        pageIndex = page.next
+    } while (pageIndex !== undefined)
+    console.info(`Loaded ${args.contributors.size} contributors.`)
 }
 const getNodeUUIDsInLineage = (
     args: Pick<SourceData, "nodes">,
@@ -133,7 +198,7 @@ const getImageNodeDerivedData = (
     }
     for (const [uuid, image] of args.images.entries()) {
         const { general, specific } = image
-        if (!args.nodes.has(specific)) {
+        if (!specific || !args.nodes.has(specific)) {
             throw new Error(`Invalid specific node for image <${uuid}>: <${specific}>.`)
         }
         if (general && !args.nodes.has(general)) {
@@ -175,110 +240,75 @@ const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, verte
     return size
 }
 const getPhylogenyDerivedData = (
-    args: Pick<SourceData, "nodeUUIDsToVertices" | "phylogeny" | "source" | "verticesToNodeUUIDs">,
+    args: Pick<SourceData, "nodeUUIDsToVertices" | "phylogeny" | "verticesToNodeUUIDs">,
 ): Pick<SourceData, "depths" | "sortIndices"> => {
     const depths = new Map<UUID, number>()
     const sortIndices = new Map<UUID, number>()
-    const rootVertex = args.nodeUUIDsToVertices.get(args.source.root)
-    if (typeof rootVertex !== "number") {
+    const roots = sources(args.phylogeny)
+    if (roots.size !== 1) {
         throw new Error("No vertex for root UUID.")
     }
+    const rootVertex = Array.from(roots)[0]
     const sizes = new Map<number, number>()
     processCladeSizes(sizes, args.phylogeny, rootVertex)
     processClade({ ...args, depths, sizes, sortIndices, sortIndex: 0 }, rootVertex, 0)
     return { depths, sortIndices }
 }
-const loadExternalObjectIDs = (
-    externals: Map<string, TitledLink>,
-    authority: string,
-    namespace: string,
-    objectIDs: readonly string[],
-    objectPromises: Promise<void>[],
-) => {
-    for (const objectID of objectIDs) {
-        objectPromises.push(
-            (async () => {
-                const identifier = `${encodeURIComponent(authority)}/${encodeURIComponent(
-                    namespace,
-                )}/${encodeURIComponent(objectID)}`
-                const path = `.s3/${SOURCE_BUCKET_NAME}/externals/${identifier}/meta.json`
-                try {
-                    const link = await readJSON<TitledLink>(path)
-                    externals.set(identifier, link)
-                } catch (e) {
-                    console.warn("Could not read JSON from file: " + path)
-                    console.error(e)
-                }
-            })(),
+class SourceClient extends BaseSourceClient {
+    constructor() {
+        const provider = new ClientProvider(
+            {
+                database: "phylopic-source",
+                host: process.env.PGHOST,
+                password: process.env.PGPASSWORD,
+                port: parseInt(process.env.PGPORT!, 10),
+                user: process.env.PGUSER,
+            },
+            {
+                credentials: {
+                    accessKeyId: process.env.S3_ACCESS_KEY_ID!,
+                    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
+                },
+                region: process.env.S3_REGION!,
+            },
         )
+        super(provider)
+        this.destroy = () => provider.destroy()
     }
-}
-const loadExternalNamespaces = async (
-    externals: Map<string, TitledLink>,
-    authority: string,
-    namespaces: readonly string[],
-    objectPromises: Promise<void>[],
-): Promise<void> => {
-    await Promise.all(
-        namespaces.map(async namespace => {
-            const objectIDs = (await listDir(`.s3/${SOURCE_BUCKET_NAME}/externals/${authority}/${namespace}`)).map(
-                decodeURIComponent,
-            )
-            loadExternalObjectIDs(externals, authority, namespace, objectIDs, objectPromises)
-        }),
-    )
-}
-const loadExternalAuthorities = async (
-    externals: Map<string, TitledLink>,
-    authorities: readonly string[],
-    objectPromises: Promise<void>[],
-): Promise<void> => {
-    await Promise.all(
-        authorities.map(async authority => {
-            const namespaces = (await listDir(`.s3/${SOURCE_BUCKET_NAME}/externals/${authority}/`)).map(
-                decodeURIComponent,
-            )
-            await loadExternalNamespaces(externals, authority, namespaces, objectPromises)
-        }),
-    )
-}
-const loadExternals = async (externals: Map<string, TitledLink>): Promise<void> => {
-    console.info("Looking up externals...")
-    const objectPromises: Promise<void>[] = []
-    const authorities = (await listDir(`.s3/${SOURCE_BUCKET_NAME}/externals/`)).map(decodeURIComponent)
-    await loadExternalAuthorities(externals, authorities, objectPromises)
-    console.info(`Loading ${objectPromises.length} externals...`)
-    await Promise.all(objectPromises)
-    console.info(`Loaded ${objectPromises.length} externals.`)
+    public readonly destroy: () => Promise<void>
 }
 const getSourceData = async (args: Args): Promise<SourceData> => {
-    const contributors = new Map<UUID, Contributor>()
-    const externals = new Map<string, TitledLink>()
-    const images = new Map<UUID, Image>()
-    const nodes = new Map<UUID, Node>()
-    const [source] = await Promise.all([
-        loadSource(),
-        loadContributors({ ...args, contributors }),
-        loadNodes({ ...args, nodes }),
-        loadImages({ ...args, images }),
-        loadExternals(externals),
-    ])
-    const { nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs } = getPhylogeny({
-        source,
-        nodes,
-    })
-    return {
-        build: args.build,
-        contributors,
-        externals,
-        images,
-        source,
-        nodeUUIDsToVertices,
-        nodes,
-        phylogeny,
-        verticesToNodeUUIDs,
-        ...getImageNodeDerivedData({ images, nodes }),
-        ...getPhylogenyDerivedData({ source, nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
+    const client = new SourceClient()
+    let result: SourceData
+    try {
+        const contributors = new Map<UUID, Contributor>()
+        const externals = new Map<string, TitledLink>()
+        const images = new Map<UUID, Image>()
+        const nodes = new Map<UUID, Node>()
+        await Promise.all([
+            loadContributors({ client, contributors }),
+            loadNodes({ client, nodes }),
+            loadImages({ client, images }),
+            loadExternals({ client, externals }),
+        ])
+        const { nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs } = getPhylogeny({
+            nodes,
+        })
+        result = {
+            build: args.build,
+            contributors,
+            externals,
+            images,
+            nodeUUIDsToVertices,
+            nodes,
+            phylogeny,
+            verticesToNodeUUIDs,
+            ...getImageNodeDerivedData({ images, nodes }),
+            ...getPhylogenyDerivedData({ nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
+        }
+    } finally {
+        await client.destroy()
     }
+    return result
 }
 export default getSourceData

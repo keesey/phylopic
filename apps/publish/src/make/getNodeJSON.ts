@@ -1,7 +1,7 @@
 import { Link, Node, TitledLink } from "@phylopic/api-models"
 import { Entity, Image } from "@phylopic/source-models"
 import { isDefined, isString, UUID } from "@phylopic/utils"
-import { difference, immediateSuccessors, successorUnion } from "simple-digraph"
+import { immediateSuccessors } from "simple-digraph"
 import type { SourceData } from "./getSourceData.js"
 const getChildNodes = (vertex: number, data: SourceData): readonly Link[] => {
     const childVertices = immediateSuccessors(data.phylogeny, new Set([vertex]))
@@ -131,7 +131,6 @@ const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData): UUID => {
 }
 const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     uuid = uuid.toLowerCase()
-    const root = uuid === data.source.root
     const sourceNode = data.nodes.get(uuid)
     if (!sourceNode) {
         throw new Error(`Source node not found! (UUID=${uuid})`)
@@ -139,9 +138,6 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     const vertex = data.nodeUUIDsToVertices.get(uuid)
     if (vertex === undefined) {
         throw new Error(`Vertex not found! (UUID=${uuid})`)
-    }
-    if (!root && !sourceNode.parent) {
-        throw new Error(`Parent not found! (UUID=${uuid})`)
     }
     const cladeImagesUUID = getCladeImagesUUID(uuid, data)
     return {

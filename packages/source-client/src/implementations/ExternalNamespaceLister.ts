@@ -23,7 +23,7 @@ export default class ExternalNamespaceLister implements Listable<Namespace, numb
     public async totalItems() {
         const client = await this.provider.getPG()
         const output = await client.query<{ total: number }>(
-            `SELECT COUNT("namespace") AS total FROM ${EXTERNAL_TABLE} WHERE authority=$1::character varying AND disabled=0::bit GROUP BY authority,"namespace"`,
+            `SELECT COUNT(DISTINCT "namespace") AS total FROM ${EXTERNAL_TABLE} WHERE authority=$1::character varying AND disabled=0::bit`,
             [this.authority],
         )
         return output.rows?.[0]?.total ?? 0
