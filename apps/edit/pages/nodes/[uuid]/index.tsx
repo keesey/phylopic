@@ -43,40 +43,37 @@ const Content: FC<Props> = ({ uuid }) => {
             <Head>
                 <title>PhyloPic Editor: {nameText}</title>
             </Head>
-            {!node && (
-                <Loader />
-            )}
+            {!node && <Loader />}
             {node && (
-            <main>
-            <header>
-                <Breadcrumbs
-                    items={[
-                        { href: "/", children: "Home" },
-                        { href: "/nodes", children: "Nodes" },
-                        {
-                            href: node ? `/nodes/${node.parent}` : undefined,
-                            children: parent ? (
-                                <a>
-                                    <NameView name={parent?.names[0]} short />
-                                </a>
-                            ) : (
-                                INCOMPLETE_STRING
-                            ),
-                        },
-                        {
-                            children: node ? <NameView name={node.names[0]} /> : INCOMPLETE_STRING,
-                        },
-                    ]}
-                />
-                <h1>{node && <NameView name={node.names[0]} />}</h1>
-            </header>
-            <NodeEditor uuid={uuid} />
-            <footer>
-                <TimesView created={node?.created} modified={node?.modified} />
-            </footer>
-        </main>
-
-            )}>
+                <main>
+                    <header>
+                        <Breadcrumbs
+                            items={[
+                                { href: "/", children: "Home" },
+                                { href: "/nodes", children: "Nodes" },
+                                {
+                                    href: node ? `/nodes/${node.parent}` : undefined,
+                                    children: parent ? (
+                                        <a>
+                                            <NameView name={parent?.names[0]} short />
+                                        </a>
+                                    ) : (
+                                        INCOMPLETE_STRING
+                                    ),
+                                },
+                                {
+                                    children: node ? <NameView name={node.names[0]} /> : INCOMPLETE_STRING,
+                                },
+                            ]}
+                        />
+                        <h1>{node && <NameView name={node.names[0]} />}</h1>
+                    </header>
+                    <NodeEditor uuid={uuid} />
+                    <footer>
+                        <TimesView created={node?.created} modified={node?.modified} />
+                    </footer>
+                </main>
+            )}
         </>
     )
 }
