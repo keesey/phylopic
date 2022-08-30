@@ -387,6 +387,8 @@ functions:
         handler: src/lambdas/uploader.onAPIGatewayProxy
         memorySize: 1024
         timeout: 30
+        environment:
+            AUTH_SECRET_KEY: "${ssm:AUTH_SECRET_KEY}"
         events:
             - http:
                   cors:
