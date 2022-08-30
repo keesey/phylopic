@@ -26,11 +26,18 @@ tags:
     description: Searches for entities (images and nodes).
   - name: external identifiers
     description: Methods related to external taxonomic databases.
+  - name: uploads
+    description: Methods related to file uploads.
 servers:
   - url: https://api.phylopic.org
     description: Production API
 components:
   headers:
+    Accept-image:
+      description: Accepted media types for the request payload.
+      example: image/svg+xml, image/png, image/gif, image/bmp, image/jpeg
+      schema:
+        type: string
     Content-Type:
       description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json`.
       example: application/vnd.phylopic.v2+json
@@ -41,6 +48,10 @@ components:
       description: The URL for the resource.
       schema:
         format: url
+        type: string
+    WWW-Authenticate:
+      description: Directives for authorizing the request.
+      schema:
         type: string
   parameters:
     Accept:
@@ -61,6 +72,22 @@ components:
       description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json`.
       schema:
         example: application/vnd.phylopic.v2+json
+        format: mimetype
+        type: string
+    Content-Type-image:
+      name: Content-Type
+      in: header
+      required: true
+      description: |
+          The media type for the payload. Must be one of the following:
+
+          - `image/bmp`
+          - `image/gif`
+          - `image/jpeg`
+          - `image/png`
+          - `image/svg+xml`
+      schema:
+        example: image/svg+xml
         format: mimetype
         type: string
     authority:
@@ -324,6 +351,17 @@ components:
         application/vnd.phylopic.v2+json:
           schema:
             $ref: "#/components/schemas/Errors"
+    "401":
+      description: The request is not authorized.
+      headers:
+        Content-Type:
+          $ref: "#/components/headers/Content-Type"
+        WWW-Authenticate:
+          $ref: "#/components/headers/WWW-Authenticate"
+      content:
+        application/vnd.phylopic.v2+json:
+          schema:
+            $ref: "#/components/schemas/Errors"
     "404":
       description: The resource cannot be found.
       headers:
@@ -345,6 +383,26 @@ components:
     "410":
       description: The specified build is old and no longer present. Remove the `build` parameter to be redirected (`307`) to the latest version of this resource.
       headers:
+        Content-Type:
+          $ref: "#/components/headers/Content-Type"
+      content:
+        application/vnd.phylopic.v2+json:
+          schema:
+            $ref: "#/components/schemas/Errors"
+    "413":
+      description: The upload is too large.
+      headers:
+        Content-Type:
+          $ref: "#/components/headers/Content-Type"
+      content:
+        application/vnd.phylopic.v2+json:
+          schema:
+            $ref: "#/components/schemas/Errors"
+    "415":
+      description: The upload is an incorrect file type.
+      headers:
+        Accept:
+          $ref: "#/components/headers/Accept-image"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
       content:
@@ -841,6 +899,11 @@ components:
             title:
               type: string
               example: "Name"
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
 paths:
   /:
     get:
@@ -1431,3 +1494,48 @@ paths:
           $ref: "#/components/responses/308"
         "406":
           $ref: "#/components/responses/406"
+  /uploads:
+    post:
+      operationId: postUpload
+      security:
+        - bearerAuth: []
+      summary: Uploads a file
+      description: On success, redirects to a location where the file can be downloaded from.
+      tags:
+        - images
+        - uploads
+      parameters:
+        - $ref: "#/components/parameters/Content-Type-image"
+      requestBody:
+        description: File to upload.
+        required: true
+        content:
+          image/bmp:
+            schema:
+                format: binary
+                type: string
+          image/gif:
+            schema:
+                format: binary
+                type: string
+          image/jpeg:
+            schema:
+                format: binary
+                type: string
+          image/png:
+            schema:
+                format: binary
+                type: string
+          image/svg+xml:
+            schema:
+                format: xml
+                type: string
+      responses:
+        "308":
+          $ref: "#/components/responses/308"
+        "401":
+          $ref: "#/components/responses/401"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
