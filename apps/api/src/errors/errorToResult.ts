@@ -5,8 +5,8 @@ import BUILD from "../build/BUILD"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import APIError from "./APIError"
-const fromAPIError = (e: APIError, stack: string | null): APIGatewayProxyResult => ({
-    body: stringifyNormalized({ build: BUILD, errors: e.data, stack }),
+const fromAPIError = (e: APIError): APIGatewayProxyResult => ({
+    body: stringifyNormalized({ build: BUILD, errors: e.data }),
     headers: {
         ...CORS_HEADERS,
         ...DATA_HEADERS,
@@ -15,9 +15,8 @@ const fromAPIError = (e: APIError, stack: string | null): APIGatewayProxyResult 
     statusCode: e.httpCode,
 })
 const errorToResult = (e: unknown): APIGatewayProxyResult => {
-    const stack = e instanceof Error && typeof e.stack === "string" ? e.stack : null
     if (e instanceof APIError) {
-        return fromAPIError(e, stack)
+        return fromAPIError(e)
     }
     const errors: readonly ErrorModel[] = [
         {
@@ -27,7 +26,7 @@ const errorToResult = (e: unknown): APIGatewayProxyResult => {
         },
     ]
     return {
-        body: JSON.stringify({ build: BUILD, errors, stack }),
+        body: JSON.stringify({ build: BUILD, errors }),
         headers: {
             ...CORS_HEADERS,
             ...DATA_HEADERS,

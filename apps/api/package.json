@@ -7,10 +7,13 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.52.0",
+        "@aws-sdk/signature-v4-crt": "^3.160.0",
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
         "aws-lambda": "^1.0.7",
         "is-uuid": "^1.0.2",
+        "jsonwebtoken": "^8.5.1",
         "pg": "^8.7.3"
     },
     "description": "Application Programming Interface for PhyloPic",
@@ -18,6 +21,7 @@
         "@phylopic/tsconfig": "*",
         "@types/aws-lambda": "^8.10.97",
         "@types/chai": "^4.3.1",
+        "@types/jsonwebtoken": "^8.5.8",
         "@types/mocha": "^9.1.1",
         "@types/pg": "^8.6.5",
         "chai": "^4.3.6",

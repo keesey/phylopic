@@ -511,9 +511,6 @@ components:
               userMessage:
                 description: A message to be presented to the user.
                 type: string
-        stack:
-          description: Details about which functions were being processed when the error occurred.
-          type: string
     Image:
       allOf:
         - $ref: "#/components/schemas/Entity"
