@@ -128,5 +128,6 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             }
         })(),
     ])
-    return { props }
+    return { props,        revalidate: 3600,
+    }
 }
