@@ -19,7 +19,9 @@ const SiteNav: FC = () => {
     return (
         <nav className={styles.main}>
             <AnchorLink key="title" className={styles.siteTitle} href="/">
-                <SiteTitle />
+                <h1>
+                    <SiteTitle />
+                </h1>
             </AnchorLink>
             <SearchBar key="search" />
             <div key="menuButton" className={styles.menuButton}>
