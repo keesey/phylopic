@@ -1,10 +1,9 @@
 import {
     GetFunctionConfigurationCommand,
     LambdaClient,
-    UpdateFunctionConfigurationCommand,
+    UpdateFunctionConfigurationCommand
 } from "@aws-sdk/client-lambda"
 import { PutParameterCommand, SSMClient } from "@aws-sdk/client-ssm"
-import { UUID } from "@phylopic/utils"
 const updateLambdaEnvironmentVariables = async (
     client: LambdaClient,
     FunctionName: string,
@@ -26,7 +25,8 @@ const updateLambdaEnvironmentVariables = async (
         }),
     )
 }
-const updateParameters = async (build: number, rootUUID: UUID) => {
+// :TODO: Implement updating the root
+const updateParameters = async (build: number/*, rootUUID: UUID*/) => {
     const ssmClient = new SSMClient({})
     const lambdaClient = new LambdaClient({})
     const buildValue = build.toString(10)
@@ -46,6 +46,7 @@ const updateParameters = async (build: number, rootUUID: UUID) => {
                 Value: buildTimestamp,
             }),
         ),
+        /*
         ssmClient.send(
             new PutParameterCommand({
                 Name: "PHYLOPIC_ROOT_UUID",
@@ -53,10 +54,11 @@ const updateParameters = async (build: number, rootUUID: UUID) => {
                 Value: rootUUID,
             }),
         ),
+        */
         updateLambdaEnvironmentVariables(lambdaClient, "phylopic-api-prod-static", {
             PHYLOPIC_BUILD: buildValue,
             PHYLOPIC_BUILD_TIMESTAMP: buildTimestamp,
-            PHYLOPIC_ROOT_UUID: rootUUID,
+            // PHYLOPIC_ROOT_UUID: rootUUID,
         }),
         updateLambdaEnvironmentVariables(lambdaClient, "phylopic-api-prod-dynamic", {
             PHYLOPIC_BUILD: buildValue,
