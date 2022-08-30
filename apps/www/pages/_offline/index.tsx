@@ -12,20 +12,12 @@ const Page: NextPage = () => (
                 items={[
                     { children: "Home", href: "/" },
                     {
-                        children: (
-                            <strong>
-                                Offline
-                            </strong>
-                        ),
+                        children: <strong>Offline</strong>,
                     },
                 ]}
             />
-            <h1>
-                Offline
-            </h1>
-            <p>
-                You appear to be offline. Please reload the page when your Internet connection is reestablished.
-            </p>
+            <h1>Offline</h1>
+            <p>You appear to be offline. Please reload the page when your Internet connection is reestablished.</p>
             <p>
                 If you believe this is a bug, please{" "}
                 <a href="https://github.com/keesey/phylopic/issues/new">report the issue</a>.

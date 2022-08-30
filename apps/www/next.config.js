@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
 const withPWA = require("next-pwa")({
     dest: "public",
+    disable: process.env.NODE_ENV === "development",
 })
 const runtimeCaching = require("next-pwa/cache")
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
     enabled: process.env.ANALYZE === "true",
 })
-const pwa = process.env.NODE_ENV === "production" ? withPWA : x => x
 module.exports = withBundleAnalyzer(
-    pwa({
+    withPWA({
         experimental: {
             images: {
                 allowFutureImage: true,
@@ -21,13 +21,10 @@ module.exports = withBundleAnalyzer(
         images: {
             domains: ["images.phylopic.org"],
         },
-        pwa:
-            process.env.NODE_ENV === "production"
-                ? {
-                      dest: "public",
-                      runtimeCaching,
-                  }
-                : undefined,
+        pwa: {
+            dest: "public",
+            runtimeCaching,
+        },
         reactStrictMode: true,
         async redirects() {
             return [
