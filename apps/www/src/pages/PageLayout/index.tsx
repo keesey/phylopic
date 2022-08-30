@@ -25,19 +25,17 @@ const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialT
     return (
         <SWRConfig value={{ fallback }}>
             <BuildContainer initialValue={build}>
-                <LoaderContext.Provider value={{ color: "#00809f" }}>
-                    <PageLoader />
-                    {aside && <aside>{aside}</aside>}
-                    <SearchContainer initialText={initialText}>
-                        <header>
-                            <SiteNav />
-                        </header>
-                        <main>
-                            <SearchOverlay>{children}</SearchOverlay>
-                        </main>
-                        <SiteFooter />
-                    </SearchContainer>
-                </LoaderContext.Provider>
+                <PageLoader />
+                {aside && <aside key="aside">{aside}</aside>}
+                <SearchContainer initialText={initialText}>
+                    <header>
+                        <SiteNav />
+                    </header>
+                    <main>
+                        <SearchOverlay>{children}</SearchOverlay>
+                    </main>
+                    <SiteFooter />
+                </SearchContainer>
             </BuildContainer>
         </SWRConfig>
     )
