@@ -12,7 +12,7 @@ export const isIdentifier: FaultDetector<Identifier> = (
     if (typeof x === "string") {
         const parts = x.split(/\//g)
         if (parts.length === 3) {
-            const [authority, namespace, objectId] = parts
+            const [authority, namespace, objectId] = parts.map(x => decodeURIComponent(x))
             return (
                 (isAuthority(authority) && isNamespace(namespace) && isObjectID(objectId)) ||
                 invalidate(faultCollector, "All parts of an identifier must be normalized text.")
