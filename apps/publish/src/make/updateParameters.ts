@@ -1,7 +1,7 @@
 import {
     GetFunctionConfigurationCommand,
     LambdaClient,
-    UpdateFunctionConfigurationCommand
+    UpdateFunctionConfigurationCommand,
 } from "@aws-sdk/client-lambda"
 import { PutParameterCommand, SSMClient } from "@aws-sdk/client-ssm"
 const updateLambdaEnvironmentVariables = async (
@@ -26,7 +26,7 @@ const updateLambdaEnvironmentVariables = async (
     )
 }
 // :TODO: Implement updating the root
-const updateParameters = async (build: number/*, rootUUID: UUID*/) => {
+const updateParameters = async (build: number /*, rootUUID: UUID*/) => {
     const ssmClient = new SSMClient({})
     const lambdaClient = new LambdaClient({})
     const buildValue = build.toString(10)
