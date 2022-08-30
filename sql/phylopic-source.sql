@@ -98,15 +98,13 @@ CREATE TABLE IF NOT EXISTS public.image
 (
     uuid uuid NOT NULL,
     contributor_uuid uuid NOT NULL,
-    specific_uuid uuid,
+    specific_uuid uuid NOT NULL,
     general_uuid uuid,
     attribution character varying(192) COLLATE pg_catalog."default",
-    license character varying(64) COLLATE pg_catalog."default",
+    license character varying(64) COLLATE pg_catalog."default" NOT NULL,
     sponsor character varying(128) COLLATE pg_catalog."default",
     created timestamp without time zone NOT NULL DEFAULT now(),
     modified timestamp without time zone NOT NULL DEFAULT now(),
-    submitted bit(1) NOT NULL DEFAULT (0)::bit(1),
-    accepted bit(1) NOT NULL DEFAULT (0)::bit(1),
     disabled bit(1) NOT NULL DEFAULT (0)::bit(1),
     CONSTRAINT image_pkey PRIMARY KEY (uuid),
     CONSTRAINT image_contributor_uuid_fkey FOREIGN KEY (contributor_uuid)
