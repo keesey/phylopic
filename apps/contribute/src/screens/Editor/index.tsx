@@ -1,7 +1,7 @@
 import { isSubmittableImage } from "@phylopic/source-models"
 import { LICENSE_NAMES, UUID } from "@phylopic/utils"
 import { FC, useCallback, useMemo, useState } from "react"
-import useImage from "~/editing/hooks/useImage"
+import useImage from "~/editing/useImage"
 import useImageDeletor from "~/editing/hooks/useSubmissionDeletor"
 import useImageMutator from "~/editing/hooks/useImageMutator"
 import useImageNode from "~/editing/hooks/useImageNode"
