@@ -37,7 +37,7 @@ const usePhyloPicResults = (text: string) => {
     return {
         data: data ? entries : undefined,
         error,
-        isValidating
+        isValidating,
     }
 }
 export default usePhyloPicResults

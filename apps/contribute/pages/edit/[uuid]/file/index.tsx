@@ -1,4 +1,3 @@
-import { AnchorLink } from "@phylopic/ui"
 import { isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"

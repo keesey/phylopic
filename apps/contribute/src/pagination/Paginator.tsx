@@ -27,13 +27,7 @@ const Paginator: FC<Props> = ({ children, endpoint, hideControls, hideLoader, on
         revalidateFirstPage: true,
     })
     const items = useMemo(
-        () =>
-            data
-                ? data.reduce<ReadonlyArray<unknown>>(
-                      (prev, page) => [...prev, ...(page.items ?? [])],
-                      [],
-                  )
-                : [],
+        () => (data ? data.reduce<ReadonlyArray<unknown>>((prev, page) => [...prev, ...(page.items ?? [])], []) : []),
         [data],
     )
     const isLastPage = useMemo(() => Boolean(data?.length && data[data.length - 1].next === undefined), [data])
