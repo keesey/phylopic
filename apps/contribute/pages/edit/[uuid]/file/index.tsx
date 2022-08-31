@@ -48,7 +48,7 @@ const Content: FC<Props> = ({ uuid }) => {
             mutate({ file: hash })
             router.push(`/edit/${encodeURIComponent(uuid)}`)
         },
-        [mutate, uuid],
+        [mutate, router, uuid],
     )
     if (error) {
         return <ErrorState>{String(error)}</ErrorState>

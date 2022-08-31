@@ -2,7 +2,7 @@ import { isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
 import { FC, useCallback, useMemo } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
-import UserTextForm from "~/ui/SiteNav/UserTextForm"
+import UserTextForm from "~/ui/UserTextForm"
 import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
 export interface Props {

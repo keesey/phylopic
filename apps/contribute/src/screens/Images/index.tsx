@@ -1,34 +1,40 @@
+import { Image } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
 import { FC, ReactNode } from "react"
-import useImageCount from "~/editing/useImageCount"
-import { ImageFilter } from "~/pagination/ImageFilter"
-import ImagePaginator from "~/pagination/Paginator"
+import useSWR from "swr"
+import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
+import Paginator from "~/pagination/Paginator"
 import Dialogue from "~/ui/Dialogue"
-import SpawnButton from "~/ui/SpawnButton"
+import { ICON_PLUS } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserImageThumbnail from "~/ui/UserImageThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 export type Props = {
     children: (total: number | undefined) => ReactNode
-    filter: ImageFilter
 }
-const Images: FC<Props> = ({ children, filter }) => {
-    const total = useImageCount(filter)
+const Images: FC<Props> = ({ children }) => {
+    const fetcher = useAuthorizedJSONFetcher<number>()
+    const { data: total } = useSWR("/api/images?total=items", fetcher)
     return (
         <Dialogue>
             <Speech mode="system">{children(total)}</Speech>
-            <UserOptions noAutoScroll>
-                <ImagePaginator key="images" filter={filter}>
-                    {images =>
-                        images.map(image => (
+            <Paginator key="images" endpoint="/api/images">
+                {images => (
+                    <UserOptions noAutoScroll>
+                        {(images as ReadonlyArray<Image & { uuid: UUID }>).map(image => (
                             <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
                                 <UserImageThumbnail uuid={image.uuid} />
                             </UserLinkButton>
-                        ))
-                    }
-                </ImagePaginator>
-                {total === 0 && <SpawnButton>Upload a Silhouette</SpawnButton>}
-            </UserOptions>
+                        ))}
+                    </UserOptions>
+                )}
+            </Paginator>
+            {total === 0 && (
+                <UserLinkButton icon={ICON_PLUS} href="/upload">
+                    Upload a silhouette.
+                </UserLinkButton>
+            )}
         </Dialogue>
     )
 }

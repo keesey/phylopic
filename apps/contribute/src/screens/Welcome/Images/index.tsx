@@ -3,19 +3,11 @@ import { FC } from "react"
 import useImageCount from "~/editing/useImageCount"
 import ImagePaginator from "~/pagination/Paginator"
 import NumberAsWords from "~/ui/NumberAsWords"
-import SpawnButton from "~/ui/SpawnButton"
 import Speech from "~/ui/Speech"
 import UserImageThumbnail from "~/ui/UserImageThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
-const Complete: FC = () => {
-    const accepted = useImageCount("accepted")
-    const submitted = useImageCount("submitted")
-    const withdrawn = useImageCount("withdrawn")
-    const hasAccepted = typeof accepted === "number" && accepted > 0
-    const hasSubmitted = typeof submitted === "number" && submitted > 0
-    const hasWithdrawn = typeof withdrawn === "number" && withdrawn > 0
-    const filter = hasSubmitted ? "submitted" : hasAccepted ? "accepted" : "withdrawn"
+const Images: FC = () => {
     return (
         <>
             {hasSubmitted && (
@@ -91,4 +83,4 @@ const Complete: FC = () => {
         </>
     )
 }
-export default Complete
+export default Images

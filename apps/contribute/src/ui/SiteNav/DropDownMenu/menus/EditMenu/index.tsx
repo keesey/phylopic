@@ -1,26 +1,25 @@
-import { Image } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { FC } from "react"
 import { ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
 import MenuLink from "../../MenuLink"
 export type Props = {
-    image: Image & { uuid: UUID }
+    submissionUUID: UUID
 }
-const EditMenu: FC<Props> = ({ image }) => {
+const EditMenu: FC<Props> = ({ submissionUUID }) => {
     return (
         <>
             <MenuLink
-                href={`/edit/${encodeURIComponent(image.uuid)}/file`}
+                href={`/edit/${encodeURIComponent(submissionUUID)}/file`}
                 icon={ICON_PENCIL}
-                label="Update Image File"
+                label="Change Image File"
             />
             <MenuLink
-                href={`/edit/${encodeURIComponent(image.uuid)}/nodes`}
+                href={`/edit/${encodeURIComponent(submissionUUID)}/nodes`}
                 icon={ICON_PENCIL}
                 label="Change Taxonomic Assignment"
             />
             <MenuLink
-                href={`/edit/${encodeURIComponent(image.uuid)}/usage`}
+                href={`/edit/${encodeURIComponent(submissionUUID)}/usage`}
                 icon={ICON_PENCIL}
                 label="Change Attribution"
             />

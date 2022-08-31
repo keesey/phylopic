@@ -7,22 +7,27 @@ const Images = dynamic(() => import("~/screens/Images"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
         head={{
-            title: "PhyloPic: Withdrawn Submissions",
-            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/images/withdrawn`,
+            title: "PhyloPic: Accepted Submissions",
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/images`,
         }}
     >
         <AuthorizedOnly>
-            <Images filter="withdrawn">
+            <Images>
                 {total =>
                     typeof total !== "number" ? (
-                        <p>Loading withdrawn submissions…</p>
+                        <p>Loading accepted submissions…</p>
                     ) : total ? (
                         <p>
-                            You have withdrawn <NumberAsWords value={total} /> of your submissions. Click on{" "}
-                            {total === 1 ? "it" : "any of them"} to reconsider.
+                            {total >= 6 && "Wow! "}
+                            <strong>
+                                <NumberAsWords caps value={total} />
+                            </strong>{" "}
+                            of your submissions {total === 1 ? "has" : "have"} been accepted.
+                            {total < 6 && " Nice!"}
+                            {total >= 12 && " Great job! "}
                         </p>
                     ) : (
-                        <p>You have not withdrawn any submissions.</p>
+                        <p>You do not currently have any accepted submissions.</p>
                     )
                 }
             </Images>

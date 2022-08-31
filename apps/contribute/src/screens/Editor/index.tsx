@@ -115,7 +115,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                                     Change the taxonomic assignment.
                                 </UserLinkButton>
                                 <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
-                                    "Change the license or attribution.
+                                    Change the license or attribution.
                                 </UserLinkButton>
                                 <UserButton icon={ICON_CHECK} onClick={submit}>
                                     You know what? I am ready to submit it.

@@ -1,6 +1,6 @@
 import { Identifier, UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
-import UserTextForm from "~/ui/SiteNav/UserTextForm"
+import UserTextForm from "~/ui/UserTextForm"
 import UserScrollTo from "~/ui/UserScrollTo"
 import NameInput from "./NameInput"
 import NameRenderer from "./NameRenderer"

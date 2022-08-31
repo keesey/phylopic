@@ -1,24 +1,21 @@
 import { Loader } from "@phylopic/ui"
 import { FC, Fragment } from "react"
-import useImageCount from "~/editing/useImageCount"
+import useSWR from "swr"
+import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import Dialogue from "~/ui/Dialogue"
 import Speech from "~/ui/Speech"
-import Complete from "./Complete"
 import Greeting from "./Greeting"
-import Incomplete from "./Incomplete"
+import Images from "./Images"
 import Prompt from "./Prompt"
+import Submissions from "./Submissions"
 const Welcome: FC = () => {
-    const accepted = useImageCount("accepted")
-    const incomplete = useImageCount("incomplete")
-    const submitted = useImageCount("submitted")
-    const withdrawn = useImageCount("withdrawn")
-    const hasAccepted = typeof accepted === "number" && accepted > 0
-    const hasIncomplete = typeof incomplete === "number" && incomplete > 0
-    const hasSubmitted = typeof submitted === "number" && submitted > 0
-    const hasWithdrawn = typeof withdrawn === "number" && withdrawn > 0
-    const pending =
-        accepted === undefined || incomplete === undefined || submitted === undefined || withdrawn === undefined
-    const hasNothing = !hasAccepted && !hasIncomplete && !hasSubmitted && !hasWithdrawn
+    const fetcher = useAuthorizedJSONFetcher<number>()
+    const { data: numImages } = useSWR("/api/images?total=items", fetcher)
+    const { data: numSubmissions } = useSWR("/api/submissions?total=items", fetcher)
+    const hasImages = typeof numImages === "number" && numImages > 0
+    const hasSubmissions = typeof numSubmissions === "number" && numSubmissions > 0
+    const pending = numImages === undefined || numSubmissions === undefined
+    const hasNothing = !hasImages && !hasSubmissions
     return (
         <Dialogue>
             <Greeting />
@@ -30,7 +27,7 @@ const Welcome: FC = () => {
             )}
             {!pending && (
                 <Fragment key="content">
-                    {hasNothing ? <Prompt /> : hasIncomplete ? <Incomplete /> : <Complete />}
+                    {hasNothing ? <Prompt /> : hasSubmissions ? <Submissions /> : <Images />}
                 </Fragment>
             )}
         </Dialogue>

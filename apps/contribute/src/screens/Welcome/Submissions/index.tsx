@@ -5,7 +5,7 @@ import Speech from "~/ui/Speech"
 import UserImageThumbnail from "~/ui/UserImageThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
-const Incomplete: FC = () => {
+const Submissions: FC = () => {
     const incomplete = useImageCount("incomplete")
     return (
         <>
@@ -29,4 +29,4 @@ const Incomplete: FC = () => {
         </>
     )
 }
-export default Incomplete
+export default Submissions

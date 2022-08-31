@@ -1,22 +1,24 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
+import { useRouter } from "next/router"
 import { FC, useState } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
-import useImage from "~/editing/useImage"
+import useSubmission from "~/editing/useSubmission"
 import useContributor from "~/profile/useContributor"
 import SiteTitle from "../SiteTitle"
 import DropDownMenu from "./DropDownMenu"
 import styles from "./index.module.scss"
 import NavItem from "./NavItem"
 export type Props = {
-    imageUUID?: UUID
+    submissionUUID?: UUID
 }
-const SiteNav: FC<Props> = ({ imageUUID }) => {
+const SiteNav: FC<Props> = ({ submissionUUID }) => {
     const authorized = useAuthorized()
     const contributor = useContributor()
     const enabled = authorized && Boolean(contributor?.name && contributor.name !== INCOMPLETE_STRING)
     const [selected, setSelected] = useState<"account" | "file" | "edit" | "site" | "view" | undefined>()
-    const image = useImage(imageUUID)
+    const submission = useSubmission(submissionUUID)
+    const router = useRouter()
     return (
         <>
             <nav className={styles.main}>
@@ -33,7 +35,7 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
                 />
                 <NavItem
                     label="Edit"
-                    disabled={!enabled || !image}
+                    disabled={!enabled || !submission}
                     onToggle={() => setSelected(selected === "edit" ? undefined : "edit")}
                     selected={selected === "edit"}
                 />
@@ -43,18 +45,23 @@ const SiteNav: FC<Props> = ({ imageUUID }) => {
                     onToggle={() => setSelected(selected === "view" ? undefined : "view")}
                     selected={selected === "view"}
                 />
+                <div className={styles.spacer} role="separator" />
                 {enabled && (
-                    <>
-                        <div className={styles.spacer} role="separator" />
                         <NavItem
                             label={contributor!.name}
                             onToggle={() => setSelected(selected === "account" ? undefined : "account")}
                             selected={selected === "account"}
                         />
-                    </>
+                )}
+                {!enabled && (
+                        <NavItem
+                            label="Sign In"
+                            onToggle={() => router.push("/")}
+                            selected={false}
+                        />
                 )}
             </nav>
-            <DropDownMenu image={image} onClose={() => setSelected(undefined)} selected={selected} />
+            <DropDownMenu submission={submission} selected={selected} />
         </>
     )
 }
