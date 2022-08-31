@@ -5,14 +5,14 @@ import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 const useImageSpawn = () => {
     const [pending, setPending] = useState(false)
     const [error, setError] = useState<any>()
-    const fetcher = useAuthorizedJSONFetcher<{ existing: boolean; uuid: UUID }>()
+    const fetcher = useAuthorizedJSONFetcher<{ uuid: UUID }>()
     const router = useRouter()
     const spawn = useCallback(async () => {
         setPending(true)
         setError(false)
         try {
             const result = await fetcher({ method: "POST", url: "/api/spawn" })
-            router.push(`/edit/${encodeURIComponent(result.uuid)}/file`)
+            await router.push(`/edit/${encodeURIComponent(result.uuid)}/file`)
         } catch (e) {
             setError(e)
         } finally {

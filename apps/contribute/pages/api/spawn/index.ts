@@ -47,9 +47,8 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
                     uuid,
                 })
                 res.setHeader("cache-control", "no-cache")
-                res.setHeader("location", `/api/submissions/${encodeURIComponent(uuid)}`)
                 res.json({ uuid })
-                res.status(307)
+                res.status(200)
                 break
             }
             default: {

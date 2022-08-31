@@ -1,7 +1,7 @@
 import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
 import useImageCount from "~/editing/hooks/useImageCount"
-import ImagePaginator from "~/pagination/ImagePaginator"
+import ImagePaginator from "~/pagination/Paginator"
 import NumberAsWords from "~/ui/NumberAsWords"
 import SpawnButton from "~/ui/SpawnButton"
 import Speech from "~/ui/Speech"

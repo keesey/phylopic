@@ -1,44 +1,42 @@
 import { Page } from "@phylopic/source-client"
-import { Image } from "@phylopic/source-models"
 import { InfiniteScroll } from "@phylopic/ui"
-import { createSearch, UUID } from "@phylopic/utils"
+import { createSearch } from "@phylopic/utils"
 import { FC, Fragment, ReactNode, useCallback, useEffect, useMemo } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
-import { ImageFilter } from "./ImageFilter"
 export type Props = {
-    children: (value: ReadonlyArray<Image & { uuid: UUID }>, isValidating: boolean) => ReactNode
-    filter: ImageFilter
+    children: (value: ReadonlyArray<unknown>, isValidating: boolean) => ReactNode
+    endpoint: string
     hideControls?: boolean
     hideLoader?: boolean
     onError?: (error: Error) => void
 }
-const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader, onError }) => {
+const Paginator: FC<Props> = ({ children, endpoint, hideControls, hideLoader, onError }) => {
     const authorized = useAuthorized()
     const getKey = useCallback<SWRInfiniteKeyLoader>(
-        (index, previousPageData: Page<Image & { uuid: UUID }, number> | null) => {
+        (index, previousPageData: Page<unknown, number | string> | null) => {
             return authorized && (index === 0 || previousPageData?.next)
-                ? "/api/images" + createSearch({ filter, page: previousPageData?.next ?? 0 })
+                ? endpoint + createSearch({ page: previousPageData?.next })
                 : null
         },
-        [authorized, filter],
+        [authorized, endpoint],
     )
-    const fetcher = useAuthorizedJSONFetcher<Page<Image & { uuid: UUID }, number>>()
+    const fetcher = useAuthorizedJSONFetcher<Page<unknown, number | string>>()
     const { data, error, isValidating, setSize, size } = useSWRInfinite(getKey, fetcher, {
         revalidateFirstPage: true,
     })
     const items = useMemo(
         () =>
             data
-                ? data.reduce<ReadonlyArray<Image & { uuid: UUID }>>(
+                ? data.reduce<ReadonlyArray<unknown>>(
                       (prev, page) => [...prev, ...(page.items ?? [])],
                       [],
                   )
                 : [],
         [data],
     )
-    const isLastPage = useMemo(() => Boolean(data?.length && !data[data.length - 1].next), [data])
+    const isLastPage = useMemo(() => Boolean(data?.length && data[data.length - 1].next === undefined), [data])
     const loadNextPage = useCallback(() => {
         if (!isLastPage) {
             setSize(size + 1)
@@ -74,4 +72,4 @@ const ImagePaginator: FC<Props> = ({ children, filter, hideControls, hideLoader,
         </>
     )
 }
-export default ImagePaginator
+export default Paginator

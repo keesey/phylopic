@@ -1,4 +1,4 @@
-import { handleAPIError, handleWithPatcher } from "@phylopic/source-client"
+import { handleAPIError } from "@phylopic/source-client"
 import { isSubmission, Submission } from "@phylopic/source-models"
 import { isUUIDv4, UUID, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
