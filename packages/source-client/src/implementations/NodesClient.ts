@@ -1,12 +1,12 @@
 import { Node } from "@phylopic/source-models"
-import { Authority, Identifier, isNonemptyString, Namespace, ObjectID, UUID } from "@phylopic/utils"
-import { Listable } from "../interfaces"
+import { Authority, Identifier, Namespace, ObjectID, UUID } from "@phylopic/utils"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
-import { NodesClient as INodesClient } from "../interfaces/SourceClient"
+import { SourceClient } from "../interfaces/SourceClient"
 import NODE_FIELDS from "./pg/constants/NODE_FIELDS"
 import NODE_TABLE from "./pg/constants/NODE_TABLE"
 import normalizeNode from "./pg/normalization/normalizeNode"
 import PGLister from "./pg/PGLister"
+type INodesClient = SourceClient["nodes"]
 export default class NodesClient extends PGLister<Node, { uuid: UUID }> implements INodesClient {
     constructor(protected readonly provider: PGClientProvider) {
         super(provider, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, '"names"::character varying')
@@ -44,43 +44,5 @@ export default class NodesClient extends PGLister<Node, { uuid: UUID }> implemen
             }),
             {},
         )
-    }
-    search(text: string) {
-        if (!isNonemptyString(text)) {
-            throw new Error("Expected nonempty string.")
-        }
-        return new NodeSearchClient(this.provider, text)
-    }
-}
-const SEARCH_PAGE_SIZE = 8
-class NodeSearchClient implements Listable<Node & { uuid: UUID }, number> {
-    constructor(protected readonly provider: PGClientProvider, protected readonly text: string) {}
-    async page(index = 0) {
-        const client = await this.provider.getPG()
-        const output = await client.query<Node & { uuid: UUID }>(
-            'SELECT "uuid", created, modified, "names"::json, parent FROM (SELECT uuid, created, modified, "names"::character varying, parent_uuid AS parent, json_array_elements(json_array_elements("names"))->>\'text\' ILIKE $4::character varying AS "match" FROM node ORDER BY "match" DESC LIMIT $1::bigint) AS matches WHERE "match"=true GROUP BY "uuid", created, modified, "names", parent ORDER BY "names"::character varying OFFSET $2::bigint LIMIT $3::bigint',
-            [SEARCH_PAGE_SIZE * (index + 1) * 16, SEARCH_PAGE_SIZE * index, SEARCH_PAGE_SIZE, `%${this.text}%`],
-        )
-        if (!output.rowCount) {
-            return {
-                items: [],
-            }
-        }
-        return {
-            items: output.rows,
-            next: index + 1,
-        }
-    }
-    async totalItems() {
-        const client = await this.provider.getPG()
-        const output = await client.query<{ total: string }>(
-            `SELECT COUNT("uuid") as total FROM (SELECT uuid, json_array_elements(json_array_elements("names"))->>'text' ILIKE $1::character varying AS "match" FROM node GROUP BY "uuid", "match" ORDER BY "match" DESC) AS matches WHERE "match"=true`,
-            [`%${this.text}%`],
-        )
-        const value = parseInt(output.rows?.[0]?.total ?? "0", 10)
-        return isNaN(value) ? 0 : value
-    }
-    async totalPages() {
-        return Math.ceil((await this.totalItems()) / SEARCH_PAGE_SIZE)
     }
 }

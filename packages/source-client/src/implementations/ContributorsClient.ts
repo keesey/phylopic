@@ -1,12 +1,13 @@
 import { Contributor } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, UUID } from "@phylopic/utils"
-import { PGClientProvider } from "../interfaces"
-import { ContributorsClient as IContributorsClient } from "../interfaces/SourceClient"
+import { PGClientProvider } from "../interfaces/PGClientProvider"
+import { SourceClient } from "../interfaces/SourceClient"
 import CONTRIBUTOR_FIELDS from "./pg/constants/CONTRIBUTOR_FIELDS"
 import CONTRIBUTOR_TABLE from "./pg/constants/CONTRIBUTOR_TABLE"
 import normalizeContributor from "./pg/normalization/normalizeContributor"
 import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
+type IContributorsClient = SourceClient["contributors"]
 export class ContributorsClient extends PGLister<Contributor, { uuid: UUID }> implements IContributorsClient {
     constructor(provider: PGClientProvider) {
         super(provider, CONTRIBUTOR_TABLE, 128, CONTRIBUTOR_FIELDS, normalizeContributor)

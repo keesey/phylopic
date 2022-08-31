@@ -1,8 +1,10 @@
-import { External } from "@phylopic/source-models"
+import { S3Client } from "@aws-sdk/client-s3"
+import { External, isSubmission, Submission } from "@phylopic/source-models"
 import {
     Authority,
     isAuthority,
     isEmailAddress,
+    isHash,
     isNamespace,
     isObjectID,
     isUUIDv4,
@@ -27,13 +29,17 @@ import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
 import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
 import AUTH_BUCKET_NAME from "./s3/constants/AUTH_BUCKET_NAME"
-import UPLOAD_BUCKET_NAME from "./s3/constants/UPLOAD_BUCKET_NAME"
+import SUBMISSIONS_BUCKET_NAME from "./s3/constants/SUBMISSIONS_BUCKET_NAME"
+import UPLOADS_BUCKET_NAME from "./s3/constants/UPLOADS_BUCKET_NAME"
+import createJSONWriter from "./s3/io/createJSONWriter"
 import readImageFile from "./s3/io/readImageFile"
+import readJSON from "./s3/io/readJSON"
 import readJWT from "./s3/io/readJWT"
-import writeImageFile from "./s3/io/writeImageFile"
 import writeJWT from "./s3/io/writeJWT"
+import S3Deletor from "./s3/S3Deletor"
 import S3Editor from "./s3/S3Editor"
 import S3Lister from "./s3/S3Lister"
+import S3Patcher from "./s3/S3Patcher"
 export default class Client implements SourceClient {
     constructor(protected readonly provider: PGClientProvider & S3ClientProvider) {
         this.authEmails = new S3Lister(provider, AUTH_BUCKET_NAME, "emails/", isEmailAddress)
@@ -41,7 +47,8 @@ export default class Client implements SourceClient {
         this.externalAuthorities = new ExternalAuthorityLister(provider, 128)
         this.images = new ImagesClient(provider)
         this.nodes = new NodesClient(provider)
-        this.uploads = new S3Lister(provider, UPLOAD_BUCKET_NAME, "images/", isUUIDv4, 32)
+        this.submissions = new S3Lister(provider, SUBMISSIONS_BUCKET_NAME, "submissions/", isUUIDv4)
+        this.uploads = new S3Lister(provider, UPLOADS_BUCKET_NAME, "files/", isHash)
     }
     authEmails
     authToken(emailAddress: string) {
@@ -120,16 +127,28 @@ export default class Client implements SourceClient {
         return new NodeClient(this.provider, uuid)
     }
     nodes
+    submission(uuid: UUID) {
+        if (!isUUIDv4(uuid)) {
+            throw new Error("Invalid UUID.")
+        }
+        return new S3Patcher<Submission & { uuid: UUID }>(
+            this.provider,
+            SUBMISSIONS_BUCKET_NAME,
+            `submissions/${encodeURIComponent(uuid)}/meta.json`,
+            readJSON,
+            createJSONWriter(isSubmission),
+        )
+    }
+    submissions
     upload(uuid: UUID) {
         if (!isUUIDv4(uuid)) {
             throw new Error("Invalid UUID.")
         }
-        return new S3Editor(
+        return new S3Deletor(
             this.provider,
-            UPLOAD_BUCKET_NAME,
+            UPLOADS_BUCKET_NAME,
             `images/${encodeURIComponent(uuid)}/source`,
             readImageFile,
-            writeImageFile,
         )
     }
     uploads

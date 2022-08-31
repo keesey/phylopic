@@ -1,34 +1,20 @@
-import { Contributor, External, Image, JWT, Node } from "@phylopic/source-models"
-import { Authority, EmailAddress, Identifier, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import { Contributor, External, Image, JWT, Node, Submission } from "@phylopic/source-models"
+import { Authority, EmailAddress, Hash, Identifier, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import { Deletable } from "./Deletable"
 import { Editable } from "./Editable"
 import { ImageFile } from "./ImageFile"
 import { Listable } from "./Listable"
 import { Patchable } from "./Patchable"
-export type ContributorsClient = Listable<Contributor & { uuid: UUID }, number> & {
-    byEmail(email: EmailAddress): Patchable<Contributor>
-}
-export type ImagesClient = Listable<Image & { uuid: UUID }, number> & {
-    accepted: Listable<Image & { uuid: UUID }, number>
-    incomplete: Listable<Image & { uuid: UUID }, number>
-    submitted: Listable<Image & { uuid: UUID }, number>
-    withdrawn: Listable<Image & { uuid: UUID }, number>
-}
-export type NodeClient = Patchable<Node & { uuid: UUID }> & {
-    lineage: Listable<Node & { uuid: UUID }, number>
-}
-export type NodesClient = Listable<Node & { uuid: UUID }, number> & {
-    resolve(
-        externals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
-    ): Promise<Record<Identifier, Node & { uuid: UUID }>>
-    search(text: string): Listable<Node & { uuid: UUID }, number>
-}
 export type SourceClient = Readonly<{
     authEmails: Listable<EmailAddress, string>
     authToken(emailAddress: EmailAddress): Editable<JWT>
     contributor(uuid: UUID): Patchable<Contributor> & {
-        images: ImagesClient
+        images: Listable<Image & { uuid: UUID }, number>
+        submissions: Listable<UUID, string>
     }
-    contributors: ContributorsClient
+    contributors: Listable<Contributor & { uuid: UUID }, number> & {
+        byEmail(email: EmailAddress): Patchable<Contributor>
+    }
     external(
         authority: Authority,
         namespace: Namespace,
@@ -43,9 +29,17 @@ export type SourceClient = Readonly<{
     image(uuid: UUID): Patchable<Image & { uuid: UUID }> & {
         file: Editable<ImageFile>
     }
-    images: ImagesClient
-    node(uuid: UUID): NodeClient
-    nodes: NodesClient
-    upload(uuid: UUID): Editable<ImageFile>
-    uploads: Listable<UUID, string>
+    images: Listable<Image & { uuid: UUID }, number>
+    node(uuid: UUID): Patchable<Node & { uuid: UUID }> & {
+        lineage: Listable<Node & { uuid: UUID }, number>
+    }
+    nodes: Listable<Node & { uuid: UUID }, number> & {
+        resolve(
+            externals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
+        ): Promise<Record<Identifier, Node & { uuid: UUID }>>
+    }
+    submission(uuid: UUID): Patchable<Submission & { uuid: UUID }>
+    submissions: Listable<UUID, string>
+    upload(hash: Hash): Deletable<ImageFile>
+    uploads: Listable<Hash, string>
 }>
