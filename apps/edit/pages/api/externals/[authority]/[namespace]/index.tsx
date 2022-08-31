@@ -13,7 +13,7 @@ const index: NextApiHandler<
             throw 404
         }
         client = new SourceClient()
-        await handleWithLister(req, res, client.externals(authority, namespace))
+        await handleWithLister(req, res, client.externals(authority, namespace), (page: string) => parseInt(page, 10))
     } catch (e) {
         handleAPIError(res, e)
     } finally {

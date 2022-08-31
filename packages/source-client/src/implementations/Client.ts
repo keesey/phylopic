@@ -1,6 +1,7 @@
 import { External, isSubmission, Submission } from "@phylopic/source-models"
 import {
     Authority,
+    Hash,
     isAuthority,
     isEmailAddress,
     isHash,
@@ -9,7 +10,7 @@ import {
     isUUIDv4,
     Namespace,
     ObjectID,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { Editable } from "../interfaces/Editable"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
@@ -139,14 +140,14 @@ export default class Client implements SourceClient {
         )
     }
     submissions
-    upload(uuid: UUID) {
-        if (!isUUIDv4(uuid)) {
-            throw new Error("Invalid UUID.")
+    upload(hash: Hash) {
+        if (!isHash(hash)) {
+            throw new Error("Invalid hexadecimal hash.")
         }
         return new S3Deletor(
             this.provider,
             UPLOADS_BUCKET_NAME,
-            `images/${encodeURIComponent(uuid)}/source`,
+            `files/${encodeURIComponent(hash)}`,
             readImageFile,
         )
     }

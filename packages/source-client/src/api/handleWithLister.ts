@@ -1,20 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { Listable, Page } from "../interfaces"
-export const handleWithLister = async <T>(
+export const handleWithLister = async <T, TPageSpecifier>(
     req: NextApiRequest,
-    res: NextApiResponse<Page<T, number> | number>,
-    lister: Listable<T, number>,
+    res: NextApiResponse<Page<T, TPageSpecifier> | number>,
+    lister: Listable<T, TPageSpecifier>,
+    getPageSpecifier: (queryValue: string) => TPageSpecifier,
 ) => {
     switch (req.method) {
         case "GET":
         case "HEAD": {
             if (typeof req.query.page === "string") {
-                const page = parseInt(req.query.page, 10)
-                if (page >= 0 && isFinite(page) && page === Math.floor(page)) {
-                    res.json(await lister.page(page))
-                } else {
-                    throw 400
-                }
+                const page = getPageSpecifier(req.query.page)
+                res.json(await lister.page(page))
             } else if (req.query.total === "pages") {
                 res.json(await lister.totalPages())
             } else if (req.query.total === "items") {

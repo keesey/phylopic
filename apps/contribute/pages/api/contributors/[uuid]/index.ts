@@ -1,8 +1,8 @@
+import { handleAPIError, handleWithPatcher } from "@phylopic/source-client"
 import { Contributor } from "@phylopic/source-models"
 import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
-import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Contributor> = async (req, res) => {
     let client: SourceClient | undefined
@@ -12,40 +12,8 @@ const index: NextApiHandler<Contributor> = async (req, res) => {
             throw 404
         }
         await verifyAuthorization(req.headers, { sub: uuid })
-        switch (req.method) {
-            case "GET":
-            case "HEAD": {
-                client = new SourceClient()
-                res.json(await client.contributor(uuid).get())
-                break
-            }
-            case "OPTIONS": {
-                res.setHeader("allow", "GET, HEAD, OPTIONS, PATCH, PUT")
-                res.status(204)
-                break
-            }
-            case "PATCH": {
-                if ((req.body as Partial<Contributor>).emailAddress === null) {
-                    throw 400
-                }
-                client = new SourceClient()
-                await client.contributor(uuid).patch(req.body)
-                res.status(204)
-                break
-            }
-            case "PUT": {
-                if ((req.body as Partial<Contributor>).emailAddress === null) {
-                    throw 400
-                }
-                client = new SourceClient()
-                await client.contributor(uuid).put(req.body)
-                res.status(204)
-                break
-            }
-            default: {
-                throw 405
-            }
-        }
+        client = new SourceClient()
+        await handleWithPatcher(req, res, client.contributor(uuid))
     } catch (e) {
         handleAPIError(res, e)
     } finally {

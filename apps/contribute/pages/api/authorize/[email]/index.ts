@@ -1,3 +1,4 @@
+import { handleAPIError } from "@phylopic/source-client"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
 import { randomUUID } from "crypto"
 import { NextApiHandler } from "next"
@@ -5,7 +6,6 @@ import decodeJWT from "~/auth/jwt/decodeJWT"
 import issueJWT from "~/auth/jwt/issueJWT"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
 import getTTLFromBody from "~/auth/ttl/getTTLFromBody"
-import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<void> = async (req, res) => {
     const now = new Date()

@@ -7,7 +7,7 @@ const index: NextApiHandler<Page<Contributor & { uuid: UUID }, number> | number>
     let client: SourceClient | undefined
     try {
         client = new SourceClient()
-        await handleWithLister(req, res, client.contributors)
+        await handleWithLister(req, res, client.contributors, (page: string) => parseInt(page, 10))
     } catch (e) {
         handleAPIError(res, e)
     } finally {

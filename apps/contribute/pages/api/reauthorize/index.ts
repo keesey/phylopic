@@ -1,3 +1,4 @@
+import { handleAPIError } from "@phylopic/source-client"
 import { JWT } from "@phylopic/source-models"
 import { isPositiveInteger, isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
@@ -5,7 +6,6 @@ import getBearerJWT from "~/auth/http/getBearerJWT"
 import issueJWT from "~/auth/jwt/issueJWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
 import getTTLFromBody from "~/auth/ttl/getTTLFromBody"
-import handleAPIError from "~/errors/handleAPIError"
 const handlePost = async (authorization: string | undefined, ttl: number): Promise<JWT> => {
     const now = new Date()
     const token = getBearerJWT(authorization)

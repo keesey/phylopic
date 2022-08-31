@@ -1,8 +1,8 @@
+import { handleAPIError } from "@phylopic/source-client"
 import { INCOMPLETE_STRING, JWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import decodeJWT from "~/auth/jwt/decodeJWT"
-import handleAPIError from "~/errors/handleAPIError"
 import SourceClient from "~/source/SourceClient"
 const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, emailAddress: EmailAddress) => {
     const contributor = client.contributor(uuid)

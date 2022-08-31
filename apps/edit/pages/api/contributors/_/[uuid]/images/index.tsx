@@ -11,7 +11,7 @@ const index: NextApiHandler<Page<Image, number> | number> = async (req, res) => 
             throw 404
         }
         client = new SourceClient()
-        await handleWithLister(req, res, client.contributor(uuid).images)
+        await handleWithLister(req, res, client.contributor(uuid).images, (page: string) => parseInt(page, 10))
     } catch (e) {
         handleAPIError(res, e)
     } finally {

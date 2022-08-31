@@ -7,7 +7,7 @@ const index: NextApiHandler<Page<Image & { uuid: UUID }, number> | number> = asy
     let client: SourceClient | undefined
     try {
         client = new SourceClient()
-        await handleWithLister(req, res, client.images)
+        await handleWithLister(req, res, client.images, (page: string) => parseInt(page, 10))
     } catch (e) {
         handleAPIError(res, e)
     } finally {

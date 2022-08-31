@@ -6,7 +6,7 @@ const index: NextApiHandler<Page<Authority, number> | number> = async (req, res)
     let client: SourceClient | undefined
     try {
         client = new SourceClient()
-        await handleWithLister(req, res, client.externalAuthorities)
+        await handleWithLister(req, res, client.externalAuthorities, (page: string) => parseInt(page, 10))
     } catch (e) {
         handleAPIError(res, e)
     } finally {

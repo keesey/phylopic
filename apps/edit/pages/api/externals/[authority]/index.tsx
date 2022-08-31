@@ -10,7 +10,7 @@ const index: NextApiHandler<Page<Namespace, number> | number> = async (req, res)
             throw 404
         }
         client = new SourceClient()
-        await handleWithLister(req, res, client.externalNamespaces(authority))
+        await handleWithLister(req, res, client.externalNamespaces(authority), (page: string) => parseInt(page, 10))
     } catch (e) {
         handleAPIError(res, e)
     } finally {
