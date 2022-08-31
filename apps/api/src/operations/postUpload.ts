@@ -8,7 +8,6 @@ import isExpired from "../auth/jwt/isExpired"
 import verifyJWT from "../auth/jwt/verifyJWT"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
-import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
@@ -93,7 +92,7 @@ const checkContributorUUID = (sub: unknown): UUID => {
                 },
             ],
             {
-                "WWW-Authenticate":
+                "www-authenticate":
                     'Bearer realm="phylopic.org",error="invalid token",error_description="Invalid token subject."',
             },
         )
@@ -143,11 +142,8 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     }
     return {
         body: stringifyNormalized(link),
-        headers: {
-            ...DATA_HEADERS,
-            ...createRedirectHeaders(link.href, true),
-        },
-        statusCode: 308,
+        headers: DATA_HEADERS,
+        statusCode: 200,
     } as APIGatewayProxyResult
 }
 export default postUpload

@@ -1528,8 +1528,15 @@ paths:
                 format: xml
                 type: string
       responses:
-        "308":
-          $ref: "#/components/responses/308"
+        "200":
+          description: Link to the uploaded file.
+          headers:
+            Content-Type:
+              $ref: "#/components/headers/Content-Type"
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                $ref: "#/components/schemas/Link"
         "401":
           $ref: "#/components/responses/401"
         "413":
