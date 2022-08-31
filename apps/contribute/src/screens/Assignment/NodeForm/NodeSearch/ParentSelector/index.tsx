@@ -1,4 +1,4 @@
-import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { Identifier, Nomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
 import { SearchEntry } from "~/search/SearchEntry"
 import NameView from "~/ui/NameView"
@@ -10,7 +10,7 @@ import NameRenderer from "../../NameRenderer"
 import ParentSearch from "./ParentSearch"
 export type Props = {
     childName: Nomen
-    onComplete: (uuid: UUID) => void
+    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
 }
 export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
     const [nameText, setNameText] = useState("")

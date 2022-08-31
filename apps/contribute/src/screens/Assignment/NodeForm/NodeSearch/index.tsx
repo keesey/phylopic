@@ -1,5 +1,5 @@
 import { Loader } from "@phylopic/ui"
-import { UUID } from "@phylopic/utils"
+import { Identifier } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
 import useSearch from "~/search/useSearch"
 import Speech from "~/ui/Speech"
@@ -9,7 +9,7 @@ import NoEntries from "./NoEntries"
 export type Props = {
     nameText: string
     onCancel: () => void
-    onComplete: (uuid: UUID) => void
+    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
 }
 export const NodeSearch: FC<Props> = ({ nameText, onCancel, onComplete }) => {
     const [parentRequested, setParentRequested] = useState<boolean | null>(null)

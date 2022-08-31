@@ -1,13 +1,13 @@
-import { isLicenseURL, isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
+import { isPublicDomainLicenseURL, isValidLicenseURL, UUID } from "@phylopic/utils"
+import { parseNomen } from "parse-nomen"
 import { FC, useMemo } from "react"
-import useImage from "~/editing/hooks/useImage"
-import useImageMutator from "~/editing/hooks/useImageMutator"
-import useImageNode from "~/editing/hooks/useImageNode"
-import useImageSrc from "~/editing/hooks/useImageSrc"
+import useSubmission from "~/editing/hooks/useSubmission"
+import useSubmissionMutator from "~/editing/hooks/useSubmissionMutator"
 import useContributor from "~/profile/useContributor"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
 import { ICON_CHECK, ICON_HAND_POINT_RIGHT, ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
+import IdentifierView from "~/ui/IdentifierView"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
@@ -20,30 +20,33 @@ import License from "./License"
 export type Props = {
     uuid: UUID
 }
-const EMPTY: never[] = []
 const Usage: FC<Props> = ({ uuid }) => {
-    const image = useImage(uuid)
-    const src = useImageSrc(uuid)
+    const submission = useSubmission(uuid)
     const contributor = useContributor()
-    const hasLicense = useMemo(() => isLicenseURL(image?.license), [image?.license])
+    const hasLicense = useMemo(() => isValidLicenseURL(submission?.license), [submission?.license])
     const complete = useMemo(() => {
-        return image?.license && (image.attribution || isPublicDomainLicenseURL(image.license))
-    }, [image?.attribution, image?.license])
-    const specific = useImageNode(uuid, "specific")
-    const mutate = useImageMutator(uuid)
-    if (!image || !src) {
+        return isValidLicenseURL(submission?.license) && (submission?.attribution || isPublicDomainLicenseURL(submission?.license))
+    }, [submission?.attribution, submission?.license])
+    const mutate = useSubmissionMutator(uuid)
+    const newName = useMemo(() => submission?.newTaxonName ? parseNomen(submission.newTaxonName) : null, [submission?.newTaxonName])
+    if (!submission) {
         return <LoadingState>One moment&hellip;</LoadingState>
     }
     return (
         <Dialogue>
             <Speech mode="user">
                 <SpeechStack collapsible>
-                    <FileView src={src} mode="light" />
-                    {specific && (
+                <FileView
+                    src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(
+                        submission.file,
+                    )}`}
+                    mode="light"
+                />
+                    {(newName || submission.identifier) && (
                         <p>
                             This image shows{" "}
                             <strong>
-                                <NameView value={specific.names[0]} />
+                                {newName ? <NameView value={newName} />: <IdentifierView value={submission.identifier!} />}
                             </strong>
                             .
                         </p>
@@ -58,12 +61,12 @@ const Usage: FC<Props> = ({ uuid }) => {
             <License uuid={uuid} />
             {hasLicense && <Attribution key="attribution" uuid={uuid} />}
             <UserOptions>
-                {hasLicense && !image.attribution && contributor?.name && (
+                {hasLicense && !submission.attribution && contributor?.name && (
                     <UserButton icon={ICON_HAND_POINT_RIGHT} onClick={() => mutate({ attribution: contributor.name })}>
                         I get the credit.
                     </UserButton>
                 )}
-                {hasLicense && image.attribution && (
+                {hasLicense && submission.attribution && (
                     <UserButton
                         danger
                         icon={ICON_PENCIL}
@@ -74,7 +77,7 @@ const Usage: FC<Props> = ({ uuid }) => {
                 )}
                 {complete && (
                     <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(uuid)}`}>
-                        All done.{!image.attribution && " No credit needed."}
+                        All done.{!submission.attribution && " No credit needed."}
                     </UserLinkButton>
                 )}
             </UserOptions>

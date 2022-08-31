@@ -33,29 +33,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
         return { notFound: true }
     }
     let client: SourceClient | undefined
-    let redirectToFile = false
     let notFound = false
     try {
         client = new SourceClient()
-        const imageClient = client.image(uuid)
-        if (!(await imageClient.exists())) {
+        const submissionClient = client.submission(uuid)
+        if (!(await submissionClient.exists())) {
             notFound = true
-        } else if (!(await imageClient.file.exists())) {
-            redirectToFile = true
         }
     } finally {
         client?.destroy()
     }
     if (notFound) {
         return { notFound }
-    }
-    if (redirectToFile) {
-        return {
-            redirect: {
-                destination: `/edit/${encodeURIComponent(uuid)}/file`,
-                permanent: false,
-            },
-        }
     }
     return {
         props: {

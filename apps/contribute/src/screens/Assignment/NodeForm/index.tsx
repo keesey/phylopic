@@ -1,4 +1,4 @@
-import { UUID } from "@phylopic/utils"
+import { Identifier, UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
 import UserTextForm from "~/ui/SiteNav/UserTextForm"
 import UserScrollTo from "~/ui/UserScrollTo"
@@ -6,7 +6,7 @@ import NameInput from "./NameInput"
 import NameRenderer from "./NameRenderer"
 import NodeSearch from "./NodeSearch"
 export type Props = {
-    onComplete: (uuid: UUID) => void
+    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
 }
 const NodeForm: FC<Props> = ({ onComplete }) => {
     const [nameText, setNameText] = useState("")

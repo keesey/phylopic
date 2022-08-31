@@ -26,8 +26,11 @@ const Content: FC = () => {
     const cancel = useCallback(() => {
         router.push("/")
     }, [router])
-    const complete = useCallback((hash: Hash) => {
-        router.push(`/api/spawn?file=${encodeURIComponent(hash)}`)
-    }, [router])
+    const complete = useCallback(
+        (hash: Hash) => {
+            router.push(`/api/spawn?file=${encodeURIComponent(hash)}`)
+        },
+        [router],
+    )
     return <Uploader onCancel={cancel} onComplete={complete} />
 }

@@ -1,15 +1,12 @@
-import { Loader } from "@phylopic/ui"
-import { UUID } from "@phylopic/utils"
+import { Identifier, UUID } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { FC, useCallback, useState } from "react"
-import useImage from "~/editing/hooks/useImage"
-import useImageMutator from "~/editing/hooks/useImageMutator"
-import useImageNode from "~/editing/hooks/useImageNode"
-import useImageSrc from "~/editing/hooks/useImageSrc"
+import useSubmission from "~/editing/hooks/useSubmission"
+import useSubmissionMutator from "~/editing/hooks/useSubmissionMutator"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
 import { ICON_CHECK, ICON_X } from "~/ui/ICON_SYMBOLS"
-import NameView from "~/ui/NameView"
+import IdentifierView from "~/ui/IdentifierView"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserLinkButton from "~/ui/UserLinkButton"
@@ -19,37 +16,32 @@ export type Props = {
     uuid: UUID
 }
 const Assignment: FC<Props> = ({ uuid }) => {
-    const image = useImage(uuid)
-    const src = useImageSrc(uuid)
-    const specific = useImageNode(uuid, "specific")
+    const submission = useSubmission(uuid)
     const [changeRequested, setChangeRequested] = useState(false)
-    const mutate = useImageMutator(uuid)
+    const mutate = useSubmissionMutator(uuid)
     const router = useRouter()
     const handleComplete = useCallback(
-        (specific: UUID) => {
+        (identifier: Identifier, newTaxonName: string | null) => {
             setChangeRequested(false)
-            mutate({ general: null, specific })
+            mutate({ identifier, newTaxonName })
             router.push(`/edit/${encodeURIComponent(uuid)}`)
         },
         [mutate, router, uuid],
     )
-    if (!image) {
+    if (!submission) {
         return null
     }
     return (
         <Dialogue>
-            {src && (
-                <Speech mode="user">
-                    <FileView src={src} mode="light" />
-                </Speech>
-            )}
-            {(!src || (image.specific && !specific)) && (
-                <Speech mode="system">
-                    <p>Loading&hellip;</p>
-                    <Loader />
-                </Speech>
-            )}
-            {!image.specific && src && (
+            <Speech mode="user">
+                <FileView
+                    src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(
+                        submission.file,
+                    )}`}
+                    mode="light"
+                />
+            </Speech>
+            {!submission.identifier && (
                 <>
                     <Speech mode="system">
                         <p>
@@ -62,11 +54,11 @@ const Assignment: FC<Props> = ({ uuid }) => {
                     <NodeForm key="nodeForm" onComplete={handleComplete} />
                 </>
             )}
-            {image.specific && src && specific && (
+            {submission.identifier && (
                 <>
                     <Speech mode="system">
                         <p>
-                            So this is <NameView value={specific.names[0]} />?
+                            So this is <IdentifierView value={submission.identifier} />?
                         </p>
                     </Speech>
                     {!changeRequested && (

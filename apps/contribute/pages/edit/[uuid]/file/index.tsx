@@ -43,12 +43,15 @@ const Content: FC<Props> = ({ uuid }) => {
     const cancel = useCallback(() => {
         router.push("/")
     }, [router])
-    const complete = useCallback((hash: Hash) => {
-        mutate({ file: hash })
-        router.push(`/edit/${encodeURIComponent(uuid)}`)
-    }, [mutate, uuid])
+    const complete = useCallback(
+        (hash: Hash) => {
+            mutate({ file: hash })
+            router.push(`/edit/${encodeURIComponent(uuid)}`)
+        },
+        [mutate, uuid],
+    )
     if (error) {
-        return <ErrorState>{String(error)}</ErrorState>        
+        return <ErrorState>{String(error)}</ErrorState>
     }
     if (!data) {
         return <LoadingState>Loading that up&hellip;</LoadingState>

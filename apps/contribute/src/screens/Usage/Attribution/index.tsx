@@ -1,7 +1,7 @@
 import { isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
 import { FC, useCallback, useMemo } from "react"
-import useImage from "~/editing/hooks/useImage"
-import useImageMutator from "~/editing/hooks/useImageMutator"
+import useSubmission from "~/editing/hooks/useSubmission"
+import useSubmissionMutator from "~/editing/hooks/useSubmissionMutator"
 import UserTextForm from "~/ui/SiteNav/UserTextForm"
 import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
@@ -9,9 +9,9 @@ export interface Props {
     uuid: UUID
 }
 const Attribution: FC<Props> = ({ uuid }) => {
-    const image = useImage(uuid)
-    const mutate = useImageMutator(uuid)
-    const { attribution, license } = image ?? {}
+    const submission = useSubmission(uuid)
+    const mutate = useSubmissionMutator(uuid)
+    const { attribution, license } = submission ?? {}
     const required = useMemo(() => !isPublicDomainLicenseURL(license), [license])
     const submit = useCallback(
         (value: string) => {

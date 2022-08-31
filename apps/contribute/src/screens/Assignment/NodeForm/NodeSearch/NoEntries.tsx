@@ -1,4 +1,4 @@
-import { UUID } from "@phylopic/utils"
+import { Identifier, UUID } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { FC, useMemo } from "react"
 import Speech from "~/ui/Speech"
@@ -8,7 +8,7 @@ import ParentSelector from "./ParentSelector"
 export type Props = {
     nameText: string
     onCancel: () => void
-    onComplete: (uuid: UUID) => void
+    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
     onParentRequest: () => void
     parentRequested: boolean | null
 }

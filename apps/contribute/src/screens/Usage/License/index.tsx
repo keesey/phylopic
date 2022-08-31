@@ -1,7 +1,7 @@
 import { LICENSE_NAMES, UUID } from "@phylopic/utils"
 import { FC } from "react"
-import useImage from "~/editing/hooks/useImage"
-import useImageMutator from "~/editing/hooks/useImageMutator"
+import useSubmission from "~/editing/hooks/useSubmission"
+import useSubmissionMutator from "~/editing/hooks/useSubmissionMutator"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
@@ -11,19 +11,19 @@ export interface Props {
     uuid: UUID
 }
 const License: FC<Props> = ({ uuid }) => {
-    const image = useImage(uuid)
-    const mutate = useImageMutator(uuid)
-    if (!image) {
+    const submission = useSubmission(uuid)
+    const mutate = useSubmissionMutator(uuid)
+    if (!submission) {
         return null
     }
-    if (image.license) {
+    if (submission.license) {
         return (
             <Speech mode="user">
                 <p>
                     The{" "}
                     <strong>
-                        <a href={image.license} target="_blank" rel="noreferrer">
-                            {LICENSE_NAMES[image.license]}
+                        <a href={submission.license} target="_blank" rel="noreferrer">
+                            {LICENSE_NAMES[submission.license]}
                         </a>
                     </strong>{" "}
                     license.

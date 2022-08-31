@@ -1,5 +1,5 @@
 import { Loader } from "@phylopic/ui"
-import { Nomen, UUID } from "@phylopic/utils"
+import { getIdentifier, Identifier, Nomen } from "@phylopic/utils"
 import { FC } from "react"
 import { SearchEntry } from "~/search/SearchEntry"
 import usePhyloPicSearch from "~/search/usePhyloPicSearch"
@@ -14,7 +14,7 @@ import NewNodeCreator from "./NewNodeCreator"
 export type Props = {
     childName: Nomen
     nameText: string
-    onComplete: (uuid: UUID) => void
+    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
     onSelect: (value: SearchEntry | null) => void
     selected: SearchEntry | null
 }
@@ -44,7 +44,11 @@ export const ParentSearch: FC<Props> = ({ childName, nameText, selected, onCompl
                         <NameView value={selected.name} />.
                     </p>
                 </Speech>
-                <NewNodeCreator name={childName} onComplete={onComplete} parentUUID={selected.objectID} />
+                <NewNodeCreator
+                    name={childName}
+                    onComplete={onComplete}
+                    parentIdentifier={getIdentifier(selected.authority, selected.namespace, selected.objectID)}
+                />
             </>
         )
     }
