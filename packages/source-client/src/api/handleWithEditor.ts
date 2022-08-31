@@ -1,6 +1,6 @@
-import { Editable } from "@phylopic/source-client"
 import { NextApiRequest, NextApiResponse } from "next"
-const handleWithEditor = async <T>(req: NextApiRequest, res: NextApiResponse<T>, editor: Editable<T>) => {
+import { Editable } from "../../dist"
+export const handleWithEditor = async <T>(req: NextApiRequest, res: NextApiResponse<T>, editor: Editable<T>) => {
     switch (req.method) {
         case "DELETE": {
             await editor.delete()

@@ -1,3 +1,4 @@
+export * from "./api"
 import Client from "./implementations/Client"
 export * from "./interfaces"
 export * from "./implementations/ClientProvider"

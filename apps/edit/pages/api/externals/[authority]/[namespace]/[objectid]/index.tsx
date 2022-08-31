@@ -1,8 +1,7 @@
+import { handleAPIError, handleWithEditor } from "@phylopic/source-client"
 import { External } from "@phylopic/source-models"
 import { Authority, isAuthority, isNamespace, isObjectID, Namespace, ObjectID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
-import handleAPIError from "~/api/handleAPIError"
-import handleWithEditor from "~/api/handleWithEditor"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }> = async (
     req,

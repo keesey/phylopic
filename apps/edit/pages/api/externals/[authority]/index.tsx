@@ -1,8 +1,6 @@
-import { Page } from "@phylopic/source-client"
+import { handleAPIError, handleWithLister, Page } from "@phylopic/source-client"
 import { isAuthority, Namespace } from "@phylopic/utils"
 import { NextApiHandler } from "next"
-import handleAPIError from "~/api/handleAPIError"
-import handleWithLister from "~/api/handleWithLister"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Page<Namespace, number> | number> = async (req, res) => {
     let client: SourceClient | undefined

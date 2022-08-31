@@ -1,3 +1,4 @@
+export * from "./Deletable"
 export * from "./Editable"
 export * from "./ImageFile"
 export * from "./Listable"

@@ -1,6 +1,6 @@
-import { Patchable } from "@phylopic/source-client"
 import { NextApiRequest, NextApiResponse } from "next"
-const handleWithPatcher = async <T>(req: NextApiRequest, res: NextApiResponse<T>, editor: Patchable<T>) => {
+import { Patchable } from "../../dist"
+export const handleWithPatcher = async <T>(req: NextApiRequest, res: NextApiResponse<T>, editor: Patchable<T>) => {
     switch (req.method) {
         case "DELETE": {
             await editor.delete()

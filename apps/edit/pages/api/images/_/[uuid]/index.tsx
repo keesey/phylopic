@@ -1,8 +1,7 @@
+import { handleAPIError, handleWithPatcher } from "@phylopic/source-client"
 import { Image } from "@phylopic/source-models"
 import { isUUIDv4, UUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
-import handleAPIError from "~/api/handleAPIError"
-import handleWithPatcher from "~/api/handleWithPatcher"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Image & { uuid: UUID }> = async (req, res) => {
     let client: SourceClient | undefined

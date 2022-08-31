@@ -1,6 +1,6 @@
-import { Readable } from "@phylopic/source-client"
 import { NextApiRequest, NextApiResponse } from "next"
-const handleWithReader = async <T>(req: NextApiRequest, res: NextApiResponse<T>, reader: Readable<T>) => {
+import { Readable } from "../interfaces"
+export const handleWithReader = async <T>(req: NextApiRequest, res: NextApiResponse<T>, reader: Readable<T>) => {
     switch (req.method) {
         case "GET":
         case "HEAD": {

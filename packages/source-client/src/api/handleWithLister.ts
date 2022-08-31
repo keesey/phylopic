@@ -1,6 +1,6 @@
-import { Listable, Page } from "@phylopic/source-client"
 import { NextApiRequest, NextApiResponse } from "next"
-const handleWithLister = async <T>(
+import { Listable, Page } from "../interfaces"
+export const handleWithLister = async <T>(
     req: NextApiRequest,
     res: NextApiResponse<Page<T, number> | number>,
     lister: Listable<T, number>,

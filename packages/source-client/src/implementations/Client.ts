@@ -9,7 +9,7 @@ import {
     isUUIDv4,
     Namespace,
     ObjectID,
-    UUID
+    UUID,
 } from "@phylopic/utils"
 import { Editable } from "../interfaces/Editable"
 import { PGClientProvider } from "../interfaces/PGClientProvider"

@@ -6,15 +6,6 @@
     "bugs": {
         "url": "https://github.com/keesey/phylopic/issues"
     },
-    "dependencies": {
-        "@aws-sdk/client-s3": "^3.82.0",
-        "@phylopic/source-models": "*",
-        "@phylopic/utils": "*",
-        "@phylopic/utils-aws": "*",
-        "jsonwebtoken": "^8.5.1",
-        "pg": "^8.7.3",
-        "uuid": "^8.3.2"
-    },
     "description": "Client for accessing the source data for *PhyloPic* (AWS S3 buckets).",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
@@ -55,6 +46,16 @@
     },
     "module": "./dist/index.mjs",
     "name": "@phylopic/source-client",
+    "peerDependencies": {
+        "@aws-sdk/client-s3": "^3.82.0",
+        "@phylopic/source-models": "*",
+        "@phylopic/utils": "*",
+        "@phylopic/utils-aws": "*",
+        "jsonwebtoken": "^8.5.1",
+        "next": "^12.2.5",
+        "pg": "^8.7.3",
+        "uuid": "^8.3.2"
+    },
     "publishConfig": {
         "access": "public"
     },
@@ -66,9 +67,9 @@
         "@types/node": "*"
     },
     "scripts": {
-        "build": "tsup src/index.ts --format esm,cjs --dts",
+        "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3 @phylopic/source-models @phylopic/utils @phylopic/utils-aws jsonwebtoken next pg uuid",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-        "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3 @phylopic/source-models @phylopic/utils @phylopic/utils-aws jsonwebtoken next pg uuid",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix",
         "test": "mocha"
     },
