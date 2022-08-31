@@ -1,7 +1,7 @@
 import { Image } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { FC, useMemo } from "react"
-import useImageSrc from "~/editing/hooks/useImageSrc"
+import useImageSrc from "~/editing/useImageSrc"
 import FileThumbnailView from "../FileThumbnailView"
 export type Props = {
     value?: Image & { uuid: UUID }

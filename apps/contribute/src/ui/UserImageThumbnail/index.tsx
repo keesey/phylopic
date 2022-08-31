@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { stringifyNomen, UUID } from "@phylopic/utils"
 import { FC } from "react"
-import useImageNode from "~/editing/hooks/useImageNode"
-import useImageSrc from "~/editing/hooks/useImageSrc"
+import useImageNode from "~/editing/useImageNode"
+import useImageSrc from "~/editing/useImageSrc"
 import FileThumbnailView from "../FileThumbnailView"
 import NameView from "../NameView"
 import styles from "./index.module.scss"

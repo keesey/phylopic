@@ -1,5 +1,5 @@
 import { FC } from "react"
-import useImageCount from "~/editing/hooks/useImageCount"
+import useImageCount from "~/editing/useImageCount"
 import ImagePaginator from "~/pagination/Paginator"
 import Speech from "~/ui/Speech"
 import UserImageThumbnail from "~/ui/UserImageThumbnail"

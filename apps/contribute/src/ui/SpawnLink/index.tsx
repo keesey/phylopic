@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import { FC, ReactNode, useEffect } from "react"
-import useImageSpawn from "~/editing/hooks/useImageSpawn"
+import useImageSpawn from "~/editing/useImageSpawn"
 import styles from "./index.module.scss"
 export type Props = {
     children: ReactNode

@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect } from "react"
-import useImageSpawn from "~/editing/hooks/useImageSpawn"
+import useImageSpawn from "~/editing/useImageSpawn"
 import { ICON_PLUS } from "../ICON_SYMBOLS"
 import UserButton from "../UserButton"
 export type Props = {

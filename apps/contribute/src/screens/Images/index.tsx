@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react"
-import useImageCount from "~/editing/hooks/useImageCount"
+import useImageCount from "~/editing/useImageCount"
 import { ImageFilter } from "~/pagination/ImageFilter"
 import ImagePaginator from "~/pagination/Paginator"
 import Dialogue from "~/ui/Dialogue"

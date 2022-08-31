@@ -1,5 +1,5 @@
 import { FC } from "react"
-import useImageCount from "~/editing/hooks/useImageCount"
+import useImageCount from "~/editing/useImageCount"
 import { ICON_BOX, ICON_CHECK, ICON_ELLIPSIS, ICON_X } from "~/ui/ICON_SYMBOLS"
 import MenuLink from "../../MenuLink"
 const ViewMenu: FC = () => {
