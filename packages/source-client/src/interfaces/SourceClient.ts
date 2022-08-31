@@ -15,6 +15,7 @@ export type SourceClient = Readonly<{
     contributors: Listable<Contributor & { uuid: UUID }, number> & {
         byEmail(email: EmailAddress): Patchable<Contributor>
     }
+    copyUploadToSourceImage(hash: Hash, uuid: UUID): Promise<void>
     external(
         authority: Authority,
         namespace: Namespace,
@@ -38,6 +39,8 @@ export type SourceClient = Readonly<{
             externals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
         ): Promise<Record<Identifier, Node & { uuid: UUID }>>
     }
+    sourceImage(hash: UUID): Editable<ImageFile>
+    sourceImages: Listable<UUID, string>
     submission(uuid: UUID): Patchable<Submission & { uuid: UUID }>
     submissions: Listable<UUID, string>
     upload(hash: Hash): Deletable<ImageFile>

@@ -1,3 +1,4 @@
+import { CopyObjectCommand } from "@aws-sdk/client-s3"
 import { External, isSubmission, Submission } from "@phylopic/source-models"
 import {
     Authority,
@@ -10,7 +11,7 @@ import {
     isUUIDv4,
     Namespace,
     ObjectID,
-    UUID
+    UUID,
 } from "@phylopic/utils"
 import { Editable } from "../interfaces/Editable"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
@@ -29,12 +30,14 @@ import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
 import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
 import AUTH_BUCKET_NAME from "./s3/constants/AUTH_BUCKET_NAME"
+import SOURCE_IMAGES_BUCKET_NAME from "./s3/constants/SOURCE_IMAGES_BUCKET_NAME"
 import SUBMISSIONS_BUCKET_NAME from "./s3/constants/SUBMISSIONS_BUCKET_NAME"
 import UPLOADS_BUCKET_NAME from "./s3/constants/UPLOADS_BUCKET_NAME"
 import createJSONWriter from "./s3/io/createJSONWriter"
 import readImageFile from "./s3/io/readImageFile"
 import readJSON from "./s3/io/readJSON"
 import readJWT from "./s3/io/readJWT"
+import writeImageFile from "./s3/io/writeImageFile"
 import writeJWT from "./s3/io/writeJWT"
 import S3Deletor from "./s3/S3Deletor"
 import S3Editor from "./s3/S3Editor"
@@ -47,6 +50,7 @@ export default class Client implements SourceClient {
         this.externalAuthorities = new ExternalAuthorityLister(provider, 128)
         this.images = new ImagesClient(provider)
         this.nodes = new NodesClient(provider)
+        this.sourceImages = new S3Lister(provider, SOURCE_IMAGES_BUCKET_NAME, "images/", isUUIDv4)
         this.submissions = new S3Lister(provider, SUBMISSIONS_BUCKET_NAME, "submissions/", isUUIDv4)
         this.uploads = new S3Lister(provider, UPLOADS_BUCKET_NAME, "files/", isHash)
     }
@@ -68,6 +72,21 @@ export default class Client implements SourceClient {
             throw new Error("Invalid UUID.")
         }
         return new ContributorClient(this.provider, uuid)
+    }
+    async copyUploadToSourceImage(hash: Hash, uuid: UUID) {
+        if (!isHash(hash)) {
+            throw new Error("Invalid hexadecimal hash.")
+        }
+        if (!isUUIDv4(uuid)) {
+            throw new Error("Invalid UUID.")
+        }
+        await this.provider.getS3().send(
+            new CopyObjectCommand({
+                Bucket: SOURCE_IMAGES_BUCKET_NAME,
+                CopySource: encodeURI(`/${UPLOADS_BUCKET_NAME}/file/${hash}`),
+                Key: `images/${encodeURIComponent(uuid)}`,
+            }),
+        )
     }
     contributors
     external(
@@ -127,6 +146,19 @@ export default class Client implements SourceClient {
         return new NodeClient(this.provider, uuid)
     }
     nodes
+    sourceImage(uuid: UUID) {
+        if (!isUUIDv4(uuid)) {
+            throw new Error("Invalid UUID.")
+        }
+        return new S3Editor(
+            this.provider,
+            SOURCE_IMAGES_BUCKET_NAME,
+            `images/${encodeURIComponent(uuid)}`,
+            readImageFile,
+            writeImageFile,
+        )
+    }
+    sourceImages
     submission(uuid: UUID) {
         if (!isUUIDv4(uuid)) {
             throw new Error("Invalid UUID.")
@@ -144,12 +176,7 @@ export default class Client implements SourceClient {
         if (!isHash(hash)) {
             throw new Error("Invalid hexadecimal hash.")
         }
-        return new S3Deletor(
-            this.provider,
-            UPLOADS_BUCKET_NAME,
-            `files/${encodeURIComponent(hash)}`,
-            readImageFile,
-        )
+        return new S3Deletor(this.provider, UPLOADS_BUCKET_NAME, `files/${encodeURIComponent(hash)}`, readImageFile)
     }
     uploads
 }
