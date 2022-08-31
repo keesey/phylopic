@@ -25,10 +25,16 @@ const Usage: FC<Props> = ({ uuid }) => {
     const contributor = useContributor()
     const hasLicense = useMemo(() => isValidLicenseURL(submission?.license), [submission?.license])
     const complete = useMemo(() => {
-        return isValidLicenseURL(submission?.license) && (submission?.attribution || isPublicDomainLicenseURL(submission?.license))
+        return (
+            isValidLicenseURL(submission?.license) &&
+            (submission?.attribution || isPublicDomainLicenseURL(submission?.license))
+        )
     }, [submission?.attribution, submission?.license])
     const mutate = useSubmissionMutator(uuid)
-    const newName = useMemo(() => submission?.newTaxonName ? parseNomen(submission.newTaxonName) : null, [submission?.newTaxonName])
+    const newName = useMemo(
+        () => (submission?.newTaxonName ? parseNomen(submission.newTaxonName) : null),
+        [submission?.newTaxonName],
+    )
     if (!submission) {
         return <LoadingState>One moment&hellip;</LoadingState>
     }
@@ -36,17 +42,21 @@ const Usage: FC<Props> = ({ uuid }) => {
         <Dialogue>
             <Speech mode="user">
                 <SpeechStack collapsible>
-                <FileView
-                    src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(
-                        submission.file,
-                    )}`}
-                    mode="light"
-                />
+                    <FileView
+                        src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(
+                            submission.file,
+                        )}`}
+                        mode="light"
+                    />
                     {(newName || submission.identifier) && (
                         <p>
                             This image shows{" "}
                             <strong>
-                                {newName ? <NameView value={newName} />: <IdentifierView value={submission.identifier!} />}
+                                {newName ? (
+                                    <NameView value={newName} />
+                                ) : (
+                                    <IdentifierView value={submission.identifier!} />
+                                )}
                             </strong>
                             .
                         </p>

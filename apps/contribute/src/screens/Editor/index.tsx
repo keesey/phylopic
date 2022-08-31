@@ -1,16 +1,13 @@
-import { isSubmittableImage } from "@phylopic/source-models"
+import { isSubmission } from "@phylopic/source-models"
 import { LICENSE_NAMES, UUID } from "@phylopic/utils"
 import { FC, useCallback, useMemo, useState } from "react"
-import useImage from "~/editing/useImage"
-import useImageDeletor from "~/editing/hooks/useSubmissionDeletor"
-import useImageMutator from "~/editing/hooks/useImageMutator"
-import useImageNode from "~/editing/hooks/useImageNode"
-import useImageSrc from "~/editing/hooks/useImageSrc"
-import useLiveImageExists from "~/editing/hooks/useLiveImageExists"
+import useSubmission from "~/editing/useSubmission"
+import useSubmissionDeletor from "~/editing/useSubmissionDeletor"
+import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
 import { ICON_CHECK, ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
-import NameView from "~/ui/NameView"
+import IdentifierView from "~/ui/IdentifierView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
 import UserButton from "~/ui/UserButton"
@@ -22,84 +19,76 @@ export type Props = {
     uuid: UUID
 }
 const Editor: FC<Props> = ({ uuid }) => {
-    const image = useImage(uuid)
-    const submittable = useMemo(() => isSubmittableImage(image), [image])
-    const isLive = useLiveImageExists(uuid)
-    const src = useImageSrc(uuid)
-    const general = useImageNode(uuid, "general")
-    const specific = useImageNode(uuid, "specific")
+    const submission = useSubmission(uuid)
+    const submittable = useMemo(
+        () => !submission?.submitted && isSubmission({ ...submission, submitted: true }),
+        [submission],
+    )
     const [unready, setUnready] = useState<boolean | null>(null)
-    const mutate = useImageMutator(uuid)
+    const mutate = useSubmissionMutator(uuid)
     const submit = useCallback(() => mutate({ submitted: true }), [mutate])
-    const deletor = useImageDeletor(uuid)
+    const deletor = useSubmissionDeletor(uuid)
     const deleteImage = useCallback(() => {
         if (confirm("Are you sure you want to PERMANENTLY delete this submission?")) {
             deletor()
-            alert("The image has been deleted and will be removed from the site in the next build.")
         }
     }, [deletor])
-    if (!image || !src) {
-        return <LoadingState>Checking contribution status&hellip;</LoadingState>
+    if (!submission) {
+        return <LoadingState>Checking submission status&hellip;</LoadingState>
     }
     return (
         <Dialogue>
             <Speech mode="user">
                 <SpeechStack collapsible>
                     <figure>
-                        <FileView mode="light" src={src} />
+                        <FileView
+                            src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(
+                                submission.file,
+                            )}`}
+                            mode="light"
+                        />
+                        <figcaption>
+                            <p>
+                                This is a silhouette image
+                                {submission.identifier && (
+                                    <>
+                                        {" "}
+                                        of{" "}
+                                        <strong>
+                                            <IdentifierView value={submission.identifier} />
+                                        </strong>
+                                    </>
+                                )}
+                                {submission.attribution && (
+                                    <>
+                                        {" "}
+                                        by <strong>{submission.attribution}</strong>
+                                    </>
+                                )}
+                                .
+                                {submission.sponsor && (
+                                    <>
+                                        {" "}
+                                        It has been sponsored by <strong>{submission.sponsor}</strong>.
+                                    </>
+                                )}
+                            </p>
+                            {submission.license && (
+                                <p>
+                                    It is available under the{" "}
+                                    <strong>
+                                        <a href={submission.license} className="text" target="_blank" rel="noreferrer">
+                                            {LICENSE_NAMES[submission.license] ?? "[Unknown License]"}
+                                        </a>
+                                    </strong>{" "}
+                                    license.
+                                </p>
+                            )}
+                        </figcaption>
                     </figure>
-                    <figcaption>
-                        <p>
-                            This is a silhouette image
-                            {specific && (
-                                <>
-                                    {" "}
-                                    of{" "}
-                                    <strong>
-                                        <NameView value={specific.names[0]} />
-                                    </strong>
-                                </>
-                            )}
-                            {image.attribution && (
-                                <>
-                                    {" "}
-                                    by <strong>{image.attribution}</strong>
-                                </>
-                            )}
-                            .
-                            {image.sponsor && (
-                                <>
-                                    {" "}
-                                    Its inclusion on the site was sponsored by <strong>{image.sponsor}</strong>.
-                                </>
-                            )}
-                        </p>
-                        {general && (
-                            <p>
-                                <small>
-                                    (It also represents the ancestral state of{" "}
-                                    <strong>
-                                        <NameView value={general.names[0]} />
-                                    </strong>
-                                    .)
-                                </small>
-                            </p>
-                        )}
-                        {image.license && (
-                            <p>
-                                It is available under the{" "}
-                                <strong>
-                                    <a href={image.license} className="text" target="_blank" rel="noreferrer">
-                                        {LICENSE_NAMES[image.license] ?? "[Unknown License]"}
-                                    </a>
-                                </strong>{" "}
-                                license.
-                            </p>
-                        )}
-                    </figcaption>
                 </SpeechStack>
             </Speech>
-            {!image.accepted && !image.submitted && submittable && (
+            {!submission.submitted && submittable && (
                 <>
                     <Speech mode="system">
                         <p>
@@ -120,13 +109,13 @@ const Editor: FC<Props> = ({ uuid }) => {
                             </Speech>
                             <UserOptions>
                                 <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/file`} icon={ICON_PENCIL}>
-                                    {src ? "Change the file." : "Upload the file."}
+                                    Change the file.
                                 </UserLinkButton>
                                 <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/nodes`} icon={ICON_PENCIL}>
-                                    {image.specific ? "Change the taxonomic assignment." : "Assign the taxon."}
+                                    Change the taxonomic assignment.
                                 </UserLinkButton>
                                 <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
-                                    {image.license ? "Change the license or attribution." : "Pick a license."}
+                                    "Change the license or attribution.
                                 </UserLinkButton>
                                 <UserButton icon={ICON_CHECK} onClick={submit}>
                                     You know what? I am ready to submit it.
@@ -136,73 +125,30 @@ const Editor: FC<Props> = ({ uuid }) => {
                     )}
                 </>
             )}
-            {!image.accepted && !image.submitted && !submittable && (
+            {!submission.submitted && !submittable && (
                 <>
                     <Speech mode="system">
                         <p>Looks like you&rsquo;ve got some work left to do on this. Where do you want to start?</p>
                     </Speech>
                     <UserOptions>
                         <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/file`} icon={ICON_PENCIL}>
-                            {src ? "Change the file." : "Upload the file."}
+                            Change the file.
                         </UserLinkButton>
                         <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/nodes`} icon={ICON_PENCIL}>
-                            {image.specific ? "Change the taxonomic assignment." : "Assign the taxon."}
+                            {submission.identifier ? "Change the taxonomic assignment." : "Assign the taxon."}
                         </UserLinkButton>
                         <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
-                            {image.license ? "Change the license or attribution." : "Pick a license."}
+                            {submission.license ? "Change the license or attribution." : "Pick a license."}
                         </UserLinkButton>
                     </UserOptions>
                 </>
             )}
-            {image.accepted && !image.submitted && (
+            {submission.submitted && (
                 <>
                     <Speech mode="system">
-                        <p>Would you like to reconsider your decision to withdraw this image?</p>
-                    </Speech>
-                    <UserVerification
-                        affirmed={unready === null ? null : !unready}
-                        affirmation={<>Yes, add it back to the site.</>}
-                        denial={<>No, I want to delete it.</>}
-                        onAffirm={submit}
-                        onDeny={deleteImage}
-                    />
-                </>
-            )}
-            {image.submitted && (
-                <>
-                    <Speech mode="system">
-                        {image.accepted && (
-                            <p>
-                                This image has been reviewed and accepted.
-                                {isLive && (
-                                    <>
-                                        {" "}
-                                        It is currently{" "}
-                                        <a
-                                            href={`https://${
-                                                process.env.NEXT_PUBLIC_WWW_DOMAIN
-                                            }/images/${encodeURIComponent(uuid)}`}
-                                            rel="noopener noreferrer"
-                                            target="_blank"
-                                        >
-                                            featured on the site
-                                        </a>
-                                        .
-                                    </>
-                                )}
-                                {isLive === false && (
-                                    <>
-                                        {" "}
-                                        <strong>Congrats!</strong> It will be added to the site in the next build.
-                                    </>
-                                )}
-                            </p>
-                        )}
-                        {!image.accepted && (
-                            <p>
-                                <strong>Sweet.</strong> This image has been submitted for review.
-                            </p>
-                        )}
+                        <p>
+                            <strong>Sweet.</strong> This image has been submitted for review.
+                        </p>
                     </Speech>
                     <UserOptions>
                         <UserLinkButton href="/" icon={ICON_CHECK}>
