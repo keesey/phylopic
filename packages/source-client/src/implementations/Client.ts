@@ -1,4 +1,3 @@
-import { S3Client } from "@aws-sdk/client-s3"
 import { External, isSubmission, Submission } from "@phylopic/source-models"
 import {
     Authority,
@@ -10,7 +9,7 @@ import {
     isUUIDv4,
     Namespace,
     ObjectID,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { Editable } from "../interfaces/Editable"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
