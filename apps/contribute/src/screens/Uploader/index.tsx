@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-import { UUID } from "@phylopic/utils"
-import { useRouter } from "next/router"
+import { Hash } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
 import ImageReview from "./ImageReview"
 import { ReviewResult } from "./ImageReview/ReviewResult"
@@ -8,23 +6,21 @@ import SelectFile from "./SelectFile"
 import { FileResult } from "./SelectFile/FileResult"
 import UploadProgress from "./UploadProgress"
 export type Props = {
-    uuid: UUID
+    onCancel: () => void
+    onComplete: (hash: Hash) => void
+    value?: Hash
 }
-const Uploader: FC<Props> = ({ uuid }) => {
+const Uploader: FC<Props> = ({ onCancel, onComplete, value }) => {
     const [fileResult, setFileResult] = useState<FileResult | undefined>()
     const [reviewResult, setReviewResult] = useState<ReviewResult | undefined>()
-    const router = useRouter()
     const handleImageReviewCancel = useCallback(() => {
         setFileResult(undefined)
     }, [])
-    const handleUploadProgressComplete = useCallback(
-        (uuid: UUID) => {
-            router.push(`/edit/${encodeURIComponent(uuid)}`)
-        },
-        [router],
-    )
+    const handleUploadProgressCancel = useCallback(() => {
+        setReviewResult(undefined)
+    }, [])
     if (!fileResult) {
-        return <SelectFile onComplete={setFileResult} uuid={uuid} />
+        return <SelectFile onCancel={onCancel} onComplete={setFileResult} value={value} />
     }
     if (!reviewResult) {
         return <ImageReview {...fileResult} onCancel={handleImageReviewCancel} onComplete={setReviewResult} />
@@ -33,9 +29,9 @@ const Uploader: FC<Props> = ({ uuid }) => {
         <UploadProgress
             buffer={reviewResult.buffer}
             filename={fileResult?.file.name}
-            onComplete={handleUploadProgressComplete}
+            onCancel={handleUploadProgressCancel}
+            onComplete={onComplete}
             type={reviewResult.type}
-            uuid={uuid}
         />
     )
 }

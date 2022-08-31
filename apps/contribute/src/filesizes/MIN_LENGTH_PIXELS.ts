@@ -1,0 +1,2 @@
+const MIN_LENGTH_PIXELS = 512
+export default MIN_LENGTH_PIXELS

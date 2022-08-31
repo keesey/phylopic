@@ -1,8 +1,14 @@
-import { isUUIDv4, UUID } from "@phylopic/utils"
+import { Hash, isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/router"
+import { FC, useCallback } from "react"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
+import useSubmissionMutator from "~/editing/hooks/useSubmissionMutator"
+import useSubmissionSWR from "~/editing/hooks/useSubmissionSWR"
 import PageLayout from "~/pages/PageLayout"
+import ErrorState from "~/screens/ErrorState"
+import LoadingState from "~/screens/LoadingState"
 const Uploader = dynamic(() => import("~/screens/Uploader"))
 type Props = {
     uuid: UUID
@@ -11,13 +17,13 @@ const Page: NextPage<Props> = ({ uuid }) => {
     return (
         <PageLayout
             head={{
-                title: "PhyloPic: Upload Image File",
+                title: "PhyloPic: Replace Image File",
                 url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(uuid)}/file`,
             }}
             imageUUID={uuid}
         >
             <AuthorizedOnly>
-                <Uploader uuid={uuid} />
+                <Content uuid={uuid} />
             </AuthorizedOnly>
         </PageLayout>
     )
@@ -29,4 +35,23 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
         return { notFound: true }
     }
     return { props: { uuid } }
+}
+const Content: FC<Props> = ({ uuid }) => {
+    const { data, error } = useSubmissionSWR(uuid)
+    const mutate = useSubmissionMutator(uuid)
+    const router = useRouter()
+    const cancel = useCallback(() => {
+        router.push("/")
+    }, [router])
+    const complete = useCallback((hash: Hash) => {
+        mutate({ file: hash })
+        router.push(`/edit/${encodeURIComponent(uuid)}`)
+    }, [mutate, uuid])
+    if (error) {
+        return <ErrorState>{String(error)}</ErrorState>        
+    }
+    if (!data) {
+        return <LoadingState>Loading that up&hellip;</LoadingState>
+    }
+    return <Uploader onCancel={cancel} onComplete={complete} value={data.file} />
 }

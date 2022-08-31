@@ -19,7 +19,7 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
                 break
             }
             case "POST": {
-                const file = req.query.file
+                const { file } = req.query
                 const faultCollector = new ValidationFaultCollector(["file"])
                 if (!isHash(file, faultCollector)) {
                     throw new ValidationError(faultCollector.list(), "Invalid request.")
@@ -47,8 +47,9 @@ const index: NextApiHandler<{ uuid: UUID }> = async (req, res) => {
                     uuid,
                 })
                 res.setHeader("cache-control", "no-cache")
+                res.setHeader("location", `/edit/${encodeURIComponent(uuid)}/nodes`)
                 res.json({ uuid })
-                res.status(200)
+                res.status(307)
                 break
             }
             default: {

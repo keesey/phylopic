@@ -1,33 +1,32 @@
-import { ImageMediaType, UUID } from "@phylopic/utils"
+import { Link } from "@phylopic/api-models"
+import { Hash, ImageMediaType, isHash } from "@phylopic/utils"
 import axios from "axios"
 import { FC, useEffect, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
-import useImageSrcSWR from "~/editing/hooks/useImageSrcSWR"
 import useContributorUUID from "~/profile/useContributorUUID"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_ARROW_LEFT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
-import UserLinkButton from "~/ui/UserLinkButton"
+import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 import styles from "./index.module.scss"
 export interface Props {
     buffer: Buffer
     filename?: string
-    onComplete?: (uuid: UUID) => void
+    onCancel: () => void
+    onComplete: (hash: Hash) => void
     type: ImageMediaType
-    uuid: UUID
 }
-const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid }) => {
+const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, type }) => {
     const token = useAuthToken()
     const contributorUUID = useContributorUUID()
     const [loaded, setLoaded] = useState(0)
     const [total, setTotal] = useState(NaN)
     const [error, setError] = useState<Error | undefined>()
-    const { mutate } = useImageSrcSWR(uuid)
     useEffect(() => {
-        if (buffer && contributorUUID && token && uuid) {
+        if (buffer && contributorUUID && token) {
             const controller = new AbortController()
-            const promise = axios.put(`/api/images/${encodeURIComponent(uuid)}/source`, buffer, {
+            const promise = axios.post<Link>(`https://${process.env.NEXT_PUBLIC_API_DOMAIN}/uploads`, buffer, {
                 headers: {
                     authorization: `Bearer ${token}`,
                     "content-type": type,
@@ -36,22 +35,18 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid })
                     setLoaded(event.loaded)
                     setTotal(event.total)
                 },
+                responseType: "json",
                 signal: controller.signal,
             })
-            mutate(
-                async () => {
-                    await promise
-                    return URL.createObjectURL(new Blob([buffer]))
-                },
-                {
-                    revalidate: true,
-                    rollbackOnError: true,
-                },
-            )
             ;(async () => {
                 try {
-                    await promise
-                    onComplete?.(uuid)
+                    const response = await promise
+                    const { href } = response.data
+                    const hash = href.match(/^\/([a-f0-9]+)$/)?.[1]
+                    if (!isHash(hash)) {
+                        throw 500
+                    }
+                    onComplete(hash)
                 } catch (e) {
                     if (e instanceof Error) {
                         if (axios.isCancel(e)) {
@@ -66,7 +61,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid })
             })()
             return () => controller.abort()
         }
-    }, [buffer, contributorUUID, mutate, onComplete, token, type, uuid])
+    }, [buffer, contributorUUID, onComplete, token, type])
     if (error) {
         return (
             <Dialogue>
@@ -77,9 +72,9 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onComplete, type, uuid })
                     <p>“{String(error)}”</p>
                 </Speech>
                 <UserOptions>
-                    <UserLinkButton icon={ICON_ARROW_LEFT} href="/">
+                    <UserButton icon={ICON_ARROW_LEFT} onClick={onCancel}>
                         Start over.
-                    </UserLinkButton>
+                    </UserButton>
                 </UserOptions>
             </Dialogue>
         )

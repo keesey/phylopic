@@ -24,6 +24,7 @@ const useSubmissionMutator = (uuid: UUID | undefined) => {
                 promise = patch(key, token, newValue, newData)
                 mutate(promise, {
                     optimisticData: newData,
+                    revalidate: true,
                     rollbackOnError: true,
                 })
                 promise?.then(() => invalidate())

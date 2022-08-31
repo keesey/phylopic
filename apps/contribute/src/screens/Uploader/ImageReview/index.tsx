@@ -2,6 +2,7 @@
 import { isImageMediaType } from "@phylopic/utils"
 import clsx from "clsx"
 import { FC, useCallback, useMemo } from "react"
+import MAX_FILE_SIZE from "~/filesizes/MAX_FILE_SIZE"
 import LoadingState from "~/screens/LoadingState"
 import Dialogue from "~/ui/Dialogue"
 import {
@@ -33,6 +34,10 @@ export interface Props {
 const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, source }) => {
     const isVector = useFileIsVector(file)
     const vectorized = useVectorization(buffer, !isVector)
+    const vectorizedBuffer = useMemo(
+        () => (vectorized.data ? Buffer.from(vectorized.data) : undefined),
+        [vectorized.data],
+    )
     const vectorizedSource = useVectorizedImageSource(vectorized.data)
     const mode = useMemo(() => (size[0] >= size[1] ? "landscape" : "portrait"), [size])
     const selectOriginal = useCallback(() => {
@@ -43,14 +48,15 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
         }
     }, [buffer, file.type, onComplete, source])
     const selectVectorized = useCallback(() => {
-        if (vectorized.data && vectorizedSource) {
-            onComplete?.({ buffer: Buffer.from(vectorized.data), source: vectorizedSource, type: "image/svg+xml" })
+        if (vectorizedBuffer && vectorizedSource) {
+            onComplete?.({ buffer: vectorizedBuffer, source: vectorizedSource, type: "image/svg+xml" })
         }
-    }, [onComplete, vectorized.data, vectorizedSource])
+    }, [onComplete, vectorizedBuffer, vectorizedSource])
     if (vectorized.pending) {
         return <LoadingState>Give me a moment to process that&hellip;</LoadingState>
     }
-    if (vectorizedSource) {
+    const vectorizedTooLarge = Boolean(vectorizedBuffer && vectorizedBuffer.length <= MAX_FILE_SIZE)
+    if (vectorizedSource && !vectorizedTooLarge) {
         return (
             <section className={styles.main}>
                 <div className={clsx(styles.imageContainer, styles.compare, styles[mode])}>
@@ -94,7 +100,14 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
                 <Speech mode="system">
                     <p>How&rsquo;s that?</p>
                 </Speech>
-                {vectorized.error && (
+                {vectorizedTooLarge && (
+                    <Speech mode="system">
+                        <p>
+                            <small>(I tried to vectorize it, but the file was too large.)</small>
+                        </p>
+                    </Speech>
+                )}
+                {!vectorizedTooLarge && vectorized.error && (
                     <Speech mode="system">
                         <p>
                             <small>I tried to vectorize it, but ran into a problem.</small>
