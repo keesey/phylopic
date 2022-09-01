@@ -1,0 +1,11 @@
+import { CopyObjectCommand, S3Client } from "@aws-sdk/client-s3"
+const copyToTrash = async (client: S3Client, Bucket: string, Key: string) => {
+    await client.send(
+        new CopyObjectCommand({
+            Bucket,
+            CopySource: encodeURI(`/${Bucket}/${Key}`),
+            Key: `trash/${Key}`,
+        }),
+    )
+}
+export default copyToTrash

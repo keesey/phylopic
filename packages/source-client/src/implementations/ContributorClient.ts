@@ -1,4 +1,4 @@
-import { Contributor } from "@phylopic/source-models"
+import { Contributor, isContributor, isSubmission, Submission } from "@phylopic/source-models"
 import { isUUIDv4, UUID } from "@phylopic/utils"
 import { S3ClientProvider } from "../interfaces"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
@@ -8,8 +8,9 @@ import CONTRIBUTOR_FIELDS from "./pg/constants/CONTRIBUTOR_FIELDS"
 import CONTRIBUTOR_TABLE from "./pg/constants/CONTRIBUTOR_TABLE"
 import normalizeContributor from "./pg/normalization/normalizeContributor"
 import PGPatcher from "./pg/PGPatcher"
-import SUBMISSIONS_BUCKET_NAME from "./s3/constants/SUBMISSIONS_BUCKET_NAME"
+import UPLOADS_BUCKET_NAME from "./s3/constants/UPLOADS_BUCKET_NAME"
 import S3Lister from "./s3/S3Lister"
+import S3TaggingLister from "./s3/S3TaggingLister"
 export default class ContributorClient
     extends PGPatcher<Contributor & { uuid: UUID }>
     implements ReturnType<SourceClient["contributor"]>
@@ -29,11 +30,11 @@ export default class ContributorClient
                 value: uuid,
             },
         ])
-        this.submissions = new S3Lister(
+        this.submissions = new S3TaggingLister(
             provider,
-            SUBMISSIONS_BUCKET_NAME,
-            `contributors/${encodeURIComponent(uuid)}/submissions/`,
-            isUUIDv4,
+            UPLOADS_BUCKET_NAME,
+            `files/`,
+            (x, faultCollector): x is Submission => isSubmission(x, faultCollector) && x.contributor === uuid,
         )
     }
     images

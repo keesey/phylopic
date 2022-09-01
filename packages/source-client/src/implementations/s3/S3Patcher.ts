@@ -14,16 +14,9 @@ export default class S3Patcher<T> extends S3Editor<T> implements Patchable<T> {
     }
     public async patch(value: T): Promise<void> {
         const previous = await this.get()
-        const next = {
+        await this.put({
             ...previous,
             ...value,
-        }
-        await this.provider.getS3().send(
-            new PutObjectCommand({
-                ...(await this.writeOutput(next)),
-                Bucket: this.bucket,
-                Key: this.key,
-            }),
-        )
+        })
     }
 }

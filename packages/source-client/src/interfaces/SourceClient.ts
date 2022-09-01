@@ -10,12 +10,12 @@ export type SourceClient = Readonly<{
     authToken(emailAddress: EmailAddress): Editable<JWT>
     contributor(uuid: UUID): Patchable<Contributor> & {
         images: Listable<Image & { uuid: UUID }, number>
-        submissions: Listable<UUID, string>
+        submissions: Listable<Submission & { Key: string }, string>
     }
     contributors: Listable<Contributor & { uuid: UUID }, number> & {
         byEmail(email: EmailAddress): Patchable<Contributor>
     }
-    copyUploadToSourceImage(hash: Hash, uuid: UUID): Promise<void>
+    copySubmissionToSourceImage(hash: Hash, uuid: UUID): Promise<void>
     external(
         authority: Authority,
         namespace: Namespace,
@@ -39,10 +39,8 @@ export type SourceClient = Readonly<{
             externals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
         ): Promise<Record<Identifier, Node & { uuid: UUID }>>
     }
-    sourceImage(hash: UUID): Editable<ImageFile>
+    sourceImage(uuid: UUID): Editable<ImageFile>
     sourceImages: Listable<UUID, string>
-    submission(uuid: UUID): Patchable<Submission & { uuid: UUID }>
-    submissions: Listable<UUID, string>
-    upload(hash: Hash): Deletable<ImageFile>
-    uploads: Listable<Hash, string>
+    submission(hash: Hash): Patchable<Submission> & { file: Deletable<ImageFile> }
+    submissions: Listable<Hash, string>
 }>

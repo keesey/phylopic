@@ -1,6 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { DATA_MEDIA_TYPE, Link } from "@phylopic/api-models"
-import { isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
+import { Submission } from "@phylopic/source-models"
+import { createQueryString, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { createHash } from "crypto"
 import { JwtPayload } from "jsonwebtoken"
@@ -125,13 +126,18 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     const hash = getHash(body)
     const client = service.createS3Client()
     try {
+        const now = new Date().toISOString()
         await client.send(
             new PutObjectCommand({
                 Bucket: "uploads.phylopic.org",
                 Body: body,
                 ContentType: contentType,
                 Key: `files/${encodeURIComponent(hash)}`,
-                Tagging: `contributor=${encodeURIComponent(contributorUUID)}`,
+                Tagging: createQueryString({
+                    contributor: contributorUUID,
+                    created: new Date().toISOString(),
+                    status: "incomplete"
+                } as Submission),
             }),
         )
     } finally {

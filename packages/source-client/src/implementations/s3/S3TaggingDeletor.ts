@@ -1,17 +1,14 @@
-import { GetObjectOutput } from "@aws-sdk/client-s3"
 import { Deletable } from "../../interfaces/Deletable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import copyToTrash from "./methods/copyToTrash"
 import deleteObject from "./methods/deleteObject"
-import S3Reader from "./S3Reader"
-export default class S3Deletor<T> extends S3Reader<T> implements Deletable<T> {
-    constructor(
-        provider: S3ClientProvider,
-        bucket: string,
-        key: string,
-        readOutput: (output: GetObjectOutput) => Promise<T>,
-    ) {
-        super(provider, bucket, key, readOutput)
+import S3TaggingReader from "./S3TaggingReader"
+export default class S3TaggingDeletor<T extends Readonly<Record<string, string | undefined>>>
+    extends S3TaggingReader<T>
+    implements Deletable<T>
+{
+    constructor(provider: S3ClientProvider, bucket: string, key: string) {
+        super(provider, bucket, key)
     }
     public async delete() {
         if (await this.exists()) {

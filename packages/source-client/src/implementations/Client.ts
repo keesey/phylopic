@@ -1,5 +1,5 @@
 import { CopyObjectCommand } from "@aws-sdk/client-s3"
-import { External, isSubmission, Submission } from "@phylopic/source-models"
+import { External } from "@phylopic/source-models"
 import {
     Authority,
     Hash,
@@ -31,18 +31,14 @@ import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
 import AUTH_BUCKET_NAME from "./s3/constants/AUTH_BUCKET_NAME"
 import SOURCE_IMAGES_BUCKET_NAME from "./s3/constants/SOURCE_IMAGES_BUCKET_NAME"
-import SUBMISSIONS_BUCKET_NAME from "./s3/constants/SUBMISSIONS_BUCKET_NAME"
 import UPLOADS_BUCKET_NAME from "./s3/constants/UPLOADS_BUCKET_NAME"
-import createJSONWriter from "./s3/io/createJSONWriter"
 import readImageFile from "./s3/io/readImageFile"
-import readJSON from "./s3/io/readJSON"
 import readJWT from "./s3/io/readJWT"
 import writeImageFile from "./s3/io/writeImageFile"
 import writeJWT from "./s3/io/writeJWT"
-import S3Deletor from "./s3/S3Deletor"
 import S3Editor from "./s3/S3Editor"
 import S3Lister from "./s3/S3Lister"
-import S3Patcher from "./s3/S3Patcher"
+import SubmissionClient from "./SubmissionClient"
 export default class Client implements SourceClient {
     constructor(protected readonly provider: PGClientProvider & S3ClientProvider) {
         this.authEmails = new S3Lister(provider, AUTH_BUCKET_NAME, "emails/", isEmailAddress)
@@ -51,8 +47,7 @@ export default class Client implements SourceClient {
         this.images = new ImagesClient(provider)
         this.nodes = new NodesClient(provider)
         this.sourceImages = new S3Lister(provider, SOURCE_IMAGES_BUCKET_NAME, "images/", isUUIDv4)
-        this.submissions = new S3Lister(provider, SUBMISSIONS_BUCKET_NAME, "submissions/", isUUIDv4)
-        this.uploads = new S3Lister(provider, UPLOADS_BUCKET_NAME, "files/", isHash)
+        this.submissions = new S3Lister(provider, UPLOADS_BUCKET_NAME, "files/", isHash)
     }
     authEmails
     authToken(emailAddress: string) {
@@ -73,7 +68,7 @@ export default class Client implements SourceClient {
         }
         return new ContributorClient(this.provider, uuid)
     }
-    async copyUploadToSourceImage(hash: Hash, uuid: UUID) {
+    async copySubmissionToSourceImage(hash: Hash, uuid: UUID) {
         if (!isHash(hash)) {
             throw new Error("Invalid hexadecimal hash.")
         }
@@ -84,7 +79,7 @@ export default class Client implements SourceClient {
             new CopyObjectCommand({
                 Bucket: SOURCE_IMAGES_BUCKET_NAME,
                 CopySource: encodeURI(`/${UPLOADS_BUCKET_NAME}/file/${hash}`),
-                Key: `images/${encodeURIComponent(uuid)}`,
+                Key: `images/${encodeURIComponent(uuid)}/source`,
             }),
         )
     }
@@ -159,24 +154,11 @@ export default class Client implements SourceClient {
         )
     }
     sourceImages
-    submission(uuid: UUID) {
-        if (!isUUIDv4(uuid)) {
-            throw new Error("Invalid UUID.")
-        }
-        return new S3Patcher<Submission & { uuid: UUID }>(
-            this.provider,
-            SUBMISSIONS_BUCKET_NAME,
-            `submissions/${encodeURIComponent(uuid)}/meta.json`,
-            readJSON,
-            createJSONWriter(isSubmission),
-        )
-    }
-    submissions
-    upload(hash: Hash) {
+    submission(hash: Hash) {
         if (!isHash(hash)) {
             throw new Error("Invalid hexadecimal hash.")
         }
-        return new S3Deletor(this.provider, UPLOADS_BUCKET_NAME, `files/${encodeURIComponent(hash)}`, readImageFile)
+        return new SubmissionClient(this.provider, hash)
     }
-    uploads
+    submissions
 }

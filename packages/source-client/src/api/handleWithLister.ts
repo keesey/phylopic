@@ -17,7 +17,7 @@ export const handleWithLister = async <T, TPageSpecifier>(
             } else if (req.query.total === "items") {
                 res.json(await lister.totalItems())
             } else {
-                throw 400
+                res.json(await lister.page())
             }
             res.status(200)
             break
