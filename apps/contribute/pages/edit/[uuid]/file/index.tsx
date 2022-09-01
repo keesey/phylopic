@@ -20,7 +20,7 @@ const Page: NextPage<Props> = ({ uuid }) => {
                 title: "PhyloPic: Replace Image File",
                 url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(uuid)}/file`,
             }}
-            imageUUID={uuid}
+            submissionUUID={uuid}
         >
             <AuthorizedOnly>
                 <Content uuid={uuid} />

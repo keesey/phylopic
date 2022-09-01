@@ -2,7 +2,6 @@ import { parseNomen } from "parse-nomen"
 import { useMemo } from "react"
 import { SearchEntry } from "./SearchEntry"
 import useOTOLResults from "./useOTOLResults"
-import useTranslatedResults from "./useTranslatedResults"
 const EMPTY: readonly never[] = []
 const useExternalResults = (text: string) => {
     const otol = useOTOLResults(text)
@@ -16,12 +15,9 @@ const useExternalResults = (text: string) => {
             })) ?? EMPTY,
         [otol.data],
     )
-    const combined = useMemo(() => (otol.data ? [...otolEntries] : EMPTY), [otol.data, otolEntries])
-    const translated = useTranslatedResults(combined)
     return {
-        data: translated.data,
-        error: otol.error || translated.error,
-        isValidating: otol.isValidating || translated.isValidating,
+        ...otol,
+        data: otol.data ? otolEntries : EMPTY,
     }
 }
 export default useExternalResults

@@ -7,7 +7,7 @@ import Paginator from "~/pagination/Paginator"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_PLUS } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
-import UserImageThumbnail from "~/ui/UserImageThumbnail"
+import UserSubmissionThumbnail from "~/ui/UserSubmissionThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 export type Props = {
@@ -24,7 +24,7 @@ const Images: FC<Props> = ({ children }) => {
                     <UserOptions noAutoScroll>
                         {(images as ReadonlyArray<Image & { uuid: UUID }>).map(image => (
                             <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                <UserImageThumbnail uuid={image.uuid} />
+                                <UserSubmissionThumbnail uuid={image.uuid} />
                             </UserLinkButton>
                         ))}
                     </UserOptions>

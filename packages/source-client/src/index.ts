@@ -1,4 +1,4 @@
-export * from "./api"
+export * from "./api/index"
 import Client from "./implementations/Client"
 export * from "./interfaces"
 export * from "./implementations/ClientProvider"

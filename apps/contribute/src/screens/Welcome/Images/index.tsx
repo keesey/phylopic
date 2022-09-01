@@ -1,84 +1,40 @@
-import { AnchorLink } from "@phylopic/ui"
 import { FC } from "react"
-import useImageCount from "~/editing/useImageCount"
-import ImagePaginator from "~/pagination/Paginator"
+import useSWR from "swr"
+import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
+import { ICON_ARROW_RIGHT, ICON_PLUS } from "~/ui/ICON_SYMBOLS"
 import NumberAsWords from "~/ui/NumberAsWords"
 import Speech from "~/ui/Speech"
-import UserImageThumbnail from "~/ui/UserImageThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 const Images: FC = () => {
+    const fetcher = useAuthorizedJSONFetcher<number>()
+    const { data: numImages } = useSWR("/api/images?total=items", fetcher)
     return (
         <>
-            {hasSubmitted && (
-                <Speech mode="system">
+            <Speech mode="system">
+                {typeof numImages === "number" && (
                     <p>
                         You have{" "}
                         <strong>
-                            <NumberAsWords max={100} value={submitted} />
+                            <NumberAsWords max={100} value={numImages} />
                         </strong>{" "}
-                        submission{submitted === 1 ? "" : "s"} awaiting review. There&rsquo;s still time to make
-                        revisions, if you need to&mdash;just click on the image.
+                        accepted submission{numImages === 1 ? "" : "s"}.
+                        {numImages >= 8 && (
+                            <>
+                                {" "}
+                                <strong>Impressive!</strong>
+                            </>
+                        )}
                     </p>
-                    {(hasAccepted || hasWithdrawn) && (
-                        <p>
-                            You also have{" "}
-                            {hasAccepted && (
-                                <AnchorLink href="/images/accepted" className="text">
-                                    <NumberAsWords max={100} value={accepted} /> accepted submission
-                                    {accepted === 1 ? "" : "s"}
-                                </AnchorLink>
-                            )}
-                            {hasAccepted && hasWithdrawn && " and "}
-                            {hasWithdrawn && (
-                                <AnchorLink href="/images/withdrawn" className="text">
-                                    <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
-                                    {withdrawn === 1 ? "" : "s"}
-                                </AnchorLink>
-                            )}
-                            .
-                        </p>
-                    )}
-                </Speech>
-            )}
-            {!hasSubmitted && hasAccepted && (
-                <Speech mode="system">
-                    <p>
-                        You have <NumberAsWords max={100} value={accepted} /> accepted submission
-                        {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to edit{" "}
-                        {accepted === 1 ? "it" : "them"}, if you need to.
-                    </p>
-                    {hasWithdrawn && (
-                        <p>
-                            You also have{" "}
-                            <AnchorLink href="/images/withdrawn">
-                                <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
-                                {withdrawn === 1 ? "" : "s"}
-                            </AnchorLink>
-                            .
-                        </p>
-                    )}
-                </Speech>
-            )}
-            {!hasSubmitted && !hasAccepted && hasWithdrawn && (
-                <Speech mode="system">
-                    <p>
-                        You have <NumberAsWords max={100} value={withdrawn} /> withdrawn submission
-                        {accepted === 1 ? "" : "s"}. Click on {accepted === 1 ? "it" : "any of them"} to reconsider, if
-                        you like.
-                    </p>
-                </Speech>
-            )}
+                )}
+            </Speech>
             <UserOptions noAutoScroll>
-                <ImagePaginator filter={filter}>
-                    {images =>
-                        images.map(image => (
-                            <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                <UserImageThumbnail uuid={image.uuid} />
-                            </UserLinkButton>
-                        ))
-                    }
-                </ImagePaginator>
+                <UserLinkButton icon={ICON_ARROW_RIGHT} href="/images">
+                    Let&rsquo;s check them out.
+                </UserLinkButton>
+                <UserLinkButton icon={ICON_PLUS} href="/upload">
+                    Upload a new image.
+                </UserLinkButton>
             </UserOptions>
         </>
     )

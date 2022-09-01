@@ -15,9 +15,9 @@ type Props = {
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
     head: PageHeadProps
-    imageUUID?: UUID
+    submissionUUID?: UUID
 }
-const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, imageUUID }) => {
+const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, submissionUUID }) => {
     useEffect(() => {
         try {
             document.domain = "phylopic.org"
@@ -37,7 +37,7 @@ const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, imageUUID
                         </aside>
                         <div className={styles.main}>
                             <header>
-                                <SiteNav imageUUID={imageUUID} />
+                                <SiteNav submissionUUID={submissionUUID} />
                             </header>
                             <main>{children}</main>
                             <footer>

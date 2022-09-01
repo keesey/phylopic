@@ -47,19 +47,13 @@ const SiteNav: FC<Props> = ({ submissionUUID }) => {
                 />
                 <div className={styles.spacer} role="separator" />
                 {enabled && (
-                        <NavItem
-                            label={contributor!.name}
-                            onToggle={() => setSelected(selected === "account" ? undefined : "account")}
-                            selected={selected === "account"}
-                        />
+                    <NavItem
+                        label={contributor!.name}
+                        onToggle={() => setSelected(selected === "account" ? undefined : "account")}
+                        selected={selected === "account"}
+                    />
                 )}
-                {!enabled && (
-                        <NavItem
-                            label="Sign In"
-                            onToggle={() => router.push("/")}
-                            selected={false}
-                        />
-                )}
+                {!enabled && <NavItem label="Sign In" onToggle={() => router.push("/")} selected={false} />}
             </nav>
             <DropDownMenu submission={submission} selected={selected} />
         </>

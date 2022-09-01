@@ -11,10 +11,10 @@ type Props = {
 const Page: NextPage<Props> = ({ uuid }) => (
     <PageLayout
         head={{
-            title: "PhyloPic: Your Image",
+            title: "PhyloPic: Your Submission",
             url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(uuid)}`,
         }}
-        imageUUID={uuid}
+        submissionUUID={uuid}
     >
         <AuthorizedOnly>
             <Editor uuid={uuid} />

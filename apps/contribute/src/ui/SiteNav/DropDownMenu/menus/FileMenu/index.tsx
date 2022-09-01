@@ -12,7 +12,7 @@ export type Props = {
     submission?: Submission & { uuid: UUID }
 }
 const FileMenu: FC<Props> = ({ submission }) => {
-    const submittable = useMemo(() => isSubmission({...submission, submitted: true }), [submission])
+    const submittable = useMemo(() => isSubmission({ ...submission, submitted: true }), [submission])
     const mutator = useSubmissionMutator(submission?.uuid)
     const deletor = useSubmissionDeletor(submission?.uuid)
     const withdraw = useCallback(() => {
@@ -42,7 +42,11 @@ const FileMenu: FC<Props> = ({ submission }) => {
                     {submission.submitted && (
                         <MenuButton icon={ICON_X} label="Withdraw this Submission" onClick={withdraw} />
                     )}
-                    <MenuButton icon={ICON_DANGER} label={`Delete this ${submission.submitted ? "Submission" : "Image"}`} onClick={deleteSubmission} />
+                    <MenuButton
+                        icon={ICON_DANGER}
+                        label={`Delete this ${submission.submitted ? "Submission" : "Image"}`}
+                        onClick={deleteSubmission}
+                    />
                 </>
             )}
         </>

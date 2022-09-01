@@ -15,10 +15,10 @@ const Page: NextPage<Props> = ({ build, uuid }) => (
     <PageLayout
         build={build}
         head={{
-            title: "PhyloPic: Your Image's Taxonomic Assignment",
+            title: "PhyloPic: Your Submission's Taxonomic Assignment",
             url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(uuid)}/nodes`,
         }}
-        imageUUID={uuid}
+        submissionUUID={uuid}
     >
         <AuthorizedOnly>
             <Assignment uuid={uuid} />

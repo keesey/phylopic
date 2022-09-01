@@ -1,23 +1,16 @@
 import { FC } from "react"
-import useImageCount from "~/editing/useImageCount"
-import { ICON_BOX, ICON_CHECK, ICON_ELLIPSIS, ICON_X } from "~/ui/ICON_SYMBOLS"
+import useSWR from "swr"
+import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
+import { ICON_BOX, ICON_CHECK } from "~/ui/ICON_SYMBOLS"
 import MenuLink from "../../MenuLink"
 const ViewMenu: FC = () => {
-    const accepted = useImageCount("accepted")
-    const incomplete = useImageCount("incomplete")
-    const submitted = useImageCount("submitted")
-    const withdrawn = useImageCount("withdrawn")
+    const fetcher = useAuthorizedJSONFetcher<number>()
+    const { data: numImages } = useSWR("/api/images?total=items", fetcher)
+    const { data: numSubmissions } = useSWR("/api/submissions?total=items", fetcher)
     return (
         <>
-            <MenuLink
-                disabled={!incomplete}
-                icon={ICON_ELLIPSIS}
-                href="/images/incomplete"
-                label="Submissions in Progress"
-            />
-            <MenuLink disabled={!submitted} icon={ICON_BOX} href="/images/submitted" label="Submitted Images" />
-            <MenuLink disabled={!accepted} icon={ICON_CHECK} href="/images/accepted" label="Accepted Submissions" />
-            <MenuLink disabled={!withdrawn} icon={ICON_X} href="/images/withdrawn" label="Withdrawn Images" />
+            <MenuLink disabled={!numSubmissions} icon={ICON_BOX} href="/submissions" label="Submitted Images" />
+            <MenuLink disabled={!numImages} icon={ICON_CHECK} href="/images" label="Accepted Submissions" />
         </>
     )
 }

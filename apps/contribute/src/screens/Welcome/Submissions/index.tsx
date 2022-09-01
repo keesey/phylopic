@@ -1,30 +1,59 @@
+import { AnchorLink, Loader } from "@phylopic/ui"
+import { UUID } from "@phylopic/utils"
 import { FC } from "react"
-import useImageCount from "~/editing/useImageCount"
-import ImagePaginator from "~/pagination/Paginator"
+import useSWR from "swr"
+import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
+import Paginator from "~/pagination/Paginator"
+import NumberAsWords from "~/ui/NumberAsWords"
 import Speech from "~/ui/Speech"
-import UserImageThumbnail from "~/ui/UserImageThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+import UserSubmissionThumbnail from "~/ui/UserSubmissionThumbnail"
 const Submissions: FC = () => {
-    const incomplete = useImageCount("incomplete")
+    const fetcher = useAuthorizedJSONFetcher<number>()
+    const { data: numImages } = useSWR("/api/images?total=items", fetcher)
+    const { data: numSubmissions } = useSWR("/api/submissions?total=items", fetcher)
     return (
         <>
             <Speech mode="system">
-                <p>
-                    Looks like you have some unfinished business. Click on{" "}
-                    {incomplete === 1 ? "the image" : "one of the images"} below to continue.
-                </p>
+                {typeof numSubmissions === "number" ? (
+                    <p>
+                        You have{" "}
+                        <strong>
+                            <NumberAsWords max={100} value={numSubmissions} />
+                        </strong>{" "}
+                        unreviewed submission{numSubmissions === 1 ? "" : "s"}. There&rsquo;s still time to make
+                        revisions, if you need to&mdash;just click on the image.
+                    </p>
+                ) : (
+                    <>
+                        <p>Checking for submissions&hellip;</p>
+                        <Loader />
+                    </>
+                )}
+                {typeof numImages === "number" && numImages > 0 && (
+                    <p>
+                        You also have{" "}
+                        <AnchorLink href="/images">
+                            <strong>
+                                <NumberAsWords max={100} value={numImages} />
+                            </strong>{" "}
+                            accepted submission{numImages === 1 ? "" : "s"}
+                        </AnchorLink>
+                        .
+                    </p>
+                )}
             </Speech>
             <UserOptions noAutoScroll>
-                <ImagePaginator filter="incomplete">
-                    {images =>
-                        images.map(image => (
-                            <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                <UserImageThumbnail uuid={image.uuid} />
+                <Paginator endpoint="/api/submissions">
+                    {submissions =>
+                        (submissions as ReadonlyArray<UUID>).map(uuid => (
+                            <UserLinkButton key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
+                                <UserSubmissionThumbnail uuid={uuid} />
                             </UserLinkButton>
                         ))
                     }
-                </ImagePaginator>
+                </Paginator>
             </UserOptions>
         </>
     )
