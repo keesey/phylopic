@@ -1,4 +1,4 @@
-import { Identifier, UUID } from "@phylopic/utils"
+import { Hash, Identifier } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { FC, useCallback, useState } from "react"
 import useSubmission from "~/editing/useSubmission"
@@ -13,20 +13,20 @@ import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 import NodeForm from "./NodeForm"
 export type Props = {
-    uuid: UUID
+    hash: Hash
 }
-const Assignment: FC<Props> = ({ uuid }) => {
-    const submission = useSubmission(uuid)
+const Assignment: FC<Props> = ({ hash }) => {
+    const submission = useSubmission(hash)
     const [changeRequested, setChangeRequested] = useState(false)
-    const mutate = useSubmissionMutator(uuid)
+    const mutate = useSubmissionMutator(hash)
     const router = useRouter()
     const handleComplete = useCallback(
-        (identifier: Identifier, newTaxonName: string | null) => {
+        (identifier: Identifier, newTaxonName?: string) => {
             setChangeRequested(false)
             mutate({ identifier, newTaxonName })
-            router.push(`/edit/${encodeURIComponent(uuid)}`)
+            router.push(`/edit/${encodeURIComponent(hash)}`)
         },
-        [mutate, router, uuid],
+        [hash, mutate, router],
     )
     if (!submission) {
         return null
@@ -35,9 +35,7 @@ const Assignment: FC<Props> = ({ uuid }) => {
         <Dialogue>
             <Speech mode="user">
                 <FileView
-                    src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(
-                        submission.file,
-                    )}`}
+                    src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
                     mode="light"
                 />
             </Speech>
@@ -63,7 +61,7 @@ const Assignment: FC<Props> = ({ uuid }) => {
                     </Speech>
                     {!changeRequested && (
                         <UserOptions>
-                            <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(uuid)}`}>
+                            <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(hash)}`}>
                                 Yep.
                             </UserLinkButton>
                             <UserButton danger icon={ICON_X} onClick={() => setChangeRequested(true)}>

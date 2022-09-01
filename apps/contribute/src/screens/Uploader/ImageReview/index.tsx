@@ -55,7 +55,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     if (vectorized.pending) {
         return <LoadingState>Give me a moment to process that&hellip;</LoadingState>
     }
-    const vectorizedTooLarge = Boolean(vectorizedBuffer && vectorizedBuffer.length <= MAX_FILE_SIZE)
+    const vectorizedTooLarge = Boolean(vectorizedBuffer && vectorizedBuffer.length > MAX_FILE_SIZE)
     if (vectorizedSource && !vectorizedTooLarge) {
         return (
             <section className={styles.main}>

@@ -1,4 +1,4 @@
-import { isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
+import { Hash, isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
 import { FC, useCallback, useMemo } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
@@ -6,16 +6,16 @@ import UserTextForm from "~/ui/UserTextForm"
 import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
 export interface Props {
-    uuid: UUID
+    hash: Hash
 }
-const Attribution: FC<Props> = ({ uuid }) => {
-    const submission = useSubmission(uuid)
-    const mutate = useSubmissionMutator(uuid)
+const Attribution: FC<Props> = ({ hash }) => {
+    const submission = useSubmission(hash)
+    const mutate = useSubmissionMutator(hash)
     const { attribution, license } = submission ?? {}
     const required = useMemo(() => !isPublicDomainLicenseURL(license), [license])
     const submit = useCallback(
         (value: string) => {
-            mutate({ attribution: value || null })
+            mutate({ attribution: value || undefined })
         },
         [mutate],
     )

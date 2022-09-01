@@ -14,7 +14,7 @@ import NewNodeCreator from "./NewNodeCreator"
 export type Props = {
     childName: Nomen
     nameText: string
-    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
+    onComplete: (identifier: Identifier, newTaxonName?: string) => void
     onSelect: (value: SearchEntry | null) => void
     selected: SearchEntry | null
 }

@@ -1,4 +1,4 @@
-import { LICENSE_NAMES, UUID } from "@phylopic/utils"
+import { Hash, LICENSE_NAMES, UUID } from "@phylopic/utils"
 import { FC } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
@@ -8,11 +8,11 @@ import UserOptions from "~/ui/UserOptions"
 import Icon from "./Icon"
 import styles from "./index.module.scss"
 export interface Props {
-    uuid: UUID
+    hash: Hash
 }
-const License: FC<Props> = ({ uuid }) => {
-    const submission = useSubmission(uuid)
-    const mutate = useSubmissionMutator(uuid)
+const License: FC<Props> = ({ hash }) => {
+    const submission = useSubmission(hash)
+    const mutate = useSubmissionMutator(hash)
     if (!submission) {
         return null
     }

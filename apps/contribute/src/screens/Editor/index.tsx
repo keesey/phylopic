@@ -1,8 +1,7 @@
-import { isSubmission } from "@phylopic/source-models"
-import { LICENSE_NAMES, UUID } from "@phylopic/utils"
+import { isSubmission, Submission } from "@phylopic/source-models"
+import { Hash, LICENSE_NAMES } from "@phylopic/utils"
 import { FC, useCallback, useMemo, useState } from "react"
 import useSubmission from "~/editing/useSubmission"
-import useSubmissionDeletor from "~/editing/useSubmissionDeletor"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
@@ -16,23 +15,17 @@ import UserOptions from "~/ui/UserOptions"
 import UserVerification from "../../ui/UserVerification"
 import LoadingState from "../LoadingState"
 export type Props = {
-    uuid: UUID
+    hash: Hash
 }
-const Editor: FC<Props> = ({ uuid }) => {
-    const submission = useSubmission(uuid)
+const Editor: FC<Props> = ({ hash }) => {
+    const submission = useSubmission(hash)
     const submittable = useMemo(
-        () => !submission?.submitted && isSubmission({ ...submission, submitted: true }),
+        () => submission?.status === "incomplete" && isSubmission({ ...submission, status: "submitted" } as Submission),
         [submission],
     )
     const [unready, setUnready] = useState<boolean | null>(null)
-    const mutate = useSubmissionMutator(uuid)
-    const submit = useCallback(() => mutate({ submitted: true }), [mutate])
-    const deletor = useSubmissionDeletor(uuid)
-    const deleteImage = useCallback(() => {
-        if (confirm("Are you sure you want to PERMANENTLY delete this submission?")) {
-            deletor()
-        }
-    }, [deletor])
+    const mutate = useSubmissionMutator(hash)
+    const submit = useCallback(() => mutate({ status: "submitted" }), [mutate])
     if (!submission) {
         return <LoadingState>Checking submission status&hellip;</LoadingState>
     }
@@ -42,9 +35,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                 <SpeechStack collapsible>
                     <figure>
                         <FileView
-                            src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(
-                                submission.file,
-                            )}`}
+                            src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
                             mode="light"
                         />
                         <figcaption>
@@ -88,7 +79,7 @@ const Editor: FC<Props> = ({ uuid }) => {
                     </figure>
                 </SpeechStack>
             </Speech>
-            {!submission.submitted && submittable && (
+            {submission.status === "incomplete" && submittable && (
                 <>
                     <Speech mode="system">
                         <p>
@@ -108,13 +99,10 @@ const Editor: FC<Props> = ({ uuid }) => {
                                 <p>Well then, what do you want to do?</p>
                             </Speech>
                             <UserOptions>
-                                <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/file`} icon={ICON_PENCIL}>
-                                    Change the file.
-                                </UserLinkButton>
-                                <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/nodes`} icon={ICON_PENCIL}>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/nodes`} icon={ICON_PENCIL}>
                                     Change the taxonomic assignment.
                                 </UserLinkButton>
-                                <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/usage`} icon={ICON_PENCIL}>
                                     Change the license or attribution.
                                 </UserLinkButton>
                                 <UserButton icon={ICON_CHECK} onClick={submit}>
@@ -125,25 +113,22 @@ const Editor: FC<Props> = ({ uuid }) => {
                     )}
                 </>
             )}
-            {!submission.submitted && !submittable && (
+            {submission.status === "incomplete" && !submittable && (
                 <>
                     <Speech mode="system">
                         <p>Looks like you&rsquo;ve got some work left to do on this. Where do you want to start?</p>
                     </Speech>
                     <UserOptions>
-                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/file`} icon={ICON_PENCIL}>
-                            Change the file.
-                        </UserLinkButton>
-                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/nodes`} icon={ICON_PENCIL}>
+                        <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/nodes`} icon={ICON_PENCIL}>
                             {submission.identifier ? "Change the taxonomic assignment." : "Assign the taxon."}
                         </UserLinkButton>
-                        <UserLinkButton href={`/edit/${encodeURIComponent(uuid)}/usage`} icon={ICON_PENCIL}>
+                        <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/usage`} icon={ICON_PENCIL}>
                             {submission.license ? "Change the license or attribution." : "Pick a license."}
                         </UserLinkButton>
                     </UserOptions>
                 </>
             )}
-            {submission.submitted && (
+            {submission.status === "submitted" && (
                 <>
                     <Speech mode="system">
                         <p>

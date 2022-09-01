@@ -1,5 +1,5 @@
 import { Link } from "@phylopic/api-models"
-import { Hash, ImageMediaType, isHash } from "@phylopic/utils"
+import { getImageFileExtension, Hash, ImageMediaType, isHash } from "@phylopic/utils"
 import axios from "axios"
 import { FC, useEffect, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
@@ -26,18 +26,22 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
     useEffect(() => {
         if (buffer && contributorUUID && token) {
             const controller = new AbortController()
-            const promise = axios.post<Link>(`https://${process.env.NEXT_PUBLIC_API_DOMAIN}/uploads`, buffer, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                    "content-type": type,
+            const promise = axios.post<Link>(
+                "https://8u78sbxjzc.execute-api.us-west-2.amazonaws.com/prod/uploads",
+                buffer,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                        "content-type": type,
+                    },
+                    onUploadProgress: (event: ProgressEvent) => {
+                        setLoaded(event.loaded)
+                        setTotal(event.total)
+                    },
+                    responseType: "json",
+                    signal: controller.signal,
                 },
-                onUploadProgress: (event: ProgressEvent) => {
-                    setLoaded(event.loaded)
-                    setTotal(event.total)
-                },
-                responseType: "json",
-                signal: controller.signal,
-            })
+            )
             ;(async () => {
                 try {
                     const response = await promise
@@ -82,7 +86,10 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
     return (
         <Dialogue>
             <Speech mode="system">
-                <p>Uploading {filename || "your image"}&hellip;</p>
+                <p>
+                    Uploading{" "}
+                    {filename ? filename.replace(/\.[^.+]$/, "." + getImageFileExtension(type)) : "your image"}&hellip;
+                </p>
                 <progress className={styles.progress} value={loaded} max={isNaN(total) ? undefined : total} />
             </Speech>
         </Dialogue>

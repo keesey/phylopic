@@ -136,7 +136,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
                 Tagging: createQueryString({
                     contributor: contributorUUID,
                     created: new Date().toISOString(),
-                    status: "incomplete"
+                    status: "incomplete",
                 } as Submission),
             }),
         )

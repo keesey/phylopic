@@ -17,6 +17,7 @@ const Uploader: FC<Props> = ({ onCancel, onComplete, value }) => {
         setFileResult(undefined)
     }, [])
     const handleUploadProgressCancel = useCallback(() => {
+        setFileResult(undefined)
         setReviewResult(undefined)
     }, [])
     if (!fileResult) {

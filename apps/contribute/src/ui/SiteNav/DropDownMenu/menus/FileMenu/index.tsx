@@ -1,5 +1,5 @@
 import { isSubmission, Submission } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
+import { Hash } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { FC, useCallback, useMemo } from "react"
 import useSubmissionDeletor from "~/editing/useSubmissionDeletor"
@@ -9,23 +9,24 @@ import MenuButton from "../../MenuButton"
 import MenuDivider from "../../MenuDivider"
 import MenuLink from "../../MenuLink"
 export type Props = {
-    submission?: Submission & { uuid: UUID }
+    submissionHash?: Hash
+    submission?: Submission
 }
-const FileMenu: FC<Props> = ({ submission }) => {
+const FileMenu: FC<Props> = ({ submission, submissionHash }) => {
     const submittable = useMemo(() => isSubmission({ ...submission, submitted: true }), [submission])
-    const mutator = useSubmissionMutator(submission?.uuid)
-    const deletor = useSubmissionDeletor(submission?.uuid)
+    const mutator = useSubmissionMutator(submissionHash)
+    const deletor = useSubmissionDeletor(submissionHash)
     const withdraw = useCallback(() => {
         if (confirm("Are you sure you’re not ready to submit this one?")) {
-            mutator({ submitted: false })
+            mutator({ status: "incomplete" })
         }
     }, [mutator])
     const submit = useCallback(() => {
-        mutator({ submitted: true })
+        mutator({ status: "submitted" })
     }, [mutator])
     const router = useRouter()
     const deleteSubmission = useCallback(() => {
-        if (confirm("Are you sure you want to PERMANENTLY delete this submission?")) {
+        if (confirm("Are you sure you want to PERMANENTLY delete this submission? It’s so nice!")) {
             deletor()
             router.push("/")
         }
@@ -36,15 +37,15 @@ const FileMenu: FC<Props> = ({ submission }) => {
             {submission && (
                 <>
                     <MenuDivider />
-                    {!submission.submitted && submittable && (
+                    {submission.status === "incomplete" && submittable && (
                         <MenuButton icon={ICON_CHECK} label="Submit this Image" onClick={submit} />
                     )}
-                    {submission.submitted && (
+                    {submission.status === "submitted" && (
                         <MenuButton icon={ICON_X} label="Withdraw this Submission" onClick={withdraw} />
                     )}
                     <MenuButton
                         icon={ICON_DANGER}
-                        label={`Delete this ${submission.submitted ? "Submission" : "Image"}`}
+                        label={`Delete this ${submission.status === "submitted" ? "Submission" : "Image"}`}
                         onClick={deleteSubmission}
                     />
                 </>

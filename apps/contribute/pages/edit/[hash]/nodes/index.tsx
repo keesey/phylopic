@@ -1,5 +1,5 @@
 import { API } from "@phylopic/api-models"
-import { isUUIDv4, UUID } from "@phylopic/utils"
+import { Hash, isHash, isUUIDv4, UUID } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
@@ -9,34 +9,34 @@ import SourceClient from "~/source/SourceClient"
 const Assignment = dynamic(() => import("~/screens/Assignment"))
 type Props = {
     build: number
-    uuid: UUID
+    hash: Hash
 }
-const Page: NextPage<Props> = ({ build, uuid }) => (
+const Page: NextPage<Props> = ({ build, hash }) => (
     <PageLayout
         build={build}
         head={{
-            title: "PhyloPic: Your Submission's Taxonomic Assignment",
-            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(uuid)}/nodes`,
+            title: "PhyloPic: Your Submission’s Taxonomic Assignment",
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(hash)}/nodes`,
         }}
-        submissionUUID={uuid}
+        submissionHash={hash}
     >
         <AuthorizedOnly>
-            <Assignment uuid={uuid} />
+            <Assignment hash={hash} />
         </AuthorizedOnly>
     </PageLayout>
 )
 export default Page
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
-    const uuid = context.params?.uuid
-    const buildPromise = fetchJSON<API>("https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/")
-    if (!isUUIDv4(uuid)) {
+    const hash = context.params?.hash
+    if (!isHash(hash)) {
         return { notFound: true }
     }
+    const buildPromise = fetchJSON<API>("https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/")
     let client: SourceClient | undefined
     let notFound = false
     try {
         client = new SourceClient()
-        const submissionClient = client.submission(uuid)
+        const submissionClient = client.submission(hash)
         if (!(await submissionClient.exists())) {
             notFound = true
         }
@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
     return {
         props: {
             build: (await buildPromise).build,
-            uuid,
+            hash,
         },
     }
 }

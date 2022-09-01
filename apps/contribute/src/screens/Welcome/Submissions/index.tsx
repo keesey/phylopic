@@ -1,3 +1,4 @@
+import { Submission } from "@phylopic/source-models"
 import { AnchorLink, Loader } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC } from "react"
@@ -47,11 +48,17 @@ const Submissions: FC = () => {
             <UserOptions noAutoScroll>
                 <Paginator endpoint="/api/submissions">
                     {submissions =>
-                        (submissions as ReadonlyArray<UUID>).map(uuid => (
-                            <UserLinkButton key={uuid} href={`/edit/${encodeURIComponent(uuid)}`}>
-                                <UserSubmissionThumbnail uuid={uuid} />
-                            </UserLinkButton>
-                        ))
+                        (submissions as ReadonlyArray<Submission & { Key: string }>).map(({ Key }) => {
+                            const hash = Key.split("/").pop()
+                            if (!hash) {
+                                return null
+                            }
+                            return (
+                                <UserLinkButton key={hash} href={`/edit/${encodeURIComponent(hash)}`}>
+                                    <UserSubmissionThumbnail hash={hash} />
+                                </UserLinkButton>
+                            )
+                        })
                     }
                 </Paginator>
             </UserOptions>

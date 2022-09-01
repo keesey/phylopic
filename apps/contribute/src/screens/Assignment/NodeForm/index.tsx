@@ -6,7 +6,7 @@ import NameInput from "./NameInput"
 import NameRenderer from "./NameRenderer"
 import NodeSearch from "./NodeSearch"
 export type Props = {
-    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
+    onComplete: (identifier: Identifier, newTaxonName?: string) => void
 }
 const NodeForm: FC<Props> = ({ onComplete }) => {
     const [nameText, setNameText] = useState("")

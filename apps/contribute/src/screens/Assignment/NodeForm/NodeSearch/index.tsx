@@ -9,7 +9,7 @@ import NoEntries from "./NoEntries"
 export type Props = {
     nameText: string
     onCancel: () => void
-    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
+    onComplete: (identifier: Identifier, newTaxonName?: string) => void
 }
 export const NodeSearch: FC<Props> = ({ nameText, onCancel, onComplete }) => {
     const [parentRequested, setParentRequested] = useState<boolean | null>(null)

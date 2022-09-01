@@ -1,9 +1,10 @@
 import { handleAPIError, handleWithLister, Page } from "@phylopic/source-client"
-import { isUUIDv4, UUID } from "@phylopic/utils"
+import { Submission } from "@phylopic/source-models"
+import { isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<Page<UUID, string> | number> = async (req, res) => {
+const index: NextApiHandler<Page<Submission & { Key: string }, string> | number> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const { sub: contributorUUID } = (await verifyAuthorization(req.headers)) ?? {}

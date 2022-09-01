@@ -2,7 +2,6 @@ import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 const useSubmissionCount = () => {
     const fetcher = useAuthorizedJSONFetcher<number>()
-    const { data } = useSWR("/api/submissions?total=items", fetcher)
-    return data
+    return useSWR("/api/submissions?total=items", fetcher).data
 }
 export default useSubmissionCount

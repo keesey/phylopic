@@ -1,5 +1,5 @@
 import { LoaderContext } from "@phylopic/ui"
-import { UUID } from "@phylopic/utils"
+import { Hash, UUID } from "@phylopic/utils"
 import { BuildContainer } from "@phylopic/utils-api"
 import { FC, ReactNode, useEffect } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
@@ -15,9 +15,9 @@ type Props = {
     children: ReactNode
     fallback?: SWRConfiguration["fallback"]
     head: PageHeadProps
-    submissionUUID?: UUID
+    submissionHash?: Hash
 }
-const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, submissionUUID }) => {
+const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, submissionHash }) => {
     useEffect(() => {
         try {
             document.domain = "phylopic.org"
@@ -37,7 +37,7 @@ const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, submissio
                         </aside>
                         <div className={styles.main}>
                             <header>
-                                <SiteNav submissionUUID={submissionUUID} />
+                                <SiteNav submissionHash={submissionHash} />
                             </header>
                             <main>{children}</main>
                             <footer>

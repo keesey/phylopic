@@ -1,5 +1,5 @@
 import { Submission } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
+import { Hash, UUID } from "@phylopic/utils"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
 import { FC } from "react"
@@ -10,10 +10,11 @@ const FileMenu = dynamic(() => import("./menus/FileMenu"), { ssr: false })
 const ViewMenu = dynamic(() => import("./menus/ViewMenu"), { ssr: false })
 const SiteMenu = dynamic(() => import("./menus/SiteMenu"), { ssr: false })
 export type Props = {
-    submission?: Submission & { uuid: UUID }
+    submission?: Submission
+    submissionHash?: Hash
     selected?: "account" | "edit" | "file" | "site" | "view"
 }
-const DropDownMenu: FC<Props> = ({ submission, selected }) => {
+const DropDownMenu: FC<Props> = ({ submission, submissionHash, selected }) => {
     const active = selected && (selected !== "edit" || Boolean(submission))
     if (!active) {
         return null
@@ -22,8 +23,8 @@ const DropDownMenu: FC<Props> = ({ submission, selected }) => {
         <div className={clsx(styles.main, styles[selected])} role="menu">
             <ul>
                 {selected === "account" && <AccountMenu />}
-                {selected === "edit" && submission && <EditMenu submissionUUID={submission.uuid} />}
-                {selected === "file" && <FileMenu submission={submission} />}
+                {selected === "edit" && submissionHash && <EditMenu submissionHash={submissionHash} />}
+                {selected === "file" && <FileMenu submission={submission} submissionHash={submissionHash} />}
                 {selected === "site" && <SiteMenu />}
                 {selected === "view" && <ViewMenu />}
             </ul>

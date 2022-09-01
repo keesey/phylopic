@@ -10,7 +10,7 @@ import NameRenderer from "../../NameRenderer"
 import ParentSearch from "./ParentSearch"
 export type Props = {
     childName: Nomen
-    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
+    onComplete: (identifier: Identifier, newTaxonName?: string) => void
 }
 export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
     const [nameText, setNameText] = useState("")

@@ -1,4 +1,4 @@
-import { isPublicDomainLicenseURL, isValidLicenseURL, UUID } from "@phylopic/utils"
+import { Hash, isPublicDomainLicenseURL, isValidLicenseURL } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { FC, useMemo } from "react"
 import useSubmission from "~/editing/useSubmission"
@@ -18,10 +18,10 @@ import LoadingState from "../LoadingState"
 import Attribution from "./Attribution"
 import License from "./License"
 export type Props = {
-    uuid: UUID
+    hash: Hash
 }
-const Usage: FC<Props> = ({ uuid }) => {
-    const submission = useSubmission(uuid)
+const Usage: FC<Props> = ({ hash }) => {
+    const submission = useSubmission(hash)
     const contributor = useContributor()
     const hasLicense = useMemo(() => isValidLicenseURL(submission?.license), [submission?.license])
     const complete = useMemo(() => {
@@ -30,7 +30,7 @@ const Usage: FC<Props> = ({ uuid }) => {
             (submission?.attribution || isPublicDomainLicenseURL(submission?.license))
         )
     }, [submission?.attribution, submission?.license])
-    const mutate = useSubmissionMutator(uuid)
+    const mutate = useSubmissionMutator(hash)
     const newName = useMemo(
         () => (submission?.newTaxonName ? parseNomen(submission.newTaxonName) : null),
         [submission?.newTaxonName],
@@ -43,9 +43,7 @@ const Usage: FC<Props> = ({ uuid }) => {
             <Speech mode="user">
                 <SpeechStack collapsible>
                     <FileView
-                        src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(
-                            submission.file,
-                        )}`}
+                        src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
                         mode="light"
                     />
                     {(newName || submission.identifier) && (
@@ -68,8 +66,8 @@ const Usage: FC<Props> = ({ uuid }) => {
                     <strong>Cool.</strong> How would you like to make this image available for reuse?
                 </p>
             </Speech>
-            <License uuid={uuid} />
-            {hasLicense && <Attribution key="attribution" uuid={uuid} />}
+            <License hash={hash} />
+            {hasLicense && <Attribution key="attribution" hash={hash} />}
             <UserOptions>
                 {hasLicense && !submission.attribution && contributor?.name && (
                     <UserButton icon={ICON_HAND_POINT_RIGHT} onClick={() => mutate({ attribution: contributor.name })}>
@@ -80,13 +78,13 @@ const Usage: FC<Props> = ({ uuid }) => {
                     <UserButton
                         danger
                         icon={ICON_PENCIL}
-                        onClick={() => mutate({ submitted: false, attribution: null })}
+                        onClick={() => mutate({ status: "incomplete", attribution: undefined })}
                     >
                         Change the attribution.
                     </UserButton>
                 )}
                 {complete && (
-                    <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(uuid)}`}>
+                    <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(hash)}`}>
                         All done.{!submission.attribution && " No credit needed."}
                     </UserLinkButton>
                 )}

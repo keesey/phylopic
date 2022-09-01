@@ -1,7 +1,7 @@
-import { UUID } from "@phylopic/utils"
+import { Hash } from "@phylopic/utils"
 import useSubmissionSWR from "./useSubmissionSWR"
-const useSubmissionExists = (uuid: UUID | undefined) => {
-    const { data, error, isValidating } = useSubmissionSWR(uuid)
+const useSubmissionExists = (hash: Hash | undefined) => {
+    const { data, error, isValidating } = useSubmissionSWR(hash)
     if (error) {
         return undefined
     }

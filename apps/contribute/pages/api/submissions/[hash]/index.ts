@@ -1,18 +1,28 @@
 import { handleAPIError } from "@phylopic/source-client"
 import { isSubmission, Submission } from "@phylopic/source-models"
-import { isUUIDv4, UUID, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
+import { isHash, isUUIDv4, UUID, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<Submission & { uuid: UUID }> = async (req, res) => {
+const SUBMISSION_KEYS: ReadonlyArray<keyof Submission> = [
+    "attribution",
+    "contributor",
+    "created",
+    "identifier",
+    "license",
+    "newTaxonName",
+    "sponsor",
+    "status",
+]
+const index: NextApiHandler<Submission> = async (req, res) => {
     let client: SourceClient | undefined
     try {
-        const uuid = req.query.uuid
-        if (!isUUIDv4(uuid)) {
+        const hash = req.query.hash
+        if (!isHash(hash)) {
             throw 404
         }
         client = new SourceClient()
-        const submissionClient = client.submission(uuid)
+        const submissionClient = client.submission(hash)
         if (!(await submissionClient.exists())) {
             throw 404
         }
@@ -36,17 +46,14 @@ const index: NextApiHandler<Submission & { uuid: UUID }> = async (req, res) => {
                 break
             }
             case "PATCH": {
-                const newValue: Submission & { uuid: UUID } = {
+                if (!Object.keys(req.body).every(key => SUBMISSION_KEYS.includes(key as keyof Submission))) {
+                    throw 400
+                }
+                const newValue: Submission = {
                     ...submission,
                     ...req.body,
-                    uuid,
                 }
-                if (
-                    newValue.contributor !== submission.contributor ||
-                    newValue.created !== submission.created ||
-                    newValue.uuid !== submission.uuid ||
-                    Object.keys(newValue).length !== Object.keys(submission).length
-                ) {
+                if (newValue.contributor !== submission.contributor || newValue.created !== submission.created) {
                     throw 400
                 }
                 const faultCollector = new ValidationFaultCollector(["body"])

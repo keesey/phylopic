@@ -8,7 +8,7 @@ import ParentSelector from "./ParentSelector"
 export type Props = {
     nameText: string
     onCancel: () => void
-    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
+    onComplete: (identifier: Identifier, newTaxonName?: string) => void
     onParentRequest: () => void
     parentRequested: boolean | null
 }

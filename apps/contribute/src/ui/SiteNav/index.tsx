@@ -1,5 +1,5 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
+import { Hash } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { FC, useState } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
@@ -10,14 +10,14 @@ import DropDownMenu from "./DropDownMenu"
 import styles from "./index.module.scss"
 import NavItem from "./NavItem"
 export type Props = {
-    submissionUUID?: UUID
+    submissionHash?: Hash
 }
-const SiteNav: FC<Props> = ({ submissionUUID }) => {
+const SiteNav: FC<Props> = ({ submissionHash }) => {
     const authorized = useAuthorized()
     const contributor = useContributor()
     const enabled = authorized && Boolean(contributor?.name && contributor.name !== INCOMPLETE_STRING)
     const [selected, setSelected] = useState<"account" | "file" | "edit" | "site" | "view" | undefined>()
-    const submission = useSubmission(submissionUUID)
+    const submission = useSubmission(submissionHash)
     const router = useRouter()
     return (
         <>
@@ -55,7 +55,7 @@ const SiteNav: FC<Props> = ({ submissionUUID }) => {
                 )}
                 {!enabled && <NavItem label="Sign In" onToggle={() => router.push("/")} selected={false} />}
             </nav>
-            <DropDownMenu submission={submission} selected={selected} />
+            <DropDownMenu submission={submission} submissionHash={submissionHash} selected={selected} />
         </>
     )
 }

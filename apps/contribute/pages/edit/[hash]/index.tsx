@@ -1,4 +1,4 @@
-import { isPublicDomainLicenseURL, isUUIDv4, UUID } from "@phylopic/utils"
+import { Hash, isHash, isPublicDomainLicenseURL } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
@@ -6,42 +6,43 @@ import PageLayout from "~/pages/PageLayout"
 import SourceClient from "~/source/SourceClient"
 const Editor = dynamic(() => import("~/screens/Editor"))
 type Props = {
-    uuid: UUID
+    hash: Hash
 }
-const Page: NextPage<Props> = ({ uuid }) => (
+const Page: NextPage<Props> = ({ hash }) => (
     <PageLayout
         head={{
             title: "PhyloPic: Your Submission",
-            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(uuid)}`,
+            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(hash)}`,
         }}
-        submissionUUID={uuid}
+        submissionHash={hash}
     >
         <AuthorizedOnly>
-            <Editor uuid={uuid} />
+            <Editor hash={hash} />
         </AuthorizedOnly>
     </PageLayout>
 )
 export default Page
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
-    const uuid = context.params?.uuid
-    if (!isUUIDv4(uuid)) {
+    const hash = context.params?.hash
+    if (!isHash(hash)) {
         return { notFound: true }
     }
     let client: SourceClient | undefined
-    let redirect: "file" | "usage" | "nodes" | undefined
+    let redirect: "nodes" | "usage" | undefined
     let notFound = false
     try {
         client = new SourceClient()
-        const imageClient = client.image(uuid)
-        if (!(await imageClient.exists())) {
+        const submissionClient = client.submission(hash)
+        if (!(await submissionClient.exists())) {
             notFound = true
-        } else if (!(await imageClient.file.exists())) {
-            redirect = "file"
         } else {
-            const image = await imageClient.get()
-            if (!image.specific) {
+            const submission = await submissionClient.get()
+            if (!submission.identifier) {
                 redirect = "nodes"
-            } else if (!image.license || (!isPublicDomainLicenseURL(image.license) && !image.attribution)) {
+            } else if (
+                !submission.license ||
+                (!isPublicDomainLicenseURL(submission.license) && !submission.attribution)
+            ) {
                 redirect = "usage"
             }
         }
@@ -54,10 +55,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
     if (redirect) {
         return {
             redirect: {
-                destination: `/edit/${encodeURIComponent(uuid)}/${encodeURIComponent(redirect)}`,
+                destination: `/edit/${encodeURIComponent(hash)}/${encodeURIComponent(redirect)}`,
                 permanent: false,
             },
         }
     }
-    return { props: { uuid } }
+    return { props: { hash } }
 }

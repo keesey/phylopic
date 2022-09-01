@@ -6,7 +6,7 @@ import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 export type Props = {
     name: Nomen
-    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
+    onComplete: (identifier: Identifier, newTaxonName?: string) => void
     parentIdentifier: Identifier
 }
 const NewNodeCreator: FC<Props> = ({ name, onComplete, parentIdentifier }) => {

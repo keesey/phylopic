@@ -11,7 +11,7 @@ export type Props = {
     entries: readonly SearchEntry[]
     nameText: string
     onCancel: () => void
-    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
+    onComplete: (identifier: Identifier, newTaxonName?: string) => void
     onParentRequest: () => void
     parentRequested: boolean | null
 }
@@ -22,7 +22,7 @@ const Entries: FC<Props> = ({ entries, nameText, onCancel, onComplete, onParentR
         (entry: SearchEntry | null) => {
             setSelected(entry)
             if (entry) {
-                onComplete(getIdentifier(entry.authority, entry.namespace, entry.objectID), null)
+                onComplete(getIdentifier(entry.authority, entry.namespace, entry.objectID))
             }
         },
         [onComplete],
