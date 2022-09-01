@@ -1,7 +1,7 @@
 import { Link } from "@phylopic/api-models"
 import { getImageFileExtension, Hash, ImageMediaType, isHash } from "@phylopic/utils"
 import axios from "axios"
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useContributorUUID from "~/profile/useContributorUUID"
 import Dialogue from "~/ui/Dialogue"
@@ -23,6 +23,10 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
     const [loaded, setLoaded] = useState(0)
     const [total, setTotal] = useState(NaN)
     const [error, setError] = useState<Error | undefined>()
+    const displayedFilename = useMemo<string>(
+        () => (filename ? filename.replace(/\.[^.]+$/, "." + getImageFileExtension(type)) : "your image"),
+        [filename, type],
+    )
     useEffect(() => {
         if (buffer && contributorUUID && token) {
             const controller = new AbortController()
@@ -86,10 +90,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
     return (
         <Dialogue>
             <Speech mode="system">
-                <p>
-                    Uploading{" "}
-                    {filename ? filename.replace(/\.[^.+]$/, "." + getImageFileExtension(type)) : "your image"}&hellip;
-                </p>
+                <p>Uploading {displayedFilename}&hellip;</p>
                 <progress className={styles.progress} value={loaded} max={isNaN(total) ? undefined : total} />
             </Speech>
         </Dialogue>
