@@ -11,6 +11,13 @@
         width: 100%;
     }
 
+    figure {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
     @media screen and (max-width: 640px) {
         &.collapsible {
             flex-direction: column;

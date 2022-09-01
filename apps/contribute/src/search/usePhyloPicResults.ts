@@ -3,6 +3,7 @@ import { normalizeText } from "@phylopic/utils"
 import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
 import { useContext, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
+import isNotFoundError from "~/http/isNotFoundError"
 import isServerError from "~/http/isServerError"
 import { SearchEntry } from "./SearchEntry"
 const usePhyloPicResults = (text: string) => {
@@ -24,19 +25,24 @@ const usePhyloPicResults = (text: string) => {
     const { data, error, isValidating } = useSWRImmutable<PageWithEmbedded<Node>>(key, apiFetcher, {
         shouldRetryOnError: isServerError,
     })
+    const notFound = isNotFoundError(error)
     const entries = useMemo(
-        () =>
-            data?._embedded.items?.map<SearchEntry>(item => ({
+        () => {
+            if (notFound) {
+                return []
+            }
+            return data?._embedded.items?.map<SearchEntry>(item => ({
                 authority: "phylopic.org",
                 namespace: "nodes",
                 objectID: item.uuid,
                 name: item.names[0],
-            })) ?? [],
-        [data],
+            })) ?? []
+        },
+        [data, notFound],
     )
     return {
-        data: data ? entries : undefined,
-        error,
+        data: (data || notFound) ? entries : undefined,
+        error: notFound ? undefined : error,
         isValidating,
     }
 }
