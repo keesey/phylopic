@@ -8,11 +8,8 @@
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.52.0",
-        "@aws-sdk/signature-v4-crt": "^3.160.0",
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
-        "aws-lambda": "^1.0.7",
-        "is-uuid": "^1.0.2",
         "jsonwebtoken": "^8.5.1",
         "pg": "^8.7.3"
     },
@@ -24,6 +21,7 @@
         "@types/jsonwebtoken": "^8.5.8",
         "@types/mocha": "^9.1.1",
         "@types/pg": "^8.6.5",
+        "aws-lambda": "^1.0.7",
         "chai": "^4.3.6",
         "eslint-config-phylopic": "*",
         "fork-ts-checker-webpack-plugin": "^7.2.11",
@@ -45,6 +43,9 @@
         "spec": "src/**/*.spec.ts"
     },
     "name": "@phylopic/api",
+    "peerDependencies": {
+        "@aws-sdk/signature-v4-crt": "^3.160.0"
+    },
     "private": true,
     "scripts": {
         "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf node_modules",

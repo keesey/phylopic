@@ -1,12 +1,17 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client, GetObjectTaggingCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 import { DATA_MEDIA_TYPE, Link } from "@phylopic/api-models"
 import { Submission } from "@phylopic/source-models"
-import { createQueryString, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
+import {
+    createQueryString,
+    ImageMediaType,
+    isImageMediaType,
+    isUUIDv4,
+    stringifyNormalized,
+    UUID,
+} from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { createHash } from "crypto"
-import { JwtPayload } from "jsonwebtoken"
-import isExpired from "../auth/jwt/isExpired"
-import verifyJWT from "../auth/jwt/verifyJWT"
+import decodeJWT from "../auth/jwt/decodeJWT"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
@@ -14,6 +19,7 @@ import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
 import { S3ClientService } from "../services/S3ClientService"
 import { Operation } from "./Operation"
+const Bucket = "uploads.phylopic.org"
 const USER_MESSAGE = "There was a problem with an attempt to upload your file."
 export type PostUploadParameters = DataRequestHeaders & {
     authorization?: string
@@ -21,130 +27,41 @@ export type PostUploadParameters = DataRequestHeaders & {
 }
 export type PostUploadService = S3ClientService
 const ACCEPT = "image/svg+xml,image/png,image/gif,image/bmp,image/jpeg"
-const checkAuthorization = async (authorization: string | undefined, now: Date) => {
-    let payload: JwtPayload | null = null
-    if (authorization?.match(/^Bearer\s+/)) {
-        const jwt = authorization.replace(/^Bearer\s+/, "")
-        try {
-            payload = await verifyJWT(jwt)
-            if (isExpired(payload?.exp, now.valueOf())) {
-                throw new APIError(
-                    401,
-                    [
-                        {
-                            developerMessage: "Your authorization has expired.",
-                            field: "authorization",
-                            type: "UNAUTHORIZED",
-                            userMessage: USER_MESSAGE,
-                        },
-                    ],
-                    {
-                        "www-authenticate":
-                            'Bearer realm="phylopic.org",error="invalid token",error_description="The access token expired."',
-                    },
-                )
-            }
-        } catch (e) {
-            console.error(e)
-            throw new APIError(
-                401,
-                [
-                    {
-                        developerMessage: "Invalid authorization: " + e,
-                        field: "authorization",
-                        type: "UNAUTHORIZED",
-                        userMessage: USER_MESSAGE,
-                    },
-                ],
-                {
-                    "www-authenticate": 'Bearer realm="phylopic.org",error="invalid token"',
-                },
-            )
-        }
-    }
-    if (!payload) {
-        throw new APIError(
-            401,
-            [
-                {
-                    developerMessage: "Not authorized.",
-                    field: "authorization",
-                    type: "UNAUTHORIZED",
-                    userMessage: USER_MESSAGE,
-                },
-            ],
-            {
-                "www-authenticate": 'Bearer realm="phylopic.org",error="missing token"',
-            },
-        )
-    }
-    return payload
-}
-const checkContributorUUID = (sub: unknown): UUID => {
-    if (!isUUIDv4(sub)) {
-        throw new APIError(
-            401,
-            [
-                {
-                    developerMessage: "Invalid authorization subject.",
-                    field: "authorization",
-                    type: "UNAUTHORIZED",
-                    userMessage: USER_MESSAGE,
-                },
-            ],
-            {
-                "www-authenticate":
-                    'Bearer realm="phylopic.org",error="invalid token",error_description="Invalid token subject."',
-            },
-        )
-    }
-    return sub
-}
-const getHash = (body: string) => {
-    const hashSum = createHash("sha256")
-    hashSum.update(body)
-    return hashSum.digest("hex")
-}
 export const postUpload: Operation<PostUploadParameters, PostUploadService> = async (
     { accept, authorization, body, "content-type": contentType },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     checkContentType(contentType, ACCEPT)
-    const payload = await checkAuthorization(authorization, new Date())
-    const contributorUUID = checkContributorUUID(payload.sub)
+    if (!isImageMediaType(contentType)) {
+        throw new Error("Unexpected condition.")
+    }
     if (!body) {
-        throw new APIError(400, [
-            {
-                developerMessage: "Missing body.",
-                field: "body",
-                type: "BAD_REQUEST_BODY",
-                userMessage: USER_MESSAGE,
-            },
-        ])
+        throw createMissingBodyError()
+    }
+    const payload = authorization ? decodeJWT(authorization.replace(/^Bearer\s+/, "")) : null
+    const contributor = payload?.sub
+    if (!isUUIDv4(contributor)) {
+        throw createUUIDError()
     }
     const hash = getHash(body)
+    const key = `files/${encodeURIComponent(hash)}`
     const client = service.createS3Client()
     try {
-        const now = new Date().toISOString()
-        await client.send(
-            new PutObjectCommand({
-                Bucket: "uploads.phylopic.org",
-                Body: body,
-                ContentType: contentType,
-                Key: `files/${encodeURIComponent(hash)}`,
-                Tagging: createQueryString({
-                    contributor: contributorUUID,
-                    created: new Date().toISOString(),
-                    status: "incomplete",
-                } as Submission),
-            }),
-        )
+        const status = await getCurrentStatus(client, key)
+        if (status.uploaded) {
+            if (status.contributor !== contributor) {
+                throw createExistingError()
+            }
+            console.warn("User already uploaded this file.")
+        } else {
+            await upload(client, body, contentType, key, contributor)
+        }
     } finally {
         service.deleteS3Client(client)
     }
     const link: Link = {
-        href: `https://uploads.phylopic.org/files/${encodeURIComponent(hash)}`,
+        href: "https://uploads.phylopic.org/" + key,
     }
     return {
         body: stringifyNormalized(link),
@@ -153,3 +70,72 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     } as APIGatewayProxyResult
 }
 export default postUpload
+const getHash = (body: string) => {
+    const hashSum = createHash("sha256")
+    hashSum.update(body)
+    return hashSum.digest("hex")
+}
+const createMissingBodyError = () =>
+    new APIError(400, [
+        {
+            developerMessage: "Missing body.",
+            field: "body",
+            type: "BAD_REQUEST_BODY",
+            userMessage: USER_MESSAGE,
+        },
+    ])
+const createUUIDError = () =>
+    new APIError(401, [
+        {
+            developerMessage: "Invalid authorization.",
+            field: "authorization",
+            type: "UNAUTHORIZED",
+            userMessage: USER_MESSAGE,
+        },
+    ])
+const createExistingError = () =>
+    new APIError(403, [
+        {
+            developerMessage: "Upload already exists and is attributed to another contributor.",
+            field: "authorization",
+            type: "UNAUTHORIZED",
+            userMessage: "Somebody else already uploaded that file.",
+        },
+    ])
+const getCurrentStatus = async (
+    client: S3Client,
+    Key: string,
+): Promise<{ uploaded: false } | { contributor: UUID; uploaded: true }> => {
+    let contributor: string | undefined
+    try {
+        const response = await client.send(
+            new GetObjectTaggingCommand({
+                Bucket,
+                Key,
+            }),
+        )
+        contributor = response.TagSet?.find(tag => tag.Key === "contributor")?.Value
+    } catch (e) {
+        if ((e as any)?.$metadata?.httpStatusCode === 404) {
+            return { uploaded: false }
+        }
+        throw e
+    }
+    return contributor ? { contributor, uploaded: true } : { uploaded: false }
+}
+const upload = async (client: S3Client, Body: string, ContentType: ImageMediaType, Key: string, contributor: UUID) => {
+    await client.send(
+        new PutObjectCommand({
+            ACL: "public-read",
+            Bucket,
+            Body,
+            ContentType,
+            Key,
+            Tagging: createQueryString({
+                contributor,
+                created: new Date().toISOString(),
+                status: "incomplete",
+            } as Submission),
+        }),
+    )
+}

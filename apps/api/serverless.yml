@@ -12,6 +12,10 @@ plugins:
     - serverless-offline
     - serverless-webpack
 functions:
+    auth:
+        handler: src/lambdas/auth.onAPIGatewayRequestAuthorizer
+        environment:
+            AUTH_SECRET_KEY: "${ssm:AUTH_SECRET_KEY}"
     ping:
         handler: src/lambdas/ping.onAPIGatewayProxy
         memorySize: 128
@@ -387,10 +391,12 @@ functions:
         handler: src/lambdas/uploader.onAPIGatewayProxy
         memorySize: 1024
         timeout: 30
-        environment:
-            AUTH_SECRET_KEY: "${ssm:AUTH_SECRET_KEY}"
         events:
             - http:
+                  authorizer:
+                      identitySource: method.request.header.authorization
+                      name: auth
+                      type: request
                   cors:
                       allowCredentials: true
                       origin: "*"
