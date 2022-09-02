@@ -18,9 +18,7 @@ const useNodeImage = (authority: Authority, namespace: Namespace, objectID: Obje
     const fetcher = useAPIFetcher<NodeWithEmbedded>()
     const key = internal
         ? `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/nodes/${encodeURIComponent(objectID)}?embed_primaryImage=true`
-        : `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(
-              namespace,
-          )}/${encodeURIComponent(objectID)}?embed_primaryImage=true`
+        : null
     const { data } = useSWRImmutable(key, fetcher)
     return data?._embedded.primaryImage as ImageWithEmbedded | null | undefined
 }

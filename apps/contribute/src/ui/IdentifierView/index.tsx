@@ -1,6 +1,6 @@
-import { getIdentifierParts, Identifier, isIdentifier, isPositiveInteger, isString, isUUIDv4 } from "@phylopic/utils"
+import { getIdentifierParts, Identifier, isIdentifier, isUUIDv4 } from "@phylopic/utils"
 import { FC, useMemo } from "react"
-import OTOLTaxonomyView from "./OTOLTaxonomyView"
+import ExternalView from "./ExternalView"
 import PhyloPicNodesView from "./PhyloPicNodesView"
 export type Props = {
     value: Identifier
@@ -10,26 +10,12 @@ const IdentifierView: FC<Props> = ({ value }) => {
         () => (isIdentifier(value) ? getIdentifierParts(value) : []),
         [value],
     )
-    switch (authority) {
-        case undefined: {
-            return null
-        }
-        case "opentreeoflife.org": {
-            if (namespace === "taxonomy" && isString(objectID)) {
-                const id = parseInt(objectID, 10)
-                if (isPositiveInteger(id)) {
-                    return <OTOLTaxonomyView id={id} />
-                }
-            }
-            break
-        }
-        case "phylopic.org": {
-            if (namespace === "nodes" && isUUIDv4(objectID)) {
-                return <PhyloPicNodesView uuid={objectID} />
-            }
-            break
-        }
+    if (!authority || !namespace || !objectID) {
+        return <>[Unnamed]</>
     }
-    return <code>{value}</code>
+    if (authority === "phylopic.org" && namespace === "nodes" && isUUIDv4(objectID)) {
+        return <PhyloPicNodesView uuid={objectID} />
+    }
+    return <ExternalView authority={authority} namespace={namespace} objectID={objectID} />
 }
 export default IdentifierView

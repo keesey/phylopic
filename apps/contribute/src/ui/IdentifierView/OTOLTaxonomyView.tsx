@@ -8,18 +8,15 @@ export type Props = {
     id: number
 }
 const OTOLTaxonomyView: FC<Props> = ({ id }) => {
-    const { data } = useSWRImmutable<{ taxon: { unique_name: string } }>(
+    const { data } = useSWRImmutable<{ unique_name: string }>(
         {
             data: { ott_id: id },
             method: "POST",
-            url: "https://api.opentreeoflife.org/v3/tree_of_life/node_info",
+            url: "https://api.opentreeoflife.org/v3/taxonomy/taxon_info",
         },
         fetchJSON,
     )
-    const name = useMemo(
-        () => (data?.taxon?.unique_name ? parseNomen(data.taxon.unique_name) : null),
-        [data?.taxon?.unique_name],
-    )
+    const name = useMemo(() => (data?.unique_name ? parseNomen(data.unique_name) : null), [data?.unique_name])
     if (!name) {
         return <>{INCOMPLETE_STRING}</>
     }
