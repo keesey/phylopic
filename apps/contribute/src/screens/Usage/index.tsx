@@ -78,7 +78,7 @@ const Usage: FC<Props> = ({ hash }) => {
                     <UserButton
                         danger
                         icon={ICON_PENCIL}
-                        onClick={() => mutate({ status: "incomplete", attribution: undefined })}
+                        onClick={() => mutate({ status: "incomplete", attribution: null })}
                     >
                         Change the attribution.
                     </UserButton>

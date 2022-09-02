@@ -15,7 +15,7 @@ const Attribution: FC<Props> = ({ hash }) => {
     const required = useMemo(() => !isPublicDomainLicenseURL(license), [license])
     const submit = useCallback(
         (value: string) => {
-            mutate({ attribution: value || undefined })
+            mutate({ attribution: value || null })
         },
         [mutate],
     )
