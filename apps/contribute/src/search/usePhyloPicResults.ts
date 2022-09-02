@@ -26,22 +26,21 @@ const usePhyloPicResults = (text: string) => {
         shouldRetryOnError: isServerError,
     })
     const notFound = isNotFoundError(error)
-    const entries = useMemo(
-        () => {
-            if (notFound) {
-                return []
-            }
-            return data?._embedded.items?.map<SearchEntry>(item => ({
+    const entries = useMemo(() => {
+        if (notFound) {
+            return []
+        }
+        return (
+            data?._embedded.items?.map<SearchEntry>(item => ({
                 authority: "phylopic.org",
                 namespace: "nodes",
                 objectID: item.uuid,
                 name: item.names[0],
             })) ?? []
-        },
-        [data, notFound],
-    )
+        )
+    }, [data, notFound])
     return {
-        data: (data || notFound) ? entries : undefined,
+        data: data || notFound ? entries : undefined,
         error: notFound ? undefined : error,
         isValidating,
     }
