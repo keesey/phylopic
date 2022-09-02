@@ -23,7 +23,7 @@ const useSubmissionDeletor = (hash: Hash | undefined) => {
         if (hash && token) {
             const url = `/api/submissions/${encodeURIComponent(hash)}`
             const promise = deleteSubmission(url, token)
-            mutate(promise, { optimisticData: null as any, rollbackOnError: true })
+            mutate(promise, { optimisticData: undefined as any, rollbackOnError: true })
             promise.then(() => {
                 invalidate()
                 return router.push("/")

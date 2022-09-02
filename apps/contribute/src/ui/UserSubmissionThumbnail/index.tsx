@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Hash } from "@phylopic/utils"
 import { FC } from "react"
 import useSubmission from "~/editing/useSubmission"
@@ -11,16 +10,21 @@ export type Props = {
 const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     return (
-        <figure>
-            <FileThumbnailView
-                src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
-            />
-            {submission?.identifier && (
+        <div className={styles.main}>
+            <figure className={styles.figure}>
                 <figcaption className={styles.caption}>
-                    <IdentifierView value={submission?.identifier} />
+                    {submission?.status === "submitted" ? "Awaiting Review" : "Unfinished"}
                 </figcaption>
-            )}
-        </figure>
+                <FileThumbnailView
+                    src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
+                />
+                {submission?.identifier && (
+                    <figcaption className={styles.caption}>
+                        {<IdentifierView value={submission?.identifier} />}
+                    </figcaption>
+                )}
+            </figure>
+        </div>
     )
 }
 export default UserSubmissionThumbnail

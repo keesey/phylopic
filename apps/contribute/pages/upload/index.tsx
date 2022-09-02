@@ -28,7 +28,7 @@ const Content: FC = () => {
     }, [router])
     const complete = useCallback(
         (hash: Hash) => {
-            router.push(`/api/spawn?file=${encodeURIComponent(hash)}`)
+            router.push(`/edit/${encodeURIComponent(hash)}`)
         },
         [router],
     )

@@ -23,6 +23,7 @@ const useSubmissionMutator = (hash: Hash | undefined) => {
                 const promise = patch(key, token, newValue, newData)
                 mutate(promise, {
                     optimisticData: newData,
+                    revalidate: true,
                     rollbackOnError: true,
                 })
                 promise.then(() => invalidate())

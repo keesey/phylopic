@@ -9,7 +9,7 @@ const ViewMenu: FC = () => {
     const { data: numSubmissions } = useSWR("/api/submissions?total=items", fetcher)
     return (
         <>
-            <MenuLink disabled={!numSubmissions} icon={ICON_BOX} href="/submissions" label="Submitted Images" />
+            <MenuLink disabled={!numSubmissions} icon={ICON_BOX} href="/submissions" label="Current Submissions" />
             <MenuLink disabled={!numImages} icon={ICON_CHECK} href="/images" label="Accepted Submissions" />
         </>
     )

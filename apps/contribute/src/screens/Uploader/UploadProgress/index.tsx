@@ -46,7 +46,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
                 try {
                     const response = await promise
                     const { href } = response.data
-                    const hash = href.match(/^\/([a-f0-9]+)$/)?.[1]
+                    const hash = href.match(/\/([a-f0-9]+)$/)?.[1]
                     if (!isHash(hash)) {
                         throw 500
                     }

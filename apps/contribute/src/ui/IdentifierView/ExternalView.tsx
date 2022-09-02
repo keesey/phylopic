@@ -9,8 +9,9 @@ export type Props = {
     authority: Authority
     namespace: Namespace
     objectID: ObjectID
+    short?: boolean
 }
-const ExternalView: FC<Props> = ({ authority, namespace, objectID }) => {
+const ExternalView: FC<Props> = ({ authority, namespace, objectID, short }) => {
     const fetcher = useAPIFetcher<Node>()
     const { data: node } = useSWRImmutable(
         `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(
@@ -19,7 +20,7 @@ const ExternalView: FC<Props> = ({ authority, namespace, objectID }) => {
         fetcher,
     )
     if (node) {
-        return <NameView value={node.names[0]} />
+        return <NameView value={node.names[0]} short={short} />
     }
     if (authority === "opentreeoflife.org" && namespace === "taxonomy") {
         const id = parseInt(objectID, 10)

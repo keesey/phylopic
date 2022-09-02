@@ -6,9 +6,10 @@ import { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"
 export type Props = {
+    short?: boolean
     uuid: UUID
 }
-const PhyloPicNodesView: FC<Props> = ({ uuid }) => {
+const PhyloPicNodesView: FC<Props> = ({ short, uuid }) => {
     const apiFetcher = useAPIFetcher<Node>()
     const { data } = useSWRImmutable(
         `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/nodes/${encodeURIComponent(uuid)}`,
@@ -17,6 +18,6 @@ const PhyloPicNodesView: FC<Props> = ({ uuid }) => {
     if (!data) {
         return <>{INCOMPLETE_STRING}</>
     }
-    return <NameView value={data.names[0]} />
+    return <NameView value={data.names[0]} short={short} />
 }
 export default PhyloPicNodesView

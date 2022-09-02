@@ -56,23 +56,35 @@ const Assignment: FC<Props> = ({ hash }) => {
                 <>
                     <Speech mode="system">
                         <p>
-                            So this is <IdentifierView value={submission.identifier} />?
+                            So this is <strong>not</strong> <IdentifierView value={submission.identifier} />?
                         </p>
                     </Speech>
                     {!changeRequested && (
                         <UserOptions>
                             <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(hash)}`}>
-                                Yep.
+                                <p>
+                                    Wait, it <strong>is</strong> <IdentifierView value={submission.identifier} short />.
+                                </p>
                             </UserLinkButton>
                             <UserButton danger icon={ICON_X} onClick={() => setChangeRequested(true)}>
-                                Nope.
+                                <p>
+                                    Yes. It is not <IdentifierView value={submission.identifier} short />.
+                                </p>
                             </UserButton>
                         </UserOptions>
                     )}
                     {changeRequested && (
                         <>
-                            <Speech mode="user">Nope.</Speech>
-                            <Speech mode="system">Really??? What is it, then?</Speech>
+                            <Speech mode="user">
+                                <p>
+                                    Yes. It is not <IdentifierView value={submission.identifier} short />.
+                                </p>
+                            </Speech>
+                            <Speech mode="system">
+                                <p>
+                                    <strong>Really?</strong> What is it, then?
+                                </p>
+                            </Speech>
                             <NodeForm key="nodeForm" onComplete={handleComplete} />
                         </>
                     )}

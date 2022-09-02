@@ -3,9 +3,10 @@ import { FC, useMemo } from "react"
 import ExternalView from "./ExternalView"
 import PhyloPicNodesView from "./PhyloPicNodesView"
 export type Props = {
+    short?: boolean
     value: Identifier
 }
-const IdentifierView: FC<Props> = ({ value }) => {
+const IdentifierView: FC<Props> = ({ short, value }) => {
     const [authority, namespace, objectID] = useMemo(
         () => (isIdentifier(value) ? getIdentifierParts(value) : []),
         [value],
@@ -14,8 +15,8 @@ const IdentifierView: FC<Props> = ({ value }) => {
         return <>[Unnamed]</>
     }
     if (authority === "phylopic.org" && namespace === "nodes" && isUUIDv4(objectID)) {
-        return <PhyloPicNodesView uuid={objectID} />
+        return <PhyloPicNodesView uuid={objectID} short={short} />
     }
-    return <ExternalView authority={authority} namespace={namespace} objectID={objectID} />
+    return <ExternalView authority={authority} namespace={namespace} objectID={objectID} short={short} />
 }
 export default IdentifierView
