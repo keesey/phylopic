@@ -4,7 +4,7 @@ import { JwtPayload } from "jsonwebtoken"
 import isExpired from "../auth/jwt/isExpired"
 import verifyJWT from "../auth/jwt/verifyJWT"
 export const onAPIGatewayRequestAuthorizer: APIGatewayRequestAuthorizerHandler = async (event, _context) => {
-    const uuid = await getAuthorizedUUID(event.headers?.authorization, new Date())
+    const uuid = await getAuthorizedUUID(event.headers?.authorization ?? event.headers?.Authorization, new Date())
     return {
         policyDocument: {
             Statement: [

@@ -21,6 +21,8 @@ import { S3ClientService } from "../services/S3ClientService"
 import { Operation } from "./Operation"
 const Bucket = "uploads.phylopic.org"
 const USER_MESSAGE = "There was a problem with an attempt to upload your file."
+const USER_AUTH_MESSAGE =
+    "There was a problem with an attempt to upload your file. You may need to sign out and sign back in."
 export type PostUploadParameters = DataRequestHeaders & {
     authorization?: string
     "content-type"?: string
@@ -32,7 +34,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    checkContentType(contentType ?? "", ACCEPT)
+    checkContentType(contentType, ACCEPT)
     if (!isImageMediaType(contentType)) {
         throw new Error("Unexpected condition.")
     }
@@ -67,13 +69,13 @@ const createMissingBodyError = () =>
             userMessage: USER_MESSAGE,
         },
     ])
-const createUUIDError = () =>
+const createUUIDError = (falseUUID: unknown) =>
     new APIError(401, [
         {
-            developerMessage: "Invalid authorization.",
+            developerMessage: "Invalid authorization. Expected a UUID: " + String(falseUUID),
             field: "authorization",
             type: "UNAUTHORIZED",
-            userMessage: USER_MESSAGE,
+            userMessage: USER_AUTH_MESSAGE,
         },
     ])
 const createExistingError = () =>
@@ -148,7 +150,7 @@ const getContributor = (authorization: string | undefined) => {
     const payload = authorization ? decodeJWT(authorization.replace(/^Bearer\s+/, "")) : null
     const contributor = payload?.sub
     if (!isUUIDv4(contributor)) {
-        throw createUUIDError()
+        throw createUUIDError(contributor)
     }
     return contributor
 }
