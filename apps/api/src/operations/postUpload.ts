@@ -32,34 +32,17 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    checkContentType(contentType, ACCEPT)
+    checkContentType(contentType ?? "", ACCEPT)
     if (!isImageMediaType(contentType)) {
         throw new Error("Unexpected condition.")
     }
     if (!body) {
         throw createMissingBodyError()
     }
-    const payload = authorization ? decodeJWT(authorization.replace(/^Bearer\s+/, "")) : null
-    const contributor = payload?.sub
-    if (!isUUIDv4(contributor)) {
-        throw createUUIDError()
-    }
+    const contributor = getContributor(authorization)
     const hash = getHash(body)
     const key = `files/${encodeURIComponent(hash)}`
-    const client = service.createS3Client()
-    try {
-        const status = await getCurrentStatus(client, key)
-        if (status.uploaded) {
-            if (status.contributor !== contributor) {
-                throw createExistingError()
-            }
-            console.warn("User already uploaded this file.")
-        } else {
-            await upload(client, body, contentType, key, contributor)
-        }
-    } finally {
-        service.deleteS3Client(client)
-    }
+    await uploadBody(service, key, contributor, body, contentType)
     const link: Link = {
         href: "https://uploads.phylopic.org/" + key,
     }
@@ -98,7 +81,7 @@ const createExistingError = () =>
         {
             developerMessage: "Upload already exists and is attributed to another contributor.",
             field: "authorization",
-            type: "UNAUTHORIZED",
+            type: "ACCESS_DENIED",
             userMessage: "Somebody else already uploaded that file.",
         },
     ])
@@ -127,8 +110,8 @@ const upload = async (client: S3Client, Body: string, ContentType: ImageMediaTyp
     await client.send(
         new PutObjectCommand({
             ACL: "public-read",
-            Bucket,
             Body,
+            Bucket,
             ContentType,
             Key,
             Tagging: createQueryString({
@@ -138,4 +121,34 @@ const upload = async (client: S3Client, Body: string, ContentType: ImageMediaTyp
             } as Submission),
         }),
     )
+}
+const uploadBody = async (
+    service: S3ClientService,
+    key: string,
+    contributor: UUID,
+    body: string,
+    contentType: ImageMediaType,
+) => {
+    const client = service.createS3Client()
+    try {
+        const status = await getCurrentStatus(client, key)
+        if (status.uploaded) {
+            if (status.contributor !== contributor) {
+                throw createExistingError()
+            }
+            console.warn("User already uploaded this file.")
+        } else {
+            await upload(client, body, contentType, key, contributor)
+        }
+    } finally {
+        service.deleteS3Client(client)
+    }
+}
+const getContributor = (authorization: string | undefined) => {
+    const payload = authorization ? decodeJWT(authorization.replace(/^Bearer\s+/, "")) : null
+    const contributor = payload?.sub
+    if (!isUUIDv4(contributor)) {
+        throw createUUIDError()
+    }
+    return contributor
 }

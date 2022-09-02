@@ -30,22 +30,18 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
     useEffect(() => {
         if (buffer && contributorUUID && token) {
             const controller = new AbortController()
-            const promise = axios.post<Link>(
-                "https://8u78sbxjzc.execute-api.us-west-2.amazonaws.com/prod/uploads",
-                buffer,
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                        "content-type": type,
-                    },
-                    onUploadProgress: (event: ProgressEvent) => {
-                        setLoaded(event.loaded)
-                        setTotal(event.total)
-                    },
-                    responseType: "json",
-                    signal: controller.signal,
+            const promise = axios.post<Link>(`https://${process.env.NEXT_PUBLIC_API_DOMAIN}/uploads`, buffer, {
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    "content-type": type,
                 },
-            )
+                onUploadProgress: (event: ProgressEvent) => {
+                    setLoaded(event.loaded)
+                    setTotal(event.total)
+                },
+                responseType: "json",
+                signal: controller.signal,
+            })
             ;(async () => {
                 try {
                     const response = await promise
