@@ -21,10 +21,10 @@ const Assignment: FC<Props> = ({ hash }) => {
     const mutate = useSubmissionMutator(hash)
     const router = useRouter()
     const handleComplete = useCallback(
-        (identifier: Identifier, newTaxonName?: string) => {
+        async (identifier: Identifier, newTaxonName: string | null) => {
             setChangeRequested(false)
-            mutate({ identifier, newTaxonName })
-            router.push(`/edit/${encodeURIComponent(hash)}`)
+            await mutate({ identifier, newTaxonName })
+            await router.push(`/edit/${encodeURIComponent(hash)}`)
         },
         [hash, mutate, router],
     )

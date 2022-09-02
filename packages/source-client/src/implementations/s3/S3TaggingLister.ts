@@ -2,8 +2,7 @@ import { GetObjectTaggingCommand, ListObjectsV2Command, ListObjectsV2Output, Tag
 import { FaultDetector, isString } from "@phylopic/utils"
 import { Listable } from "../../interfaces/Listable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
-import readTagging from "./io/readTagging"
-export default class S3TaggingLister<TValue extends Readonly<Record<string, string | undefined>>>
+export default class S3TaggingLister<TValue extends Readonly<Record<string, string | null>>>
     implements Listable<TValue & { Key: string }, string>
 {
     constructor(
@@ -11,7 +10,8 @@ export default class S3TaggingLister<TValue extends Readonly<Record<string, stri
         protected readonly bucket: string,
         protected readonly prefix: string,
         protected readonly validate: FaultDetector<TValue>,
-        protected readonly pageSize: number | undefined = undefined,
+        protected readonly pageSize: number | undefined,
+        protected readonly readTagging: (tagging: Tagging | undefined) => TValue,
     ) {}
     public async page(token?: string) {
         const output = await this.provider.getS3().send(this.getCommand(token))
@@ -51,7 +51,7 @@ export default class S3TaggingLister<TValue extends Readonly<Record<string, stri
     protected async getItems(output: ListObjectsV2Output): Promise<ReadonlyArray<TValue & { Key: string }>> {
         const keys = output.Contents?.map(content => content.Key).filter(isString) ?? []
         const client = this.provider.getS3()
-        const taggingOutputs = await Promise.all(
+        const taggingOutputsSettled = await Promise.allSettled(
             keys.map(async Key =>
                 client.send(
                     new GetObjectTaggingCommand({
@@ -61,8 +61,11 @@ export default class S3TaggingLister<TValue extends Readonly<Record<string, stri
                 ),
             ),
         )
-        return taggingOutputs
-            .map((output, index) => ({ ...(readTagging(output) as TValue), Key: keys[index] }))
+        return taggingOutputsSettled
+            .filter(isSettled)
+            .map(settled => settled.value)
+            .map((output, index) => ({ ...(this.readTagging(output) as TValue), Key: keys[index] }))
             .filter((value): value is TValue & { Key: string } => this.validate(value))
     }
 }
+const isSettled = <T>(x: PromiseSettledResult<T>): x is PromiseFulfilledResult<T> => x.status === "fulfilled"

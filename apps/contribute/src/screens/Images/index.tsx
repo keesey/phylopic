@@ -24,9 +24,7 @@ const Images: FC<Props> = ({ children }) => {
                     {images => (
                         <UserOptions noAutoScroll>
                             {(images as ReadonlyArray<Image & { uuid: UUID }>).map(image => (
-                                <UserLinkButton key={image.uuid} href={`/edit/${encodeURIComponent(image.uuid)}`}>
-                                    <UserImageThumbnail uuid={image.uuid} />
-                                </UserLinkButton>
+                                <UserImageThumbnail key={image.uuid} uuid={image.uuid} />
                             ))}
                         </UserOptions>
                     )}

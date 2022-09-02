@@ -1,12 +1,13 @@
 .main {
-    height: calc((100vw - 768px) * (64 / (1056 - 768)) + 64px);
-    object-fit: contain;
-    mix-blend-mode: darken;
-    max-height: 128px;
-    max-width: 128px;
-    min-height: 64px;
-    min-width: 64px;
-    width: calc((100vw - 768px) * (64 / (1056 - 768)) + 64px);
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    img {
+        filter: invert(100%);
+        mix-blend-mode: lighten;
+    }
 }
 
 .caption {

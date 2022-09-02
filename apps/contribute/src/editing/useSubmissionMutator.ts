@@ -16,7 +16,7 @@ const useSubmissionMutator = (hash: Hash | undefined) => {
     const { data, mutate } = useSubmissionSWR(hash)
     const token = useAuthToken()
     return useCallback(
-        (newValue: Partial<Submission>) => {
+        async (newValue: Partial<Submission>) => {
             if (data && hash && token) {
                 const key = `/api/submissions/${encodeURIComponent(hash)}`
                 const newData = { ...data, ...newValue } as Submission
@@ -26,7 +26,8 @@ const useSubmissionMutator = (hash: Hash | undefined) => {
                     revalidate: true,
                     rollbackOnError: true,
                 })
-                promise.then(() => invalidate())
+                await promise
+                invalidate()
             }
         },
         [data, hash, invalidate, mutate, token],

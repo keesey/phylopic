@@ -24,7 +24,7 @@ const UserImageThumbnail: FC<Props> = ({ uuid }) => {
     }
     if (publishedSWR.data) {
         return (
-            <figure>
+            <figure className={styles.main}>
                 <ImageThumbnailView value={publishedSWR.data} />
                 <figcaption className={styles.caption}>
                     <NameView value={publishedSWR.data._embedded.specificNode?.names[0]} short />
@@ -38,7 +38,7 @@ export default UserImageThumbnail
 const Unpublished: FC<Props> = ({ uuid }) => {
     const image = useImage(uuid)
     return (
-        <figure>
+        <figure className={styles.main}>
             <FileThumbnailView src={`https://${process.env.NEXT_PUBLIC_SOURCE_IMAGES_DOMAIN}/images/${uuid}/source`} />
             <figcaption className={styles.caption}>
                 {image?.specific ? <NameRenderer value={image?.specific} /> : null}

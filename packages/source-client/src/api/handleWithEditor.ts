@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { Editable } from "../../dist"
+import { Editable } from "../interfaces"
 export const handleWithEditor = async <T>(req: NextApiRequest, res: NextApiResponse<T>, editor: Editable<T>) => {
     switch (req.method) {
         case "DELETE": {

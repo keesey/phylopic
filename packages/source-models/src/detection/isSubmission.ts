@@ -3,9 +3,9 @@ import {
     isIdentifier,
     isISOTimestamp,
     isNormalizedText,
+    isNullOr,
     isObject,
     isPublicDomainLicenseURL,
-    isUndefinedOr,
     isUUIDv4,
     isValidLicenseURL,
     ValidationFaultCollector,
@@ -20,13 +20,13 @@ const isStatus = (x: unknown, faultCollector?: ValidationFaultCollector): x is "
 }
 export const isSubmission = (x: unknown, faultCollector?: ValidationFaultCollector): x is Submission =>
     isObject(x, faultCollector) &&
-    isUndefinedOr(isNormalizedText)((x as Submission).attribution, faultCollector?.sub("attribution")) &&
+    isNullOr(isNormalizedText)((x as Submission).attribution, faultCollector?.sub("attribution")) &&
     isUUIDv4((x as Submission).contributor, faultCollector?.sub("contributor")) &&
     isISOTimestamp((x as Submission).created, faultCollector?.sub("created")) &&
-    isUndefinedOr(isIdentifier)((x as Submission).identifier, faultCollector?.sub("identifier")) &&
-    isUndefinedOr(isValidLicenseURL)((x as Submission).license, faultCollector?.sub("license")) &&
-    isUndefinedOr(isNormalizedText)((x as Submission).newTaxonName, faultCollector?.sub("newTaxonName")) &&
-    isUndefinedOr(isNormalizedText)((x as Submission).sponsor, faultCollector?.sub("sponsor")) &&
+    isNullOr(isIdentifier)((x as Submission).identifier, faultCollector?.sub("identifier")) &&
+    isNullOr(isValidLicenseURL)((x as Submission).license, faultCollector?.sub("license")) &&
+    isNullOr(isNormalizedText)((x as Submission).newTaxonName, faultCollector?.sub("newTaxonName")) &&
+    isNullOr(isNormalizedText)((x as Submission).sponsor, faultCollector?.sub("sponsor")) &&
     isStatus((x as Submission).status, faultCollector?.sub("status")) &&
     ((x as Submission).status === "incomplete" ||
         Boolean(

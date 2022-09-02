@@ -1,4 +1,4 @@
-import { S3Client, GetObjectTaggingCommand, PutObjectCommand } from "@aws-sdk/client-s3"
+import { GetObjectTaggingCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { DATA_MEDIA_TYPE, Link } from "@phylopic/api-models"
 import { Submission } from "@phylopic/source-models"
 import {
@@ -120,7 +120,7 @@ const upload = async (client: S3Client, Body: string, ContentType: ImageMediaTyp
                 contributor,
                 created: new Date().toISOString(),
                 status: "incomplete",
-            } as Submission),
+            } as Partial<Submission> & Record<string, string>),
         }),
     )
 }
