@@ -1445,15 +1445,6 @@ paths:
         - $ref: "#/components/parameters/namespace"
         - $ref: "#/components/parameters/objectid"
       responses:
-        "307":
-          description: An ancestral node was found.
-          headers:
-            Location:
-              $ref: "#/components/headers/Location"
-          content:
-            application/vnd.phylopic.v2+json:
-              schema:
-                $ref: "#/components/schemas/TitledLink"
         "308":
           description: The node was found.
           headers:
