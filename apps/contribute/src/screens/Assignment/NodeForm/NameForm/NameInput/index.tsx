@@ -1,5 +1,5 @@
+import { useMatches } from "@phylopic/ui"
 import { FC } from "react"
-import useAutocomplete from "~/search/useAutocomplete"
 import UserInput from "~/ui/UserInput"
 interface Props {
     onChange: (value: string) => void
@@ -7,7 +7,7 @@ interface Props {
     value: string
 }
 const NameInput: FC<Props> = ({ onChange, placeholder, value }) => {
-    const autocomplete = useAutocomplete(value)
+    const matches = useMatches(8)
     return (
         <>
             <UserInput
@@ -22,8 +22,8 @@ const NameInput: FC<Props> = ({ onChange, placeholder, value }) => {
                 value={value}
             />
             <datalist id="autocomplete">
-                {autocomplete.map(item => (
-                    <option key={item}>{item}</option>
+                {matches.map(match => (
+                    <option key={match}>{match}</option>
                 ))}
             </datalist>
         </>
