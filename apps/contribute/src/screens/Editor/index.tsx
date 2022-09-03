@@ -38,6 +38,7 @@ const Editor: FC<Props> = ({ hash }) => {
                             src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
                             mode="light"
                         />
+                        <br />
                         <figcaption>
                             <p>
                                 This is a silhouette image
