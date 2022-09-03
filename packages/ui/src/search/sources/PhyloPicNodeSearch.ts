@@ -12,7 +12,10 @@ import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
 export const PhyloPicNodeSearch: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const basis = state?.text || undefined
-    const matchingText = React.useMemo(() => getMatchingText(state?.internalMatches, basis), [state?.internalMatches, basis])
+    const matchingText = React.useMemo(
+        () => getMatchingText(state?.internalMatches, basis),
+        [state?.internalMatches, basis],
+    )
     const endpoint = React.useMemo(
         () =>
             matchingText
