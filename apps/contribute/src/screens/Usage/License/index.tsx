@@ -37,7 +37,6 @@ const License: FC<Props> = ({ hash }) => {
                 icon={<Icon alt="No Copyright" src="/logos/publicdomain.svg" />}
                 onClick={() =>
                     mutate({
-                        attribution: null,
                         license: "https://creativecommons.org/publicdomain/mark/1.0/",
                         status: "incomplete",
                     })
@@ -54,7 +53,6 @@ const License: FC<Props> = ({ hash }) => {
                 }
                 onClick={() =>
                     mutate({
-                        attribution: null,
                         license: "https://creativecommons.org/publicdomain/zero/1.0/",
                         status: "incomplete",
                     })
@@ -71,7 +69,6 @@ const License: FC<Props> = ({ hash }) => {
                 }
                 onClick={() =>
                     mutate({
-                        attribution: null,
                         license: "https://creativecommons.org/licenses/by/4.0/",
                         status: "incomplete",
                     })

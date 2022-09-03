@@ -88,6 +88,15 @@ const Usage: FC<Props> = ({ hash }) => {
                         All done.{!submission.attribution && " No credit needed."}
                     </UserLinkButton>
                 )}
+                {hasLicense && (
+                    <UserButton
+                        danger
+                        icon={ICON_PENCIL}
+                        onClick={() => mutate({ status: "incomplete", license: null })}
+                    >
+                        Change the license.
+                    </UserButton>
+                )}
             </UserOptions>
         </Dialogue>
     )
