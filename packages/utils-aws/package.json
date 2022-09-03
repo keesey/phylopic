@@ -7,7 +7,6 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.82.0",
         "@phylopic/utils": "*",
         "raw-body": "^2.5.1",
         "stream": "^0.0.2"
@@ -54,6 +53,10 @@
     },
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-aws",
+    "peerDependencies": {
+        "@aws-sdk/client-s3": "^3.82.0",
+        "@aws-sdk/signature-v4-crt": "^3.163.0"
+    },
     "publishConfig": {
         "access": "public"
     },
@@ -62,9 +65,9 @@
         "url": "git+https://github.com/keesey/phylopic.git"
     },
     "scripts": {
-        "build": "tsup src/index.ts --format esm,cjs --dts",
+        "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-        "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix",
         "test": "mocha"
     },
