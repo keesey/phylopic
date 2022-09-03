@@ -19,22 +19,25 @@ const Images: FC<Props> = ({ children }) => {
     return (
         <Dialogue>
             <Speech mode="system">{children(total)}</Speech>
-            <UserOptions>
-                <Paginator key="images" endpoint="/api/images">
-                    {images => (
+            <Paginator key="images" endpoint="/api/images">
+                {images => (
+                    <>
+                        <br />
                         <UserOptions noAutoScroll>
                             {(images as ReadonlyArray<Image & { uuid: UUID }>).map(image => (
                                 <UserImageThumbnail key={image.uuid} uuid={image.uuid} />
                             ))}
                         </UserOptions>
-                    )}
-                </Paginator>
-                {total === 0 && (
+                    </>
+                )}
+            </Paginator>
+            {total === 0 && (
+                <UserOptions>
                     <UserLinkButton icon={ICON_PLUS} href="/upload">
                         Upload a silhouette.
                     </UserLinkButton>
-                )}
-            </UserOptions>
+                </UserOptions>
+            )}
         </Dialogue>
     )
 }

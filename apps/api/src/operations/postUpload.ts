@@ -109,13 +109,7 @@ const getCurrentStatus = async (
     }
     return contributor ? { contributor, uploaded: true } : { uploaded: false }
 }
-const upload = async (
-    client: S3Client,
-    Body: Buffer,
-    ContentType: ImageMediaType,
-    Key: string,
-    contributor: UUID,
-) => {
+const upload = async (client: S3Client, Body: Buffer, ContentType: ImageMediaType, Key: string, contributor: UUID) => {
     await client.send(
         new PutObjectCommand({
             ACL: "public-read",

@@ -10,6 +10,14 @@
     }
 }
 
+.link:hover {
+    opacity: 0.5;
+}
+
+.unpublished {
+    opacity: 0.5;
+}
+
 .caption {
     display: block;
     font-size: 75%;
