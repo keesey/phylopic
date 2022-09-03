@@ -14,7 +14,7 @@ const createResolutionComparator = (text: string) => (a: ExternalResolution, b: 
         compareStrings(a.uuid, b.uuid)
     )
 }
-const useExternalResolutions = (maxResults = Infinity) => {
+export const useExternalResolutions = (maxResults = Infinity) => {
     const [state] = useContext(SearchContext) ?? []
     const nodeResultUUIDs = useMemo(
         () => new Set((state?.nodeResults ?? []).slice(0, maxResults).map(nodeResult => nodeResult.uuid)),

@@ -1,17 +1,13 @@
+import { SearchContainer } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import dynamic from "next/dynamic"
 import { FC, ReactNode, useEffect } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
-import SearchContainer from "~/search/SearchContainer"
 import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
-const EOLSearch = dynamic(() => import("~/search/sources/EOLSearch"), { ssr: false })
-const OTOLAutocompleteName = dynamic(() => import("~/search/sources/OTOLAutocompleteName"), { ssr: false })
-const OTOLResolve = dynamic(() => import("~/search/sources/OTOLResolve"), { ssr: false })
-const PhyloPicAutocomplete = dynamic(() => import("~/search/sources/PhyloPicAutocomplete"), { ssr: false })
-const PhyloPicNodeSearch = dynamic(() => import("~/search/sources/PhyloPicNodeSearch"), { ssr: false })
+const Search = dynamic(() => import("./Search"), { ssr: false })
 export type Props = {
     aside?: ReactNode
     build?: number
@@ -33,12 +29,7 @@ const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialT
                 <PageLoader />
                 {aside && <aside key="aside">{aside}</aside>}
                 <SearchContainer initialText={initialText}>
-                    <PhyloPicAutocomplete />
-                    {/*<PhyloPicImageSearch />*/}
-                    <PhyloPicNodeSearch />
-                    <OTOLAutocompleteName />
-                    <OTOLResolve />
-                    <EOLSearch />
+                    <Search />
                     <header>
                         <SiteNav />
                     </header>

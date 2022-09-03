@@ -1,6 +1,6 @@
 import { createSearch } from "@phylopic/utils"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
-import { FC, useContext, useEffect } from "react"
+import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import SearchContext from "../context"
@@ -30,10 +30,10 @@ const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, 
     )
     return [response.data.results, query]
 }
-const EOLSearch: FC = () => {
-    const [state, dispatch] = useContext(SearchContext) ?? []
+export const EOLSearch: React.FC = () => {
+    const [state, dispatch] = React.useContext(SearchContext) ?? []
     const response = useSWRImmutable(state?.text ? [URL, state.text] : null, fetcher)
-    useEffect(() => {
+    React.useEffect(() => {
         if (dispatch && response.data) {
             dispatch({
                 type: "ADD_EXTERNAL_MATCHES",

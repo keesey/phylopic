@@ -1,10 +1,8 @@
+import { SearchContext, useExternalResolutions, useMatches } from "@phylopic/ui"
 import { extractPath } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import { ChangeEvent, FC, FormEvent, useCallback, useContext, useState } from "react"
-import SearchContext from "~/search/context"
-import useExternalResolutions from "~/search/hooks/useExternalResolutions"
-import useMatches from "~/search/hooks/useMatches"
 import styles from "./index.module.scss"
 const MAX_MATCHES = 16
 const SearchBar: FC = () => {

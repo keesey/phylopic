@@ -1,48 +1,47 @@
-import { NodeListParameters, NodeWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
+import { ImageListParameters, ImageWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
 import { useAPISWRKey } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
-import { FC, useContext, useEffect, useMemo } from "react"
+import React from "react"
 import useSWRImmutable from "swr/immutable"
 import SearchContext from "../context"
-import { SetNodeResultsAction } from "../context/actions"
+import { SetImageResultsAction } from "../context/actions"
 import useQueryFetcher, { QueryKey } from "../hooks/useQueryFetcher"
 import getMatchingText from "./getMatchingText"
 import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
-const PhyloPicNodeSearch: FC = () => {
-    const [state, dispatch] = useContext(SearchContext) ?? []
+export const PhyloPicImageSearch: React.FC = () => {
+    const [state, dispatch] = React.useContext(SearchContext) ?? []
     const basis = state?.text || undefined
-    const matchingText = useMemo(() => getMatchingText(state?.internalMatches, basis), [state?.internalMatches, basis])
-    const endpoint = useMemo(
+    const matchingText = React.useMemo(() => getMatchingText(state?.internalMatches, basis), [state?.internalMatches, basis])
+    const endpoint = React.useMemo(
         () =>
             matchingText
                 ? "https://" +
                   process.env.NEXT_PUBLIC_API_DOMAIN +
-                  "/nodes" +
+                  "/images" +
                   createSearch({
-                      embed_items: "true",
-                      embed_primaryImage: "true",
+                      embed_specificNode: "true",
                       filter_name: matchingText,
                       page: "0",
-                  } as NodeListParameters & Query)
+                  } as ImageListParameters & Query)
                 : null,
         [matchingText],
     )
     const apiSWRKey = useAPISWRKey(endpoint)
-    const key = useMemo(() => (apiSWRKey && basis ? ([apiSWRKey, basis] as QueryKey) : null), [apiSWRKey, basis])
+    const key = React.useMemo(() => (apiSWRKey && basis ? ([apiSWRKey, basis] as QueryKey) : null), [apiSWRKey, basis])
     const [debouncedKey, setDebouncedKey] = useDebounce(key, DEBOUNCE_WAIT, true)
-    useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
-    const fetcher = useQueryFetcher<PageWithEmbedded<NodeWithEmbedded>>()
+    React.useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
+    const fetcher = useQueryFetcher<PageWithEmbedded<ImageWithEmbedded>>()
     const { data } = useSWRImmutable(debouncedKey, fetcher)
-    useEffect(() => {
+    React.useEffect(() => {
         if (dispatch && data?.[0] && data[1]) {
             dispatch({
                 meta: { basis: data[1] },
                 payload: data[0]._embedded.items,
-                type: "SET_NODE_RESULTS",
-            } as SetNodeResultsAction)
+                type: "SET_IMAGE_RESULTS",
+            } as SetImageResultsAction)
         }
     }, [data, dispatch])
     return null
 }
-export default PhyloPicNodeSearch
+export default PhyloPicImageSearch

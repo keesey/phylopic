@@ -1,6 +1,5 @@
+import { SearchContext, useExternalResolutions } from "@phylopic/ui"
 import { FC, useContext, useMemo } from "react"
-import SearchContext from "~/search/context"
-import useExternalResolutions from "~/search/hooks/useExternalResolutions"
 import IllustratedNodeView from "~/views/IllustratedNodeView"
 import SearchAside from "../SearchAside"
 import ExternalResolutionCaption from "./ExternalResolutionCaption"

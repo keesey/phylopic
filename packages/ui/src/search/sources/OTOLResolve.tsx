@@ -1,6 +1,6 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
-import { FC, useContext, useEffect, useMemo } from "react"
+import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import SearchContext from "../context"
@@ -34,10 +34,10 @@ const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = as
     })
     return response.data
 }
-const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
-    const [, dispatch] = useContext(SearchContext) ?? []
+const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
+    const [, dispatch] = React.useContext(SearchContext) ?? []
     const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
-    useEffect(
+    React.useEffect(
         () =>
             setDirectKey(
                 ott_id
@@ -50,14 +50,14 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
     )
     const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchDirect)
     const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
-    const lineageIDs = useMemo(() => {
+    const lineageIDs = React.useMemo(() => {
         if (!lineage.data?.lineage) {
             return []
         }
         return lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))
     }, [lineage.data?.lineage])
     const [indirectKey, setIndirectKey] = useDebounce<[string, string[]] | null>(null, DEBOUNCE_WAIT, true)
-    useEffect(
+    React.useEffect(
         () =>
             setIndirectKey(
                 lineageIDs.length
@@ -70,7 +70,7 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
         [lineageIDs, setIndirectKey],
     )
     const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchIndirect)
-    useEffect(() => {
+    React.useEffect(() => {
         const node = direct.data ?? indirect.data
         if (node && dispatch) {
             dispatch({
@@ -82,9 +82,9 @@ const OTOLResolveObject: FC<{ ott_id: number }> = ({ ott_id }) => {
     }, [direct.data, dispatch, indirect.data, ott_id])
     return null
 }
-const OTOLResolve: FC = () => {
-    const [state] = useContext(SearchContext) ?? []
-    const unresolvedOTTIDs = useMemo(() => {
+export const OTOLResolve: React.FC = () => {
+    const [state] = React.useContext(SearchContext) ?? []
+    const unresolvedOTTIDs = React.useMemo(() => {
         const ott_ids = Object.keys(state?.externalResults["opentreeoflife.org"]?.taxonomy ?? {})
         return ott_ids
             .filter(id => !state?.resolutions["opentreeoflife.org"]?.taxonomy?.[id])

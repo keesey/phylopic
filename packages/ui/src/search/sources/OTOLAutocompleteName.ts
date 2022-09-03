@@ -1,5 +1,5 @@
 import { fetchDataAndCheck } from "@phylopic/utils-api"
-import { FC, useContext, useEffect } from "react"
+import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import SearchContext from "../context"
@@ -22,10 +22,10 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
     return [response.data, name]
 }
 const sanitizeUniqueName = (name: string) => name.replace(/\s*\([a-z\s+(in|with)[^)]+\)/gi, "")
-const OTOLAutocompleteName: FC = () => {
-    const [state, dispatch] = useContext(SearchContext) ?? []
+export const OTOLAutocompleteName: React.FC = () => {
+    const [state, dispatch] = React.useContext(SearchContext) ?? []
     const response = useSWRImmutable(state?.text ? [OTOL_URL + "/tnrs/autocomplete_name", state.text] : null, fetcher)
-    useEffect(() => {
+    React.useEffect(() => {
         if (dispatch && response.data) {
             dispatch({
                 type: "ADD_EXTERNAL_MATCHES",
