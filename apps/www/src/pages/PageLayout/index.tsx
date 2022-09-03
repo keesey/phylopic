@@ -7,6 +7,7 @@ import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
+const BuildChecker = dynamic(() => import("./BuildChecker"), { ssr: false })
 const Search = dynamic(() => import("./Search"), { ssr: false })
 export type Props = {
     aside?: ReactNode
@@ -26,6 +27,7 @@ const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialT
     return (
         <SWRConfig value={{ fallback }}>
             <BuildContainer initialValue={build}>
+                <BuildChecker />
                 <PageLoader />
                 {aside && <aside key="aside">{aside}</aside>}
                 <SearchContainer initialText={initialText}>
