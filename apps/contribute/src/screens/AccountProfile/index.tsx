@@ -102,7 +102,9 @@ const AccountProfile: FC = () => {
                         )}
                     </UserTextForm>
                     <UserOptions>
-                        <UserButton icon={ICON_X} onClick={() => setNameChangeRequested(false)}>Never mind, that is my name.</UserButton>
+                        <UserButton icon={ICON_X} onClick={() => setNameChangeRequested(false)}>
+                            Never mind, that is my name.
+                        </UserButton>
                     </UserOptions>
                 </>
             )}

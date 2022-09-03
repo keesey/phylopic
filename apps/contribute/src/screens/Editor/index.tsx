@@ -48,12 +48,17 @@ const Editor: FC<Props> = ({ hash }) => {
                                         {" "}
                                         of{" "}
                                         <strong>
-                                            {submission.newTaxonName && <NameRenderer value={submission.newTaxonName} />}
-                                            {!submission.newTaxonName && <IdentifierView value={submission.identifier} />}
+                                            {submission.newTaxonName && (
+                                                <NameRenderer value={submission.newTaxonName} />
+                                            )}
+                                            {!submission.newTaxonName && (
+                                                <IdentifierView value={submission.identifier} />
+                                            )}
                                         </strong>
                                         {submission.newTaxonName && (
                                             <>
-                                                {" "}(<IdentifierView value={submission.identifier} short />)
+                                                {" "}
+                                                (<IdentifierView value={submission.identifier} short />)
                                             </>
                                         )}
                                     </>

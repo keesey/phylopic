@@ -1,13 +1,16 @@
-import { useMatches } from "@phylopic/ui"
-import { FC } from "react"
+import { SearchContext, useMatches } from "@phylopic/ui"
+import { FC, useContext, useEffect, useState } from "react"
 import UserInput from "~/ui/UserInput"
 interface Props {
-    onChange: (value: string) => void
     placeholder: string
-    value: string
 }
-const NameInput: FC<Props> = ({ onChange, placeholder, value }) => {
-    const matches = useMatches(8)
+const NameInput: FC<Props> = ({ placeholder }) => {
+    const matches = useMatches()
+    const [{ text }, dispatch] = useContext(SearchContext) ?? [{}]
+    const [value, setValue] = useState(text ?? "")
+    useEffect(() => {
+        dispatch?.({ type: "SET_TEXT", payload: value })
+    }, [dispatch, value])
     return (
         <>
             <UserInput
@@ -16,7 +19,7 @@ const NameInput: FC<Props> = ({ onChange, placeholder, value }) => {
                 maxLength={128}
                 minLength={2}
                 name="searchName"
-                onChange={onChange}
+                onChange={setValue}
                 placeholder={placeholder}
                 type="search"
                 value={value}

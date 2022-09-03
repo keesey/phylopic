@@ -1,5 +1,5 @@
 import { SearchContext } from "@phylopic/ui"
-import { FC, useContext } from "react"
+import { FC, useContext, useEffect, useState } from "react"
 import UserTextForm, { Props as UserTextFormProps } from "~/ui/UserTextForm"
 import NameRenderer from "../NameRenderer"
 import NameInput from "./NameInput"
@@ -7,16 +7,22 @@ export type Props = Pick<UserTextFormProps, "postfix" | "prefix"> & {
     placeholder: string
 }
 const NameForm: FC<Props> = ({ placeholder, ...formProps }) => {
-    const [{ text }, dispatch] = useContext(SearchContext) ?? [{}]
+    const [editable, setEditable] = useState(true)
+    const [{ text }] = useContext(SearchContext) ?? [{}]
+    useEffect(() => {
+        if (!text) {
+            setEditable(true)
+        }
+    }, [text])
     return (
         <UserTextForm
             {...formProps}
-            editable={!text}
-            onSubmit={payload => dispatch?.({ type: "SET_TEXT", payload })}
+            editable={editable}
+            onSubmit={value => setEditable(Boolean(value))}
             value={text ?? ""}
             renderer={value => <NameRenderer value={value} />}
         >
-            {(value, setValue) => <NameInput onChange={setValue} value={value} placeholder={placeholder} />}
+            {() => <NameInput placeholder={placeholder} />}
         </UserTextForm>
     )
 }
