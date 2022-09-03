@@ -18,6 +18,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return postUpload(
                         {
                             body: event.body ?? undefined,
+                            encoding: event.isBase64Encoded ? "base64" : "utf8",
                             ...getParameters(event.headers, ["accept", "authorization", "content-type"]),
                         },
                         SERVICE,

@@ -25,12 +25,13 @@ const USER_AUTH_MESSAGE =
     "There was a problem with an attempt to upload your file. You may need to sign out and sign back in."
 export type PostUploadParameters = DataRequestHeaders & {
     authorization?: string
+    encoding: "base64" | "utf8"
     "content-type"?: string
 }
 export type PostUploadService = S3ClientService
 const ACCEPT = "image/svg+xml,image/png,image/gif,image/bmp,image/jpeg"
 export const postUpload: Operation<PostUploadParameters, PostUploadService> = async (
-    { accept, authorization, body, "content-type": contentType },
+    { accept, authorization, body, "content-type": contentType, encoding },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
@@ -44,7 +45,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     const contributor = getContributor(authorization)
     const hash = getHash(body)
     const key = `files/${encodeURIComponent(hash)}`
-    await uploadBody(service, key, contributor, body, contentType)
+    await uploadBody(service, key, contributor, Buffer.from(body, encoding), contentType)
     const link: Link = {
         href: "https://uploads.phylopic.org/" + key,
     }
@@ -108,7 +109,13 @@ const getCurrentStatus = async (
     }
     return contributor ? { contributor, uploaded: true } : { uploaded: false }
 }
-const upload = async (client: S3Client, Body: string, ContentType: ImageMediaType, Key: string, contributor: UUID) => {
+const upload = async (
+    client: S3Client,
+    Body: Buffer,
+    ContentType: ImageMediaType,
+    Key: string,
+    contributor: UUID,
+) => {
     await client.send(
         new PutObjectCommand({
             ACL: "public-read",
@@ -128,7 +135,7 @@ const uploadBody = async (
     service: S3ClientService,
     key: string,
     contributor: UUID,
-    body: string,
+    body: Buffer,
     contentType: ImageMediaType,
 ) => {
     const client = service.createS3Client()

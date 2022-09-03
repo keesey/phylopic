@@ -1,6 +1,12 @@
 service: phylopic-api
 useDotenv: true
 provider:
+    apiGateway:
+        binaryMediaTypes:
+            - "image/bmp"
+            - "image/gif"
+            - "image/jpeg"
+            - "image/png"
     iam:
         role: arn:aws:iam::960039257217:role/phylopic-api-executor
     name: aws
