@@ -35,7 +35,13 @@ const License: FC<Props> = ({ hash }) => {
         <UserOptions>
             <UserButton
                 icon={<Icon alt="No Copyright" src="/logos/publicdomain.svg" />}
-                onClick={() => mutate({ attribution: null, license: "https://creativecommons.org/publicdomain/mark/1.0/", status: "incomplete" })}
+                onClick={() =>
+                    mutate({
+                        attribution: null,
+                        license: "https://creativecommons.org/publicdomain/mark/1.0/",
+                        status: "incomplete",
+                    })
+                }
             >
                 It&rsquo;s already in the public domain.
             </UserButton>
@@ -46,7 +52,13 @@ const License: FC<Props> = ({ hash }) => {
                         <Icon alt="Public Domain Dedication" src="/logos/cc-zero.svg" />
                     </span>
                 }
-                onClick={() => mutate({ attribution: null, license: "https://creativecommons.org/publicdomain/zero/1.0/", status: "incomplete" })}
+                onClick={() =>
+                    mutate({
+                        attribution: null,
+                        license: "https://creativecommons.org/publicdomain/zero/1.0/",
+                        status: "incomplete",
+                    })
+                }
             >
                 Release it into the public domain.
             </UserButton>
@@ -57,7 +69,13 @@ const License: FC<Props> = ({ hash }) => {
                         <Icon alt="Attribution" src="/logos/cc-by.svg" />
                     </span>
                 }
-                onClick={() => mutate({ attribution: null, license: "https://creativecommons.org/licenses/by/4.0/", status: "incomplete" })}
+                onClick={() =>
+                    mutate({
+                        attribution: null,
+                        license: "https://creativecommons.org/licenses/by/4.0/",
+                        status: "incomplete",
+                    })
+                }
             >
                 Attribution should always be given.
             </UserButton>

@@ -1,6 +1,6 @@
 import { handleAPIError } from "@phylopic/source-client"
 import { isSubmission, Submission } from "@phylopic/source-models"
-import { isHash, isUUIDv4, UUID, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
+import { isHash, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import SourceClient from "~/source/SourceClient"
@@ -60,7 +60,7 @@ const index: NextApiHandler<Submission> = async (req, res) => {
                 if (!isSubmission(newValue, faultCollector)) {
                     throw new ValidationError(faultCollector.list(), "Invalid payload.")
                 }
-                submissionClient.put(newValue)
+                await submissionClient.put(newValue)
                 res.status(204)
                 break
             }
