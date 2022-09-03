@@ -69,6 +69,15 @@ const Usage: FC<Props> = ({ hash }) => {
             <License hash={hash} />
             {hasLicense && <Attribution key="attribution" hash={hash} />}
             <UserOptions>
+                {hasLicense && (
+                    <UserButton
+                        danger
+                        icon={ICON_PENCIL}
+                        onClick={() => mutate({ status: "incomplete", license: null })}
+                    >
+                        Change the license.
+                    </UserButton>
+                )}
                 {hasLicense && !submission.attribution && contributor?.name && (
                     <UserButton icon={ICON_HAND_POINT_RIGHT} onClick={() => mutate({ attribution: contributor.name })}>
                         I get the credit.
@@ -87,15 +96,6 @@ const Usage: FC<Props> = ({ hash }) => {
                     <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(hash)}`}>
                         All done.{!submission.attribution && " No credit needed."}
                     </UserLinkButton>
-                )}
-                {hasLicense && (
-                    <UserButton
-                        danger
-                        icon={ICON_PENCIL}
-                        onClick={() => mutate({ status: "incomplete", license: null })}
-                    >
-                        Change the license.
-                    </UserButton>
                 )}
             </UserOptions>
         </Dialogue>
