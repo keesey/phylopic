@@ -14,7 +14,6 @@ export type Props = {
     onComplete: (identifier: Identifier, newTaxonName: string | null) => void
 }
 const NodeForm: FC<Props> = ({ onComplete }) => {
-    const [nameText, setNameText] = useState("")
     return (
         <SearchContainer>
             <>
@@ -23,7 +22,7 @@ const NodeForm: FC<Props> = ({ onComplete }) => {
                 <PhyloPicNodeSearch />
                 <OTOLResolve />
             </>
-            <NameForm />
+            <NameForm placeholder="Species or other taxonomic group" />
             <NodeSearch onComplete={onComplete} />
             <UserScrollTo />
         </SearchContainer>

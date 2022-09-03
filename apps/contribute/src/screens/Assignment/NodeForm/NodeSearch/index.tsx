@@ -25,7 +25,7 @@ export const NodeSearch: FC<Props> = ({ onComplete }) => {
                         objectID: node.uuid,
                     } as SearchEntry),
             ),
-            ...externalResolutions.map(
+            ...externalResolutions.filter(value => !nodeResults || !nodeResults.some(node => node.uuid === value.uuid)).map(
                 resolution =>
                     ({
                         authority: resolution.authority,

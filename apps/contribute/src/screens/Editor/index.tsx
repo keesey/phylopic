@@ -13,6 +13,7 @@ import UserButton from "~/ui/UserButton"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 import UserVerification from "../../ui/UserVerification"
+import NameRenderer from "../Assignment/NodeForm/NameRenderer"
 import LoadingState from "../LoadingState"
 export type Props = {
     hash: Hash
@@ -47,8 +48,14 @@ const Editor: FC<Props> = ({ hash }) => {
                                         {" "}
                                         of{" "}
                                         <strong>
-                                            <IdentifierView value={submission.identifier} />
+                                            {submission.newTaxonName && <NameRenderer value={submission.newTaxonName} />}
+                                            {!submission.newTaxonName && <IdentifierView value={submission.identifier} />}
                                         </strong>
+                                        {submission.newTaxonName && (
+                                            <>
+                                                {" "}(<IdentifierView value={submission.identifier} short />)
+                                            </>
+                                        )}
                                     </>
                                 )}
                                 {submission.attribution && (

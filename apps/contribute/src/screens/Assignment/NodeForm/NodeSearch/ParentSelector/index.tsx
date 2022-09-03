@@ -12,12 +12,6 @@ export type Props = {
     onComplete: (identifier: Identifier, newTaxonName: string | null) => void
 }
 export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
-    const [nameText, setNameText] = useState("")
-    const [selected, setSelected] = useState<SearchEntry | null>(null)
-    const onSelect = useCallback((entry: SearchEntry | null) => {
-        setNameText(entry ? stringifyNomen(entry.name) : "")
-        setSelected(entry)
-    }, [])
     return (
         <SearchContainer>
             <>
@@ -30,14 +24,8 @@ export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
                     part of?
                 </p>
             </Speech>
-            <NameForm prefix={<NoBreak>Sure, how about&nbsp;</NoBreak>} postfix="?" />
-            <ParentSearch
-                childName={childName}
-                nameText={nameText}
-                selected={selected}
-                onSelect={onSelect}
-                onComplete={onComplete}
-            />
+            <NameForm placeholder="more general group" prefix={<NoBreak>Sure, how about&nbsp;</NoBreak>} postfix="?" />
+            <ParentSearch childName={childName} onComplete={onComplete} />
         </SearchContainer>
     )
 }

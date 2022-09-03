@@ -7,6 +7,11 @@
     gap: 0.5em;
 }
 
+.incomplete {
+    mix-blend-mode: darken;
+    opacity: 0.5;
+}
+
 .caption {
     color: colors.$black;
     display: block;

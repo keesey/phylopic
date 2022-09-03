@@ -1,4 +1,5 @@
 import { Hash } from "@phylopic/utils"
+import clsx from "clsx"
 import { FC } from "react"
 import useSubmission from "~/editing/useSubmission"
 import FileThumbnailView from "../FileThumbnailView"
@@ -10,11 +11,8 @@ export type Props = {
 const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     return (
-        <div className={styles.main}>
+        <div className={clsx(styles.main, submission && styles[submission.status])}>
             <figure className={styles.figure}>
-                <figcaption className={styles.caption}>
-                    {submission?.status === "submitted" ? "Awaiting Review" : "Unfinished"}
-                </figcaption>
                 <FileThumbnailView
                     src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
                 />
