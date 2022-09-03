@@ -4,6 +4,6 @@ const useListCountInvalidator = (endpoint: string, delta: number) => {
     const { data, mutate } = useSWR(`${endpoint}?count=total`)
     return useCallback(() => {
         mutate(undefined, { optimisticData: data + delta, revalidate: true })
-    }, [data, mutate])
+    }, [data, delta, mutate])
 }
 export default useListCountInvalidator

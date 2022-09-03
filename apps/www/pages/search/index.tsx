@@ -7,12 +7,12 @@ import {
     QueryMatches,
 } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
+import { getMatchingText } from "@phylopic/ui"
 import { fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
 import { PublicConfiguration } from "swr/dist/types"
 import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
-import getMatchingText from "~/search/sources/getMatchingText"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SearchAside from "~/ui/SearchAside"
 type Props = Omit<PageLayoutProps, "children">

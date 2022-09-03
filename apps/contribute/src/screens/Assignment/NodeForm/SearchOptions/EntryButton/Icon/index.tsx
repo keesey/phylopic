@@ -4,7 +4,7 @@ import { Authority, isUUIDv4, Namespace, ObjectID } from "@phylopic/utils"
 import { useAPIFetcher } from "@phylopic/utils-api"
 import { FC, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
-import { SearchEntry } from "~/search/SearchEntry"
+import { SearchEntry } from "../../../NodeSearch/SearchEntry"
 import AuthorityIcon from "./AuthorityIcon"
 import styles from "./index.module.scss"
 export type Props = {
