@@ -1,9 +1,9 @@
 import { JWT } from "@phylopic/source-models"
 import { Hash } from "@phylopic/utils"
 import axios from "axios"
-import { useRouter } from "next/router"
 import { useCallback } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
+import useListCountInvalidator from "./useListCountInvalidator"
 import useListInvalidator from "./useListInvalidator"
 import useSubmissionSWR from "./useSubmissionSWR"
 const deleteSubmission = async (url: string, token: JWT): Promise<any> => {
@@ -15,20 +15,19 @@ const deleteSubmission = async (url: string, token: JWT): Promise<any> => {
     return null
 }
 const useSubmissionDeletor = (hash: Hash | undefined) => {
-    const invalidate = useListInvalidator("/api/submissions")
+    const invalidateList = useListInvalidator("/api/submissions")
+    const invalidateListCount = useListCountInvalidator("/api/submissions", -1)
     const { mutate } = useSubmissionSWR(hash)
     const token = useAuthToken()
-    const router = useRouter()
-    return useCallback(() => {
+    return useCallback(async () => {
         if (hash && token) {
             const url = `/api/submissions/${encodeURIComponent(hash)}`
             const promise = deleteSubmission(url, token)
-            mutate(promise, { optimisticData: undefined as any, rollbackOnError: true })
-            promise.then(() => {
-                invalidate()
-                return router.push("/")
-            })
+            mutate(promise)
+            await promise
+            invalidateList()
+            invalidateListCount()
         }
-    }, [invalidate, mutate, router, token, hash])
+    }, [invalidateList, invalidateListCount, mutate, token, hash])
 }
 export default useSubmissionDeletor

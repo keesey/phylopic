@@ -1,11 +1,9 @@
 import { useCallback } from "react"
 import useSWR from "swr"
 const useListInvalidator = (endpoint: string) => {
-    const { mutate: mutatePage } = useSWR(endpoint)
-    const { mutate: mutateCount } = useSWR(`${endpoint}?count=total`)
+    const { mutate } = useSWR(endpoint)
     return useCallback(() => {
-        mutateCount(undefined, { revalidate: true })
-        mutatePage(undefined, { revalidate: true })
-    }, [mutateCount, mutatePage])
+        mutate(undefined, { revalidate: true })
+    }, [mutate])
 }
 export default useListInvalidator
