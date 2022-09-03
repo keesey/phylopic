@@ -13,12 +13,12 @@ const EditMenu: FC<Props> = ({ submissionHash }) => {
             <MenuLink
                 href={`/edit/${encodeURIComponent(submissionHash)}/nodes`}
                 icon={ICON_PENCIL}
-                label={`${submission?.identifier ? "Change": "Set"} Taxonomic Assignment`}
+                label={`${submission?.identifier ? "Change" : "Set"} Taxonomic Assignment`}
             />
             <MenuLink
                 href={`/edit/${encodeURIComponent(submissionHash)}/usage`}
                 icon={ICON_PENCIL}
-                label={`${submission?.license ? "Change": "Set"} License and Attribution`}
+                label={`${submission?.license ? "Change" : "Set"} License and Attribution`}
             />
         </>
     )

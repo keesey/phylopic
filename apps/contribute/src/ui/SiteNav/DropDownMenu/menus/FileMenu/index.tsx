@@ -38,7 +38,12 @@ const FileMenu: FC<Props> = ({ submission, submissionHash }) => {
                 <>
                     <MenuDivider />
                     {submission.status === "incomplete" && (
-                        <MenuButton disabled={!submittable} icon={ICON_CHECK} label="Submit this Image" onClick={submit} />
+                        <MenuButton
+                            disabled={!submittable}
+                            icon={ICON_CHECK}
+                            label="Submit this Image"
+                            onClick={submit}
+                        />
                     )}
                     {submission.status === "submitted" && (
                         <MenuButton icon={ICON_X} label="Withdraw this Submission" onClick={withdraw} />
