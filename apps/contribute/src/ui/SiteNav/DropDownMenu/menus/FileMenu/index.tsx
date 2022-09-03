@@ -13,7 +13,6 @@ export type Props = {
     submission?: Submission
 }
 const FileMenu: FC<Props> = ({ submission, submissionHash }) => {
-    const submittable = useMemo(() => isSubmission({ ...submission, submitted: true }), [submission])
     const mutator = useSubmissionMutator(submissionHash)
     const deletor = useSubmissionDeletor(submissionHash)
     const withdraw = useCallback(async () => {
@@ -31,14 +30,15 @@ const FileMenu: FC<Props> = ({ submission, submissionHash }) => {
             await router.push("/")
         }
     }, [deletor, router])
+    const submittable = useMemo(() => isSubmission({ ...submission, status: "submitted" } as Submission), [submission])
     return (
         <>
             <MenuLink icon={ICON_PLUS} label="Upload New Image" href="/upload" />
             {submission && (
                 <>
                     <MenuDivider />
-                    {submission.status === "incomplete" && submittable && (
-                        <MenuButton icon={ICON_CHECK} label="Submit this Image" onClick={submit} />
+                    {submission.status === "incomplete" && (
+                        <MenuButton disabled={!submittable} icon={ICON_CHECK} label="Submit this Image" onClick={submit} />
                     )}
                     {submission.status === "submitted" && (
                         <MenuButton icon={ICON_X} label="Withdraw this Submission" onClick={withdraw} />

@@ -1,3 +1,19 @@
+@use "@phylopic/styles/colors.scss";
+
+.disabled {
+    a {
+        color: colors.$wash  !important;
+        cursor: not-allowed;
+
+        &:hover,
+        &:active {
+            color: colors.$wash;
+            opacity: unset;
+        }
+    }
+
+}
+
 .link {
     display: flex;
     gap: 1em;
