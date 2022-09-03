@@ -2,11 +2,11 @@ import { Loader } from "@phylopic/ui"
 import { getIdentifier, Identifier } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { FC, useCallback, useMemo, useState } from "react"
-import { SearchEntry } from "~/search/SearchEntry"
 import Speech from "~/ui/Speech"
 import UserVerification from "~/ui/UserVerification"
 import SearchOptions from "../SearchOptions"
 import ParentSelector from "./ParentSelector"
+import { SearchEntry } from "./SearchEntry"
 export type Props = {
     entries: readonly SearchEntry[]
     nameText: string

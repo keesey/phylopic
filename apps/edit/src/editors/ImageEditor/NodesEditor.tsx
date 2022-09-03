@@ -52,7 +52,7 @@ const LineageEditor: FC<{
     return (
         <BubbleList>
             {nodesToShow.map((node, index) => (
-                <BubbleNode light={index >= lastIndex}>
+                <BubbleNode key={node.uuid} light={index >= lastIndex}>
                     <AnchorLink href={`/nodes/${node.uuid}`}>
                         <NameView
                             name={node.names[0]}

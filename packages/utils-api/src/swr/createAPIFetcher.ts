@@ -2,7 +2,7 @@ import { DATA_MEDIA_TYPE, ErrorResponse } from "@phylopic/api-models"
 import { URL } from "@phylopic/utils"
 import axios from "axios"
 import { Dispatch, SetStateAction } from "react"
-import { Fetcher } from "swr"
+import type { Fetcher } from "swr"
 import APISWRError from "./APISWRError"
 export const createAPIFetcher =
     <T extends Readonly<{ build: number }>>(setBuild?: Dispatch<SetStateAction<number>>): Fetcher<T, URL> =>

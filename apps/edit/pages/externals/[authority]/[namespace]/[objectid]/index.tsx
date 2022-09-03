@@ -95,7 +95,7 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
                 router.push(`/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`)
             })()
         }
-    }, [authority, key, mutate, namespace])
+    }, [authority, key, mutate, namespace, router])
     const handleSelect = useCallback(
         (value: Entity<Node> | undefined) => {
             if (external && node && value && value.uuid !== node.uuid) {
@@ -107,7 +107,7 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
             }
             setSelecting(false)
         },
-        [external, mutate, node],
+        [external, key, mutate, node],
     )
     if (!external || !node) {
         if (externalError || nodeError) {

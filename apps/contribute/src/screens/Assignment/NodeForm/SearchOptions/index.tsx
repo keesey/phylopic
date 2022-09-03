@@ -1,11 +1,11 @@
+import { getIdentifier } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
-import getIdentifier from "~/search/getIdentifier"
-import { SearchEntry } from "~/search/SearchEntry"
 import { ICON_X } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
+import { SearchEntry } from "../NodeSearch/SearchEntry"
 import EntryButton from "./EntryButton"
 export type Props = {
     entries: readonly SearchEntry[]
@@ -28,7 +28,11 @@ const SearchOptions: FC<Props> = ({ entries, onSelect }) => {
             <UserOptions>
                 <>
                     {entries.map(entry => (
-                        <EntryButton key={getIdentifier(entry)} onClick={() => select(entry)} value={entry} />
+                        <EntryButton
+                            key={getIdentifier(entry.authority, entry.namespace, entry.objectID)}
+                            onClick={() => select(entry)}
+                            value={entry}
+                        />
                     ))}
                 </>
                 <UserButton danger icon={ICON_X} onClick={() => select(null)}>

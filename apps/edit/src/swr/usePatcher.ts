@@ -5,14 +5,15 @@ import { SWRResponse } from "swr"
 const usePatcher = <T extends { modified: ISOTimestamp }>(
     key: string,
     response: SWRResponse<T & { uuid: UUID }, unknown>,
-) =>
-    useCallback(
+) => {
+    const { data, mutate } = response
+    return useCallback(
         (value: Partial<T>) => {
-            if (response.data === undefined) {
+            if (data === undefined) {
                 throw new Error("Still loading!")
             }
-            const newData = { ...response.data, ...value, modified: new Date().toISOString() }
-            response.mutate(
+            const newData = { ...data, ...value, modified: new Date().toISOString() }
+            mutate(
                 async () => {
                     await axios.patch(key, newData)
                     return newData
@@ -20,6 +21,7 @@ const usePatcher = <T extends { modified: ISOTimestamp }>(
                 { optimisticData: newData, revalidate: true, rollbackOnError: true },
             )
         },
-        [key, response.data, response.mutate],
+        [data, key, mutate],
     )
+}
 export default usePatcher

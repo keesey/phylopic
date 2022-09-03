@@ -38,7 +38,7 @@ const NodeSelector: FC<Props> = ({ open, onSelect }) => {
             {searchText && Boolean(searchResults?.items.length) && (
                 <BubbleList>
                     {searchResults?.items.map(node => (
-                        <BubbleItem>
+                        <BubbleItem key={node.uuid}>
                             <button onClick={() => onSelect({ value: node, uuid: node.uuid })}>
                                 <NameView name={node.names[0]} />
                             </button>

@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react"
-import { Fetcher } from "swr"
+import type { Fetcher } from "swr"
 import { BuildContext } from "../builds"
 import createAPIFetcher from "./createAPIFetcher"
 export const useAPIFetcher = <T extends Readonly<{ build: number }> = Readonly<{ build: number }>>(): Fetcher<T> => {

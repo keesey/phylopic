@@ -10,16 +10,17 @@ const useDeletor = (
     route: UrlObject | string = "/",
 ) => {
     const router = useRouter()
+    const { mutate } = response
     return useCallback(() => {
         const promise = axios.delete(key)
-        response.mutate(
+        mutate(
             promise.then(() => {}),
             { optimisticData: undefined, revalidate: true, rollbackOnError: true },
         )
-        for (const mutate of associatedMutators) {
-            mutate(undefined, { revalidate: true })
+        for (const mutator of associatedMutators) {
+            mutator(undefined, { revalidate: true })
         }
         promise.then(() => router.push(route))
-    }, [associatedMutators, key, response.data, response.mutate, route])
+    }, [associatedMutators, key, mutate, route, router])
 }
 export default useDeletor
