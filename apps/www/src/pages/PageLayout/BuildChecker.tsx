@@ -1,5 +1,5 @@
-import { useAPIFetcher } from "@phylopic/utils-api";
-import { FC } from "react";
+import { useAPIFetcher } from "@phylopic/utils-api"
+import { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 const BuildChecker: FC = () => {
     const fetcher = useAPIFetcher()

@@ -14,12 +14,15 @@ import NameView from "~/views/NameView"
 const Page: NextPage = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const router = useRouter()
-    const handleNodeSelect = useCallback((value: Entity<Node> | undefined) => {
-        setModalOpen(false)
-        if (value) {
-            router.push(`/nodes/${value.uuid}`)
-        }
-    }, [])
+    const handleNodeSelect = useCallback(
+        (value: Entity<Node> | undefined) => {
+            setModalOpen(false)
+            if (value) {
+                router.push(`/nodes/${value.uuid}`)
+            }
+        },
+        [router],
+    )
     return (
         <>
             <Head>
