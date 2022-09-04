@@ -1,9 +1,9 @@
+import { NodeWithEmbedded } from "@phylopic/api-models"
 import { ExternalResolution, SearchContext, useExternalResolutions } from "@phylopic/ui"
 import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { useContext, useMemo } from "react"
 import { SearchEntry } from "./SearchEntry"
-import { NodeWithEmbedded } from "/Users/keesey/Documents/workspace/phylopic/phylopic/packages/api-models/dist/index"
 export const useEntries = () => {
     const [{ externalResults, nodeResults }] = useContext(SearchContext) ?? [{}]
     const externalResolutions = useExternalResolutions()
