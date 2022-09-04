@@ -46,6 +46,19 @@ export const NodeSearch: FC = () => {
             {Boolean(text) && (
                 <>
                     <Speech mode="system">
+                        <small>
+                            (Search partly powered by{" "}
+                            <a
+                                href="https://tree.opentreeoflife.org/about/open-tree-of-life"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Open Tree of Life
+                            </a>
+                            .)
+                        </small>
+                    </Speech>
+                    <Speech mode="system">
                         {entries.length === 0 && !searchTimedout && (
                             <>
                                 <p>Looking that up&hellip;</p>
