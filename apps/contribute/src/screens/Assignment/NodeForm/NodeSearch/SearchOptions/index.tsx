@@ -5,7 +5,7 @@ import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
-import { SearchEntry } from "../NodeSearch/SearchEntry"
+import { SearchEntry } from "../SearchEntry"
 import EntryButton from "./EntryButton"
 export type Props = {
     entries: readonly SearchEntry[]

@@ -3,7 +3,7 @@ import { FC } from "react"
 import NameView from "~/ui/NameView"
 import SpeechStack from "~/ui/SpeechStack"
 import UserButton from "~/ui/UserButton"
-import { SearchEntry } from "../../NodeSearch/SearchEntry"
+import { SearchEntry } from "../../SearchEntry"
 import AuthorityIcon from "./Icon/AuthorityIcon"
 export type Props = {
     onClick?: () => void

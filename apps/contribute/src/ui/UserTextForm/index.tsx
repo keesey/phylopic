@@ -4,7 +4,7 @@ import SpeechStack from "~/ui/SpeechStack"
 export type Props = {
     children: (value: string, setValue: (value: string) => void) => ReactNode
     editable: boolean
-    onSubmit: (value: string) => void
+    onSubmit?: (value: string) => void
     postfix?: ReactNode
     prefix?: ReactNode
     renderer?: (value: string) => ReactNode
@@ -46,7 +46,7 @@ const Editable: FC<Pick<Props, "children" | "onSubmit" | "postfix" | "prefix" | 
     const submit = useCallback(
         (event: FormEvent) => {
             event.preventDefault()
-            onSubmit(textValue.trim().replaceAll(/\s+/g, " "))
+            onSubmit?.(textValue.trim().replaceAll(/\s+/g, " "))
         },
         [onSubmit, textValue],
     )

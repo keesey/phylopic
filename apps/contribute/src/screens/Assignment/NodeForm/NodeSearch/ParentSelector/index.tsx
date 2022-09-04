@@ -1,17 +1,14 @@
 import { PhyloPicAutocomplete, PhyloPicNodeSearch, SearchContainer } from "@phylopic/ui"
-import { Identifier, Nomen, stringifyNomen } from "@phylopic/utils"
-import { FC, useCallback, useState } from "react"
-import NameView from "~/ui/NameView"
+import { FC, useState } from "react"
+import useNormalizedText from "~/screens/Assignment/AssignmentContainer/hooks/useNormalizedText"
 import NoBreak from "~/ui/NoBreak"
 import Speech from "~/ui/Speech"
 import NameForm from "../../NameForm"
-import { SearchEntry } from "../SearchEntry"
-import ParentSearch from "./ParentSearch"
-export type Props = {
-    childName: Nomen
-    onComplete: (identifier: Identifier, newTaxonName: string | null) => void
-}
-export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
+import NameRenderer from "../../NameRenderer"
+import ParentOptions from "./ParentOptions"
+export const ParentSelector: FC = () => {
+    const childNameText = useNormalizedText()
+    const [parentNameText, setParentNameText] = useState("")
     return (
         <SearchContainer>
             <>
@@ -20,12 +17,18 @@ export const ParentSelector: FC<Props> = ({ childName, onComplete }) => {
             </>
             <Speech mode="system">
                 <p>
-                    Okay, just checking. Can I get the name of a larger group that <NameView value={childName} /> is
-                    part of?
+                    Okay, can I get the name of a larger group that <NameRenderer value={childNameText} /> is part of?
                 </p>
             </Speech>
-            <NameForm placeholder="more general group" prefix={<NoBreak>Sure, how about&nbsp;</NoBreak>} postfix="?" />
-            <ParentSearch childName={childName} onComplete={onComplete} />
+            <NameForm
+                editable
+                onChange={setParentNameText}
+                placeholder="more general group"
+                prefix={<NoBreak>Sure, how about&nbsp;</NoBreak>}
+                postfix="?"
+                value={parentNameText}
+            />
+            <ParentOptions />
         </SearchContainer>
     )
 }

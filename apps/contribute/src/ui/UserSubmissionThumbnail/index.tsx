@@ -2,6 +2,7 @@ import { Hash } from "@phylopic/utils"
 import clsx from "clsx"
 import { FC } from "react"
 import useSubmission from "~/editing/useSubmission"
+import NameRenderer from "~/screens/Assignment/NodeForm/NameRenderer"
 import FileThumbnailView from "../FileThumbnailView"
 import IdentifierView from "../IdentifierView"
 import styles from "./index.module.scss"
@@ -18,7 +19,11 @@ const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
                 />
                 {submission?.identifier && (
                     <figcaption className={styles.caption}>
-                        {<IdentifierView value={submission?.identifier} />}
+                        {submission.newTaxonName ? (
+                            <NameRenderer value={submission.newTaxonName} />
+                        ) : (
+                            <IdentifierView value={submission?.identifier} />
+                        )}
                     </figcaption>
                 )}
             </figure>
