@@ -2,11 +2,11 @@ import { Image } from "@phylopic/api-models"
 import { isJWT, JWT } from "@phylopic/source-models"
 import { useStoredState } from "@phylopic/ui"
 import { isUUIDv4, UUID } from "@phylopic/utils"
+import { useAPIFetcher } from "@phylopic/utils-api"
 import { decode } from "jsonwebtoken"
 import { FC, useMemo, useState } from "react"
-import styles from "./index.module.scss"
 import useSWRImmutable from "swr/immutable"
-import { useAPIFetcher } from "@phylopic/utils-api"
+import styles from "./index.module.scss"
 export type Props = {
     imageUUID: UUID
 }
@@ -37,13 +37,7 @@ const ContributorBanner: FC<Props> = ({ imageUUID }) => {
     return (
         <div className={styles.main}>
             <span>
-                Hey, you uploaded this one!{" "}
-                <a
-                    className={styles.link}
-                    href={`https://contribute.phylopic.org/edit/${encodeURIComponent(image?.uuid)}`}
-                >
-                    Want to have a look at it in the Image Contribution Tool?
-                </a>
+                Hey, you uploaded this one! Nice job!
             </span>
             <a className={styles.closer} onClick={() => setDismissed(true)}>
                 ×
