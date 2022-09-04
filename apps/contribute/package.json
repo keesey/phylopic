@@ -36,6 +36,7 @@
         "@types/react": "^18.0.12",
         "@types/react-dom": "^18.0.5",
         "eslint-config-phylopic": "*",
+        "flux-standard-action": "^2.1.2",
         "next-unused": "^0.0.6",
         "sass": "^1.51.0",
         "typescript": "^4.6.4"
