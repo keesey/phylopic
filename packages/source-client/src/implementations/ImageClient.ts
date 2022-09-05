@@ -8,7 +8,7 @@ import IMAGE_FIELDS from "./pg/constants/IMAGE_FIELDS"
 import IMAGE_TABLE from "./pg/constants/IMAGE_TABLE"
 import normalizeImage from "./pg/normalization/normalizeImage"
 import PGPatcher from "./pg/PGPatcher"
-import UPLOAD_BUCKET_NAME from "./s3/constants/UPLOADS_BUCKET_NAME"
+import SOURCE_IMAGES_BUCKET_NAME from "./s3/constants/SOURCE_IMAGES_BUCKET_NAME"
 import readImageFile from "./s3/io/readImageFile"
 import writeImageFile from "./s3/io/writeImageFile"
 import S3Editor from "./s3/S3Editor"
@@ -20,7 +20,7 @@ export default class ImageClient
         super(provider, IMAGE_TABLE, [{ column: "uuid", type: "uuid", value: uuid }], IMAGE_FIELDS, normalizeImage)
         this.file = new S3Editor<ImageFile>(
             provider,
-            UPLOAD_BUCKET_NAME,
+            SOURCE_IMAGES_BUCKET_NAME,
             `images/${encodeURIComponent(this.uuid)}/source`,
             readImageFile,
             writeImageFile,
