@@ -99,12 +99,12 @@ const loadExternals = async (args: Pick<ProcessArgs, "client" | "externals">): P
     console.info(`Loaded ${args.externals.size} externals.`)
 }
 const loadImages = async (args: Pick<ProcessArgs, "client" | "images">): Promise<void> => {
-    console.info("Looking up accepted images...")
-    const total = await args.client.images.accepted.totalItems()
-    console.info(`Loading ${total} accepted images...`)
+    console.info("Looking up images...")
+    const total = await args.client.images.totalItems()
+    console.info(`Loading ${total} images...`)
     let pageIndex: number | undefined = 0
     do {
-        const page: Page<Image & { uuid: UUID }, number> = await args.client.images.accepted.page(pageIndex)
+        const page: Page<Image & { uuid: UUID }, number> = await args.client.images.page(pageIndex)
         for (const item of page.items) {
             if (!isImage(item as unknown)) {
                 throw new Error(`Invalid image (UUID: "${item.uuid}").`)
@@ -113,7 +113,7 @@ const loadImages = async (args: Pick<ProcessArgs, "client" | "images">): Promise
         }
         pageIndex = page.next
     } while (pageIndex !== undefined)
-    console.info(`Loaded ${args.images.size} accepted images.`)
+    console.info(`Loaded ${args.images.size} images.`)
 }
 const loadNodes = async (args: Pick<ProcessArgs, "client" | "nodes">): Promise<void> => {
     console.info("Looking up nodes...")
