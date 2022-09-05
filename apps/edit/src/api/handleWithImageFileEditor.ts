@@ -3,7 +3,7 @@ import { Image } from "@phylopic/source-models"
 import { isImageMediaType, UUID } from "@phylopic/utils"
 import { convertS3BodyToBuffer } from "@phylopic/utils-aws"
 import { NextApiRequest, NextApiResponse } from "next"
-import getFilename from "~/files/getFilename"
+import getImageFilename from "~/files/getImageFilename"
 const handleWithImageFileEditor = async (
     req: NextApiRequest,
     res: NextApiResponse<Buffer>,
@@ -26,7 +26,10 @@ const handleWithImageFileEditor = async (
             const { data, type } = await editor.get()
             const image = await imagePromise
             if (image) {
-                res.setHeader("content-disposition", `attachment; filename=${JSON.stringify(getFilename(image, type))}`)
+                res.setHeader(
+                    "content-disposition",
+                    `attachment; filename=${JSON.stringify(getImageFilename(image, type))}`,
+                )
             }
             res.setHeader("content-type", type)
             res.send(data)

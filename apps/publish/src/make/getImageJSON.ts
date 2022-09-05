@@ -1,5 +1,4 @@
 import { Image, Link, MediaLink } from "@phylopic/api-models"
-import { isSubmittableImage } from "@phylopic/source-models"
 import { isImageMediaType, normalizeUUID, RasterMediaType, UUID, VectorMediaType } from "@phylopic/utils"
 import { createReadStream } from "fs"
 import { join } from "path"
@@ -100,9 +99,6 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
     const sourceImage = data.images.get(uuid)
     if (!sourceImage) {
         throw new Error(`Source image not found! <${uuid}>`)
-    }
-    if (!isSubmittableImage(sourceImage)) {
-        throw new Error(`Source image not submittable! <${uuid}>`)
     }
     const [rasterFiles, socialFile, sourceFile, thumbnailFiles, vectorFile] = await Promise.all([
         getRasterLinks(uuid),

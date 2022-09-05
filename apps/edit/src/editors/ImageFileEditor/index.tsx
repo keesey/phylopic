@@ -7,7 +7,7 @@ import { ChangeEvent, DragEvent, FC, useCallback, useMemo, useState } from "reac
 import useSWR from "swr"
 import fetchJSON from "~/fetch/fetchJSON"
 import fetchObjectURLAndType from "~/fetch/fetchObjectURLAndType"
-import getFilename from "~/files/getFilename"
+import getImageFilename from "~/files/getImageFilename"
 import styles from "./index.module.scss"
 export interface Props {
     uuid: UUID
@@ -20,7 +20,7 @@ const ImageFileEditor: FC<Props> = ({ uuid }) => {
     const { data: image, mutate: mutateImage } = useSWR<Image & { uuid: UUID }>(imageKey, fetchJSON)
     const { url: imageSrc, type: fileType } = fileData ?? {}
     const filename = useMemo(
-        () => (image && isImageMediaType(fileType) ? getFilename(image, fileType) : "file.img"),
+        () => (image && isImageMediaType(fileType) ? getImageFilename(image, fileType) : "file.img"),
         [image, fileType],
     )
     const put = useCallback(
@@ -68,7 +68,7 @@ const ImageFileEditor: FC<Props> = ({ uuid }) => {
     )
     return (
         <figure onDrop={handleFigureDrop} className={clsx(styles.main, pending && "pending")}>
-            <NextImage alt="Submission" src={imageSrc ?? "data:"} width={512} height={512} />
+            <NextImage alt="Submission" src={imageSrc ?? "data:"} width={512} height={512} unoptimized />
             <nav>
                 <a
                     key="download"

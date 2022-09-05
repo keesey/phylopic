@@ -1,18 +1,21 @@
-import { useContext, FC } from "react"
-import Context from "~/contexts/SubmissionEditorContainer/Context"
-import LicenseURLEditor from "../LicenseURLEditor"
-
-const LicenseEditor: FC = () => {
-    const [state, dispatch] = useContext(Context) ?? []
-    if (!state || !dispatch) {
+import { Submission } from "@phylopic/source-models"
+import { Hash } from "@phylopic/utils"
+import { FC } from "react"
+import useSWR from "swr"
+import fetchJSON from "~/fetch/fetchJSON"
+import usePatcher from "~/swr/usePatcher"
+import ValidLicenseURLEditor from "../ValidLicenseURLEditor"
+export type Props = {
+    hash: Hash
+}
+const LicenseEditor: FC<Props> = ({ hash }) => {
+    const key = `/api/submissions/_/${encodeURIComponent(hash)}`
+    const response = useSWR<Submission>(key, fetchJSON)
+    const { data } = response
+    const patcher = usePatcher(key, response)
+    if (!data) {
         return null
     }
-    return (
-        <LicenseURLEditor
-            onChange={value => dispatch({ payload: value, type: "SET_LICENSE" })}
-            modified={state.modified.contribution.license}
-            original={state.original.contribution.license}
-        />
-    )
+    return <ValidLicenseURLEditor onChange={value => patcher({ license: value })} value={data.license} />
 }
 export default LicenseEditor

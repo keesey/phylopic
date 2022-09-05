@@ -1,45 +1,41 @@
-import { useContext, FC } from "react"
-import Context from "~/contexts/SubmissionEditorContainer/Context"
+import { Hash } from "@phylopic/utils"
+import { FC } from "react"
 import AttributionEditor from "./AttributionEditor"
-import ContributorEditor from "./ContributorEditor"
+import ContributorViewer from "./ContributorViewer"
 import Controls from "./Controls"
 import styles from "./index.module.scss"
 import LicenseEditor from "./LicenseEditor"
-import LineageEditor from "./LineageEditor"
+import IdentifierViewer from "./IdentifierViewer"
 import SponsorEditor from "./SponsorEditor"
-
-const SubmissionEditor: FC = () => {
-    const [state] = useContext(Context) ?? []
-    const { modified } = state ?? {}
-    if (!modified) {
-        return null
-    }
-    const className = [styles.main, state?.pending && "pending"].filter(Boolean).join(" ")
+export type Props = {
+    hash: Hash
+}
+const SubmissionEditor: FC<Props> = ({ hash }) => {
     return (
-        <section className={className}>
+        <section className={styles.main}>
             <dl>
                 <dt>Attribution</dt>
                 <dd>
-                    <AttributionEditor />
+                    <AttributionEditor hash={hash} />
                 </dd>
                 <dt>Contributor</dt>
                 <dd>
-                    <ContributorEditor />
+                    <ContributorViewer hash={hash} />
                 </dd>
                 <dt>Sponsor</dt>
                 <dd>
-                    <SponsorEditor />
+                    <SponsorEditor hash={hash} />
                 </dd>
                 <dt>License</dt>
                 <dd>
-                    <LicenseEditor />
+                    <LicenseEditor hash={hash} />
                 </dd>
-                <dt>Nodes</dt>
+                <dt>Identifier</dt>
                 <dd>
-                    <LineageEditor />
+                    <IdentifierViewer hash={hash} />
                 </dd>
             </dl>
-            <Controls />
+            <Controls hash={hash} />
         </section>
     )
 }

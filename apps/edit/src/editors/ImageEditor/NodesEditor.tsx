@@ -5,7 +5,7 @@ import { FC, useCallback, useMemo, useState } from "react"
 import useSWR from "swr"
 import fetchJSON from "~/fetch/fetchJSON"
 import Paginator from "~/pagination/Paginator"
-import usePatcher from "~/swr/usePatcher"
+import useModifiedPatcher from "~/swr/useModifiedPatcher"
 import BubbleList from "~/ui/BubbleList"
 import BubbleNode from "~/ui/BubbleNode"
 import NameView from "~/views/NameView"
@@ -47,7 +47,7 @@ const LineageEditor: FC<{
     const nodesToShow = useMemo(() => (expanded ? nodes : nodes.slice(0, lastIndex)), [expanded, lastIndex, nodes])
     const imageKey = `/api/images/_/${encodeURIComponent(image.uuid)}`
     const imageResponse = useSWR<Image & { uuid: UUID }>(imageKey, fetchJSON)
-    const patcher = usePatcher(imageKey, imageResponse)
+    const patcher = useModifiedPatcher(imageKey, imageResponse)
     const setGeneral = useCallback((value: UUID | null) => patcher({ general: value }), [patcher])
     return (
         <BubbleList>

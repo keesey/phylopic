@@ -1,19 +1,27 @@
-import { useContext, FC } from "react"
-import Context from "~/contexts/SubmissionEditorContainer/Context"
+import { Submission } from "@phylopic/source-models"
+import { Hash } from "@phylopic/utils"
+import { FC } from "react"
+import useSWR from "swr"
 import TextEditor from "~/editors/TextEditor"
-
-const AttributionEditor: FC = () => {
-    const [state, dispatch] = useContext(Context) ?? []
-    if (!state || !dispatch) {
+import fetchJSON from "~/fetch/fetchJSON"
+import usePatcher from "~/swr/usePatcher"
+export type Props = {
+    hash: Hash
+}
+const AttributionEditor: FC<Props> = ({ hash }) => {
+    const key = `/api/submissions/_/${encodeURIComponent(hash)}`
+    const response = useSWR<Submission>(key, fetchJSON)
+    const { data } = response
+    const patcher = usePatcher(key, response)
+    if (!data) {
         return null
     }
     return (
         <TextEditor
-            emptyLabel="Anonymous"
-            onChange={value => dispatch({ payload: value || undefined, type: "SET_ATTRIBUTION" })}
-            modified={state.modified.contribution.attribution}
+            emptyLabel="[Anonymous]"
+            onChange={value => patcher({ attribution: value })}
             optional
-            original={state.original.contribution.attribution}
+            value={data?.attribution}
         />
     )
 }

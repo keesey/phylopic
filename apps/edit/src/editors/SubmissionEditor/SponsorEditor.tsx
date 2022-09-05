@@ -1,19 +1,27 @@
-import { useContext, FC } from "react"
-import Context from "~/contexts/SubmissionEditorContainer/Context"
+import { Submission } from "@phylopic/source-models"
+import { Hash } from "@phylopic/utils"
+import { FC } from "react"
+import useSWR from "swr"
 import TextEditor from "~/editors/TextEditor"
-
-const SponsorEditor: FC = () => {
-    const [state, dispatch] = useContext(Context) ?? []
-    if (!state || !dispatch) {
+import fetchJSON from "~/fetch/fetchJSON"
+import usePatcher from "~/swr/usePatcher"
+export type Props = {
+    hash: Hash
+}
+const SponsorEditor: FC<Props> = ({ hash }) => {
+    const key = `/api/submissions/_/${encodeURIComponent(hash)}`
+    const response = useSWR<Submission>(key, fetchJSON)
+    const { data } = response
+    const patcher = usePatcher(key, response)
+    if (!data) {
         return null
     }
     return (
         <TextEditor
-            emptyLabel="N/A"
-            onChange={value => dispatch({ payload: value || undefined, type: "SET_SPONSOR" })}
-            modified={state.modified.contribution.sponsor}
+            emptyLabel="[None]"
+            onChange={value => patcher({ sponsor: value })}
             optional
-            original={state.original.contribution.sponsor}
+            value={data?.sponsor}
         />
     )
 }

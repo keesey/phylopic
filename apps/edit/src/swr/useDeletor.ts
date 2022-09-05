@@ -6,7 +6,7 @@ import { UrlObject } from "url"
 const useDeletor = (
     key: string,
     response: SWRResponse,
-    associatedMutators: readonly KeyedMutator<unknown>[] = [],
+    associatedMutators: readonly KeyedMutator<any>[] = [],
     route: UrlObject | string = "/",
 ) => {
     const router = useRouter()

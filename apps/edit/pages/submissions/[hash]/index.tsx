@@ -3,6 +3,8 @@ import { Hash, isHash } from "@phylopic/utils"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
 import useSWR, { SWRConfig } from "swr"
+import SubmissionEditor from "~/editors/SubmissionEditor"
+import SubmissionFileEditor from "~/editors/SubmissionFileEditor"
 import fetchJSON from "~/fetch/fetchJSON"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SubmissionNameView from "~/views/SubmissionNameView"
@@ -35,7 +37,8 @@ const Page: NextPage<Props> = ({ hash }) => {
                         </h2>
                     )}
                 </header>
-                :TODO:
+                <SubmissionFileEditor hash={hash} />
+                <SubmissionEditor hash={hash} />
                 <footer>
                     <TimesView created={submission?.created} />
                 </footer>

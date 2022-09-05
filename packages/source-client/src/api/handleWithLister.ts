@@ -9,7 +9,6 @@ export const handleWithLister = async <T, TPageSpecifier>(
     switch (req.method) {
         case "GET":
         case "HEAD": {
-            console.debug(req.query)
             if (typeof req.query.page === "string") {
                 const page = req.query.page ? getPageSpecifier(req.query.page) : undefined
                 res.json(await lister.page(page))

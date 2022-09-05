@@ -5,7 +5,7 @@ import { FC, FormEvent, useCallback, useState } from "react"
 import useSWR from "swr"
 import fetchJSON from "~/fetch/fetchJSON"
 import NameSelector from "~/selectors/NameSelector"
-import usePatcher from "~/swr/usePatcher"
+import useModifiedPatcher from "~/swr/useModifiedPatcher"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
@@ -18,7 +18,7 @@ const NamesEditor: FC<Props> = ({ onSplit, uuid }) => {
     const key = `/api/nodes/_/${uuid}`
     const response = useSWR<Node & { uuid: UUID }>(key, fetchJSON)
     const { data: node } = response
-    const patcher = usePatcher(key, response)
+    const patcher = useModifiedPatcher(key, response)
     const [editedNameIndex, setEditedNameIndex] = useState(-1)
     const [namesText, setNamesText] = useState("")
     const handleNamesFormSubmit = useCallback(

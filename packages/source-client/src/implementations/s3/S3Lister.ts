@@ -13,7 +13,6 @@ export default class S3Lister<TValue extends string = string> implements Listabl
     ) {}
     public async page(token?: string) {
         const output = await this.provider.getS3().send(this.getCommand(token))
-        console.debug(output)
         return {
             items: this.getItems(output),
             next: output.NextContinuationToken,

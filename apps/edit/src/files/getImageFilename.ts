@@ -1,6 +1,6 @@
 import { Image } from "@phylopic/source-models"
 import { getImageFileExtension, ImageMediaType, SHORT_LICENSE_NAMES, UUID } from "@phylopic/utils"
-const getFilename = (image: Image & { uuid: UUID }, contentType: ImageMediaType) => {
+const getImageFilename = (image: Image & { uuid: UUID }, contentType: ImageMediaType) => {
     return [
         image.uuid,
         image.attribution || "Anonymous",
@@ -10,4 +10,4 @@ const getFilename = (image: Image & { uuid: UUID }, contentType: ImageMediaType)
         .map(x => encodeURIComponent(x))
         .join(".")
 }
-export default getFilename
+export default getImageFilename
