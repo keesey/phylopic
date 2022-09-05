@@ -21,15 +21,6 @@ const Page: NextPage<Props> = ({ uuid }) => {
         () => (specific ? stringifyNomen(specific.names[0]) : INCOMPLETE_STRING),
         [specific],
     )
-    const filter = useMemo(() => {
-        if (!image) {
-            return null
-        }
-        if (image.accepted) {
-            return image.submitted ? "accepted" : "withdrawn"
-        }
-        return image.submitted ? "submitted" : "incomplete"
-    }, [image])
     return (
         <SWRConfig>
             <Head>
@@ -43,10 +34,6 @@ const Page: NextPage<Props> = ({ uuid }) => {
                         items={[
                             { href: "/", children: "Home" },
                             { href: "/images", children: "Images" },
-                            {
-                                href: `/images?filter=${filter}`,
-                                children: filter ? filter.charAt(0).toUpperCase() + filter.slice(1) : INCOMPLETE_STRING,
-                            },
                             {
                                 children: (
                                     <ImageTitleView

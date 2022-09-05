@@ -21,17 +21,15 @@ const Home: NextPage = () => (
                 <ul>
                     <li>
                         <AnchorLink href="images">Images</AnchorLink>
-                        <ul>
-                            <li>
-                                <AnchorLink href="images?filter=submitted">New Submissions</AnchorLink>
-                            </li>
-                        </ul>
                     </li>
                     <li>
                         <AnchorLink href="nodes">Nodes</AnchorLink>
                     </li>
                     <li>
                         <AnchorLink href="phylogeny">Phylogeny</AnchorLink>
+                    </li>
+                    <li>
+                        <AnchorLink href="submissions">Submissions</AnchorLink>
                     </li>
                     <li>
                         <AnchorLink href="externals">External Authorities</AnchorLink>

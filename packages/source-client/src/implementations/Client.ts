@@ -47,7 +47,7 @@ export default class Client implements SourceClient {
         this.images = new ImagesClient(provider)
         this.nodes = new NodesClient(provider)
         this.sourceImages = new S3Lister(provider, SOURCE_IMAGES_BUCKET_NAME, "images/", isUUIDv4)
-        this.submissions = new S3Lister(provider, UPLOADS_BUCKET_NAME, "files/", isHash)
+        this.submissions = new S3Lister(provider, UPLOADS_BUCKET_NAME, "files/", isHash, undefined, null)
     }
     authEmails
     authToken(emailAddress: string) {

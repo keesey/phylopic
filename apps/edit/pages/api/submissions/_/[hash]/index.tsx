@@ -1,17 +1,17 @@
 import { handleAPIError, handleWithPatcher } from "@phylopic/source-client"
-import { Node } from "@phylopic/source-models"
-import { isUUIDv4, UUID } from "@phylopic/utils"
+import { Submission } from "@phylopic/source-models"
+import { isHash, isUUIDv4 } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<Node & { uuid: UUID }> = async (req, res) => {
+const index: NextApiHandler<Submission> = async (req, res) => {
     let client: SourceClient | undefined
     try {
-        const { uuid } = req.query
-        if (!isUUIDv4(uuid)) {
+        const { hash } = req.query
+        if (!isHash(hash)) {
             throw 404
         }
         client = new SourceClient()
-        await handleWithPatcher(req, res, client.node(uuid))
+        await handleWithPatcher(req, res, client.submission(hash))
     } catch (e) {
         handleAPIError(res, e)
     } finally {

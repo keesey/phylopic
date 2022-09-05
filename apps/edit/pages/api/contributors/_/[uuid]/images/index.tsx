@@ -1,9 +1,9 @@
-import { Page, handleAPIError, handleWithLister } from "@phylopic/source-client"
+import { handleAPIError, handleWithLister, Page } from "@phylopic/source-client"
 import { Image } from "@phylopic/source-models"
-import { isUUIDv4 } from "@phylopic/utils"
+import { isUUIDv4, UUID } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<Page<Image, number> | number> = async (req, res) => {
+const index: NextApiHandler<Page<Image & { uuid: UUID }, number> | number> = async (req, res) => {
     let client: SourceClient | undefined
     try {
         const { uuid } = req.query

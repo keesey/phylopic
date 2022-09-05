@@ -1,54 +1,26 @@
 import { Contributor, Image, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
 import { AnchorLink } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
-import { GetServerSideProps, NextPage } from "next"
+import { NextPage } from "next"
 import Head from "next/head"
-import { FC, useMemo } from "react"
+import { FC } from "react"
 import useSWR, { SWRConfig } from "swr"
 import fetchJSON from "~/fetch/fetchJSON"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
-import BubbleItem from "~/ui/BubbleItem"
-import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
-export type Props = {
-    filter?: "accepted" | "incomplete" | "submitted" | "withdrawn"
-}
-const Page: NextPage<Props> = ({ filter }) => {
-    const filterName = useMemo(() => (filter ? filter.charAt(0).toUpperCase() + filter.slice(1) + " " : ""), [filter])
+const Page: NextPage = () => {
     return (
         <SWRConfig>
             <Head>
-                <title>PhyloPic Editor: {filterName}Images</title>
+                <title>PhyloPic Editor: Images</title>
             </Head>
             <main>
                 <header>
-                    <Breadcrumbs
-                        items={[
-                            { href: "/", children: <a>Home</a> },
-                            { href: filter ? "/images" : undefined, children: "Images" },
-                            ...(filter ? [{ children: filterName }] : []),
-                        ]}
-                    />
+                    <Breadcrumbs items={[{ href: "/", children: <a>Home</a> }, { children: "Images" }]} />
                     <h1>Images</h1>
                 </header>
-                <nav>
-                    <BubbleList>
-                        <BubbleItem light={filter === "incomplete"}>
-                            <AnchorLink href="/images?filter=incomplete">Incomplete</AnchorLink>
-                        </BubbleItem>
-                        <BubbleItem light={filter === "submitted"}>
-                            <AnchorLink href="/images?filter=submitted">Submitted</AnchorLink>
-                        </BubbleItem>
-                        <BubbleItem light={filter === "accepted"}>
-                            <AnchorLink href="/images?filter=accepted">Accepted</AnchorLink>
-                        </BubbleItem>
-                        <BubbleItem light={filter === "withdrawn"}>
-                            <AnchorLink href="/images?filter=withdrawn">Withdrawn</AnchorLink>
-                        </BubbleItem>
-                    </BubbleList>
-                </nav>
-                <Paginator endpoint={`/api/images${filter ? `/${filter}` : ""}`}>
+                <Paginator endpoint="/api/images">
                     {(items, invalidating) =>
                         items.length ? (
                             <ul>
@@ -61,7 +33,7 @@ const Page: NextPage<Props> = ({ filter }) => {
                                 ))}
                             </ul>
                         ) : invalidating ? null : (
-                            <p>No {filterName.toLowerCase()}images found.</p>
+                            <p>No images found.</p>
                         )
                     }
                 </Paginator>
@@ -70,13 +42,6 @@ const Page: NextPage<Props> = ({ filter }) => {
     )
 }
 export default Page
-export const getServerSideProps: GetServerSideProps<Props> = async context => {
-    const { filter } = context.query
-    if (filter === "accepted" || filter === "submitted" || filter === "incomplete" || filter === "withdrawn") {
-        return { props: { filter } }
-    }
-    return { props: {} }
-}
 const ImageView: FC<{ image: Image & { uuid: UUID } }> = ({ image }) => {
     const { data: specific } = useSWR<Node & { uuid: UUID }>(
         image.specific ? `/api/nodes/_/${encodeURIComponent(image.specific)}` : null,

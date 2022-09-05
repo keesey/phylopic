@@ -15,7 +15,7 @@ const Paginator: FC<Props> = ({ children, endpoint, hideControls, hideLoader, on
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: Page<{ uuid: UUID }, number> | null) => {
             return index === 0 || previousPageData?.next
-                ? endpoint + createSearch({ page: previousPageData?.next ?? 0 })
+                ? endpoint + createSearch({ page: previousPageData?.next })
                 : null
         },
         [endpoint],
