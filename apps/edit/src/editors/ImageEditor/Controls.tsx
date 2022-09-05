@@ -21,10 +21,6 @@ const Controls: FC<Props> = ({ uuid }) => {
         }
     }, [error])
     const router = useRouter()
-    return (
-        <nav className={styles.main}>
-            {data && <button onClick={deletor}>Delete</button>}
-        </nav>
-    )
+    return <nav className={styles.main}>{data && <button onClick={deletor}>Delete</button>}</nav>
 }
 export default Controls

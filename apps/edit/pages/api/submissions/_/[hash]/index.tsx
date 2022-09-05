@@ -67,17 +67,20 @@ const accept = async (client: SourceClient, hash: Hash): Promise<UUID> => {
     do {
         uuid = normalizeUUID(randomUUID())
     } while (await client.image(uuid).exists())
-    await client.image(uuid).put({
-        attribution: submission.attribution,
-        contributor: submission.contributor,
-        created: submission.created,
-        general: null,
-        license: submission.license,
-        modified: submission.created,
-        specific: node.uuid,
-        sponsor: submission.sponsor,
-        uuid,
-    })
+    await Promise.all([
+        client.image(uuid).put({
+            attribution: submission.attribution,
+            contributor: submission.contributor,
+            created: submission.created,
+            general: null,
+            license: submission.license,
+            modified: submission.created,
+            specific: node.uuid,
+            sponsor: submission.sponsor,
+            uuid,
+        }),
+        client.copySubmissionToSourceImage(hash, uuid),
+    ])
     await client.submission(hash).delete()
     return uuid
 }
