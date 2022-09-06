@@ -43,11 +43,18 @@ const Page: NextPage = () => {
 }
 export default Page
 const SubmissionView: FC<{ hash: Hash }> = ({ hash }) => {
-    const { data: submission } = useSWR<Submission>(`/api/submissions/_/${encodeURIComponent(hash)}`, fetchJSON)
+    const { data: submission, error } = useSWR<Submission>(`/api/submissions/_/${encodeURIComponent(hash)}`, fetchJSON)
     const { data: contributor } = useSWR<Contributor & { uuid: UUID }>(
         submission?.contributor ? `/api/contributors/_/${encodeURIComponent(submission.contributor)}` : null,
         fetchJSON,
     )
+    if (error) {
+        return (
+            <>
+                <strong>Error!</strong> {String(error)}
+            </>
+        )
+    }
     if (!submission) {
         return <>{INCOMPLETE_STRING}</>
     }
