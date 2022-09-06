@@ -78,7 +78,7 @@ export default class Client implements SourceClient {
         await this.provider.getS3().send(
             new CopyObjectCommand({
                 Bucket: SOURCE_IMAGES_BUCKET_NAME,
-                CopySource: encodeURI(`/${UPLOADS_BUCKET_NAME}/file/${hash}`),
+                CopySource: encodeURI(`/${UPLOADS_BUCKET_NAME}/files/${hash}`),
                 Key: `images/${encodeURIComponent(uuid)}/source`,
             }),
         )

@@ -53,4 +53,11 @@
             text-transform: uppercase;
         }
     }
+
+    &.small {
+        height: 64px;
+        min-height: 64px;
+        min-width: 64px;
+        width: 64px;
+    }
 }

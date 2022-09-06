@@ -4,9 +4,10 @@ import { FC, useCallback, useState } from "react"
 import styles from "./index.module.scss"
 export interface Props {
     alt?: string
+    small?: boolean
     src?: string
 }
-const FileThumbnailView: FC<Props> = ({ alt, src }) => {
+const FileThumbnailView: FC<Props> = ({ alt, src, small }) => {
     const [imgError, setImgError] = useState(false)
     const [imgPending, setImgPending] = useState(true)
     const handleImgError = useCallback(() => {
@@ -26,6 +27,7 @@ const FileThumbnailView: FC<Props> = ({ alt, src }) => {
         <div
             className={clsx(
                 styles.main,
+                small && styles.small,
                 imgLoaded && src && styles.loaded,
                 imgError && src && styles.error,
                 (imgPending || !src) && styles.pending,
@@ -34,13 +36,13 @@ const FileThumbnailView: FC<Props> = ({ alt, src }) => {
             {src && (
                 <Image
                     alt={alt ?? "silhouette image"}
-                    height={128}
+                    height={small ? 64 : 128}
                     onErrorCapture={handleImgError}
                     onLoad={handleImgLoad}
                     onLoadStart={handleImgLoadStart}
                     src={src}
                     unoptimized
-                    width={128}
+                    width={small ? 64 : 128}
                 />
             )}
             {imgError && <p>image missing</p>}
