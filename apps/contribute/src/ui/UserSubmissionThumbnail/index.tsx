@@ -12,7 +12,10 @@ export type Props = {
 }
 const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
-    const submittable = useMemo(() => submission ? isSubmission({ ...submission, status: "submitted"} as Submission) : null, [submission])
+    const submittable = useMemo(
+        () => (submission ? isSubmission({ ...submission, status: "submitted" } as Submission) : null),
+        [submission],
+    )
     return (
         <div className={clsx(styles.main, submission && styles[submission.status])}>
             <figure className={styles.figure}>
@@ -29,7 +32,13 @@ const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
                             )}
                         </>
                     )}
-                    <strong>{submission?.status === "submitted" ? "Awaiting Review" : submittable ? "Ready to Submit" : "Incomplete"}</strong>
+                    <strong>
+                        {submission?.status === "submitted"
+                            ? "Awaiting Review"
+                            : submittable
+                            ? "Ready to Submit"
+                            : "Incomplete"}
+                    </strong>
                 </figcaption>
             </figure>
         </div>

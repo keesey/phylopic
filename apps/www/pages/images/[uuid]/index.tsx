@@ -15,6 +15,7 @@ import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import HeaderNav from "~/ui/HeaderNav"
+import SiteTitle from "~/ui/SiteTitle"
 import ImageFilesView from "~/views/ImageFilesView"
 import ImageRasterView from "~/views/ImageRasterView"
 import LicenseDetailsView from "~/views/LicenseDetailsView"
@@ -129,12 +130,6 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                 <LicenseView value={image._links.license.href} />
                             </td>
                         </tr>
-                        {image.sponsor && (
-                            <tr key="sponsor">
-                                <th>Sponsor</th>
-                                <td>{image.sponsor}</td>
-                            </tr>
-                        )}
                         <tr key="uploaded">
                             <th>Uploaded</th>
                             <td>
@@ -165,6 +160,16 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
             </header>
             <br key="br" />
             <ImageRasterView key="raster" value={image} />
+            {image.sponsor && (
+                <section key="sponsor">
+                    <p style={{ textAlign: "center" }}>
+                        <em>
+                            This silhouette&apos;s inclusion in <SiteTitle /> has been sponsored by{" "}
+                            <strong>{image.sponsor}</strong>.
+                        </em>
+                    </p>
+                </section>
+            )}
             <section key="download">
                 <h2>Download Files</h2>
                 <section>
