@@ -32,6 +32,7 @@ const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
                             )}
                         </>
                     )}
+                    <br />
                     <strong>
                         {submission?.status === "submitted"
                             ? "Awaiting Review"
