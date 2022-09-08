@@ -9,6 +9,7 @@ import { unstable_serialize } from "swr"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import PageHead from "~/metadata/PageHead"
 import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
+import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import DonationPromo from "~/promos/DonationPromo"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
@@ -143,15 +144,13 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                 )}
                             </td>
                         </tr>
-                        {image._embedded.nodes && image._embedded.nodes.length > 0 && (
+                        {image._embedded.specificNode && (
                             <tr key="nodes">
-                                <th>Tax{image._embedded.nodes.length === 1 ? "on" : "a"}</th>
+                                <th>Taxon</th>
                                 <td>
-                                    <NodeListView
-                                        short
-                                        value={[...image._embedded.nodes].reverse()}
-                                        variant="lineage"
-                                    />
+                                    <AnchorLink href={`/nodes/${getCladeImagesUUID(image._embedded.specificNode)}`}>
+                                        <NomenView value={image._embedded.specificNode.names[0]} />
+                                    </AnchorLink>
                                 </td>
                             </tr>
                         )}
