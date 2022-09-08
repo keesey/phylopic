@@ -1,5 +1,5 @@
 import { SearchContext, useExternalResolutions } from "@phylopic/ui"
-import { FC, useContext, useMemo } from "react"
+import { FC, Fragment, useContext, useMemo } from "react"
 import IllustratedNodeView from "~/views/IllustratedNodeView"
 import SearchAside from "../SearchAside"
 import ExternalResolutionCaption from "./ExternalResolutionCaption"
@@ -23,24 +23,31 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
         <aside>
             <h2 key="header">Search Results</h2>
             {!hasNodeResults && !hasResolutions && (
-                <p className={styles.noResults} key="none">
+                <p className={styles.message} key="none">
                     No results found.
                 </p>
             )}
             {(hasNodeResults || hasResolutions) && (
-                <div className={styles.results}>
-                    {nodeResults.map(node => (
-                        <IllustratedNodeView key={node.uuid} value={node} short />
-                    ))}
-                    {resolutions.map(resolution => (
-                        <IllustratedNodeView
-                            key={resolution.uuid}
-                            caption={<ExternalResolutionCaption value={resolution} />}
-                            value={resolution.node}
-                            short
-                        />
-                    ))}
-                </div>
+                <Fragment key="some">
+                    <p className={styles.message}>
+                        Search powered in part by the{" "}
+                        <a href="https://tree.opentreeoflife.org/">Open Tree of Life</a> and the{" "}
+                        <a href="https://eol.org/">Encyclopedia of Life</a>.
+                    </p>
+                    <div className={styles.results}>
+                        {nodeResults.map(node => (
+                            <IllustratedNodeView key={node.uuid} value={node} short />
+                        ))}
+                        {resolutions.map(resolution => (
+                            <IllustratedNodeView
+                                key={resolution.uuid}
+                                caption={<ExternalResolutionCaption value={resolution} />}
+                                value={resolution.node}
+                                short
+                            />
+                        ))}
+                    </div>
+                </Fragment>
             )}
         </aside>
     )
