@@ -58,7 +58,7 @@ export default class Client implements SourceClient {
         return new S3Editor(
             this.provider,
             AUTH_BUCKET_NAME,
-            `emails/${encodeURIComponent(emailAddress)}/token.jwt`,
+            `emails/${encodeURIComponent(emailAddress).toLowerCase()}/token.jwt`,
             readJWT,
             writeJWT,
         )
