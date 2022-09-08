@@ -51,6 +51,7 @@ export default class Client implements SourceClient {
     }
     authEmails
     authToken(emailAddress: string) {
+        emailAddress = emailAddress.toLowerCase()
         if (!isEmailAddress(emailAddress)) {
             throw new Error("Invalid email address.")
         }
