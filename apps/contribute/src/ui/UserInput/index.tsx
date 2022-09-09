@@ -52,9 +52,7 @@ const UserInput: FC<Props> = ({
                 type={type}
                 value={value}
             />
-            {showSubmit && (
-                <input className={styles.submit} type="submit" value={ICON_CHECK} />
-            )}
+            {showSubmit && <input className={styles.submit} type="submit" value={ICON_CHECK} />}
         </div>
     )
 }

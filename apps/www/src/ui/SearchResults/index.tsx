@@ -30,9 +30,8 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
             {(hasNodeResults || hasResolutions) && (
                 <Fragment key="some">
                     <p className={styles.message}>
-                        Search powered in part by the{" "}
-                        <a href="https://tree.opentreeoflife.org/">Open Tree of Life</a> and the{" "}
-                        <a href="https://eol.org/">Encyclopedia of Life</a>.
+                        Search powered in part by the <a href="https://tree.opentreeoflife.org/">Open Tree of Life</a>{" "}
+                        and the <a href="https://eol.org/">Encyclopedia of Life</a>.
                     </p>
                     <div className={styles.results}>
                         {nodeResults.map(node => (
