@@ -2,10 +2,16 @@
 @use "../../styles/buttons.scss";
 
 .main {
+    display: flex;
+    width: 100%;
+}
+
+.input {
     background-color: colors.$white;
     border-radius: 1em;
     border: 2px solid colors.$black;
     color: colors.$black;
+    flex-grow: 1;
     font-size: inherit;
     padding: 0.5em;
     width: 100%;
@@ -29,4 +35,16 @@
         @include buttons.user;
         width: unset;
     }
+
+    &.withSubmit {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+}
+
+.submit {
+    @include buttons.user-inline;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    width: unset;
 }

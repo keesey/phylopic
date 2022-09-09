@@ -42,6 +42,7 @@ const AccountDetails = () => {
                         onChange={setValue}
                         placeholder="Full Name or Alias"
                         required
+                        showSubmit
                         type="text"
                         value={value}
                     />

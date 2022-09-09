@@ -3,12 +3,10 @@
 
 @mixin user-base {
     align-items: center;
-    box-shadow: 0 0 1em 0 colors.$shadow;
     display: inline-flex;
     font-size: inherit;
     font-weight: normal;
     justify-content: center;
-    max-width: 4in;
     padding: 0.5em 1em;
     text-align: center;
     text-transform: none;
@@ -18,9 +16,15 @@
     }
 }
 
+@mixin user-standalone-base {
+    @include user-base;
+    box-shadow: 0 0 1em 0 colors.$shadow;
+    max-width: 4in;
+}
+
 @mixin user {
     @include buttons.cta(colors.$black, colors.$dandelion, colors.$dandelion);
-    @include user-base;
+    @include user-standalone-base;
 
     &:hover {
         background-color: colors.$sunshine;
@@ -33,9 +37,20 @@
     }
 }
 
+@mixin user-inline {
+    @include buttons.cta(colors.$black, colors.$sunshine, colors.$black);
+    @include user-base;
+    border-left: none;
+
+    &:hover {
+        background-color: colors.$dandelion;
+        color: colors.$white;
+    }
+}
+
 @mixin user-danger {
     @include buttons.cta(colors.$dandelion, colors.$black);
-    @include user-base;
+    @include user-standalone-base;
 
     img {
         filter: invert(52%) sepia(97%) saturate(612%) hue-rotate(14deg) brightness(113%) contrast(103%);

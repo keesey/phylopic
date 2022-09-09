@@ -1,4 +1,6 @@
+import clsx from "clsx"
 import { ChangeEvent, FC, HTMLInputTypeAttribute, useCallback } from "react"
+import { ICON_CHECK } from "../ICON_SYMBOLS"
 import styles from "./index.module.scss"
 export interface Props {
     autoComplete?: string
@@ -11,6 +13,7 @@ export interface Props {
     onChange?: (value: string) => void
     placeholder?: string
     required?: boolean
+    showSubmit?: boolean
     type?: HTMLInputTypeAttribute
     value?: string
 }
@@ -25,6 +28,7 @@ const UserInput: FC<Props> = ({
     onChange,
     placeholder,
     required,
+    showSubmit,
     type,
     value,
 }) => {
@@ -35,21 +39,26 @@ const UserInput: FC<Props> = ({
         [onChange],
     )
     return (
-        <input
-            autoComplete={autoComplete}
-            className={styles.main}
-            id={id}
-            list={list}
-            maxLength={maxLength}
-            minLength={minLength}
-            name={name}
-            onBlur={onBlur}
-            onChange={handleInputChange}
-            placeholder={placeholder}
-            required={required}
-            type={type}
-            value={value}
-        />
+        <div className={styles.main}>
+            <input
+                autoComplete={autoComplete}
+                className={clsx(styles.input, showSubmit && styles.withSubmit)}
+                id={id}
+                list={list}
+                maxLength={maxLength}
+                minLength={minLength}
+                name={name}
+                onBlur={onBlur}
+                onChange={handleInputChange}
+                placeholder={placeholder}
+                required={required}
+                type={type}
+                value={value}
+            />
+            {showSubmit && (
+                <input className={styles.submit} type="submit" value={ICON_CHECK} />
+            )}
+        </div>
     )
 }
 export default UserInput

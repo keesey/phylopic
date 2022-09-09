@@ -50,6 +50,7 @@ const SignIn: FC<Props> = ({ onSubmit }) => {
                         name="email"
                         onChange={setEmail}
                         required
+                        showSubmit
                         type="email"
                         placeholder="Email address"
                     />

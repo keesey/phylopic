@@ -36,8 +36,6 @@ const Attribution: FC<Props> = ({ hash }) => {
                 editable={!attribution}
                 onSubmit={submit}
                 value={attribution ?? ""}
-                prefix={<>By&nbsp;</>}
-                postfix="."
                 renderer={value => (value ? <strong>{value}</strong> : "[Anonymous]")}
             >
                 {(value, setValue) => (
@@ -46,6 +44,7 @@ const Attribution: FC<Props> = ({ hash }) => {
                         onChange={setValue}
                         required={required}
                         placeholder="Attribution"
+                        showSubmit
                         value={value}
                     />
                 )}
