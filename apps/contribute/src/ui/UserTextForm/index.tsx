@@ -51,7 +51,7 @@ const Editable: FC<Pick<Props, "children" | "onSubmit" | "postfix" | "prefix" | 
         [onSubmit, textValue],
     )
     return (
-        <form onBlur={submit} onSubmit={submit}>
+        <form onSubmit={submit}>
             <Speech mode="user-input">
                 <SpeechStack compact fullWidth>
                     {prefix}

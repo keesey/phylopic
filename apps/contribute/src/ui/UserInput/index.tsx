@@ -9,7 +9,6 @@ export interface Props {
     maxLength?: number
     minLength?: number
     name?: string
-    onBlur?: () => void
     onChange?: (value: string) => void
     placeholder?: string
     required?: boolean
@@ -24,7 +23,6 @@ const UserInput: FC<Props> = ({
     maxLength,
     minLength,
     name,
-    onBlur,
     onChange,
     placeholder,
     required,
@@ -48,7 +46,6 @@ const UserInput: FC<Props> = ({
                 maxLength={maxLength}
                 minLength={minLength}
                 name={name}
-                onBlur={onBlur}
                 onChange={handleInputChange}
                 placeholder={placeholder}
                 required={required}
