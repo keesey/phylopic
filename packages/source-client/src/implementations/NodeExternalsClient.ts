@@ -54,7 +54,7 @@ class NodeExternalsNamespaceClient
     async page(index = 0) {
         const client = await this.provider.getPG()
         const result = await client.query<Pick<External, "title"> & { objectID: ObjectID }>(
-            `SELECT object_id AS "objectID",title FROM external WHERE node_uuid=$::uuid AND authority=$::character varying AND "namespace"=$::character varying OFFSET $::bigint LIMIT $::bigint`,
+            `SELECT object_id AS "objectID",title FROM external WHERE disabled=0::bit AND node_uuid=$::uuid AND authority=$::character varying AND "namespace"=$::character varying OFFSET $::bigint LIMIT $::bigint`,
             [this.uuid, this.authority, this.namespace, index * EXTERNALS_PAGE_SIZE, EXTERNALS_PAGE_SIZE + 1],
         )
         return {
@@ -67,7 +67,7 @@ class NodeExternalsNamespaceClient
     async totalItems() {
         const client = await this.provider.getPG()
         const result = await client.query<{ total: number }>(
-            `SELECT COUNT(*) AS total FROM external WHERE node_uuid=$::uuid AND authority=$::character varying AND "namespace"=$::character varying`,
+            `SELECT COUNT(*) AS total FROM external WHERE disabled=0::bit AND node_uuid=$::uuid AND authority=$::character varying AND "namespace"=$::character varying`,
             [this.uuid, this.authority, this.namespace],
         )
         return result.rows[0].total

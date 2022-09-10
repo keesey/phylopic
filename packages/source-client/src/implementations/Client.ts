@@ -29,6 +29,7 @@ import EXTERNAL_FIELDS from "./pg/constants/EXTERNAL_FIELDS"
 import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
 import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
+import RootClient from "./RootClient"
 import AUTH_BUCKET_NAME from "./s3/constants/AUTH_BUCKET_NAME"
 import SOURCE_IMAGES_BUCKET_NAME from "./s3/constants/SOURCE_IMAGES_BUCKET_NAME"
 import UPLOADS_BUCKET_NAME from "./s3/constants/UPLOADS_BUCKET_NAME"
@@ -46,6 +47,7 @@ export default class Client implements SourceClient {
         this.externalAuthorities = new ExternalAuthorityLister(provider, 128)
         this.images = new ImagesClient(provider)
         this.nodes = new NodesClient(provider)
+        this.root = new RootClient(provider)
         this.sourceImages = new S3Lister(provider, SOURCE_IMAGES_BUCKET_NAME, "images/", isUUIDv4)
         this.submissions = new S3Lister(provider, UPLOADS_BUCKET_NAME, "files/", isHash, undefined, null)
     }
@@ -142,6 +144,7 @@ export default class Client implements SourceClient {
         return new NodeClient(this.provider, uuid)
     }
     nodes
+    root
     sourceImage(uuid: UUID) {
         if (!isUUIDv4(uuid)) {
             throw new Error("Invalid UUID.")

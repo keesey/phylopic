@@ -45,6 +45,7 @@ export type SourceClient = Readonly<{
             externals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
         ): Promise<Record<Identifier, Node & { uuid: UUID }>>
     }
+    root: Patchable<Node & { uuid: UUID }>
     sourceImage(uuid: UUID): Editable<ImageFile>
     sourceImages: Listable<UUID, string>
     submission(hash: Hash): Patchable<Submission> & { file: Deletable<ImageFile> }
