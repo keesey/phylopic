@@ -4,11 +4,11 @@ import { useAPISWRKey } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import useSWRImmutable from "swr/immutable"
-import SearchContext from "../context"
-import { SetImageResultsAction } from "../context/actions"
-import useQueryFetcher, { QueryKey } from "../hooks/useQueryFetcher"
-import getMatchingText from "./getMatchingText"
-import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
+import SearchContext from "../../context"
+import { SetImageResultsAction } from "../../context/actions"
+import useQueryFetcher, { QueryKey } from "../../hooks/useQueryFetcher"
+import getMatchingText from "../getMatchingText"
+import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
 export const PhyloPicImageSearch: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const basis = state?.text || undefined

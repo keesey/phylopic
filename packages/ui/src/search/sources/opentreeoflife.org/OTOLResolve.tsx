@@ -3,10 +3,10 @@ import { fetchDataAndCheck } from "@phylopic/utils-api"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import SearchContext from "../context"
+import SearchContext from "../../context"
 import OTOL_URL from "./OTOL_URL"
 import { useDebounce } from "@react-hook/debounce"
-import DEBOUNCE_WAIT from "./DEBOUNCE_WAIT"
+import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
 interface OTOLLineageItem {
     // Abridged.
     readonly ott_id: number
