@@ -4,8 +4,7 @@ import { Patchable } from "../interfaces"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
 import NodeClient from "./NodeClient"
 export default class RootClient implements Patchable<Node & { uuid: UUID }> {
-    constructor(protected provider: PGClientProvider) {
-    }
+    constructor(protected provider: PGClientProvider) {}
     async patch(value: Partial<Node & { uuid: string }>): Promise<void> {
         return (await this.getNodeClient()).patch(value)
     }
@@ -26,12 +25,12 @@ export default class RootClient implements Patchable<Node & { uuid: UUID }> {
         if (!this.nodeClient) {
             const client = await this.provider.getPG()
             const output = await client.query<{ uuid: UUID }>(
-                `SELECT "uuid" FROM node WHERE parent_uuid IS NULL AND disabled=0::bit`
+                `SELECT "uuid" FROM node WHERE parent_uuid IS NULL AND disabled=0::bit`,
             )
             if (output.rowCount !== 1) {
                 throw new Error("Cannot find root node.")
             }
-            return this.nodeClient = new NodeClient(this.provider, output.rows[0].uuid)
+            return (this.nodeClient = new NodeClient(this.provider, output.rows[0].uuid))
         }
         return this.nodeClient
     }
