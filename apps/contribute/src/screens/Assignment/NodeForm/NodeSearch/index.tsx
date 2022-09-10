@@ -33,7 +33,7 @@ export const NodeSearch: FC = () => {
         async (entry: SearchEntry) => {
             await complete(getIdentifier(entry.authority, entry.namespace, entry.objectID), null)
         },
-        [dispatch],
+        [complete],
     )
     return (
         <>

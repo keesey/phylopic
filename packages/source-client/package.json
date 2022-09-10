@@ -52,7 +52,7 @@
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
         "jsonwebtoken": "^8.5.1",
-        "next": "^12.2.5",
+        "next": "^12.3.0",
         "pg": "^8.7.3",
         "uuid": "^8.3.2"
     },
