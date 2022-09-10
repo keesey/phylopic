@@ -44,9 +44,9 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
         () =>
             setDirectKey(
                 oid
-                    ? `https://${
-                          process.env.NEXT_PUBLIC_API_DOMAIN
-                      }/resolve/paleobiodb.org/txn/${encodeURIComponent(oid)}?embed_primaryImage=true`
+                    ? `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/resolve/paleobiodb.org/txn/${encodeURIComponent(
+                          oid,
+                      )}?embed_primaryImage=true`
                     : null,
             ),
         [oid, setDirectKey],

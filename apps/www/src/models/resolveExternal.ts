@@ -8,6 +8,7 @@ const RESOLVERS: Readonly<Record<string, ((id: string) => string) | undefined>> 
     ["ncbi.nlm.nih.gov/taxid"]: id => `https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/${encodeURIComponent(id)}/`,
     ["opentreeoflife.org/taxonomy"]: id =>
         `https://tree.opentreeoflife.org/taxonomy/browse?id=${encodeURIComponent(id)}`,
+    ["paleobiodb.org/txn"]: id => `https://paleobiodb.org/classic/basicTaxonInfo?taxon_no=${encodeURIComponent(id)}`,
     ["phylopic.org/nodes"]: uuid => `/nodes/${encodeURIComponent(uuid)}`,
     ["phylopic.org/images"]: uuid => `/images/${encodeURIComponent(uuid)}`,
     ["ubio.org/namebank"]: id => `http://www.ubio.org/browser/details.php?namebankID=${encodeURIComponent(id)}`,

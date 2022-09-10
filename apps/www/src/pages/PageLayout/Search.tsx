@@ -1,4 +1,12 @@
-import { EOLSearch, OTOLAutocompleteName, OTOLResolve, PhyloPicAutocomplete, PhyloPicNodeSearch } from "@phylopic/ui"
+import {
+    EOLSearch,
+    OTOLAutocompleteName,
+    OTOLResolve,
+    PBDBAutocomplete,
+    PBDBResolve,
+    PhyloPicAutocomplete,
+    PhyloPicNodeSearch,
+} from "@phylopic/ui"
 import { FC } from "react"
 const Search: FC = () => (
     <>
@@ -7,6 +15,8 @@ const Search: FC = () => (
         <PhyloPicNodeSearch />
         <OTOLAutocompleteName />
         <OTOLResolve />
+        <PBDBAutocomplete />
+        <PBDBResolve />
         <EOLSearch />
     </>
 )

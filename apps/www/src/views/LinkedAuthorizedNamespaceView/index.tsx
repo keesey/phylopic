@@ -12,6 +12,7 @@ const HREFS: Record<string, string> = {
     ["ncbi.nlm.nih.gov/taxid"]: "https://www.ncbi.nlm.nih.gov/taxonomy/",
     ["opentreeoflife.org/contexts"]: "https://www.opentreeoflife.github.io/",
     ["opentreeoflife.org/taxonomy"]: "https://www.opentreeoflife.github.io/",
+    ["paleobiodb.org/txn"]: "https://paleobiodb.org/",
     ["phylopic.org/nodes"]: "/nodes",
     ["phylopic.org/images"]: "/images",
     ["ubio.org/namebank"]: "http://www.ubio.org/?pagename=namebank",

@@ -12,6 +12,9 @@ const AuthorityIcon: FC<Props> = ({ authority }) => {
     if (authority === "opentreeoflife.org") {
         return <img alt="Open Tree of Life" src="/logos/otol.svg" className={styles.main} />
     }
+    if (authority === "paleobiodb.org") {
+        return <img alt="Paleobiology Database" src="/logos/paleobiodb.svg" className={styles.main} />
+    }
     return null
 }
 export default AuthorityIcon

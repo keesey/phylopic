@@ -47,13 +47,17 @@ export const NodeSearch: FC = () => {
                 <>
                     <Speech mode="system">
                         <small>
-                            (Search partly powered by{" "}
+                            (Search partly powered by the{" "}
                             <a
                                 href="https://tree.opentreeoflife.org/about/open-tree-of-life"
                                 target="_blank"
                                 rel="noreferrer"
                             >
                                 Open Tree of Life
+                            </a>
+                            {" and the "}
+                            <a href="https://paleobiodb.org/" target="_blank" rel="noreferrer">
+                                Paleobiology Database
                             </a>
                             .)
                         </small>

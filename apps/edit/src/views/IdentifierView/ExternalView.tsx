@@ -5,6 +5,7 @@ import { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "~/views/NameView"
 import OTOLTaxonomyView from "./OTOLTaxonomyView"
+import PBDBTxnView from "./PBDBTxnView"
 export type Props = {
     authority: Authority
     namespace: Namespace
@@ -26,6 +27,12 @@ const ExternalView: FC<Props> = ({ authority, namespace, objectID, short }) => {
         const id = parseInt(objectID, 10)
         if (isPositiveInteger(id)) {
             return <OTOLTaxonomyView id={id} />
+        }
+    }
+    if (authority === "paleobiodb.org" && namespace === "txn") {
+        const oid = parseInt(objectID, 10)
+        if (isPositiveInteger(oid)) {
+            return <PBDBTxnView oid={oid} />
         }
     }
     return (

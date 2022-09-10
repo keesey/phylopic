@@ -7,7 +7,7 @@ import useSWRImmutable from "swr/immutable"
 import SearchContext from "../../context"
 import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
 import PBDB_URL from "./PBDB_URL"
-export type PaleoBioDBAutocompleteProps = {
+export type PBDBAutocompleteProps = {
     limit?: number
 }
 type PBDBRecord = Readonly<{
@@ -28,14 +28,11 @@ const fetcher: Fetcher<Readonly<[readonly PBDBRecord[], string]>, [string, strin
     const response = await fetchDataAndCheck<PBDBResponse>(url)
     return [response.data.records, name]
 }
-export const PBDBAutocomplete: React.FC<PaleoBioDBAutocompleteProps> = ({ limit = 10 }) => {
+export const PBDBAutocomplete: React.FC<PBDBAutocompleteProps> = ({ limit = 10 }) => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const { text } = state ?? {}
     const key = React.useMemo(
-        () =>
-            text && text.length >= 2
-                ? PBDB_URL + "/taxa/auto.json" + createSearch({ limit, name: text })
-                : null,
+        () => (text && text.length >= 2 ? PBDB_URL + "/taxa/auto.json" + createSearch({ limit, name: text }) : null),
         [text],
     )
     const [debouncedKey, setDebouncedKey] = useDebounce<string | null>(key, DEBOUNCE_WAIT, true)

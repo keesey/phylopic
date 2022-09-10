@@ -1,6 +1,8 @@
 import {
     OTOLAutocompleteName,
     OTOLResolve,
+    PBDBAutocomplete,
+    PBDBResolve,
     PhyloPicAutocomplete,
     PhyloPicNodeSearch,
     SearchContainer,
@@ -13,8 +15,10 @@ const NodeForm: FC = () => {
             <>
                 <PhyloPicAutocomplete />
                 <OTOLAutocompleteName />
+                <PBDBAutocomplete />
                 <PhyloPicNodeSearch />
                 <OTOLResolve />
+                <PBDBResolve />
             </>
             <NodeSearch />
         </SearchContainer>
