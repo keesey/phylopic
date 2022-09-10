@@ -29,6 +29,7 @@
     "name": "@phylopic/publish",
     "private": true,
     "scripts": {
+        "autolink": "ts-node --esm ./src/autolink.ts",
         "clean": "rm -rf .turbo && rm -rf node_modules",
         "cli": "ts-node --esm ./src/cli.ts",
         "download": "concurrently \"yarn download:images\" \"yarn download:source\"",

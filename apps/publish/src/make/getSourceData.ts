@@ -1,9 +1,10 @@
 import { TitledLink } from "@phylopic/api-models"
-import BaseSourceClient, { ClientProvider, Page, SourceClient as ISourceClient } from "@phylopic/source-client"
+import { Page, SourceClient as ISourceClient } from "@phylopic/source-client"
 import { Contributor, External, Image, isContributor, isExternal, isImage, isNode, Node } from "@phylopic/source-models"
 import { Authority, compareStrings, isAuthority, isNamespace, Namespace, ObjectID, UUID } from "@phylopic/utils"
 import { Arc, Digraph, sources } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
+import SourceClient from "../source/SourceClient.js"
 export type SourceData = Readonly<{
     build: number
     cladeImages: ReadonlyMap<UUID, ReadonlySet<UUID>>
@@ -253,29 +254,6 @@ const getPhylogenyDerivedData = (
     processCladeSizes(sizes, args.phylogeny, rootVertex)
     processClade({ ...args, depths, sizes, sortIndices, sortIndex: 0 }, rootVertex, 0)
     return { depths, sortIndices }
-}
-class SourceClient extends BaseSourceClient {
-    constructor() {
-        const provider = new ClientProvider(
-            {
-                database: "phylopic-source",
-                host: process.env.PGHOST,
-                password: process.env.PGPASSWORD,
-                port: parseInt(process.env.PGPORT!, 10),
-                user: process.env.PGUSER,
-            },
-            {
-                credentials: {
-                    accessKeyId: process.env.S3_ACCESS_KEY_ID!,
-                    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
-                },
-                region: process.env.S3_REGION!,
-            },
-        )
-        super(provider)
-        this.destroy = () => provider.destroy()
-    }
-    public readonly destroy: () => Promise<void>
 }
 const getSourceData = async (args: Args): Promise<SourceData> => {
     const client = new SourceClient()

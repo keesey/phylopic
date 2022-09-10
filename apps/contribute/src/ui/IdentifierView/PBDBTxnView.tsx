@@ -12,10 +12,8 @@ const PBDBTxnView: FC<Props> = ({ oid }) => {
         `https://training.paleobiodb.org/data1.2/taxa/single.json?id=txn:${encodeURIComponent(oid)}`,
         fetchJSON,
     )
-    const name = useMemo(
-        () => (data?.records?.[0]?.nam ? parseNomen(data.records[0].nam) : null),
-        [data?.records?.[0]?.nam],
-    )
+    const rawName = data?.records?.[0]?.nam
+    const name = useMemo(() => (rawName ? parseNomen(rawName) : null), [rawName])
     if (!name) {
         return <>{INCOMPLETE_STRING}</>
     }
