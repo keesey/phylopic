@@ -1,9 +1,9 @@
 import { Submission } from "@phylopic/source-models"
+import { fetchJSON } from "@phylopic/ui"
 import { Hash } from "@phylopic/utils"
 import { FC } from "react"
 import useSWR from "swr"
 import TextEditor from "~/editors/TextEditor"
-import fetchJSON from "~/fetch/fetchJSON"
 import usePatcher from "~/swr/usePatcher"
 export type Props = {
     hash: Hash

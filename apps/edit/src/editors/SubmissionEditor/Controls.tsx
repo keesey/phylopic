@@ -1,11 +1,11 @@
 import { Page } from "@phylopic/source-client"
 import { Submission } from "@phylopic/source-models"
+import { fetchJSON } from "@phylopic/ui"
 import { Hash, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { FC, useCallback, useMemo } from "react"
 import useSWR from "swr"
-import fetchJSON from "~/fetch/fetchJSON"
 import useDeletor from "~/swr/useDeletor"
 import styles from "./Controls.module.scss"
 export type Props = {

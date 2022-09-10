@@ -1,10 +1,10 @@
 import { Submission } from "@phylopic/source-models"
+import { fetchJSON } from "@phylopic/ui"
 import { Hash, isImageMediaType } from "@phylopic/utils"
 import NextImage from "next/future/image"
 import { FC, useMemo } from "react"
 import useSWR from "swr"
-import fetchJSON from "~/fetch/fetchJSON"
-import fetchObjectURLAndType from "~/fetch/fetchObjectURLAndType"
+import fetchObjectURLAndType from "~/fetchers/fetchObjectURLAndType"
 import getSubmissionFilename from "~/files/getSubmissionFilename"
 import styles from "./index.module.scss"
 export interface Props {

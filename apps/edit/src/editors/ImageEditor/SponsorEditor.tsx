@@ -1,9 +1,9 @@
 import { Image } from "@phylopic/source-models"
+import { fetchJSON } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC } from "react"
 import useSWR from "swr"
 import TextEditor from "~/editors/TextEditor"
-import fetchJSON from "~/fetch/fetchJSON"
 import useModifiedPatcher from "~/swr/useModifiedPatcher"
 export type Props = {
     uuid: UUID

@@ -1,9 +1,9 @@
 import { API } from "@phylopic/api-models"
-import { Hash, isHash, isUUIDv4, UUID } from "@phylopic/utils"
+import { fetchJSON } from "@phylopic/ui"
+import { Hash, isHash } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
-import fetchJSON from "~/fetch/fetchJSON"
 import PageLayout from "~/pages/PageLayout"
 import SourceClient from "~/source/SourceClient"
 const Assignment = dynamic(() => import("~/screens/Assignment"))

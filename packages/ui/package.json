@@ -35,6 +35,7 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/ui",
     "peerDependencies": {
+        "axios": "^0.27.2",
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",

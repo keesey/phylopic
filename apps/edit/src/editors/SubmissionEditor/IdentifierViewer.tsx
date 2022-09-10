@@ -1,8 +1,8 @@
 import { Submission } from "@phylopic/source-models"
+import { fetchJSON } from "@phylopic/ui"
 import { Hash } from "@phylopic/utils"
 import { FC } from "react"
 import useSWR from "swr"
-import fetchJSON from "~/fetch/fetchJSON"
 import NameRenderer from "~/views/NameRenderer"
 export type Props = {
     hash: Hash

@@ -1,9 +1,8 @@
 import { Contributor, INCOMPLETE_STRING, Submission } from "@phylopic/source-models"
-import { AnchorLink } from "@phylopic/ui"
+import { AnchorLink, fetchJSON } from "@phylopic/ui"
 import { Hash, UUID } from "@phylopic/utils"
 import { FC } from "react"
 import useSWR from "swr"
-import fetchJSON from "~/fetch/fetchJSON"
 export type Props = {
     hash: Hash
 }

@@ -1,9 +1,9 @@
 import { Image } from "@phylopic/source-models"
+import { fetchJSON } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { FC, useEffect } from "react"
 import useSWR from "swr"
-import fetchJSON from "~/fetch/fetchJSON"
 import useDeletor from "~/swr/useDeletor"
 import styles from "./Controls.module.scss"
 export type Props = {

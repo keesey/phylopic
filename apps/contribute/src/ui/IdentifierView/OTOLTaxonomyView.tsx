@@ -1,8 +1,8 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
+import { fetchJSON } from "@phylopic/ui"
 import { parseNomen } from "parse-nomen"
 import { FC, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
-import fetchJSON from "~/fetch/fetchJSON"
 import NameView from "../NameView"
 export type Props = {
     id: number

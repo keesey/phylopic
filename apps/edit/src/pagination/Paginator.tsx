@@ -1,9 +1,8 @@
 import { Page } from "@phylopic/source-client"
-import { InfiniteScroll } from "@phylopic/ui"
+import { fetchJSON, InfiniteScroll } from "@phylopic/ui"
 import { createSearch, UUID } from "@phylopic/utils"
 import { FC, Fragment, ReactNode, useCallback, useEffect, useMemo } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
-import fetchJSON from "~/fetch/fetchJSON"
 export type Props = {
     children: (value: ReadonlyArray<unknown>, isValidating: boolean) => ReactNode
     endpoint: string
