@@ -57,6 +57,7 @@ const nextConfig = {
             },
         ]
     },
+    swcMinify: true,
 }
 const runtimeCaching = require("next-pwa/cache")
 const withPWA = require("next-pwa")({
