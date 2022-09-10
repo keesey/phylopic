@@ -32,6 +32,7 @@ export type SourceClient = Readonly<{
     }
     images: Listable<Image & { uuid: UUID }, number>
     node(uuid: UUID): Patchable<Node & { uuid: UUID }> & {
+        externals: Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
         lineage: Listable<Node & { uuid: UUID }, number>
     }
     nodes: Listable<Node & { uuid: UUID }, number> & {

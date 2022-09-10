@@ -31,10 +31,10 @@ export default class NodeLineageClient implements Listable<Node & { uuid: UUID }
             ).join(",")},lineage_index ORDER BY lineage_index
             OFFSET $2::bigint LIMIT $3::bigint
         `,
-            [this.uuid, index * LINEAGE_PAGE_SIZE, LINEAGE_PAGE_SIZE],
+            [this.uuid, index * LINEAGE_PAGE_SIZE, LINEAGE_PAGE_SIZE + 1],
         )
         return {
-            items: result.rows.map(normalizeNode),
+            items: result.rows.slice(0, LINEAGE_PAGE_SIZE).map(normalizeNode),
             next: result.rowCount >= LINEAGE_PAGE_SIZE ? index + 1 : undefined,
         }
     }
