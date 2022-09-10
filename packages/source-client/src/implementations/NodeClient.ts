@@ -15,6 +15,14 @@ export default class NodeClient extends PGPatcher<Node & { uuid: UUID }> impleme
         this.externals = new NodeExternalsClient(provider, uuid)
         this.lineage = new NodeLineageClient(provider, uuid)
     }
-    readonly externals: Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
+    readonly externals: Listable<
+        External & { authority: Authority; namespace: Namespace; objectID: ObjectID },
+        number
+    > & {
+        namespace: (
+            authority: Authority,
+            namespace: Namespace,
+        ) => Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
+    }
     readonly lineage: Listable<Node & { uuid: UUID }, number>
 }
