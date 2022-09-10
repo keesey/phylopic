@@ -8,11 +8,21 @@ import NodeLineageClient from "./NodeLineageClient"
 import NODE_FIELDS from "./pg/constants/NODE_FIELDS"
 import NODE_TABLE from "./pg/constants/NODE_TABLE"
 import normalizeNode from "./pg/normalization/normalizeNode"
+import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
 export default class NodeClient extends PGPatcher<Node & { uuid: UUID }> implements ReturnType<SourceClient["node"]> {
     constructor(protected provider: PGClientProvider, protected uuid: UUID) {
         super(provider, NODE_TABLE, [{ column: "uuid", type: "uuid", value: uuid }], NODE_FIELDS, normalizeNode)
         this.externals = new NodeExternalsClient(provider, uuid)
+        this.children = new PGLister<Node & { uuid: UUID }, number>(
+            this.provider,
+            NODE_TABLE,
+            64,
+            NODE_FIELDS,
+            normalizeNode,
+            "uuid",
+            [{ column: "parent_uuid", type: "uuid", value: uuid }],
+        )
         this.lineage = new NodeLineageClient(provider, uuid)
     }
     readonly externals: Listable<
@@ -24,5 +34,6 @@ export default class NodeClient extends PGPatcher<Node & { uuid: UUID }> impleme
             namespace: Namespace,
         ) => Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
     }
+    readonly children: Listable<Node & { uuid: UUID }, number>
     readonly lineage: Listable<Node & { uuid: UUID }, number>
 }
