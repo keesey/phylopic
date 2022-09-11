@@ -31,11 +31,14 @@ const fetcher: Fetcher<Readonly<[readonly PBDBRecord[], string]>, [string, strin
 export const PBDBAutocomplete: React.FC<PBDBAutocompleteProps> = ({ limit = 10 }) => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const { text } = state ?? {}
-    const key = React.useMemo(
-        () => (text && text.length >= 2 ? PBDB_URL + "/taxa/auto.json" + createSearch({ limit, name: text }) : null),
+    const key = React.useMemo<[string, string] | null>(
+        () =>
+            text && text.length >= 2
+                ? [PBDB_URL + "/taxa/auto.json" + createSearch({ limit, name: text }), text]
+                : null,
         [text],
     )
-    const [debouncedKey, setDebouncedKey] = useDebounce<string | null>(key, DEBOUNCE_WAIT, true)
+    const [debouncedKey, setDebouncedKey] = useDebounce<[string, string] | null>(key, DEBOUNCE_WAIT, true)
     React.useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
     const response = useSWRImmutable(debouncedKey, fetcher)
     React.useEffect(() => {
