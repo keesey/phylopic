@@ -31,7 +31,7 @@ const Controls: FC<Props> = ({ hash }) => {
         mutate(undefined, { revalidate: true })
         mutateList(undefined, { revalidate: true })
         router.push(`/images/${encodeURIComponent(uuid)}`)
-    }, [mutate, mutateList, router])
+    }, [key, mutate, mutateList, router])
     const handleDeleteClick = useCallback(() => {
         if (confirm("Are you sure you want to delete this?")) {
             deletor()

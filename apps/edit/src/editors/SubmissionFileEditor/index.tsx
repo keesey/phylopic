@@ -21,7 +21,7 @@ const SubmissionFileEditor: FC<Props> = ({ hash }) => {
             submission && isImageMediaType(fileType)
                 ? getSubmissionFilename({ ...submission, hash }, fileType)
                 : "file.img",
-        [fileType, submission],
+        [fileType, hash, submission],
     )
     // :TODO: Ability to replace image
     /*
