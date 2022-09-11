@@ -11,7 +11,7 @@ interface PBDBRecord {
     readonly oid: string
 }
 const resolveItem = async (client: SourceClient, item: PBDBRecord, lineage: readonly PBDBRecord[]) => {
-    const externalClient = client.external("palobiodb.org", "txn", item.oid.replace(/^txn:/, ""))
+    const externalClient = client.external("paleobiodb.org", "txn", item.oid.replace(/^txn:/, ""))
     if (await externalClient.exists()) {
         const external = await externalClient.get()
         const node = await client.node(external.node).get()
@@ -29,7 +29,7 @@ const resolveItem = async (client: SourceClient, item: PBDBRecord, lineage: read
     }
     await client.node(newNode.uuid).put(newNode)
     await externalClient.put({
-        authority: "palobiodb.org",
+        authority: "paleobiodb.org",
         namespace: "txn",
         node: newNode.uuid,
         objectID: String(item.oid.replace(/^txn:/, "")),
