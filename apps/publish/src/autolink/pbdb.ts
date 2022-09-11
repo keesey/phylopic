@@ -4,6 +4,7 @@ import { getIdentifier, isScientific, Nomen, stringifyNomen, UUID } from "@phylo
 import axios from "axios"
 type PBDBRecord = Readonly<{
     ext: string
+    flg?: string
     nam: string
     noc: number
     oid: string
@@ -21,42 +22,41 @@ const getScientificNames = (names: readonly Nomen[]) =>
             .map(part => part.text)
             .join(" "),
     )
-// :KLUDGE:
-const ANCESTOR_TITLE_BLOCK_LIST = ["Archaea", "Biota", "Chromalveolata", "Life", "Prokaryota", "Sarcomastigota"] // These are either not helpful or are used differently in PaleobioDB
-const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, ancestorTitles: readonly string[]) => {
-    console.info("Processing", ancestorTitles.join(" > "), ">", stringifyNomen(node.names[0]), `(${node.uuid})...`)
-    let title: string | undefined
+const ACCEPTED_ANCESTOR_RANKS = new Set([23, 20])
+const isAcceptableAncestor = (ancestor: PBDBRecord) => ACCEPTED_ANCESTOR_RANKS.has(ancestor.rnk)
+const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, ancestors: readonly PBDBRecord[]) => {
+    const ancestorNames = ancestors.map(ancestor => ancestor.nam)
+    console.info(
+        "Processing",
+        ["Life", ...ancestorNames].join(" > "),
+        ">",
+        stringifyNomen(node.names[0]),
+        `(${node.uuid})...`,
+    )
+    let mainRecord: PBDBRecord | undefined
     const page = await client.node(node.uuid).externals.namespace("paleobiodb.org", "txn").page()
     if (page.items.length) {
-        const childrenResponse = await axios.get<PBDBResponse>(
-            `https://paleobiodb.org/data1.2/taxa/list.json?id=${encodeURIComponent(
-                page.items[0].objectID,
-            )}&rel=children`,
+        const response = await axios.get<PBDBResponse>(
+            `https://paleobiodb.org/data1.2/taxa/single.json?id=${encodeURIComponent(page.items[0].objectID)}`,
         )
-        if (childrenResponse.data.records.length > 0) {
-            title = page.items[0].title
-        }
+        const record = response.data.records[0]
+        mainRecord = record
     } else {
-        let numChildrenForTitle = 0
         const names = getScientificNames(node.names)
         for (const name of names) {
             const response = await axios.get<PBDBResponse>(
                 `https://paleobiodb.org/data1.2/taxa/list.json?name=${encodeURIComponent(
-                    [...ancestorTitles, name].join(":"),
+                    [...ancestorNames, name].join(":"),
                 )}&rel=synonyms`,
             )
             if (response.data.records.length > 0) {
-                for (const record of response.data.records) {
-                    const oid = record.oid.replace(/^txn:/, "")
-                    const childrenResponse = await axios.get<PBDBResponse>(
-                        `https://paleobiodb.org/data1.2/taxa/list.json?id=${encodeURIComponent(
-                            record.oid,
-                        )}&rel=children`,
-                    )
-                    if (childrenResponse.data.records.length > numChildrenForTitle) {
-                        numChildrenForTitle = childrenResponse.data.records.length
-                        title = record.nam
+                for (const record of [...response.data.records].sort(
+                    (a, b) => (a.flg === "B" ? -1 : 1) - (b.flg === "B" ? -1 : 1),
+                )) {
+                    if (!mainRecord) {
+                        mainRecord = record
                     }
+                    const oid = record.oid.replace(/^txn:/, "")
                     const externalClient = client.external("paleobiodb.org", "txn", oid)
                     if (await externalClient.exists()) {
                         console.info(`${getIdentifier("paleobiodb.org", "txn", oid)} is already assigned.`)
@@ -78,14 +78,15 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
             }
         }
     }
-    if (title && ANCESTOR_TITLE_BLOCK_LIST.includes(title)) {
-        title = undefined
+    if (mainRecord) {
+        const response = await axios.get<PBDBResponse>(
+            `https://paleobiodb.org/data1.2/taxa/list.json?id=${encodeURIComponent(mainRecord.oid)}&rel=all_parents`,
+        )
+        ancestors = response.data.records.filter(isAcceptableAncestor)
     }
-    const promises: Array<Promise<void>> = []
     for await (const child of iterateList(client.node(node.uuid).children)) {
-        promises.push(processNode(client, child, title ? [...ancestorTitles, title] : ancestorTitles))
+        await processNode(client, child, ancestors)
     }
-    await Promise.all(promises)
 }
 const autolinkPBDB = async (client: SourceClient): Promise<void> => {
     const node = await client.root.get()
