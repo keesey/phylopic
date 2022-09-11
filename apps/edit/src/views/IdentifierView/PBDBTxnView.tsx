@@ -13,10 +13,7 @@ const PBDBTxnView: FC<Props> = ({ oid }) => {
         fetchJSON,
     )
     const rawName = data?.records?.[0]?.nam
-    const name = useMemo(
-        () => (rawName ? parseNomen(rawName) : null),
-        [rawName],
-    )
+    const name = useMemo(() => (rawName ? parseNomen(rawName) : null), [rawName])
     if (!name) {
         return <>{INCOMPLETE_STRING}</>
     }
