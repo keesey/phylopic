@@ -208,7 +208,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return getResolveObject(
                         {
                             ...getParameters(event.headers, ["accept"]),
-                            ...getParameters(event.pathParameters, ["authority", "namespace", "objectID"]),
+                            ...getParameters(event.pathParameters, ["authority", "namespace", "objectID"], true),
                             ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },
                         SERVICE,

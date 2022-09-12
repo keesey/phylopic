@@ -1,12 +1,13 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
-import { fetchDataAndCheck } from "@phylopic/utils-api"
-import React from "react"
+import { createSearch } from "@phylopic/utils"
+import { BuildContext, fetchDataAndCheck } from "@phylopic/utils-api"
+import { useDebounce } from "@react-hook/debounce"
+import React, { useContext } from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import SearchContext from "../../context"
-import OTOL_URL from "./OTOL_URL"
-import { useDebounce } from "@react-hook/debounce"
 import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
+import OTOL_URL from "./OTOL_URL"
 interface OTOLLineageItem {
     // Abridged.
     readonly ott_id: number
@@ -35,6 +36,7 @@ const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = as
     return response.data
 }
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
+    const [build] = useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
     const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
@@ -43,10 +45,13 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
                 ott_id
                     ? `https://${
                           process.env.NEXT_PUBLIC_API_DOMAIN
-                      }/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(ott_id)}?embed_primaryImage=true`
+                      }/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(ott_id)}${createSearch({
+                          build,
+                          embed_primaryImage: true,
+                      })}`
                     : null,
             ),
-        [ott_id, setDirectKey],
+        [build, ott_id, setDirectKey],
     )
     const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchDirect)
     const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
@@ -55,19 +60,24 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
             return []
         }
         return lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))
-    }, [lineage.data?.lineage])
+    }, [lineage.data?.lineage, ott_id])
     const [indirectKey, setIndirectKey] = useDebounce<[string, string[]] | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
             setIndirectKey(
                 lineageIDs.length
                     ? ([
-                          `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/resolve/opentreeoflife.org/taxonomy?embed_primaryImage=true`,
+                          `https://${
+                              process.env.NEXT_PUBLIC_API_DOMAIN
+                          }/resolve/opentreeoflife.org/taxonomy${createSearch({
+                              build,
+                              embed_primaryImage: true,
+                          })}`,
                           lineageIDs,
                       ] as [string, string[]])
                     : null,
             ),
-        [lineageIDs, setIndirectKey],
+        [build, lineageIDs, setIndirectKey],
     )
     const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchIndirect)
     React.useEffect(() => {

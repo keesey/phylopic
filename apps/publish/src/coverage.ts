@@ -39,7 +39,8 @@ import "dotenv/config"
                                 "images /",
                                 otolTaxon.terminal_descendants.length,
                                 "terminal nodes (ott_id=" + ott_id + ")",
-                                (100 * cladeImages.totalItems / otolTaxon.terminal_descendants.length).toFixed(2) + "%",
+                                ((100 * cladeImages.totalItems) / otolTaxon.terminal_descendants.length).toFixed(2) +
+                                    "%",
                             )
                         }
                     } catch (e) {
