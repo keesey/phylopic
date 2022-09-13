@@ -34,7 +34,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 
 ### Database scripts
 
-The script for creating the project's Postgres database is in [sql/create.sql](./sql/create.sql).
+The scripts for creating the project's Postgres databases are in [sql](./sql).
 
 ## Getting started
 
