@@ -31,12 +31,10 @@
     "scripts": {
         "autolink": "ts-node --esm ./src/autolink.ts",
         "clean": "rm -rf .turbo && rm -rf node_modules",
-        "cli": "ts-node --esm ./src/cli.ts",
         "coverage": "ts-node --esm ./src/coverage.ts",
         "download": "concurrently \"yarn download:images\" \"yarn download:source\"",
         "download:images": "aws s3 sync --delete s3://images.phylopic.org/ ./.s3/images.phylopic.org && find .s3/images.phylopic.org -type d -empty -delete",
         "download:source": "aws s3 sync --delete s3://source-images.phylopic.org/ ./.s3/source-images.phylopic.org && find .s3/source-images.phylopic.org -type d -empty -delete",
-        "heal": "ts-node --esm ./src/heal.ts",
         "insert": "ts-node --esm ./src/insert.ts 2> insert-error.log",
         "lint": "TIMING=1 eslint --ext .js,.ts . --fix",
         "make": "yarn download && yarn process && concurrently \"yarn insert\" \"yarn upload\" && yarn release && yarn sync",
