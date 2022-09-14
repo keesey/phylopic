@@ -16,7 +16,10 @@ const SiteFooter: FC = () => (
                 Version 2.0 <abbr title="beta version">βɛτα</abbr>
             </li>
             <li className={styles.item}>
-                <abbr title="Copyright">©</abbr> {YEAR} <a href="http://tmkeesey.net">T. Michael Keesey</a>
+                <abbr title="Copyright">©</abbr> {YEAR}{" "}
+                <a href="http://tmkeesey.net" rel="author">
+                    T. Michael Keesey
+                </a>
             </li>
             <li className={clsx(styles.item, styles.logos)}>
                 <Link href="/mailinglist">
@@ -24,10 +27,10 @@ const SiteFooter: FC = () => (
                         <Image src={logoMail} width={28} height={28} alt="Mailing List" />
                     </a>
                 </Link>
-                <a href="https://www.twitter.com/phylopic" title="Follow @phylopic on Twitter.">
+                <a href="https://www.twitter.com/phylopic" title="Follow @phylopic on Twitter." rel="external">
                     <Image src={logoTwitter} width={28} height={28} alt="Twitter" />
                 </a>
-                <a href="https://www.facebook.com/phylopic" title="Follow @phylopic on Facebook.">
+                <a href="https://www.facebook.com/phylopic" title="Follow @phylopic on Facebook." rel="external">
                     <Image src={logoFacebook} width={21} height={21} alt="Facebook" />
                 </a>
                 <a

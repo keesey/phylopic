@@ -65,10 +65,14 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     <AnchorLink href="/mailinglist">Mailing List</AnchorLink>
                 </li>
                 <li>
-                    <a href="https://www.twitter.com/phylopic">Twitter</a>
+                    <a href="https://www.twitter.com/phylopic" rel="external">
+                        Twitter
+                    </a>
                 </li>
                 <li>
-                    <a href="https://www.facebook.com/phylopic">Facebook</a>
+                    <a href="https://www.facebook.com/phylopic" rel="external">
+                        Facebook
+                    </a>
                 </li>
             </ul>
         </section>
@@ -89,7 +93,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
         <section>
             <ul>
                 <li>
-                    <AnchorLink href={`/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`}>
+                    <AnchorLink href={`/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`} rel="author">
                         Contact the Creator
                     </AnchorLink>
                 </li>

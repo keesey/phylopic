@@ -45,7 +45,11 @@ const LicenseDetailsView: FC<Props> = ({ value }) => {
                             You must give credit to <em>{value.attribution ?? "Anonymous"}</em>.
                         </li>
                         <li>
-                            You must provide <a href={value._links.license.href}>a link to the license</a>.
+                            You must provide{" "}
+                            <a href={value._links.license.href} rel="license">
+                                a link to the license
+                            </a>
+                            .
                         </li>
                         <li>You must indicate if changes were made.</li>
                     </Fragment>
@@ -53,7 +57,7 @@ const LicenseDetailsView: FC<Props> = ({ value }) => {
                 {nc && (
                     <li key="nc">
                         You may not use the material for commercial purposes. (But you may{" "}
-                        <AnchorLink href={extractPath(value._links.contributor.href)}>
+                        <AnchorLink href={extractPath(value._links.contributor.href)} rel="author">
                             contact the contributor
                         </AnchorLink>{" "}
                         to request a waiver.)
@@ -62,7 +66,7 @@ const LicenseDetailsView: FC<Props> = ({ value }) => {
                 {sa && <li key="sa">You must distribute your work under the same license as the original.</li>}
             </ul>
             <p>
-                <a href={value._links.license.href}>
+                <a href={value._links.license.href} rel="license">
                     Read more about the <LicenseTextView value={value._links.license.href} /> license.
                 </a>
             </p>

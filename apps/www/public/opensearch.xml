@@ -1,0 +1,10 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Search PhyloPic</ShortName>
+  <Description>Search for freely reusable silhouettes of organisms on PhyloPic.</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">/favicon.ico</Image>
+  <Url type="text/html" template="/search?q={searchTerms}"/>
+  <Url type="application/x-suggestions+json" template="/api/suggestions?q={searchTerms}"/>
+  <moz:SearchForm>/search</moz:SearchForm>
+</OpenSearchDescription>

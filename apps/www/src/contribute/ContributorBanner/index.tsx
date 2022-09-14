@@ -37,7 +37,7 @@ const ContributorBanner: FC<Props> = ({ imageUUID }) => {
     return (
         <div className={styles.main}>
             <span>Hey, you uploaded this one! Nice job!</span>
-            <a className={styles.closer} onClick={() => setDismissed(true)}>
+            <a className={styles.closer} onClick={() => setDismissed(true)} role="button">
                 ×
             </a>
         </div>

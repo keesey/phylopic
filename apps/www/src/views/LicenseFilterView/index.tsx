@@ -32,7 +32,10 @@ const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
                     readOnly
                 />
                 <label htmlFor="license_publicdomain">
-                    public domain <a href="https://creativecommons.org/share-your-work/public-domain/">ⓘ</a>
+                    public domain{" "}
+                    <a href="https://creativecommons.org/share-your-work/public-domain/" rel="external">
+                        ⓘ
+                    </a>
                 </label>
             </div>
             <div className={styles.option}>
@@ -56,7 +59,10 @@ const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
                 />
                 <label htmlFor="license_commercial">
                     free for commercial use{" "}
-                    <a href="https://creativecommons.org/faq/#does-my-use-violate-the-noncommercial-clause-of-the-licenses">
+                    <a
+                        href="https://creativecommons.org/faq/#does-my-use-violate-the-noncommercial-clause-of-the-licenses"
+                        rel="external"
+                    >
                         ⓘ
                     </a>
                 </label>
@@ -82,7 +88,9 @@ const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
                 />
                 <label htmlFor="license_nosharealike">
                     no ShareAlike requirement{" "}
-                    <a href="https://wiki.creativecommons.org/wiki/ShareAlike_interpretation">ⓘ</a>
+                    <a href="https://wiki.creativecommons.org/wiki/ShareAlike_interpretation" rel="external">
+                        ⓘ
+                    </a>
                 </label>
             </div>
         </section>

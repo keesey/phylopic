@@ -14,7 +14,7 @@ const ExternalTitledLinkView: FC<Props> = ({ value, title }) => {
         return <NomenView value={name} />
     }
     return (
-        <a href={href} title={title}>
+        <a href={href} title={title} rel="external">
             <NomenView value={name} />
         </a>
     )

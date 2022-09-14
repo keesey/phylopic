@@ -15,7 +15,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
     return (
         <div className={styles.main}>
             <p className={styles.highlighted} id="systbio.org">
-                <a href="https://www.systbio.org" className={styles.imageLink}>
+                <a href="https://www.systbio.org" className={styles.imageLink} rel="license">
                     <cite>
                         <Image
                             src={logoSSB}

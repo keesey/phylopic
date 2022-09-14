@@ -26,6 +26,11 @@ const nextConfig = {
                 permanent: true,
             },
             {
+                source: "/contribute",
+                destination: "https://contribute.phylopic.org/",
+                permanent: true,
+            },
+            {
                 source: "/donate",
                 destination: "https://www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
                 permanent: true,
