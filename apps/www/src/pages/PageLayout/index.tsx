@@ -25,26 +25,23 @@ const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialT
         }
     }, [])
     return (
-        <>
-            <Analytics />
-            <SWRConfig value={{ fallback }}>
-                <BuildContainer initialValue={build}>
-                    <BuildChecker />
-                    <PageLoader />
-                    {aside && <aside key="aside">{aside}</aside>}
-                    <SearchContainer initialText={initialText}>
-                        <Search />
-                        <header>
-                            <SiteNav />
-                        </header>
-                        <main>
-                            <SearchOverlay>{children}</SearchOverlay>
-                        </main>
-                        <SiteFooter />
-                    </SearchContainer>
-                </BuildContainer>
-            </SWRConfig>
-        </>
+        <SWRConfig value={{ fallback }}>
+            <BuildContainer initialValue={build}>
+                <BuildChecker />
+                <PageLoader />
+                {aside && <aside key="aside">{aside}</aside>}
+                <SearchContainer initialText={initialText}>
+                    <Search />
+                    <header>
+                        <SiteNav />
+                    </header>
+                    <main>
+                        <SearchOverlay>{children}</SearchOverlay>
+                    </main>
+                    <SiteFooter />
+                </SearchContainer>
+            </BuildContainer>
+        </SWRConfig>
     )
 }
 export default PageLayout
