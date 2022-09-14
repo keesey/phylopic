@@ -68,7 +68,10 @@ const PageComponent: NextPage<Props> = props => (
         <header>
             <p>
                 <strong>Free silhouette images</strong> of animals, plants, and other life forms,{" "}
-                <strong>available for reuse</strong> under <a href="//creativecommons.org">Creative Commons</a>{" "}
+                <strong>available for reuse</strong> under{" "}
+                <a href="//creativecommons.org" rel="external">
+                    Creative Commons
+                </a>{" "}
                 licenses.
             </p>
         </header>

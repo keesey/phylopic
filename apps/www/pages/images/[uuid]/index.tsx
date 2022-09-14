@@ -21,7 +21,6 @@ import ImageFilesView from "~/views/ImageFilesView"
 import ImageRasterView from "~/views/ImageRasterView"
 import LicenseDetailsView from "~/views/LicenseDetailsView"
 import LicenseView from "~/views/LicenseView"
-import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
 const ContributorBanner = dynamic(() => import("~/contribute/ContributorBanner"), { ssr: false })
 const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
@@ -75,6 +74,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
             >
                 <meta key="meta:author" name="author" content={image.attribution ?? "Anonymous"} />
                 <link key="link:contributor" rel="contributor" href={image._links.contributor.href} />
+                <link key="link:license" rel="license" href={image._links.license.href} />
                 <VisualArtworkSchemaScript image={image} />
             </PageHead>
             <header key="header">
@@ -138,6 +138,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                 {image._embedded.contributor && (
                                     <AnchorLink
                                         href={`/contributors/${encodeURIComponent(image._embedded.contributor.uuid)}`}
+                                        rel="contributor"
                                     >
                                         {image._embedded.contributor.name || "Anonymous"}
                                     </AnchorLink>
@@ -148,7 +149,10 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             <tr key="nodes">
                                 <th>Taxon</th>
                                 <td>
-                                    <AnchorLink href={`/nodes/${getCladeImagesUUID(image._embedded.specificNode)}`}>
+                                    <AnchorLink
+                                        href={`/nodes/${getCladeImagesUUID(image._embedded.specificNode)}`}
+                                        rel="subject"
+                                    >
                                         <NomenView value={image._embedded.specificNode.names[0]} />
                                     </AnchorLink>
                                 </td>

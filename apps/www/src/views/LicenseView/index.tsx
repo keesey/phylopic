@@ -6,7 +6,7 @@ export interface Props {
     value: LicenseURL
 }
 const LicenseView: FC<Props> = ({ value, short }) => (
-    <a href={value}>
+    <a href={value} rel="license">
         <LicenseTextView value={value} short={short} />
     </a>
 )

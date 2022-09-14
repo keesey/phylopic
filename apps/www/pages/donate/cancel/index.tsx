@@ -48,7 +48,7 @@ const PageComponent: NextPage = () => (
                         Mike Keesey
                     </AnchorLink>
                     , like the comic book series{" "}
-                    <a href="https://www.keesey-comics.com/paleocene">
+                    <a href="https://www.keesey-comics.com/paleocene" rel="external">
                         <cite>Paleocene</cite>
                     </a>
                     . <a href="https://www.patreon.com/tmkeesey?fan_landing=true">Become a patron!</a>
@@ -72,13 +72,19 @@ const PageComponent: NextPage = () => (
                 </p>
                 <BulletList>
                     <li>
-                        <a href="https://inkscape.org/support-us/">Inkscape</a>
+                        <a href="https://inkscape.org/support-us/" rel="external">
+                            Inkscape
+                        </a>
                     </li>
                     <li>
-                        <a href="https://imagemagick.org/script/support.php#support">ImageMagick</a>
+                        <a href="https://imagemagick.org/script/support.php#support" rel="external">
+                            ImageMagick
+                        </a>
                     </li>
                     <li>
-                        <a href="https://opencollective.com/mochajs#support">Mocha</a>
+                        <a href="https://opencollective.com/mochajs#support" rel="external">
+                            Mocha
+                        </a>
                     </li>
                 </BulletList>
             </section>
