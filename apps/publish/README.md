@@ -21,14 +21,14 @@ Make sure you have the following installed on your system and reachable via the 
 
 The following environment variables are required. They may be stored in `.env` in the root of this project.
 
-| Variable Name           | Description                           |
-| ----------------------- | ------------------------------------- |
-| `AWS_ACCESS_KEY_ID`     | Amazon Web Services access key ID     |
-| `AWS_REGION`            | Amazon Web Services region            |
-| `AWS_SECRET_ACCESS_KEY` | Amazon Web Services secret access key |
-| `PGHOST`                | Postgres host                         |
-| `PGPASSWORD`            | Postgres password                     |
-| `PGUSER`                | Postgres user                         |
+| Variable Name          | Description                              |
+| ---------------------- | ---------------------------------------- |
+| `PGHOST`               | Postgres host                            |
+| `PGPASSWORD`           | Postgres password                        |
+| `PGUSER`               | Postgres user                            |
+| `S3_ACCESS_KEY_ID`     | Amazon Web Services S3 access key ID     |
+| `S3_REGION`            | Amazon Web Services S3 region            |
+| `S3_SECRET_ACCESS_KEY` | Amazon Web Services S3 secret access key |
 
 The following environment variables are optional:
 

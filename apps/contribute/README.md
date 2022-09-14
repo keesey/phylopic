@@ -24,9 +24,12 @@ The following environment variables are required. They may be stored in `.env.lo
 | `PGPASSWORD`                    | PostgreSQL password                                                      |
 | `PGPORT`                        | PostgreSQL port                                                          |
 | `PGUSER`                        | PostgreSQL user                                                          |
-| `AWS_ACCESS_KEY_ID`             | AWS S3 access key ID                                                     |
-| `AWS_REGION`                    | AWS S3 region                                                            |
-| `AWS_SECRET_ACCESS_KEY`         | AWS S3 secret access key                                                 |
+| `S3_ACCESS_KEY_ID`              | AWS S3 access key ID                                                     |
+| `S3_REGION`                     | AWS S3 region                                                            |
+| `S3_SECRET_ACCESS_KEY`          | AWS S3 secret access key                                                 |
+| `SES_ACCESS_KEY_ID`             | AWS SES access key ID                                                    |
+| `SES_REGION`                    | AWS SES region                                                           |
+| `SES_SECRET_ACCESS_KEY`         | AWS SES secret access key                                                |
 
 The following environment variables are optional:
 
