@@ -12,7 +12,7 @@ export type Props = {
 const createListStaticPropsGetter =
     <TEntity>(endpoint: string, entityEmbedsQuery?: Query): GetStaticProps<Props, Record<string, never>> =>
     async () => {
-        const listKey = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + endpoint
+        const listKey = process.env.NEXT_PUBLIC_API_DOMAIN + endpoint
         const listResponse = await fetchResult<List>(listKey)
         if (listResponse.status !== "success") {
             return getStaticPropsResult(listResponse)

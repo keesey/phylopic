@@ -12,12 +12,12 @@ const nextConfig = {
         return [
             {
                 source: "/account",
-                destination: "https://contribute.phylopic.org",
+                destination: process.env.NEXT_PUBLIC_CONTRIBUTE_URL,
                 permanent: true,
             },
             {
                 source: "/account/:path*",
-                destination: "https://contribute.phylopic.org",
+                destination: process.env.NEXT_PUBLIC_CONTRIBUTE_URL,
                 permanent: true,
             },
             {
@@ -27,7 +27,7 @@ const nextConfig = {
             },
             {
                 source: "/contribute",
-                destination: "https://contribute.phylopic.org/",
+                destination: process.env.NEXT_PUBLIC_CONTRIBUTE_URL,
                 permanent: true,
             },
             {

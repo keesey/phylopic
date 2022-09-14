@@ -19,8 +19,7 @@ export const PhyloPicImageSearch: React.FC = () => {
     const endpoint = React.useMemo(
         () =>
             matchingText
-                ? "https://" +
-                  process.env.NEXT_PUBLIC_API_DOMAIN +
+                ? process.env.NEXT_PUBLIC_API_URL +
                   "/images" +
                   createSearch({
                       embed_specificNode: "true",

@@ -192,7 +192,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const key = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/images/" + uuid + createSearch(IMAGE_QUERY)
+    const key = process.env.NEXT_PUBLIC_API_URL + "/images/" + uuid + createSearch(IMAGE_QUERY)
     const result = await fetchResult<ImageWithEmbedded>(key)
     if (result.status !== "success") {
         return getStaticPropsResult(result)

@@ -11,10 +11,7 @@ export type Props = {
 }
 const PhyloPicNodesView: FC<Props> = ({ short, uuid }) => {
     const apiFetcher = useAPIFetcher<Node>()
-    const { data } = useSWRImmutable(
-        `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/nodes/${encodeURIComponent(uuid)}`,
-        apiFetcher,
-    )
+    const { data } = useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/nodes/${encodeURIComponent(uuid)}`, apiFetcher)
     if (!data) {
         return <>{INCOMPLETE_STRING}</>
     }

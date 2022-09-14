@@ -7,7 +7,6 @@ import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
-import Analytics from "./Analytics"
 const BuildChecker = dynamic(() => import("./BuildChecker"), { ssr: false })
 const Search = dynamic(() => import("./Search"), { ssr: false })
 export type Props = {

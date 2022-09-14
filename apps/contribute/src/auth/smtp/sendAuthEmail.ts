@@ -31,8 +31,8 @@ const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date, expires
         subject: "Uploading Silhouettes to PhyloPic",
         text: `Hey there,
         
-Open this link to start uploading images to PhyloPic: https://${
-            process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN
+Open this link to start uploading images to PhyloPic: ${
+            process.env.NEXT_PUBLIC_CONTRIBUTE_URL
         }/authorize/${encodeURIComponent(email)}/${encodeURIComponent(payload.jti)}
 This link will expire at ${expires.toUTCString()}.
 

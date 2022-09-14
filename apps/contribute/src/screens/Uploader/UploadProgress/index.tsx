@@ -30,7 +30,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
     useEffect(() => {
         if (buffer && contributorUUID && token) {
             const controller = new AbortController()
-            const promise = axios.post<Link>(`https://${process.env.NEXT_PUBLIC_API_DOMAIN}/uploads`, buffer, {
+            const promise = axios.post<Link>(`${process.env.NEXT_PUBLIC_API_URL}/uploads`, buffer, {
                 headers: {
                     authorization: `Bearer ${token}`,
                     "content-type": type,

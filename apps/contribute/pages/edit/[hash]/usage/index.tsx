@@ -12,7 +12,7 @@ const Page: NextPage<Props> = ({ hash }) => (
     <PageLayout
         head={{
             title: "PhyloPic: Usage of Your Submission",
-            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(hash)}/usage`,
+            url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/edit/${encodeURIComponent(hash)}/usage`,
         }}
         submissionHash={hash}
     >

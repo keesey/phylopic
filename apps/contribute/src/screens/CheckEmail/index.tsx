@@ -19,7 +19,7 @@ const CheckEmail: FC<Props> = ({ ttl }) => (
             <p>You may close this page. See you soon!</p>
         </Speech>
         <UserOptions>
-            <UserLinkButton icon={ICON_ARROW_RIGHT} href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/`}>
+            <UserLinkButton icon={ICON_ARROW_RIGHT} href={process.env.NEXT_PUBLIC_WWW_URL + "/"}>
                 Check out the site.
             </UserLinkButton>
         </UserOptions>

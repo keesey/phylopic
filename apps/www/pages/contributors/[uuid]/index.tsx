@@ -90,8 +90,8 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         return { notFound: true }
     }
     const imagesQuery: ImageListParameters & Query = { filter_contributor: uuid }
-    const contributorKey = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/contributors/" + uuid
-    const listImagesKey = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/images" + createSearch(imagesQuery)
+    const contributorKey = process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid
+    const listImagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
     const [listImagesResponse, contributorResult] = await Promise.all([
         fetchData<List>(listImagesKey),
         fetchResult<Contributor>(contributorKey),
@@ -111,8 +111,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         props.fallback![unstable_serialize(addBuildToURL(listImagesKey, build))] = listImagesResponse.data
         if (listImagesResponse.data.totalItems > 0) {
             const getImagesPageKey = (page: number) =>
-                "https://" +
-                process.env.NEXT_PUBLIC_API_DOMAIN +
+                process.env.NEXT_PUBLIC_API_URL +
                 "/images" +
                 createSearch({ ...imagesQuery, build, embed_items: true, embed_specificNode: true, page })
             const imagesPageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getImagesPageKey(0))

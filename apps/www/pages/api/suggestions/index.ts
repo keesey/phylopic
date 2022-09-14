@@ -130,7 +130,7 @@ const getPhyloPicSuggestions = async (prefix: string): Promise<readonly Suggesti
         if (prefix.length >= 2) {
             const query = normalizeQuery(prefix)
             const response = await axios.get<QueryMatches>(
-                "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/autocomplete" + createSearch({ query }),
+                process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ query }),
             )
             return response.data.matches.map(match => ({
                 description: "Illustrated",

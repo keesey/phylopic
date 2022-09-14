@@ -7,7 +7,7 @@ const createGetServerSideListSitemapProps =
     (path: string): GetServerSideProps =>
     async ({ res }) => {
         const lastmod = new Date().toISOString()
-        const listResult = await fetchResult<List>("https://" + process.env.NEXT_PUBLIC_API_DOMAIN + path)
+        const listResult = await fetchResult<List>(process.env.NEXT_PUBLIC_API_URL + path)
         if (!listResult.ok) {
             throw new Error(listResult.status)
         }
@@ -16,8 +16,7 @@ const createGetServerSideListSitemapProps =
         for (let page = 0; page < listResult.data.totalPages; ++page) {
             pagePromises.push(
                 fetchResult<Page>(
-                    "https://" +
-                        process.env.NEXT_PUBLIC_API_DOMAIN +
+                    process.env.NEXT_PUBLIC_API_URL +
                         path +
                         `?build=${encodeURIComponent(build)}&page=${encodeURIComponent(page)}`,
                 ),

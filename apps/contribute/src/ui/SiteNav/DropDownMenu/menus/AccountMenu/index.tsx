@@ -9,9 +9,7 @@ const AccountMenu: FC = () => {
             <MenuLink href="/profile" icon={ICON_HAND_POINT_RIGHT} label="Profile" />
             {contributorUUID && (
                 <MenuLink
-                    href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/contributors/${encodeURIComponent(
-                        contributorUUID,
-                    )}`}
+                    href={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributorUUID)}`}
                     icon={ICON_HAND_POINT_RIGHT}
                     isExternal
                     label="Your Page on the Site"

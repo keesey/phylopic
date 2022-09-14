@@ -6,7 +6,7 @@ export type Props = {
     build: number
 }
 const getBuildStaticProps: GetStaticProps<Props, Record<string, never>> = async () => {
-    const key = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN
+    const key = process.env.NEXT_PUBLIC_API_URL + "/"
     const response = await fetchResult<API>(key)
     if (response.status !== "success") {
         return getStaticPropsResult(response)

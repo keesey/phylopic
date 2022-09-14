@@ -11,7 +11,7 @@ const Page: NextPage = () => {
         <PageLayout
             head={{
                 title: "PhyloPic: Upload New Image File",
-                url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/upload`,
+                url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/upload`,
             }}
         >
             <AuthorizedOnly>

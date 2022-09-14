@@ -6,13 +6,13 @@ const SiteMenu: FC = () => {
         <>
             <MenuLink href="/" icon={ICON_HAND_POINT_RIGHT} label="Contribute" />
             <MenuLink
-                href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}`}
+                href={process.env.NEXT_PUBLIC_WWW_URL + "/"}
                 icon={ICON_ARROW_RIGHT}
                 isExternal
                 label="Main Site"
             />
             <MenuLink
-                href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images`}
+                href={`${process.env.NEXT_PUBLIC_WWW_URL}/images`}
                 icon={ICON_ARROW_RIGHT}
                 isExternal
                 label="Image Gallery"

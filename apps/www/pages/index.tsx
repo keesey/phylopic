@@ -89,7 +89,7 @@ const PageComponent: NextPage<Props> = props => (
                 headerLevel={2}
             />
             <PaginationContainer
-                endpoint={"https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/images"}
+                endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
                 query={{ embed_specificNode: true }}
                 maxPages={1}
             >

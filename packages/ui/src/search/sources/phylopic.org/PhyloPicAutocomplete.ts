@@ -12,7 +12,7 @@ export const PhyloPicAutocomplete: React.FC = () => {
     const endpoint = React.useMemo(
         () =>
             text && text.length >= 2
-                ? "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/autocomplete" + createSearch({ query: text })
+                ? process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ query: text })
                 : null,
         [text],
     )

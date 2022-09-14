@@ -6,7 +6,7 @@ const BuildChecker: FC = () => {
     const fetcher = useAPIFetcher()
     const [cachebuster, setCachebuster] = useState<string | undefined>()
     useEffect(() => setCachebuster(new Date().valueOf().toString(16)), [])
-    useSWRImmutable(`https://${process.env.NEXT_PUBLIC_API_DOMAIN}/${createSearch({ cb: cachebuster })}`, fetcher)
+    useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/${createSearch({ cb: cachebuster })}`, fetcher)
     return null
 }
 export default BuildChecker

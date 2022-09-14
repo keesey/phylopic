@@ -27,7 +27,7 @@ const Content: FC = () => {
         <Dialogue>
             <Speech mode="user">
                 <FileView
-                    src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
+                    src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/files/${encodeURIComponent(hash)}`}
                     mode="light"
                 />
             </Speech>
