@@ -1,5 +1,5 @@
 import { normalizeQuery, QueryMatches } from "@phylopic/api-models"
-import { getSortIndex } from "@phylopic/ui"; // :TODO: move to utils
+import { getSortIndex } from "@phylopic/ui" // :TODO: move to utils
 import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import axios from "axios"
 import { NextApiHandler } from "next"
@@ -8,12 +8,14 @@ const index: NextApiHandler = async (req, res) => {
         const prefix = getString(req.query.q)
         const suggestions = await getSuggestions(prefix)
         res.setHeader("Content-Type", "application/opensearchdescription+xml")
-        res.send(stringifyNormalized([
-            prefix,
-            suggestions.map(suggestion => suggestion.term),
-            suggestions.map(suggestion => suggestion.description),
-            suggestions.map(suggestion => suggestion.url),
-        ]))
+        res.send(
+            stringifyNormalized([
+                prefix,
+                suggestions.map(suggestion => suggestion.term),
+                suggestions.map(suggestion => suggestion.description),
+                suggestions.map(suggestion => suggestion.url),
+            ]),
+        )
     } catch (err) {
         console.error(err)
         res.setHeader("Content-Type", "text/plain")
