@@ -14,7 +14,7 @@ const ContributionCTAView: FC = () => {
                     </p>
                     <ul className={styles.ctaList}>
                         <li>
-                            <a href="https://contribute.phylopic.org">Image Uploader</a>
+                            <a href={process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/"}>Image Uploader</a>
                         </li>
                     </ul>
                 </section>
