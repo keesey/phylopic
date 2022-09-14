@@ -14,28 +14,32 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
     if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
         return { notFound: true }
     }
-    const response = await axios.get<never>(
-        [
-            "https://" + process.env.NEXT_PUBLIC_API_DOMAIN,
-            "resolve",
-            encodeURIComponent(authority),
-            encodeURIComponent(namespace),
-            encodeURIComponent(objectID),
-        ].join("/"),
-        {
-            maxRedirects: 0,
-        },
-    )
-    if (response.status !== 307 && response.status !== 308) {
-        return { notFound: true }
-    }
-    const destination = response.headers.location
-    if (destination) {
-        return {
-            redirect: {
-                destination,
-                permanent: response.status === 308,
+    try {
+        await axios.get<never>(
+            [
+                "https://" + process.env.NEXT_PUBLIC_API_DOMAIN,
+                "resolve",
+                encodeURIComponent(authority),
+                encodeURIComponent(namespace),
+                encodeURIComponent(objectID),
+            ].join("/"),
+            {
+                maxRedirects: 0,
             },
+        )
+    } catch (e) {
+        if (axios.isAxiosError(e)) {
+            if (e.response?.status === 307 || e.response?.status === 308) {
+                const destination = e.response?.headers.location
+                if (destination) {
+                    return {
+                        redirect: {
+                            destination,
+                            permanent: e.response?.status === 308,
+                        },
+                    }
+                }
+            }
         }
     }
     return { notFound: true }
