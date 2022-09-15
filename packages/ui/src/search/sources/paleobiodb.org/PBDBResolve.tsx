@@ -44,7 +44,7 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
         () =>
             setDirectKey(
                 oid
-                    ? `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/resolve/paleobiodb.org/txn/${encodeURIComponent(
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn/${encodeURIComponent(
                           oid,
                       )}?embed_primaryImage=true`
                     : null,
@@ -68,7 +68,7 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
             setIndirectKey(
                 lineageOIDs.length
                     ? ([
-                          `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/resolve/paleobiodb.org/txn?embed_primaryImage=true`,
+                          `${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn?embed_primaryImage=true`,
                           lineageOIDs,
                       ] as [string, string[]])
                     : null,

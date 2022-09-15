@@ -19,7 +19,7 @@ const LineageNodeView: FC<Props> = ({ value }) => {
     const linked = useMemo(() => nodeHasOwnCladeImages(value), [value])
     return (
         <section className={styles.main}>
-            <PaginationContainer endpoint={`https://${process.env.NEXT_PUBLIC_API_DOMAIN}/images`} query={query}>
+            <PaginationContainer endpoint={`${process.env.NEXT_PUBLIC_API_URL}/images`} query={query}>
                 {items =>
                     items.length ? (
                         <div className={styles.images} key="images">

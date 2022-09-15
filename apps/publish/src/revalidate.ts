@@ -4,9 +4,7 @@ import "dotenv/config"
     try {
         console.info("Revalidating website...")
         const response = await axios.get<{ revalidated: boolean }>(
-            `https://${process.env.WWW_DOMAIN}/api/revalidate?secret=${encodeURIComponent(
-                process.env.REVALIDATE_KEY ?? "",
-            )}`,
+            `${process.env.WWW_URL}/api/revalidate?secret=${encodeURIComponent(process.env.REVALIDATE_KEY ?? "")}`,
         )
         if (!response.data.revalidated) {
             throw new Error("Failed to revalidate.")

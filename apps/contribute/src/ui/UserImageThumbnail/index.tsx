@@ -18,7 +18,7 @@ export type Props = {
 const UserImageThumbnail: FC<Props> = ({ uuid }) => {
     const apiFetcher = useAPIFetcher<ImageWithEmbedded>()
     const publishedSWR = useSWRImmutable(
-        `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/images/${encodeURIComponent(uuid)}?embed_specificNode=true`,
+        `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(uuid)}?embed_specificNode=true`,
         apiFetcher,
     )
     if (publishedSWR.error) {
@@ -28,7 +28,7 @@ const UserImageThumbnail: FC<Props> = ({ uuid }) => {
         return (
             <a
                 className={styles.link}
-                href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/images/${encodeURIComponent(uuid)}`}
+                href={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(uuid)}`}
                 target="_blank"
                 rel="noreferrer"
             >

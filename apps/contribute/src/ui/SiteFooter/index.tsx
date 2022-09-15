@@ -19,7 +19,7 @@ const SiteFooter: FC = () => (
                 <abbr title="Copyright">©</abbr> {YEAR} <a href="http://tmkeesey.net">T. Michael Keesey</a>
             </li>
             <li className={clsx(styles.item, styles.logos)}>
-                <Link href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}/mailinglist`}>
+                <Link href={`${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`}>
                     <a className={styles.textIcon} title="Subscribe to the PhyloPic mailing list.">
                         <Image src={logoMail} width={28} height={28} alt="Mailing List" />
                     </a>

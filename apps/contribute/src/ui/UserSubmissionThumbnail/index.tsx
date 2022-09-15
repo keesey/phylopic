@@ -19,9 +19,7 @@ const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
     return (
         <div className={clsx(styles.main, submission && styles[submission.status])}>
             <figure className={styles.figure}>
-                <FileThumbnailView
-                    src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
-                />
+                <FileThumbnailView src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/files/${encodeURIComponent(hash)}`} />
                 <figcaption className={styles.caption}>
                     {submission?.identifier && (
                         <>

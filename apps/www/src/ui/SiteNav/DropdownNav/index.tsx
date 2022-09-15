@@ -26,7 +26,9 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     <AnchorLink href="/images">Image Gallery</AnchorLink>
                 </li>
                 <li>
-                    <AnchorLink href={`/nodes/${process.env.NEXT_PUBLIC_ROOT_UUID}`}>All Life</AnchorLink>
+                    <AnchorLink href={`/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID!)}`}>
+                        All Life
+                    </AnchorLink>
                 </li>
                 <li>
                     <AnchorLink href="/contributors">Contributors</AnchorLink>
@@ -37,7 +39,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <h2>Contribute</h2>
             <ul>
                 <li>
-                    <a href="https://contribute.phylopic.org">Upload Images</a>
+                    <a href={process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/"}>Upload Images</a>
                 </li>
                 <li>
                     <AnchorLink href="/donate">Make a Donation</AnchorLink>
@@ -93,7 +95,10 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
         <section>
             <ul>
                 <li>
-                    <AnchorLink href={`/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`} rel="author">
+                    <AnchorLink
+                        href={`/contributors/${encodeURIComponent(process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID!)}`}
+                        rel="author"
+                    >
                         Contact the Creator
                     </AnchorLink>
                 </li>

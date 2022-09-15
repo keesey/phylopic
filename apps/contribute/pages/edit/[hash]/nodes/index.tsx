@@ -16,7 +16,7 @@ const Page: NextPage<Props> = ({ build, hash }) => (
         build={build}
         head={{
             title: "PhyloPic: Your Submission’s Taxonomic Assignment",
-            url: `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/edit/${encodeURIComponent(hash)}/nodes`,
+            url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/edit/${encodeURIComponent(hash)}/nodes`,
         }}
         submissionHash={hash}
     >
@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
     if (!isHash(hash)) {
         return { notFound: true }
     }
-    const buildPromise = fetchJSON<API>("https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/")
+    const buildPromise = fetchJSON<API>(process.env.NEXT_PUBLIC_API_URL + "/")
     let client: SourceClient | undefined
     let notFound = false
     try {

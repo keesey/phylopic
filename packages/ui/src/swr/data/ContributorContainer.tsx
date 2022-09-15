@@ -8,7 +8,7 @@ export type ContributorContainerProps = Omit<DataContainerProps<Contributor>, "e
 }
 export const ContributorContainer: React.FC<ContributorContainerProps> = ({ uuid, ...dataContainerProps }) => {
     const endpoint = React.useMemo(
-        () => "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/contributors/" + uuid,
+        () => process.env.NEXT_PUBLIC_API_URL + "/contributors/" + encodeURIComponent(uuid),
         [uuid],
     )
     return <DataContainer endpoint={endpoint} {...(dataContainerProps as Partial<DataContainerProps>)} />

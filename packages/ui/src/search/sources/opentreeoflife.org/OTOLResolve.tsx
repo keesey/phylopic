@@ -43,9 +43,9 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
         () =>
             setDirectKey(
                 ott_id
-                    ? `https://${
-                          process.env.NEXT_PUBLIC_API_DOMAIN
-                      }/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(ott_id)}${createSearch({
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(
+                          ott_id,
+                      )}${createSearch({
                           build,
                           embed_primaryImage: true,
                       })}`
@@ -67,9 +67,7 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
             setIndirectKey(
                 lineageIDs.length
                     ? ([
-                          `https://${
-                              process.env.NEXT_PUBLIC_API_DOMAIN
-                          }/resolve/opentreeoflife.org/taxonomy${createSearch({
+                          `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy${createSearch({
                               build,
                               embed_primaryImage: true,
                           })}`,

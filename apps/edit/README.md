@@ -8,6 +8,26 @@ This app is only meant to be run locally. It is not hosted online.
 
 See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [AWS Command Line Interface](https://aws.amazon.com/cli/).
 
+### Environment Variables
+
+The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
+
+| Variable Name          | Description                                                 |
+| ---------------------- | ----------------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL`  | Root URL of the _PhyloPic_ API (`https://api.phylopic.org`) |
+| `PGHOST`               | Postgres host                                               |
+| `PGPASSWORD`           | Postgres password                                           |
+| `PGUSER`               | Postgres user                                               |
+| `S3_ACCESS_KEY_ID`     | Amazon Web Services S3 access key ID                        |
+| `S3_REGION`            | Amazon Web Services S3 region                               |
+| `S3_SECRET_ACCESS_KEY` | Amazon Web Services S3 secret access key                    |
+
+The following environment variables are optional:
+
+| Variable Name | Description   |
+| ------------- | ------------- |
+| `PGPORT`      | Postgres port |
+
 ## Linting
 
 To clean up formatting for source files:

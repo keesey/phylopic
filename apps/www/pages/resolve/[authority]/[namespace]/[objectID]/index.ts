@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
     try {
         await axios.get<never>(
             [
-                "https://" + process.env.NEXT_PUBLIC_API_DOMAIN,
+                process.env.NEXT_PUBLIC_API_URL,
                 "resolve",
                 encodeURIComponent(authority),
                 encodeURIComponent(namespace),

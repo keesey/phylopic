@@ -34,8 +34,8 @@ const PageComponent: NextPage = () => (
                 <h2>Upload a Silhouette</h2>
                 <p>
                     <SiteTitle /> relies on silhouettes uploaded by people like you! Use the{" "}
-                    <a href="https://contribute.phylopic.org">Image Uploader</a> to add your artwork the database of
-                    freely reusable images!
+                    <a href={process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/"}>Image Uploader</a> to add your artwork the
+                    database of freely reusable images!
                 </p>
                 <p></p>
             </section>

@@ -12,24 +12,23 @@ See instructions in the [_PhyloPic_ project `README`](../../README.md) for setti
 
 The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
 
-| Variable Name                   | Description                                                              |
-| ------------------------------- | ------------------------------------------------------------------------ |
-| `AUTH_SECRET_KEY`               | Secret key used for authentication                                       |
-| `MAILGUN_API_KEY`               | API key for [Mailgun](https://www.mailgun.com/)                          |
-| `MAILGUN_DOMAIN`                | Domain for [Mailgun](https://www.mailgun.com/) (`mail.phylopic.org`)     |
-| `NEXT_PUBLIC_API_DOMAIN`        | Domain of the _PhyloPic_ API (`api.phylopic.org`)                        |
-| `NEXT_PUBLIC_CONTRIBUTE_DOMAIN` | Domain of the _PhyloPic: Contribute_ website (`contribute.phylopic.org`) |
-| `NEXT_PUBLIC_WWW_DOMAIN`        | Domain of the main _PhyloPic_ website (`www.phylopic.org`)               |
-| `PGHOST`                        | PostgreSQL host                                                          |
-| `PGPASSWORD`                    | PostgreSQL password                                                      |
-| `PGPORT`                        | PostgreSQL port                                                          |
-| `PGUSER`                        | PostgreSQL user                                                          |
-| `S3_ACCESS_KEY_ID`              | AWS S3 access key ID                                                     |
-| `S3_REGION`                     | AWS S3 region                                                            |
-| `S3_SECRET_ACCESS_KEY`          | AWS S3 secret access key                                                 |
-| `SES_ACCESS_KEY_ID`             | AWS SES access key ID                                                    |
-| `SES_REGION`                    | AWS SES region                                                           |
-| `SES_SECRET_ACCESS_KEY`         | AWS SES secret access key                                                |
+| Variable Name                | Description                                                                        |
+| ---------------------------- | ---------------------------------------------------------------------------------- |
+| `AUTH_SECRET_KEY`            | Secret key used for authentication                                                 |
+| `MAILGUN_API_KEY`            | API key for [Mailgun](https://www.mailgun.com/)                                    |
+| `MAILGUN_DOMAIN`             | Domain for [Mailgun](https://www.mailgun.com/) (`mail.phylopic.org`)               |
+| `NEXT_PUBLIC_API_URL`        | Root URL of the _PhyloPic_ API (`https://api.phylopic.org`)                        |
+| `NEXT_PUBLIC_CONTRIBUTE_URL` | Root URL of the _PhyloPic: Contribute_ website (`https://contribute.phylopic.org`) |
+| `NEXT_PUBLIC_WWW_URL`        | Root URL of the main _PhyloPic_ website (`https://www.phylopic.org`)               |
+| `PGHOST`                     | Postgres host                                                                      |
+| `PGPASSWORD`                 | Postgres password                                                                  |
+| `PGUSER`                     | Postgres user                                                                      |
+| `S3_ACCESS_KEY_ID`           | Amazon Web Services S3 access key ID                                               |
+| `S3_REGION`                  | Amazon Web Services S3 region                                                      |
+| `S3_SECRET_ACCESS_KEY`       | Amazon Web Services S3 secret access key                                           |
+| `SES_ACCESS_KEY_ID`          | AWS SES access key ID                                                              |
+| `SES_REGION`                 | AWS SES region                                                                     |
+| `SES_SECRET_ACCESS_KEY`      | AWS SES secret access key                                                          |
 
 The following environment variables are optional:
 
@@ -37,6 +36,7 @@ The following environment variables are optional:
 | ----------------------------------- | ----------------------------------------------- |
 | `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key |
 | `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Measurement ID for Google Analytics             |
+| `PGPORT`                            | Postgres port                                   |
 
 ## Linting
 

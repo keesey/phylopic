@@ -24,9 +24,9 @@ const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date, expires
     if (duration < 0) {
         throw new Error("Tried to send an email using an expired token.")
     }
-    const url = `https://${process.env.NEXT_PUBLIC_CONTRIBUTE_DOMAIN}/authorize/${encodeURIComponent(
-        email,
-    )}/${encodeURIComponent(payload.jti)}`
+    const url = `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/authorize/${encodeURIComponent(email)}/${encodeURIComponent(
+        payload.jti,
+    )}`
     const client = new SESClient({
         credentials: {
             accessKeyId: process.env.SES_ACCESS_KEY_ID!,

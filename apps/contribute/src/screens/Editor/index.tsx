@@ -36,7 +36,7 @@ const Editor: FC<Props> = ({ hash }) => {
                 <SpeechStack collapsible>
                     <figure>
                         <FileView
-                            src={`https://${process.env.NEXT_PUBLIC_UPLOADS_DOMAIN}/files/${encodeURIComponent(hash)}`}
+                            src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/files/${encodeURIComponent(hash)}`}
                             mode="light"
                         />
                         <br />

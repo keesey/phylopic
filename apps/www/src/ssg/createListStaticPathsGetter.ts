@@ -7,7 +7,7 @@ import { EntityPageQuery } from "./EntityPageQuery"
 const createStaticPathsGetter =
     (endpoint: string): GetStaticPaths<EntityPageQuery> =>
     async () => {
-        const listKey = "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + endpoint
+        const listKey = process.env.NEXT_PUBLIC_API_URL + endpoint
         const listResponse = await fetchData<List>(listKey)
         if (!listResponse.ok || !listResponse.data.totalPages) {
             if (!listResponse.ok) {

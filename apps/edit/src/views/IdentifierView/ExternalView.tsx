@@ -15,7 +15,7 @@ export type Props = {
 const ExternalView: FC<Props> = ({ authority, namespace, objectID, short }) => {
     const fetcher = useAPIFetcher<Node>()
     const { data: node } = useSWRImmutable(
-        `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(
+        `${process.env.NEXT_PUBLIC_API_URL}/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(
             namespace,
         )}/${encodeURIComponent(objectID)}`,
         fetcher,

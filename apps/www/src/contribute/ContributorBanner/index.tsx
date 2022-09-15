@@ -14,7 +14,7 @@ const ContributorBanner: FC<Props> = ({ imageUUID }) => {
     const [dismissed, setDismissed] = useState(false)
     const fetcher = useAPIFetcher<Image>()
     const { data: image } = useSWRImmutable(
-        `https://${process.env.NEXT_PUBLIC_API_DOMAIN}/images/${encodeURIComponent(imageUUID)}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(imageUUID)}`,
         fetcher,
     )
     const [token] = useStoredState<JWT>("auth")

@@ -17,6 +17,29 @@ The API is hosted at [https://api.phylopic.org](https://api.phylopic.org).
 
 See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [`serverless` CLI](https://www.serverless.com/framework/docs/getting-started).
 
+### Environment Variables
+
+The following environment variables are required.
+
+| Variable Name              | Description                                                |
+| -------------------------- | ---------------------------------------------------------- |
+| `AUTH_SECRET_KEY`          | Secret key used for authentication                         |
+| `AWS_ACCESS_KEY_ID`        | Amazon Web Services access key ID                          |
+| `AWS_REGION`               | Amazon Web Services region                                 |
+| `AWS_SECRET_ACCESS_KEY`    | Amazon Web Services access key                             |
+| `PGHOST`                   | Postgres host                                              |
+| `PGPASSWORD`               | Postgres password                                          |
+| `PGUSER`                   | Postgres user                                              |
+| `PHYLOPIC_BUILD`           | The number of the current _PhyloPic_ build                 |
+| `PHYLOPIC_BUILD_TIMESTAMP` | The timestamp associated with the current _PhyloPic_ build |
+| `PHYLOPIC_ROOT_UUID`       | The UUID of the root node for _PhyloPic_                   |
+
+The following environment variables are optional:
+
+| Variable Name | Description                     |
+| ------------- | ------------------------------- |
+| `PGPORT`      | Postgres port (default: `5432`) |
+
 ## Linting
 
 To clean up formatting for source files:

@@ -11,8 +11,8 @@ type Props = Omit<PageLayoutProps, "children">
 const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
         <PageHead
-            title="PhyloPic: Contributors"
-            url="https://www.phylopic.org/contributors"
+            title="PhyloPic: Contributor List"
+            url="https://www.phylopic.org/lists/contributors"
             description="A list of everyone who has contributed free silhouette images to PhyloPic."
         />
         <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>

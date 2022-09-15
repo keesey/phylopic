@@ -7,6 +7,6 @@ export type NodeContainerProps = Omit<DataContainerProps<NodeWithEmbedded>, "end
     uuid: UUID
 }
 export const NodeContainer: React.FC<NodeContainerProps> = ({ uuid, ...dataContainerProps }) => {
-    const endpoint = React.useMemo(() => "https://" + process.env.NEXT_PUBLIC_API_DOMAIN + "/nodes/" + uuid, [uuid])
+    const endpoint = React.useMemo(() => process.env.NEXT_PUBLIC_API_URL + "/nodes/" + encodeURIComponent(uuid), [uuid])
     return <DataContainer endpoint={endpoint} {...(dataContainerProps as Partial<DataContainerProps>)} />
 }

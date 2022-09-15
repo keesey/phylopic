@@ -14,7 +14,7 @@ const Farewell: FC = () => {
                 <UserLinkButton icon={ICON_ARROW_LEFT} href="/">
                     Log me back in.
                 </UserLinkButton>
-                <UserLinkButton icon={ICON_ARROW_RIGHT} href={`https://${process.env.NEXT_PUBLIC_WWW_DOMAIN}`}>
+                <UserLinkButton icon={ICON_ARROW_RIGHT} href={process.env.NEXT_PUBLIC_WWW_URL + "/"}>
                     View the site.
                 </UserLinkButton>
             </UserOptions>
