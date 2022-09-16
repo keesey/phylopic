@@ -30,7 +30,7 @@ const AccountDetails = () => {
                 editable={name === ""}
                 value={name}
                 onSubmit={setName}
-                prefix={<NoBreak>My name is </NoBreak>}
+                prefix={<NoBreak>My name is&nbsp;</NoBreak>}
                 postfix="."
             >
                 {(value, setValue) => (
