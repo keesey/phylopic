@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: PhyloPic API
   description: |
-    Documentation for [*PhyloPic*](https://beta.phylopic.org/)'s Application Programming Interface.
+    Documentation for [*PhyloPic*](https://www.phylopic.org/)'s Application Programming Interface.
 
     *PhyloPic* is an open database of freely reusable silhouette images of organisms, searchable by phylogeny.
   contact:

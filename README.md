@@ -1,6 +1,6 @@
 # PhyloPic
 
-_[PhyloPic](https://beta.phylopic.org)_ is an open database of freely reusable silhouettes of life forms. Code for _PhyloPic_ resides in this [monorepo](https://turborepo.org/docs).
+_[PhyloPic](https://www.phylopic.org)_ is an open database of freely reusable silhouettes of life forms. Code for _PhyloPic_ resides in this [monorepo](https://turborepo.org/docs).
 
 Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/).
 

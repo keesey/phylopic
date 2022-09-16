@@ -1,6 +1,6 @@
 # _PhyloPic_ Editing Webapp
 
-This [Next.js](https://nextjs.org/) application allows users to manage data for [_PhyloPic_](https://beta.phylopic.org), including phylogenetic nodes and silhouette images. It includes the interface for reviewing images uploaded via the [Contribute webapp](../contribute).
+This [Next.js](https://nextjs.org/) application allows users to manage data for [_PhyloPic_](https://www.phylopic.org), including phylogenetic nodes and silhouette images. It includes the interface for reviewing images uploaded via the [Contribute webapp](../contribute).
 
 This app is only meant to be run locally. It is not hosted online.
 

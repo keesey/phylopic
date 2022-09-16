@@ -2,7 +2,7 @@
 
 This [Next.js](https://nextjs.org/) application allows users to find and download freely reusable silhouette images of organisms.
 
-The app is hosted at [https://beta.phylopic.org](https://beta.phylopic.org) and will eventually move to `https://www.phylopic.org`.
+The app is hosted at [https://www.phylopic.org](https://www.phylopic.org) and will eventually move to `https://www.phylopic.org`.
 
 ## Getting started
 
@@ -52,7 +52,7 @@ yarn build && yarn start
 
 ## Deploying
 
-To deploy to `beta.phylopic.org`, use [Git](https://git-scm.com/) to set the `@phylopic/www/beta` branch to the desired commit, then push to `origin`.
+To deploy to `www.phylopic.org`, use [Git](https://git-scm.com/) to set the `@phylopic/www/prod` branch to the desired commit, then push to `origin`.
 
 ```sh
 git push origin @phylopic/www/beta
