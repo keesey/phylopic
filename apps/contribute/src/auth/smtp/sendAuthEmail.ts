@@ -10,22 +10,17 @@ const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
         throw new Error("Tried to use an invalid email address.")
     }
     const payload = decodeJWT(token)
-    if (
-        !payload ||
-        !isUUIDv4(payload?.sub) ||
-        !isUUIDv4(payload?.jti) ||
-        typeof payload.iat !== "number" ||
-        typeof payload.exp !== "number"
-    ) {
+    const { exp, iat, jti, sub } = payload ?? {}
+    if (!payload || !isUUIDv4(sub) || !isUUIDv4(jti) || typeof iat !== "number" || typeof exp !== "number") {
         throw new Error("Tried to send an email using an invalid token.")
     }
-    const expirationDate = new Date(payload.exp * 1000)
+    const expirationDate = new Date(exp * 1000)
     const duration = expirationDate.valueOf() - now.valueOf()
     if (!duration || duration < 0) {
         throw new Error("Tried to send an email using an expired token.")
     }
     const url = `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/authorize/${encodeURIComponent(email)}/${encodeURIComponent(
-        payload.jti,
+        jti,
     )}`
     const client = new SESClient({
         credentials: {
@@ -42,8 +37,8 @@ const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
                     Body: {
                         Html: {
                             Data: `<p>Open this link to start uploading images to <i>PhyloPic</i>: <a href="${url}">${url}</a></p>
-<p>This link will expire at ${expiration}.</p>
-<p>Thanks! Can't wait to see your silhouettes.</p>
+<p>This link will expire on <time datetime="${expirationDate.toISOString()}">${expiration}</time>.</p>
+<p>Thanks! Can&rsquo;t wait to see your silhouettes.</p>
 <br />
 Mike Keesey<br />
 <a href="mailto:keesey+phylopic@gmail.com">keesey+phylopic@gmail.com</a>`,
@@ -51,7 +46,7 @@ Mike Keesey<br />
                         Text: {
                             Data: `Open this link to start uploading images to PhyloPic: ${url}
 
-This link will expire at ${expiration}.
+This link will expire on ${expiration}.
 
 Thanks! Can't wait to see your silhouettes.
 
@@ -78,16 +73,30 @@ export default sendAuthEmail
 const formatDate = (date: Date) => {
     return [
         date.getUTCFullYear(),
-        ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][date.getUTCMonth()],
+        [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ][date.getUTCMonth()],
         date.getUTCDate(),
         "(" + ["Sunday", "Monday", "Tuesday", "Wednesdey", "Thursday", "Friday", "Saturday"][date.getUTCDay()] + ")",
+        "at",
         [getHour(date.getUTCHours()), padZeroes(date.getUTCMinutes(), 2)].join(":"),
         getAMPM(date.getUTCHours()),
-        "UTC (Coordinated Universal Time)"
+        "UTC (Coordinated Universal Time)",
     ].join(" ")
 }
-const getAMPM = (hour: number) => hour < 12 ? "AM" : "PM"
-const getHour = (hour: number) => hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+const getAMPM = (hour: number) => (hour < 12 ? "AM" : "PM")
+const getHour = (hour: number) => (hour === 0 ? 12 : hour > 12 ? hour - 12 : hour)
 const padZeroes = (n: number, length: number) => {
     let s = n.toString(10)
     while (s.length < length) {
