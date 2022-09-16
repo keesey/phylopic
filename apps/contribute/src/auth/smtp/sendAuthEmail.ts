@@ -3,9 +3,6 @@ import { JWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4 } from "@phylopic/utils"
 import decodeJWT from "../jwt/decodeJWT"
 const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
-    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
-        throw new Error("The server is missing certain data required to send email.")
-    }
     if (!isEmailAddress(email)) {
         throw new Error("Tried to use an invalid email address.")
     }
@@ -36,12 +33,14 @@ const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
                 Message: {
                     Body: {
                         Html: {
-                            Data: `<p>Open this link to start uploading images to <i>PhyloPic</i>: <a href="${url}">${url}</a></p>
-<p>This link will expire on <time datetime="${expirationDate.toISOString()}">${expiration}</time>.</p>
+                            Data: `<body>
+<p>Open this link to start uploading images to <i>PhyloPic</i>: <a href="${escapeHTML(url)}">${escapeHTML(url)}</a></p>
+<p>This link will expire on ${escapeHTML(expiration)}.</p>
 <p>Thanks! Can&rsquo;t wait to see your silhouettes.</p>
 <br />
 Mike Keesey<br />
-<a href="mailto:keesey+phylopic@gmail.com">keesey+phylopic@gmail.com</a>`,
+<a href="mailto:keesey+phylopic@gmail.com">keesey+phylopic@gmail.com</a>
+</body>`,
                         },
                         Text: {
                             Data: `Open this link to start uploading images to PhyloPic: ${url}
@@ -104,3 +103,12 @@ const padZeroes = (n: number, length: number) => {
     }
     return s
 }
+const escapeHTML = (s: string) =>
+{
+    return s
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&apos;");
+ }
