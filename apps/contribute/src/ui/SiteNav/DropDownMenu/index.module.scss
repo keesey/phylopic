@@ -10,27 +10,27 @@
 }
 
 .file {
-    left: 143px;
+    left: 133px;
 
-    @media screen and (max-width: 535px) {
+    @media screen and (max-width: 525px) {
         left: unset;
         right: 0;
     }
 }
 
 .edit {
-    left: 238px;
+    left: 228px;
 
-    @media screen and (max-width: 625px) {
+    @media screen and (max-width: 615px) {
         left: unset;
         right: 0;
     }
 }
 
 .view {
-    left: 338px;
+    left: 328px;
 
-    @media screen and (max-width: 730px) {
+    @media screen and (max-width: 720px) {
         left: unset;
         right: 0;
     }
