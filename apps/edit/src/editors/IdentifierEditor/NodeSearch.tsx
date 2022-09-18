@@ -3,11 +3,11 @@ import { fetchJSON, SearchContext } from "@phylopic/ui"
 import { getIdentifier, Hash } from "@phylopic/utils"
 import { ChangeEvent, FC, useCallback, useContext, useState } from "react"
 import useSWR from "swr"
+import { SearchEntry } from "~/models/SearchEntry"
 import usePatcher from "~/swr/usePatcher"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
-import { SearchEntry } from "./SearchEntry"
 import useEntries from "./useEntries"
 export type Props = {
     hash: Hash
