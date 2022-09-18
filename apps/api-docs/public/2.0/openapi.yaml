@@ -285,7 +285,6 @@ components:
       description: |
         Specifies a particular page of items to retrieve.
       schema:
-        example: 0
         type: integer
     query:
       name: query
