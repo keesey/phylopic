@@ -1,14 +1,19 @@
 import { Entity, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
-import { fetchJSON, Loader } from "@phylopic/ui"
+import { AnchorLink, fetchJSON, Loader } from "@phylopic/ui"
 import { isUUIDv4, stringifyNomen, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { FC, useCallback, useMemo, useState } from "react"
 import useSWR, { SWRConfig } from "swr"
 import NodeEditor from "~/editors/NodeEditor"
+import Paginator from "~/pagination/Paginator"
 import NodeSelector from "~/selectors/NodeSelector"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import BubbleItem from "~/ui/BubbleItem"
+import BubbleList from "~/ui/BubbleList"
+import BubbleNode from "~/ui/BubbleNode"
 import NameView from "~/views/NameView"
 import TimesView from "~/views/TimesView"
 export type Props = {
@@ -62,7 +67,7 @@ const Content: FC<Props> = ({ uuid }) => {
             }
             setMerging(false)
         },
-        [mutateNode, mutateParent, uuid],
+        [mutateNode, mutateParent, node, parent, uuid],
     )
     return (
         <>
@@ -95,6 +100,28 @@ const Content: FC<Props> = ({ uuid }) => {
                         <h1>{node && <NameView name={node.names[0]} />}</h1>
                     </header>
                     <NodeEditor uuid={uuid} />
+                    <section>
+                        <h2>Children</h2>
+                        <Paginator endpoint={`/api/nodes/_/${encodeURIComponent(uuid)}/children`}>
+                            {(children, isValidating) =>
+                                children.length ? (
+                                    <BubbleList>
+                                        {(children as ReadonlyArray<Node & { uuid: UUID }>).map(child => (
+                                            <BubbleItem key={child.uuid}>
+                                                <AnchorLink href={`/nodes/${encodeURIComponent(child.uuid)}`}>
+                                                    <NameView name={child.names[0]} short />
+                                                </AnchorLink>
+                                            </BubbleItem>
+                                        ))}
+                                    </BubbleList>
+                                ) : isValidating ? (
+                                    <Loader />
+                                ) : (
+                                    <p>This is a terminal node.</p>
+                                )
+                            }
+                        </Paginator>
+                    </section>
                     <section>
                         <button onClick={() => setMerging(true)}>Absorb Another Node</button>
                         <NodeSelector open={merging} onSelect={handleMergeSelect} />
