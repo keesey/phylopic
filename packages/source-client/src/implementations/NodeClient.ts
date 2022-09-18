@@ -7,6 +7,7 @@ import {
     normalizeNomina,
     normalizeUUID,
     ObjectID,
+    stringifyNomen,
     stringifyNormalized,
     UUID,
 } from "@phylopic/utils"
@@ -66,12 +67,21 @@ export default class NodeClient extends PGPatcher<Node & { uuid: UUID }> impleme
                     [this.uuid, suppressedUUID],
                 ),
             ])
-            await this.patch({
-                modified: new Date().toISOString(),
-                names: normalizeNomina([...conserved.names, ...suppressed.names]),
-                ...(conserved.parent === suppressed.uuid ? { parent: suppressed.parent } : null),
-            })
-            await suppressedClient.delete()
+            await Promise.all([
+                this.patch({
+                    modified: new Date().toISOString(),
+                    names: normalizeNomina([...conserved.names, ...suppressed.names]),
+                    ...(conserved.parent === suppressed.uuid ? { parent: suppressed.parent } : null),
+                }),
+                new ExternalClient(this.provider, "phylopic.org", "nodes", suppressedUUID).put({
+                    authority: "phylopic.org",
+                    namespace: "nodes",
+                    node: this.uuid,
+                    objectID: suppressedUUID,
+                    title: stringifyNomen(suppressed.names[0]),
+                }),
+                suppressedClient.delete(),
+            ])
         }
     }
     readonly children: Listable<Node & { uuid: UUID }, number>
