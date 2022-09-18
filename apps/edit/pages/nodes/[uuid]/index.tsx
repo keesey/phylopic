@@ -1,11 +1,13 @@
-import { INCOMPLETE_STRING, Node } from "@phylopic/source-models"
+import { Entity, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
 import { fetchJSON, Loader } from "@phylopic/ui"
 import { isUUIDv4, stringifyNomen, UUID } from "@phylopic/utils"
+import axios from "axios"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
-import { FC, useMemo } from "react"
+import { FC, useCallback, useMemo, useState } from "react"
 import useSWR, { SWRConfig } from "swr"
 import NodeEditor from "~/editors/NodeEditor"
+import NodeSelector from "~/selectors/NodeSelector"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import NameView from "~/views/NameView"
 import TimesView from "~/views/TimesView"
@@ -34,9 +36,34 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
 }
 const Content: FC<Props> = ({ uuid }) => {
-    const { data: node } = useSWR<Node & { uuid: UUID }>(`/api/nodes/_/${uuid}`, fetchJSON)
-    const { data: parent } = useSWR<Node & { uuid: UUID }>(node ? `/api/nodes/_/${node.parent}` : null, fetchJSON)
+    const [merging, setMerging] = useState(false)
+    const { data: node, mutate: mutateNode } = useSWR<Node & { uuid: UUID }>(`/api/nodes/_/${uuid}`, fetchJSON)
+    const { data: parent, mutate: mutateParent } = useSWR<Node & { uuid: UUID }>(
+        node ? `/api/nodes/_/${node.parent}` : null,
+        fetchJSON,
+    )
     const nameText = useMemo(() => (node ? stringifyNomen(node.names[0]) : INCOMPLETE_STRING), [node])
+    const handleMergeSelect = useCallback(
+        async (suppressed: Entity<Node> | undefined) => {
+            if (suppressed && node && parent) {
+                const promise = axios.post<undefined>("/api/nodes/merge", {
+                    conserved: uuid,
+                    suppressed: suppressed.uuid,
+                })
+                mutateNode(
+                    promise.then(() => node),
+                    { revalidate: true },
+                )
+                mutateParent(
+                    promise.then(() => parent),
+                    { revalidate: true },
+                )
+                await promise
+            }
+            setMerging(false)
+        },
+        [mutateNode, mutateParent, uuid],
+    )
     return (
         <>
             <Head>
@@ -68,6 +95,10 @@ const Content: FC<Props> = ({ uuid }) => {
                         <h1>{node && <NameView name={node.names[0]} />}</h1>
                     </header>
                     <NodeEditor uuid={uuid} />
+                    <section>
+                        <button onClick={() => setMerging(true)}>Absorb Another Node</button>
+                        <NodeSelector open={merging} onSelect={handleMergeSelect} />
+                    </section>
                     <footer>
                         <TimesView created={node?.created} modified={node?.modified} />
                     </footer>

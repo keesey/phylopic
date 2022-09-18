@@ -6,12 +6,12 @@ import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Page<Node & { uuid: UUID }, number> | number> = async (req, res) => {
     let client: SourceClient | undefined
     try {
-        const text = req.query.q
+        const text = req.query.text
         if (typeof text !== "string" || text.length < 0) {
             throw 404
         }
         client = new SourceClient()
-        await handleWithLister(req, res, client.nodes.search(text))
+        await handleWithLister(req, res, client.nodes.search(text), (page: string) => parseInt(page, 10))
     } catch (e) {
         handleAPIError(res, e)
     } finally {

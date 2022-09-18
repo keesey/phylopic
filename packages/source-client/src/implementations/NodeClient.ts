@@ -50,19 +50,19 @@ export default class NodeClient extends PGPatcher<Node & { uuid: UUID }> impleme
             const pgClient = await this.provider.getPG()
             await Promise.all([
                 pgClient.query(
-                    "UPDATE image SET specific=$1::uuid, modified=NOW() WHERE specific=$2::uuid AND disabled=0::bit",
+                    "UPDATE image SET specific_uuid=$1::uuid, modified=NOW() WHERE specific_uuid=$2::uuid AND disabled=0::bit",
                     [this.uuid, suppressedUUID],
                 ),
                 pgClient.query(
-                    "UPDATE image SET general=$1::uuid, modified=NOW() WHERE general=$2::uuid AND disabled=0::bit",
+                    "UPDATE image SET general_uuid=$1::uuid, modified=NOW() WHERE general_uuid=$2::uuid AND disabled=0::bit",
                     [this.uuid, suppressedUUID],
                 ),
+                pgClient.query("UPDATE external SET node_uuid=$1::uuid WHERE node_uuid=$2::uuid AND disabled=0::bit", [
+                    this.uuid,
+                    suppressedUUID,
+                ]),
                 pgClient.query(
-                    "UPDATE external SET node=$1::uuid, modified=NOW() WHERE node=$2::uuid AND disabled=0::bit",
-                    [this.uuid, suppressedUUID],
-                ),
-                pgClient.query(
-                    "UPDATE node SET parent=$1::uuid, modified=NOW() WHERE parent=$2::uuid AND disabled=0::bit",
+                    "UPDATE node SET parent_uuid=$1::uuid, modified=NOW() WHERE parent_uuid=$2::uuid AND disabled=0::bit",
                     [this.uuid, suppressedUUID],
                 ),
             ])
