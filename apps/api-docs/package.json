@@ -8,7 +8,8 @@
     },
     "description": "Documentation for PhyloPic's Application Programming Interface",
     "devDependencies": {
-        "swagger-cli": "^4.0.4"
+        "swagger-cli": "^4.0.4",
+        "yarn": "^1.22.19"
     },
     "homepage": "https://github.com/keesey/phylopic/packages/api-docs#readme",
     "keywords": [
@@ -27,6 +28,7 @@
     },
     "scripts": {
         "deploy": "aws s3 sync --acl public-read --delete ./public s3://api-docs.phylopic.org",
+        "predeploy": "yarn test",
         "test": "swagger-cli validate ./public/2.0/openapi.yaml"
     },
     "version": "0.0.0"
