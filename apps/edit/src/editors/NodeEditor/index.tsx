@@ -1,19 +1,16 @@
-import { Node } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { FC } from "react"
-import useSWR from "swr"
-import NameView from "~/views/NameView"
 import NamesEditor from "./NamesEditor"
+import ParentEditor from "./ParentEditor"
 export type Props = { uuid: UUID }
 const NodeEditor: FC<Props> = ({ uuid }) => {
-    const { data: node } = useSWR<Node & { uuid: UUID }>(`/api/nodes/_/${uuid}`, fetchJSON)
-    const { data: parent } = useSWR<Node & { uuid: UUID }>(node ? `/api/nodes/_/${node.parent}` : null, fetchJSON)
     return (
         <section>
             <dl>
                 <dt>Parent</dt>
-                <dd>{parent ? <NameView name={parent.names[0]} /> : "N/A"}</dd>
+                <dd>
+                    <ParentEditor uuid={uuid} />
+                </dd>
                 <dt>Names</dt>
                 <dd>
                     <NamesEditor uuid={uuid} />

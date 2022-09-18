@@ -103,12 +103,11 @@ const padZeroes = (n: number, length: number) => {
     }
     return s
 }
-const escapeHTML = (s: string) =>
-{
+const escapeHTML = (s: string) => {
     return s
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&apos;");
- }
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;")
+}
