@@ -115,7 +115,6 @@ components:
       description: |
         If `"true"`, includes all members of `childNodes` in `_embedded`.
       schema:
-        example: "true"
         pattern: "^true$"
         type: string
     embed_contributor:
@@ -124,7 +123,6 @@ components:
       description: |
         If `"true"`, includes `contributor` in `_embedded`.
       schema:
-        example: "true"
         pattern: "^true$"
         type: string
     embed_generalNode:
@@ -133,7 +131,6 @@ components:
       description: |
         If `"true"`, includes `generalNode` in `_embedded`.
       schema:
-        example: "true"
         pattern: "^true$"
         type: string
     embed_items:
@@ -142,7 +139,6 @@ components:
       description: |
         If `"true"`, includes `items` in `_embedded`. (This is a prerequisite for including any embeds on the items themselves.)
       schema:
-        example: "true"
         pattern: "^true$"
         type: string
     embed_nodes:
@@ -151,7 +147,6 @@ components:
       description: |
         If `"true"`, includes all members of `nodes` in `_embedded`.
       schema:
-        example: "true"
         pattern: "^true$"
         type: string
     embed_parentNode:
@@ -160,7 +155,6 @@ components:
       description: |
         If `"true"`, includes `parentNode` in `_embedded`.
       schema:
-        example: "true"
         pattern: "^true$"
         type: string
     embed_primaryImage:
@@ -169,7 +163,6 @@ components:
       description: |
         If `"true"`, includes `primaryImage` in `_embedded`.
       schema:
-        example: "true"
         pattern: "^true$"
         type: string
     embed_specificNode:
@@ -178,7 +171,6 @@ components:
       description: |
         If `"true"`, includes `specificNode` in `_embedded`.
       schema:
-        example: "true"
         pattern: "^true$"
         type: string
     filter_clade:
