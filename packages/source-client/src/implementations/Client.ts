@@ -7,7 +7,6 @@ import {
     isEmailAddress,
     isHash,
     isNamespace,
-    isObjectID,
     isUUIDv4,
     Namespace,
     ObjectID,
@@ -20,6 +19,7 @@ import { SourceClient } from "../interfaces/SourceClient"
 import ContributorClient from "./ContributorClient"
 import { ContributorsClient } from "./ContributorsClient"
 import ExternalAuthorityLister from "./ExternalAuthorityLister"
+import ExternalClient from "./ExternalClient"
 import ExternalNamespaceLister from "./ExternalNamespaceLister"
 import ImageClient from "./ImageClient"
 import ImagesClient from "./ImagesClient"
@@ -28,7 +28,6 @@ import NodesClient from "./NodesClient"
 import EXTERNAL_FIELDS from "./pg/constants/EXTERNAL_FIELDS"
 import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
 import PGLister from "./pg/PGLister"
-import PGPatcher from "./pg/PGPatcher"
 import RootClient from "./RootClient"
 import AUTH_BUCKET_NAME from "./s3/constants/AUTH_BUCKET_NAME"
 import SOURCE_IMAGES_BUCKET_NAME from "./s3/constants/SOURCE_IMAGES_BUCKET_NAME"
@@ -66,9 +65,6 @@ export default class Client implements SourceClient {
         )
     }
     contributor(uuid: UUID) {
-        if (!isUUIDv4(uuid)) {
-            throw new Error("Invalid UUID.")
-        }
         return new ContributorClient(this.provider, uuid)
     }
     async copySubmissionToSourceImage(hash: Hash, uuid: UUID) {
@@ -92,25 +88,10 @@ export default class Client implements SourceClient {
         namespace: Namespace,
         objectID: ObjectID,
     ): Editable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }> {
-        if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
-            throw new Error("Invalid external object specification.")
-        }
-        return new PGPatcher(
-            this.provider,
-            EXTERNAL_TABLE,
-            [
-                { column: "authority", type: "character varying", value: authority },
-                { column: "namespace", type: "character varying", value: namespace },
-                { column: "object_id", type: "character varying", value: objectID },
-            ],
-            EXTERNAL_FIELDS,
-        )
+        return new ExternalClient(this.provider, authority, namespace, objectID)
     }
     externalAuthorities
     externalNamespaces(authority: Authority) {
-        if (!isAuthority(authority)) {
-            throw new Error("Invalid external authority.")
-        }
         return new ExternalNamespaceLister(this.provider, 128, authority)
     }
     externals(authority: Authority, namespace: Namespace) {
@@ -131,16 +112,10 @@ export default class Client implements SourceClient {
         )
     }
     image(uuid: UUID) {
-        if (!isUUIDv4(uuid)) {
-            throw new Error("Invalid UUID.")
-        }
         return new ImageClient(this.provider, uuid)
     }
     images
     node(uuid: UUID) {
-        if (!isUUIDv4(uuid)) {
-            throw new Error("Invalid UUID.")
-        }
         return new NodeClient(this.provider, uuid)
     }
     nodes
@@ -159,9 +134,6 @@ export default class Client implements SourceClient {
     }
     sourceImages
     submission(hash: Hash) {
-        if (!isHash(hash)) {
-            throw new Error("Invalid hexadecimal hash.")
-        }
         return new SubmissionClient(this.provider, hash)
     }
     submissions

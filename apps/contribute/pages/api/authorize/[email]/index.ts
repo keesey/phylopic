@@ -34,7 +34,7 @@ const index: NextApiHandler<void> = async (req, res) => {
             }
             const token = await issueJWT(uuid, ttl, now)
             await authTokenClient.put(token)
-            await sendAuthEmail(email, token, now, new Date(now.valueOf() + ttl))
+            await sendAuthEmail(email, token, now)
             res.status(204)
         } else {
             throw 405

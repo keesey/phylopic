@@ -11,9 +11,8 @@ const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
         if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
             throw 404
         }
-        console.debug({ authority, namespace, objectID })
-        client = new SourceClient()
         if (req.method === "POST") {
+            client = new SourceClient()
             const node = await importNode(client, authority, namespace, objectID)
             res.setHeader("location", `/nodes/${encodeURIComponent(node.uuid)}`)
             res.json(node)

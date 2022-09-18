@@ -1,5 +1,5 @@
 import { Submission } from "@phylopic/source-models"
-import { Hash } from "@phylopic/utils"
+import { Hash, isHash } from "@phylopic/utils"
 import { ImageFile, S3ClientProvider } from "../interfaces"
 import { SourceClient } from "../interfaces/SourceClient"
 import UPLOADS_BUCKET_NAME from "./s3/constants/UPLOADS_BUCKET_NAME"
@@ -12,6 +12,9 @@ export default class SubmissionClient
     implements ReturnType<SourceClient["submission"]>
 {
     constructor(provider: S3ClientProvider, hash: Hash) {
+        if (!isHash(hash)) {
+            throw new Error("Invalid hexadecimal hash.")
+        }
         const key = `files/${encodeURIComponent(hash)}`
         super(provider, UPLOADS_BUCKET_NAME, key, readSubmission)
         this.file = new S3Deletor<ImageFile>(provider, UPLOADS_BUCKET_NAME, key, readImageFile)

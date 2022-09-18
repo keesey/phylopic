@@ -1,4 +1,4 @@
-import { Authority, Namespace } from "@phylopic/utils"
+import { Authority, isAuthority, Namespace } from "@phylopic/utils"
 import { Listable } from "../interfaces/Listable"
 import { Page } from "../interfaces/Page"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
@@ -8,7 +8,11 @@ export default class ExternalNamespaceLister implements Listable<Namespace, numb
         protected readonly provider: PGClientProvider,
         protected readonly pageSize: number,
         protected readonly authority: Authority,
-    ) {}
+    ) {
+        if (!isAuthority(authority)) {
+            throw new Error("Invalid external authority.")
+        }
+    }
     async page(index = 0): Promise<Page<string, number>> {
         const client = await this.provider.getPG()
         const output = await client.query<{ namespace: Namespace }>(
