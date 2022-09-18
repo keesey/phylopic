@@ -1,8 +1,12 @@
+import { QueryResultRow } from "pg"
 import { Listable } from "../../interfaces/Listable"
 import { PGClientProvider } from "../../interfaces/PGClientProvider"
 import getFields from "./fields/getFields"
 import { IDField } from "./fields/IDField"
 import { ReadField } from "./fields/ReadField"
+export type WhereField = IDField & {
+    operator?: "=" | "<" | ">" | "<=" | ">=" | "!-" | "~" | "~*" | "!~" | "!~*" | "~~" | "~~*" | "!~~" | "!~~*"
+}
 export default class PGLister<TValue, TIdentifier> implements Listable<TValue & Readonly<TIdentifier>, number> {
     constructor(
         protected provider: PGClientProvider,
@@ -11,11 +15,11 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
         protected fields: ReadonlyArray<(string & keyof TValue & TIdentifier) | ReadField<TValue & TIdentifier>>,
         protected normalize?: (value: TValue & TIdentifier) => TValue & TIdentifier,
         protected order: string = '"uuid"',
-        protected where?: readonly IDField[],
+        protected where?: readonly WhereField[],
     ) {}
     public async page(index = 0) {
         const client = await this.provider.getPG()
-        const output = await client.query<TValue & TIdentifier>(
+        const output = await client.query<TValue & TIdentifier & QueryResultRow>(
             `SELECT ${getFields(this.fields)} FROM ${this.table} WHERE${this.whereClause(3)} disabled=0::bit ORDER BY ${
                 this.order
             } OFFSET $1::bigint LIMIT $2::bigint`,
@@ -45,7 +49,12 @@ export default class PGLister<TValue, TIdentifier> implements Listable<TValue & 
         return (
             " " +
             this.where
-                .map((identifier, index) => `${identifier.column}=$${index + startIndex}::${identifier.type}`)
+                .map(
+                    (identifier, index) =>
+                        `${identifier.column}::${identifier.type}${identifier.operator ?? "="}$${index + startIndex}::${
+                            identifier.type
+                        }`,
+                )
                 .join(" AND ") +
             " AND"
         )

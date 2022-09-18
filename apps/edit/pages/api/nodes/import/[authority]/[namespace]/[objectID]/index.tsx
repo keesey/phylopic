@@ -32,7 +32,12 @@ const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
     res.end()
 }
 export default index
-const importNode = async (client: SourceClient, authority: Authority, namespace: Namespace, objectID: ObjectID): Promise<Entity<Node>> => {
+const importNode = async (
+    client: SourceClient,
+    authority: Authority,
+    namespace: Namespace,
+    objectID: ObjectID,
+): Promise<Entity<Node>> => {
     const existing = await client.external(authority, namespace, objectID).exists()
     let node: Node & { uuid: UUID }
     if (existing) {

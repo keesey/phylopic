@@ -46,7 +46,9 @@ const ParentEditor: FC<Props> = ({ uuid }) => {
         return (
             <>
                 [Unassigned]
-                <button title="Add Parent Node" onClick={selectNew}>✎</button>
+                <button title="Add Parent Node" onClick={selectNew}>
+                    ✎
+                </button>
                 <NodeSelector open={selecting} onSelect={selectNode} />
             </>
         )
