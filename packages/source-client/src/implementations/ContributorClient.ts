@@ -1,5 +1,5 @@
 import { Contributor, isSubmission, Submission } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
+import { isUUIDv4, UUID } from "@phylopic/utils"
 import { S3ClientProvider } from "../interfaces"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
 import { SourceClient } from "../interfaces/SourceClient"
@@ -16,6 +16,9 @@ export default class ContributorClient
     implements ReturnType<SourceClient["contributor"]>
 {
     constructor(provider: PGClientProvider & S3ClientProvider, uuid: UUID) {
+        if (!isUUIDv4(uuid)) {
+            throw new Error("Invalid UUID.")
+        }
         super(
             provider,
             CONTRIBUTOR_TABLE,

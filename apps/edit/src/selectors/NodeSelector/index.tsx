@@ -10,7 +10,7 @@ import {
     PBDBResolve,
     PhyloPicAutocomplete,
     PhyloPicNodeSearch,
-    SearchContainer
+    SearchContainer,
 } from "@phylopic/ui"
 import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
 import axios from "axios"
@@ -38,7 +38,10 @@ const NodeSelector: FC<Props> = ({ open, onSelect }) => {
     )
     const createNew = useCallback(async () => {
         try {
-            const response = await axios.post< Node & { uuid: UUID }>(`/api/nodes`, { parent: null, names: [parseNomen(searchText)]})
+            const response = await axios.post<Node & { uuid: UUID }>(`/api/nodes`, {
+                parent: null,
+                names: [parseNomen(searchText)],
+            })
             onSelect({ uuid: response.data.uuid, value: response.data })
         } catch (e) {
             alert(e)

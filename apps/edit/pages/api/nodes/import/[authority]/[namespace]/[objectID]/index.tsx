@@ -11,9 +11,8 @@ const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
         if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
             throw 404
         }
-        console.debug({ authority, namespace, objectID })
-        client = new SourceClient()
         if (req.method === "POST") {
+            client = new SourceClient()
             const node = await importNode(client, authority, namespace, objectID)
             res.setHeader("location", `/nodes/${encodeURIComponent(node.uuid)}`)
             res.json(node)
@@ -32,7 +31,12 @@ const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
     res.end()
 }
 export default index
-const importNode = async (client: SourceClient, authority: Authority, namespace: Namespace, objectID: ObjectID): Promise<Entity<Node>> => {
+const importNode = async (
+    client: SourceClient,
+    authority: Authority,
+    namespace: Namespace,
+    objectID: ObjectID,
+): Promise<Entity<Node>> => {
     const existing = await client.external(authority, namespace, objectID).exists()
     let node: Node & { uuid: UUID }
     if (existing) {

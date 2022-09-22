@@ -4,7 +4,10 @@ import { isNode, Node } from "@phylopic/source-models"
 import { normalizeUUID, UUID, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
-const index: NextApiHandler<Page<Node & { uuid: UUID }, number> | number> = async (req, res) => {
+const index: NextApiHandler<(Node & { uuid: UUID }) | Page<Node & { uuid: UUID }, number> | number> = async (
+    req,
+    res,
+) => {
     let client: SourceClient | undefined
     try {
         if (req.method === "OPTIONS") {

@@ -21,12 +21,14 @@ export const NodeSearch: FC<Props> = ({ onSelect }) => {
                         created: new Date().toISOString(),
                         modified: new Date().toISOString(),
                         names: [entry.name],
-                        parent: null
-                    }
+                        parent: null,
+                    },
                 })
             } else {
                 try {
-                    const response = await axios.post<Entity<Node>>(`/api/nodes/import/${getIdentifier(entry.authority, entry.namespace, entry.objectID)}`);
+                    const response = await axios.post<Entity<Node>>(
+                        `/api/nodes/import/${getIdentifier(entry.authority, entry.namespace, entry.objectID)}`,
+                    )
                     onSelect(response.data)
                 } catch (e) {
                     alert(e)
