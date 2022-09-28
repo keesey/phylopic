@@ -1,3 +1,4 @@
+export * from "./AuthorizedNamespaceView"
 export * from "./CountView"
 export * from "./ImageRasterView"
 export * from "./ImageThumbnailView"

@@ -1,4 +1,5 @@
 export type { Authority } from "./Authority"
+export type { AuthorizedNamespace } from "./AuthorizedNamespace"
 export type { EmailAddress } from "./EmailAddress"
 export type { Hash } from "./Hash"
 export type { Identifier } from "./Identifier"
