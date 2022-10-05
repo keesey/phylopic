@@ -35,7 +35,9 @@ const ImageFileEditor: FC<Props> = ({ uuid }) => {
                     async () => {
                         setPending(true)
                         try {
-                            await axios.put(key, Buffer.from(await file.arrayBuffer()), {
+                            const arrayBuffer = await file.arrayBuffer()
+                            const buffer = Buffer.from(arrayBuffer)
+                            await axios.put(key, buffer, {
                                 headers: {
                                     "content-type": file.type,
                                 },
