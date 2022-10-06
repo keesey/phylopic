@@ -39,7 +39,6 @@
         "lint": "TIMING=1 eslint --ext .js,.ts . --fix",
         "make": "yarn download && yarn process && concurrently \"yarn insert\" \"yarn upload\" && yarn release && yarn sync",
         "make:data": "yarn insert && yarn release",
-        "make:files": "yarn download && yarn process && yarn upload && yarn release && yarn sync",
         "process": "./process.sh 2> process-error.log",
         "release": "ts-node --esm ./src/release.ts 2> release-error.log && yarn revalidate",
         "revalidate": "ts-node --esm ./src/revalidate.ts 2> revalidate-error.log",
