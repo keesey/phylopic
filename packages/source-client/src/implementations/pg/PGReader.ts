@@ -1,3 +1,4 @@
+import { QueryResultRow } from "pg"
 import { PGClientProvider } from "../../interfaces/PGClientProvider"
 import { Readable } from "../../interfaces/Readable"
 import getFields from "./fields/getFields"
@@ -13,7 +14,7 @@ export default class PGReader<T> implements Readable<T> {
     ) {}
     public async get() {
         const client = await this.provider.getPG()
-        const output = await client.query<T>(
+        const output = await client.query<T & QueryResultRow>(
             `SELECT ${this.getFields()} FROM ${this.table} WHERE ${this.identification()} AND disabled=0::bit`,
             this.identificationValues(),
         )

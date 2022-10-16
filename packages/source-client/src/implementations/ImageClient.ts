@@ -1,5 +1,5 @@
 import { Image } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
+import { isUUIDv4, UUID } from "@phylopic/utils"
 import { ImageFile } from "../interfaces/ImageFile"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
 import { S3ClientProvider } from "../interfaces/S3ClientProvider"
@@ -17,6 +17,9 @@ export default class ImageClient
     implements ReturnType<SourceClient["image"]>
 {
     constructor(protected readonly provider: PGClientProvider & S3ClientProvider, protected readonly uuid: UUID) {
+        if (!isUUIDv4(uuid)) {
+            throw new Error("Invalid UUID.")
+        }
         super(provider, IMAGE_TABLE, [{ column: "uuid", type: "uuid", value: uuid }], IMAGE_FIELDS, normalizeImage)
         this.file = new S3Editor<ImageFile>(
             provider,

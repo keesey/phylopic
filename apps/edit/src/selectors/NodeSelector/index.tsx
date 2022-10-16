@@ -1,8 +1,20 @@
 import { normalizeQuery } from "@phylopic/api-models"
 import { Page } from "@phylopic/source-client"
 import { Entity, Node } from "@phylopic/source-models"
-import { fetchJSON, Loader } from "@phylopic/ui"
+import {
+    fetchJSON,
+    Loader,
+    OTOLAutocompleteName,
+    OTOLResolve,
+    PBDBAutocomplete,
+    PBDBResolve,
+    PhyloPicAutocomplete,
+    PhyloPicNodeSearch,
+    SearchContainer,
+} from "@phylopic/ui"
 import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import axios from "axios"
+import { parseNomen } from "parse-nomen"
 import { FC, useCallback, useState } from "react"
 import useSWR from "swr"
 import BubbleItem from "~/ui/BubbleItem"
@@ -10,6 +22,7 @@ import BubbleList from "~/ui/BubbleList"
 import Modal from "~/ui/Modal"
 import NameView from "~/views/NameView"
 import NameSelector from "../NameSelector"
+import NodeSearch from "./NodeSearch"
 export interface Props {
     onSelect: (node: Entity<Node> | undefined) => void
     open?: boolean
@@ -23,6 +36,17 @@ const NodeSelector: FC<Props> = ({ open, onSelect }) => {
         searchText ? `/api/nodes/search?page=0&text=${encodeURIComponent(searchText)}` : null,
         fetchJSON,
     )
+    const createNew = useCallback(async () => {
+        try {
+            const response = await axios.post<Node & { uuid: UUID }>(`/api/nodes`, {
+                parent: null,
+                names: [parseNomen(searchText)],
+            })
+            onSelect({ uuid: response.data.uuid, value: response.data })
+        } catch (e) {
+            alert(e)
+        }
+    }, [onSelect, searchText])
     if (!open) {
         return null
     }
@@ -44,6 +68,24 @@ const NodeSelector: FC<Props> = ({ open, onSelect }) => {
                         </BubbleItem>
                     ))}
                 </BubbleList>
+            )}
+            {searchText && (
+                <>
+                    <hr />
+                    <SearchContainer initialText={searchText}>
+                        <>
+                            <PhyloPicAutocomplete />
+                            <OTOLAutocompleteName />
+                            <PBDBAutocomplete />
+                            <PhyloPicNodeSearch />
+                            <OTOLResolve />
+                            <PBDBResolve />
+                        </>
+                        <NodeSearch onSelect={onSelect} />
+                    </SearchContainer>
+                    <hr />
+                    <button onClick={createNew}>Create a new node</button>
+                </>
             )}
         </Modal>
     )

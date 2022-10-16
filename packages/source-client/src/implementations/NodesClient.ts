@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/source-models"
-import { Authority, Identifier, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import { Authority, Identifier, Namespace, normalizeText, ObjectID, UUID } from "@phylopic/utils"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
 import { SourceClient } from "../interfaces/SourceClient"
 import NODE_FIELDS from "./pg/constants/NODE_FIELDS"
@@ -43,6 +43,24 @@ export default class NodesClient extends PGLister<Node, { uuid: UUID }> implemen
                 },
             }),
             {},
+        )
+    }
+    search(text: string) {
+        return new PGLister<Node, { uuid: UUID }>(
+            this.provider,
+            NODE_TABLE,
+            32,
+            NODE_FIELDS,
+            normalizeNode,
+            '"names"::character varying',
+            [
+                {
+                    column: '"names"',
+                    operator: "~~*",
+                    type: "character varying",
+                    value: "%" + normalizeText(text).replace(/%/g, "\\%") + "%",
+                },
+            ],
         )
     }
 }

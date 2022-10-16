@@ -1,5 +1,5 @@
 import { Contributor, External, Image, JWT, Node, Submission } from "@phylopic/source-models"
-import { Authority, EmailAddress, Hash, Identifier, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import { Authority, EmailAddress, Hash, Identifier, Namespace, Nomen, ObjectID, UUID } from "@phylopic/utils"
 import { Deletable } from "./Deletable"
 import { Editable } from "./Editable"
 import { ImageFile } from "./ImageFile"
@@ -32,6 +32,7 @@ export type SourceClient = Readonly<{
     }
     images: Listable<Image & { uuid: UUID }, number>
     node(uuid: UUID): Patchable<Node & { uuid: UUID }> & {
+        absorb(suppressedUUID: UUID): Promise<void>
         children: Listable<Node & { uuid: UUID }, number>
         externals: Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number> & {
             namespace: (
@@ -40,11 +41,17 @@ export type SourceClient = Readonly<{
             ) => Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
         }
         lineage: Listable<Node & { uuid: UUID }, number>
+        split(
+            newUUID: UUID,
+            newNames: readonly Nomen[],
+            newExternals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
+        ): Promise<void>
     }
     nodes: Listable<Node & { uuid: UUID }, number> & {
         resolve(
             externals: ReadonlyArray<Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>>,
         ): Promise<Record<Identifier, Node & { uuid: UUID }>>
+        search(text: string): Listable<Node & { uuid: UUID }, number>
     }
     root: Patchable<Node & { uuid: UUID }>
     sourceImage(uuid: UUID): Editable<ImageFile>
