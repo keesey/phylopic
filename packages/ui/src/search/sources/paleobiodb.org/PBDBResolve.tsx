@@ -60,7 +60,7 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
         if (!lineage.data?.records) {
             return []
         }
-        return lineage.data.records.map(({ oid }) => oid)
+        return lineage.data.records.map(({ oid }) => oid.replace(/^txn:/, ""))
     }, [lineage.data?.records])
     const [indirectKey, setIndirectKey] = useDebounce<[string, string[]] | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
