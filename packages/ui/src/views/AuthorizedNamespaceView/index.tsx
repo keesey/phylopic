@@ -1,4 +1,4 @@
-import { AuthorizedNamespace } from "@phylopic/utils"
+import type { AuthorizedNamespace } from "@phylopic/utils"
 import React from "react"
 export interface Props {
     short?: boolean
