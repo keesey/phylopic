@@ -61,40 +61,44 @@ const LineageEditor: FC<{
     )
     return (
         <>
-        <BubbleList>
-            {nodesToShow.map((node, index) => (
-                <BubbleNode key={node.uuid} light={index >= lastIndex}>
-                    <AnchorLink href={`/nodes/${node.uuid}`}>
-                        <NameView
-                            name={node.names[0]}
-                            short={node.uuid !== image.specific && node.uuid !== image.general}
-                        />
-                    </AnchorLink>
-                    {node.uuid === image.specific && <button onClick={() => setModalOpen(true)} title="Change Specific Node">✎</button>}
-                    {node.uuid !== image.general && index > 0 && (
-                        <button onClick={() => setGeneral(node.uuid)} title="Select as General Node">
-                            G
-                        </button>
-                    )}
-                    {node.uuid === image.general && (
-                        <button onClick={() => setGeneral(null)} title="Unselect as General Node">
-                            ✗
-                        </button>
-                    )}
-                </BubbleNode>
-            ))}
-            {!expanded && (
-                <a onClick={() => setExpanded(true)} role="button">
-                    Expand
-                </a>
-            )}
-            {expanded && (
-                <a onClick={() => setExpanded(false)} role="button">
-                    Collapse
-                </a>
-            )}
-        </BubbleList>
-        <NodeSelector onSelect={handleNodeSelect} open={modalOpen} />
+            <BubbleList>
+                {nodesToShow.map((node, index) => (
+                    <BubbleNode key={node.uuid} light={index >= lastIndex}>
+                        <AnchorLink href={`/nodes/${node.uuid}`}>
+                            <NameView
+                                name={node.names[0]}
+                                short={node.uuid !== image.specific && node.uuid !== image.general}
+                            />
+                        </AnchorLink>
+                        {node.uuid === image.specific && (
+                            <button onClick={() => setModalOpen(true)} title="Change Specific Node">
+                                ✎
+                            </button>
+                        )}
+                        {node.uuid !== image.general && index > 0 && (
+                            <button onClick={() => setGeneral(node.uuid)} title="Select as General Node">
+                                G
+                            </button>
+                        )}
+                        {node.uuid === image.general && (
+                            <button onClick={() => setGeneral(null)} title="Unselect as General Node">
+                                ✗
+                            </button>
+                        )}
+                    </BubbleNode>
+                ))}
+                {!expanded && (
+                    <a onClick={() => setExpanded(true)} role="button">
+                        Expand
+                    </a>
+                )}
+                {expanded && (
+                    <a onClick={() => setExpanded(false)} role="button">
+                        Collapse
+                    </a>
+                )}
+            </BubbleList>
+            <NodeSelector onSelect={handleNodeSelect} open={modalOpen} />
         </>
     )
 }
