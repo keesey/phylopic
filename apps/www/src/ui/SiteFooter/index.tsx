@@ -5,6 +5,7 @@ import Link from "next/link"
 import { FC } from "react"
 import logoFacebook from "../../../public/logos/facebook.svg"
 import logoMail from "../../../public/logos/mail.svg"
+import logoMastodon from "../../../public/logos/mastodon.svg"
 import logoPatreon from "../../../public/logos/patreon-white.svg"
 import logoTwitter from "../../../public/logos/twitter.svg"
 import styles from "./index.module.scss"
@@ -27,14 +28,18 @@ const SiteFooter: FC = () => (
                         <Image src={logoMail} width={28} height={28} alt="Mailing List" />
                     </a>
                 </Link>
-                <a href="https://www.twitter.com/phylopic" title="Follow @phylopic on Twitter." rel="external">
+                <a href="https://sauropods.win/@phylopic" title="Follow PhyloPic on Mastodon." rel="me">
+                    <Image src={logoMastodon} width={25} height={25} alt="Mastodon" />
+                </a>
+                <a href="https://www.twitter.com/phylopic" title="Follow PhyloPic on Twitter." rel="me">
                     <Image src={logoTwitter} width={28} height={28} alt="Twitter" />
                 </a>
-                <a href="https://www.facebook.com/phylopic" title="Follow @phylopic on Facebook." rel="external">
+                <a href="https://www.facebook.com/phylopic" title="Follow PhyloPic on Facebook." rel="me">
                     <Image src={logoFacebook} width={21} height={21} alt="Facebook" />
                 </a>
                 <a
                     href="https://www.patreon.com/tmkeesey?fan_landing=true"
+                    rel="author"
                     title="Support the creator of PhyloPic on Patreon."
                 >
                     <Image src={logoPatreon} width={80} height={11} alt="Patreon" />

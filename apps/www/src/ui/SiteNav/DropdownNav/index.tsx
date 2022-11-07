@@ -61,18 +61,23 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <h2>Follow</h2>
             <ul>
                 <li>
-                    <a href="https://www.patreon.com/tmkeesey?fan_landing=true">Patreon</a>
+                    <a href="https://www.patreon.com/tmkeesey?fan_landing=true" rel="author">Patreon</a>
                 </li>
                 <li>
                     <AnchorLink href="/mailinglist">Mailing List</AnchorLink>
                 </li>
                 <li>
-                    <a href="https://www.twitter.com/phylopic" rel="external">
+                    <a href="https://sauropods.win/@phylopic" rel="me">
+                        Mastodon
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.twitter.com/phylopic" rel="me">
                         Twitter
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.facebook.com/phylopic" rel="external">
+                    <a href="https://www.facebook.com/phylopic" rel="me">
                         Facebook
                     </a>
                 </li>
