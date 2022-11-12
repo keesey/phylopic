@@ -16,6 +16,15 @@ const LicenseEditor: FC<Props> = ({ uuid }) => {
     if (!data) {
         return null
     }
-    return <LicenseURLEditor onChange={value => patcher({ license: value })} value={data.license} />
+    return (
+        <LicenseURLEditor
+            onChange={value => {
+                if (value) {
+                    patcher({ license: value })
+                }
+            }}
+            value={data.license}
+        />
+    )
 }
 export default LicenseEditor

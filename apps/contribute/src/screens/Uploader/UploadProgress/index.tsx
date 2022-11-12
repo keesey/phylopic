@@ -50,6 +50,8 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
                     if (!isHash(hash)) {
                         throw 500
                     }
+                    // :KLUDGE: Make sure it's ready
+                    await new Promise(resolve => setInterval(resolve, 500))
                     onComplete(hash)
                 } catch (e) {
                     if (e instanceof Error) {

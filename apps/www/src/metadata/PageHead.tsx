@@ -11,8 +11,8 @@ export interface Props {
     url: string
 }
 const DEFAULT_SOCIAL_IMAGE: MediaLink = {
-    href: "/social/1200x628.png",
-    sizes: "1200x628",
+    href: "/social/1200x1200.png",
+    sizes: "1200x1200",
     type: "image/png",
 }
 const PageHead: FC<Props> = ({
@@ -24,10 +24,13 @@ const PageHead: FC<Props> = ({
     url,
 }) => {
     const [socialImageWidth, socialImageHeight] = useMemo(
-        () => socialImage?.sizes.split("x", 2) ?? ["0", "0"],
+        () => (socialImage?.sizes ?? DEFAULT_SOCIAL_IMAGE.sizes).split("x", 2),
         [socialImage?.sizes],
     )
-    const socialImageHRef = useMemo(() => socialImage?.href ?? "data:", [socialImage?.href])
+    const socialImageHRef = useMemo(
+        () => new URL(socialImage?.href ?? DEFAULT_SOCIAL_IMAGE.href, process.env.NEXT_PUBLIC_WWW_URL).toString(),
+        [socialImage?.href],
+    )
     return (
         <>
             <Head>
@@ -69,7 +72,11 @@ const PageHead: FC<Props> = ({
                 <meta key="meta:og:image" property="og:image" content={socialImageHRef} />
                 <meta key="meta:og:image:alt" property="og:image:alt" content={title} />
                 <meta key="meta:og:image:height" property="og:image:height" content={socialImageHeight} />
-                <meta key="meta:og:image:type" property="og:image:type" content={socialImage?.type} />
+                <meta
+                    key="meta:og:image:type"
+                    property="og:image:type"
+                    content={socialImage?.type ?? DEFAULT_SOCIAL_IMAGE.type}
+                />
                 <meta key="meta:og:image:width" property="og:image:width" content={socialImageWidth} />
                 <meta key="meta:og:site_name" property="og:site_name" content="PhyloPic" />
                 <meta key="meta:og:title" property="og:title" content={title} />

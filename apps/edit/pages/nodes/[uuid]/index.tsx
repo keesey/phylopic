@@ -1,10 +1,9 @@
-import { Entity, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
+import { Entity, External, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
 import { AnchorLink, fetchJSON, Loader } from "@phylopic/ui"
-import { isUUIDv4, stringifyNomen, UUID } from "@phylopic/utils"
+import { Authority, getIdentifier, isUUIDv4, Namespace, ObjectID, stringifyNomen, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
-import Link from "next/link"
 import { FC, useCallback, useMemo, useState } from "react"
 import useSWR, { SWRConfig } from "swr"
 import NodeEditor from "~/editors/NodeEditor"
@@ -13,7 +12,7 @@ import NodeSelector from "~/selectors/NodeSelector"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
-import BubbleNode from "~/ui/BubbleNode"
+import ExternalView from "~/views/ExternalView"
 import NameView from "~/views/NameView"
 import TimesView from "~/views/TimesView"
 export type Props = {
@@ -122,6 +121,39 @@ const Content: FC<Props> = ({ uuid }) => {
                             }
                         </Paginator>
                     </section>
+                    <Paginator endpoint={`/api/nodes/_/${encodeURIComponent(uuid)}/externals`}>
+                        {(children, isValidating) =>
+                            children.length ? (
+                                <section>
+                                    <h2>Externals</h2>
+                                    <BubbleList>
+                                        {(
+                                            children as ReadonlyArray<
+                                                External & {
+                                                    authority: Authority
+                                                    namespace: Namespace
+                                                    objectID: ObjectID
+                                                }
+                                            >
+                                        ).map(external => {
+                                            const identifier = getIdentifier(
+                                                external.authority,
+                                                external.namespace,
+                                                external.objectID,
+                                            )
+                                            return (
+                                                <BubbleItem key={identifier}>
+                                                    <ExternalView external={external} />
+                                                </BubbleItem>
+                                            )
+                                        })}
+                                    </BubbleList>
+                                </section>
+                            ) : isValidating ? (
+                                <Loader />
+                            ) : null
+                        }
+                    </Paginator>
                     <section>
                         <button onClick={() => setMerging(true)}>Absorb Another Node</button>
                         <NodeSelector open={merging} onSelect={handleMergeSelect} />

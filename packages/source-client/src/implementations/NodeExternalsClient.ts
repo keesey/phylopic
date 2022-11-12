@@ -22,7 +22,7 @@ export default class NodeExternalsClient implements INodeExternalsClient {
         const result = await client.query<
             Pick<External, "title"> & { authority: Authority; namespace: Namespace; objectID: ObjectID }
         >(
-            `SELECT authority,"namespace",object_id AS "objectID",title FROM external WHERE node_uuid=$1::uuid OFFSET $2::bigint LIMIT $3::bigint`,
+            `SELECT authority,"namespace",object_id AS "objectID",title FROM external WHERE disabled=0::bit AND node_uuid=$1::uuid OFFSET $2::bigint LIMIT $3::bigint`,
             [this.uuid, index * EXTERNALS_PAGE_SIZE, EXTERNALS_PAGE_SIZE + 1],
         )
         return {
@@ -33,7 +33,7 @@ export default class NodeExternalsClient implements INodeExternalsClient {
     async totalItems() {
         const client = await this.provider.getPG()
         const result = await client.query<{ total: number }>(
-            `SELECT COUNT(*) AS total FROM external WHERE node_uuid=$1::uuid`,
+            `SELECT COUNT(*) AS total FROM external WHERE disabled=0::bit AND node_uuid=$1::uuid`,
             [this.uuid],
         )
         return result.rows[0].total
