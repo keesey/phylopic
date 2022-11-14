@@ -1,4 +1,3 @@
-import { getIdentifier } from "@phylopic/utils"
 import { Reducer } from "react"
 import { Action } from "./actions"
 import { State } from "./State"

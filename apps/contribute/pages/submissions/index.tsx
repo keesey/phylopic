@@ -1,10 +1,11 @@
+import { Loader } from "@phylopic/ui"
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
+import { Suspense } from "react"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
-import Submissions from "~/screens/Submissions"
 import NumberAsWords from "~/ui/NumberAsWords"
-const Images = dynamic(() => import("~/screens/Images"), { ssr: false })
+const Submissions = dynamic(() => import("~/screens/Submissions"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
         head={{
@@ -13,23 +14,25 @@ const Page: NextPage = () => (
         }}
     >
         <AuthorizedOnly>
-            <Submissions>
-                {total =>
-                    typeof total !== "number" ? (
-                        <p>Loading current submissions…</p>
-                    ) : total ? (
-                        <p>
-                            You have{" "}
-                            <strong>
-                                <NumberAsWords value={total} />
-                            </strong>{" "}
-                            submission{total === 1 ? "" : "s"} awaiting completion or review.
-                        </p>
-                    ) : (
-                        <p>You do not currently have any submissions.</p>
-                    )
-                }
-            </Submissions>
+            <Suspense fallback={<Loader />}>
+                <Submissions>
+                    {total =>
+                        typeof total !== "number" ? (
+                            <p>Loading current submissions…</p>
+                        ) : total ? (
+                            <p>
+                                You have{" "}
+                                <strong>
+                                    <NumberAsWords value={total} />
+                                </strong>{" "}
+                                submission{total === 1 ? "" : "s"} awaiting completion or review.
+                            </p>
+                        ) : (
+                            <p>You do not currently have any submissions.</p>
+                        )
+                    }
+                </Submissions>
+            </Suspense>
         </AuthorizedOnly>
     </PageLayout>
 )
