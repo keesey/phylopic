@@ -51,7 +51,9 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
     )
     const description = useMemo(
         () =>
-            `A free silhouette image of ${nameLong}${image.attribution ? ` by ${image.attribution}` : ""} (License: ${licenseLong}).`,
+            `A free silhouette image of ${nameLong}${
+                image.attribution ? ` by ${image.attribution}` : ""
+            } (License: ${licenseLong}).`,
         [image.attribution, licenseLong, nameLong],
     )
     const lineageNodeHRef = useMemo(() => {

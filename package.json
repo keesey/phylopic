@@ -6,6 +6,7 @@
     "bugs": {
         "url": "https://github.com/keesey/phylopic/issues"
     },
+    "dependencies": {},
     "description": "An open database of freely reusable silhouettes of life forms.",
     "devDependencies": {
         "@changesets/cli": "^2.22.0",
