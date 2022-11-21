@@ -21,7 +21,7 @@ const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
             about,
             datePublished: image.created,
             contributor: { "@id": "https://www.phylopic.org" + extractPath(image._links.contributor.href) },
-            creditText: image.attribution ?? "Anonymous",
+            creditText: image.attribution ?? undefined,
             identifier: image.uuid,
             images: [
                 image._links.sourceFile,

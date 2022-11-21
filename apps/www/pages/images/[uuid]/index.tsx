@@ -46,12 +46,12 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
     const licenseLong = useLicenseText(image._links.license.href)
     const licenseShort = useLicenseText(image._links.license.href, true)
     const title = useMemo(
-        () => `PhyloPic: ${nameShort} by ${image.attribution ?? "Anonymous"} (${licenseShort})`,
+        () => `PhyloPic: ${nameShort}${image.attribution ? ` by ${image.attribution}` : ""} (${licenseShort})`,
         [image.attribution, licenseShort, nameShort],
     )
     const description = useMemo(
         () =>
-            `A free silhouette image of ${nameLong} by ${image.attribution ?? "Anonymous"} (License: ${licenseLong}).`,
+            `A free silhouette image of ${nameLong}${image.attribution ? ` by ${image.attribution}` : ""} (License: ${licenseLong}).`,
         [image.attribution, licenseLong, nameLong],
     )
     const lineageNodeHRef = useMemo(() => {
@@ -72,7 +72,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 title={title}
                 url={`https://www.phylopic.org/images/${image.uuid}`}
             >
-                <meta key="meta:author" name="author" content={image.attribution ?? "Anonymous"} />
+                {image.attribution && <meta key="meta:author" name="author" content={image.attribution} />}
                 <link key="link:contributor" rel="contributor" href={image._links.contributor.href} />
                 <link key="link:license" rel="license" href={image._links.license.href} />
                 <VisualArtworkSchemaScript image={image} />
@@ -90,8 +90,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                         short
                                         defaultText="Silhouette"
                                     />
-                                    {" by "}
-                                    {image.attribution ?? "Anonymous"}
+                                    {image.attribution && ` by ${image.attribution}`}
                                 </strong>
                             ),
                         },
@@ -118,8 +117,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                 short
                                 defaultText="Silhouette"
                             />
-                            {" by "}
-                            {image.attribution ?? "Anonymous"}
+                            {image.attribution && ` by ${image.attribution}`}
                         </>
                     }
                 />
