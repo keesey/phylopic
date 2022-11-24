@@ -1,4 +1,4 @@
-import { UUID } from "@phylopic/utils"
+import { UUIDish } from "@phylopic/utils"
 export type CollectionParameters = {
-    uuid: UUID
+    uuid: UUIDish
 }

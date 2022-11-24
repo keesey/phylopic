@@ -1,5 +1,4 @@
-import { UUID } from "@phylopic/utils"
-import { Data } from "./Data"
+import { UUIDish } from "@phylopic/utils"
 import { Link } from "./Link"
 import { Links } from "./Links"
 export interface CollectionLinks extends Links {
@@ -9,5 +8,5 @@ export interface CollectionLinks extends Links {
 }
 export interface Collection {
     readonly _links: CollectionLinks
-    readonly uuid: UUID
+    readonly uuid: UUIDish
 }
