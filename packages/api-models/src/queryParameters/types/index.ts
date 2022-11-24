@@ -1,3 +1,4 @@
+export type { CollectionParameters } from "./CollectionParameters"
 export type { ContributorListParameters } from "./ContributorListParameters"
 export type { ContributorParameters } from "./ContributorParameters"
 export type { DataParameters } from "./DataParameters"

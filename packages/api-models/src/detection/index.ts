@@ -1,5 +1,6 @@
 export * from "./isAPI"
 export * from "./isContributor"
+export * from "./isCollection"
 export * from "./isData"
 export * from "./isDataMediaType"
 export * from "./isEntity"

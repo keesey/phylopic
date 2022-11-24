@@ -8,15 +8,18 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
+import checkContentType from "../mediaTypes/checkContentType"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
-export type GetResolveObjectsParameters = DataRequestHeaders &
-    Partial<Omit<ResolveParameters, "objectID">> & {
+export type PostResolveObjectsParameters = DataRequestHeaders & {
+    "content-type"?: string
+} & Partial<Omit<ResolveParameters, "objectID">> & {
         readonly body?: string
     }
-export type GetResolveObjectsService = PgClientService
+export type PostResolveObjectsService = PgClientService
 const getRedirect = async (
     service: PgClientService,
     authority: Authority | undefined,
@@ -106,11 +109,12 @@ const getObjectIDsFromBody = (body: string | null) => {
     }
     return objectIDs
 }
-export const postResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
-    { accept, body, ...queryAndPathParameters },
+export const postResolveObjects: Operation<PostResolveObjectsParameters, PostResolveObjectsService> = async (
+    { accept, body, "content-type": contentType, ...queryAndPathParameters },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
+    checkContentType(contentType, ACCEPT)
     validate({ ...queryAndPathParameters, objectID: "-" }, isResolveParameters, USER_MESSAGE)
     if (!body) {
         throw new APIError(400, [

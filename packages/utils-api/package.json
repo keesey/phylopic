@@ -64,8 +64,7 @@
         "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils axios react swr",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils axios react swr",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix",
-        "test": "mocha"
+        "lint": "TIMING=1 eslint src/**/*.ts* --fix"
     },
     "sideEffects": false,
     "types": "./dist/index.d.ts",

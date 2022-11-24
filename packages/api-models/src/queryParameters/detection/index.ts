@@ -1,3 +1,4 @@
+export * from "./isCollectionParameters"
 export * from "./isContributorListParameters"
 export * from "./isContributorParameters"
 export * from "./isDataParameters"

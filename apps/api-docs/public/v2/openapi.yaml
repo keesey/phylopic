@@ -35,9 +35,8 @@ servers:
     description: Production API
 components:
   headers:
-    Accept-image:
+    Accept:
       description: Accepted media types for the request payload.
-      example: image/svg+xml, image/png, image/gif, image/bmp, image/jpeg
       schema:
         type: string
     Content-Type:
@@ -394,7 +393,7 @@ components:
           schema:
             $ref: "#/components/schemas/Errors"
     "413":
-      description: The upload is too large.
+      description: The payload is too large.
       headers:
         Content-Type:
           $ref: "#/components/headers/Content-Type"
@@ -403,10 +402,10 @@ components:
           schema:
             $ref: "#/components/schemas/Errors"
     "415":
-      description: The upload is an incorrect file type.
+      description: The request's payload has the wrong content type.
       headers:
         Accept:
-          $ref: "#/components/headers/Accept-image"
+          $ref: "#/components/headers/Accept"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
       content:
@@ -1067,6 +1066,10 @@ paths:
           $ref: "#/components/responses/400"
         "406":
           $ref: "#/components/responses/406"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
   /collections/{uuid}:
     get:
       operationId: getCollection
@@ -1076,8 +1079,6 @@ paths:
         - collections
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/Content-Type"
-        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: |
@@ -1091,7 +1092,6 @@ paths:
                 type: object
                 required:
                   - _links
-                  - build
                   - uuid
                 properties:
                   _links:
@@ -1110,9 +1110,6 @@ paths:
                         $ref: "#/components/schemas/Link"
                       self:
                         $ref: "#/components/schemas/Link"
-                  build:
-                    description: Index number of the current data build.
-                    type: integer
                   uuid:
                     description: The universally unique identifier for this collection.
                     example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
@@ -1517,6 +1514,8 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
+        "415":
+          $ref: "#/components/responses/415"
   /resolve/{authority}/{namespace}/{objectid}:
     get:
       operationId: getResolveObject

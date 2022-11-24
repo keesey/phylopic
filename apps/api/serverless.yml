@@ -156,6 +156,44 @@ functions:
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
                           - X-Api-Key
+                  path: collections
+                  method: post
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: "collections/{uuid}"
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              uuid: true
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
                   path: contributors
                   method: get
                   request:

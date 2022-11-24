@@ -70,8 +70,7 @@
         "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3 @phylopic/source-models @phylopic/utils @phylopic/utils-aws jsonwebtoken next pg uuid",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3 @phylopic/source-models @phylopic/utils @phylopic/utils-aws jsonwebtoken next pg uuid",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix",
-        "test": "mocha"
+        "lint": "TIMING=1 eslint src/**/*.ts* --fix"
     },
     "types": "./dist/index.d.ts",
     "version": "0.0.0"
