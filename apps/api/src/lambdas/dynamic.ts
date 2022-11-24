@@ -1,4 +1,5 @@
 import {
+    ContributorListParameters,
     CONTRIBUTOR_EMBEDDED_PARAMETERS,
     ImageListParameters,
     IMAGE_EMBEDDED_PARAMETERS,
@@ -30,6 +31,7 @@ import getParameters from "./parameters/getParameters"
 import getUUID from "./parameters/getUUID"
 import PG_CLIENT_SERVICE from "./services/PG_CLIENT_SERVICE"
 const SERVICE: PgClientService = PG_CLIENT_SERVICE
+const CONTRIBUTOR_FILTER_PARAMETERS: ReadonlyArray<keyof ContributorListParameters> = ["filter_collection"]
 const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["filter_collection", "filter_name"]
 const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [
     "filter_clade",
@@ -92,7 +94,11 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return getContributors(
                         {
                             ...getParameters(event.headers, ["accept"]),
-                            ...getParameters(event.queryStringParameters, ["build", "page"]),
+                            ...getParameters(event.queryStringParameters, [
+                                "build",
+                                "page",
+                                ...CONTRIBUTOR_FILTER_PARAMETERS,
+                            ]),
                             ...getEmbedParameters(event.queryStringParameters, [
                                 "embed_items" as const,
                                 ...CONTRIBUTOR_EMBEDDED_PARAMETERS,
