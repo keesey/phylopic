@@ -12,20 +12,22 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.0.0-beta
+  version: 2.1.0
 tags:
   - name: general
     description: General API information and status.
+  - name: collections
+    description: Methods related to collections of entities.
   - name: contributors
     description: Methods related to contributing users.
-  - name: nodes
-    description: Methods related to phylogenetic nodes.
-  - name: images
-    description: Methods related to silhouette images.
-  - name: search
-    description: Searches for entities (images and nodes).
   - name: external identifiers
     description: Methods related to external taxonomic databases.
+  - name: images
+    description: Methods related to silhouette images.
+  - name: nodes
+    description: Methods related to phylogenetic nodes.
+  - name: search
+    description: Searches for entities (images and nodes).
   - name: uploads
     description: Methods related to file uploads.
 servers:
@@ -1162,6 +1164,74 @@ paths:
             application/vnd.phylopic.v2+json:
               schema:
                 $ref: "#/components/schemas/ImageWithEmbedded"
+        "307":
+          $ref: "#/components/responses/307"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
+  /imagesets:
+    post:
+      operationId: postImageset
+      summary: Redirects to an imageset based on a list of image UUIDs.
+      tags:
+        - collections
+        - images
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/Content-Type"
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_contributor"
+        - $ref: "#/components/parameters/embed_generalNode"
+        - $ref: "#/components/parameters/embed_items"
+        - $ref: "#/components/parameters/embed_nodes"
+        - $ref: "#/components/parameters/embed_specificNode"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "307":
+          $ref: "#/components/responses/307"
+        "308":
+          $ref: "#/components/responses/308"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
+  /imagesets/{uuid}:
+    get:
+      operationId: getImageset
+      summary: Lists all images within a given imageset.
+      description: Images are listed from most recently uploaded to least recently uploaded.
+      tags:
+        - collections
+        - images
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/Content-Type"
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_contributor"
+        - $ref: "#/components/parameters/embed_generalNode"
+        - $ref: "#/components/parameters/embed_items"
+        - $ref: "#/components/parameters/embed_nodes"
+        - $ref: "#/components/parameters/embed_specificNode"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: |
+            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) list record (if `page` is not provided) or page record (if `page` is provided).
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/List"
+                  - $ref: "#/components/schemas/PageWithEmbeddedImages"
         "307":
           $ref: "#/components/responses/307"
         "400":
