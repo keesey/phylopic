@@ -162,6 +162,7 @@ functions:
                       parameters:
                           headers:
                               accept: false
+                              content-type: true
             - http:
                   cors:
                       allowCredentials: true

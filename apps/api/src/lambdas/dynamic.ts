@@ -70,12 +70,12 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
         case "/collections":
         case "/collections/": {
             switch (event.httpMethod) {
-                case "GET": {
+                case "POST": {
                     return postCollection(
                         {
                             body: event.body ?? undefined,
                             encoding: event.isBase64Encoded ? "base64" : "utf8",
-                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.headers, ["accept", "content-type"]),
                         },
                         SERVICE,
                     )
@@ -175,7 +175,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
             case "GET": {
                 return getCollection(
                     {
-                        ...getParameters(event.headers, ["accept", "content-type"]),
+                        ...getParameters(event.headers, ["accept"]),
                         ...getUUID(event.pathParameters),
                     },
                     SERVICE,
