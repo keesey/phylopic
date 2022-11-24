@@ -187,6 +187,18 @@ components:
         example: "8f901db5-84c1-4dc0-93ba-2300eeddf4ab"
         format: uuid
         type: string
+    filter_collection:
+      name: filter_collection
+      in: query
+      required: false
+      description: |
+        Limits results to entioties within the specified collection.
+
+        Cannot be used alongside other `filter_*` parameters.
+      schema:
+        example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
+        format: uuid
+        type: string
     filter_contributor:
       name: filter_contributor
       in: query
@@ -1029,17 +1041,100 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
+  /collections:
+    post:
+      operationId: postCollection
+      summary: Redirects to a collection based on a list of image UUIDs.
+      tags:
+        - collections
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/Content-Type"
+      requestBody:
+        description: A list of UUIDs.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                format: uuid
+                type: string
+      responses:
+        "308":
+          $ref: "#/components/responses/308"
+        "400":
+          $ref: "#/components/responses/400"
+        "406":
+          $ref: "#/components/responses/406"
+  /collections/{uuid}:
+    get:
+      operationId: getCollection
+      summary: Lists all UUIDs within a collection.
+      description: UUIDs are sorted alphanumerically.
+      tags:
+        - collections
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/Content-Type"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: |
+            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) resource description for the collection.
+          headers:
+            Content-Type:
+              $ref: "#/components/headers/Content-Type"
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                type: object
+                required:
+                  - _links
+                  - build
+                  - uuid
+                properties:
+                  _links:
+                    type: object
+                    required:
+                      - contributors
+                      - images
+                      - nodes
+                      - self
+                    properties:
+                      contributors:
+                        $ref: "#/components/schemas/Link"
+                      images:
+                        $ref: "#/components/schemas/Link"
+                      nodes:
+                        $ref: "#/components/schemas/Link"
+                      self:
+                        $ref: "#/components/schemas/Link"
+                  build:
+                    description: Index number of the current data build.
+                    type: integer
+                  uuid:
+                    description: The universally unique identifier for this collection.
+                    example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
+                    format: uuid
+                    type: string
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
   /contributors:
     get:
       operationId: getContributors
       summary: Lists all contributing users.
       description: Contributors are listed in order from those with the most uploaded images to those with the fewest.
       tags:
+        - collections
         - contributors
       parameters:
         - $ref: "#/components/parameters/Accept"
         - $ref: "#/components/parameters/build"
         - $ref: "#/components/parameters/embed_items"
+        - $ref: "#/components/parameters/filter_collection"
         - $ref: "#/components/parameters/page"
       responses:
         "200":
@@ -1097,10 +1192,11 @@ paths:
       operationId: getImages
       summary: Lists all images, or a filtered subset.
       description: |
-        Images are listed from most recently uploaded to least recently uploaded, unless certain `filter_` parameters are specified:
+        Images are listed from most recently uploaded to least recently uploaded, unless certain `filter_*` parameters are specified:
         - `filter_clade`: images are listed from most basal nodes to most deeply nested nodes.
         - `filter_name`: images are listed according to which one's nodes' names fit the search string best.
       tags:
+        - collections
         - images
         - search
       parameters:
@@ -1112,6 +1208,7 @@ paths:
         - $ref: "#/components/parameters/embed_nodes"
         - $ref: "#/components/parameters/embed_specificNode"
         - $ref: "#/components/parameters/filter_clade"
+        - $ref: "#/components/parameters/filter_collection"
         - $ref: "#/components/parameters/filter_contributor"
         - $ref: "#/components/parameters/filter_license_by"
         - $ref: "#/components/parameters/filter_license_nc"
@@ -1164,74 +1261,6 @@ paths:
             application/vnd.phylopic.v2+json:
               schema:
                 $ref: "#/components/schemas/ImageWithEmbedded"
-        "307":
-          $ref: "#/components/responses/307"
-        "400":
-          $ref: "#/components/responses/400"
-        "404":
-          $ref: "#/components/responses/404"
-        "406":
-          $ref: "#/components/responses/406"
-        "410":
-          $ref: "#/components/responses/410"
-  /imagesets:
-    post:
-      operationId: postImageset
-      summary: Redirects to an imageset based on a list of image UUIDs.
-      tags:
-        - collections
-        - images
-      parameters:
-        - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/Content-Type"
-        - $ref: "#/components/parameters/build"
-        - $ref: "#/components/parameters/embed_contributor"
-        - $ref: "#/components/parameters/embed_generalNode"
-        - $ref: "#/components/parameters/embed_items"
-        - $ref: "#/components/parameters/embed_nodes"
-        - $ref: "#/components/parameters/embed_specificNode"
-        - $ref: "#/components/parameters/page"
-      responses:
-        "307":
-          $ref: "#/components/responses/307"
-        "308":
-          $ref: "#/components/responses/308"
-        "400":
-          $ref: "#/components/responses/400"
-        "404":
-          $ref: "#/components/responses/404"
-        "406":
-          $ref: "#/components/responses/406"
-        "410":
-          $ref: "#/components/responses/410"
-  /imagesets/{uuid}:
-    get:
-      operationId: getImageset
-      summary: Lists all images within a given imageset.
-      description: Images are listed from most recently uploaded to least recently uploaded.
-      tags:
-        - collections
-        - images
-      parameters:
-        - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/Content-Type"
-        - $ref: "#/components/parameters/build"
-        - $ref: "#/components/parameters/embed_contributor"
-        - $ref: "#/components/parameters/embed_generalNode"
-        - $ref: "#/components/parameters/embed_items"
-        - $ref: "#/components/parameters/embed_nodes"
-        - $ref: "#/components/parameters/embed_specificNode"
-        - $ref: "#/components/parameters/page"
-      responses:
-        "200":
-          description: |
-            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) list record (if `page` is not provided) or page record (if `page` is provided).
-          content:
-            application/vnd.phylopic.v2+json:
-              schema:
-                oneOf:
-                  - $ref: "#/components/schemas/List"
-                  - $ref: "#/components/schemas/PageWithEmbeddedImages"
         "307":
           $ref: "#/components/responses/307"
         "400":
@@ -1327,6 +1356,7 @@ paths:
 
         If `filter_name` is passed, the nodes with names matching the search text are listed according to how early in the name the search text appears.
       tags:
+        - collections
         - nodes
         - search
       parameters:
@@ -1336,6 +1366,7 @@ paths:
         - $ref: "#/components/parameters/embed_items"
         - $ref: "#/components/parameters/embed_primaryImage"
         - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/filter_collection"
         - $ref: "#/components/parameters/filter_name"
         - $ref: "#/components/parameters/page"
       responses:
