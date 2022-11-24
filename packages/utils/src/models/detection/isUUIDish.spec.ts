@@ -4,9 +4,7 @@ import { EMPTY_UUID } from "../constants"
 import { isUUIDish } from "./isUUIDish"
 describe("isUUIDish", () => {
     const test = (value: unknown, expected: boolean) => {
-        it(`should determine that ${JSON.stringify(value)} is${
-            expected ? "" : " not"
-        } a UUID-like identifier.`, () => {
+        it(`should determine that ${JSON.stringify(value)} is${expected ? "" : " not"} a UUID-like identifier.`, () => {
             const actual = isUUIDish(value)
             expect(actual).to.equal(expected)
         })

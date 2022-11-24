@@ -196,7 +196,7 @@ components:
         Cannot be used alongside other `filter_*` parameters.
       schema:
         example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
-        format: uuid
+        pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
         type: string
     filter_contributor:
       name: filter_contributor
@@ -1057,6 +1057,7 @@ paths:
             schema:
               type: array
               items:
+                example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
                 format: uuid
                 type: string
       responses:
@@ -1111,9 +1112,12 @@ paths:
                       self:
                         $ref: "#/components/schemas/Link"
                   uuid:
-                    description: The universally unique identifier for this collection.
+                    description: |
+                      The identifier for this collection.
+
+                      Note: this is formatted like a UUID, but may or may not be a valid UUID.
                     example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
-                    format: uuid
+                    pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
                     type: string
         "404":
           $ref: "#/components/responses/404"
