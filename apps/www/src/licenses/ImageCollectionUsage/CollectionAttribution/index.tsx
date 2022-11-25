@@ -53,13 +53,15 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
                     Attribution must be given to <strong>Anonymous</strong>.
                 </>
             )}
-            {hasAttributions && `Attribution is ${attributionRequired ? "" : "not "}required, ${attributionRequired ? "and" : "but"} may be given as:`}
+            {hasAttributions &&
+                `Attribution is ${attributionRequired ? "" : "not "}required, ${
+                    attributionRequired ? "and" : "but"
+                } may be given as:`}
             {hasAttributions && (
                 <blockquote>
                     Silhouette image{images.length === 1 ? "" : "s"}
                     {numAttributions === 1 && <Nomina nomina={attributionEntries[0][1]} />}{" "}
-                    {images.length === 1 ? "is" : "are"}{" "}
-                    by{" "}
+                    {images.length === 1 ? "is" : "are"} by{" "}
                     {Object.entries(attributions)
                         .sort((a, b) => compareStrings(a[0], b[0]))
                         .map(([attribution, nomina], index, array) => (
