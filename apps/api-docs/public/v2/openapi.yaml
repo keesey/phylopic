@@ -1043,7 +1043,7 @@ paths:
   /collections:
     post:
       operationId: postCollection
-      summary: Redirects to a collection based on a list of image UUIDs.
+      summary: Redirects to an entity collection based on a list of UUIDs.
       tags:
         - collections
       parameters:
@@ -1074,7 +1074,7 @@ paths:
   /collections/{uuid}:
     get:
       operationId: getCollection
-      summary: Lists all UUIDs within a collection.
+      summary: Links to endpoints for getting all entities of certain types that are in a specified collection.
       description: UUIDs are sorted alphanumerically.
       tags:
         - collections
