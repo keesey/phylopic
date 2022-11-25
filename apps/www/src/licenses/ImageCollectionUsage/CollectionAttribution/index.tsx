@@ -3,6 +3,7 @@ import { compareStrings, isPublicDomainLicenseURL, Nomen, stringifyNomen, UUIDis
 import { FC, Fragment, useMemo } from "react"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
+import Nomina from "./Nomina"
 import PermalinkButton from "./PermalinkButton"
 export interface Props {
     images: readonly ImageWithEmbedded[]
@@ -38,20 +39,27 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
     const separator = useMemo(() => {
         return Object.keys(attributions).some(attribution => attribution.indexOf(",") >= 0) ? ";" : ","
     }, [attributions])
-    const hasAttribution = Object.keys(attributions).length > 0
+    const attributionEntries = useMemo(
+        () => Object.entries(attributions).sort((a, b) => compareStrings(a[0], b[0])),
+        [attributions],
+    )
+    const numAttributions = attributionEntries.length
+    const hasAttributions = numAttributions > 0
     return (
         <div className={styles.main}>
-            {!attributionRequired && !hasAttribution && "Attribution is not required."}
-            {attributionRequired && !hasAttribution && (
+            {!attributionRequired && !hasAttributions && "Attribution is not required."}
+            {attributionRequired && !hasAttributions && (
                 <>
                     Attribution must be given to <strong>Anonymous</strong>.
                 </>
             )}
-            {!attributionRequired && hasAttribution && "Attribution is not required, but may optionally be given as:"}
-            {attributionRequired && hasAttribution && "Attribution is required, and may be given as:"}
-            {hasAttribution && (
+            {hasAttributions && `Attribution is ${attributionRequired ? "" : "not "}required, ${attributionRequired ? "and" : "but"} may be given as:`}
+            {hasAttributions && (
                 <blockquote>
-                    Silhouette {images.length === 1 ? "image is" : "images are"} by{" "}
+                    Silhouette image{images.length === 1 ? "" : "s"}
+                    {numAttributions === 1 && <Nomina nomina={attributionEntries[0][1]} />}{" "}
+                    {images.length === 1 ? "is" : "are"}{" "}
+                    by{" "}
                     {Object.entries(attributions)
                         .sort((a, b) => compareStrings(a[0], b[0]))
                         .map(([attribution, nomina], index, array) => (
@@ -59,19 +67,7 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
                                 {index && array.length > 2 ? separator : null}
                                 {index && index === array.length - 1 ? " and " : " "}
                                 {attribution}
-                                {nomina.length > 0 && (
-                                    <span>
-                                        {" "}
-                                        (
-                                        {nomina.map((nomen, index) => (
-                                            <Fragment key={JSON.stringify(nomen)}>
-                                                {index > 0 && ", "}
-                                                <NomenView key={JSON.stringify(nomen)} short value={nomen} />
-                                            </Fragment>
-                                        ))}
-                                        )
-                                    </span>
-                                )}
+                                {numAttributions > 1 && <Nomina nomina={nomina} />}
                             </Fragment>
                         ))}
                     .

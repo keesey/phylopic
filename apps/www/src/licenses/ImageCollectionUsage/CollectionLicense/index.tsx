@@ -13,10 +13,10 @@ const CollectionLicense: FC<Props> = ({ images }) => {
     }
     if (isPublicDomainLicenseURL(license)) {
         return (
-            <section>
+            <p>
                 There are no licensing requirements for use of{" "}
                 {images.length === 1 ? "this silhouette image" : "these silhouette images"}.
-            </section>
+            </p>
         )
     }
     return (
