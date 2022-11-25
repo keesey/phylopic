@@ -16,7 +16,7 @@ const PermalinkButton: FC<Props> = ({ children, uuid }) => {
     const errorMessage = error ? String(error) : undefined
     useEffect(() => {
         if (errorMessage) {
-            alert(errorMessage)
+            alert("There was an error creating the permalink.")
             setRequested(false)
         }
     }, [errorMessage])

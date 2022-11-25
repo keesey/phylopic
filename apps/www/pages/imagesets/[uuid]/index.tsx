@@ -1,6 +1,6 @@
 import { ImageListParameters, ImageParameters } from "@phylopic/api-models"
 import { Loader } from "@phylopic/ui"
-import { isUUIDish, Query, UUIDish } from "@phylopic/utils"
+import { EMPTY_UUID, isUUIDish, Query, UUIDish } from "@phylopic/utils"
 import type { GetStaticPaths, GetStaticProps, GetStaticPropsResult, NextPage } from "next"
 import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
@@ -37,18 +37,26 @@ const PageComponent: NextPage<Props> = props => {
                 />
                 <h1>Silhouette Image Collection</h1>
             </header>
-            <LicenseTypeFilterContainer>
-                <ImageLicensePaginator autoLoad query={{ filter_collection: props.uuid }}>
-                    {(items, total) => (
-                        <>
-                            <ImageCollectionUsage items={items} total={total} uuid={props.uuid} />
-                            {isNaN(total) && <Loader key="loader" />}
-                            <br />
-                            <ImageListView value={items} />
-                        </>
-                    )}
-                </ImageLicensePaginator>
-            </LicenseTypeFilterContainer>
+            {props.uuid === EMPTY_UUID && <p>This is an empty collection.</p>}
+            {props.uuid !== EMPTY_UUID && (
+                <LicenseTypeFilterContainer>
+                    <ImageLicensePaginator autoLoad query={{ filter_collection: props.uuid }}>
+                        {(items, total) => (
+                            <>
+                                {total === 0 && <p>There are no silhouette images in this collection.</p>}
+                                {total > 0 && (
+                                    <>
+                                        <ImageCollectionUsage items={items} total={total} uuid={props.uuid} />
+                                        {isNaN(total) && <Loader key="loader" />}
+                                        <br />
+                                        <ImageListView value={items} />
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </ImageLicensePaginator>
+                </LicenseTypeFilterContainer>
+            )}
         </PageLayout>
     )
 }
