@@ -24,9 +24,9 @@ const PageComponent: NextPage<Props> = props => {
     return (
         <PageLayout {...props}>
             <PageHead
-                title="PhyloPic: Silhouette Image Collection"
-                url="https://www.phylopic.org/images/"
                 description="A collection of silhouette images from PhyloPic."
+                title="PhyloPic: Silhouette Image Collection"
+                url={`https://www.phylopic.org/imagesets/${encodeURIComponent(props.uuid)}`}
             />
             <header>
                 <Breadcrumbs
