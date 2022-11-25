@@ -1,5 +1,6 @@
 export * from "./isAuthority"
 export * from "./isEmailAddress"
+export * from "./isExtendedLicenseURL"
 export * from "./isHash"
 export * from "./isIdentifier"
 export * from "./isImageMediaType"

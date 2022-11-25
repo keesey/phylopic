@@ -2,7 +2,7 @@ import { ImageListParameters, ImageParameters } from "@phylopic/api-models"
 import { Loader } from "@phylopic/ui"
 import { isUUIDish, Query, UUIDish } from "@phylopic/utils"
 import type { GetStaticPaths, GetStaticProps, GetStaticPropsResult, NextPage } from "next"
-import ImageLicenseControls from "~/licenses/ImageLicenseControls"
+import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PageHead from "~/metadata/PageHead"
@@ -41,7 +41,7 @@ const PageComponent: NextPage<Props> = props => {
                 <ImageLicensePaginator autoLoad query={{ filter_collection: props.uuid }}>
                     {(items, total) => (
                         <>
-                            <ImageLicenseControls total={total} />
+                            <ImageCollectionUsage items={items} total={total} uuid={props.uuid} />
                             {isNaN(total) && <Loader key="loader" />}
                             <br />
                             <ImageListView value={items} />
@@ -56,7 +56,7 @@ export default PageComponent
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",
-        paths: []
+        paths: [],
     }
 }
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {

@@ -1,0 +1,12 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    blockquote {
+        background-color: colors.$white;
+        border-radius: 1em;
+        border: 2px solid colors.$black;
+        color: colors.$black;
+        padding: 1em;
+        margin: 0.5em 0;
+    }
+}

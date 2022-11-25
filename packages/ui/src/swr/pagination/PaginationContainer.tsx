@@ -94,7 +94,7 @@ export const PaginationContainer: React.FC<PaginationContainerProps> = ({
     const moreToLoad = size < (maxPages ?? totalPages)
     React.useEffect(() => {
         if (autoLoad && moreToLoad && !error && !list.isValidating && !pages.isValidating) {
-            loadNextPage();
+            loadNextPage()
         }
     }, [autoLoad, error, list.isValidating, loadNextPage, moreToLoad, pages.isValidating])
     return (
