@@ -27,7 +27,7 @@ const ImageLicenseControls: FC<Props> = ({ total }) => {
             <p className={clsx(isNaN(total) && styles.pending)}>
                 <CountView value={totalDisplayed} /> {licenses ? "matching " : ""}silhouette image
                 {totalDisplayed === 1 ? "" : "s"}
-                {licenses ? "" : " in the database"}.
+                {licenses ? "" : " in all"}.
             </p>
             <LicenseFilterView onChange={setLicenses} pending={isNaN(total)} value={licenses} />
         </>

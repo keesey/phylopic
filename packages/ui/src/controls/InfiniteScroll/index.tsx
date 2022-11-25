@@ -14,6 +14,7 @@ const STYLE: React.CSSProperties = {
     textAlign: "center",
 }
 export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({ hideLoader, onInViewport, pending }) => {
+    pending = Boolean(pending)
     const [inViewport, setInViewport] = React.useState(false)
     const [element, setElement] = React.useState<HTMLDivElement | null>(null)
     React.useEffect(() => {

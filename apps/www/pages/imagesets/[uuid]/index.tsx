@@ -1,0 +1,81 @@
+import { ImageListParameters, ImageParameters } from "@phylopic/api-models"
+import { Loader } from "@phylopic/ui"
+import { isUUIDish, Query, UUIDish } from "@phylopic/utils"
+import type { GetStaticPaths, GetStaticProps, GetStaticPropsResult, NextPage } from "next"
+import ImageLicenseControls from "~/licenses/ImageLicenseControls"
+import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
+import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
+import PageHead from "~/metadata/PageHead"
+import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
+import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import Breadcrumbs from "~/ui/Breadcrumbs"
+import ImageListView from "~/views/ImageListView"
+const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
+    embed_contributor: "true",
+    embed_nodes: "true",
+    embed_specificNode: "true",
+}
+export type ImageFilter = Pick<ImageListParameters, "filter_license_by" | "filter_license_nc" | "filter_license_sa">
+type Props = Omit<PageLayoutProps, "children"> & {
+    uuid: UUIDish
+}
+const PageComponent: NextPage<Props> = props => {
+    return (
+        <PageLayout {...props}>
+            <PageHead
+                title="PhyloPic: Silhouette Image Collection"
+                url="https://www.phylopic.org/images/"
+                description="A collection of silhouette images from PhyloPic."
+            />
+            <header>
+                <Breadcrumbs
+                    items={[
+                        { children: "Home", href: "/" },
+                        { children: <strong>Silhouette Image Collection</strong> },
+                    ]}
+                />
+                <h1>Silhouette Image Collection</h1>
+            </header>
+            <LicenseTypeFilterContainer>
+                <ImageLicensePaginator autoLoad query={{ filter_collection: props.uuid }}>
+                    {(items, total) => (
+                        <>
+                            <ImageLicenseControls total={total} />
+                            {isNaN(total) && <Loader key="loader" />}
+                            <br />
+                            <ImageListView value={items} />
+                        </>
+                    )}
+                </ImageLicensePaginator>
+            </LicenseTypeFilterContainer>
+        </PageLayout>
+    )
+}
+export default PageComponent
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        fallback: "blocking",
+        paths: []
+    }
+}
+export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
+    const { uuid } = context.params ?? {}
+    if (!isUUIDish(uuid)) {
+        return { notFound: true }
+    }
+    const result = await createListStaticPropsGetter("/images", { ...IMAGE_QUERY, filter_collection: uuid })({
+        ...context,
+        params: {},
+    })
+    if (!(result as { props: unknown }).props) {
+        return result as GetStaticPropsResult<Props> & { props: undefined }
+    }
+    return {
+        ...result,
+        props: {
+            ...(result as { props: Omit<Props, "uuid"> }).props,
+            uuid,
+        },
+    }
+}

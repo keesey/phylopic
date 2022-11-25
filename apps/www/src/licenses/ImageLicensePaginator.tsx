@@ -3,6 +3,7 @@ import { PaginationContainer, PaginationContainerProps } from "@phylopic/ui"
 import { FC, useMemo } from "react"
 import useLicenseFilterQuery from "./useLicenseFilterQuery"
 export type Props = Omit<PaginationContainerProps<ImageWithEmbedded>, "endpoint"> & {
+    autoLoad?: boolean
     query?: ImageListParameters
 }
 const ImageLicensePaginator: FC<Props> = props => {
