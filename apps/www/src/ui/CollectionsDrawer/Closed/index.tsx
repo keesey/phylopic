@@ -13,7 +13,7 @@ const Closed: FC = () => {
                 <div className={styles.toggle}>▲</div>
                 {collection && name && (
                     <div className={styles.content}>
-                        {collection.size} silhouette image{collection.size === 1 ? "" : "s"} in <strong>{name}</strong>
+                        <strong>{name}</strong> ({collection.size} image{collection.size === 1 ? "" : "s"})
                     </div>
                 )}
             </aside>

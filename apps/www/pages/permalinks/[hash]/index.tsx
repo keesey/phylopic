@@ -38,7 +38,8 @@ const PageComponent: NextPage<Props> = props => {
                         Created at <TimestampView value={props.date} format="datetime" />.{" "}
                     </>
                 )}
-                This is a permanent reference that will not change when the rest of <SiteTitle /> changes.
+                This is a permanent reference. The data on this page will not change when the rest of <SiteTitle />{" "}
+                changes.
             </p>
             <PermalinkView url={url} value={props.data} />
         </PageLayout>
