@@ -1,5 +1,5 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
-import { NumberView } from "@phylopic/ui"
+import { CountView, NumberView } from "@phylopic/ui"
 import { isPublicDomainLicenseURL, LICENSE_NAMES } from "@phylopic/utils"
 import { FC } from "react"
 import useCollectionLicense from "./useCollectionLicense"

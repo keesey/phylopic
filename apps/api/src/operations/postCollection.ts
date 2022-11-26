@@ -118,7 +118,7 @@ export const postCollection: Operation<PostCollectionParameters, PostCollectionS
             ...createRedirectHeaders(link.href, true),
             "access-control-allow-methods": "OPTIONS,POST",
         },
-        statusCode: 308,
+        statusCode: 303,
     } as APIGatewayProxyResult
 }
 export default postCollection

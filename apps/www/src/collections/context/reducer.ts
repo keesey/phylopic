@@ -12,7 +12,10 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
     switch (action.type) {
         case "ADD_COLLECTION": {
             if (prevState.collections[action.payload]) {
-                return prevState
+                return {
+                    ...prevState,
+                    currentCollection: action.payload,
+                }
             }
             return {
                 ...prevState,

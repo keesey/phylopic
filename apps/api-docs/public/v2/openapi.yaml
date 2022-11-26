@@ -1061,8 +1061,8 @@ paths:
                 format: uuid
                 type: string
       responses:
-        "308":
-          $ref: "#/components/responses/308"
+        "303":
+          $ref: "#/components/responses/303"
         "400":
           $ref: "#/components/responses/400"
         "406":

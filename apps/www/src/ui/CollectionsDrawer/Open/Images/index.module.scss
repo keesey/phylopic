@@ -5,6 +5,8 @@
      flex-wrap: wrap;
      gap: 1em;
      justify-content: center;
+     max-height: 50vh;
+     overflow: auto;
      padding: 1em 2em;
 
      a:hover {

@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useReducer, useState } from "react"
+import { FC, ReactNode, useCallback, useEffect, useReducer, useState } from "react"
 import CollectionsContext from "./CollectionsContext"
 import INITIAL_STATE from "./INITIAL_STATE"
 import reducer from "./reducer"
@@ -13,7 +13,7 @@ const CollectionsContainer: FC<Props> = ({ children }) => {
     const value = useReducer(reducer, INITIAL_STATE)
     const [state, dispatch] = value
     const [initialized, setInitialized] = useState(false)
-    useEffect(() => {
+    const reload = useCallback(() => {
         const persisted = localStorage.getItem(LOCAL_STORAGE_KEY)
         if (persisted) {
             let payload: State
@@ -27,6 +27,16 @@ const CollectionsContainer: FC<Props> = ({ children }) => {
         }
         setInitialized(true)
     }, [dispatch])
+    useEffect(() => {
+        const handler = () => setInitialized(false)
+        window.addEventListener("blur", handler)
+        return () => window.removeEventListener("blur", handler)
+    }, [])
+    useEffect(() => {
+        window.addEventListener("focus", reload)
+        return () => window.removeEventListener("focus", reload)
+    }, [])
+    useEffect(() => reload(), [reload])
     useEffect(() => {
         if (initialized) {
             localStorage.setItem(LOCAL_STORAGE_KEY, serialize(state))

@@ -17,12 +17,15 @@
 
 .selected {
     border-bottom: none;
-    font-weight: bold;
+
+    .label {
+        font-weight: bold;
+        margin-left: 0.5em;
+    }
 }
 
 .label {
     color: colors.$white;
-    margin-left: 0.5em;
 }
 
 .controls {
