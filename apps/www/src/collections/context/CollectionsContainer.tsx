@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useReducer } from "react"
+import { FC, ReactNode, useEffect, useReducer, useState } from "react"
 import CollectionsContext from "./CollectionsContext"
 import INITIAL_STATE from "./INITIAL_STATE"
 import reducer from "./reducer"
@@ -12,6 +12,7 @@ const LOCAL_STORAGE_KEY = "collections"
 const CollectionsContainer: FC<Props> = ({ children }) => {
     const value = useReducer(reducer, INITIAL_STATE)
     const [state, dispatch] = value
+    const [initialized, setInitialized] = useState(false)
     useEffect(() => {
         const persisted = localStorage.getItem(LOCAL_STORAGE_KEY)
         if (persisted) {
@@ -21,14 +22,18 @@ const CollectionsContainer: FC<Props> = ({ children }) => {
             } catch {
                 // Corrupted.
                 localStorage.removeItem(LOCAL_STORAGE_KEY)
+                setInitialized(true)
                 return
             }
             dispatch({ payload, type: "INITIALIZE" })
+            setInitialized(true)
         }
     }, [dispatch])
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, serialize(state))
-    }, [state])
+        if (initialized) {
+            localStorage.setItem(LOCAL_STORAGE_KEY, serialize(state))
+        }
+    }, [initialized, state])
     return <CollectionsContext.Provider value={value}>{children}</CollectionsContext.Provider>
 }
 export default CollectionsContainer

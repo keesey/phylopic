@@ -1,0 +1,29 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$ink;
+    bottom: 68.5px;
+    color: colors.$white;
+    left: 0;
+    padding: 0.5em;
+    padding-top: 2em;
+    position: fixed;
+    right: 0;
+    text-align: center;
+}
+
+.toggle {
+    background-color: colors.$cerulean;
+    color: colors.$foam;
+    font-weight: bold;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    a:hover & {
+        background-color: colors.$aquatic;
+        color: colors.$white;
+        transition: all 0.3s;
+    }
+}

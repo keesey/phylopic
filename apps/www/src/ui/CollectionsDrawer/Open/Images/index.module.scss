@@ -1,0 +1,33 @@
+ @use "@phylopic/styles/colors.scss";
+
+ .main {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 1em;
+     justify-content: center;
+     padding: 0 2em 0.5em;
+
+     a:hover {
+         opacity: 0.75;
+         transition: opacity 0.3s;
+     }
+
+     img {
+         filter: invert(100%);
+     }
+ }
+
+ .close {
+     background-color: colors.$white;
+     border-radius: 100%;
+     color: colors.$ink;
+     cursor: pointer;
+     display: inline-block;
+     font-weight: bold;
+     min-height: 20px;
+     min-width: 20px;
+
+     &:hover {
+         color: colors.$ink;
+     }
+ }

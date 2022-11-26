@@ -3,6 +3,8 @@ import { BuildContainer } from "@phylopic/utils-api"
 import dynamic from "next/dynamic"
 import { FC, ReactNode, useEffect } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
+import CollectionsContainer from "~/collections/context/CollectionsContainer"
+import CollectionsDrawer from "~/ui/CollectionsDrawer"
 import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
@@ -32,13 +34,16 @@ const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialT
                 {aside && <aside key="aside">{aside}</aside>}
                 <SearchContainer initialText={initialText}>
                     <Search />
-                    <header>
-                        <SiteNav />
-                    </header>
-                    <main>
-                        <SearchOverlay>{children}</SearchOverlay>
-                    </main>
-                    <SiteFooter />
+                    <CollectionsContainer>
+                        <header>
+                            <SiteNav />
+                        </header>
+                        <main>
+                            <SearchOverlay>{children}</SearchOverlay>
+                        </main>
+                        <CollectionsDrawer />
+                        <SiteFooter />
+                    </CollectionsContainer>
                 </SearchContainer>
             </BuildContainer>
         </SWRConfig>

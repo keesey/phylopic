@@ -2,6 +2,7 @@ import { UUID } from "@phylopic/utils"
 import { Reducer } from "react"
 import { Action } from "./Action"
 import { State } from "./State"
+const DEFAULT_COLLECTION_NAME = "My Collection"
 const cleanEntities = (entities: State["entities"], collections: State["collections"]): State["entities"] => {
     return Object.fromEntries(
         Object.entries(entities).filter(([uuid]) => Object.values(collections).some(uuids => uuids.has(uuid))),
@@ -22,19 +23,18 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
             }
         }
         case "ADD_TO_CURRENT_COLLECTION": {
-            if (!prevState.currentCollection) {
-                return prevState
-            }
-            const previousSet = prevState.collections[prevState.currentCollection]
+            const name = prevState.currentCollection ?? DEFAULT_COLLECTION_NAME
+            const previousSet = prevState.collections[name]
             return {
                 ...prevState,
                 collections: {
                     ...prevState.collections,
-                    [prevState.currentCollection]: new Set<UUID>([
+                    [name]: new Set<UUID>([
                         ...Array.from(previousSet ?? []),
                         action.payload.entity.uuid,
                     ]),
                 },
+                currentCollection: name,
                 entities: {
                     ...prevState.entities,
                     [action.payload.entity.uuid]: action.payload,

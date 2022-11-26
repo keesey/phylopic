@@ -32,12 +32,13 @@ const PageComponent: NextPage<Props> = props => {
                 <Breadcrumbs
                     items={[
                         { children: "Home", href: "/" },
+                        { children: "Collections" },
                         { children: <strong>Silhouette Image Collection</strong> },
                     ]}
                 />
                 <h1>Silhouette Image Collection</h1>
             </header>
-            {props.uuid === EMPTY_UUID && <p>This is an empty collection.</p>}
+            {props.uuid === EMPTY_UUID && <p>This collection is empty.</p>}
             {props.uuid !== EMPTY_UUID && (
                 <LicenseTypeFilterContainer>
                     <ImageLicensePaginator autoLoad query={{ filter_collection: props.uuid }}>
