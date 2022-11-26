@@ -16,6 +16,7 @@ export type EntityRecord =
       }>
 export type State = Readonly<{
     collections: Readonly<Record<string, ReadonlySet<UUID>>>
-    currentCollection: string | null
+    currentCollection: string
     entities: Readonly<Record<UUID, EntityRecord>>
+    open: boolean
 }>

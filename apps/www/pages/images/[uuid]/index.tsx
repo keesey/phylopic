@@ -46,7 +46,7 @@ const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
 const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
     const [, dispatch] = useContext(CollectionsContext)
     const images = useCurrentCollectionImages()
-    const isInCollection = useMemo(() => images.some(i => i.uuid === image.uuid), [images])
+    const isInCollection = useMemo(() => images.some(i => i.uuid === image.uuid), [image.uuid, images])
     const nameLong = useNomenText(image._embedded.specificNode?.names[0])
     const nameShort = useNomenText(image._embedded.specificNode?.names[0], true)
     const licenseLong = useLicenseText(image._links.license.href)
@@ -109,7 +109,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                         isInCollection
                             ? null
                             : {
-                                  children: "Add to Collection +",
+                                  children: "Add to Collection ＋",
                                   key: "collection",
                                   onClick: () =>
                                       dispatch({
@@ -183,7 +183,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 <section key="sponsor">
                     <p style={{ textAlign: "center" }}>
                         <em>
-                            This silhouette&apos;s inclusion in <SiteTitle /> has been sponsored by{" "}
+                            This silhouette&rsquo;s inclusion in <SiteTitle /> has been sponsored by{" "}
                             <strong>{image.sponsor}</strong>.
                         </em>
                     </p>

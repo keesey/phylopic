@@ -19,15 +19,13 @@ const CollectionsContainer: FC<Props> = ({ children }) => {
             let payload: State
             try {
                 payload = deserialize(persisted)
+                dispatch({ payload, type: "INITIALIZE" })
             } catch {
                 // Corrupted.
                 localStorage.removeItem(LOCAL_STORAGE_KEY)
-                setInitialized(true)
-                return
             }
-            dispatch({ payload, type: "INITIALIZE" })
-            setInitialized(true)
         }
+        setInitialized(true)
     }, [dispatch])
     useEffect(() => {
         if (initialized) {
