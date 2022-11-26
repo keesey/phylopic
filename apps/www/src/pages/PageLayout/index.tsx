@@ -9,6 +9,7 @@ import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
+import styles from "./index.module.scss"
 const BuildChecker = dynamic(() => import("./BuildChecker"), { ssr: false })
 const Search = dynamic(() => import("./Search"), { ssr: false })
 export type Props = {
@@ -35,7 +36,7 @@ const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialT
                 <SearchContainer initialText={initialText}>
                     <Search />
                     <CollectionsContainer>
-                        <header>
+                        <header className={styles.header}>
                             <SiteNav />
                         </header>
                         <main>
