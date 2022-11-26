@@ -58,15 +58,17 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
         case "REMOVE_COLLECTION": {
             const collections = { ...prevState.collections }
             delete collections[action.payload]
-            if (Object.keys(collections).length === 0) {
+            let defaultCollectionName = Object.keys(collections).sort()[0]
+            if (!defaultCollectionName) {
                 collections[DEFAULT_COLLECTION_NAME] = new Set<UUID>()
+                defaultCollectionName = DEFAULT_COLLECTION_NAME
             }
             return {
                 ...prevState,
                 collections,
                 currentCollection:
                     action.payload === prevState.currentCollection
-                        ? DEFAULT_COLLECTION_NAME
+                        ? defaultCollectionName
                         : prevState.currentCollection,
                 entities: cleanEntities(prevState.entities, collections),
             }

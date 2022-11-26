@@ -1,0 +1,36 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$ink;
+    border: 1px solid colors.$cerulean;
+    border-bottom-width: 2px;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    display: inline-flex;
+    gap: 1em;
+    padding: 0.5em 0.5em 0;
+
+    &:first-of-type {
+        border-left: none;
+    }
+}
+
+.selected {
+    border-bottom: none;
+    font-weight: bold;
+}
+
+.label {
+    color: colors.$white;
+    margin-left: 0.5em;
+}
+
+.controls {
+    display: flex;
+    gap: 0.5em;
+}
+
+.icon {
+    color: colors.$white;
+    font-weight: bold;
+}

@@ -3,10 +3,12 @@
 .main {
     background-color: colors.$ink;
     bottom: 68.5px;
+    border-top: 1px solid colors.$vellum;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
     color: colors.$white;
     left: 0;
-    padding: 0.5em;
-    padding-top: 1.5em;
+    overflow: clip;
     position: fixed;
     right: 0;
     text-align: center;
@@ -15,20 +17,11 @@
 .toggle {
     background-color: colors.$cerulean;
     color: colors.$foam;
-    font-weight: bold;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
+    display: block;
 
     &:hover {
         background-color: colors.$aquatic;
         color: colors.$white;
         transition: all 0.3s;
     }
-}
-
-.header {
-    border: none;
-    font-size: 1.2rem;
 }
