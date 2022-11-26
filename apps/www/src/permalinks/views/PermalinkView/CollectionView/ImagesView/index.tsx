@@ -20,7 +20,13 @@ const ImagesView: FC<Props> = ({ url, value }) => {
         <section id="images" className={styles.main}>
             <h2>Silhouette Images</h2>
             <CollectionLicense images={value} />
-            <p>You may link to <a href={url} rel="canonical">this page</a> as a way of providing attribution and license information.</p>
+            <p>
+                You may link to{" "}
+                <a href={url} rel="canonical">
+                    this page
+                </a>{" "}
+                as a way of providing attribution and license information.
+            </p>
             <table>
                 <thead>
                     <tr>

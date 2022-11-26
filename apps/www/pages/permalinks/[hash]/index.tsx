@@ -21,11 +21,7 @@ const PageComponent: NextPage<Props> = props => {
     const url = `https://www.phylopic.org/permalink/${encodeURIComponent(props.hash)}`
     return (
         <PageLayout {...props}>
-            <PageHead
-                title="PhyloPic: Permalink"
-                url={url}
-                description="Permanent data resource for PhyloPic."
-            />
+            <PageHead title="PhyloPic: Permalink" url={url} description="Permanent data resource for PhyloPic." />
             <header>
                 <Breadcrumbs
                     items={[

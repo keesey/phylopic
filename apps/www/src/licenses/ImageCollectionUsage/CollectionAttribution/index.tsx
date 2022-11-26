@@ -74,7 +74,7 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
                     .
                 </blockquote>
             )}
-            {attributionRequired && uuid &&  (
+            {attributionRequired && uuid && (
                 <>
                     Alternately,{" "}
                     <strong>
