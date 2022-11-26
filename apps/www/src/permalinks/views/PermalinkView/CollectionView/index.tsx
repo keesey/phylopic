@@ -1,14 +1,16 @@
+import { URL } from "@phylopic/utils"
 import { FC } from "react"
 import { CollectionPermalinkData } from "~/permalinks/types/CollectionPermalinkData"
 import ImagesView from "./ImagesView"
 export interface Props {
+    url: URL
     value: CollectionPermalinkData
 }
-const CollectionView: FC<Props> = ({ value }) => {
+const CollectionView: FC<Props> = ({ url, value }) => {
     // :TODO: Other entities
     return (
         <>
-            <ImagesView value={value.entities.images} />
+            <ImagesView url={url} value={value.entities.images} />
         </>
     )
 }

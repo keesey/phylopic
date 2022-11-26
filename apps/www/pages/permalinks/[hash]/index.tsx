@@ -18,11 +18,12 @@ type Props = Omit<PageLayoutProps, "children"> & {
 }
 const PageComponent: NextPage<Props> = props => {
     const subheader = usePermalinkSubheader(props.data)
+    const url = `https://www.phylopic.org/permalink/${encodeURIComponent(props.hash)}`
     return (
         <PageLayout {...props}>
             <PageHead
                 title="PhyloPic: Permalink"
-                url={`https://www.phylopic.org/permalink/${encodeURIComponent(props.hash)}`}
+                url={url}
                 description="Permanent data resource for PhyloPic."
             />
             <header>
@@ -43,7 +44,7 @@ const PageComponent: NextPage<Props> = props => {
                 )}
                 This is a permanent reference that will not change when the rest of <SiteTitle /> changes.
             </p>
-            <PermalinkView value={props.data} />
+            <PermalinkView url={url} value={props.data} />
         </PageLayout>
     )
 }

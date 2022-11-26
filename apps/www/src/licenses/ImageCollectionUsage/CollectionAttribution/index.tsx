@@ -1,13 +1,12 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
 import { compareStrings, isPublicDomainLicenseURL, Nomen, stringifyNomen, UUIDish } from "@phylopic/utils"
 import { FC, Fragment, useMemo } from "react"
-import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
 import Nomina from "./Nomina"
 import PermalinkButton from "./PermalinkButton"
 export interface Props {
     images: readonly ImageWithEmbedded[]
-    uuid: UUIDish
+    uuid?: UUIDish
 }
 const contains = (nomina: readonly Nomen[], nomen: Nomen) => {
     const json = JSON.stringify(nomen)
@@ -75,7 +74,7 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
                     .
                 </blockquote>
             )}
-            {attributionRequired && (
+            {attributionRequired && uuid &&  (
                 <>
                     Alternately,{" "}
                     <strong>
