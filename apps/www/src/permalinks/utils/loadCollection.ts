@@ -71,14 +71,8 @@ const loadCollection = async (uuid: UUIDish): Promise<CollectionPermalinkData> =
     return {
         entities: {
             contributors: await loadList<Contributor>("/contributors", build, uuid),
-            nodes: await loadList<NodeWithEmbedded>("/nodes", build, uuid, { primaryImage: "true" } as Record<
-                keyof NodeEmbedded,
-                "true"
-            >),
-            images: await loadList<ImageWithEmbedded>("/images", build, uuid, { specificNode: "true" } as Record<
-                keyof ImageEmbedded,
-                "true"
-            >),
+            nodes: await loadList<NodeWithEmbedded>("/nodes", build, uuid, { embed_primaryImage: "true" }),
+            images: await loadList<ImageWithEmbedded>("/images", build, uuid, { embed_specificNode: "true" }),
         },
         type: "collection",
         uuid,
