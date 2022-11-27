@@ -11,7 +11,7 @@ export interface Props {
     url: string
 }
 const DEFAULT_SOCIAL_IMAGE: MediaLink = {
-    href: "/social/1200x1200.png",
+    href: process.env.NEXT_PUBLIC_WWW_URL + "/social/1200x1200.png",
     sizes: "1200x1200",
     type: "image/png",
 }
