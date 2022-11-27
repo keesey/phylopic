@@ -12,7 +12,13 @@ const index: NextApiHandler = async (req, res) => {
         }
         const normalizedUUID = normalizeUUID(uuid)
         const collection = await loadCollection(normalizedUUID)
-        s3Client = new S3Client({})
+        s3Client = new S3Client({
+            credentials: {
+                accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
+                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
+            },
+            region: process.env.S3_REGION,
+        })
         const hash = await save(s3Client, collection)
         res.setHeader("content-type", "application/json")
         res.send(JSON.stringify(hash))

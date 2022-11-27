@@ -57,7 +57,13 @@ export const getStaticProps: GetStaticProps<Props, { hash: Hash }> = async conte
     if (!isHash(hash)) {
         return { notFound: true }
     }
-    const client = new S3Client({})
+    const client = new S3Client({
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
+        },
+        region: process.env.S3_REGION,
+    })
     let data: PermalinkData
     let output: GetObjectCommandOutput
     try {

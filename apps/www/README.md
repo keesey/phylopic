@@ -20,6 +20,9 @@ The following environment variables are required. They may be stored in `.env.lo
 | `NEXT_PUBLIC_ROOT_UUID`                | ID for the root phylogenetic node (`8f901db5-84c1-4dc0-93ba-2300eeddf4ab`)                                                                                         |
 | `NEXT_PUBLIC_WWW_URL`                  | Root URL of the main _PhyloPic_ website (`https://www.phylopic.org`)                                                                                               |
 | `REVALIDATE_TOKEN`                     | Secret key for [Next.js on-demand revalidation](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration#using-on-demand-revalidation) |
+| `S3_ACCESS_KEY_ID`                     | Amazon Web Services S3 access key ID                                                                                                                               |
+| `S3_REGION`                            | Amazon Web Services S3 region                                                                                                                                      |
+| `S3_SECRET_ACCESS_KEY`                 | Amazon Web Services S3 secret access key                                                                                                                           |
 
 The following environment variables are optional:
 
