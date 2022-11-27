@@ -21,11 +21,11 @@ const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
 }
 type CollectionType = "contributors" | "images" | "nodes" | "multiple" | "empty"
 type Props = Omit<PageLayoutProps, "children"> & {
-    has: Readonly<{
+    has: {
         contributors: boolean
         images: boolean
         nodes: boolean
-    }>
+    }
     uuid: UUIDish
 }
 const TYPE_LABELS: Readonly<Record<CollectionType, string>> = {
@@ -161,7 +161,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         return { notFound: true }
     }
     if (uuid === EMPTY_UUID) {
-        return { props: { type: "empty", uuid } }
+        return { props: { has: { contributors: false, images: false, nodes: false }, uuid } }
     }
     const contributorsKey = `${process.env.NEXT_PUBLIC_API_URL}/contributors${createSearch({
         filter_collection: uuid,
