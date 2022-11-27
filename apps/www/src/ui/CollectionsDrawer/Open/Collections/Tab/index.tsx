@@ -74,7 +74,7 @@ const Tab: FC<Props> = ({ name }) => {
                         </a>
                         <a
                             onClick={handleDeleteClick}
-                            className={clsx(styles.icon)}
+                            className={clsx(styles.icon, styles.danger)}
                             role="button"
                             title="Delete Collection"
                         >

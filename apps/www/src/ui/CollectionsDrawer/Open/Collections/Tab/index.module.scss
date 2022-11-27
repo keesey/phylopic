@@ -36,4 +36,10 @@
 .icon {
     color: colors.$white;
     font-weight: bold;
+
+}
+
+.danger:hover {
+    color: colors.$dandelion;
+    opacity: unset;
 }

@@ -11,7 +11,7 @@ const Images: FC = () => {
         <section className={styles.main}>
             {images.map(image => (
                 <section key={image.uuid}>
-                    <LinkedImageThumbnailView value={image} />
+                    <LinkedImageThumbnailView inverted value={image} />
                     <div>
                         <a
                             className={styles.close}
