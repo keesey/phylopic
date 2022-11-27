@@ -55,7 +55,7 @@ yarn build && yarn start
 To deploy to `www.phylopic.org`, use [Git](https://git-scm.com/) to set the `@phylopic/www/prod` branch to the desired commit, then push to `origin`.
 
 ```sh
-git push origin @phylopic/www/beta
+git push origin @phylopic/www/prod
 ```
 
 The app will deploy through [Vercel](https://vercel.com/keesey/phylopic-www).
