@@ -13,11 +13,17 @@
     position: fixed;
     right: 0;
     text-align: center;
+
+    @media screen and (max-width: 660px) {
+        bottom: 89.5px;
+    }
 }
 
 .toggle {
     background-color: colors.$cerulean;
+    border-bottom: 2px solid colors.$wash;
     color: colors.$foam;
+    padding: 0.33em 1em;
 
     a:hover & {
         background-color: colors.$aquatic;

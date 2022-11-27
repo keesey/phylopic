@@ -2,10 +2,11 @@
 
 .main {
     align-items: stretch;
-    background-color: colors.$cerulean;
+    background-color: colors.$wash;
     display: inline-flex;
     gap: -1px;
     margin: 0;
     justify-content: flex-start;
+    padding-top: 0.25em;
     width: 100%;
 }
