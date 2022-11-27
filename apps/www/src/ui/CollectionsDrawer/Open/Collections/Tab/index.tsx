@@ -18,7 +18,7 @@ const Tab: FC<Props> = ({ name }) => {
     const [, dispatch] = useContext(CollectionsContext)
     const router = useRouter()
     const handleDeleteClick = () => {
-        if (currentImages.length == 0 || confirm(`Are you sure you want to delete this collection (“${name}”)?`)) {
+        if (currentImages.length === 0 || confirm(`Are you sure you want to delete this collection (“${name}”)?`)) {
             dispatch({ type: "REMOVE_COLLECTION", payload: name })
         }
     }
