@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+import { AnchorLink } from "@phylopic/ui"
 import clsx from "clsx"
 import Image from "next/future/image"
-import Link from "next/link"
 import { FC } from "react"
 import logoFacebook from "../../../public/logos/facebook.svg"
 import logoMail from "../../../public/logos/mail.svg"
@@ -23,11 +23,13 @@ const SiteFooter: FC = () => (
                 </a>
             </li>
             <li className={clsx(styles.item, styles.logos)}>
-                <Link href="/mailinglist">
-                    <a className={styles.textIcon} title="Subscribe to the PhyloPic mailing list.">
-                        <Image src={logoMail} width={28} height={28} alt="Mailing List" />
-                    </a>
-                </Link>
+                <AnchorLink
+                    className={styles.textIcon}
+                    href="/mailinglist"
+                    title="Subscribe to the PhyloPic mailing list."
+                >
+                    <Image src={logoMail} width={28} height={28} alt="Mailing List" />
+                </AnchorLink>
                 <a href="https://sauropods.win/@phylopic" title="Follow PhyloPic on Mastodon." rel="me">
                     <Image src={logoMastodon} width={25} height={25} alt="Mastodon" />
                 </a>

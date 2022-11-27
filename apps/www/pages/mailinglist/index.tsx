@@ -20,7 +20,7 @@ const PageComponent: NextPage = () => (
                     "@id": `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
                     description: "Newsletter for PhyloPic.",
                     name: "PhyloPic Mailing List",
-                    url: `${process.env.NEXT_PUBLIC_WWW_URL}g/mailinglist`,
+                    url: `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
                 }}
             />
         </PageHead>

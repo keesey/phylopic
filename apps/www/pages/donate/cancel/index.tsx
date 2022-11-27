@@ -9,9 +9,9 @@ import SiteTitle from "~/ui/SiteTitle"
 const PageComponent: NextPage = () => (
     <PageLayout>
         <PageHead
+            description="Ways to contribute to PhyloPic, an open database of freely reusable silhouette images of organisms."
             title="PhyloPic: Other Ways to Contribute"
             url={`${process.env.NEXT_PUBLIC_WWW_URL}/contribute/cancel`}
-            description="Ways to contribute to PhyloPic, an open database of freely reusable silhouette images of organisms."
         />
         <header>
             <Breadcrumbs
