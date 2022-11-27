@@ -1,4 +1,5 @@
 @use "@phylopic/styles/colors.scss";
+
 .main {
     cursor: pointer;
     filter: drop-shadow(-10px 10px 10px colors.$shadow);
@@ -7,10 +8,12 @@
     width: 200px;
     perspective: 1024px;
 }
+
 .front {
     background-color: colors.$marine;
     color: white;
 }
+
 .side {
     backface-visibility: hidden;
     border-radius: 1rem;
@@ -22,6 +25,7 @@
     top: 0;
     transition: all 0.5s;
 }
+
 .hidden {
     transform: rotateY(180deg)
 }
