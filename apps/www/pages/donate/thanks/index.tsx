@@ -8,7 +8,7 @@ import InlineSections from "~/ui/InlineSections"
 import SiteTitle from "~/ui/SiteTitle"
 const PageComponent: NextPage = () => (
     <PageLayout>
-        <PageHead title="Thank You from PhyloPic!" url="https://www.phylopic.org/contribute/thanks" />
+        <PageHead title="Thank You from PhyloPic!" url={`${process.env.NEXT_PUBLIC_WWW_URL}/donate/thanks`} />
         <header>
             <Breadcrumbs
                 items={[
@@ -93,7 +93,7 @@ const PageComponent: NextPage = () => (
                     <h3>Spread the Word!</h3>
                     <p>
                         Tell people about{" "}
-                        <a href="https://www.phylopic.org">
+                        <a href={`${process.env.NEXT_PUBLIC_WWW_URL}`}>
                             <SiteTitle />
                         </a>
                         !

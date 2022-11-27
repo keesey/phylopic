@@ -10,7 +10,7 @@ const PageComponent: NextPage = () => (
     <PageLayout>
         <PageHead
             title="PhyloPic: Other Ways to Contribute"
-            url="https://www.phylopic.org/contribute/cancel"
+            url={`${process.env.NEXT_PUBLIC_WWW_URL}/contribute/cancel`}
             description="Ways to contribute to PhyloPic, an open database of freely reusable silhouette images of organisms."
         />
         <header>
@@ -58,7 +58,7 @@ const PageComponent: NextPage = () => (
                 <h2>Spread the Word!</h2>
                 <p>
                     Tell people about{" "}
-                    <a href="https://www.phylopic.org">
+                    <a href={`${process.env.NEXT_PUBLIC_WWW_URL}`}>
                         <SiteTitle />
                     </a>
                     !

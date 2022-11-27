@@ -34,7 +34,7 @@ const createGetServerSideListSitemapProps =
           .map(
               path => `
             <url>
-              <loc>https://www.phylopic.org${path}</loc>
+              <loc>${process.env.NEXT_PUBLIC_WWW_URL}${path}</loc>
               <lastmod>${lastmod}</lastmod>
             </url>
           `,

@@ -56,7 +56,7 @@ const PageComponent: NextPage<Props> = ({ has, uuid, ...props }) => {
             <PageHead
                 description={`A collection of ${TYPE_LABELS[type]} from PhyloPic.`}
                 title={`PhyloPic: ${COLLECTION_LABELS[type]}`}
-                url={`https://www.phylopic.org/collections/${encodeURIComponent(uuid)}`}
+                url={`${process.env.NEXT_PUBLIC_WWW_URL}/collections/${encodeURIComponent(uuid)}`}
             />
             <header>
                 <Breadcrumbs

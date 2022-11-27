@@ -104,7 +104,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                 description={`Freely reusable silhouette images of ${nameString}.`}
                 socialImage={node._embedded.primaryImage?._links["http://ogp.me/ns#image"]}
                 title={`PhyloPic: ${shortNameString}`}
-                url={`https://www.phylopic.org/nodes/${node.uuid}`}
+                url={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}`}
             >
                 <TaxonSchemaScript node={node} />
             </PageHead>

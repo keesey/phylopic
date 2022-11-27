@@ -8,10 +8,6 @@ export interface Props {
 }
 const CollectionView: FC<Props> = ({ url, value }) => {
     // :TODO: Other entities
-    return (
-        <>
-            <ImagesView url={url} value={value.entities.images} />
-        </>
-    )
+    return <ImagesView url={url} value={value.entities.images} />
 }
 export default CollectionView

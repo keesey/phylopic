@@ -77,7 +77,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 description={description}
                 socialImage={image._links["http://ogp.me/ns#image"]}
                 title={title}
-                url={`https://www.phylopic.org/images/${image.uuid}`}
+                url={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(image.uuid)}`}
             >
                 {image.attribution && <meta key="meta:author" name="author" content={image.attribution} />}
                 <link key="link:contributor" rel="contributor" href={image._links.contributor.href} />

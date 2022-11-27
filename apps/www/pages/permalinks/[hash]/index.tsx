@@ -18,7 +18,7 @@ type Props = Omit<PageLayoutProps, "children"> & {
 }
 const PageComponent: NextPage<Props> = props => {
     const subheader = usePermalinkSubheader(props.data)
-    const url = `https://www.phylopic.org/permalink/${encodeURIComponent(props.hash)}`
+    const url = `${process.env.NEXT_PUBLIC_WWW_URL}/permalink/${encodeURIComponent(props.hash)}`
     return (
         <PageLayout {...props}>
             <PageHead title="PhyloPic: Permalink" url={url} description="Permanent data resource for PhyloPic." />
