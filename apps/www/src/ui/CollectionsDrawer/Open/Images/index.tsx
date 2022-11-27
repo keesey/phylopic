@@ -9,6 +9,9 @@ const Images: FC = () => {
     const [, dispatch] = useContext(CollectionsContext)
     return (
         <section className={styles.main}>
+            {!images.length && (
+                <p><em>Drag and drop silhouette images here to add them.</em></p>
+            )}
             {images.map(image => (
                 <section key={image.uuid}>
                     <LinkedImageThumbnailView inverted value={image} />

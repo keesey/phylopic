@@ -15,7 +15,7 @@ const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
     }
     return (
         <AnchorLink
-            className={clsx(!inverted && styles.standard, inverted && styles.inverted)}
+            className={clsx(styles.main, !inverted && styles.standard, inverted && styles.inverted)}
             draggable
             href={extractPath(value._links.self.href)}
             onDragStart={handleDragStart}

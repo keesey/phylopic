@@ -6,17 +6,9 @@
     border-top: 1px solid colors.$vellum;
     border-top-left-radius: 1em;
     border-top-right-radius: 1em;
-    bottom: 68.5px;
     color: colors.$white;
-    left: 0;
     overflow: clip;
-    position: fixed;
-    right: 0;
     text-align: center;
-
-    @media screen and (max-width: 660px) {
-        bottom: 89.5px;
-    }
 }
 
 .toggle {

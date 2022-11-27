@@ -1,14 +1,18 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageRasterView as UIImageRasterView } from "@phylopic/ui"
-import { FC } from "react"
+import { stringifyNormalized } from "@phylopic/utils"
+import { DragEvent, FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {
     value: ImageWithEmbedded
 }
 const ImageRasterView: FC<Props> = ({ value }) => {
+    const handleDragStart = (event: DragEvent) => {
+        event.dataTransfer.setData(DATA_MEDIA_TYPE, stringifyNormalized(value))
+    }
     return (
         <div className={styles.main}>
-            <figure className={styles.figure}>
+            <figure className={styles.figure} draggable onDragStart={handleDragStart}>
                 <UIImageRasterView value={value} />
             </figure>
         </div>

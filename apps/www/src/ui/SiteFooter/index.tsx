@@ -8,11 +8,13 @@ import logoMail from "../../../public/logos/mail.svg"
 import logoMastodon from "../../../public/logos/mastodon.svg"
 import logoPatreon from "../../../public/logos/patreon-white.svg"
 import logoTwitter from "../../../public/logos/twitter.svg"
+import CollectionsDrawer from "../CollectionsDrawer"
 import styles from "./index.module.scss"
 const YEAR = new Date().getFullYear()
 const SiteFooter: FC = () => (
     <footer className={styles.main}>
-        <ul>
+        <CollectionsDrawer />
+        <ul className={styles.content}>
             <li className={styles.item}>
                 Version 2.0 <abbr title="beta version">βɛτα</abbr>
             </li>
