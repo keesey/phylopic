@@ -7,7 +7,6 @@ import dynamic from "next/dynamic"
 import { FC, useContext, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import CollectionsContext from "~/collections/context/CollectionsContext"
-import useCurrentCollection from "~/collections/hooks/useCurrentCollection"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import PageHead from "~/metadata/PageHead"
@@ -28,7 +27,6 @@ import NomenView from "~/views/NomenView"
 const ContributorBanner = dynamic(() => import("~/contribute/ContributorBanner"), { ssr: false })
 const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
     embed_contributor: "true",
-    embed_nodes: "true",
     embed_specificNode: "true",
 }
 type Props = Omit<PageLayoutProps, "children"> & {

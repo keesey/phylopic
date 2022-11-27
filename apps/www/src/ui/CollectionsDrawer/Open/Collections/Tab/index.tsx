@@ -29,7 +29,7 @@ const Tab: FC<Props> = ({ name }) => {
                 const response = await axios.post<Collection>(process.env.NEXT_PUBLIC_API_URL + "/collections", uuids)
                 if (isUUIDish(response?.data?.uuid)) {
                     dispatch({ type: "CLOSE" })
-                    await router.push(`/imagesets/${encodeURIComponent(response.data.uuid)}`)
+                    await router.push(`/collections/${encodeURIComponent(response.data.uuid)}`)
                 }
             } catch (e) {
                 alert("There was an error creating the Collection Page.")

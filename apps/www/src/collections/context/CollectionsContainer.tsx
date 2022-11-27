@@ -35,7 +35,7 @@ const CollectionsContainer: FC<Props> = ({ children }) => {
     useEffect(() => {
         window.addEventListener("focus", reload)
         return () => window.removeEventListener("focus", reload)
-    }, [])
+    }, [reload])
     useEffect(() => reload(), [reload])
     useEffect(() => {
         if (initialized) {
