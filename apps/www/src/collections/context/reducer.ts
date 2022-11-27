@@ -109,6 +109,12 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
                 currentCollection: action.payload,
             }
         }
+        case "TOGGLE": {
+            return {
+                ...prevState,
+                open: !prevState.open,
+            }
+        }
         default: {
             return prevState
         }

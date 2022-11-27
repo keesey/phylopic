@@ -10,6 +10,7 @@ export type RemoveCollectionAction = FSAWithPayload<"REMOVE_COLLECTION", string>
 export type RemoveFromCurrentCollectionAction = FSAWithPayload<"REMOVE_FROM_CURRENT_COLLECTION", UUID>
 export type RenameCollectionAction = FSAWithPayload<"RENAME_COLLECTION", Readonly<[string, string]>>
 export type SetCurrentCollectionAction = FSAWithPayload<"SET_CURRENT_COLLECTION", string>
+export type ToggleAction = FSA<"TOGGLE">
 export type Action =
     | AddCollectionAction
     | AddToCurrentCollectionAction
@@ -20,3 +21,4 @@ export type Action =
     | RemoveFromCurrentCollectionAction
     | RenameCollectionAction
     | SetCurrentCollectionAction
+    | ToggleAction

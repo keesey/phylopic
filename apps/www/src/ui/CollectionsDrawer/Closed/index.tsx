@@ -7,17 +7,13 @@ const Closed: FC = () => {
     const collection = useCurrentCollection()
     const name = useCurrentCollectionName()
     const [, dispatch] = useContext(CollectionsContext)
+    if (!collection || !name) {
+        return null
+    }
     return (
-        <a onClick={() => dispatch({ type: "OPEN" })} role="button">
-            <aside className={styles.main}>
-                <div className={styles.toggle}>▲</div>
-                {collection && name && (
-                    <div className={styles.content}>
-                        <strong>{name}</strong> ({collection.size} image{collection.size === 1 ? "" : "s"})
-                    </div>
-                )}
-            </aside>
-        </a>
+        <div className={styles.main}>
+            <strong>{name}</strong> ({collection.size} image{collection.size === 1 ? "" : "s"})
+        </div>
     )
 }
 export default Closed

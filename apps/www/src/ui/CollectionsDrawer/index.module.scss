@@ -2,11 +2,11 @@
 
 .main {
     background-color: colors.$ink;
-    bottom: 68.5px;
     border-bottom: 1px solid colors.$black;
     border-top: 1px solid colors.$vellum;
     border-top-left-radius: 1em;
     border-top-right-radius: 1em;
+    bottom: 68.5px;
     color: colors.$white;
     left: 0;
     overflow: clip;
@@ -21,6 +21,7 @@
 
 .toggle {
     background-color: colors.$cerulean;
+    border-bottom: 2px solid colors.$wash;
     color: colors.$foam;
     display: block;
     padding: 0.33em 1em;
@@ -30,4 +31,9 @@
         color: colors.$white;
         transition: all 0.3s;
     }
+}
+
+.dragging {
+    filter: brightness(1.5);
+    transition: filter 0.3s;
 }
