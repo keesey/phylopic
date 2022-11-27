@@ -28,7 +28,8 @@ const Tab: FC<Props> = ({ name }) => {
             try {
                 const response = await axios.post<Collection>(process.env.NEXT_PUBLIC_API_URL + "/collections", uuids)
                 if (isUUIDish(response?.data?.uuid)) {
-                    router.push(`/imagesets/${encodeURIComponent(response.data.uuid)}`)
+                    dispatch({ type: "CLOSE" })
+                    await router.push(`/imagesets/${encodeURIComponent(response.data.uuid)}`)
                 }
             } catch (e) {
                 alert("There was an error creating the Collection Page.")
@@ -53,14 +54,16 @@ const Tab: FC<Props> = ({ name }) => {
                         </span>
                     </div>
                     <div className={styles.controls}>
-                        <a
-                            onClick={handleLinkClick}
-                            className={clsx(styles.icon)}
-                            role="button"
-                            title="Open Collection Page"
-                        >
-                            ↗
-                        </a>
+                        {currentImages.length > 1 && (
+                            <a
+                                onClick={handleLinkClick}
+                                className={clsx(styles.icon)}
+                                role="button"
+                                title="Open Collection Page"
+                            >
+                                ↗
+                            </a>
+                        )}
                         <a
                             onClick={handleRenameClick}
                             className={clsx(styles.icon)}

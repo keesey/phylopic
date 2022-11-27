@@ -1,5 +1,5 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
-import { CountView, NumberView } from "@phylopic/ui"
+import { NumberView } from "@phylopic/ui"
 import { isPublicDomainLicenseURL, LICENSE_NAMES } from "@phylopic/utils"
 import { FC } from "react"
 import useCollectionLicense from "./useCollectionLicense"
@@ -14,7 +14,7 @@ const CollectionLicense: FC<Props> = ({ images }) => {
     if (isPublicDomainLicenseURL(license)) {
         return (
             <p>
-                There are no licensing requirements for use of{" "}
+                There are no licensing requirements for the use of{" "}
                 {images.length === 1 ? "this silhouette image" : "these silhouette images"}.
             </p>
         )

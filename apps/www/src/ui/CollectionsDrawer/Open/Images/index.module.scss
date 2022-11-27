@@ -9,12 +9,23 @@
      overflow: auto;
      padding: 1em 2em;
 
-     a:hover {
-         opacity: 0.75;
-         transition: opacity 0.3s;
-     }
-
      img {
          filter: invert(100%);
      }
+
+     a {
+         color: colors.$glacier;
+         cursor: pointer;
+     }
+
+     a:hover {
+         color: colors.$sunshine;
+         transition: color 0.3s;
+
+         img {
+             opacity: 0.75;
+             transition: opacity 0.3s;
+         }
+     }
+
  }
