@@ -10,7 +10,9 @@ const Images: FC = () => {
     return (
         <section className={styles.main}>
             {!images.length && (
-                <p><em>Drag and drop silhouette images here to add them.</em></p>
+                <p>
+                    <em>Drag and drop silhouette images here to add them.</em>
+                </p>
             )}
             {images.map(image => (
                 <section key={image.uuid}>
