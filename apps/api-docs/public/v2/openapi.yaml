@@ -191,9 +191,9 @@ components:
       in: query
       required: false
       description: |
-        Limits results to entioties within the specified collection.
+        Limits results to entities within the specified collection.
 
-        Cannot be used alongside other `filter_*` parameters.
+        Cannot be used alongside other `filter_*` parameters (except `filter_license_*` for images).
       schema:
         example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
         pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
