@@ -267,7 +267,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return postResolveObjects(
                         {
                             body: event.body ?? undefined,
-                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.headers, ["accept", "content-type"]),
                             ...getParameters(event.pathParameters, ["authority", "namespace"]),
                             ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },
