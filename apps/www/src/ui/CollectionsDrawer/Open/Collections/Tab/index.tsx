@@ -9,6 +9,7 @@ import styles from "./index.module.scss"
 import axios from "axios"
 import { Collection, Link } from "@phylopic/api-models"
 import { NumberView } from "@phylopic/ui"
+import Icon from "~/ui/Icon"
 export interface Props {
     name: string
 }
@@ -61,7 +62,7 @@ const Tab: FC<Props> = ({ name }) => {
                                 role="button"
                                 title="Open Collection Page"
                             >
-                                ↗
+                                <Icon name="link" />
                             </a>
                         )}
                         <a
@@ -70,7 +71,7 @@ const Tab: FC<Props> = ({ name }) => {
                             role="button"
                             title="Rename Collection"
                         >
-                            ✎
+                            <Icon name="pencil" />
                         </a>
                         <a
                             onClick={handleDeleteClick}
@@ -78,7 +79,7 @@ const Tab: FC<Props> = ({ name }) => {
                             role="button"
                             title="Delete Collection"
                         >
-                            ✖
+                            <Icon name="trash" />
                         </a>
                     </div>
                 </>

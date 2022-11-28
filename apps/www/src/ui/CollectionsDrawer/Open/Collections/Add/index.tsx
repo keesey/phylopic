@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import { FC, useCallback, useContext } from "react"
 import CollectionsContext from "~/collections/context/CollectionsContext"
+import Icon from "~/ui/Icon"
 import styles from "./index.module.scss"
 const Add: FC = () => {
     const [, dispatch] = useContext(CollectionsContext)
@@ -12,8 +13,8 @@ const Add: FC = () => {
     }, [dispatch])
     return (
         <div className={styles.main}>
-            <a onClick={handleAddClick} className={clsx(styles.icon)} role="button" title="Add New Collection">
-                ＋
+            <a onClick={handleAddClick} role="button" title="Add New Collection">
+                <Icon name="plus" />
             </a>
         </div>
     )

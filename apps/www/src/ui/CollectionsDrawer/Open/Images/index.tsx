@@ -19,7 +19,6 @@ const Images: FC = () => {
                     <LinkedImageThumbnailView inverted value={image} />
                     <div>
                         <a
-                            className={styles.close}
                             onClick={() => dispatch({ type: "REMOVE_FROM_CURRENT_COLLECTION", payload: image.uuid })}
                             title="Remove"
                         >

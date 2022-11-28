@@ -28,6 +28,9 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
         }
         case "ADD_TO_CURRENT_COLLECTION": {
             const previousSet = prevState.collections[prevState.currentCollection]
+            if (previousSet.has(action.payload.entity.uuid)) {
+                return prevState
+            }
             return {
                 ...prevState,
                 collections: {
@@ -41,6 +44,7 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
                     ...prevState.entities,
                     [action.payload.entity.uuid]: action.payload,
                 },
+                open: true,
             }
         }
         case "CLOSE": {

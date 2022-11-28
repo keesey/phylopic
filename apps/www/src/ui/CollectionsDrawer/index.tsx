@@ -45,7 +45,7 @@ const CollectionsDrawer: FC = () => {
             <a className={styles.toggle} onClick={() => dispatch({ type: "TOGGLE" })} role="button">
                 {open ? "▼" : "▲"}
             </a>
-            {open ? <Open /> : empty ? null : <Closed />}
+            {open ? <Open /> : <Closed />}
         </aside>
     )
 }
