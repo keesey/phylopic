@@ -425,6 +425,7 @@ functions:
                       parameters:
                           headers:
                               accept: false
+                              content-type: true
                           paths:
                               authority: true
                               namespace: true
