@@ -9,10 +9,10 @@ export type Props = {
 }
 const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
     const object = useMemo<WithContext<VisualArtwork>>(() => {
-        const url = `https://www.phylopic.org/images/${image.uuid}`
+        const url = `${process.env.NEXT_PUBLIC_WWW_URL}/images/${image.uuid}`
         const about = image._links.nodes.map<Thing>(link => ({
             "@type": "Taxon",
-            "@id": "https://www.phylopic.org" + extractPath(link.href),
+            "@id": `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(link.href)}`,
         }))
         return {
             "@context": "https://schema.org",
@@ -20,7 +20,7 @@ const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
             "@id": url,
             about,
             datePublished: image.created,
-            contributor: { "@id": "https://www.phylopic.org" + extractPath(image._links.contributor.href) },
+            contributor: { "@id": `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(image._links.contributor.href)}` },
             creditText: image.attribution ?? undefined,
             identifier: image.uuid,
             images: [
@@ -48,7 +48,7 @@ const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
             license: image._links.license.href,
             mainEntity: {
                 "@type": "Taxon",
-                "@id": "https://www.phylopic.org" + extractPath(image._links.specificNode.href),
+                "@id": `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(image._links.specificNode.href)}`,
             },
             sponsor: image.sponsor ?? undefined,
             thumbnailUrl: image._links.thumbnailFiles[0].href,

@@ -1,6 +1,7 @@
 export type { API } from "./API"
 export type { AuthorizedNamespace } from "./AuthorizedNamespace"
 export type { AuthorizedNamespaces } from "./AuthorizedNamespaces"
+export type { Collection } from "./Collection"
 export type { Contributor, ContributorLinks } from "./Contributor"
 export type { Data } from "./Data"
 export type { Entity } from "./Entity"

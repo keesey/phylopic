@@ -1,0 +1,9 @@
+.main {
+    filter: invert(100%);
+    overflow: hidden;
+
+    a:hover & {
+        opacity: 0.75;
+        transition: opacity 0.3s;
+    }
+}

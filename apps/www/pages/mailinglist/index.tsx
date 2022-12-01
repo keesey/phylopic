@@ -10,17 +10,17 @@ const PageComponent: NextPage = () => (
         <PageHead
             description="Get updates on new features for PhyloPic, the open database of freely reusable silhouette images of organisms."
             title="Sign up for the PhyloPic Mailing List"
-            url="https://www.phylopic.org/mailinglist"
+            url={`${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`}
         >
             <SchemaScript
                 id="MediaSubscription"
                 object={{
                     "@context": "https://schema.org",
                     "@type": "MediaSubscription",
-                    "@id": "http://www.phylopic.org/mailinglist",
+                    "@id": `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
                     description: "Newsletter for PhyloPic.",
                     name: "PhyloPic Mailing List",
-                    url: "http://www.phylopic.org/mailinglist",
+                    url: `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
                 }}
             />
         </PageHead>

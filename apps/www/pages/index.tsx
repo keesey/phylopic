@@ -16,20 +16,20 @@ import ImageListView from "~/views/ImageListView"
 import SupportersView from "~/views/SupportersView"
 type Props = Omit<PageLayoutProps, "children">
 const ITEM_URLS: readonly URL[] = [
-    "https://www.phylopic.org/images",
-    "https://www.phylopic.org/nodes",
-    "https://www.phylopic.org/contributors",
-    "https://www.phylopic.org/thanks",
-    "https://www.phylopic.org/mailinglist",
-    "http://api-docs.phylopic.org/2.0",
-    "https://contribute.phylopic.org",
+    `${process.env.NEXT_PUBLIC_WWW_URL}/images`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/nodes`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/contributors`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/thanks`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
+    "http://api-docs.phylopic.org/v2",
+    `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}`,
     "https://keesey.gumroad.com/l/pocketphylogenies",
 ]
 const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
         <PageHead
             title="PhyloPic"
-            url="https://www.phylopic.org/"
+            url={`${process.env.NEXT_PUBLIC_WWW_URL}`}
             description="PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses."
         >
             <SchemaScript
@@ -42,10 +42,10 @@ const PageComponent: NextPage<Props> = props => (
                         query: "required",
                         target: {
                             "@type": "EntryPoint",
-                            urlTemplate: "https://www.phylopic.org/search?q={query}",
+                            urlTemplate: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q={query}`,
                         },
                     },
-                    url: "https://www.phylopic.org",
+                    url: `${process.env.NEXT_PUBLIC_WWW_URL}`,
                 }}
             />
             <SchemaScript
@@ -58,7 +58,7 @@ const PageComponent: NextPage<Props> = props => (
                     email: "keesey@gmail.com",
                     name: "Mike Keesey",
                     sameAs: process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID
-                        ? `https://www.phylopic.org/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`
+                        ? `${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`
                         : undefined,
                     url: "http://tmkeesey.net",
                 }}

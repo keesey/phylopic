@@ -1,3 +1,3 @@
-import { UUID } from "@phylopic/utils"
+import { UUID, UUIDish } from "@phylopic/utils"
 import { ParsedUrlQuery } from "querystring"
-export type EntityPageQuery = ParsedUrlQuery & { uuid: UUID }
+export type EntityPageQuery = ParsedUrlQuery & { uuid: UUID | UUIDish }

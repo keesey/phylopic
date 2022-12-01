@@ -20,7 +20,7 @@ const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
         <PageHead
             title="Search for Silhouette Images on PhyloPic"
-            url="https://www.phylopic.org/search"
+            url={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
             description="Search for free silhouette images of animals, plants, and other life forms."
         />
         <header>

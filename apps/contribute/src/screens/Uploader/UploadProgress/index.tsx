@@ -1,6 +1,6 @@
 import { Link } from "@phylopic/api-models"
 import { getImageFileExtension, Hash, ImageMediaType, isHash } from "@phylopic/utils"
-import axios from "axios"
+import axios, { AxiosProgressEvent } from "axios"
 import { FC, useEffect, useMemo, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useContributorUUID from "~/profile/useContributorUUID"
@@ -35,9 +35,9 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
                     authorization: `Bearer ${token}`,
                     "content-type": type,
                 },
-                onUploadProgress: (event: ProgressEvent) => {
+                onUploadProgress: (event: AxiosProgressEvent) => {
                     setLoaded(event.loaded)
-                    setTotal(event.total)
+                    setTotal(event.total ?? NaN)
                 },
                 responseType: "json",
                 signal: controller.signal,

@@ -1,4 +1,4 @@
-import { UUID } from "../types/UUID"
-export const normalizeUUID = (uuid?: UUID) =>
-    typeof uuid === "string" ? uuid.toLowerCase() : "00000000-0000-0000-0000-000000000000"
+import { EMPTY_UUID } from "../constants/EMPTY_UUID"
+import { UUIDish } from "../types/UUIDish"
+export const normalizeUUID = (uuid?: UUIDish) => (typeof uuid === "string" ? uuid.toLowerCase() : EMPTY_UUID)
 export default normalizeUUID

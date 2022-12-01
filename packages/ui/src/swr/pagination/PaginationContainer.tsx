@@ -7,6 +7,7 @@ import useSWRInfinite, { SWRInfiniteConfiguration, SWRInfiniteFetcher, SWRInfini
 import { InfiniteScroll } from "../../controls"
 import { createPageKeyGetter } from "./createPageKeyGetter"
 export type PaginationContainerProps<T = unknown> = {
+    autoLoad?: boolean
     children: (value: readonly T[], total: number) => React.ReactNode
     endpoint: URL
     hideControls?: boolean
@@ -33,6 +34,7 @@ const SWR_INFINITE_CONFIG = {
     revalidateFirstPage: false,
 }
 export const PaginationContainer: React.FC<PaginationContainerProps> = ({
+    autoLoad,
     children,
     endpoint,
     hideControls,
@@ -89,14 +91,20 @@ export const PaginationContainer: React.FC<PaginationContainerProps> = ({
             onError?.(error)
         }
     }, [error, onError])
+    const moreToLoad = size < (maxPages ?? totalPages)
+    React.useEffect(() => {
+        if (autoLoad && moreToLoad && !error && !list.isValidating && !pages.isValidating) {
+            loadNextPage()
+        }
+    }, [autoLoad, error, list.isValidating, loadNextPage, moreToLoad, pages.isValidating])
     return (
         <>
             <React.Fragment key="items">{children(items, totalItems)}</React.Fragment>
-            {size < (maxPages ?? totalPages) && !error && !hideControls && (
+            {moreToLoad && !error && !hideControls && (
                 <InfiniteScroll
                     hideLoader={hideLoader}
                     key="infinite-scroll"
-                    onInViewport={loadNextPage}
+                    onInViewport={!autoLoad ? loadNextPage : undefined}
                     pending={list.isValidating || pages.isValidating}
                 />
             )}

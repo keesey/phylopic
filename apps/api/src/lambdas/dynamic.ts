@@ -1,4 +1,5 @@
 import {
+    ContributorListParameters,
     CONTRIBUTOR_EMBEDDED_PARAMETERS,
     ImageListParameters,
     IMAGE_EMBEDDED_PARAMETERS,
@@ -12,6 +13,7 @@ import errorToResult from "../errors/errorToResult"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import TEMPORARY_HEADERS from "../headers/responses/TEMPORARY_HEADERS"
 import getAutocomplete from "../operations/getAutocomplete"
+import getCollection from "../operations/getCollection"
 import getContributor from "../operations/getContributor"
 import getContributors from "../operations/getContributors"
 import getImage from "../operations/getImage"
@@ -21,6 +23,7 @@ import getNode from "../operations/getNode"
 import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
+import postCollection from "../operations/postCollection"
 import postResolveObjects from "../operations/postResolveObjects"
 import { PgClientService } from "../services/PgClientService"
 import getEmbedParameters from "./parameters/getEmbedParameters"
@@ -28,9 +31,11 @@ import getParameters from "./parameters/getParameters"
 import getUUID from "./parameters/getUUID"
 import PG_CLIENT_SERVICE from "./services/PG_CLIENT_SERVICE"
 const SERVICE: PgClientService = PG_CLIENT_SERVICE
-const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["filter_name"]
+const CONTRIBUTOR_FILTER_PARAMETERS: ReadonlyArray<keyof ContributorListParameters> = ["filter_collection"]
+const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["filter_collection", "filter_name"]
 const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [
     "filter_clade",
+    "filter_collection",
     "filter_contributor",
     "filter_license_by",
     "filter_license_nc",
@@ -64,6 +69,24 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 }
             }
         }
+        case "/collections":
+        case "/collections/": {
+            switch (event.httpMethod) {
+                case "POST": {
+                    return postCollection(
+                        {
+                            body: event.body ?? undefined,
+                            encoding: event.isBase64Encoded ? "base64" : "utf8",
+                            ...getParameters(event.headers, ["accept", "content-type"]),
+                        },
+                        SERVICE,
+                    )
+                }
+                default: {
+                    throw create405()
+                }
+            }
+        }
         case "/contributors":
         case "/contributors/": {
             switch (event.httpMethod) {
@@ -71,7 +94,11 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return getContributors(
                         {
                             ...getParameters(event.headers, ["accept"]),
-                            ...getParameters(event.queryStringParameters, ["build", "page"]),
+                            ...getParameters(event.queryStringParameters, [
+                                "build",
+                                "page",
+                                ...CONTRIBUTOR_FILTER_PARAMETERS,
+                            ]),
                             ...getEmbedParameters(event.queryStringParameters, [
                                 "embed_items" as const,
                                 ...CONTRIBUTOR_EMBEDDED_PARAMETERS,
@@ -146,6 +173,22 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 default: {
                     throw create405()
                 }
+            }
+        }
+    }
+    if (path.startsWith("/collections/")) {
+        switch (event.httpMethod) {
+            case "GET": {
+                return getCollection(
+                    {
+                        ...getParameters(event.headers, ["accept"]),
+                        ...getUUID(event.pathParameters),
+                    },
+                    SERVICE,
+                )
+            }
+            default: {
+                throw create405()
             }
         }
     }
@@ -224,7 +267,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                     return postResolveObjects(
                         {
                             body: event.body ?? undefined,
-                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.headers, ["accept", "content-type"]),
                             ...getParameters(event.pathParameters, ["authority", "namespace"]),
                             ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },

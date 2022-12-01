@@ -37,7 +37,7 @@ const ParentEditor: FC<Props> = ({ uuid }) => {
                 setSelecting(false)
             }
         },
-        [data?.parent],
+        [data?.parent, patcher],
     )
     if (!data) {
         return null

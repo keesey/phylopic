@@ -40,7 +40,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                 description={`Illustrated evolutionary lineage of ${nameString}.`}
                 socialImage={node._embedded?.primaryImage?._links["http://ogp.me/ns#image"]}
                 title={`PhyloPic: Lineage of ${shortNameStrong}`}
-                url={`https://www.phylopic.org/nodes/${node.uuid}/lineage`}
+                url={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}/lineage`}
             />
             <header>
                 <ExpandableLineageBreadcrumbs

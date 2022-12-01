@@ -10,7 +10,7 @@ export type Props = {
     fallback: PublicConfiguration["fallback"]
 } & Pick<List, "build">
 const createListStaticPropsGetter =
-    <TEntity>(endpoint: string, entityEmbedsQuery?: Query): GetStaticProps<Props, Record<string, never>> =>
+    <TEntity>(endpoint: string, query?: Query): GetStaticProps<Props, Record<string, never>> =>
     async () => {
         const listKey = process.env.NEXT_PUBLIC_API_URL + endpoint
         const listResponse = await fetchResult<List>(listKey)
@@ -28,7 +28,7 @@ const createListStaticPropsGetter =
             const getPageKey = (page: number) =>
                 listKey +
                 createSearch({
-                    ...entityEmbedsQuery,
+                    ...query,
                     build,
                     embed_items: true,
                     page,

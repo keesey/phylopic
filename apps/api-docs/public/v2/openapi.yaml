@@ -12,20 +12,22 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.0.0-beta
+  version: 2.1.0
 tags:
   - name: general
     description: General API information and status.
+  - name: collections
+    description: Methods related to collections of entities.
   - name: contributors
     description: Methods related to contributing users.
-  - name: nodes
-    description: Methods related to phylogenetic nodes.
-  - name: images
-    description: Methods related to silhouette images.
-  - name: search
-    description: Searches for entities (images and nodes).
   - name: external identifiers
     description: Methods related to external taxonomic databases.
+  - name: images
+    description: Methods related to silhouette images.
+  - name: nodes
+    description: Methods related to phylogenetic nodes.
+  - name: search
+    description: Searches for entities (images and nodes).
   - name: uploads
     description: Methods related to file uploads.
 servers:
@@ -33,9 +35,8 @@ servers:
     description: Production API
 components:
   headers:
-    Accept-image:
+    Accept:
       description: Accepted media types for the request payload.
-      example: image/svg+xml, image/png, image/gif, image/bmp, image/jpeg
       schema:
         type: string
     Content-Type:
@@ -184,6 +185,18 @@ components:
       schema:
         example: "8f901db5-84c1-4dc0-93ba-2300eeddf4ab"
         format: uuid
+        type: string
+    filter_collection:
+      name: filter_collection
+      in: query
+      required: false
+      description: |
+        Limits results to entities within the specified collection.
+
+        Cannot be used alongside other `filter_*` parameters (except `filter_license_*` for images).
+      schema:
+        example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
+        pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
         type: string
     filter_contributor:
       name: filter_contributor
@@ -380,7 +393,7 @@ components:
           schema:
             $ref: "#/components/schemas/Errors"
     "413":
-      description: The upload is too large.
+      description: The payload is too large.
       headers:
         Content-Type:
           $ref: "#/components/headers/Content-Type"
@@ -389,10 +402,10 @@ components:
           schema:
             $ref: "#/components/schemas/Errors"
     "415":
-      description: The upload is an incorrect file type.
+      description: The request's payload has the wrong content type.
       headers:
         Accept:
-          $ref: "#/components/headers/Accept-image"
+          $ref: "#/components/headers/Accept"
         Content-Type:
           $ref: "#/components/headers/Content-Type"
       content:
@@ -1027,17 +1040,102 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
+  /collections:
+    post:
+      operationId: postCollection
+      summary: Redirects to an entity collection based on a list of UUIDs.
+      tags:
+        - collections
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/Content-Type"
+      requestBody:
+        description: A list of UUIDs.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
+                format: uuid
+                type: string
+      responses:
+        "303":
+          $ref: "#/components/responses/303"
+        "400":
+          $ref: "#/components/responses/400"
+        "406":
+          $ref: "#/components/responses/406"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+  /collections/{uuid}:
+    get:
+      operationId: getCollection
+      summary: Links to endpoints for getting all entities of certain types that are in a specified collection.
+      description: UUIDs are sorted alphanumerically.
+      tags:
+        - collections
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+      responses:
+        "200":
+          description: |
+            [HAL](http://stateless.co/hal_specification.html) [JSON](https://www.json.org/) resource description for the collection.
+          headers:
+            Content-Type:
+              $ref: "#/components/headers/Content-Type"
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                type: object
+                required:
+                  - _links
+                  - uuid
+                properties:
+                  _links:
+                    type: object
+                    required:
+                      - contributors
+                      - images
+                      - nodes
+                      - self
+                    properties:
+                      contributors:
+                        $ref: "#/components/schemas/Link"
+                      images:
+                        $ref: "#/components/schemas/Link"
+                      nodes:
+                        $ref: "#/components/schemas/Link"
+                      self:
+                        $ref: "#/components/schemas/Link"
+                  uuid:
+                    description: |
+                      The identifier for this collection.
+
+                      Note: this is formatted like a UUID, but may or may not be a valid UUID.
+                    example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
+                    pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+                    type: string
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
   /contributors:
     get:
       operationId: getContributors
       summary: Lists all contributing users.
       description: Contributors are listed in order from those with the most uploaded images to those with the fewest.
       tags:
+        - collections
         - contributors
       parameters:
         - $ref: "#/components/parameters/Accept"
         - $ref: "#/components/parameters/build"
         - $ref: "#/components/parameters/embed_items"
+        - $ref: "#/components/parameters/filter_collection"
         - $ref: "#/components/parameters/page"
       responses:
         "200":
@@ -1095,10 +1193,11 @@ paths:
       operationId: getImages
       summary: Lists all images, or a filtered subset.
       description: |
-        Images are listed from most recently uploaded to least recently uploaded, unless certain `filter_` parameters are specified:
+        Images are listed from most recently uploaded to least recently uploaded, unless certain `filter_*` parameters are specified:
         - `filter_clade`: images are listed from most basal nodes to most deeply nested nodes.
         - `filter_name`: images are listed according to which one's nodes' names fit the search string best.
       tags:
+        - collections
         - images
         - search
       parameters:
@@ -1110,6 +1209,7 @@ paths:
         - $ref: "#/components/parameters/embed_nodes"
         - $ref: "#/components/parameters/embed_specificNode"
         - $ref: "#/components/parameters/filter_clade"
+        - $ref: "#/components/parameters/filter_collection"
         - $ref: "#/components/parameters/filter_contributor"
         - $ref: "#/components/parameters/filter_license_by"
         - $ref: "#/components/parameters/filter_license_nc"
@@ -1257,6 +1357,7 @@ paths:
 
         If `filter_name` is passed, the nodes with names matching the search text are listed according to how early in the name the search text appears.
       tags:
+        - collections
         - nodes
         - search
       parameters:
@@ -1266,6 +1367,7 @@ paths:
         - $ref: "#/components/parameters/embed_items"
         - $ref: "#/components/parameters/embed_primaryImage"
         - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/filter_collection"
         - $ref: "#/components/parameters/filter_name"
         - $ref: "#/components/parameters/page"
       responses:
@@ -1416,6 +1518,8 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
+        "415":
+          $ref: "#/components/responses/415"
   /resolve/{authority}/{namespace}/{objectid}:
     get:
       operationId: getResolveObject

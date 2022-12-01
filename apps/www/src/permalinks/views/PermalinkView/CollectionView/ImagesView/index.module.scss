@@ -1,0 +1,21 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+
+    table {
+        max-width: 100%;
+        overflow: auto;
+        width: 100%;
+    }
+
+    th,
+    td {
+        padding: 0.5em;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    thead {
+        border-bottom: 1px solid colors.$wash;
+    }
+}

@@ -17,23 +17,23 @@ const TaxonSchemaScript: FC<Props> = ({ node }) => {
         ])
         alternateNames.delete(name)
         const sameAs = node._links.external.map(({ href }) => resolveExternalHRef(href)).filter(isDefined)
-        const url = `https://www.phylopic.org/nodes/${node.uuid}`
+        const url = `${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}`
         return {
             "@context": "https://schema.org",
             "@type": "Taxon",
             "@id": url,
             alternateName: alternateNames.size ? Array.from(alternateNames).sort() : undefined,
             childTaxon: node._links.childNodes.length
-                ? node._links.childNodes.map(({ href }) => "https://www.phylopic.org" + extractPath(href))
+                ? node._links.childNodes.map(({ href }) => `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(href)}`)
                 : undefined,
             identifier: node.uuid,
             image: node._links.primaryImage?.href
-                ? "https://www.phylopic.org" + extractPath(node._links.primaryImage.href)
+                ? `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(node._links.primaryImage.href)}`
                 : undefined,
-            mainEntityOfPage: `https://www.phylopic.org/nodes/${node.uuid}/lineage`,
+            mainEntityOfPage: `${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${node.uuid}/lineage`,
             name,
             parentTaxon: node._links.parentNode?.href
-                ? "https://www.phylopic.org" + extractPath(node._links.parentNode.href)
+                ? `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(node._links.parentNode.href)}`
                 : undefined,
             sameAs: sameAs.length ? sameAs : undefined,
             url,

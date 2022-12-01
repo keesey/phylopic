@@ -22,33 +22,57 @@ export type GetContributorsParameters = DataRequestHeaders & ContributorListPara
 export type GetContributorsService = PgClientService
 const ITEMS_PER_PAGE = 96
 const USER_MESSAGE = "There was a problem with a request to list contributors."
-const getTotalItems = async (client: ClientBase) => {
-    const builder = new QueryConfigBuilder('SELECT COUNT("uuid") AS total FROM contributor WHERE build=$::bigint', [
-        BUILD,
-    ])
-    const result = await client.query<{ total: string }>(builder.build())
-    return parseInt(result.rows[0].total, 10) ?? 0
+const getQueryBuilder = (parameters: ContributorListParameters, results: "total" | "uuid" | "json") => {
+    const builder = new QueryConfigBuilder()
+    const selection =
+        results === "total"
+            ? 'COUNT(contributor."uuid") as total'
+            : results === "uuid"
+            ? 'contributor."uuid" AS "uuid"'
+            : 'contributor.json AS json,contributor."uuid" AS "uuid"'
+    if (parameters.filter_collection) {
+        builder.add(
+            `SELECT ${selection} FROM collection LEFT JOIN contributor ON contributor."uuid"=ANY(collection.uuids) WHERE collection.uuid=$::uuid AND contributor.build=$::bigint`,
+            [parameters.filter_collection, BUILD],
+        )
+    } else {
+        builder.add(`SELECT ${selection} FROM contributor WHERE build=$::bigint`, [BUILD])
+    }
+    if (results === "total") {
+        // Add nothing
+    } else {
+        builder.add("ORDER BY contributor.sort_index")
+    }
+    return builder
 }
-const getItemLinks = async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
-    const queryResult = await client.query<{ uuid: UUID }>({
-        text: 'SELECT "uuid" FROM contributor WHERE build=$1::bigint ORDER BY sort_index OFFSET $2 LIMIT $3',
-        values: [BUILD, offset, limit],
-    })
-    return queryResult.rows.map(({ uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}` }))
+const getTotalItems = (parameters: ContributorListParameters) => async (client: ClientBase) => {
+    const query = getQueryBuilder(parameters, "total").build()
+    const queryResult = await client.query<{ total: string }>(query)
+    return parseInt(queryResult.rows[0].total, 10) || 0
 }
-// :TODO: /contributors/<uuid>?embed_latestImage=true
-const getItemLinksAndJSON = async (
-    client: ClientBase,
-    offset: number,
-    limit: number,
-    /*embed: ReadonlyArray<string & keyof ContributorEmbedded>,*/
-): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
-    const queryResult = await client.query<{ json: string; uuid: UUID }>({
-        text: "SELECT json,uuid FROM contributor WHERE build=$1::bigint ORDER BY sort_index OFFSET $2 LIMIT $3",
-        values: [BUILD, offset, limit],
-    })
-    return queryResult.rows.map(({ json, uuid }) => [{ href: `/contributors/${uuid}?build=${BUILD}` }, json])
-}
+const getItemLinks =
+    (parameters: ContributorListParameters) =>
+    async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
+        const queryBuilder = getQueryBuilder(parameters, "uuid")
+        queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
+        const queryResult = await client.query<{ uuid: UUID }>(queryBuilder.build())
+        return queryResult.rows.map(({ uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}` }))
+    }
+const getItemLinksAndJSON =
+    (parameters: ContributorListParameters) =>
+    async (
+        client: ClientBase,
+        offset: number,
+        limit: number,
+        // :TODO: embed_latestImage
+        // embeds: ReadonlyArray<string & keyof {}>,
+    ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
+        const queryBuilder = getQueryBuilder(parameters, "json")
+        queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
+        const queryResult = await client.query<{ json: string; uuid: UUID }>(queryBuilder.build())
+        return queryResult.rows.map(({ json, uuid }) => [{ href: `/contributors/${uuid}?build=${BUILD}` }, json])
+        // :TODO: embeds
+    }
 export const getContributors: Operation<GetContributorsParameters, GetContributorsService> = async (
     { accept, ...queryParameters },
     service,
@@ -60,9 +84,9 @@ export const getContributors: Operation<GetContributorsParameters, GetContributo
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
     return await getListResult({
-        getItemLinks,
-        getItemLinksAndJSON,
-        getTotalItems,
+        getItemLinks: getItemLinks(queryParameters),
+        getItemLinksAndJSON: getItemLinksAndJSON(queryParameters),
+        getTotalItems: getTotalItems(queryParameters),
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/contributors",
         service,

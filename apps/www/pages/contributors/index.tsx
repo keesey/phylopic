@@ -12,7 +12,7 @@ const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
         <PageHead
             title="PhyloPic: Contributors"
-            url="https://www.phylopic.org/contributors"
+            url={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors`}
             description="A list of everyone who has contributed free silhouette images to PhyloPic."
         />
         <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>

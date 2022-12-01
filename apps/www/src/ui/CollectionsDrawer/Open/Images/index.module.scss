@@ -1,0 +1,21 @@
+ @use "@phylopic/styles/colors.scss";
+
+ .main {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 1em;
+     justify-content: center;
+     max-height: 50vh;
+     overflow: auto;
+     padding: 1em 2em;
+
+     a {
+         color: colors.$glacier;
+         cursor: pointer;
+
+         &:hover {
+             color: colors.$dandelion;
+             transition: color 0.3s;
+         }
+     }
+ }

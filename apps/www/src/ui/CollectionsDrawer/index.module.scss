@@ -1,0 +1,31 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$ink;
+    border-bottom: 1px solid colors.$black;
+    border-top: 1px solid colors.$vellum;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    color: colors.$white;
+    overflow: clip;
+    text-align: center;
+}
+
+.toggle {
+    background-color: colors.$cerulean;
+    border-bottom: 2px solid colors.$wash;
+    color: colors.$foam;
+    display: block;
+    padding: 0.33em 1em;
+
+    &:hover {
+        background-color: colors.$aquatic;
+        color: colors.$white;
+        transition: all 0.3s;
+    }
+}
+
+.dragging {
+    filter: brightness(1.5);
+    transition: filter 0.3s;
+}

@@ -2,12 +2,12 @@ import { URL } from "@phylopic/utils"
 import { GetServerSideProps, NextPage } from "next"
 const Page: NextPage = () => null
 const URLS: readonly URL[] = [
-    "https://www.phylopic.org",
-    "https://www.phylopic.org/contributors",
-    "https://www.phylopic.org/images",
-    "https://www.phylopic.org/mailinglist",
-    "https://www.phylopic.org/nodes",
-    "https://www.phylopic.org/thanks",
+    `${process.env.NEXT_PUBLIC_WWW_URL}`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/contributors`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/images`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/nodes`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/thanks`,
 ]
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     const lastmod = new Date().toISOString()

@@ -1,11 +1,13 @@
 import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { AnchorLink, ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
-import { createSearch, extractPath, isUUIDv4, Query, UUID } from "@phylopic/utils"
+import { createSearch, extractPath, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
 import dynamic from "next/dynamic"
-import { FC, useMemo } from "react"
+import { FC, useContext, useMemo } from "react"
 import { unstable_serialize } from "swr"
+import CollectionsContext from "~/collections/context/CollectionsContext"
+import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import PageHead from "~/metadata/PageHead"
 import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
@@ -41,6 +43,9 @@ const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
     )
 }
 const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
+    const [, dispatch] = useContext(CollectionsContext)
+    const images = useCurrentCollectionImages()
+    const isInCollection = useMemo(() => images.some(i => i.uuid === image.uuid), [image.uuid, images])
     const nameLong = useNomenText(image._embedded.specificNode?.names[0])
     const nameShort = useNomenText(image._embedded.specificNode?.names[0], true)
     const licenseLong = useLicenseText(image._links.license.href)
@@ -72,7 +77,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 description={description}
                 socialImage={image._links["http://ogp.me/ns#image"]}
                 title={title}
-                url={`https://www.phylopic.org/images/${image.uuid}`}
+                url={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(image.uuid)}`}
             >
                 {image.attribution && <meta key="meta:author" name="author" content={image.attribution} />}
                 <link key="link:contributor" rel="contributor" href={image._links.contributor.href} />
@@ -99,18 +104,28 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                     ]}
                 />
                 <HeaderNav
-                    buttons={
+                    buttons={[
+                        isInCollection
+                            ? null
+                            : {
+                                  children: "Add to Collection ＋",
+                                  key: "collection",
+                                  onClick: () =>
+                                      dispatch({
+                                          type: "ADD_TO_CURRENT_COLLECTION",
+                                          payload: { type: "image", entity: image },
+                                      }),
+                                  type: "button" as const,
+                              },
                         lineageNodeHRef
-                            ? [
-                                  {
-                                      children: "View Lineage →",
-                                      key: "lineage",
-                                      href: extractPath(lineageNodeHRef) + "/lineage",
-                                      type: "anchor",
-                                  },
-                              ]
-                            : []
-                    }
+                            ? {
+                                  children: "View Lineage →",
+                                  key: "lineage",
+                                  href: extractPath(lineageNodeHRef) + "/lineage",
+                                  type: "anchor" as const,
+                              }
+                            : null,
+                    ].filter(isDefined)}
                     headerLevel={1}
                     header={
                         <>
@@ -167,7 +182,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 <section key="sponsor">
                     <p style={{ textAlign: "center" }}>
                         <em>
-                            This silhouette&apos;s inclusion in <SiteTitle /> has been sponsored by{" "}
+                            This silhouette&rsquo;s inclusion in <SiteTitle /> has been sponsored by{" "}
                             <strong>{image.sponsor}</strong>.
                         </em>
                     </p>
