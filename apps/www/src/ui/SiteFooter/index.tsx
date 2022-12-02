@@ -15,7 +15,7 @@ const SiteFooter: FC = () => (
     <footer className={styles.main}>
         <CollectionsDrawer />
         <ul className={styles.content}>
-            <li className={styles.item}>
+            <li className={clsx(styles.item, styles.optional)}>
                 Version 2.0 <abbr title="beta version">βɛτα</abbr>
             </li>
             <li className={styles.item}>

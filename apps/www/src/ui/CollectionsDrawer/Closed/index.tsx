@@ -11,7 +11,10 @@ const Closed: FC = () => {
     return (
         <div className={styles.main}>
             {collection.size === 0 ? (
-                <em>Drag and drop silhouette images here to start a collection.</em>
+                <em>
+                    Drag <span className={styles.optional2}>and drop </span>
+                    <span className={styles.optional}>silhouette </span>images here to start a collection.
+                </em>
             ) : (
                 <>
                     <strong>{name}</strong> ({collection.size} image{collection.size === 1 ? "" : "s"})

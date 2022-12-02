@@ -1,3 +1,15 @@
 .main {
     padding: 0.5em;
 }
+
+.optional {
+    @media screen and (max-width: 480px) {
+        display: none;
+    }
+}
+
+.optional2 {
+    @media screen and (max-width: 400px) {
+        display: none;
+    }
+}
