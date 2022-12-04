@@ -13,7 +13,6 @@ const Controls: FC<Props> = ({ uuid }) => {
     const key = `/api/images/_/${encodeURIComponent(uuid)}`
     const response = useSWR<Image & { uuid: UUID }>(key, fetchJSON)
     const { data, error } = response
-    // :TODO: confirm
     const deletor = useDeletor(key, response, [], "/images")
     useEffect(() => {
         if (error) {

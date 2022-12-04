@@ -12,15 +12,17 @@ const useDeletor = (
     const router = useRouter()
     const { mutate } = response
     return useCallback(() => {
-        const promise = axios.delete(key)
-        mutate(
-            promise.then(() => {}),
-            { optimisticData: undefined, revalidate: true, rollbackOnError: true },
-        )
-        for (const mutator of associatedMutators) {
-            mutator(undefined, { revalidate: true })
+        if (confirm("Are you sure you want to delete this image?")) {
+            const promise = axios.delete(key)
+            mutate(
+                promise.then(() => {}),
+                { optimisticData: undefined, revalidate: true, rollbackOnError: true },
+            )
+            for (const mutator of associatedMutators) {
+                mutator(undefined, { revalidate: true })
+            }
+            promise.then(() => router.push(route))
         }
-        promise.then(() => router.push(route))
     }, [associatedMutators, key, mutate, route, router])
 }
 export default useDeletor
