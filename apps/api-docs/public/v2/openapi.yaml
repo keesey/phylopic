@@ -12,7 +12,7 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.1.0
+  version: 2.2.0
 tags:
   - name: general
     description: General API information and status.
@@ -28,6 +28,8 @@ tags:
     description: Methods related to phylogenetic nodes.
   - name: search
     description: Searches for entities (images and nodes).
+  - name: tags
+    description: Methods related to tags.
   - name: uploads
     description: Methods related to file uploads.
 servers:
@@ -181,7 +183,7 @@ components:
       description: |
         Limits results to entries within a clade (as identified by its UUID).
 
-        Cannot be used alongside `filter_contributor`, `filter_name`, or `filter_node`.
+        Cannot be used alongside `filter_collection`, `filter_contributor`, `filter_name`, or `filter_node`.
       schema:
         example: "8f901db5-84c1-4dc0-93ba-2300eeddf4ab"
         format: uuid
@@ -193,7 +195,7 @@ components:
       description: |
         Limits results to entities within the specified collection.
 
-        Cannot be used alongside other `filter_*` parameters (except `filter_license_*` for images).
+        Cannot be used alongside `filter_clade`, `filter_contributor`, `filter_name`, or `filter_node`.
       schema:
         example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
         pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
@@ -205,7 +207,7 @@ components:
       description: |
         Limits results to entries contributed by a certain user (as identified by their UUID).
 
-        Cannot be used alongside `filter_clade`, `filter_name`, or `filter_node`.
+        Cannot be used alongside `filter_clade`, `filter_collection`, `filter_name`, or `filter_node`.
       schema:
         example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
         format: uuid
@@ -249,6 +251,8 @@ components:
       required: false
       description: |
         Limits results to entries matching a given name. The name should be normalized (all lower-case letters or hyphens, no diacritics, single spaces between words).
+
+        Cannot be used alongside `filter_clade`, `filter_collection`,`filter_contributor`, or `filter_node`.
       schema:
         example: "homo sapiens"
         pattern: "^([a-z-]+ )*[a-z-]+$"
@@ -260,10 +264,20 @@ components:
       description: |
         Limits results to entries matching a given name. The name should be normalized (all lower-case letters or hyphens, no diacritics, single spaces between words).
 
-        Cannot be used alongside `filter_clade`, `filter_contributor`, or `filter_name`.
+        Cannot be used alongside `filter_clade`, `filter_collection`,`filter_contributor`, or `filter_name`.
       schema:
         example: "8f901db5-84c1-4dc0-93ba-2300eeddf4ab"
         format: uuid
+        type: string
+    filter_tags:
+      name: filter_tags
+      in: query
+      required: false
+      description: |
+        Limits results to images associated with one or more tags, comma-separated.
+      schema:
+        example: "male,subadult"
+        format: "^[a-z0-9 -]{2,}(,[a-z0-9 -]{2,})*$"
         type: string
     namespace:
       name: namespace
@@ -523,6 +537,7 @@ components:
             - attribution
             - build
             - sponsor
+            - tags
           type: object
           properties:
             attribution:
@@ -533,6 +548,12 @@ components:
               type: string
               example: "Patron Name"
               nullable: true
+            tags:
+              type: array
+              items:
+                example: "juvenile"
+                format: "^[a-z0-9 -]{2,}$"
+                type: string
             _links:
               type: object
               required:
@@ -1216,6 +1237,7 @@ paths:
         - $ref: "#/components/parameters/filter_license_sa"
         - $ref: "#/components/parameters/filter_name"
         - $ref: "#/components/parameters/filter_node"
+        - $ref: "#/components/parameters/filter_tags"
         - $ref: "#/components/parameters/page"
       responses:
         "200":
@@ -1272,6 +1294,40 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
+  /imagetags:
+    get:
+      operationId: getImageTags
+      summary: Returns a list of all image tags.
+      tags:
+        - images
+        - tags
+      description:
+        Returns a list of all tags currently in use for images.
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/build"
+      responses:
+        "200":
+          description: List of tags.
+          headers:
+            Content-Type:
+              $ref: "#/components/headers/Content-Type"
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                type: array
+                items:
+                  example: "colony"
+                  format: "^[a-z0-0 -]{2,}$"
+                  type: string
+        "307":
+          $ref: "#/components/responses/307"
+        "400":
+          $ref: "#/components/responses/400"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
   /licenses:
     get:
       operationId: getLicenses
@@ -1301,8 +1357,6 @@ paths:
           $ref: "#/components/responses/307"
         "400":
           $ref: "#/components/responses/400"
-        "404":
-          $ref: "#/components/responses/404"
         "406":
           $ref: "#/components/responses/406"
         "410":
@@ -1416,6 +1470,41 @@ paths:
             application/vnd.phylopic.v2+json:
               schema:
                 $ref: "#/components/schemas/NodeWithEmbedded"
+        "307":
+          $ref: "#/components/responses/307"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
+  /nodes/{uuid}/imagetags:
+    get:
+      operationId: getNodeImageTags
+      summary: Returns a list of all image tags in use for this clade.
+      description: |
+        Returns a list of all tags associated with images associated with this node or any descendant of this node.
+      tags:
+        - images
+        - nodes
+        - tags
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/build"
+      responses:
+        "200":
+          description: List of tags.
+          headers:
+            Content-Type:
+              $ref: "#/components/headers/Content-Type"
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                type: array
+                items:
+                  type: string
         "307":
           $ref: "#/components/responses/307"
         "400":
