@@ -42,8 +42,8 @@ const getRasterLinks = async (uuid: UUID): Promise<readonly MediaLink<string, Ra
 const getSocialLink = async (uuid: UUID): Promise<MediaLink<string, RasterMediaType>> => {
     // :TODO: Check existence?
     return {
-        href: IMAGES_URL_BASE + uuid + "/social/1200x1200.png",
-        sizes: "1200x1200",
+        href: IMAGES_URL_BASE + uuid + "/social/1200x628.png",
+        sizes: "1200x628",
         type: "image/png",
     }
 }
