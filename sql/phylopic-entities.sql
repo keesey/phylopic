@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS public.image
     license_sa bit(1) NOT NULL,
     json text COLLATE pg_catalog."default" NOT NULL,
     depth bigint NOT NULL DEFAULT 0,
+    tags character varying[] COLLATE pg_catalog."default",
     CONSTRAINT image_id PRIMARY KEY (uuid, build),
     CONSTRAINT image_contributor_fkey FOREIGN KEY (contributor_uuid, build)
         REFERENCES public.contributor (uuid, build) MATCH SIMPLE
