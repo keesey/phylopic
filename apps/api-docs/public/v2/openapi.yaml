@@ -1315,11 +1315,20 @@ paths:
           content:
             application/vnd.phylopic.v2+json:
               schema:
-                type: array
-                items:
-                  example: "colony"
-                  format: "^[a-z0-0 -]{2,}$"
-                  type: string
+                type: object
+                required:
+                  - build
+                  - tags
+                properties:
+                  build:
+                    type: number
+                    format: integer
+                  tags:
+                    type: array
+                    items:
+                      example: "colony"
+                      format: "^[a-z0-0 -]{2,}$"
+                      type: string
         "307":
           $ref: "#/components/responses/307"
         "400":
