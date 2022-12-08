@@ -18,6 +18,7 @@ import getContributor from "../operations/getContributor"
 import getContributors from "../operations/getContributors"
 import getImage from "../operations/getImage"
 import getImages from "../operations/getImages"
+import getImageTags from "../operations/getImageTags"
 import getNamespaces from "../operations/getNamespaces"
 import getNode from "../operations/getNode"
 import getNodeLineage from "../operations/getNodeLineage"
@@ -128,6 +129,23 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                                 "embed_items" as const,
                                 ...IMAGE_EMBEDDED_PARAMETERS,
                             ]),
+                        },
+                        SERVICE,
+                    )
+                }
+                default: {
+                    throw create405()
+                }
+            }
+        }
+        case "/imagetags":
+        case "/imagetags/": {
+            switch (event.httpMethod) {
+                case "GET": {
+                    return getImageTags(
+                        {
+                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.queryStringParameters, ["build"]),
                         },
                         SERVICE,
                     )
