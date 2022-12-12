@@ -7,7 +7,6 @@ import logoFacebook from "../../../public/logos/facebook.svg"
 import logoMail from "../../../public/logos/mail.svg"
 import logoMastodon from "../../../public/logos/mastodon.svg"
 import logoPatreon from "../../../public/logos/patreon-white.svg"
-import logoTwitter from "../../../public/logos/twitter.svg"
 import styles from "./index.module.scss"
 const YEAR = new Date().getFullYear()
 const SiteFooter: FC = () => (
@@ -27,9 +26,6 @@ const SiteFooter: FC = () => (
                 </Link>
                 <a href="https://sauropods.win/@phylopic" rel="me" title="Follow PhyloPic on Mastodon.">
                     <Image src={logoMastodon} width={25} height={25} alt="Mastodon" />
-                </a>
-                <a href="https://www.twitter.com/phylopic" rel="me" title="Follow PhyloPic on Twitter.">
-                    <Image src={logoTwitter} width={28} height={28} alt="Twitter" />
                 </a>
                 <a href="https://www.facebook.com/phylopic" rel="me" title="Follow PhyloPic on Facebook.">
                     <Image src={logoFacebook} width={21} height={21} alt="Facebook" />

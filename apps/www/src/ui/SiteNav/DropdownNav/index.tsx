@@ -74,11 +74,6 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.twitter.com/phylopic" rel="me">
-                        Twitter
-                    </a>
-                </li>
-                <li>
                     <a href="https://www.facebook.com/phylopic" rel="me">
                         Facebook
                     </a>

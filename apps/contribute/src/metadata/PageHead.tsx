@@ -47,14 +47,6 @@ const PageHead: FC<Props> = ({
                 />
                 <meta key="meta:reply-to" name="reply-to" content="keesey+phylopic@gmail.com" />
                 <meta key="meta:robots" name="robots" content={`${index ? "" : "no"}index`} />
-                <meta key="meta:twitter:card" name="twitter:card" content="summary_large_image" />
-                <meta key="meta:twitter:creator" name="twitter:creator" content="@phylopic" />
-                <meta key="meta:twitter:description" name="twitter:description" content={description} />
-                <meta key="meta:twitter:image" name="twitter:image" content={socialImageHRef} />
-                <meta key="meta:twitter:image:alt" name="twitter:image:alt" content={title} />
-                <meta key="meta:twitter:image:height" name="twitter:image:height" content={socialImageHeight} />
-                <meta key="meta:twitter:image:width" name="twitter:image:width" content={socialImageWidth} />
-                <meta key="meta:twitter:title" name="twitter:title" content={title} />
                 <meta key="meta:viewport" name="viewport" content="width=device-width,initial-scale=1" />
                 <meta key="meta:og:description" property="og:description" content={description} />
                 <meta key="meta:og:image" property="og:image" content={socialImageHRef} />
