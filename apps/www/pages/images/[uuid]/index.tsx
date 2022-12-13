@@ -1,9 +1,10 @@
 import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
-import { AnchorLink, ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
+import { ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
 import { createSearch, extractPath, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import { FC, useContext, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import CollectionsContext from "~/collections/context/CollectionsContext"
@@ -151,12 +152,12 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             <td>
                                 <TimestampView value={image.created} /> by{" "}
                                 {image._embedded.contributor && (
-                                    <AnchorLink
+                                    <Link
                                         href={`/contributors/${encodeURIComponent(image._embedded.contributor.uuid)}`}
                                         rel="contributor"
                                     >
                                         {image._embedded.contributor.name || "Anonymous"}
-                                    </AnchorLink>
+                                    </Link>
                                 )}
                             </td>
                         </tr>
@@ -164,12 +165,12 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             <tr key="nodes">
                                 <th>Taxon</th>
                                 <td>
-                                    <AnchorLink
+                                    <Link
                                         href={`/nodes/${getCladeImagesUUID(image._embedded.specificNode)}`}
                                         rel="subject"
                                     >
                                         <NomenView value={image._embedded.specificNode.names[0]} />
-                                    </AnchorLink>
+                                    </Link>
                                 </td>
                             </tr>
                         )}

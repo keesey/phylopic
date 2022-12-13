@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from "clsx"
-import Image from "next/future/image"
+import Image from "next/image"
 import Link from "next/link"
 import { FC } from "react"
 import logoFacebook from "../../../public/logos/facebook.svg"
@@ -19,10 +19,8 @@ const SiteFooter: FC = () => (
                 <abbr title="Copyright">©</abbr> {YEAR} <a href="http://tmkeesey.net">T. Michael Keesey</a>
             </li>
             <li className={clsx(styles.item, styles.logos)}>
-                <Link href={`${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`}>
-                    <a className={styles.textIcon} title="Subscribe to the PhyloPic mailing list.">
-                        <Image src={logoMail} width={28} height={28} alt="Mailing List" />
-                    </a>
+                <Link className={styles.textIcon} href={`${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`} title="Subscribe to the PhyloPic mailing list.">
+                    <Image src={logoMail} width={28} height={28} alt="Mailing List" />
                 </Link>
                 <a href="https://sauropods.win/@phylopic" rel="me" title="Follow PhyloPic on Mastodon.">
                     <Image src={logoMastodon} width={25} height={25} alt="Mastodon" />

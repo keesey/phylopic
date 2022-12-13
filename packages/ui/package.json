@@ -9,12 +9,12 @@
     "description": "General user interface components for *PhyloPic*.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/react": "^18.0.12",
+        "@types/react": "^18.0.26",
         "eslint-config-phylopic": "*",
         "flux-standard-action": "^2.1.2",
-        "react-spinners": "^0.12.0",
-        "sharp": "^0.30.6",
-        "typescript": "^4.6.4"
+        "react-spinners": "^0.13.7",
+        "sharp": "^0.31.2",
+        "typescript": "^4.9.4"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -35,14 +35,14 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/ui",
     "peerDependencies": {
-        "axios": "^1.2.0",
+        "axios": "^1.2.1",
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
-        "clsx": "^1.1.1",
-        "next": "^12.3.0",
+        "clsx": "^1.2.1",
+        "next": "^13.0.6",
         "parse-nomen": "^2.1.2",
-        "react": "^18.1.0",
+        "react": "^18.2.0",
         "swr": "^1.3.0"
     },
     "publishConfig": {
@@ -56,9 +56,9 @@
         "@types/node": "*"
     },
     "scripts": {
-        "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils @phylopic/utils-api clsx next next/future/image next/link parse-nomen react swr",
+        "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils @phylopic/utils-api clsx next next/image next/link parse-nomen react swr",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils @phylopic/utils-api clsx next next/future/image next/link parse-nomen react swr",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils @phylopic/utils-api clsx next next/image next/link parse-nomen react swr",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix"
     },
     "sideEffects": false,

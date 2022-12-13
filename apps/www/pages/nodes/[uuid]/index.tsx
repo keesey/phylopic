@@ -1,12 +1,13 @@
+import { Node } from "@phylopic/api-models"
 import {
     ImageListParameters,
     ImageWithEmbedded,
     List,
     NodeParameters,
     NodeWithEmbedded,
-    PageWithEmbedded,
+    PageWithEmbedded
 } from "@phylopic/api-models"
-import { AnchorLink, Loader, NodeContainer, useNomenText } from "@phylopic/ui"
+import { Loader, NodeContainer, useNomenText } from "@phylopic/ui"
 import {
     createSearch,
     extractPath,
@@ -15,7 +16,7 @@ import {
     isUUIDv4,
     parseQueryString,
     Query,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
@@ -50,7 +51,7 @@ type Props = Omit<PageLayoutProps, "children"> & {
 const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => (
     <PageLayout {...pageLayoutProps}>
         <NodeContainer uuid={uuid} query={NODE_QUERY}>
-            {node => (node ? <Content node={node} /> : null)}
+            {(node: Node) => (node ? <Content node={node} /> : null)}
         </NodeContainer>
     </PageLayout>
 )
@@ -145,20 +146,20 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
                 <Fragment key="empty">
                     {node._links.lineage && (
                         <p>
-                            <AnchorLink href={lineagePath}>
+                            <Link href={lineagePath}>
                                 Look through the ancestors of{" "}
                                 <NomenView value={name} short defaultText="this taxonomic group" /> to find an
                                 approximation.
-                            </AnchorLink>
+                            </Link>
                         </p>
                     )}
                     <p>
                         Or,{" "}
-                        <AnchorLink href="/contribute">
+                        <Link href="/contribute">
                             be the first to contribute a silhouette of{" "}
                             <NomenView value={name} short defaultText="this taxon" />
                             <LicenseQualifier />!
-                        </AnchorLink>
+                        </Link>
                     </p>
                 </Fragment>
             )}

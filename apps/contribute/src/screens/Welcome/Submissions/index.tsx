@@ -1,6 +1,6 @@
 import { Submission } from "@phylopic/source-models"
-import { AnchorLink, Loader } from "@phylopic/ui"
-import { UUID } from "@phylopic/utils"
+import { Loader } from "@phylopic/ui"
+import Link from "next/link"
 import { FC } from "react"
 import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
@@ -35,12 +35,12 @@ const Submissions: FC = () => {
                 {typeof numImages === "number" && numImages > 0 && (
                     <p>
                         You also have{" "}
-                        <AnchorLink href="/images">
+                        <Link href="/images">
                             <strong>
                                 <NumberAsWords max={100} value={numImages} />
                             </strong>{" "}
                             accepted submission{numImages === 1 ? "" : "s"}
-                        </AnchorLink>
+                        </Link>
                         .
                     </p>
                 )}

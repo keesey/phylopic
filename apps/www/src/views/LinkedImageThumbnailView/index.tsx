@@ -14,7 +14,7 @@ const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
         event.dataTransfer.setData(DATA_MEDIA_TYPE, stringifyNormalized(value))
     }
     return (
-        <AnchorLink
+        <Link
             className={clsx(styles.main, !inverted && styles.standard, inverted && styles.inverted)}
             draggable
             href={extractPath(value._links.self.href)}
@@ -22,7 +22,7 @@ const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
             title={title}
         >
             <ImageThumbnailView value={value} />
-        </AnchorLink>
+        </Link>
     )
 }
 export default LinkedImageThumbnailView

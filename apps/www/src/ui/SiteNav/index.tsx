@@ -18,11 +18,11 @@ const SiteNav: FC = () => {
     }, [router])
     return (
         <nav className={styles.main}>
-            <AnchorLink key="title" className={styles.siteTitle} href="/">
+            <Link key="title" className={styles.siteTitle} href="/">
                 <h1>
                     <SiteTitle />
                 </h1>
-            </AnchorLink>
+            </Link>
             <SearchBar key="search" />
             <div key="menuButton" className={styles.menuButton}>
                 <button onClick={handleMenuButtonClick}>☰</button>

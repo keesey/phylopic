@@ -13,10 +13,7 @@ const NameTitleView: FC<Props> = ({ name, parent }) => (
         {parent?.uuid && parent?.value && (
             <>
                 <Link href={`/nodes/${parent.uuid}`}>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a>
-                        <NameView name={parent.value.names[0]} short />
-                    </a>
+                    <NameView name={parent.value.names[0]} short />
                 </Link>
                 {": "}
             </>

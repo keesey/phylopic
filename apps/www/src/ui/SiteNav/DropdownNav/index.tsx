@@ -11,9 +11,9 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <button onClick={onClose}>☰</button>
         </div>
         <div className={styles.siteLink}>
-            <AnchorLink href="/">
+            <Link href="/">
                 <SiteTitle />
-            </AnchorLink>{" "}
+            </Link>{" "}
             &mdash; free silhouette images of organisms
             <div className={styles.subheader}>
                 version 2.0 <abbr title="beta version">βɛτα</abbr>
@@ -23,15 +23,15 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <h2>Browse</h2>
             <ul>
                 <li>
-                    <AnchorLink href="/images">Image Gallery</AnchorLink>
+                    <Link href="/images">Image Gallery</Link>
                 </li>
                 <li>
-                    <AnchorLink href={`/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID!)}`}>
+                    <Link href={`/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID!)}`}>
                         All Life
-                    </AnchorLink>
+                    </Link>
                 </li>
                 <li>
-                    <AnchorLink href="/contributors">Contributors</AnchorLink>
+                    <Link href="/contributors">Contributors</Link>
                 </li>
             </ul>
         </section>
@@ -42,7 +42,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     <a href={process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/"}>Upload Images</a>
                 </li>
                 <li>
-                    <AnchorLink href="/donate">Make a Donation</AnchorLink>
+                    <Link href="/donate">Make a Donation</Link>
                 </li>
                 <li>
                     <a href="https://www.patreon.com/tmkeesey?fan_landing=true">Become a Patron</a>
@@ -66,7 +66,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     </a>
                 </li>
                 <li>
-                    <AnchorLink href="/mailinglist">Mailing List</AnchorLink>
+                    <Link href="/mailinglist">Mailing List</Link>
                 </li>
                 <li>
                     <a href="https://sauropods.win/@phylopic" rel="me">
@@ -97,15 +97,15 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
         <section>
             <ul>
                 <li>
-                    <AnchorLink
+                    <Link
                         href={`/contributors/${encodeURIComponent(process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID!)}`}
                         rel="author"
                     >
                         Contact the Creator
-                    </AnchorLink>
+                    </Link>
                 </li>
                 <li>
-                    <AnchorLink href="/thanks">Special Thanks</AnchorLink>
+                    <Link href="/thanks">Special Thanks</Link>
                 </li>
             </ul>
         </section>

@@ -1,8 +1,8 @@
 {
     "dependencies": {
-        "eslint-config-next": "^12.3.0",
+        "eslint-config-next": "^13.0.6",
         "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-react": "^7.31.8"
+        "eslint-plugin-react": "^7.31.11"
     },
     "license": "MIT",
     "main": "index.js",

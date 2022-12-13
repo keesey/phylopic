@@ -13,7 +13,7 @@ export interface Props {
 const IllustratedNodeView: FC<Props> = ({ caption, value, short }) => {
     const href = useMemo(() => extractPath(value._links.self.href), [value._links.self.href])
     return (
-        <AnchorLink href={href}>
+        <Link href={href}>
             <figure className={styles.figure}>
                 {value?._embedded?.primaryImage && (
                     <ImageThumbnailView
@@ -23,7 +23,7 @@ const IllustratedNodeView: FC<Props> = ({ caption, value, short }) => {
                 {!value?._embedded?.primaryImage && <EmptyImage />}
                 <figcaption>{caption || <NomenView value={value.names[0]} short={short} />}</figcaption>
             </figure>
-        </AnchorLink>
+        </Link>
     )
 }
 export default IllustratedNodeView

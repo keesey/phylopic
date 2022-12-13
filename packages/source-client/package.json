@@ -47,14 +47,14 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/source-client",
     "peerDependencies": {
-        "@aws-sdk/client-s3": "^3.82.0",
+        "@aws-sdk/client-s3": "^3.229.0",
         "@phylopic/source-models": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
         "jsonwebtoken": "^8.5.1",
-        "next": "^12.3.0",
-        "pg": "^8.7.3",
-        "uuid": "^8.3.2"
+        "next": "^13.0.6",
+        "pg": "^8.8.0",
+        "uuid": "^9.0.0"
     },
     "publishConfig": {
         "access": "public"

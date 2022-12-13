@@ -30,9 +30,9 @@ const LineageNodeView: FC<Props> = ({ value }) => {
             </PaginationContainer>
             <header className={styles.header} key="header">
                 {linked ? (
-                    <AnchorLink href={`/nodes/${value.uuid}`}>
+                    <Link href={`/nodes/${value.uuid}`}>
                         <NomenView value={value.names[0]} short key="name" />
-                    </AnchorLink>
+                    </Link>
                 ) : (
                     <NomenView value={value.names[0]} short key="name" />
                 )}
