@@ -131,6 +131,7 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
                 href: `/nodes/${encodeURIComponent(sourceImage.specific)}?build=${data.build}`,
             },
             thumbnailFiles,
+            // :TODO: Remove this line
             "twitter:image": socialFile,
             vectorFile,
         },
