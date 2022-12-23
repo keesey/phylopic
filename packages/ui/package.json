@@ -7,6 +7,11 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "description": "General user interface components for *PhyloPic*.",
+    "dependencies": {
+        "@phylopic/api-models": "*",
+        "@phylopic/utils": "*",
+        "@phylopic/utils-api": "*"
+    },
     "devDependencies": {
         "@phylopic/tsconfig": "*",
         "@types/react": "^18.0.12",
@@ -36,9 +41,6 @@
     "name": "@phylopic/ui",
     "peerDependencies": {
         "axios": "^1.2.0",
-        "@phylopic/api-models": "*",
-        "@phylopic/utils": "*",
-        "@phylopic/utils-api": "*",
         "clsx": "^1.1.1",
         "next": "^12.3.0",
         "parse-nomen": "^2.1.2",
