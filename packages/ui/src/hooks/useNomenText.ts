@@ -6,7 +6,11 @@ export const useNomenText = (name: Nomen = EMPTY, short = false, defaultText = "
         () =>
             (short
                 ? name.filter(
-                      part => part.class === "scientific" || part.class === "vernacular" || part.class === "operator",
+                      (part, index, array) =>
+                          part.class === "scientific" ||
+                          part.class === "vernacular" ||
+                          part.class === "operator" ||
+                          (part.class === "rank" && index < array.length - 1),
                   )
                 : name
             )
