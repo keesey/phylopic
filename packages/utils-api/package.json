@@ -16,7 +16,7 @@
         "@phylopic/utils": "*",
         "@phylopic/tsconfig": "*",
         "@types/react": "^18.0.12",
-        "axios": "^1.2.0",
+        "axios": "^1.2.2",
         "eslint-config-phylopic": "*",
         "react": "^18.1.0",
         "swr": "^1.3.0",
@@ -48,7 +48,7 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-api",
     "peerDependencies": {
-        "axios": "^1.2.0",
+        "axios": "^1.2.2",
         "react": "^18.1.0",
         "swr": "^1.3.0"
     },
