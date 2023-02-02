@@ -1,3 +1,3 @@
 # `@phylopic/utils-aws`
 
-> TODO: description
+Utility functions related to Amazon Web Services.

@@ -1,3 +1,3 @@
 # `@phylopic/utils-api`
 
-> TODO: description
+Utility functions, types, and components related to using the API.
