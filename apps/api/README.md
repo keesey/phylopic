@@ -1,6 +1,6 @@
 # _PhyloPic_ API Implementation
 
-This is the implementation of the API (Application Programming Interface) for [_PhyloPic_](https://beta/phylopic.org. The documentation for using this API is here: http://api-docs.phylopic.org
+This is the implementation of the API (Application Programming Interface) for [_PhyloPic_](https://www.phylopic.org. The documentation for using this API is here: http://api-docs.phylopic.org
 
 This implementation uses:
 
