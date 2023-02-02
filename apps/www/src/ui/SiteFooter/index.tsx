@@ -24,11 +24,7 @@ const SiteFooter: FC = () => (
                 </a>
             </li>
             <li className={clsx(styles.item, styles.logos)}>
-                <Link
-                    className={styles.textIcon}
-                    href="/mailinglist"
-                    title="Subscribe to the PhyloPic mailing list."
-                >
+                <Link className={styles.textIcon} href="/mailinglist" title="Subscribe to the PhyloPic mailing list.">
                     <Image src={logoMail} width={28} height={28} alt="Mailing List" />
                 </Link>
                 <a href="https://sauropods.win/@phylopic" title="Follow PhyloPic on Mastodon." rel="me">

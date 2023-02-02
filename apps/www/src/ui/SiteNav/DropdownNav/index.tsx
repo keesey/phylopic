@@ -26,9 +26,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     <Link href="/images">Image Gallery</Link>
                 </li>
                 <li>
-                    <Link href={`/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID!)}`}>
-                        All Life
-                    </Link>
+                    <Link href={`/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID!)}`}>All Life</Link>
                 </li>
                 <li>
                     <Link href="/contributors">Contributors</Link>

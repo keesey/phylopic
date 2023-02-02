@@ -67,10 +67,7 @@ const PageComponent: NextPage = () => (
                     <p>
                         For as little as $1 a month, you can see previews of new <SiteTitle /> functionality, as well as
                         updates on other projects by{" "}
-                        <Link
-                            href={`/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`}
-                            rel="author"
-                        >
+                        <Link href={`/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`} rel="author">
                             Mike Keesey
                         </Link>
                         , like the comic book series{" "}
