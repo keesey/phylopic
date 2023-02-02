@@ -14,7 +14,7 @@ const SiteFooter: FC = () => (
         <CollectionsDrawer />
         <ul className={styles.content}>
             <li className={clsx(styles.item, styles.optional)}>
-                Version 2.0 <abbr title="beta version">βɛτα</abbr>
+                Version 2.0
             </li>
             <li className={styles.item}>
                 <abbr title="Copyright">©</abbr> {YEAR}{" "}
