@@ -2,12 +2,12 @@ import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps } from "next"
+import type { SWRConfiguration } from "swr"
 import { unstable_serialize } from "swr"
-import { PublicConfiguration } from "swr/dist/types"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 export type Props = {
-    fallback: PublicConfiguration["fallback"]
+    fallback: NonNullable<SWRConfiguration["fallback"]>
 } & Pick<List, "build">
 const createListStaticPropsGetter =
     <TEntity>(endpoint: string, query?: Query): GetStaticProps<Props, Record<string, never>> =>

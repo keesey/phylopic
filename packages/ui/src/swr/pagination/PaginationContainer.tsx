@@ -6,7 +6,7 @@ import useSWR, { BareFetcher, SWRConfiguration } from "swr"
 import useSWRInfinite, { SWRInfiniteConfiguration, SWRInfiniteFetcher, SWRInfiniteKeyLoader } from "swr/infinite"
 import { InfiniteScroll } from "../../controls"
 import { createPageKeyGetter } from "./createPageKeyGetter"
-export type PaginationContainerProps<T = unknown> = {
+export type PaginationContainerProps<T> = {
     autoLoad?: boolean
     children: (value: readonly T[], total: number) => React.ReactNode
     endpoint: URL
@@ -33,7 +33,7 @@ const SWR_INFINITE_CONFIG = {
     ...SWR_CONFIG,
     revalidateFirstPage: false,
 }
-export const PaginationContainer: React.FC<PaginationContainerProps> = ({
+export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
     autoLoad,
     children,
     endpoint,

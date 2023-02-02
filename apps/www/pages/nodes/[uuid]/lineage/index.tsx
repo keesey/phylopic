@@ -23,7 +23,7 @@ type Props = Omit<PageLayoutProps, "children"> & {
 const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => (
     <PageLayout {...pageLayoutProps}>
         <NodeContainer uuid={uuid} query={NODE_QUERY}>
-            {(node: Node) => (node ? <Content node={node} /> : null)}
+            {node => (node ? <Content node={node} /> : null)}
         </NodeContainer>
     </PageLayout>
 )

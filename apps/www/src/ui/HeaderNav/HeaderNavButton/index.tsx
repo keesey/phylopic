@@ -1,8 +1,10 @@
 import clsx from "clsx"
 import Link, { LinkProps } from "next/link"
-import { FC, HTMLProps, useMemo } from "react"
+import { FC, HTMLProps, PropsWithChildren, useMemo } from "react"
 import styles from "./index.module.scss"
-export type Props = ({ type: "anchor" } & LinkProps) | ({ type: "button" } & HTMLProps<HTMLButtonElement>)
+export type Props =
+    | PropsWithChildren<{ className?: string; type: "anchor" } & LinkProps>
+    | ({ type: "button" } & HTMLProps<HTMLButtonElement>)
 const HeaderNavButton: FC<Props> = props => {
     const combinedClassName = useMemo(() => clsx([props.className, styles.main]), [props.className])
     if (props.type === "button") {
