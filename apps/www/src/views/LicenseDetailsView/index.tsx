@@ -1,6 +1,6 @@
 import { Image } from "@phylopic/api-models"
-import { AnchorLink } from "@phylopic/ui"
 import { extractPath, LicenseURL } from "@phylopic/utils"
+import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"
 import LicenseTextView from "../LicenseTextView"
 import styles from "./index.module.scss"

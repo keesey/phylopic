@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/api-models"
-import { AnchorLink } from "@phylopic/ui"
+import Link from "next/link"
 import { FC } from "react"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import NomenView from "~/views/NomenView"

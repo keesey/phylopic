@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
-import { AnchorLink } from "@phylopic/ui"
 import clsx from "clsx"
 import Image from "next/image"
+import Link from "next/link"
 import { FC } from "react"
 import logoFacebook from "../../../public/logos/facebook.svg"
 import logoMail from "../../../public/logos/mail.svg"

@@ -1,5 +1,5 @@
-import { AnchorLink } from "@phylopic/ui"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { FC, useCallback, useEffect, useState } from "react"
 import SearchBar from "../SearchBar"

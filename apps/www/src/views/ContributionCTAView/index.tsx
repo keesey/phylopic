@@ -1,4 +1,4 @@
-import { AnchorLink } from "@phylopic/ui"
+import Link from "next/link"
 import { FC } from "react"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"

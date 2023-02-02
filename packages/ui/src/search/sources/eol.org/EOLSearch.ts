@@ -17,7 +17,7 @@ interface EOLSearchResult {
     readonly link: URL
     readonly title: string
 }
-const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, string]> = async (url, query) => {
+const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, string]> = async ([url, query]) => {
     if (query.length < 2) {
         return [[], query]
     }

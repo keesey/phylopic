@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 import { Contributor } from "@phylopic/api-models"
-import { AnchorLink, PaginationContainer } from "@phylopic/ui"
+import { PaginationContainer } from "@phylopic/ui"
 import Image from "next/image"
+import Link from "next/link"
 import { FC, ReactNode } from "react"
 import logoIndiegogo from "../../../public/logos/indiegogo-cerulean.svg"
 import logoPatreon from "../../../public/logos/patreon-cerulean.svg"

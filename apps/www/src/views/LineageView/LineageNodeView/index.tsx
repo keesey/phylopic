@@ -1,6 +1,7 @@
 import { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
-import { AnchorLink, PaginationContainer } from "@phylopic/ui"
+import { PaginationContainer } from "@phylopic/ui"
 import { Query } from "@phylopic/utils"
+import Link from "next/link"
 import { FC, useMemo } from "react"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import ImageListView from "~/views/ImageListView"

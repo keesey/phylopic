@@ -20,6 +20,7 @@ import {
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
+import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
@@ -51,7 +52,7 @@ type Props = Omit<PageLayoutProps, "children"> & {
 const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => (
     <PageLayout {...pageLayoutProps}>
         <NodeContainer uuid={uuid} query={NODE_QUERY}>
-            {(node: Node) => (node ? <Content node={node} /> : null)}
+            {(node: NodeWithEmbedded | undefined) => (node ? <Content node={node} /> : null)}
         </NodeContainer>
     </PageLayout>
 )

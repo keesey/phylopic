@@ -1,7 +1,8 @@
 import { DATA_MEDIA_TYPE, ImageWithEmbedded } from "@phylopic/api-models"
-import { AnchorLink, ImageThumbnailView, useImageAlt } from "@phylopic/ui"
+import { ImageThumbnailView, useImageAlt } from "@phylopic/ui"
 import { extractPath, stringifyNormalized } from "@phylopic/utils"
 import clsx from "clsx"
+import Link from "next/link"
 import { DragEvent, FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {
