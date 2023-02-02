@@ -1,7 +1,7 @@
-import { AnchorLink } from "@phylopic/ui"
 import { Authority } from "@phylopic/utils"
 import { NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -22,9 +22,9 @@ const Page: NextPage = () => (
                             <ul>
                                 {(items as readonly Authority[]).map(authority => (
                                     <li key={authority}>
-                                        <AnchorLink href={`/externals/${encodeURIComponent(authority)}`}>
+                                        <Link href={`/externals/${encodeURIComponent(authority)}`}>
                                             <code>{authority}</code>
-                                        </AnchorLink>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

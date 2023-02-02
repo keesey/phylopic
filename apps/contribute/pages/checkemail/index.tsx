@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import type { GetServerSideProps, NextPage } from "next"
 import PageLayout from "~/pages/PageLayout"
 import CheckEmail from "~/screens/CheckEmail"

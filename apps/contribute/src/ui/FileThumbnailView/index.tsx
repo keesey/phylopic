@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import Image from "next/future/image"
+import Image from "next/image"
 import { FC, useCallback, useState } from "react"
 import styles from "./index.module.scss"
 export interface Props {

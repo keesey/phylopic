@@ -50,7 +50,7 @@ export const fetchData = async <T>(
         }
         return {
             data: response.data as T,
-            headers: new Headers(response.headers),
+            headers: new Headers(response.headers as HeadersInit),
             ok: true,
             status: response.status,
             statusText: response.statusText,
@@ -63,7 +63,7 @@ export const fetchData = async <T>(
                 code: "HTTPError",
                 details: data?.stack ?? undefined,
                 error: data?.errors,
-                headers: new Headers(e.response.headers),
+                headers: new Headers(e.response.headers as HeadersInit),
                 ok: false,
                 status: e.response.status,
                 statusText: e.response.statusText,

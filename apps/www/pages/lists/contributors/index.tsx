@@ -1,6 +1,7 @@
 import { Contributor } from "@phylopic/api-models"
-import { AnchorLink, CountView, NumberView, PaginationContainer } from "@phylopic/ui"
+import { CountView, NumberView, PaginationContainer } from "@phylopic/ui"
 import type { NextPage } from "next"
+import Link from "next/link"
 import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
@@ -11,18 +12,18 @@ type Props = Omit<PageLayoutProps, "children">
 const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
         <PageHead
-            title="PhyloPic: Contributor List"
-            url="https://www.phylopic.org/lists/contributors"
+            title="PhyloPic: Image Contributors"
+            url={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors`}
             description="A list of everyone who has contributed free silhouette images to PhyloPic."
         />
         <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>
-            {(contributors, totalContributors) => (
+            {(contributors: readonly Contributor[], totalContributors: number) => (
                 <>
                     <header>
                         <Breadcrumbs
-                            items={[{ children: "Home", href: "/" }, { children: <strong>Contributors</strong> }]}
+                            items={[{ children: "Home", href: "/" }, { children: <strong>Image Contributors</strong> }]}
                         />
-                        <h1>Contributors</h1>
+                        <h1>Image Contributors</h1>
                         <p>
                             <CountView value={totalContributors} /> people have contributed silhouette images to{" "}
                             <SiteTitle />.
@@ -31,9 +32,9 @@ const PageComponent: NextPage<Props> = props => (
                     <Board
                         items={(contributors as readonly Contributor[]).map(({ count, name, uuid }) => [
                             uuid,
-                            <AnchorLink key={`link:${uuid}`} href={`/contributors/${encodeURIComponent(uuid)}`}>
+                            <Link key={`link:${uuid}`} href={`/contributors/${encodeURIComponent(uuid)}`}>
                                 {name || "Anonymous"}
-                            </AnchorLink>,
+                            </Link>,
                             <NumberView key={`count:${uuid}`} value={count} />,
                         ])}
                     />

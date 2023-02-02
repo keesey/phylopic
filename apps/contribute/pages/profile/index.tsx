@@ -1,8 +1,10 @@
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
+import { Suspense } from "react"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
-const AccountProfile = dynamic(() => import("~/screens/AccountProfile"))
+import LoadingState from "~/screens/LoadingState"
+const AccountProfile = dynamic(() => import("~/screens/AccountProfile"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
         head={{
@@ -11,7 +13,9 @@ const Page: NextPage = () => (
         }}
     >
         <AuthorizedOnly>
-            <AccountProfile />
+            <Suspense fallback={<LoadingState>Loading your profile…</LoadingState>}>
+                <AccountProfile />
+            </Suspense>
         </AuthorizedOnly>
     </PageLayout>
 )

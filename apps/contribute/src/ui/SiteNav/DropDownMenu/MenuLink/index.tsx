@@ -1,5 +1,5 @@
-import { AnchorLink } from "@phylopic/ui"
 import clsx from "clsx"
+import Link from "next/link"
 import { FC, ReactNode } from "react"
 import styles from "./index.module.scss"
 export type Props = {
@@ -18,10 +18,10 @@ const MenuLink: FC<Props> = ({ disabled, href, icon, isExternal, label }) => {
                     <span className={styles.label}>{label}</span>
                 </a>
             ) : (
-                <AnchorLink className={styles.link} href={disabled ? "#" : href}>
+                <Link className={styles.link} href={disabled ? "#" : href}>
                     <span className={styles.icon}>{icon}</span>
                     <span className={styles.label}>{label}</span>
-                </AnchorLink>
+                </Link>
             )}
         </li>
     )

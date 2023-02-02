@@ -1,11 +1,13 @@
+import { Loader } from "@phylopic/ui"
 import { Hash } from "@phylopic/utils"
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import { FC, useCallback } from "react"
+import { FC, Suspense, useCallback } from "react"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
-const Uploader = dynamic(() => import("~/screens/Uploader"))
+import LoadingState from "~/screens/LoadingState"
+const Uploader = dynamic(() => import("~/screens/Uploader"), { ssr: false })
 const Page: NextPage = () => {
     return (
         <PageLayout
@@ -32,5 +34,9 @@ const Content: FC = () => {
         },
         [router],
     )
-    return <Uploader onCancel={cancel} onComplete={complete} />
+    return (
+        <Suspense fallback={<LoadingState>Let&rsquo;s go!</LoadingState>}>
+            <Uploader onCancel={cancel} onComplete={complete} />
+        </Suspense>
+    )
 }

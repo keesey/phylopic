@@ -6,20 +6,25 @@
     "bugs": {
         "url": "https://github.com/keesey/phylopic/issues"
     },
+    "dependencies": {
+        "@phylopic/source-models": "*",
+        "@phylopic/utils": "*",
+        "@phylopic/utils-aws": "*"
+    },
     "description": "Client for accessing the source data for *PhyloPic* (AWS S3 buckets).",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/chai": "^4.3.1",
-        "@types/mocha": "^9.1.1",
-        "@types/uuid": "^8.3.4",
-        "chai": "^4.3.6",
-        "eslint": "^8.15.0",
+        "@types/chai": "^4.3.4",
+        "@types/mocha": "^10.0.1",
+        "@types/uuid": "^9.0.0",
+        "chai": "^4.3.7",
+        "eslint": "^8.33.0",
         "eslint-config-phylopic": "*",
-        "mocha": "^10.0.0",
-        "prettier": "^2.5.1",
-        "ts-node": "^10.8.0",
-        "tsup": "^5.10.1",
-        "typescript": "^4.6.4",
+        "mocha": "^10.2.0",
+        "prettier": "^2.8.3",
+        "ts-node": "^10.9.1",
+        "tsup": "^6.5.0",
+        "typescript": "^4.9.5",
         "yarn": "^1.22.19"
     },
     "exports": {
@@ -47,14 +52,11 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/source-client",
     "peerDependencies": {
-        "@aws-sdk/client-s3": "^3.82.0",
-        "@phylopic/source-models": "*",
-        "@phylopic/utils": "*",
-        "@phylopic/utils-aws": "*",
-        "jsonwebtoken": "^8.5.1",
-        "next": "^12.3.0",
-        "pg": "^8.7.3",
-        "uuid": "^8.3.2"
+        "@aws-sdk/client-s3": "^3.262.0",
+        "jsonwebtoken": "^9.0.0",
+        "next": "^13.1.6",
+        "pg": "^8.9.0",
+        "uuid": "^9.0.0"
     },
     "publishConfig": {
         "access": "public"
@@ -70,8 +72,7 @@
         "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3 @phylopic/source-models @phylopic/utils @phylopic/utils-aws jsonwebtoken next pg uuid",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3 @phylopic/source-models @phylopic/utils @phylopic/utils-aws jsonwebtoken next pg uuid",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix",
-        "test": "mocha"
+        "lint": "TIMING=1 eslint src/**/*.ts* --fix"
     },
     "types": "./dist/index.d.ts",
     "version": "0.0.0"

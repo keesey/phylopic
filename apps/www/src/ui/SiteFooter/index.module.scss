@@ -1,36 +1,48 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/bullet.scss";
+
 .main {
-    background-color: colors.$deep;
     bottom: 0;
-    color: colors.$white;
     left: 0;
-    gap: 1em;
-    padding: 1em;
     position: fixed;
     right: 0;
+}
+
+.content {
+    align-items: center;
+    background-color: colors.$deep;
+    color: colors.$white;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em;
+    justify-content: center;
+
     a {
         color: inherit;
+
         &:hover,
         &:active {
             opacity: 0.5;
         }
     }
-    ul {
-        align-items: center;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
 }
+
 .item {
     @include bullet.item(colors.$black);
+
     &::after {
         color: colors.$white;
     }
 }
+
 .logos {
     align-items: center;
     display: flex;
     gap: 0.75rem;
+}
+
+.optional {
+    @media screen and (max-width: 430px) {
+        display: none;
+    }
 }

@@ -6,11 +6,11 @@ import {
     PageWithEmbedded,
     QueryMatches,
 } from "@phylopic/api-models"
-import { createSearch, Query } from "@phylopic/utils"
 import { getMatchingText } from "@phylopic/ui"
+import { createSearch, Query } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
-import { PublicConfiguration } from "swr/dist/types"
+import type { SWRConfiguration } from "swr"
 import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -20,7 +20,7 @@ const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
         <PageHead
             title="Search for Silhouette Images on PhyloPic"
-            url="https://www.phylopic.org/search"
+            url={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
             description="Search for free silhouette images of animals, plants, and other life forms."
         />
         <header>
@@ -45,7 +45,7 @@ const getInitialText = (q?: string | string[]) => {
 }
 export const getServerSideProps: GetServerSideProps<Props, { q?: string | string[] }> = async context => {
     const initialText = getInitialText(context.query.q)
-    const fallback: PublicConfiguration["fallback"] = {}
+    const fallback: SWRConfiguration["fallback"] = {}
     let build: number | undefined
     const endpoint = process.env.NEXT_PUBLIC_API_URL + "/"
     const response = await fetchResult<API>(endpoint)

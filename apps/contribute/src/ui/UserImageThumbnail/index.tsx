@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { ImageWithEmbedded } from "@phylopic/api-models"
 import { Node } from "@phylopic/source-models"
 import { ImageThumbnailView } from "@phylopic/ui"

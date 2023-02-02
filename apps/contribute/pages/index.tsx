@@ -1,5 +1,7 @@
+import { Loader } from "@phylopic/ui"
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
+import { Suspense } from "react"
 import PageLayout from "~/pages/PageLayout"
 const Home = dynamic(() => import("~/pages/Home"), { ssr: false })
 const Page: NextPage = () => (
@@ -11,7 +13,9 @@ const Page: NextPage = () => (
             url: process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/",
         }}
     >
-        <Home />
+        <Suspense fallback={<Loader />}>
+            <Home />
+        </Suspense>
     </PageLayout>
 )
 export default Page

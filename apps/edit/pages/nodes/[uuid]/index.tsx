@@ -1,9 +1,10 @@
 import { Entity, External, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
-import { AnchorLink, fetchJSON, Loader } from "@phylopic/ui"
+import { fetchJSON, Loader } from "@phylopic/ui"
 import { Authority, getIdentifier, isUUIDv4, Namespace, ObjectID, stringifyNomen, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { FC, useCallback, useMemo, useState } from "react"
 import useSWR, { SWRConfig } from "swr"
 import NodeEditor from "~/editors/NodeEditor"
@@ -107,9 +108,9 @@ const Content: FC<Props> = ({ uuid }) => {
                                     <BubbleList>
                                         {(children as ReadonlyArray<Node & { uuid: UUID }>).map(child => (
                                             <BubbleItem key={child.uuid}>
-                                                <AnchorLink href={`/nodes/${encodeURIComponent(child.uuid)}`}>
+                                                <Link href={`/nodes/${encodeURIComponent(child.uuid)}`}>
                                                     <NameView name={child.names[0]} short />
-                                                </AnchorLink>
+                                                </Link>
                                             </BubbleItem>
                                         ))}
                                     </BubbleList>

@@ -14,11 +14,13 @@ html {
 body {
     background-color: colors.$vellum;
     min-height: 100vh;
-    padding-bottom: 8rem;
+    min-width: 250px;
+    padding-bottom: 16rem;
 }
 
 a {
     color: colors.$cerulean;
+
     &:hover {
         color: colors.$glacier;
     }

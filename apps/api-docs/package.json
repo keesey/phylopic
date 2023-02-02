@@ -29,7 +29,7 @@
     "scripts": {
         "deploy": "aws s3 sync --acl public-read --delete ./public s3://api-docs.phylopic.org",
         "predeploy": "yarn test",
-        "test": "swagger-cli validate ./public/2.0/openapi.yaml"
+        "test": "swagger-cli validate ./public/v2/openapi.yaml"
     },
     "version": "2.0.0-rc.1"
 }

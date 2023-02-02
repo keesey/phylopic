@@ -1,8 +1,9 @@
 import { Contributor, Image, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
-import { AnchorLink, fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { FC } from "react"
 import useSWR, { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
@@ -25,9 +26,9 @@ const Page: NextPage = () => {
                             <ul>
                                 {(items as ReadonlyArray<Image & { uuid: UUID }>).map(image => (
                                     <li key={image.uuid}>
-                                        <AnchorLink href={`/images/${encodeURIComponent(image.uuid)}`}>
+                                        <Link href={`/images/${encodeURIComponent(image.uuid)}`}>
                                             <ImageView image={image} />
-                                        </AnchorLink>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

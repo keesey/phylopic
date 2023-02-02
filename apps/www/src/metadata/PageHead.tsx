@@ -11,7 +11,7 @@ export interface Props {
     url: string
 }
 const DEFAULT_SOCIAL_IMAGE: MediaLink = {
-    href: "/social/1200x1200.png",
+    href: process.env.NEXT_PUBLIC_WWW_URL + "/social/1200x1200.png",
     sizes: "1200x1200",
     type: "image/png",
 }
@@ -59,14 +59,6 @@ const PageHead: FC<Props> = ({
                     content="#f7fffb"
                     media="(prefers-color-scheme: dark)"
                 />
-                <meta key="meta:twitter:card" name="twitter:card" content="summary_large_image" />
-                <meta key="meta:twitter:creator" name="twitter:creator" content="@phylopic" />
-                <meta key="meta:twitter:description" name="twitter:description" content={description} />
-                <meta key="meta:twitter:image" name="twitter:image" content={socialImageHRef} />
-                <meta key="meta:twitter:image:alt" name="twitter:image:alt" content={title} />
-                <meta key="meta:twitter:image:height" name="twitter:image:height" content={socialImageHeight} />
-                <meta key="meta:twitter:image:width" name="twitter:image:width" content={socialImageWidth} />
-                <meta key="meta:twitter:title" name="twitter:title" content={title} />
                 <meta key="meta:viewport" name="viewport" content="width=device-width,initial-scale=1" />
                 <meta key="meta:og:description" property="og:description" content={description} />
                 <meta key="meta:og:image" property="og:image" content={socialImageHRef} />

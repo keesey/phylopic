@@ -1,7 +1,7 @@
-import { AnchorLink } from "@phylopic/ui"
 import { Authority, isAuthority, Namespace } from "@phylopic/utils"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -33,7 +33,7 @@ const Page: NextPage<Props> = ({ authority }) => (
                             <ul>
                                 {(items as readonly Namespace[]).map(namespace => (
                                     <li key={namespace}>
-                                        <AnchorLink
+                                        <Link
                                             href={`/externals/${encodeURIComponent(authority)}/${encodeURIComponent(
                                                 namespace,
                                             )}`}
@@ -41,7 +41,7 @@ const Page: NextPage<Props> = ({ authority }) => (
                                             <code>
                                                 {authority}/{namespace}
                                             </code>
-                                        </AnchorLink>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

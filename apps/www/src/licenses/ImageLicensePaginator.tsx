@@ -14,12 +14,6 @@ const ImageLicensePaginator: FC<Props> = props => {
         }),
         [licenseFilter, props.query],
     )
-    return (
-        <PaginationContainer
-            {...(props as PaginationContainerProps)}
-            endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
-            query={query}
-        />
-    )
+    return <PaginationContainer {...props} endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"} query={query} />
 }
 export default ImageLicensePaginator

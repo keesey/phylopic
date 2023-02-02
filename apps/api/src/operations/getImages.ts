@@ -74,6 +74,11 @@ SELECT ${selection} FROM node_name
 `,
             [parameters.filter_name, BUILD],
         )
+    } else if (parameters.filter_collection) {
+        builder.add(
+            `SELECT ${selection} FROM collection LEFT JOIN image ON image."uuid"=ANY(collection.uuids) WHERE collection.uuid=$::uuid AND image.build=$::bigint`,
+            [parameters.filter_collection, BUILD],
+        )
     } else {
         builder.add(`SELECT ${selection} FROM image WHERE build=$::bigint`, [BUILD])
     }

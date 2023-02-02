@@ -7,7 +7,7 @@ export type QueryFetcher<T extends Readonly<{ build: number }>> = Fetcher<QueryF
 export const useQueryFetcher = <T extends Readonly<{ build: number }>>(): QueryFetcher<T> => {
     const apiFetcher = useAPIFetcher<T>()
     return useCallback<QueryFetcher<T>>(
-        async (endpoint, basis) => {
+        async ([endpoint, basis]) => {
             const apiResult = await apiFetcher(endpoint)
             return [apiResult, basis] as QueryFetcherResult<T>
         },

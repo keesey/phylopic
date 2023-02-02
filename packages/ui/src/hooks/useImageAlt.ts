@@ -9,13 +9,13 @@ export const useImageAlt = (image: Image | ImageWithEmbedded) => {
         () =>
             [
                 specificName ?? "Image",
-                "by",
-                image.attribution ?? "Anonymous",
+                image.attribution ? `by ${image.attribution}` : null,
                 image.sponsor ? `, sponsored by ${image.sponsor}` : null,
                 `(${license})`,
             ]
                 .filter(Boolean)
-                .join(" "),
+                .join(" ")
+                .replace(/\s,/, ","),
         [license, specificName, image],
     )
 }

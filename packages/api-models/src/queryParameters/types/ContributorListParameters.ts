@@ -1,2 +1,5 @@
+import { UUID } from "@phylopic/utils"
 import { ListParameters } from "./ListParameters"
-export type ContributorListParameters = ListParameters<Record<string, never>>
+export interface ContributorListParameters extends ListParameters<{}> {
+    filter_collection?: UUID
+}

@@ -1,5 +1,5 @@
 import { Image, ImageWithEmbedded } from "@phylopic/api-models"
-import NextImage from "next/future/image"
+import NextImage from "next/image"
 import React from "react"
 import useImageAlt from "../../hooks/useImageAlt"
 import useImageLoader from "../../hooks/useImageLoader"

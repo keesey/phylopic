@@ -1,8 +1,9 @@
 import { Entity, Node } from "@phylopic/source-models"
-import { AnchorLink, fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { FC, useCallback, useState } from "react"
 import useSWR from "swr"
@@ -41,9 +42,9 @@ const Page: NextPage = () => {
                             <ul>
                                 {(items as ReadonlyArray<Node & { uuid: UUID }>).map(node => (
                                     <li key={node.uuid}>
-                                        <AnchorLink href={`/nodes/${encodeURIComponent(node.uuid)}`}>
+                                        <Link href={`/nodes/${encodeURIComponent(node.uuid)}`}>
                                             <NodeView node={node} />
-                                        </AnchorLink>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

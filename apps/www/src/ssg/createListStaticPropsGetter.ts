@@ -2,15 +2,15 @@ import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps } from "next"
+import type { SWRConfiguration } from "swr"
 import { unstable_serialize } from "swr"
-import { PublicConfiguration } from "swr/dist/types"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 export type Props = {
-    fallback: PublicConfiguration["fallback"]
+    fallback: NonNullable<SWRConfiguration["fallback"]>
 } & Pick<List, "build">
 const createListStaticPropsGetter =
-    <TEntity>(endpoint: string, entityEmbedsQuery?: Query): GetStaticProps<Props, Record<string, never>> =>
+    <TEntity>(endpoint: string, query?: Query): GetStaticProps<Props, Record<string, never>> =>
     async () => {
         const listKey = process.env.NEXT_PUBLIC_API_URL + endpoint
         const listResponse = await fetchResult<List>(listKey)
@@ -28,7 +28,7 @@ const createListStaticPropsGetter =
             const getPageKey = (page: number) =>
                 listKey +
                 createSearch({
-                    ...entityEmbedsQuery,
+                    ...query,
                     build,
                     embed_items: true,
                     page,

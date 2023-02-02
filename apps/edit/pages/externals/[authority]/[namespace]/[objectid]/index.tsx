@@ -1,9 +1,10 @@
 import { Entity, External, Node } from "@phylopic/source-models"
-import { AnchorLink, fetchJSON, Loader } from "@phylopic/ui"
+import { fetchJSON, Loader } from "@phylopic/ui"
 import { Authority, isAuthority, isNamespace, isObjectID, Namespace, ObjectID, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { FC, useCallback, useState } from "react"
 import useSWR, { SWRConfig } from "swr"
@@ -118,9 +119,9 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
         <section>
             <p>
                 <strong>{external.title}</strong> &rarr;{" "}
-                <AnchorLink href={`/nodes/${encodeURIComponent(node.uuid)}`}>
+                <Link href={`/nodes/${encodeURIComponent(node.uuid)}`}>
                     <NameView name={node.names[0]} />
-                </AnchorLink>
+                </Link>
             </p>
             <BubbleList>
                 <BubbleItem light>

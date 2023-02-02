@@ -54,7 +54,10 @@ const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): Ph
         throw new Error("Phylogeny has no root!")
     }
     if (sourceVertices.size > 1) {
-        throw new Error("Phylogeny has multiple roots!")
+        throw new Error(
+            "Phylogeny has multiple roots! UUIDs: " +
+                [...sourceVertices].map(vertex => verticesToNodeUUIDs.get(vertex) ?? "null").join(", "),
+        )
     }
     if (!sourceVertices.has(rootVertex)) {
         throw new Error("Something weird happened looking for the root!")

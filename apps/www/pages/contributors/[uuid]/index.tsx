@@ -44,7 +44,7 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
                         description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
                         socialImage={(images[0] as ImageWithEmbedded)?._links["http://ogp.me/ns#image"] ?? null}
                         title={`PhyloPic: Silhouette Images Contributed by ${name}`}
-                        url={`https://www.phylopic.org/contributors/${contributor.uuid}`}
+                        url={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributor.uuid)}`}
                     >
                         <PersonSchemaScript contributor={contributor} />
                     </PageHead>

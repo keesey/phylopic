@@ -3,10 +3,12 @@ import { fetchJSON } from "@phylopic/ui"
 import { Hash, isHash } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
+import { Suspense } from "react"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
+import LoadingState from "~/screens/LoadingState"
 import SourceClient from "~/source/SourceClient"
-const Assignment = dynamic(() => import("~/screens/Assignment"))
+const Assignment = dynamic(() => import("~/screens/Assignment"), { ssr: false })
 type Props = {
     build: number
     hash: Hash
@@ -21,7 +23,9 @@ const Page: NextPage<Props> = ({ build, hash }) => (
         submissionHash={hash}
     >
         <AuthorizedOnly>
-            <Assignment hash={hash} />
+            <Suspense fallback={<LoadingState>One moment…</LoadingState>}>
+                <Assignment hash={hash} />
+            </Suspense>
         </AuthorizedOnly>
     </PageLayout>
 )

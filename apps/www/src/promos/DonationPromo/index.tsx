@@ -1,5 +1,5 @@
-import { AnchorLink } from "@phylopic/ui"
 import clsx from "clsx"
+import Link from "next/link"
 import { FC, useEffect, useState } from "react"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
@@ -16,8 +16,7 @@ const DonationPromo: FC = () => {
     return (
         <aside className={clsx([styles.main, styles[variant]])}>
             <p>
-                Hey, do you like <SiteTitle />? <AnchorLink href="/donate">Make a donation</AnchorLink> to keep it
-                going!
+                Hey, do you like <SiteTitle />? <Link href="/donate">Make a donation</Link> to keep it going!
             </p>
             <p>
                 Or, <a href="https://www.patreon.com/tmkeesey?fan_landing=true">become a patron</a> to see previews of

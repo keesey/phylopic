@@ -1,5 +1,5 @@
-import { AnchorLink } from "@phylopic/ui"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { FC, useCallback, useEffect, useState } from "react"
 import SearchBar from "../SearchBar"
@@ -18,11 +18,11 @@ const SiteNav: FC = () => {
     }, [router])
     return (
         <nav className={styles.main}>
-            <AnchorLink key="title" className={styles.siteTitle} href="/">
+            <Link key="title" className={styles.siteTitle} href="/">
                 <h1>
                     <SiteTitle />
                 </h1>
-            </AnchorLink>
+            </Link>
             <SearchBar key="search" />
             <div key="menuButton" className={styles.menuButton}>
                 <button onClick={handleMenuButtonClick}>☰</button>

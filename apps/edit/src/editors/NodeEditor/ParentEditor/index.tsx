@@ -1,6 +1,7 @@
 import { Entity, Node } from "@phylopic/source-models"
-import { AnchorLink, fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/ui"
 import { stringifyNomen, UUID } from "@phylopic/utils"
+import Link from "next/link"
 import { FC, useCallback, useMemo, useState } from "react"
 import useSWR from "swr"
 import Paginator from "~/pagination/Paginator"
@@ -37,7 +38,7 @@ const ParentEditor: FC<Props> = ({ uuid }) => {
                 setSelecting(false)
             }
         },
-        [data?.parent],
+        [data?.parent, patcher],
     )
     if (!data) {
         return null
@@ -92,9 +93,9 @@ const LineageEditor: FC<{
         <BubbleList>
             {nodesToShow.map((node, index) => (
                 <BubbleNode key={node.uuid} light={index > 0}>
-                    <AnchorLink href={`/nodes/${node.uuid}`}>
+                    <Link href={`/nodes/${node.uuid}`}>
                         <NameView name={node.names[0]} short={index > 0} />
-                    </AnchorLink>
+                    </Link>
                     {index === 0 && (
                         <button title="Change Parent Node" onClick={onSelectNew}>
                             ✎

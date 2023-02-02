@@ -15,8 +15,11 @@ export const NomenView: React.FC<NomenViewProps> = ({ classes, defaultText = "",
             value
                 ? short
                     ? value.filter(
-                          part =>
-                              part.class === "scientific" || part.class === "vernacular" || part.class === "operator",
+                          (part, index, array) =>
+                              part.class === "scientific" ||
+                              part.class === "vernacular" ||
+                              part.class === "operator" ||
+                              (part.class === "rank" && index < array.length - 1),
                       )
                     : value
                 : [],

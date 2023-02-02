@@ -1,12 +1,16 @@
 @use "@phylopic/styles/colors.scss";
+
 .main {
     max-width: calc(100vw - 2rem);
-    width: 11in;
+    margin: 0 auto;
     text-align: center;
+    width: 11in;
+
     @media (max-width: 1295px) {
         order: 2;
     }
-    > input {
+
+    >input {
         background-color: colors.$vellum;
         border-radius: 1rem;
         border: none;
@@ -14,11 +18,13 @@
         font-size: large;
         width: 100%;
         padding: 0.5rem;
+
         &::placeholder {
             color: colors.$wash;
         }
     }
 }
+
 .focused {
     background-color: colors.$white;
     color: colors.$black;

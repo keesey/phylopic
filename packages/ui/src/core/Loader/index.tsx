@@ -5,7 +5,7 @@ export const Loader: React.FC = () => {
     const props = React.useContext(LoaderContext)
     return (
         <div style={{ margin: "1rem", textAlign: "center" }}>
-            <PropagateLoader color="#000" css="" loading size={15} speedMultiplier={1} {...props} />
+            <PropagateLoader color="#000" loading size={15} speedMultiplier={1} {...props} />
         </div>
     )
 }

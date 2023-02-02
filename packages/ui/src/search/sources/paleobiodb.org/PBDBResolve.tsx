@@ -30,7 +30,7 @@ const fetchDirect: Fetcher<NodeWithEmbedded, string> = async url => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url)
     return response.data
 }
-const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = async (url, objectIDs) => {
+const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = async ([url, objectIDs]) => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url, {
         data: objectIDs,
         method: "POST",

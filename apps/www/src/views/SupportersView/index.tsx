@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 import { Contributor } from "@phylopic/api-models"
-import { AnchorLink, PaginationContainer } from "@phylopic/ui"
-import Image from "next/future/image"
+import { PaginationContainer } from "@phylopic/ui"
+import Image from "next/image"
+import Link from "next/link"
 import { FC, ReactNode } from "react"
 import logoIndiegogo from "../../../public/logos/indiegogo-cerulean.svg"
 import logoPatreon from "../../../public/logos/patreon-cerulean.svg"
@@ -60,7 +60,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
             </section>
             <section id="contributors">
                 <h3>
-                    <AnchorLink href="/contributors">All contributors of silhouettes</AnchorLink>
+                    <Link href="/contributors">All contributors of silhouettes</Link>
                 </h3>
                 {showContributors && (
                     <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>
@@ -68,9 +68,9 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                             <ul className={styles.list}>
                                 {(items as readonly Contributor[]).map(item => (
                                     <li key={item.uuid}>
-                                        <AnchorLink href={`/contributors/${encodeURIComponent(item.uuid)}`}>
+                                        <Link href={`/contributors/${encodeURIComponent(item.uuid)}`}>
                                             {item.name || "Anonymous"}
-                                        </AnchorLink>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

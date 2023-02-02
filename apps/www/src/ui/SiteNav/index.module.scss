@@ -4,6 +4,7 @@
 .main {
     align-items: center;
     background-color: colors.$deep;
+    border-bottom: 1px solid colors.$vellum;
     color: colors.$white;
     display: flex;
     flex-wrap: wrap;

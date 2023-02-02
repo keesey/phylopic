@@ -9,7 +9,7 @@ import SUPPORTERS from "~/views/SupportersView/SUPPORTERS"
 const NAMES = SUPPORTERS.reduce<readonly ReactNode[]>((prev, supporters) => [...prev, ...supporters.names], [])
 const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
-        <PageHead title="Special Thanks from PhyloPic" url="https://www.phylopic.org/thanks" />
+        <PageHead title="Special Thanks from PhyloPic" url={`${process.env.NEXT_PUBLIC_WWW_URL}/thanks`} />
         <header>
             <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Special Thanks</strong> }]} />
             <h1>Special Thanks</h1>

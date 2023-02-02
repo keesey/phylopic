@@ -11,6 +11,20 @@ CREATE DATABASE "phylopic-entities"
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 
+-- DROP TABLE IF EXISTS public.collection;
+
+CREATE TABLE IF NOT EXISTS public.collection
+(
+    uuid uuid NOT NULL,
+    uuids uuid[] NOT NULL,
+    CONSTRAINT collection_pkey PRIMARY KEY (uuid)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.collection
+    OWNER to master;
+    
 -- Table: public.contributor
 
 -- DROP TABLE IF EXISTS public.contributor;

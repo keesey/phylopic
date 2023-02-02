@@ -8,7 +8,7 @@ export type Props = {
 }
 const PersonSchemaScript: FC<Props> = ({ contributor }) => {
     const object = useMemo<WithContext<Person>>(() => {
-        const url = `https://www.phylopic.org/contributors/${contributor.uuid}`
+        const url = `${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributor.uuid)}`
         return {
             "@context": "https://schema.org",
             "@type": "Person",

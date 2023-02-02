@@ -1,11 +1,14 @@
 import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
-import { AnchorLink, ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
-import { createSearch, extractPath, isUUIDv4, Query, UUID } from "@phylopic/utils"
+import { ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
+import { createSearch, extractPath, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
 import dynamic from "next/dynamic"
-import { FC, useMemo } from "react"
+import Link from "next/link"
+import { FC, useContext, useMemo } from "react"
 import { unstable_serialize } from "swr"
+import CollectionsContext from "~/collections/context/CollectionsContext"
+import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import PageHead from "~/metadata/PageHead"
 import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
@@ -41,17 +44,22 @@ const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
     )
 }
 const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
+    const [, dispatch] = useContext(CollectionsContext)
+    const images = useCurrentCollectionImages()
+    const isInCollection = useMemo(() => images.some(i => i.uuid === image.uuid), [image.uuid, images])
     const nameLong = useNomenText(image._embedded.specificNode?.names[0])
     const nameShort = useNomenText(image._embedded.specificNode?.names[0], true)
     const licenseLong = useLicenseText(image._links.license.href)
     const licenseShort = useLicenseText(image._links.license.href, true)
     const title = useMemo(
-        () => `PhyloPic: ${nameShort} by ${image.attribution ?? "Anonymous"} (${licenseShort})`,
+        () => `PhyloPic: ${nameShort}${image.attribution ? ` by ${image.attribution}` : ""} (${licenseShort})`,
         [image.attribution, licenseShort, nameShort],
     )
     const description = useMemo(
         () =>
-            `A free silhouette image of ${nameLong} by ${image.attribution ?? "Anonymous"} (License: ${licenseLong}).`,
+            `A free silhouette image of ${nameLong}${
+                image.attribution ? ` by ${image.attribution}` : ""
+            } (License: ${licenseLong}).`,
         [image.attribution, licenseLong, nameLong],
     )
     const lineageNodeHRef = useMemo(() => {
@@ -70,9 +78,9 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 description={description}
                 socialImage={image._links["http://ogp.me/ns#image"]}
                 title={title}
-                url={`https://www.phylopic.org/images/${image.uuid}`}
+                url={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(image.uuid)}`}
             >
-                <meta key="meta:author" name="author" content={image.attribution ?? "Anonymous"} />
+                {image.attribution && <meta key="meta:author" name="author" content={image.attribution} />}
                 <link key="link:contributor" rel="contributor" href={image._links.contributor.href} />
                 <link key="link:license" rel="license" href={image._links.license.href} />
                 <VisualArtworkSchemaScript image={image} />
@@ -90,26 +98,35 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                         short
                                         defaultText="Silhouette"
                                     />
-                                    {" by "}
-                                    {image.attribution ?? "Anonymous"}
+                                    {image.attribution && ` by ${image.attribution}`}
                                 </strong>
                             ),
                         },
                     ]}
                 />
                 <HeaderNav
-                    buttons={
+                    buttons={[
+                        isInCollection
+                            ? null
+                            : {
+                                  children: "Add to Collection ＋",
+                                  key: "collection",
+                                  onClick: () =>
+                                      dispatch({
+                                          type: "ADD_TO_CURRENT_COLLECTION",
+                                          payload: { type: "image", entity: image },
+                                      }),
+                                  type: "button" as const,
+                              },
                         lineageNodeHRef
-                            ? [
-                                  {
-                                      children: "View Lineage →",
-                                      key: "lineage",
-                                      href: extractPath(lineageNodeHRef) + "/lineage",
-                                      type: "anchor",
-                                  },
-                              ]
-                            : []
-                    }
+                            ? {
+                                  children: "View Lineage →",
+                                  key: "lineage",
+                                  href: extractPath(lineageNodeHRef) + "/lineage",
+                                  type: "anchor" as const,
+                              }
+                            : null,
+                    ].filter(isDefined)}
                     headerLevel={1}
                     header={
                         <>
@@ -118,8 +135,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                 short
                                 defaultText="Silhouette"
                             />
-                            {" by "}
-                            {image.attribution ?? "Anonymous"}
+                            {image.attribution && ` by ${image.attribution}`}
                         </>
                     }
                 />
@@ -136,12 +152,12 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             <td>
                                 <TimestampView value={image.created} /> by{" "}
                                 {image._embedded.contributor && (
-                                    <AnchorLink
+                                    <Link
                                         href={`/contributors/${encodeURIComponent(image._embedded.contributor.uuid)}`}
                                         rel="contributor"
                                     >
                                         {image._embedded.contributor.name || "Anonymous"}
-                                    </AnchorLink>
+                                    </Link>
                                 )}
                             </td>
                         </tr>
@@ -149,12 +165,12 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             <tr key="nodes">
                                 <th>Taxon</th>
                                 <td>
-                                    <AnchorLink
+                                    <Link
                                         href={`/nodes/${getCladeImagesUUID(image._embedded.specificNode)}`}
                                         rel="subject"
                                     >
                                         <NomenView value={image._embedded.specificNode.names[0]} />
-                                    </AnchorLink>
+                                    </Link>
                                 </td>
                             </tr>
                         )}
@@ -167,7 +183,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 <section key="sponsor">
                     <p style={{ textAlign: "center" }}>
                         <em>
-                            This silhouette&apos;s inclusion in <SiteTitle /> has been sponsored by{" "}
+                            This silhouette&rsquo;s inclusion in <SiteTitle /> has been sponsored by{" "}
                             <strong>{image.sponsor}</strong>.
                         </em>
                     </p>

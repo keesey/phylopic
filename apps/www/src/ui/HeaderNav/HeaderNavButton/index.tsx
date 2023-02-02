@@ -1,8 +1,10 @@
-import { AnchorLink, AnchorLinkProps } from "@phylopic/ui"
 import clsx from "clsx"
-import { FC, HTMLProps, useMemo } from "react"
+import Link, { LinkProps } from "next/link"
+import { FC, HTMLProps, PropsWithChildren, useMemo } from "react"
 import styles from "./index.module.scss"
-export type Props = ({ type: "anchor" } & AnchorLinkProps) | ({ type: "button" } & HTMLProps<HTMLButtonElement>)
+export type Props =
+    | PropsWithChildren<{ className?: string; type: "anchor" } & LinkProps>
+    | ({ type: "button" } & HTMLProps<HTMLButtonElement>)
 const HeaderNavButton: FC<Props> = props => {
     const combinedClassName = useMemo(() => clsx([props.className, styles.main]), [props.className])
     if (props.type === "button") {
@@ -15,9 +17,9 @@ const HeaderNavButton: FC<Props> = props => {
     } else {
         const { children, className: _className, type: _type, ...otherProps } = props
         return (
-            <AnchorLink className={combinedClassName} {...otherProps}>
+            <Link className={combinedClassName} {...otherProps}>
                 {children}
-            </AnchorLink>
+            </Link>
         )
     }
 }

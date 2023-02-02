@@ -1,8 +1,9 @@
 import { List, NodeParameters, NodeWithEmbedded, Page } from "@phylopic/api-models"
-import { AnchorLink, NodeContainer, PaginationContainer, useNomenText } from "@phylopic/ui"
+import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
+import Link from "next/link"
 import { FC, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
@@ -40,7 +41,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                 description={`Illustrated evolutionary lineage of ${nameString}.`}
                 socialImage={node._embedded?.primaryImage?._links["http://ogp.me/ns#image"]}
                 title={`PhyloPic: Lineage of ${shortNameStrong}`}
-                url={`https://www.phylopic.org/nodes/${node.uuid}/lineage`}
+                url={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}/lineage`}
             />
             <header>
                 <ExpandableLineageBreadcrumbs
@@ -48,9 +49,9 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                     afterItems={[
                         {
                             children: (
-                                <AnchorLink href={`/nodes/` + node.uuid}>
+                                <Link href={`/nodes/` + node.uuid}>
                                     <NomenView value={name} defaultText="[Unnamed Group]" />
-                                </AnchorLink>
+                                </Link>
                             ),
                         },
                         {

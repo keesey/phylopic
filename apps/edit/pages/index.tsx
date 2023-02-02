@@ -1,4 +1,3 @@
-import { AnchorLink } from "@phylopic/ui"
 import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
@@ -20,19 +19,19 @@ const Home: NextPage = () => (
             <nav>
                 <ul>
                     <li>
-                        <AnchorLink href="images">Images</AnchorLink>
+                        <Link href="images">Images</Link>
                     </li>
                     <li>
-                        <AnchorLink href="nodes">Nodes</AnchorLink>
+                        <Link href="nodes">Nodes</Link>
                     </li>
                     <li>
-                        <AnchorLink href="phylogeny">Phylogeny</AnchorLink>
+                        <Link href="phylogeny">Phylogeny</Link>
                     </li>
                     <li>
-                        <AnchorLink href="submissions">Submissions</AnchorLink>
+                        <Link href="submissions">Submissions</Link>
                     </li>
                     <li>
-                        <AnchorLink href="externals">External Authorities</AnchorLink>
+                        <Link href="externals">External Authorities</Link>
                     </li>
                 </ul>
             </nav>

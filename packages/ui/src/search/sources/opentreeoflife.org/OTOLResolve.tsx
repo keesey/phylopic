@@ -16,7 +16,7 @@ interface OTOLTaxonInfo {
     // Abridged.
     readonly lineage?: readonly OTOLLineageItem[]
 }
-const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async (url, ott_id, include_lineage) => {
+const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async ([url, ott_id, include_lineage]) => {
     const response = await fetchDataAndCheck<OTOLTaxonInfo>(url, {
         data: { include_lineage, ott_id },
         headers: { "content-type": "application/json" },
@@ -24,13 +24,14 @@ const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async (u
     })
     return response.data
 }
-const fetchDirect: Fetcher<NodeWithEmbedded, [string]> = async url => {
+const fetchDirect: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url)
     return response.data
 }
-const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = async (url, objectIDs) => {
+const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = async ([url, objectIDs]) => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url, {
         data: objectIDs,
+        headers: { "content-type": "application/json" },
         method: "POST",
     })
     return response.data
