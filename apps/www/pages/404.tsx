@@ -1,6 +1,6 @@
-import { AnchorLink } from "@phylopic/ui"
 import { NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 const Page: NextPage = () => (
@@ -25,7 +25,7 @@ const Page: NextPage = () => (
                 <em>Incertae Sedis</em>
             </h1>
             <p>
-                The page you requested cannot be found. Please try the <AnchorLink href="/">Home Page</AnchorLink>.
+                The page you requested cannot be found. Please try the <Link href="/">Home Page</Link>.
             </p>
             <p>
                 If you believe this is a bug, please{" "}

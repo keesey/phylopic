@@ -1,7 +1,7 @@
 import { Submission } from "@phylopic/source-models"
 import { fetchJSON } from "@phylopic/ui"
 import { Hash, isImageMediaType } from "@phylopic/utils"
-import NextImage from "next/future/image"
+import NextImage from "next/image"
 import { FC, useMemo } from "react"
 import useSWR from "swr"
 import fetchObjectURLAndType from "~/fetchers/fetchObjectURLAndType"

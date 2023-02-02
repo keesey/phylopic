@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { FC, useCallback, useState } from "react"
 import styles from "./index.module.scss"
-import Image from "next/future/image"
+import Image from "next/image"
 export type Props = {
     index: 1 | 2 | 3 | 4 | 5
 }

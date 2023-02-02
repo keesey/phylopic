@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import clsx from "clsx"
+import Image from "next/image"
 import { FC } from "react"
 import styles from "./index.module.scss"
 export type Props = {
@@ -11,7 +11,7 @@ export type Props = {
 const ImageBox: FC<Props> = ({ alt, mode, onClick, source }) => {
     return (
         <a onClick={onClick} role="button" className={clsx(styles.main, styles[mode])} title={alt}>
-            <img alt={alt} src={source} />
+            <Image alt={alt} src={source} />
         </a>
     )
 }

@@ -1,10 +1,9 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
-import { AnchorLink, ImageThumbnailView } from "@phylopic/ui"
+import { ImageThumbnailView } from "@phylopic/ui"
 import { URL } from "@phylopic/utils"
+import Link from "next/link"
 import { FC } from "react"
-import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import CollectionLicense from "~/licenses/ImageCollectionUsage/CollectionLicense"
-import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import LicenseView from "~/views/LicenseView"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
@@ -40,14 +39,14 @@ const ImagesView: FC<Props> = ({ url, value }) => {
                     {value.map(image => (
                         <tr key={image.uuid}>
                             <td>
-                                <AnchorLink href={`/images/${encodeURIComponent(image.uuid)}`}>
+                                <Link href={`/images/${encodeURIComponent(image.uuid)}`}>
                                     <ImageThumbnailView value={image} />
-                                </AnchorLink>
+                                </Link>
                             </td>
                             <td>
-                                <AnchorLink href={image._links.specificNode.href}>
+                                <Link href={image._links.specificNode.href}>
                                     <NomenView value={image._embedded.specificNode?.names[0]} short />
-                                </AnchorLink>
+                                </Link>
                             </td>
                             <td>{image.attribution || "—"}</td>
                             <td>

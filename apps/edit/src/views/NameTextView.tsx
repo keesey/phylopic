@@ -7,7 +7,13 @@ export interface Props {
 }
 const NameTextView: FC<Props> = ({ name, short }) => {
     const parts = short
-        ? name.filter(part => part.class !== "citation" && part.class !== "comment" && part.class !== "rank")
+        ? name.filter(
+              (part, index, array) =>
+                  part.class === "scientific" ||
+                  part.class === "vernacular" ||
+                  part.class === "operator" ||
+                  (part.class === "rank" && index < array.length - 1),
+          )
         : name
     return (
         <>

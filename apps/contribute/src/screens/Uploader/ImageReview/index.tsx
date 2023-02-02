@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { isImageMediaType } from "@phylopic/utils"
 import clsx from "clsx"
 import { FC, useCallback, useMemo } from "react"

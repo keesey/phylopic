@@ -567,7 +567,6 @@ components:
                 - sourceFile
                 - specificNode
                 - thumbnailFiles
-                - twitter:image
                 - vectorFile
               properties:
                 contributor:
@@ -610,10 +609,6 @@ components:
                   description: A list of links to raster thumbnail image files (PNG format) of various square sizes.
                   items:
                     $ref: "#/components/schemas/MediaLink"
-                "twitter:image":
-                  allOf:
-                    - $ref: "#/components/schemas/MediaLink"
-                    - description: A link to an image for use with Twitter (PNG format).
                 vectorFile:
                   allOf:
                     - $ref: "#/components/schemas/MediaLink"

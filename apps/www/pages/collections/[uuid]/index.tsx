@@ -1,9 +1,10 @@
 import { Contributor, ImageParameters, List, Node } from "@phylopic/api-models"
-import { AnchorLink, Loader, PaginationContainer } from "@phylopic/ui"
+import { Loader, PaginationContainer } from "@phylopic/ui"
 import { createSearch, EMPTY_UUID, isUUIDish, Query, UUIDish } from "@phylopic/utils"
 import { addBuildToURL } from "@phylopic/utils-api"
 import axios from "axios"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import Link from "next/link"
 import { unstable_serialize } from "swr"
 import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
@@ -76,13 +77,13 @@ const PageComponent: NextPage<Props> = ({ has, uuid, ...props }) => {
                         endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
                         query={{ filter_collection: uuid }}
                     >
-                        {contributors => (
+                        {(contributors: readonly Contributor[]) => (
                             <BulletList>
-                                {(contributors as readonly Contributor[]).map(contributor => (
+                                {contributors.map(contributor => (
                                     <li key={contributor.uuid}>
-                                        <AnchorLink href={`/contributors/${encodeURIComponent(contributor.uuid)}`}>
+                                        <Link href={`/contributors/${encodeURIComponent(contributor.uuid)}`}>
                                             {contributor.name}
-                                        </AnchorLink>
+                                        </Link>
                                     </li>
                                 ))}
                             </BulletList>
@@ -123,9 +124,9 @@ const PageComponent: NextPage<Props> = ({ has, uuid, ...props }) => {
                             <BulletList>
                                 {(nodes as readonly Node[]).map(node => (
                                     <li key={node.uuid}>
-                                        <AnchorLink href={`/nodes/${encodeURIComponent(node.uuid)}`}>
+                                        <Link href={`/nodes/${encodeURIComponent(node.uuid)}`}>
                                             <NomenView value={node.names[0]} short />
-                                        </AnchorLink>
+                                        </Link>
                                     </li>
                                 ))}
                             </BulletList>

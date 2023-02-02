@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import { Authority } from "@phylopic/utils"
+import Image from "next/image"
 import { FC } from "react"
 import styles from "./index.module.scss"
 export type Props = {
@@ -7,13 +7,13 @@ export type Props = {
 }
 const AuthorityIcon: FC<Props> = ({ authority }) => {
     if (authority === "eol.org") {
-        return <img alt="Encyclopedia of Life" src="/logos/eol.svg" className={styles.main} />
+        return <Image alt="Encyclopedia of Life" src="/logos/eol.svg" unoptimized className={styles.main} />
     }
     if (authority === "opentreeoflife.org") {
-        return <img alt="Open Tree of Life" src="/logos/otol.svg" className={styles.main} />
+        return <Image alt="Open Tree of Life" src="/logos/otol.svg" unoptimized className={styles.main} />
     }
     if (authority === "paleobiodb.org") {
-        return <img alt="Paleobiology Database" src="/logos/paleobiodb.svg" className={styles.main} />
+        return <Image alt="Paleobiology Database" src="/logos/paleobiodb.svg" unoptimized className={styles.main} />
     }
     return null
 }

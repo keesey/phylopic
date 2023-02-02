@@ -1,8 +1,8 @@
 import { External } from "@phylopic/source-models"
-import { AnchorLink } from "@phylopic/ui"
 import { Authority, isAuthority, isNamespace, Namespace, ObjectID } from "@phylopic/utils"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -47,13 +47,13 @@ const Page: NextPage<Props> = ({ authority, namespace }) => (
                             <ul>
                                 {(items as ReadonlyArray<External & { objectID: ObjectID }>).map(external => (
                                     <li key={external.objectID}>
-                                        <AnchorLink
+                                        <Link
                                             href={`/externals/${encodeURIComponent(authority)}/${encodeURIComponent(
                                                 namespace,
                                             )}/${encodeURIComponent(external.objectID)}`}
                                         >
                                             {external.title} <code>[{external.objectID}]</code>
-                                        </AnchorLink>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

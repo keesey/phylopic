@@ -1,7 +1,7 @@
 import { MediaLink } from "@phylopic/api-models"
 import { createSearch, RasterMediaType, URL } from "@phylopic/utils"
 import { BuildContext } from "@phylopic/utils-api"
-import type { ImageLoader } from "next/future/image"
+import type { ImageLoader } from "next/image"
 import { useCallback, useContext, useMemo } from "react"
 const findBestSize = (links: readonly MediaLink<URL, RasterMediaType>[], width: number) => {
     const linksByWidth = links

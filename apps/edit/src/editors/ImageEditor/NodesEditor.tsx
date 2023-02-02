@@ -1,6 +1,7 @@
 import { Entity, Image, Node } from "@phylopic/source-models"
-import { AnchorLink, fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
+import Link from "next/link"
 import { FC, useCallback, useMemo, useState } from "react"
 import useSWR from "swr"
 import Paginator from "~/pagination/Paginator"
@@ -64,12 +65,12 @@ const LineageEditor: FC<{
             <BubbleList>
                 {nodesToShow.map((node, index) => (
                     <BubbleNode key={node.uuid} light={index >= lastIndex}>
-                        <AnchorLink href={`/nodes/${node.uuid}`}>
+                        <Link href={`/nodes/${node.uuid}`}>
                             <NameView
                                 name={node.names[0]}
                                 short={node.uuid !== image.specific && node.uuid !== image.general}
                             />
-                        </AnchorLink>
+                        </Link>
                         {node.uuid === image.specific && (
                             <button onClick={() => setModalOpen(true)} title="Change Specific Node">
                                 ✎

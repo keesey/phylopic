@@ -1,4 +1,4 @@
-import Image from "next/future/image"
+import Image from "next/image"
 import { FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {

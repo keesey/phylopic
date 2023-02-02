@@ -1,4 +1,3 @@
-import { AnchorLink, ImageThumbnailView } from "@phylopic/ui"
 import { FC, useContext } from "react"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
@@ -21,6 +20,7 @@ const Images: FC = () => {
                         <a
                             onClick={() => dispatch({ type: "REMOVE_FROM_CURRENT_COLLECTION", payload: image.uuid })}
                             title="Remove"
+                            role="button"
                         >
                             ✖
                         </a>

@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/api-models"
-import { AnchorLink } from "@phylopic/ui"
+import Link from "next/link"
 import { FC } from "react"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import NomenView from "~/views/NomenView"
@@ -13,9 +13,9 @@ const NodeListViewItems: FC<Props> = ({ short, value }) => {
         <>
             {value.map(node => (
                 <li key={node.uuid} className={styles.item}>
-                    <AnchorLink href={`/nodes/${getCladeImagesUUID(node)}`}>
+                    <Link href={`/nodes/${getCladeImagesUUID(node)}`}>
                         <NomenView value={node.names[0]} short={short} />
-                    </AnchorLink>
+                    </Link>
                 </li>
             ))}
         </>

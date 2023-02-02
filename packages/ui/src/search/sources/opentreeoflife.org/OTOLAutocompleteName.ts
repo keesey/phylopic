@@ -10,7 +10,7 @@ interface OTOLAutocompleteName {
     readonly ott_id: number
     readonly unique_name: string
 }
-const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [string, string]> = async (url, name) => {
+const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [string, string]> = async ([url, name]) => {
     if (name.length < 2) {
         return [[], name]
     }

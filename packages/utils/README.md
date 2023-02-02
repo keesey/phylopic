@@ -1,3 +1,3 @@
 # `@phylopic/utils`
 
-> TODO: description
+General utility functions and types.

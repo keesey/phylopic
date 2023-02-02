@@ -1,5 +1,5 @@
-import { AnchorLink } from "@phylopic/ui"
 import type { NextPage } from "next"
+import Link from "next/link"
 import PageHead from "~/metadata/PageHead"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -44,10 +44,8 @@ const PageComponent: NextPage = () => (
                 <p>
                     For as little as $1 a month, you can see previews of new <SiteTitle /> functionality, as well as
                     updates on other projects by{" "}
-                    <AnchorLink href={`/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`}>
-                        Mike Keesey
-                    </AnchorLink>
-                    , like the comic book series{" "}
+                    <Link href={`/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`}>Mike Keesey</Link>,
+                    like the comic book series{" "}
                     <a href="https://www.keesey-comics.com/paleocene" rel="external">
                         <cite>Paleocene</cite>
                     </a>
@@ -103,7 +101,7 @@ const PageComponent: NextPage = () => (
                     Come on, you want to donate <em>something</em> don’t you? Right?
                 </p>
                 <p>
-                    <AnchorLink href="/donate">Go back!</AnchorLink>
+                    <Link href="/donate">Go back!</Link>
                 </p>
             </section>
         </InlineSections>

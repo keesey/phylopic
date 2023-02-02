@@ -1,6 +1,6 @@
 import { Image } from "@phylopic/api-models"
-import { AnchorLink } from "@phylopic/ui"
 import { extractPath, LicenseURL } from "@phylopic/utils"
+import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"
 import LicenseTextView from "../LicenseTextView"
 import styles from "./index.module.scss"
@@ -57,9 +57,9 @@ const LicenseDetailsView: FC<Props> = ({ value }) => {
                 {nc && (
                     <li key="nc">
                         You may not use the material for commercial purposes. (But you may{" "}
-                        <AnchorLink href={extractPath(value._links.contributor.href)} rel="author">
+                        <Link href={extractPath(value._links.contributor.href)} rel="author">
                             contact the contributor
-                        </AnchorLink>{" "}
+                        </Link>{" "}
                         to request a waiver.)
                     </li>
                 )}

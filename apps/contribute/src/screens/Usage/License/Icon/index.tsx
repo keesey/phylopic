@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image"
 import { FC } from "react"
 import styles from "./index.module.scss"
 export type Props = {
@@ -6,6 +6,6 @@ export type Props = {
     src: string
 }
 const Icon: FC<Props> = ({ alt, src }) => {
-    return <img alt={alt} src={src} className={styles.main} />
+    return <Image alt={alt} src={src} className={styles.main} unoptimized />
 }
 export default Icon

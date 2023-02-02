@@ -1,6 +1,7 @@
 import { Contributor, INCOMPLETE_STRING, Submission } from "@phylopic/source-models"
-import { AnchorLink, fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/ui"
 import { Hash, UUID } from "@phylopic/utils"
+import Link from "next/link"
 import { FC } from "react"
 import useSWR from "swr"
 export type Props = {
@@ -19,9 +20,9 @@ const ContributorViewer: FC<Props> = ({ hash }) => {
         return <>&hellip;</>
     }
     return (
-        <AnchorLink href={`/contributors/${encodeURIComponent(submission.contributor)}`}>
+        <Link href={`/contributors/${encodeURIComponent(submission.contributor)}`}>
             {contributor ? contributor.name : INCOMPLETE_STRING}
-        </AnchorLink>
+        </Link>
     )
 }
 export default ContributorViewer
