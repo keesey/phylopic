@@ -13,9 +13,7 @@ const SiteFooter: FC = () => (
     <footer className={styles.main}>
         <CollectionsDrawer />
         <ul className={styles.content}>
-            <li className={clsx(styles.item, styles.optional)}>
-                Version 2.0
-            </li>
+            <li className={clsx(styles.item, styles.optional)}>Version 2.0</li>
             <li className={styles.item}>
                 <abbr title="Copyright">©</abbr> {YEAR}{" "}
                 <a href="http://tmkeesey.net" rel="author">

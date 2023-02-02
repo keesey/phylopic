@@ -11,9 +11,7 @@ const YEAR = new Date().getFullYear()
 const SiteFooter: FC = () => (
     <nav className={styles.main}>
         <ul>
-            <li className={styles.item}>
-                Version 2.0
-            </li>
+            <li className={styles.item}>Version 2.0</li>
             <li className={styles.item}>
                 <abbr title="Copyright">©</abbr> {YEAR} <a href="http://tmkeesey.net">T. Michael Keesey</a>
             </li>
