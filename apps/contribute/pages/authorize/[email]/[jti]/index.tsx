@@ -15,11 +15,9 @@ export interface Props {
 }
 const Page: NextPage<Props> = ({ email, jti }) => (
     <PageLayout
-        head={{
+        seo={{
+            noindex: true,
             title: "PhyloPic: Authorization",
-            url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/authorize/${encodeURIComponent(email)}/${encodeURIComponent(
-                jti,
-            )}`,
         }}
     >
         <Content email={email} jti={jti} />

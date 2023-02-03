@@ -6,11 +6,9 @@ import PageLayout from "~/pages/PageLayout"
 const Home = dynamic(() => import("~/pages/Home"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
-        head={{
+        seo={{
+            canonical: process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/",
             description: "Upload your own images to PhyloPic, the open database of freely reusable silhouettes.",
-            index: true,
-            title: "PhyloPic: Contribute",
-            url: process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/",
         }}
     >
         <Suspense fallback={<Loader />}>

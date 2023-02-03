@@ -1,10 +1,10 @@
 import { ImageListParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { Loader } from "@phylopic/ui"
 import type { NextPage } from "next"
+import { NextSeo } from "next-seo"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
-import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -14,10 +14,10 @@ type Props = Omit<PageLayoutProps, "children">
 const PageComponent: NextPage<Props> = props => {
     return (
         <PageLayout {...props}>
-            <PageHead
-                title="PhyloPic: Silhouette Images"
-                url={`${process.env.NEXT_PUBLIC_WWW_URL}/images`}
+            <NextSeo
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/images`}
                 description="Browse all the free silhouette images in PhyloPic."
+                title="PhyloPic: Silhouette Images"
             />
             <header>
                 <Breadcrumbs

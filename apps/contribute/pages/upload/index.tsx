@@ -1,4 +1,3 @@
-import { Loader } from "@phylopic/ui"
 import { Hash } from "@phylopic/utils"
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
@@ -11,9 +10,9 @@ const Uploader = dynamic(() => import("~/screens/Uploader"), { ssr: false })
 const Page: NextPage = () => {
     return (
         <PageLayout
-            head={{
+            seo={{
+                noindex: true,
                 title: "PhyloPic: Upload New Image File",
-                url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/upload`,
             }}
         >
             <AuthorizedOnly>

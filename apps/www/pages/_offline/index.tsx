@@ -1,12 +1,10 @@
 import { NextPage } from "next"
-import Head from "next/head"
+import { NextSeo } from "next-seo"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 const Page: NextPage = () => (
     <PageLayout>
-        <Head>
-            <title>PhyloPic: Offline</title>
-        </Head>
+        <NextSeo noindex title="PhyloPic: Offline" />
         <header>
             <Breadcrumbs
                 items={[

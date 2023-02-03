@@ -1,6 +1,6 @@
 import type { NextPage } from "next"
+import { NextSeo } from "next-seo"
 import Link from "next/link"
-import PageHead from "~/metadata/PageHead"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import BulletList from "~/ui/BulletList"
@@ -8,10 +8,11 @@ import InlineSections from "~/ui/InlineSections"
 import SiteTitle from "~/ui/SiteTitle"
 const PageComponent: NextPage = () => (
     <PageLayout>
-        <PageHead
+        <NextSeo
+            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contribute/cancel`}
             description="Ways to contribute to PhyloPic, an open database of freely reusable silhouette images of organisms."
+            noindex
             title="PhyloPic: Other Ways to Contribute"
-            url={`${process.env.NEXT_PUBLIC_WWW_URL}/contribute/cancel`}
         />
         <header>
             <Breadcrumbs

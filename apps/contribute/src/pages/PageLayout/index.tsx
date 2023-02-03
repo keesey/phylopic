@@ -1,23 +1,23 @@
 import { LoaderContext } from "@phylopic/ui"
-import { Hash, UUID } from "@phylopic/utils"
+import { Hash } from "@phylopic/utils"
 import { BuildContainer } from "@phylopic/utils-api"
-import { FC, ReactNode, useEffect } from "react"
+import type { NextSeoProps } from "next-seo"
+import { NextSeo } from "next-seo"
+import { FC, PropsWithChildren, ReactNode, useEffect } from "react"
 import { SWRConfig, SWRConfiguration } from "swr"
 import AuthContainer from "~/auth/AuthContainer"
-import PageHead, { Props as PageHeadProps } from "~/metadata/PageHead"
 import AuthExpirationCountdown from "~/ui/AuthExpirationCountdown"
 import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import styles from "./index.module.scss"
-type Props = {
+type Props = PropsWithChildren<{
     build?: number
-    children: ReactNode
     fallback?: SWRConfiguration["fallback"]
-    head: PageHeadProps
+    seo?: NextSeoProps
     submissionHash?: Hash
-}
-const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, submissionHash }) => {
+}>
+const PageLayout: FC<Props> = ({ build, children, fallback = {}, seo, submissionHash }) => {
     useEffect(() => {
         try {
             document.domain = "phylopic.org"
@@ -29,7 +29,7 @@ const PageLayout: FC<Props> = ({ build, children, fallback = {}, head, submissio
         <SWRConfig value={{ fallback }}>
             <LoaderContext.Provider value={{ color: "#fff" }}>
                 <PageLoader />
-                <PageHead {...head} />
+                <NextSeo {...seo} />
                 <BuildContainer initialValue={build}>
                     <AuthContainer>
                         <aside>

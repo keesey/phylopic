@@ -1,7 +1,7 @@
 import { Node } from "@phylopic/api-models"
 import { CountView, PaginationContainer } from "@phylopic/ui"
 import type { NextPage } from "next"
-import PageHead from "~/metadata/PageHead"
+import { NextSeo } from "next-seo"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -9,10 +9,10 @@ import NodeListView from "~/views/NodeListView"
 type Props = Omit<PageLayoutProps, "children">
 const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
-        <PageHead
-            title="PhyloPic: Taxonomic Groups"
-            url={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes`}
+        <NextSeo
+            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes`}
             description="A list of all taxonomic groups covered by PhyloPic, the open database of freely reusable silhouette images of organisms."
+            title="PhyloPic: Taxonomic Groups"
         />
         <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}>
             {(nodes, totalNodes) => (

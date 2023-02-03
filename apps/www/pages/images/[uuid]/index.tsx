@@ -3,6 +3,7 @@ import { ImageContainer, TimestampView, useLicenseText, useNomenText } from "@ph
 import { createSearch, extractPath, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
+import { NextSeo } from "next-seo"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { FC, useContext, useMemo } from "react"
@@ -10,7 +11,7 @@ import { unstable_serialize } from "swr"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
-import PageHead from "~/metadata/PageHead"
+import useOpenGraphImages from "~/metadata/getOpenGraphImages"
 import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -72,19 +73,21 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
         }
         return node._links.self.href
     }, [image._embedded.nodes])
+    const openGraphImages = useOpenGraphImages(image)
     return (
         <>
-            <PageHead
+            <NextSeo
+                additionalMetaTags={image.attribution ? [{ content: image.attribution, name: "author" }] : undefined}
+                additionalLinkTags={[
+                    { href: image._links.contributor.href, rel: "contributor" },
+                    { href: image._links.license.href, rel: "license" },
+                ]}
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(image.uuid)}`}
                 description={description}
-                socialImage={image._links["http://ogp.me/ns#image"]}
+                openGraph={{ images: openGraphImages }}
                 title={title}
-                url={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(image.uuid)}`}
-            >
-                {image.attribution && <meta key="meta:author" name="author" content={image.attribution} />}
-                <link key="link:contributor" rel="contributor" href={image._links.contributor.href} />
-                <link key="link:license" rel="license" href={image._links.license.href} />
-                <VisualArtworkSchemaScript image={image} />
-            </PageHead>
+            />
+            <VisualArtworkSchemaScript image={image} />
             <header key="header">
                 <Breadcrumbs
                     items={[

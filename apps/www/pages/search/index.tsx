@@ -10,18 +10,18 @@ import { getMatchingText } from "@phylopic/ui"
 import { createSearch, Query } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
+import { NextSeo } from "next-seo"
 import type { SWRConfiguration } from "swr"
-import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SearchAside from "~/ui/SearchAside"
 type Props = Omit<PageLayoutProps, "children">
 const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
-        <PageHead
-            title="Search for Silhouette Images on PhyloPic"
-            url={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
+        <NextSeo
+            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
             description="Search for free silhouette images of animals, plants, and other life forms."
+            title="Search for Silhouette Images on PhyloPic"
         />
         <header>
             <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />

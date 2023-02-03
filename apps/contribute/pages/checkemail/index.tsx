@@ -8,9 +8,9 @@ type Props = {
 }
 const Page: NextPage<Props> = ({ ttl }) => (
     <PageLayout
-        head={{
+        seo={{
+            noindex: true,
             title: "PhyloPic: Check Your Email",
-            url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/checkemail`,
         }}
     >
         <CheckEmail ttl={ttl ?? "DAY"} />

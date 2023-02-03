@@ -1,8 +1,8 @@
 import { Contributor } from "@phylopic/api-models"
 import { CountView, NumberView, PaginationContainer } from "@phylopic/ui"
 import type { NextPage } from "next"
+import { NextSeo } from "next-seo"
 import Link from "next/link"
-import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import Board from "~/ui/Board"
@@ -11,10 +11,10 @@ import SiteTitle from "~/ui/SiteTitle"
 type Props = Omit<PageLayoutProps, "children">
 const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
-        <PageHead
-            title="PhyloPic: Contributors"
-            url={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors`}
+        <NextSeo
+            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors`}
             description="A list of everyone who has contributed free silhouette images to PhyloPic."
+            title="PhyloPic: Contributors"
         />
         <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>
             {(contributors: readonly Contributor[], totalContributors: number) => (

@@ -12,9 +12,9 @@ type Props = {
 }
 const Page: NextPage<Props> = ({ hash }) => (
     <PageLayout
-        head={{
+        seo={{
+            noindex: true,
             title: "PhyloPic: Your Submission",
-            url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/edit/${encodeURIComponent(hash)}`,
         }}
         submissionHash={hash}
     >

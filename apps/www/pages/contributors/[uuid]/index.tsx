@@ -3,6 +3,7 @@ import { ContributorContainer, Loader } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
+import { NextSeo } from "next-seo"
 import { FC, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
@@ -10,7 +11,7 @@ import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
-import PageHead from "~/metadata/PageHead"
+import useOpenGraphImages from "~/metadata/getOpenGraphImages"
 import PersonSchemaScript from "~/metadata/SchemaScript/PersonSchemaScript"
 import getContributorName from "~/models/getContributorName"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -30,25 +31,16 @@ const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
         </PageLayout>
     )
 }
+export default PageComponent
 const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
     const imagesQuery = useMemo(
         () => ({ filter_contributor: contributor.uuid, embed_specificNode: "true" } as ImageListParameters & Query),
         [contributor.uuid],
     )
-    const name = useMemo(() => getContributorName(contributor), [contributor])
     return (
         <LicenseTypeFilterContainer>
             <ImageLicensePaginator query={imagesQuery} hideControls>
-                {images => (
-                    <PageHead
-                        description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
-                        socialImage={(images[0] as ImageWithEmbedded)?._links["http://ogp.me/ns#image"] ?? null}
-                        title={`PhyloPic: Silhouette Images Contributed by ${name}`}
-                        url={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributor.uuid)}`}
-                    >
-                        <PersonSchemaScript contributor={contributor} />
-                    </PageHead>
-                )}
+                {images => <Seo contributor={contributor} images={images} />}
             </ImageLicensePaginator>
             <header>
                 <Breadcrumbs
@@ -82,7 +74,21 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
         </LicenseTypeFilterContainer>
     )
 }
-export default PageComponent
+const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }> = ({ contributor, images }) => {
+    const openGraphImages = useOpenGraphImages(images[0])
+    const name = useMemo(() => getContributorName(contributor), [contributor])
+    return (
+        <>
+            <NextSeo
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributor.uuid)}`}
+                description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
+                openGraph={{ images: openGraphImages }}
+                title={`PhyloPic: Silhouette Images Contributed by ${name}`}
+            />
+            <PersonSchemaScript contributor={contributor} />
+        </>
+    )
+}
 export const getStaticPaths = createStaticPathsGetter("/contributors")
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { uuid } = context.params ?? {}

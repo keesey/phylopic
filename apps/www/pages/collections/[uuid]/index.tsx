@@ -4,12 +4,12 @@ import { createSearch, EMPTY_UUID, isUUIDish, Query, UUIDish } from "@phylopic/u
 import { addBuildToURL } from "@phylopic/utils-api"
 import axios from "axios"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { unstable_serialize } from "swr"
 import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
-import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -54,10 +54,11 @@ const PageComponent: NextPage<Props> = ({ has, uuid, ...props }) => {
     const type = getCollectionType(has.contributors, has.images, has.nodes)
     return (
         <PageLayout {...props}>
-            <PageHead
+            <NextSeo
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/collections/${encodeURIComponent(uuid)}`}
                 description={`A collection of ${TYPE_LABELS[type]} from PhyloPic.`}
+                noindex
                 title={`PhyloPic: ${COLLECTION_LABELS[type]}`}
-                url={`${process.env.NEXT_PUBLIC_WWW_URL}/collections/${encodeURIComponent(uuid)}`}
             />
             <header>
                 <Breadcrumbs

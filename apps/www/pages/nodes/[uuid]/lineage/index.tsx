@@ -3,12 +3,13 @@ import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
+import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { FC, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
-import PageHead from "~/metadata/PageHead"
+import useOpenGraphImages from "~/metadata/getOpenGraphImages"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
@@ -35,13 +36,14 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         () => extractUUIDv4(node._links.parentNode?.href) ?? undefined,
         [node._links.parentNode?.href],
     )
+    const openGraphImages = useOpenGraphImages(node._embedded!.primaryImage!)
     return (
         <>
-            <PageHead
+            <NextSeo
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}/lineage`}
                 description={`Illustrated evolutionary lineage of ${nameString}.`}
-                socialImage={node._embedded?.primaryImage?._links["http://ogp.me/ns#image"]}
+                openGraph={{ images: openGraphImages }}
                 title={`PhyloPic: Lineage of ${shortNameStrong}`}
-                url={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}/lineage`}
             />
             <header>
                 <ExpandableLineageBreadcrumbs

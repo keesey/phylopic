@@ -2,9 +2,9 @@ import { ImageWithEmbedded } from "@phylopic/api-models"
 import { CountView, PaginationContainer } from "@phylopic/ui"
 import { URL } from "@phylopic/utils"
 import type { NextPage } from "next"
+import { NextSeo } from "next-seo"
 import MailingListForm from "~/forms/MailingListForm"
 import PocketPhylogenies from "~/materials/PocketPhylogenies"
-import PageHead from "~/metadata/PageHead"
 import SchemaScript from "~/metadata/SchemaScript"
 import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -27,44 +27,42 @@ const ITEM_URLS: readonly URL[] = [
 ]
 const PageComponent: NextPage<Props> = props => (
     <PageLayout {...props}>
-        <PageHead
-            title="PhyloPic"
-            url={`${process.env.NEXT_PUBLIC_WWW_URL}`}
+        <NextSeo
+            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}`}
             description="PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses."
-        >
-            <SchemaScript
-                id="WebSite"
-                object={{
-                    "@context": "https://schema.org",
-                    "@type": "WebSite",
-                    potentialAction: {
-                        "@type": "SearchAction",
-                        query: "required",
-                        target: {
-                            "@type": "EntryPoint",
-                            urlTemplate: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q={query}`,
-                        },
+        />
+        <SchemaScript
+            id="WebSite"
+            object={{
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                potentialAction: {
+                    "@type": "SearchAction",
+                    query: "required",
+                    target: {
+                        "@type": "EntryPoint",
+                        urlTemplate: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q={query}`,
                     },
-                    url: `${process.env.NEXT_PUBLIC_WWW_URL}`,
-                }}
-            />
-            <SchemaScript
-                id="Person"
-                object={{
-                    "@context": "https://schema.org",
-                    "@id": "http://tmkeesey.net",
-                    "@type": "Person",
-                    alternateName: "T. Michael Keesey",
-                    email: "keesey@gmail.com",
-                    name: "Mike Keesey",
-                    sameAs: process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID
-                        ? `${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`
-                        : undefined,
-                    url: "http://tmkeesey.net",
-                }}
-            />
-            <ItemListSchemaScript urls={ITEM_URLS} />
-        </PageHead>
+                },
+                url: `${process.env.NEXT_PUBLIC_WWW_URL}`,
+            }}
+        />
+        <SchemaScript
+            id="Person"
+            object={{
+                "@context": "https://schema.org",
+                "@id": "http://tmkeesey.net",
+                "@type": "Person",
+                alternateName: "T. Michael Keesey",
+                email: "keesey@gmail.com",
+                name: "Mike Keesey",
+                sameAs: process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID
+                    ? `${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`
+                    : undefined,
+                url: "http://tmkeesey.net",
+            }}
+        />
+        <ItemListSchemaScript urls={ITEM_URLS} />
         <header>
             <p>
                 <strong>Free silhouette images</strong> of animals, plants, and other life forms,{" "}
