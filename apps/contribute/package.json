@@ -20,6 +20,7 @@
         "form-data": "^4.0.0",
         "jsonwebtoken": "^9.0.0",
         "next": "^13.1.6",
+        "next-seo": "^5.15.0",
         "number-to-words": "^1.2.4",
         "potrace": "^2.1.8",
         "react": "^18.2.0",
