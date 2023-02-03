@@ -4,7 +4,7 @@ import {
     List,
     NodeParameters,
     NodeWithEmbedded,
-    PageWithEmbedded
+    PageWithEmbedded,
 } from "@phylopic/api-models"
 import { Loader, NodeContainer, useNomenText } from "@phylopic/ui"
 import {
@@ -15,7 +15,7 @@ import {
     isUUIDv4,
     parseQueryString,
     Query,
-    UUID
+    UUID,
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps, NextPage } from "next"
