@@ -1,4 +1,3 @@
-import { Node } from "@phylopic/api-models"
 import {
     ImageListParameters,
     ImageWithEmbedded,
@@ -19,10 +18,11 @@ import {
     UUID,
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
+import type { Compressed } from "compress-json"
 import type { GetStaticProps, NextPage } from "next"
 import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"
-import { unstable_serialize } from "swr"
+import { SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import CladeImageLicensePaginator from "~/licenses/CladeImageLicensePaginator"
@@ -36,6 +36,8 @@ import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
+import compressFallback from "~/swr/compressFallback"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import NomenHeader from "~/ui/NomenHeader"
 import ImageListView from "~/views/ImageListView"
@@ -47,14 +49,17 @@ const NODE_QUERY: Omit<NodeParameters, "uuid"> & Query = {
     embed_primaryImage: "true",
 }
 type Props = Omit<PageLayoutProps, "children"> & {
+    fallback?: Compressed
     uuid: UUID
 }
-const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => (
-    <PageLayout {...pageLayoutProps}>
-        <NodeContainer uuid={uuid} query={NODE_QUERY}>
-            {node => (node ? <Content node={node} /> : null)}
-        </NodeContainer>
-    </PageLayout>
+const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) => (
+    <CompressedSWRConfig fallback={fallback}>
+        <PageLayout {...pageLayoutProps}>
+            <NodeContainer uuid={uuid} query={NODE_QUERY}>
+                {node => (node ? <Content node={node} /> : null)}
+            </NodeContainer>
+        </PageLayout>
+    </CompressedSWRConfig>
 )
 const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     const name = node.names[0]
@@ -197,17 +202,15 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     const cladeImagesUUID =
         parseQueryString(extractQueryString(nodeResult.data._links.cladeImages?.href ?? "")).filter_clade ?? uuid
     const build = nodeResult.data.build
-    const props: Props = {
-        build,
-        fallback: { [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data },
-        uuid,
+    const fallback: NonNullable<SWRConfiguration["fallback"]> = {
+        [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data,
     }
     const imagesQuery = { filter_clade: cladeImagesUUID } as ImageListParameters & Query
     const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
     const imagesResponsePromise = fetchData<List>(imagesKey)
     const imagesResponse = await imagesResponsePromise
     if (imagesResponse.ok) {
-        props.fallback![unstable_serialize(addBuildToURL(imagesKey, build))] = imagesResponse.data
+        fallback[unstable_serialize(addBuildToURL(imagesKey, build))] = imagesResponse.data
         if (imagesResponse.data.totalPages) {
             const getPageKey = (page: number) =>
                 process.env.NEXT_PUBLIC_API_URL +
@@ -215,9 +218,9 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
                 createSearch({ ...imagesQuery, build, embed_items: true, embed_specificNode: true, page })
             const pageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getPageKey(0))
             if (pageResponse.ok) {
-                props.fallback![unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
+                fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
             }
         }
     }
-    return { props, revalidate: 3600 }
+    return { props: { build, fallback: compressFallback(fallback), uuid }, revalidate: 3600 }
 }

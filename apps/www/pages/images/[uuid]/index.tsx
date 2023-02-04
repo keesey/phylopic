@@ -2,6 +2,7 @@ import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
 import { createSearch, extractPath, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
+import type { Compressed } from "compress-json"
 import type { GetStaticProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import Link from "next/link"
@@ -17,6 +18,8 @@ import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import DonationPromo from "~/promos/DonationPromo"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
+import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import HeaderNav from "~/ui/HeaderNav"
 import SiteTitle from "~/ui/SiteTitle"
@@ -32,15 +35,18 @@ const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
     embed_specificNode: "true",
 }
 type Props = Omit<PageLayoutProps, "children"> & {
+    fallback?: Compressed
     uuid: UUID
 }
-const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
+const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
     return (
-        <PageLayout aside={<ContributorBanner imageUUID={uuid} />} {...pageLayoutProps}>
-            <ImageContainer uuid={uuid} query={IMAGE_QUERY}>
-                {image => (image ? <Content image={image} /> : null)}
-            </ImageContainer>
-        </PageLayout>
+        <CompressedSWRConfig fallback={fallback}>
+            <PageLayout aside={<ContributorBanner imageUUID={uuid} />} {...props}>
+                <ImageContainer uuid={uuid} query={IMAGE_QUERY}>
+                    {image => (image ? <Content image={image} /> : null)}
+                </ImageContainer>
+            </PageLayout>
+        </CompressedSWRConfig>
     )
 }
 const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
@@ -217,9 +223,9 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     return {
         props: {
             build,
-            fallback: {
+            fallback: compressFallback({
                 [unstable_serialize(addBuildToURL(key, build))]: result.data,
-            },
+            }),
             uuid,
         },
         revalidate: 3600,

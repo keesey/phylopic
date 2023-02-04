@@ -2,9 +2,10 @@ import { Contributor, ImageListParameters, ImageWithEmbedded, List, PageWithEmbe
 import { ContributorContainer, Loader } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
+import type { Compressed } from "compress-json"
 import type { GetStaticProps, NextPage } from "next"
 import { FC, useMemo } from "react"
-import { unstable_serialize } from "swr"
+import { SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
@@ -16,18 +17,25 @@ import getContributorName from "~/models/getContributorName"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
+import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import ContributorDetailsView from "~/views/ContributorDetailsView"
 import ContributorNameView from "~/views/ContributorNameView"
 import ImageListView from "~/views/ImageListView"
-type Props = Omit<PageLayoutProps, "children"> & { uuid: UUID }
-const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
+type Props = Omit<PageLayoutProps, "children"> & {
+    fallback?: Compressed
+    uuid: UUID
+}
+const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
     return (
-        <PageLayout {...pageLayoutProps}>
-            <ContributorContainer uuid={uuid}>
-                {contributor => (contributor ? <Content contributor={contributor} /> : null)}
-            </ContributorContainer>
-        </PageLayout>
+        <CompressedSWRConfig fallback={fallback}>
+            <PageLayout {...props}>
+                <ContributorContainer uuid={uuid}>
+                    {contributor => (contributor ? <Content contributor={contributor} /> : null)}
+                </ContributorContainer>
+            </PageLayout>
+        </CompressedSWRConfig>
     )
 }
 const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
@@ -100,15 +108,11 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         return getStaticPropsResult(contributorResult)
     }
     const build = contributorResult.data.build
-    const props: Props = {
-        build: contributorResult.data.build,
-        fallback: {
-            [unstable_serialize(addBuildToURL(contributorKey, build))]: contributorResult.data,
-        },
-        uuid,
+    const fallback: NonNullable<SWRConfiguration["fallback"]> = {
+        [unstable_serialize(addBuildToURL(contributorKey, build))]: contributorResult.data,
     }
     if (listImagesResponse.ok) {
-        props.fallback![unstable_serialize(addBuildToURL(listImagesKey, build))] = listImagesResponse.data
+        fallback[unstable_serialize(addBuildToURL(listImagesKey, build))] = listImagesResponse.data
         if (listImagesResponse.data.totalItems > 0) {
             const getImagesPageKey = (page: number) =>
                 process.env.NEXT_PUBLIC_API_URL +
@@ -116,9 +120,16 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
                 createSearch({ ...imagesQuery, build, embed_items: true, embed_specificNode: true, page })
             const imagesPageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getImagesPageKey(0))
             if (imagesPageResponse.ok) {
-                props.fallback![unstable_serialize_infinite(getImagesPageKey)] = [imagesPageResponse.data]
+                fallback[unstable_serialize_infinite(getImagesPageKey)] = [imagesPageResponse.data]
             }
         }
     }
-    return { props, revalidate: 3600 }
+    return {
+        props: {
+            build,
+            fallback: compressFallback(fallback),
+            uuid,
+        },
+        revalidate: 3600,
+    }
 }

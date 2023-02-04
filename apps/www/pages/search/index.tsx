@@ -9,26 +9,33 @@ import {
 import { getMatchingText } from "@phylopic/ui"
 import { createSearch, Query } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
+import type { Compressed } from "compress-json"
 import type { GetServerSideProps, NextPage } from "next"
 import type { SWRConfiguration } from "swr"
 import PageHead from "~/metadata/PageHead"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
+import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SearchAside from "~/ui/SearchAside"
-type Props = Omit<PageLayoutProps, "children">
-const PageComponent: NextPage<Props> = props => (
-    <PageLayout {...props}>
-        <PageHead
-            title="Search for Silhouette Images on PhyloPic"
-            url={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
-            description="Search for free silhouette images of animals, plants, and other life forms."
-        />
-        <header>
-            <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />
-            <h1>Search</h1>
-        </header>
-        <SearchAside />
-    </PageLayout>
+type Props = Omit<PageLayoutProps, "children"> & {
+    fallback?: Compressed
+}
+const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
+    <CompressedSWRConfig fallback={fallback}>
+        <PageLayout {...props}>
+            <PageHead
+                title="Search for Silhouette Images on PhyloPic"
+                url={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
+                description="Search for free silhouette images of animals, plants, and other life forms."
+            />
+            <header>
+                <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />
+                <h1>Search</h1>
+            </header>
+            <SearchAside />
+        </PageLayout>
+    </CompressedSWRConfig>
 )
 export default PageComponent
 const getInitialText = (q?: string | string[]) => {
@@ -45,7 +52,7 @@ const getInitialText = (q?: string | string[]) => {
 }
 export const getServerSideProps: GetServerSideProps<Props, { q?: string | string[] }> = async context => {
     const initialText = getInitialText(context.query.q)
-    const fallback: SWRConfiguration["fallback"] = {}
+    const fallback: NonNullable<SWRConfiguration["fallback"]> = {}
     let build: number | undefined
     const endpoint = process.env.NEXT_PUBLIC_API_URL + "/"
     const response = await fetchResult<API>(endpoint)
@@ -83,7 +90,7 @@ export const getServerSideProps: GetServerSideProps<Props, { q?: string | string
     return {
         props: {
             ...(build ? { build } : null),
-            fallback,
+            fallback: compressFallback(fallback),
             initialText,
         },
     }

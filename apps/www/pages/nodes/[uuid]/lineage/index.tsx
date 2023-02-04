@@ -2,10 +2,11 @@ import { List, NodeParameters, NodeWithEmbedded, Page } from "@phylopic/api-mode
 import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
+import type { Compressed } from "compress-json"
 import type { GetStaticProps, NextPage } from "next"
 import Link from "next/link"
 import { FC, useMemo } from "react"
-import { unstable_serialize } from "swr"
+import { SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import PageHead from "~/metadata/PageHead"
@@ -13,19 +14,24 @@ import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
+import compressFallback from "~/swr/compressFallback"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import LineageView from "~/views/LineageView"
 import NomenView from "~/views/NomenView"
 const NODE_QUERY: Pick<NodeParameters, "embed_primaryImage"> & Query = { embed_primaryImage: "true" }
 type Props = Omit<PageLayoutProps, "children"> & {
+    fallback?: Compressed
     uuid: UUID
 }
-const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => (
-    <PageLayout {...pageLayoutProps}>
-        <NodeContainer uuid={uuid} query={NODE_QUERY}>
-            {node => (node ? <Content node={node} /> : null)}
-        </NodeContainer>
-    </PageLayout>
+const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) => (
+    <CompressedSWRConfig fallback={fallback}>
+        <PageLayout {...pageLayoutProps}>
+            <NodeContainer uuid={uuid} query={NODE_QUERY}>
+                {node => (node ? <Content node={node} /> : null)}
+            </NodeContainer>
+        </PageLayout>
+    </CompressedSWRConfig>
 )
 const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     const name = node.names[0]
@@ -96,14 +102,10 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         return getStaticPropsResult(listResult)
     }
     const build = nodeResult.data.build
-    const props: Props = {
-        build,
-        fallback: {
-            ...(imagesResult.ok ? { [unstable_serialize(addBuildToURL(imagesKey, build))]: imagesResult.data } : null),
-            [unstable_serialize(addBuildToURL(listKey, build))]: listResult.data,
-            [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data,
-        },
-        uuid,
+    const fallback: NonNullable<SWRConfiguration["fallback"]> = {
+        ...(imagesResult.ok ? { [unstable_serialize(addBuildToURL(imagesKey, build))]: imagesResult.data } : null),
+        [unstable_serialize(addBuildToURL(listKey, build))]: listResult.data,
+        [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data,
     }
     await Promise.all([
         (async () => {
@@ -111,7 +113,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
                 const getPageKey = (page: number) => listKey + createSearch({ build, embed_items: true, page })
                 const pageResponse = await fetchData<Page>(getPageKey(0))
                 if (pageResponse.ok) {
-                    props.fallback![unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
+                    fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
                 }
             }
         })(),
@@ -122,10 +124,17 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
                     createSearch({ build, embed_items: true, embed_specificNode: true, filter_node: uuid, page })
                 const pageResponse = await fetchData<Page>(getPageKey(0))
                 if (pageResponse.ok) {
-                    props.fallback![unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
+                    fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
                 }
             }
         })(),
     ])
-    return { props, revalidate: 3600 }
+    return {
+        props: {
+            build,
+            fallback: compressFallback(fallback),
+            uuid,
+        },
+        revalidate: 3600,
+    }
 }
