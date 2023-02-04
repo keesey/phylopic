@@ -32,5 +32,5 @@
         "clean": "rm -rf .turbo && rm -rf node_modules",
         "lint": "TIMING=1 sass-lint src/**/*.scss"
     },
-    "version": "0.0.0"
+    "version": "1.0.0"
 }
