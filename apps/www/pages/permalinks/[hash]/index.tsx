@@ -2,6 +2,7 @@ import { GetObjectCommandOutput, S3Client } from "@aws-sdk/client-s3"
 import { TimestampView } from "@phylopic/ui"
 import { Hash, isHash } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
+import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -9,18 +10,20 @@ import PERMALINKS_BUCKET_NAME from "~/permalinks/constants/PERMALINKS_BUCKET_NAM
 import usePermalinkSubheader from "~/permalinks/hooks/usePermalinkSubheader"
 import { PermalinkData } from "~/permalinks/types/PermalinkData"
 import PermalinkView from "~/permalinks/views/PermalinkView"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SiteTitle from "~/ui/SiteTitle"
 type Props = Omit<PageLayoutProps, "children"> & {
     data: PermalinkData
     date?: string
+    fallback?: Compressed
     hash: Hash
 }
-const PageComponent: NextPage<Props> = props => {
+const PageComponent: NextPage<Props> = ({ fallback, ...props }) => {
     const subheader = usePermalinkSubheader(props.data)
     const url = `${process.env.NEXT_PUBLIC_WWW_URL}/permalink/${encodeURIComponent(props.hash)}`
     return (
-        <>
+        <CompressedSWRConfig fallback={fallback}>
             <PageLayout {...props}>
                 <NextSeo
                     title="PhyloPic: Permalink"
@@ -48,7 +51,7 @@ const PageComponent: NextPage<Props> = props => {
                 </p>
                 <PermalinkView url={url} value={props.data} />
             </PageLayout>
-        </>
+        </CompressedSWRConfig>
     )
 }
 export default PageComponent

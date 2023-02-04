@@ -3,6 +3,7 @@ import { Loader, PaginationContainer } from "@phylopic/ui"
 import { createSearch, EMPTY_UUID, isUUIDish, Query, UUIDish } from "@phylopic/utils"
 import { addBuildToURL } from "@phylopic/utils-api"
 import axios from "axios"
+import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
@@ -12,6 +13,8 @@ import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
+import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import BulletList from "~/ui/BulletList"
 import ImageListView from "~/views/ImageListView"
@@ -22,6 +25,7 @@ const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
 }
 type CollectionType = "contributors" | "images" | "nodes" | "multiple" | "empty"
 type Props = Omit<PageLayoutProps, "children"> & {
+    fallback?: Compressed
     has: {
         contributors: boolean
         images: boolean
@@ -50,10 +54,10 @@ const COLLECTION_LABELS_SHORT: Readonly<Record<CollectionType, string>> = {
     multiple: "Collection",
     nodes: "Taxonomic Groups",
 }
-const PageComponent: NextPage<Props> = ({ has, uuid, ...props }) => {
+const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
     const type = getCollectionType(has.contributors, has.images, has.nodes)
     return (
-        <>
+        <CompressedSWRConfig fallback={fallback}>
             <PageLayout {...props}>
                 <NextSeo
                     canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/collections/${encodeURIComponent(uuid)}`}
@@ -137,7 +141,7 @@ const PageComponent: NextPage<Props> = ({ has, uuid, ...props }) => {
                     </section>
                 )}
             </PageLayout>
-        </>
+        </CompressedSWRConfig>
     )
 }
 export default PageComponent
@@ -181,11 +185,11 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     return {
         props: {
             build,
-            fallback: {
+            fallback: compressFallback({
                 [unstable_serialize(addBuildToURL(contributorsKey, build))]: contributors.data,
                 [unstable_serialize(addBuildToURL(imagesKey, build))]: images.data,
                 [unstable_serialize(addBuildToURL(nodesKey, build))]: nodes.data,
-            },
+            }),
             has: {
                 contributors: contributors.data.totalItems > 0,
                 images: images.data.totalItems > 0,

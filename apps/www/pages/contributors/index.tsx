@@ -1,16 +1,20 @@
 import { Contributor } from "@phylopic/api-models"
 import { CountView, NumberView, PaginationContainer } from "@phylopic/ui"
+import type { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import Board from "~/ui/Board"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SiteTitle from "~/ui/SiteTitle"
-type Props = Omit<PageLayoutProps, "children">
-const PageComponent: NextPage<Props> = props => (
-    <>
+type Props = Omit<PageLayoutProps, "children"> & {
+    fallback?: Compressed
+}
+const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
+    <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
             <NextSeo
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors`}
@@ -43,7 +47,7 @@ const PageComponent: NextPage<Props> = props => (
                 )}
             </PaginationContainer>
         </PageLayout>
-    </>
+    </CompressedSWRConfig>
 )
 export default PageComponent
 export const getStaticProps = createListStaticPropsGetter<Contributor>("/contributors")

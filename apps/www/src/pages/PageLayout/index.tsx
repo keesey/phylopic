@@ -2,7 +2,6 @@ import { SearchContainer } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import dynamic from "next/dynamic"
 import { FC, ReactNode, useEffect } from "react"
-import { SWRConfig, SWRConfiguration } from "swr"
 import CollectionsContainer from "~/collections/context/CollectionsContainer"
 import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
@@ -15,10 +14,9 @@ export type Props = {
     aside?: ReactNode
     build?: number
     children: ReactNode
-    fallback?: SWRConfiguration["fallback"]
     initialText?: string
 }
-const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialText }) => {
+const PageLayout: FC<Props> = ({ aside, build, children, initialText }) => {
     useEffect(() => {
         try {
             document.domain = "phylopic.org"
@@ -27,25 +25,23 @@ const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialT
         }
     }, [])
     return (
-        <SWRConfig value={{ fallback }}>
-            <BuildContainer initialValue={build}>
-                <BuildChecker />
-                <PageLoader />
-                {aside && <aside key="aside">{aside}</aside>}
-                <SearchContainer initialText={initialText}>
-                    <Search />
-                    <CollectionsContainer>
-                        <header className={styles.header}>
-                            <SiteNav />
-                        </header>
-                        <main>
-                            <SearchOverlay>{children}</SearchOverlay>
-                        </main>
-                        <SiteFooter />
-                    </CollectionsContainer>
-                </SearchContainer>
-            </BuildContainer>
-        </SWRConfig>
+        <BuildContainer initialValue={build}>
+            <BuildChecker />
+            <PageLoader />
+            {aside && <aside key="aside">{aside}</aside>}
+            <SearchContainer initialText={initialText}>
+                <Search />
+                <CollectionsContainer>
+                    <header className={styles.header}>
+                        <SiteNav />
+                    </header>
+                    <main>
+                        <SearchOverlay>{children}</SearchOverlay>
+                    </main>
+                    <SiteFooter />
+                </CollectionsContainer>
+            </SearchContainer>
+        </BuildContainer>
     )
 }
 export default PageLayout

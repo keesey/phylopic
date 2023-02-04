@@ -1,6 +1,7 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
 import { CountView, PaginationContainer } from "@phylopic/ui"
 import { URL } from "@phylopic/utils"
+import { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import MailingListForm from "~/forms/MailingListForm"
@@ -9,12 +10,13 @@ import SchemaScript from "~/metadata/SchemaScript"
 import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import HeaderNav from "~/ui/HeaderNav"
 import SiteTitle from "~/ui/SiteTitle"
 import ContributionCTAView from "~/views/ContributionCTAView"
 import ImageListView from "~/views/ImageListView"
 import SupportersView from "~/views/SupportersView"
-type Props = Omit<PageLayoutProps, "children">
+type Props = Omit<PageLayoutProps, "children"> & { fallback?: Compressed }
 const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/images`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/nodes`,
@@ -25,8 +27,8 @@ const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}`,
     "https://keesey.gumroad.com/l/pocketphylogenies",
 ]
-const PageComponent: NextPage<Props> = props => (
-    <>
+const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
+    <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
             <NextSeo
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}`}
@@ -150,7 +152,7 @@ const PageComponent: NextPage<Props> = props => (
                 <SupportersView />
             </section>
         </PageLayout>
-    </>
+    </CompressedSWRConfig>
 )
 export default PageComponent
 export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images", {

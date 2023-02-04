@@ -9,15 +9,20 @@ import {
 import { getMatchingText } from "@phylopic/ui"
 import { createSearch, Query } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
+import type { Compressed } from "compress-json"
 import type { GetServerSideProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import type { SWRConfiguration } from "swr"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
+import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SearchAside from "~/ui/SearchAside"
-type Props = Omit<PageLayoutProps, "children">
-const PageComponent: NextPage<Props> = props => (
-    <>
+type Props = Omit<PageLayoutProps, "children"> & {
+    fallback?: Compressed
+}
+const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
+    <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
             <NextSeo
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
@@ -30,7 +35,7 @@ const PageComponent: NextPage<Props> = props => (
             </header>
             <SearchAside />
         </PageLayout>
-    </>
+    </CompressedSWRConfig>
 )
 export default PageComponent
 const getInitialText = (q?: string | string[]) => {
@@ -47,7 +52,7 @@ const getInitialText = (q?: string | string[]) => {
 }
 export const getServerSideProps: GetServerSideProps<Props, { q?: string | string[] }> = async context => {
     const initialText = getInitialText(context.query.q)
-    const fallback: SWRConfiguration["fallback"] = {}
+    const fallback: NonNullable<SWRConfiguration["fallback"]> = {}
     let build: number | undefined
     const endpoint = process.env.NEXT_PUBLIC_API_URL + "/"
     const response = await fetchResult<API>(endpoint)
@@ -85,7 +90,7 @@ export const getServerSideProps: GetServerSideProps<Props, { q?: string | string
     return {
         props: {
             ...(build ? { build } : null),
-            fallback,
+            fallback: compressFallback(fallback),
             initialText,
         },
     }
