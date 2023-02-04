@@ -13,31 +13,33 @@ export type ImageFilter = Pick<ImageListParameters, "filter_license_by" | "filte
 type Props = Omit<PageLayoutProps, "children">
 const PageComponent: NextPage<Props> = props => {
     return (
-        <PageLayout {...props}>
-            <NextSeo
-                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/images`}
-                description="Browse all the free silhouette images in PhyloPic."
-                title="PhyloPic: Silhouette Images"
-            />
-            <header>
-                <Breadcrumbs
-                    items={[{ children: "Home", href: "/" }, { children: <strong>Silhouette Images</strong> }]}
+        <>
+            <PageLayout {...props}>
+                <NextSeo
+                    canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/images`}
+                    description="Browse all the free silhouette images in PhyloPic."
+                    title="PhyloPic: Silhouette Images"
                 />
-                <h1>Silhouette Images</h1>
-            </header>
-            <LicenseTypeFilterContainer>
-                <ImageLicensePaginator>
-                    {(items, total) => (
-                        <>
-                            <ImageLicenseControls total={total} />
-                            {isNaN(total) && <Loader key="loader" />}
-                            <br />
-                            <ImageListView value={items} />
-                        </>
-                    )}
-                </ImageLicensePaginator>
-            </LicenseTypeFilterContainer>
-        </PageLayout>
+                <header>
+                    <Breadcrumbs
+                        items={[{ children: "Home", href: "/" }, { children: <strong>Silhouette Images</strong> }]}
+                    />
+                    <h1>Silhouette Images</h1>
+                </header>
+                <LicenseTypeFilterContainer>
+                    <ImageLicensePaginator>
+                        {(items, total) => (
+                            <>
+                                <ImageLicenseControls total={total} />
+                                {isNaN(total) && <Loader key="loader" />}
+                                <br />
+                                <ImageListView value={items} />
+                            </>
+                        )}
+                    </ImageLicensePaginator>
+                </LicenseTypeFilterContainer>
+            </PageLayout>
+        </>
     )
 }
 export default PageComponent

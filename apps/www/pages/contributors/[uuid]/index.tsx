@@ -24,11 +24,13 @@ import ImageListView from "~/views/ImageListView"
 type Props = Omit<PageLayoutProps, "children"> & { uuid: UUID }
 const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
     return (
-        <PageLayout {...pageLayoutProps}>
-            <ContributorContainer uuid={uuid}>
-                {contributor => (contributor ? <Content contributor={contributor} /> : null)}
-            </ContributorContainer>
-        </PageLayout>
+        <>
+            <PageLayout {...pageLayoutProps}>
+                <ContributorContainer uuid={uuid}>
+                    {contributor => (contributor ? <Content contributor={contributor} /> : null)}
+                </ContributorContainer>
+            </PageLayout>
+        </>
     )
 }
 export default PageComponent

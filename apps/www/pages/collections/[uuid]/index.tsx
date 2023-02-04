@@ -53,89 +53,91 @@ const COLLECTION_LABELS_SHORT: Readonly<Record<CollectionType, string>> = {
 const PageComponent: NextPage<Props> = ({ has, uuid, ...props }) => {
     const type = getCollectionType(has.contributors, has.images, has.nodes)
     return (
-        <PageLayout {...props}>
-            <NextSeo
-                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/collections/${encodeURIComponent(uuid)}`}
-                description={`A collection of ${TYPE_LABELS[type]} from PhyloPic.`}
-                noindex
-                title={`PhyloPic: ${COLLECTION_LABELS[type]}`}
-            />
-            <header>
-                <Breadcrumbs
-                    items={[
-                        { children: "Home", href: "/" },
-                        { children: "Collections" },
-                        { children: <strong>{COLLECTION_LABELS_SHORT[type]}</strong> },
-                    ]}
+        <>
+            <PageLayout {...props}>
+                <NextSeo
+                    canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/collections/${encodeURIComponent(uuid)}`}
+                    description={`A collection of ${TYPE_LABELS[type]} from PhyloPic.`}
+                    noindex
+                    title={`PhyloPic: ${COLLECTION_LABELS[type]}`}
                 />
-                <h1>{COLLECTION_LABELS[type]}</h1>
-            </header>
-            {!has.contributors && !has.images && !has.nodes && <p>This collection is empty.</p>}
-            {has.contributors && (
-                <section id="contributors">
-                    {(has.images || has.nodes) && <h2>Image Contributors</h2>}
-                    <PaginationContainer
-                        endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
-                        query={{ filter_collection: uuid }}
-                    >
-                        {(contributors: readonly Contributor[]) => (
-                            <BulletList>
-                                {contributors.map(contributor => (
-                                    <li key={contributor.uuid}>
-                                        <Link href={`/contributors/${encodeURIComponent(contributor.uuid)}`}>
-                                            {contributor.name}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </BulletList>
-                        )}
-                    </PaginationContainer>
-                </section>
-            )}
-            {has.images && (
-                <section id="images">
-                    {(has.contributors || has.nodes) && <h2>Silhouette Images</h2>}
-                    <LicenseTypeFilterContainer>
-                        <ImageLicensePaginator autoLoad query={{ ...IMAGE_QUERY, filter_collection: uuid }}>
-                            {(items, total) => (
-                                <>
-                                    {total === 0 && <p>There are no silhouette images in this collection.</p>}
-                                    {total > 0 && (
-                                        <>
-                                            <ImageCollectionUsage items={items} total={total} uuid={uuid} />
-                                            {isNaN(total) && <Loader key="loader" />}
-                                            <br />
-                                            <ImageListView value={items} />
-                                        </>
-                                    )}
-                                </>
+                <header>
+                    <Breadcrumbs
+                        items={[
+                            { children: "Home", href: "/" },
+                            { children: "Collections" },
+                            { children: <strong>{COLLECTION_LABELS_SHORT[type]}</strong> },
+                        ]}
+                    />
+                    <h1>{COLLECTION_LABELS[type]}</h1>
+                </header>
+                {!has.contributors && !has.images && !has.nodes && <p>This collection is empty.</p>}
+                {has.contributors && (
+                    <section id="contributors">
+                        {(has.images || has.nodes) && <h2>Image Contributors</h2>}
+                        <PaginationContainer
+                            endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
+                            query={{ filter_collection: uuid }}
+                        >
+                            {(contributors: readonly Contributor[]) => (
+                                <BulletList>
+                                    {contributors.map(contributor => (
+                                        <li key={contributor.uuid}>
+                                            <Link href={`/contributors/${encodeURIComponent(contributor.uuid)}`}>
+                                                {contributor.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </BulletList>
                             )}
-                        </ImageLicensePaginator>
-                    </LicenseTypeFilterContainer>
-                </section>
-            )}
-            {has.nodes && (
-                <section id="nodes">
-                    {(has.contributors || has.images) && <h2>Taxonomic Groups</h2>}
-                    <PaginationContainer
-                        endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}
-                        query={{ filter_collection: uuid }}
-                    >
-                        {nodes => (
-                            <BulletList>
-                                {(nodes as readonly Node[]).map(node => (
-                                    <li key={node.uuid}>
-                                        <Link href={`/nodes/${encodeURIComponent(node.uuid)}`}>
-                                            <NomenView value={node.names[0]} short />
-                                        </Link>
-                                    </li>
-                                ))}
-                            </BulletList>
-                        )}
-                    </PaginationContainer>
-                </section>
-            )}
-        </PageLayout>
+                        </PaginationContainer>
+                    </section>
+                )}
+                {has.images && (
+                    <section id="images">
+                        {(has.contributors || has.nodes) && <h2>Silhouette Images</h2>}
+                        <LicenseTypeFilterContainer>
+                            <ImageLicensePaginator autoLoad query={{ ...IMAGE_QUERY, filter_collection: uuid }}>
+                                {(items, total) => (
+                                    <>
+                                        {total === 0 && <p>There are no silhouette images in this collection.</p>}
+                                        {total > 0 && (
+                                            <>
+                                                <ImageCollectionUsage items={items} total={total} uuid={uuid} />
+                                                {isNaN(total) && <Loader key="loader" />}
+                                                <br />
+                                                <ImageListView value={items} />
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </ImageLicensePaginator>
+                        </LicenseTypeFilterContainer>
+                    </section>
+                )}
+                {has.nodes && (
+                    <section id="nodes">
+                        {(has.contributors || has.images) && <h2>Taxonomic Groups</h2>}
+                        <PaginationContainer
+                            endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}
+                            query={{ filter_collection: uuid }}
+                        >
+                            {nodes => (
+                                <BulletList>
+                                    {(nodes as readonly Node[]).map(node => (
+                                        <li key={node.uuid}>
+                                            <Link href={`/nodes/${encodeURIComponent(node.uuid)}`}>
+                                                <NomenView value={node.names[0]} short />
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </BulletList>
+                            )}
+                        </PaginationContainer>
+                    </section>
+                )}
+            </PageLayout>
+        </>
     )
 }
 export default PageComponent

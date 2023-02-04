@@ -26,129 +26,131 @@ const ITEM_URLS: readonly URL[] = [
     "https://keesey.gumroad.com/l/pocketphylogenies",
 ]
 const PageComponent: NextPage<Props> = props => (
-    <PageLayout {...props}>
-        <NextSeo
-            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}`}
-            description="PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses."
-        />
-        <SchemaScript
-            id="WebSite"
-            object={{
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                potentialAction: {
-                    "@type": "SearchAction",
-                    query: "required",
-                    target: {
-                        "@type": "EntryPoint",
-                        urlTemplate: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q={query}`,
-                    },
-                },
-                url: `${process.env.NEXT_PUBLIC_WWW_URL}`,
-            }}
-        />
-        <SchemaScript
-            id="Person"
-            object={{
-                "@context": "https://schema.org",
-                "@id": "http://tmkeesey.net",
-                "@type": "Person",
-                alternateName: "T. Michael Keesey",
-                email: "keesey@gmail.com",
-                name: "Mike Keesey",
-                sameAs: process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID
-                    ? `${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`
-                    : undefined,
-                url: "http://tmkeesey.net",
-            }}
-        />
-        <ItemListSchemaScript urls={ITEM_URLS} />
-        <header>
-            <p>
-                <strong>Free silhouette images</strong> of animals, plants, and other life forms,{" "}
-                <strong>available for reuse</strong> under{" "}
-                <a href="//creativecommons.org" rel="external">
-                    Creative Commons
-                </a>{" "}
-                licenses.
-            </p>
-        </header>
-        <section>
-            <HeaderNav
-                buttons={[
-                    {
-                        children: "See more →",
-                        href: "/images",
-                        key: "images",
-                        type: "anchor",
-                    },
-                ]}
-                header="Latest Uploads"
-                headerLevel={2}
+    <>
+        <PageLayout {...props}>
+            <NextSeo
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}`}
+                description="PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses."
             />
-            <PaginationContainer
-                endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
-                query={{ embed_specificNode: true }}
-                maxPages={1}
-            >
-                {(images, totalImages) => (
-                    <>
-                        <ImageListView value={images as readonly ImageWithEmbedded[]} />
-                        <p>
-                            <CountView value={totalImages} /> silhouette images in the database.
-                        </p>
-                    </>
-                )}
-            </PaginationContainer>
-        </section>
-        <ContributionCTAView />
-        <section>
-            <HeaderNav
-                buttons={[
-                    {
-                        children: "Download →",
-                        href: "/materials",
-                        key: "materials",
-                        type: "anchor",
+            <SchemaScript
+                id="WebSite"
+                object={{
+                    "@context": "https://schema.org",
+                    "@type": "WebSite",
+                    potentialAction: {
+                        "@type": "SearchAction",
+                        query: "required",
+                        target: {
+                            "@type": "EntryPoint",
+                            urlTemplate: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q={query}`,
+                        },
                     },
-                ]}
-                header="Pocket Phylogenies"
-                headerLevel={2}
+                    url: `${process.env.NEXT_PUBLIC_WWW_URL}`,
+                }}
             />
-            <p>
-                Free wallet-sized cards with common questions about evolution on one side, and diagrams for explaining
-                the answers on the other. Click on the cards below to see the diagrams, and{" "}
-                <a href="https://keesey.gumroad.com/l/pocketphylogenies">
-                    click here to print out Pocket Phylogenies for yourself
-                </a>
-                .
-            </p>
-            <PocketPhylogenies />
-        </section>
-        <section>
-            <h2>Mailing List</h2>
-            <p>
-                Subscribe to the <SiteTitle /> newsletter to receives updates about the site&mdash;improvements, new
-                features, and more!
-            </p>
-            <MailingListForm />
-        </section>
-        <section>
-            <HeaderNav
-                buttons={[
-                    {
-                        children: "See more →",
-                        href: "/thanks",
-                        key: "thanks",
-                        type: "anchor",
-                    },
-                ]}
-                header="Special Thanks"
-                headerLevel={2}
+            <SchemaScript
+                id="Person"
+                object={{
+                    "@context": "https://schema.org",
+                    "@id": "http://tmkeesey.net",
+                    "@type": "Person",
+                    alternateName: "T. Michael Keesey",
+                    email: "keesey@gmail.com",
+                    name: "Mike Keesey",
+                    sameAs: process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID
+                        ? `${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`
+                        : undefined,
+                    url: "http://tmkeesey.net",
+                }}
             />
-            <SupportersView />
-        </section>
-    </PageLayout>
+            <ItemListSchemaScript urls={ITEM_URLS} />
+            <header>
+                <p>
+                    <strong>Free silhouette images</strong> of animals, plants, and other life forms,{" "}
+                    <strong>available for reuse</strong> under{" "}
+                    <a href="//creativecommons.org" rel="external">
+                        Creative Commons
+                    </a>{" "}
+                    licenses.
+                </p>
+            </header>
+            <section>
+                <HeaderNav
+                    buttons={[
+                        {
+                            children: "See more →",
+                            href: "/images",
+                            key: "images",
+                            type: "anchor",
+                        },
+                    ]}
+                    header="Latest Uploads"
+                    headerLevel={2}
+                />
+                <PaginationContainer
+                    endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
+                    query={{ embed_specificNode: true }}
+                    maxPages={1}
+                >
+                    {(images, totalImages) => (
+                        <>
+                            <ImageListView value={images as readonly ImageWithEmbedded[]} />
+                            <p>
+                                <CountView value={totalImages} /> silhouette images in the database.
+                            </p>
+                        </>
+                    )}
+                </PaginationContainer>
+            </section>
+            <ContributionCTAView />
+            <section>
+                <HeaderNav
+                    buttons={[
+                        {
+                            children: "Download →",
+                            href: "/materials",
+                            key: "materials",
+                            type: "anchor",
+                        },
+                    ]}
+                    header="Pocket Phylogenies"
+                    headerLevel={2}
+                />
+                <p>
+                    Free wallet-sized cards with common questions about evolution on one side, and diagrams for
+                    explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
+                    <a href="https://keesey.gumroad.com/l/pocketphylogenies">
+                        click here to print out Pocket Phylogenies for yourself
+                    </a>
+                    .
+                </p>
+                <PocketPhylogenies />
+            </section>
+            <section>
+                <h2>Mailing List</h2>
+                <p>
+                    Subscribe to the <SiteTitle /> newsletter to receives updates about the site&mdash;improvements, new
+                    features, and more!
+                </p>
+                <MailingListForm />
+            </section>
+            <section>
+                <HeaderNav
+                    buttons={[
+                        {
+                            children: "See more →",
+                            href: "/thanks",
+                            key: "thanks",
+                            type: "anchor",
+                        },
+                    ]}
+                    header="Special Thanks"
+                    headerLevel={2}
+                />
+                <SupportersView />
+            </section>
+        </PageLayout>
+    </>
 )
 export default PageComponent
 export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images", {

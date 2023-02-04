@@ -37,11 +37,13 @@ type Props = Omit<PageLayoutProps, "children"> & {
 }
 const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => {
     return (
-        <PageLayout aside={<ContributorBanner imageUUID={uuid} />} {...pageLayoutProps}>
-            <ImageContainer uuid={uuid} query={IMAGE_QUERY}>
-                {image => (image ? <Content image={image} /> : null)}
-            </ImageContainer>
-        </PageLayout>
+        <>
+            <PageLayout aside={<ContributorBanner imageUUID={uuid} />} {...pageLayoutProps}>
+                <ImageContainer uuid={uuid} query={IMAGE_QUERY}>
+                    {image => (image ? <Content image={image} /> : null)}
+                </ImageContainer>
+            </PageLayout>
+        </>
     )
 }
 const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {

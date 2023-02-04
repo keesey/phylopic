@@ -17,18 +17,20 @@ import Breadcrumbs from "~/ui/Breadcrumbs"
 import SearchAside from "~/ui/SearchAside"
 type Props = Omit<PageLayoutProps, "children">
 const PageComponent: NextPage<Props> = props => (
-    <PageLayout {...props}>
-        <NextSeo
-            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
-            description="Search for free silhouette images of animals, plants, and other life forms."
-            title="Search for Silhouette Images on PhyloPic"
-        />
-        <header>
-            <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />
-            <h1>Search</h1>
-        </header>
-        <SearchAside />
-    </PageLayout>
+    <>
+        <PageLayout {...props}>
+            <NextSeo
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/search`}
+                description="Search for free silhouette images of animals, plants, and other life forms."
+                title="Search for Silhouette Images on PhyloPic"
+            />
+            <header>
+                <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />
+                <h1>Search</h1>
+            </header>
+            <SearchAside />
+        </PageLayout>
+    </>
 )
 export default PageComponent
 const getInitialText = (q?: string | string[]) => {

@@ -50,11 +50,13 @@ type Props = Omit<PageLayoutProps, "children"> & {
     uuid: UUID
 }
 const PageComponent: NextPage<Props> = ({ uuid, ...pageLayoutProps }) => (
-    <PageLayout {...pageLayoutProps}>
-        <NodeContainer uuid={uuid} query={NODE_QUERY}>
-            {node => (node ? <Content node={node} /> : null)}
-        </NodeContainer>
-    </PageLayout>
+    <>
+        <PageLayout {...pageLayoutProps}>
+            <NodeContainer uuid={uuid} query={NODE_QUERY}>
+                {node => (node ? <Content node={node} /> : null)}
+            </NodeContainer>
+        </PageLayout>
+    </>
 )
 const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     const name = node.names[0]
