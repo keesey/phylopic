@@ -90,3 +90,4 @@ To contribute to the development of _PhyloPic_, please read the guidelines in [`
 ## Further Documentation
 
 -   [AWS S3 Bucket Structure](./S3.md)
+-   [Subdomains](./SUBDOMAINS.md)
