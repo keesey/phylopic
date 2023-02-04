@@ -2,6 +2,7 @@ import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
 import { FC } from "react"
+import logoDiscord from "../../../public/logos/discord.svg"
 import logoFacebook from "../../../public/logos/facebook.svg"
 import logoMail from "../../../public/logos/mail.svg"
 import logoMastodon from "../../../public/logos/mastodon.svg"
@@ -26,6 +27,9 @@ const SiteFooter: FC = () => (
                 </Link>
                 <a href="https://sauropods.win/@phylopic" title="Follow PhyloPic on Mastodon." rel="me">
                     <Image src={logoMastodon} width={25} height={25} alt="Mastodon" />
+                </a>
+                <a href="https://discord.gg/RtrWAzTEce" title="Join the discussion on Discord.">
+                    <Image src={logoDiscord} width={27.7} height={21} alt="Discord" />
                 </a>
                 <a href="https://www.facebook.com/phylopic" title="Follow PhyloPic on Facebook." rel="me">
                     <Image src={logoFacebook} width={21} height={21} alt="Facebook" />
