@@ -70,9 +70,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     </a>
                 </li>
                 <li>
-                    <a href="https://discord.gg/RtrWAzTEce">
-                        Discord
-                    </a>
+                    <a href="https://discord.gg/RtrWAzTEce">Discord</a>
                 </li>
             </ul>
         </section>
