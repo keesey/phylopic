@@ -46,3 +46,12 @@
         display: none;
     }
 }
+
+.buyMeACoffee {
+    margin-bottom: 4px;
+    margin-top: 4px;
+
+    @media screen and (max-width: 506px) {
+        display: none;
+    }
+}
