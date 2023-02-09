@@ -43,6 +43,9 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                 <li>
                     <a href="https://www.patreon.com/tmkeesey?fan_landing=true">Become a Patron</a>
                 </li>
+                <li>
+                    <a href="https://www.buymeacoffee.com/phylopic">Buy Me a Coffee</a>
+                </li>
             </ul>
         </section>
         <section>
