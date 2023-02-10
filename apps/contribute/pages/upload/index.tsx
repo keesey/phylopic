@@ -1,4 +1,3 @@
-import { Loader } from "@phylopic/ui"
 import { Hash } from "@phylopic/utils"
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"

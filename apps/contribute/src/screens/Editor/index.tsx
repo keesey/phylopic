@@ -5,7 +5,7 @@ import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_CHECK, ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
+import { ICON_CHECK, ICON_PENCIL, ICON_PLUS } from "~/ui/ICON_SYMBOLS"
 import IdentifierView from "~/ui/IdentifierView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
@@ -151,6 +151,9 @@ const Editor: FC<Props> = ({ hash }) => {
                     <UserOptions>
                         <UserLinkButton href="/" icon={ICON_CHECK}>
                             Cool.
+                        </UserLinkButton>
+                        <UserLinkButton href="/upload" icon={ICON_PLUS}>
+                            Let&rsquo;s upload another!
                         </UserLinkButton>
                     </UserOptions>
                 </>
