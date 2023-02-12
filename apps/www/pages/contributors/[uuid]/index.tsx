@@ -12,7 +12,7 @@ import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
-import useOpenGraphImages from "~/metadata/getOpenGraphImages"
+import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import PersonSchemaScript from "~/metadata/SchemaScript/PersonSchemaScript"
 import getContributorName from "~/models/getContributorName"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -83,14 +83,14 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
     )
 }
 const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }> = ({ contributor, images }) => {
-    const openGraphImages = useOpenGraphImages(images[0])
+    const openGraph = useOpenGraphForImage(images[0])
     const name = useMemo(() => getContributorName(contributor), [contributor])
     return (
         <>
             <NextSeo
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributor.uuid)}`}
                 description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
-                openGraph={{ images: openGraphImages }}
+                openGraph={openGraph}
                 title={`PhyloPic: Silhouette Images Contributed by ${name}`}
             />
             <PersonSchemaScript contributor={contributor} />

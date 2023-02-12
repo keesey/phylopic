@@ -12,7 +12,7 @@ import { unstable_serialize } from "swr"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
-import useOpenGraphImages from "~/metadata/getOpenGraphImages"
+import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -79,7 +79,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
         }
         return node._links.self.href
     }, [image._embedded.nodes])
-    const openGraphImages = useOpenGraphImages(image)
+    const openGraph = useOpenGraphForImage(image)
     return (
         <>
             <NextSeo
@@ -90,7 +90,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 ]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(image.uuid)}`}
                 description={description}
-                openGraph={{ images: openGraphImages }}
+                openGraph={openGraph}
                 title={title}
             />
             <VisualArtworkSchemaScript image={image} />

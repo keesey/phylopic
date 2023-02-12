@@ -30,7 +30,7 @@ import CladeImageLicensePaginator from "~/licenses/CladeImageLicensePaginator"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import LicenseQualifier from "~/licenses/LicenseQualifier"
-import useOpenGraphImages from "~/metadata/getOpenGraphImages"
+import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import TaxonSchemaScript from "~/metadata/SchemaScript/TaxonSchemaScript"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -106,13 +106,13 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         () => extractUUIDv4(node._embedded.parentNode?._links.parentNode?.href) ?? undefined,
         [node._embedded.parentNode?._links.parentNode?.href],
     )
-    const openGraphImages = useOpenGraphImages(node._embedded.primaryImage!)
+    const openGraph = useOpenGraphForImage(node._embedded.primaryImage)
     return (
         <LicenseTypeFilterContainer>
             <NextSeo
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}`}
                 description={`Freely reusable silhouette images of ${nameString}.`}
-                openGraph={{ images: openGraphImages }}
+                openGraph={openGraph}
                 title={`PhyloPic: ${shortNameString}`}
             />
             <TaxonSchemaScript node={node} />

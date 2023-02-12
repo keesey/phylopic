@@ -10,7 +10,7 @@ import { FC, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
-import useOpenGraphImages from "~/metadata/getOpenGraphImages"
+import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
@@ -42,13 +42,13 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         () => extractUUIDv4(node._links.parentNode?.href) ?? undefined,
         [node._links.parentNode?.href],
     )
-    const openGraphImages = useOpenGraphImages(node._embedded!.primaryImage!)
+    const openGraph = useOpenGraphForImage(node._embedded.primaryImage)
     return (
         <>
             <NextSeo
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}/lineage`}
                 description={`Illustrated evolutionary lineage of ${nameString}.`}
-                openGraph={{ images: openGraphImages }}
+                openGraph={openGraph}
                 title={`PhyloPic: Lineage of ${shortNameStrong}`}
             />
             <header>

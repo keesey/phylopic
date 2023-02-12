@@ -48,7 +48,7 @@ const SiteNav: FC<Props> = ({ submissionHash }) => {
                 <div className={styles.spacer} role="separator" />
                 {enabled && (
                     <NavItem
-                        label={contributor!.name}
+                        label={contributor?.name || "Your Account"}
                         onToggle={() => setSelected(selected === "account" ? undefined : "account")}
                         selected={selected === "account"}
                     />

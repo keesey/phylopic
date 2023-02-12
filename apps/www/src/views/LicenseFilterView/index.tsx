@@ -9,7 +9,7 @@ export interface Props {
 }
 const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
     return (
-        <section className={clsx(styles.main, pending && styles.pending)}>
+        <form className={clsx(styles.main, pending && styles.pending)}>
             <strong>Licenses</strong>
             <div className={styles.option}>
                 <input
@@ -93,7 +93,7 @@ const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
                     </a>
                 </label>
             </div>
-        </section>
+        </form>
     )
 }
 export default LicenseFilterView
