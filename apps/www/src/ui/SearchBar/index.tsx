@@ -38,15 +38,14 @@ const SearchBar: FC = () => {
             <input
                 aria-label="search text"
                 className={clsx(focused && styles.focused)}
-                key="input"
                 list="autocomplete"
                 maxLength={128}
                 minLength={2}
-                name="searchName"
                 onBlur={handleInputBlur}
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
                 placeholder="Enter the name of a group of organisms."
+                required={false}
                 type="search"
                 value={value}
             />
