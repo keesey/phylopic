@@ -34,10 +34,11 @@ const SearchBar: FC = () => {
     )
     const handleInputFocus = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: true }), [dispatch])
     return (
-        <form className={styles.main} onSubmit={handleFormSubmit} role="search">
+        <form className={styles.main} key="form" onSubmit={handleFormSubmit} role="search">
             <input
-                aria-label="search text"
+                aria-label="Search for a group of organisms."
                 className={clsx(focused && styles.focused)}
+                key="input"
                 list="autocomplete"
                 maxLength={128}
                 minLength={2}
@@ -46,6 +47,7 @@ const SearchBar: FC = () => {
                 onFocus={handleInputFocus}
                 placeholder="Enter the name of a group of organisms."
                 required={false}
+                tabIndex={0}
                 type="search"
                 value={value}
             />

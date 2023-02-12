@@ -17,13 +17,13 @@ const SiteNav: FC = () => {
         return () => router.events.off("routeChangeStart", handler)
     }, [router])
     return (
-        <nav className={styles.main}>
+        <nav className={styles.main} key="nav">
             <Link className={styles.siteTitle} href="/">
                 <h1>
                     <SiteTitle />
                 </h1>
             </Link>
-            <SearchBar />
+            <SearchBar key="searchBar" />
             <div className={styles.menuButton}>
                 <button onClick={handleMenuButtonClick}>☰</button>
             </div>
