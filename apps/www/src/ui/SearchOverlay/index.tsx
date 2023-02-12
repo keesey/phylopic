@@ -8,7 +8,7 @@ export interface Props {
 }
 const SearchOverlay: FC<Props> = ({ children }) => {
     const [state] = useContext(SearchContext) ?? []
-    const active = Boolean(state?.focused || state?.text)
+    const active = Boolean(state?.focused || (state?.text?.length ?? 0) >= 2)
     return (
         <div className={styles.main}>
             {active && <SearchResults key="results" />}

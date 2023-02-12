@@ -26,10 +26,10 @@ const PageLayout: FC<Props> = ({ aside, build, children, initialText }) => {
     }, [])
     return (
         <BuildContainer initialValue={build}>
-            <BuildChecker key="buildChecker" />
-            <PageLoader key="pageLoader" />
+            <BuildChecker />
+            <PageLoader />
             {aside && <aside key="aside">{aside}</aside>}
-            <SearchContainer key="searchContainer" initialText={initialText}>
+            <SearchContainer initialText={initialText}>
                 <Search />
                 <CollectionsContainer>
                     <header className={styles.header}>

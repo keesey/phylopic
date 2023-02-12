@@ -12,7 +12,7 @@ const MailingListForm: FC = () => {
                 <input type="text" name="b_e566f9716747a52421a7b5ac7_f5b825e47d" tabIndex={-1} />
             </div>
             <div className={styles.content}>
-                <input type="email" name="EMAIL" placeholder="Enter your email address" />
+                <input aria-label="email address" type="email" name="EMAIL" placeholder="Enter your email address." />
                 <button type="submit">Subscribe</button>
             </div>
         </form>
