@@ -12,7 +12,7 @@
         "eslint": "^8.33.0",
         "eslint-config-phylopic": "*",
         "prettier": "^2.8.3",
-        "turbo": "^1.7.3"
+        "turbo": "^1.7.4"
     },
     "license": "MIT",
     "name": "phylopic",
