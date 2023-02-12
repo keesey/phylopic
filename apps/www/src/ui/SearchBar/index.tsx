@@ -2,7 +2,7 @@ import { SearchContext, useExternalResolutions, useMatches } from "@phylopic/ui"
 import { extractPath } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
-import { ChangeEvent, FC, FormEvent, useCallback, useContext, useState } from "react"
+import { ChangeEvent, FC, FocusEvent, FormEvent, useCallback, useContext, useState } from "react"
 import styles from "./index.module.scss"
 const MAX_MATCHES = 16
 const SearchBar: FC = () => {
@@ -36,8 +36,8 @@ const SearchBar: FC = () => {
         },
         [dispatch],
     )
-    const handleInputFocus = useCallback(() => {
-        console.debug("focus")
+    const handleInputFocus = useCallback((event: FocusEvent<HTMLInputElement>) => {
+        console.debug("focus", event)
         dispatch?.({ type: "SET_ACTIVE", payload: true })
     }, [dispatch])
     return (
