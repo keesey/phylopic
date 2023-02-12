@@ -58,7 +58,7 @@ const getPathsFromNamebank = async (namebankIDs?: ReadonlySet<number>): Promise<
     const url = `https://query.wikidata.org/sparql?query=${encodeURIComponent(sparqlQuery)}`
     const headers = {
         Accept: "application/sparql-results+json",
-        "User-Agent": "phylopic/2.0 (http://phylopic.org/; keesey+phylopic@gmail.com) phylopic-publish/0.0.0",
+        "User-Agent": "phylopic/2.0 (https://www.phylopic.org/; keesey+phylopic@gmail.com) phylopic-publish/1.0.0",
     }
     // console.debug(`Looking for EoL matches for uBio NameBank IDs: ${[...namebankIDs].sort().join(", ")}...`)
     const response = await axios.get<SPARQLResponse>(url, { headers, responseType: "json" })
