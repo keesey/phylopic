@@ -15,14 +15,13 @@ const App = ({ Component, pageProps }: AppProps) => {
                 ]}
                 additionalMetaTags={[
                     { name: "author", content: "T. Michael Keesey" },
-                    { name: "domain", content: process.env.NEXT_PUBLIC_VERCEL_URL ?? "" },
                     { name: "language", content: "en" },
                     { name: "no-email-collection", content: "//unspam.com/noemailcollection" },
                     { name: "reply-to", content: "keesey+phylopic@gmail.com" },
                     { name: "viewport", content: "width=device-width,initial-scale=1" },
                 ]}
                 dangerouslySetAllPagesToNoIndex={
-                    process.env.NEXT_PUBLIC_VERCEL_URL !== "contribute.phylopic.org" || process.env.NEXT_PUBLIC_VERCEL_ENV !== "production"
+                    process.env.NEXT_PUBLIC_VERCEL_ENV !== "production"
                 }
                 defaultOpenGraphImageHeight={1200}
                 defaultOpenGraphImageWidth={1200}
