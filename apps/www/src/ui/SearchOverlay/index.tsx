@@ -1,6 +1,6 @@
 import { SearchContext } from "@phylopic/ui"
 import dynamic from "next/dynamic"
-import { FC, Fragment, ReactNode, useContext } from "react"
+import { FC, ReactNode, useContext } from "react"
 import styles from "./index.module.scss"
 const SearchResults = dynamic(() => import("../SearchResults"), { ssr: false })
 export interface Props {
@@ -11,8 +11,8 @@ const SearchOverlay: FC<Props> = ({ children }) => {
     const active = Boolean(state?.focused || (state?.text?.length ?? 0) >= 2)
     return (
         <div className={styles.main}>
-            {active && <SearchResults key="results" />}
-            {!active && <Fragment key="content">{children}</Fragment>}
+            {active && <SearchResults />}
+            {!active && <>{children}</>}
         </div>
     )
 }
