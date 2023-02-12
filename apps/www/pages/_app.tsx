@@ -39,7 +39,6 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <>
                     <Script
                         async
-                        id="script:gtm"
                         src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(
                             process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
                         )}`}
@@ -51,7 +50,6 @@ const App = ({ Component, pageProps }: AppProps) => {
                                 process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
                             )})`,
                         }}
-                        id="script:gtm-init"
                         strategy="lazyOnload"
                     />
                 </>
