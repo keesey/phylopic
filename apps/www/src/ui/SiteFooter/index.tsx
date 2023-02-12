@@ -14,7 +14,6 @@ const SiteFooter: FC = () => (
     <footer className={styles.main}>
         <CollectionsDrawer />
         <ul className={styles.content}>
-            <li className={clsx(styles.item, styles.optional)}>Version 2.0</li>
             <li className={styles.item}>
                 <abbr title="Copyright">©</abbr> {YEAR}{" "}
                 <a href="http://tmkeesey.net" rel="author">
@@ -41,7 +40,7 @@ const SiteFooter: FC = () => (
                 >
                     <Image src={logoPatreon} width={80} height={11} alt="Patreon" />
                 </a>
-                <a href="https://www.buymeacoffee.com/phylopic" className={styles.buyMeACoffee}>
+                <a href="https://www.buymeacoffee.com/phylopic" className={styles.optional}>
                     <Image
                         alt="Buy me a coffee."
                         height={50}

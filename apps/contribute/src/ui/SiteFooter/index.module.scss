@@ -10,6 +10,7 @@
     min-height: 75px;
     overflow: hidden;
     padding: 1em;
+    text-align: center;
 
     a {
         text-decoration: none;
@@ -33,11 +34,8 @@
     gap: 0.75em;
 }
 
-.buyMeACoffee {
-    margin-bottom: 4px;
-    margin-top: 4px;
-
-    @media screen and (max-width: 506px) {
+.optional {
+    @media screen and (max-width: 755px) {
         display: none;
     }
 }
