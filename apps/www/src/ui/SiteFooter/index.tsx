@@ -42,7 +42,13 @@ const SiteFooter: FC = () => (
                     <Image src={logoPatreon} width={80} height={11} alt="Patreon" />
                 </a>
                 <a href="https://www.buymeacoffee.com/phylopic" className={styles.buyMeACoffee}>
-                    <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phylopic&button_colour=305860&font_colour=f7fffb&font_family=Poppins&outline_colour=f7fffb&coffee_colour=94acae" />
+                    <Image
+                        alt="Buy me a coffee."
+                        height={50}
+                        src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phylopic&button_colour=305860&font_colour=f7fffb&font_family=Poppins&outline_colour=f7fffb&coffee_colour=94acae"
+                        unoptimized
+                        width={235}
+                    />
                 </a>
             </li>
         </ul>
