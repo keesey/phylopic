@@ -23,16 +23,23 @@ const SearchBar: FC = () => {
         },
         [resolution?.node, internalResult, router],
     )
-    const handleInputBlur = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: false }), [dispatch])
+    const handleInputBlur = useCallback(() => {
+        console.debug("blur")
+        dispatch?.({ type: "SET_ACTIVE", payload: false })
+    }, [dispatch])
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             const { value: payload } = event.currentTarget
+            console.debug("change", payload)
             setValue(payload)
             dispatch?.({ type: "SET_TEXT", payload })
         },
         [dispatch],
     )
-    const handleInputFocus = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: true }), [dispatch])
+    const handleInputFocus = useCallback(() => {
+        console.debug("focus")
+        dispatch?.({ type: "SET_ACTIVE", payload: true })
+    }, [dispatch])
     return (
         <form className={styles.main} onSubmit={handleFormSubmit} role="search">
             <input
