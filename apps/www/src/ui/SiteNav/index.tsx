@@ -18,13 +18,13 @@ const SiteNav: FC = () => {
     }, [router])
     return (
         <nav className={styles.main}>
-            <Link key="title" className={styles.siteTitle} href="/">
+            <Link className={styles.siteTitle} href="/">
                 <h1>
                     <SiteTitle />
                 </h1>
             </Link>
-            <SearchBar key="search" />
-            <div key="menuButton" className={styles.menuButton}>
+            <SearchBar />
+            <div className={styles.menuButton}>
                 <button onClick={handleMenuButtonClick}>☰</button>
             </div>
             {dropdownOpen && <DropdownNav onClose={handleDropdownNavClose} />}

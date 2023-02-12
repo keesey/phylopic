@@ -20,9 +20,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                     { name: "reply-to", content: "keesey+phylopic@gmail.com" },
                     { name: "viewport", content: "width=device-width,initial-scale=1" },
                 ]}
-                dangerouslySetAllPagesToNoIndex={
-                    process.env.NEXT_PUBLIC_VERCEL_ENV !== "production"
-                }
+                dangerouslySetAllPagesToNoIndex={process.env.NEXT_PUBLIC_VERCEL_ENV !== "production"}
                 defaultOpenGraphImageHeight={1200}
                 defaultOpenGraphImageWidth={1200}
                 openGraph={{

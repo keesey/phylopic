@@ -21,7 +21,7 @@ const SearchBar: FC = () => {
                 router.push(extractPath(node._links.self.href))
             }
         },
-        [resolution, internalResult, router],
+        [resolution?.node, internalResult, router],
     )
     const handleInputBlur = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: false }), [dispatch])
     const handleInputChange = useCallback(
@@ -34,11 +34,11 @@ const SearchBar: FC = () => {
     )
     const handleInputFocus = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: true }), [dispatch])
     return (
-        <form className={styles.main} onSubmit={handleFormSubmit}>
+        <form className={styles.main} onSubmit={handleFormSubmit} role="search">
             <input
+                aria-label="search text"
                 className={clsx(focused && styles.focused)}
                 key="input"
-                id="searchName"
                 list="autocomplete"
                 maxLength={128}
                 minLength={2}
