@@ -2,7 +2,7 @@ import { SearchContext, useExternalResolutions, useMatches } from "@phylopic/ui"
 import { extractPath } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
-import { ChangeEvent, FC, FormEvent, useCallback, useContext, useEffect, useRef, useState } from "react"
+import { ChangeEvent, FC, FormEvent, useCallback, useContext, useState } from "react"
 import styles from "./index.module.scss"
 const MAX_MATCHES = 16
 const SearchBar: FC = () => {
@@ -33,11 +33,6 @@ const SearchBar: FC = () => {
         [dispatch],
     )
     const handleInputFocus = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: true }), [dispatch])
-    // :KLUDGE: Fix for Safari 16.2
-    const inputRef = useRef<HTMLInputElement>(null)
-    useEffect(() => {
-        inputRef.current?.blur()
-    }, [inputRef])
     return (
         <form className={styles.main} onSubmit={handleFormSubmit} role="search">
             <input
@@ -50,7 +45,6 @@ const SearchBar: FC = () => {
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
                 placeholder="Enter the name of a group of organisms."
-                ref={inputRef}
                 type="search"
                 value={value}
             />
