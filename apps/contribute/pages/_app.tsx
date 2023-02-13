@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react"
 import { DefaultSeo } from "next-seo"
 import type { AppProps } from "next/app"
 import Script from "next/script"
@@ -52,6 +53,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 </>
             )}
             <Component {...pageProps} />
+            <Analytics />
         </>
     )
 }
