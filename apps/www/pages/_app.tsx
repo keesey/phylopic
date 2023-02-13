@@ -52,7 +52,6 @@ const App = ({ Component, pageProps }: AppProps) => {
                             )})`,
                         }}
                         id="script:gtm-init"
-                        strategy="lazyOnload"
                     />
                 </>
             )}

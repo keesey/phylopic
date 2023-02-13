@@ -19,4 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.1] - 2023-02-13
+
+### Changed
+
+-   Removed `lazyOnLoad` strategy for Google Measurement script.
+
 ## [2.0.0] - 2023-02-12
