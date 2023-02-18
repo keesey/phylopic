@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Serving all social media images from `images.phylopic.org`.
 
+### Deprecated
+
+-   `public/social/1200x1200.png`
+
 ## [2.0.2] - 2023-02-13
 
 ### Added
