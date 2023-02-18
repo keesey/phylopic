@@ -16,6 +16,7 @@ export default class ExternalClient extends PGPatcher<
             EXTERNAL_TABLE,
             [
                 { column: "authority", type: "character varying", value: authority },
+                { column: "disabled", type: "bit", value: 0 },
                 { column: "namespace", type: "character varying", value: namespace },
                 { column: "object_id", type: "character varying", value: objectID },
             ],

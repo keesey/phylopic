@@ -28,7 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 defaultOpenGraphImageWidth={1200}
                 defaultTitle="PhyloPic"
                 openGraph={{
-                    images: [{ type: "image/png", url: process.env.NEXT_PUBLIC_WWW_URL + "/social/1200x1200.png" }],
+                    images: [{ type: "image/png", url: "https://images.phylopic.org/social/1200x1200.png" }],
                     locale: "en_US",
                     siteName: "PhyloPic",
                     type: "website",
