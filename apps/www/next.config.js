@@ -60,6 +60,11 @@ const nextConfig = {
                 destination: `/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID)}`,
                 permanent: true,
             },
+            {
+                source: "/social/1200x1200.png",
+                destination: "https://images.phylopic.org/social/1200x1200.png",
+                permanent: true,
+            }
         ]
     },
     swcMinify: true,

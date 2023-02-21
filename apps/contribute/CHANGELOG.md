@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.4] - 2023-02-21
+
+### Added
+
+-   Redirect for `public/social/1200x1200.png`.
+
+### Removed
+
+-   `public/social/1200x1200.png`
+
 ## [2.0.3] - 2023-02-18
 
 ### Changed
