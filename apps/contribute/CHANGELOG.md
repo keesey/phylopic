@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+-   No longer setting `document.domain`.
+
 ### Security
 
 ## [2.0.5] - 2023-02-29

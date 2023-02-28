@@ -17,13 +17,6 @@ export type Props = {
     initialText?: string
 }
 const PageLayout: FC<Props> = ({ aside, build, children, initialText }) => {
-    useEffect(() => {
-        try {
-            document.domain = "phylopic.org"
-        } catch (e) {
-            console.warn(e)
-        }
-    }, [])
     return (
         <BuildContainer initialValue={build}>
             <BuildChecker />
