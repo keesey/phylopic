@@ -22,16 +22,16 @@ const SiteFooter: FC = () => (
             </li>
             <li className={clsx(styles.item, styles.logos)}>
                 <Link className={styles.textIcon} href="/mailinglist" title="Subscribe to the PhyloPic mailing list.">
-                    <Image src={logoMail} width={28} height={28} alt="Mailing List" />
+                    <Image src={logoMail} width={28} height={28} alt="Mailing List" unoptimized />
                 </Link>
                 <a href="https://sauropods.win/@phylopic" title="Follow PhyloPic on Mastodon." rel="me">
-                    <Image src={logoMastodon} width={25} height={25} alt="Mastodon" />
+                    <Image src={logoMastodon} width={25} height={25} alt="Mastodon" unoptimized />
                 </a>
                 <a href="https://discord.gg/RtrWAzTEce" title="Join the discussion on Discord.">
-                    <Image src={logoDiscord} width={27.7} height={21} alt="Discord" />
+                    <Image src={logoDiscord} width={27.7} height={21} alt="Discord" unoptimized />
                 </a>
                 <a href="https://www.facebook.com/phylopic" title="Follow PhyloPic on Facebook." rel="me">
-                    <Image src={logoFacebook} width={21} height={21} alt="Facebook" />
+                    <Image src={logoFacebook} width={21} height={21} alt="Facebook" unoptimized />
                 </a>
                 <a
                     href="https://www.patreon.com/tmkeesey?fan_landing=true"
