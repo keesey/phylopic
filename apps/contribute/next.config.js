@@ -9,7 +9,7 @@ module.exports = {
             source: "/social/1200x1200.png",
             destination: "https://images.phylopic.org/social/1200x1200.png",
             permanent: true,
-        }
+        },
     ],
     swcMinify: true,
 }
