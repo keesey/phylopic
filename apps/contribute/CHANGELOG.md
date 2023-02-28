@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.5] - 2023-02-29
+
+### Changed
+
+-   Not optimizing social media icons in footers.
+
 ## [2.0.4] - 2023-02-21
 
 ### Added

@@ -19,6 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.6] - 2023-02-29
+
+### Added
+
+-   Blur image and `sizes` attribute for Pocket Phylogenies.
+
+### Changed
+
+-   Not optimizing social media icons in footers.
+-   Not including `build` query in silhouette image URLs.
+-   Made `alt` text for the backs of Pocket Phylogenies more descriptive.
+
+### Fixed
+
+-   Using more widely-accepted ARIA attribute (`aria-describedby`) for search input description.
+
 ## [2.0.5] - 2023-02-21
 
 ### Added

@@ -19,4 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.0] - 2023-02-29
+
+### Added
+
+-   Function for generating flat-color bur images (`rgbDataURL()`).
+
 ## [1.0.0] - 2023-02-12
