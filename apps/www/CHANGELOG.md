@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   More properties to `ImageObject` metadata.
-
 ### Changed
 
 ### Deprecated
@@ -19,9 +17,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
--   No longer setting `document.domain`.
-
 ### Security
+
+## [2.0.7] - 2023-03-06
+
+### Added
+
+-   More properties to `ImageObject` metadata.
+
+### Removed
+
+-   No longer setting `document.domain`.
 
 ## [2.0.6] - 2023-02-29
 
