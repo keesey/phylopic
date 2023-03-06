@@ -18,13 +18,6 @@ type Props = PropsWithChildren<{
     submissionHash?: Hash
 }>
 const PageLayout: FC<Props> = ({ build, children, fallback = {}, seo, submissionHash }) => {
-    useEffect(() => {
-        try {
-            document.domain = "phylopic.org"
-        } catch (e) {
-            console.warn(e)
-        }
-    }, [])
     return (
         <SWRConfig value={{ fallback }}>
             <LoaderContext.Provider value={{ color: "#fff" }}>
