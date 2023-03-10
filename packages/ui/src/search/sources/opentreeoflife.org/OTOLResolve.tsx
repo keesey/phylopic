@@ -58,9 +58,9 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
     const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
     const lineageIDs = React.useMemo(() => {
         if (!lineage.data?.lineage) {
-            return []
+            return [ott_id]
         }
-        return lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))
+        return [ott_id, ...lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))]
     }, [lineage.data?.lineage, ott_id])
     const [indirectKey, setIndirectKey] = useDebounce<[string, string[]] | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(

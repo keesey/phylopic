@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   The _Open Tree of Life_ resolver was not including the search result in the lineage list.
+
 ### Removed
 
 ### Security
@@ -23,6 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Function for generating flat-color bur images (`rgbDataURL()`).
+-   Function for generating flat-color blur images (`rgbDataURL()`).
 
 ## [1.0.0] - 2023-02-12
