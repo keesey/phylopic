@@ -4,6 +4,7 @@ import {
     DATA_MEDIA_TYPE,
     isContributorListParameters,
     Link,
+    TitledLink,
 } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
 import { ClientBase } from "pg"
@@ -28,8 +29,8 @@ const getQueryBuilder = (parameters: ContributorListParameters, results: "total"
         results === "total"
             ? 'COUNT(contributor."uuid") as total'
             : results === "uuid"
-            ? 'contributor."uuid" AS "uuid"'
-            : 'contributor.json AS json,contributor."uuid" AS "uuid"'
+            ? 'contributor.title AS title,contributor."uuid" AS "uuid"'
+            : 'contributor.json AS json,contributor.title AS title,contributor."uuid" AS "uuid"'
     if (parameters.filter_collection) {
         builder.add(
             `SELECT ${selection} FROM collection LEFT JOIN contributor ON contributor."uuid"=ANY(collection.uuids) WHERE collection.uuid=$::uuid AND contributor.build=$::bigint`,
@@ -52,11 +53,11 @@ const getTotalItems = (parameters: ContributorListParameters) => async (client: 
 }
 const getItemLinks =
     (parameters: ContributorListParameters) =>
-    async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
+    async (client: ClientBase, offset: number, limit: number): Promise<readonly TitledLink[]> => {
         const queryBuilder = getQueryBuilder(parameters, "uuid")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ uuid: UUID }>(queryBuilder.build())
-        return queryResult.rows.map(({ uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}` }))
+        const queryResult = await client.query<{ title: string; uuid: UUID }>(queryBuilder.build())
+        return queryResult.rows.map(({ title, uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}`, title }))
     }
 const getItemLinksAndJSON =
     (parameters: ContributorListParameters) =>
@@ -66,11 +67,14 @@ const getItemLinksAndJSON =
         limit: number,
         // :TODO: embed_latestImage
         // embeds: ReadonlyArray<string & keyof {}>,
-    ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
+    ): Promise<ReadonlyArray<Readonly<[TitledLink, string]>>> => {
         const queryBuilder = getQueryBuilder(parameters, "json")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ json: string; uuid: UUID }>(queryBuilder.build())
-        return queryResult.rows.map(({ json, uuid }) => [{ href: `/contributors/${uuid}?build=${BUILD}` }, json])
+        const queryResult = await client.query<{ json: string; title: string; uuid: UUID }>(queryBuilder.build())
+        return queryResult.rows.map(({ json, title, uuid }) => [
+            { href: `/contributors/${uuid}?build=${BUILD}`, title },
+            json,
+        ])
         // :TODO: embeds
     }
 export const getContributors: Operation<GetContributorsParameters, GetContributorsService> = async (

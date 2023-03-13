@@ -36,8 +36,9 @@ CREATE TABLE IF NOT EXISTS public.contributor
     created timestamp without time zone NOT NULL,
     json text COLLATE pg_catalog."default" NOT NULL,
     sort_index bigint NOT NULL,
+    title character varying(64) COLLATE pg_catalog."default" NOT NULL
     CONSTRAINT contributor_id PRIMARY KEY (uuid, build),
-    CONSTRAINT contributor_sort_index_unique UNIQUE (sort_index, build)
+    CONSTRAINT contributor_sort_index_unique UNIQUE (sort_index, build).sql
 )
 WITH (
     OIDS = FALSE
@@ -62,6 +63,7 @@ CREATE TABLE IF NOT EXISTS public.image
     license_sa bit(1) NOT NULL,
     json text COLLATE pg_catalog."default" NOT NULL,
     depth bigint NOT NULL DEFAULT 0,
+    title character varying(64) COLLATE pg_catalog."default" NOT NULL
     CONSTRAINT image_id PRIMARY KEY (uuid, build),
     CONSTRAINT image_contributor_fkey FOREIGN KEY (contributor_uuid, build)
         REFERENCES public.contributor (uuid, build) MATCH SIMPLE
@@ -88,6 +90,7 @@ CREATE TABLE IF NOT EXISTS public.node
     parent_uuid uuid,
     json text COLLATE pg_catalog."default" NOT NULL,
     sort_index bigint NOT NULL,
+    title character varying(64) COLLATE pg_catalog."default" NOT NULL
     CONSTRAINT node_id PRIMARY KEY (uuid, build),
     CONSTRAINT node_sort_index_unique UNIQUE (sort_index, build),
     CONSTRAINT node_parent FOREIGN KEY (build, parent_uuid)

@@ -1,9 +1,11 @@
 import { List, Page } from "@phylopic/api-models"
-import { createSearch, isDefined } from "@phylopic/utils"
+import { createSearch } from "@phylopic/utils"
 import { fetchData } from "@phylopic/utils-api"
 import { GetStaticPaths, GetStaticPathsResult } from "next"
+import slugify from "slugify"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import { EntityPageQuery } from "./EntityPageQuery"
+const isEntityPageQuery = (x: Partial<EntityPageQuery>): x is EntityPageQuery => Boolean(x?.uuid)
 const createStaticPathsGetter =
     (endpoint: string): GetStaticPaths<EntityPageQuery> =>
     async () => {
@@ -30,11 +32,15 @@ const createStaticPathsGetter =
         }
         const paths: GetStaticPathsResult<EntityPageQuery>["paths"] =
             pageResponse.data._links.items
-                .map(link => extractUUIDv4(link.href))
-                .filter(isDefined)
-                .map(uuid => ({
-                    params: { uuid },
-                })) ?? []
+                .map(
+                    link =>
+                        ({
+                            slug: slugify(link.title),
+                            uuid: extractUUIDv4(link.href) ?? undefined,
+                        } as Partial<EntityPageQuery>),
+                )
+                .filter(isEntityPageQuery)
+                .map((params: EntityPageQuery) => ({ params })) ?? []
         return {
             fallback: "blocking",
             paths,

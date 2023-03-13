@@ -1,4 +1,4 @@
-import { Link, Page } from "@phylopic/api-models"
+import { Page, TitledLink } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
 const getPageObject = (
@@ -6,7 +6,7 @@ const getPageObject = (
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
     index: number,
     lastPage: boolean,
-    items: readonly Link[],
+    items: readonly TitledLink[],
 ): Page => {
     return {
         _links: {

@@ -99,7 +99,7 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
 }
 export const getStaticPaths = createStaticPathsGetter("/contributors")
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
-    const { uuid } = context.params ?? {}
+    const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
