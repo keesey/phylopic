@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.9] - 2023-03-13
+
+### Changed
+
+-   Drastically reducing SWR fallback payload for Lineage Pages.
+
 ## [2.0.8] - 2023-03-10
 
 ### Fixed
