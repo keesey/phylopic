@@ -15,7 +15,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
     return (
         <div className={styles.main}>
             <p className={styles.highlighted} id="systbio.org">
-                <a href="https://www.systbio.org" className={styles.imageLink} rel="license">
+                <a href="//www.systbio.org" className={styles.imageLink} rel="external">
                     <cite>
                         <Image
                             src={logoSSB}
@@ -32,7 +32,8 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                 All patrons on{" "}
                 <a
                     className={styles.imageLink}
-                    href="https://www.patreon.com/tmkeesey?fan_landing=true"
+                    href="//www.patreon.com/tmkeesey?fan_landing=true"
+                    rel="author"
                     title="Support the creator of PhyloPic on Patreon."
                 >
                     <Image src={logoPatreon} width={150} height={20} alt="Patreon" />
@@ -42,7 +43,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                 <h3>
                     Backers of the{" "}
                     <a
-                        href="https://www.indiegogo.com/projects/phylopic-2-0-free-silhouettes-of-all-life-forms"
+                        href="//www.indiegogo.com/projects/phylopic-2-0-free-silhouettes-of-all-life-forms"
                         className={styles.imageLink}
                     >
                         <Image src={logoIndiegogo} width={140} height={20} alt="IndieGogo" />

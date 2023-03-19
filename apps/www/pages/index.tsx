@@ -121,7 +121,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 <p>
                     Free wallet-sized cards with common questions about evolution on one side, and diagrams for
                     explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
-                    <a href="https://keesey.gumroad.com/l/pocketphylogenies">
+                    <a href="//keesey.gumroad.com/l/pocketphylogenies">
                         click here to print out Pocket Phylogenies for yourself
                     </a>
                     .

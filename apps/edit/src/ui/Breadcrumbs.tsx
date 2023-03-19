@@ -9,15 +9,20 @@ export type BreadcrumbItem = Readonly<{
 export interface Props {
     items: readonly BreadcrumbItem[]
 }
+const isExternalLink = (s: string) => /^(https?:)?\/\//.test(s)
 const Breadcrumbs: FC<Props> = ({ items }) => (
     <nav className={styles.main}>
         <ul>
             {items.map(({ children, href }, index) => (
                 <li key={index}>
                     {href ? (
-                        <Link href={href} legacyBehavior>
-                            {children}
-                        </Link>
+                        isExternalLink(href) ? (
+                            <a href={href}>{children}</a>
+                        ) : (
+                            <Link href={href} legacyBehavior>
+                                {children}
+                            </Link>
+                        )
                     ) : (
                         children
                     )}

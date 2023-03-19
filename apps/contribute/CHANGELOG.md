@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Removed schema from outbound `https` links.
+-   Replaced `/donate` links with direct URL.
+-   Updated `rel` attribute for links
+
 ### Deprecated
 
 ### Fixed

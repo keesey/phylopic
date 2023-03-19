@@ -31,15 +31,15 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
                 <Fragment key="some">
                     <p className={styles.message}>
                         Search powered in part by the{" "}
-                        <a href="https://eol.org/" rel="external">
+                        <a href="//eol.org/" rel="external">
                             Encyclopedia of Life
                         </a>
                         , the{" "}
-                        <a href="https://tree.opentreeoflife.org/" rel="external">
+                        <a href="//tree.opentreeoflife.org/" rel="external">
                             Open Tree of Life
                         </a>
                         , and the{" "}
-                        <a href="https://paleobiodb.org/" rel="external">
+                        <a href="//paleobiodb.org/" rel="external">
                             Paleobiology Database
                         </a>
                         .

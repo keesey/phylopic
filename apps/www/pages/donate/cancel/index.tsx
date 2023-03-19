@@ -18,7 +18,7 @@ const PageComponent: NextPage = () => (
             <Breadcrumbs
                 items={[
                     { children: "Home", href: "/" },
-                    { children: "Donate", href: "/donate" },
+                    { children: "Donate", href: "//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW" },
                     { children: <strong>Other Ways to Contribute</strong> },
                 ]}
             />
@@ -47,10 +47,13 @@ const PageComponent: NextPage = () => (
                     updates on other projects by{" "}
                     <Link href={`/contributors/${process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID}`}>Mike Keesey</Link>,
                     like the comic book series{" "}
-                    <a href="https://www.keesey-comics.com/paleocene" rel="external">
+                    <a href="//www.keesey-comics.com/paleocene" rel="external">
                         <cite>Paleocene</cite>
                     </a>
-                    . <a href="https://www.patreon.com/tmkeesey?fan_landing=true">Become a patron!</a>
+                    .{" "}
+                    <a href="//www.patreon.com/tmkeesey?fan_landing=true" rel="author">
+                        Become a patron!
+                    </a>
                 </p>
             </section>
             <section>
@@ -71,17 +74,17 @@ const PageComponent: NextPage = () => (
                 </p>
                 <BulletList>
                     <li>
-                        <a href="https://inkscape.org/support-us/" rel="external">
+                        <a href="//inkscape.org/support-us/" rel="external">
                             Inkscape
                         </a>
                     </li>
                     <li>
-                        <a href="https://imagemagick.org/script/support.php#support" rel="external">
+                        <a href="//imagemagick.org/script/support.php#support" rel="external">
                             ImageMagick
                         </a>
                     </li>
                     <li>
-                        <a href="https://opencollective.com/mochajs#support" rel="external">
+                        <a href="//opencollective.com/mochajs#support" rel="external">
                             Mocha
                         </a>
                     </li>
@@ -91,9 +94,11 @@ const PageComponent: NextPage = () => (
                 <h2>Software Engineering</h2>
                 <p>
                     If you are technically inclined, check out the{" "}
-                    <a href="https://github.com/keesey/phylopic">code repository</a> and/or the{" "}
-                    <a href="http://api-docs.phylopic.org/2.0">API Documentation</a>. Think about contributing to{" "}
-                    <SiteTitle /> or building a tool that uses it.
+                    <a href="//github.com/keesey/phylopic">code repository</a> and/or the{" "}
+                    <a href="http://api-docs.phylopic.org/v2" rel="help">
+                        API Documentation
+                    </a>
+                    . Think about contributing to <SiteTitle /> or building a tool that uses it.
                 </p>
             </section>
             <section>

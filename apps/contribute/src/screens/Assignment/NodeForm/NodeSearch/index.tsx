@@ -49,14 +49,14 @@ export const NodeSearch: FC = () => {
                         <small>
                             (Search partly powered by the{" "}
                             <a
-                                href="https://tree.opentreeoflife.org/about/open-tree-of-life"
+                                href="//tree.opentreeoflife.org/about/open-tree-of-life"
                                 target="_blank"
                                 rel="noreferrer"
                             >
                                 Open Tree of Life
                             </a>
                             {" and the "}
-                            <a href="https://paleobiodb.org/" target="_blank" rel="noreferrer">
+                            <a href="//paleobiodb.org/" target="_blank" rel="noreferrer">
                                 Paleobiology Database
                             </a>
                             .)

@@ -11,7 +11,7 @@ const Page: NextPage = () => (
         </header>
         <p>Sorry for the inconvenience. Please check back later.</p>
         <p>
-            You may also <a href="https://github.com/keesey/phylopic/issues/new">report the issue</a>.
+            You may also <a href="//github.com/keesey/phylopic/issues/new">report the issue</a>.
         </p>
     </PageLayout>
 )

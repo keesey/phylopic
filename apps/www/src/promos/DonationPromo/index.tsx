@@ -16,11 +16,15 @@ const DonationPromo: FC = () => {
     return (
         <aside className={clsx([styles.main, styles[variant]])}>
             <p>
-                Hey, do you like <SiteTitle />? <Link href="/donate">Make a donation</Link> to keep it going!
+                Hey, do you like <SiteTitle />?{" "}
+                <a href="//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW">Make a donation</a> to keep it going!
             </p>
             <p>
-                Or, <a href="https://www.patreon.com/tmkeesey?fan_landing=true">become a patron</a> to see previews of
-                new features!
+                Or,{" "}
+                <a href="//www.patreon.com/tmkeesey?fan_landing=true" rel="author">
+                    become a patron
+                </a>{" "}
+                to see previews of new features!
             </p>
         </aside>
     )
