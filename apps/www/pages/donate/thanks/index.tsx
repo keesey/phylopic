@@ -17,7 +17,7 @@ const PageComponent: NextPage = () => (
             <Breadcrumbs
                 items={[
                     { children: "Home", href: "/" },
-                    { children: "Donate", href: "//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW" },
+                    { children: "Donate", href: "https://www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW" },
                     { children: <strong>Thanks for Your Donation</strong> },
                 ]}
             />
