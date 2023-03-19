@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Removed schema from some outbound `https` links.
 -   Replaced `/donate` links with direct URL.
--   Updated `rel` attribute for links
+-   Updated `rel` attribute for links.
 
 ## [2.0.7] - 2023-03-10
 
