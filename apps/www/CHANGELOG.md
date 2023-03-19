@@ -11,20 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Removed schema from outbound `https` links and external image links.
--   Updated link for API Docs.
--   Replaced `/donate` links with direct URL.
--   Updated `rel` attribute for links
-
 ### Deprecated
 
 ### Fixed
 
 ### Removed
 
--   Unused page for `/donate`.
-
 ### Security
+
+## [2.0.10] - 2023-03-19
+
+### Changed
+
+-   Removed schema from some outbound `https` links and external image links.
+-   Updated link for API Docs.
+-   Replaced `/donate` links with direct URL.
+-   Updated `rel` attribute for links
+
+### Removed
+
+-   Unused page for `/donate`.
 
 ## [2.0.9] - 2023-03-13
 
