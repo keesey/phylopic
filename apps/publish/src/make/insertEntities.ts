@@ -226,7 +226,7 @@ const insertIllustrations = async (client: ClientBase, data: SourceData) => {
         const chunks = chunk(data.illustration.entries(), 1024)
         for (const c of chunks) {
             const config: QueryConfig = {
-                text: "INSERT INTO image_node (node_uuid,build,image_uuid,title) VALUES",
+                text: "INSERT INTO image_node (node_uuid,build,image_uuid) VALUES",
                 values: [],
             }
             let index = 1
@@ -236,7 +236,7 @@ const insertIllustrations = async (client: ClientBase, data: SourceData) => {
             for (const [imageUUID, nodeUUIDs] of c) {
                 for (const nodeUUID of nodeUUIDs) {
                     config.text += index === 1 ? " " : ","
-                    config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::character varying)`
+                    config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid)`
                     config.values.push(nodeUUID, data.build, imageUUID)
                 }
             }
