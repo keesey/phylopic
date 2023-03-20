@@ -1,6 +1,14 @@
 import { normalizeQuery, TitledLink } from "@phylopic/api-models"
 import { Contributor } from "@phylopic/source-models"
-import { chunk, compareStrings, LicenseURL, stringifyNomen, stringifyNormalized, UUID } from "@phylopic/utils"
+import {
+    chunk,
+    compareStrings,
+    LicenseURL,
+    shortenNomen,
+    stringifyNomen,
+    stringifyNormalized,
+    UUID,
+} from "@phylopic/utils"
 import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
 import { cleanTables } from "./cleanEntities.js"
@@ -79,7 +87,7 @@ const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryCo
         node.parent ?? null,
         data.sortIndices.get(nodeUUID) ?? 0,
         stringifyNormalized(json),
-        titleNomen ? getNormalizedName(titleNomen) : null,
+        titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
     )
     processNodeNames(data.build, nodeUUID, node.names, queryConfigs.names)
     const nodeHRef = `/nodes/${nodeUUID}`
@@ -163,7 +171,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
                     isSA(image.license!) ? 1 : 0,
                     image.created,
                     stringifyNormalized(await getImageJSON(uuid, data)),
-                    titleNomen ? getNormalizedName(titleNomen) : null,
+                    titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
                 )
             }
             await tryQuery(client, config)
