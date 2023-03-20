@@ -1,5 +1,13 @@
-import { Image, Link, MediaLink } from "@phylopic/api-models"
-import { isImageMediaType, normalizeUUID, RasterMediaType, UUID, VectorMediaType } from "@phylopic/utils"
+import { Image, MediaLink, TitledLink } from "@phylopic/api-models"
+import {
+    isImageMediaType,
+    normalizeUUID,
+    RasterMediaType,
+    shortenNomen,
+    stringifyNomen,
+    UUID,
+    VectorMediaType
+} from "@phylopic/utils"
 import { createReadStream } from "fs"
 import { join } from "path"
 import probeImageSize from "probe-image-size"
@@ -7,12 +15,15 @@ import listDir from "../fsutils/listDir.js"
 import type { SourceData } from "./getSourceData.js"
 
 const IMAGES_URL_BASE = "https://images.phylopic.org/images/"
-const getNodes = (uuid: string, data: SourceData): readonly Link[] => {
+const getNodes = (uuid: string, data: SourceData): readonly TitledLink[] => {
     const nodeUUIDs = data.illustration.get(uuid)
     if (!nodeUUIDs) {
         return []
     }
-    return nodeUUIDs.map(nodeUUID => ({ href: `/nodes/${encodeURIComponent(nodeUUID)}?build=${data.build}` }))
+    return nodeUUIDs.map(nodeUUID => ({
+        href: `/nodes/${encodeURIComponent(nodeUUID)}?build=${data.build}`,
+        title: stringifyNomen(shortenNomen(data.nodes.get(nodeUUID)?.names[0] ?? [])) || "[Unnamed]",
+    }))
 }
 const getFileMetadata = (filename: string) => {
     const stream = createReadStream(filename)
@@ -107,14 +118,20 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
         getThumbnailLinks(uuid),
         getVectorLink(uuid),
     ])
+    const specificTitle =
+        stringifyNomen(shortenNomen(data.nodes.get(sourceImage.specific)?.names[0] ?? [])) || "[Unnamed]"
     return {
         _links: {
             contributor: {
                 href: `/contributors/${encodeURIComponent(sourceImage.contributor)}?build=${data.build}`,
+                title: data.contributors.get(sourceImage.contributor)?.name || "[Anonymous]",
             },
             generalNode: sourceImage.general
                 ? {
                       href: `/nodes/${encodeURIComponent(sourceImage.general)}?build=${data.build}`,
+                      title:
+                          stringifyNomen(shortenNomen(data.nodes.get(sourceImage.general)?.names[0] ?? [])) ||
+                          "[Unnamed]",
                   }
                 : null,
             "http://ogp.me/ns#image": socialFile,
@@ -125,10 +142,12 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
             rasterFiles,
             self: {
                 href: `/images/${encodeURIComponent(uuid)}?build=${data.build}`,
+                title: specificTitle,
             },
             sourceFile,
             specificNode: {
                 href: `/nodes/${encodeURIComponent(sourceImage.specific)}?build=${data.build}`,
+                title: specificTitle,
             },
             thumbnailFiles,
             // :TODO: Remove this line
