@@ -8,6 +8,7 @@ import {
     NodeLineageParameters,
     NodeLinks,
     NODE_EMBEDDED_PARAMETERS,
+    TitledLink,
 } from "@phylopic/api-models"
 import { normalizeUUID, UUID } from "@phylopic/utils"
 import { ClientBase } from "pg"
@@ -26,11 +27,13 @@ import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetNodesParameters = DataRequestHeaders & NodeLineageParameters
 export type GetNodesService = PgClientService
+const DEFAULT_TITLE = "[Unnamed]"
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list taxonomic groups."
-const getQueryBuilder = (uuid: UUID, results: "total" | "uuid" | "json") => {
+const getQueryBuilder = (uuid: UUID, results: "total" | "href" | "json") => {
     const builder = new QueryConfigBuilder()
-    const selection = results === "total" ? 'COUNT("uuid") as total' : results === "uuid" ? '"uuid"' : '"json","uuid"'
+    const selection =
+        results === "total" ? 'COUNT("uuid") as total' : results === "href" ? 'title,"uuid"' : '"json","uuid"'
     const additional = results === "json" ? '"json",' : ""
     const additionalN = results === "json" ? 'n."json",' : ""
     builder.add(
@@ -40,7 +43,7 @@ WITH RECURSIVE predecessors AS (
         FROM node
         WHERE "uuid"=$::uuid AND build=$::bigint
     UNION
-    SELECT ${additionalN}n."uuid",n.parent_uuid,n.build,suc.lineage_index + 1
+    SELECT ${additionalN}n.title,n."uuid",n.parent_uuid,n.build,suc.lineage_index + 1
         FROM node n
         INNER JOIN predecessors suc ON suc.parent_uuid=n."uuid" AND suc.build=n.build
 )
@@ -60,11 +63,14 @@ const getTotalItems = (uuid: UUID) => async (client: ClientBase) => {
 }
 const getItemLinks =
     (uuid: UUID) =>
-    async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
-        const queryBuilder = getQueryBuilder(uuid, "uuid")
+    async (client: ClientBase, offset: number, limit: number): Promise<readonly TitledLink[]> => {
+        const queryBuilder = getQueryBuilder(uuid, "href")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ uuid: UUID }>(queryBuilder.build())
-        return queryResult.rows.map(({ uuid }) => ({ href: `/nodes/${uuid}?build=${BUILD}` }))
+        const queryResult = await client.query<{ title: string | null; uuid: UUID }>(queryBuilder.build())
+        return queryResult.rows.map(({ title, uuid }) => ({
+            href: `/nodes/${uuid}?build=${BUILD}`,
+            title: title || DEFAULT_TITLE,
+        }))
     }
 const getItemLinksAndJSON =
     (uuid: UUID) =>
@@ -73,17 +79,20 @@ const getItemLinksAndJSON =
         offset: number,
         limit: number,
         embeds: ReadonlyArray<string & keyof NodeEmbedded>,
-    ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
+    ): Promise<ReadonlyArray<Readonly<[TitledLink, string]>>> => {
         const queryBuilder = getQueryBuilder(uuid, "json")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ json: string; uuid: UUID }>(queryBuilder.build())
+        const queryResult = await client.query<{ json: string; title: string | null; uuid: UUID }>(queryBuilder.build())
         if (!embeds.length) {
-            return queryResult.rows.map(({ json, uuid }) => [{ href: `/nodes/${uuid}?build=${BUILD}` }, json])
+            return queryResult.rows.map(({ json, title, uuid }) => [
+                { href: `/nodes/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
+                json,
+            ])
         }
         return await Promise.all(
-            queryResult.rows.map(async ({ json, uuid }) => {
+            queryResult.rows.map(async ({ json, title, uuid }) => {
                 return [
-                    { href: `/nodes/${uuid}?build=${BUILD}` },
+                    { href: `/nodes/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
                     await parseEntityJSONAndEmbed<Node, NodeLinks>(client, json, embeds, isNode, "taxonomic group"),
                 ]
             }),
