@@ -90,7 +90,7 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
     return (
         <>
             <NextSeo
-                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributor.uuid)}`}
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getContributorHRef(contributor._links.self)}`}
                 description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
                 openGraph={openGraph}
                 title={`PhyloPic: Silhouette Images Contributed by ${name}`}

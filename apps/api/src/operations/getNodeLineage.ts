@@ -52,7 +52,7 @@ SELECT ${selection} FROM predecessors
         [uuid, BUILD],
     )
     if (results !== "total") {
-        builder.add(`GROUP BY ${additional}"uuid",lineage_index ORDER BY lineage_index`)
+        builder.add(`GROUP BY ${additional}title,"uuid",lineage_index ORDER BY lineage_index`)
     }
     return builder
 }

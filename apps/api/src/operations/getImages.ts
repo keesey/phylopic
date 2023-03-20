@@ -88,13 +88,13 @@ SELECT ${selection} FROM node_name
         // Add nothing
     } else if (parameters.filter_clade) {
         builder.add(
-            `GROUP BY image."uuid",image.depth${
+            `GROUP BY image.title,image."uuid",image.depth${
                 results === "json" ? ',image."json"' : ""
             } ORDER BY image.depth,image."uuid"`,
         )
     } else if (parameters.filter_name || parameters.filter_node) {
         builder.add(
-            `GROUP BY image."uuid",image.created${
+            `GROUP BY image.title,image."uuid",image.created${
                 results === "json" ? ',image."json"' : ""
             } ORDER BY image.created DESC,image."uuid"`,
         )

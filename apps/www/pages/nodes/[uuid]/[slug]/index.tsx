@@ -4,7 +4,7 @@ import {
     List,
     NodeParameters,
     NodeWithEmbedded,
-    PageWithEmbedded,
+    PageWithEmbedded
 } from "@phylopic/api-models"
 import { Loader, NodeContainer, useNomenText } from "@phylopic/ui"
 import {
@@ -15,7 +15,7 @@ import {
     isUUIDv4,
     parseQueryString,
     Query,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
@@ -35,6 +35,7 @@ import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
+import getHRefFromAPILink from "~/routes/getHRefFromAPILink"
 import getNodeHRef from "~/routes/getNodeHRef"
 import getNodeSlug from "~/routes/getNodeSlug"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
@@ -73,7 +74,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
             node._links.parentNode?.href &&
             node._embedded.parentNode &&
             nodeHasOwnCladeImages(node._embedded.parentNode)
-                ? extractPath(node._links.parentNode.href)
+                ? getHRefFromAPILink(node._links.parentNode)
                 : undefined,
         [node._embedded.parentNode, node._links.parentNode?.href],
     )

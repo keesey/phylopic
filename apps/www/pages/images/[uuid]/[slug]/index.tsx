@@ -17,8 +17,10 @@ import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import DonationPromo from "~/promos/DonationPromo"
+import getContributorHRef from "~/routes/getContributorHRef"
 import getImageHRef from "~/routes/getImageHRef"
 import getImageSlug from "~/routes/getImageSlug"
+import getNodeHRef from "~/routes/getNodeHRef"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
@@ -33,7 +35,6 @@ import LicenseView from "~/views/LicenseView"
 import NomenView from "~/views/NomenView"
 const ContributorBanner = dynamic(() => import("~/contribute/ContributorBanner"), { ssr: false })
 const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
-    embed_contributor: "true",
     embed_nodes: "true",
     embed_specificNode: "true",
 }
@@ -90,7 +91,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                     { href: image._links.contributor.href, rel: "contributor" },
                     { href: image._links.license.href, rel: "license" },
                 ]}
-                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(image.uuid)}`}
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getImageHRef(image._links.self)}`}
                 description={description}
                 openGraph={openGraph}
                 title={title}
@@ -162,24 +163,16 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             <th>Uploaded</th>
                             <td>
                                 <TimestampView value={image.created} /> by{" "}
-                                {image._embedded.contributor && (
-                                    <Link
-                                        href={`/contributors/${encodeURIComponent(image._embedded.contributor.uuid)}`}
-                                        rel="contributor"
-                                    >
-                                        {image._embedded.contributor.name || "Anonymous"}
-                                    </Link>
-                                )}
+                                <Link href={getContributorHRef(image._links.contributor)} rel="author">
+                                    {image._links.contributor.title}
+                                </Link>
                             </td>
                         </tr>
                         {image._embedded.specificNode && (
                             <tr key="nodes">
                                 <th>Taxon</th>
                                 <td>
-                                    <Link
-                                        href={`/nodes/${getCladeImagesUUID(image._embedded.specificNode)}`}
-                                        rel="subject"
-                                    >
+                                    <Link href={getNodeHRef(image._links.specificNode)} rel="subject">
                                         <NomenView value={image._embedded.specificNode.names[0]} />
                                     </Link>
                                 </td>
@@ -225,7 +218,6 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         return getStaticPropsResult(result)
     }
     if (getImageSlug(result.data._links.self.title) !== slug) {
-        console.log(getImageSlug(result.data._links.self.title), "!==", slug)
         return {
             redirect: {
                 destination: `${process.env.NEXT_PUBLIC_WWW_URL}/${getImageHRef(result.data._links.self)}`,

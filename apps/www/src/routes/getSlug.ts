@@ -12,6 +12,6 @@ const getSlug = (href: string, title: string) => {
     if (href.startsWith("/contributors/")) {
         return getContributorSlug(title)
     }
-    return slugify(title, { lower: true })
+    return slugify(title, { lower: true, strict: true, trim: true })
 }
 export default getSlug
