@@ -4,6 +4,7 @@ import { fetchData } from "@phylopic/utils-api"
 import { GetStaticPaths, GetStaticPathsResult } from "next"
 import slugify from "slugify"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
+import getSlug from "~/routes/getSlug"
 import { EntityPageQuery } from "./EntityPageQuery"
 const isEntityPageQuery = (x: Partial<EntityPageQuery>): x is EntityPageQuery => Boolean(x?.uuid)
 const createStaticPathsGetter =
@@ -35,7 +36,7 @@ const createStaticPathsGetter =
                 .map(
                     link =>
                         ({
-                            slug: slugify(link.title),
+                            slug: getSlug(link.href, link.title),
                             uuid: extractUUIDv4(link.href) ?? undefined,
                         } as Partial<EntityPageQuery>),
                 )

@@ -1,3 +1,3 @@
 import slugify from "slugify"
-const getContributorSlug = (title: string) => `silhouettes-by-${slugify(title)}`
+const getContributorSlug = (title: string) => `silhouettes-by-${slugify(title, { lower: true })}`
 export default getContributorSlug

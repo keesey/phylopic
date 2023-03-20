@@ -15,7 +15,7 @@ const getChildNodes = (vertex: number, data: SourceData): readonly TitledLink[] 
         )
         .map(childUUID => ({
             href: `/nodes/${childUUID}?build=${data.build}`,
-            title: stringifyNomen(shortenNomen(data.nodes.get(childUUID)?.names[0] ?? [])) || "[Unnamed]"
+            title: stringifyNomen(shortenNomen(data.nodes.get(childUUID)?.names[0] ?? [])) || "[Unnamed]",
         }))
 }
 const compareImageEntitiesByCreated = (a: Entity<Image>, b: Entity<Image>) => {
@@ -90,7 +90,7 @@ const getPrimaryImage = (uuid: UUID, data: SourceData): TitledLink | null => {
     }
     return {
         href: `/images/${imageEntity.uuid}?build=${data.build}`,
-        title: stringifyNomen(shortenNomen(data.nodes.get(imageEntity.value.specific)?.names[0] ?? [])) || "[Untitled]"
+        title: stringifyNomen(shortenNomen(data.nodes.get(imageEntity.value.specific)?.names[0] ?? [])) || "[Untitled]",
     }
 }
 const getExternal = (uuid: UUID, data: SourceData) => {

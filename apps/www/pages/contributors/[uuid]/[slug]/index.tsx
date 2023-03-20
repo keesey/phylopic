@@ -24,6 +24,8 @@ import Breadcrumbs from "~/ui/Breadcrumbs"
 import ContributorDetailsView from "~/views/ContributorDetailsView"
 import ContributorNameView from "~/views/ContributorNameView"
 import ImageListView from "~/views/ImageListView"
+import getContributorSlug from "~/routes/getContributorSlug"
+import getContributorHRef from "~/routes/getContributorHRef"
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
     uuid: UUID
@@ -112,6 +114,16 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     ])
     if (contributorResult.status !== "success") {
         return getStaticPropsResult(contributorResult)
+    }
+    if (getContributorSlug(contributorResult.data._links.self.title) !== slug) {
+        return {
+            redirect: {
+                destination: `${process.env.NEXT_PUBLIC_WWW_URL}/${getContributorHRef(
+                    contributorResult.data._links.self,
+                )}`,
+                permanent: false,
+            },
+        }
     }
     const build = contributorResult.data.build
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {

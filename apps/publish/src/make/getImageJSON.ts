@@ -6,7 +6,7 @@ import {
     shortenNomen,
     stringifyNomen,
     UUID,
-    VectorMediaType
+    VectorMediaType,
 } from "@phylopic/utils"
 import { createReadStream } from "fs"
 import { join } from "path"

@@ -5,6 +5,7 @@ import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import getContributorHRef from "~/routes/getContributorHRef"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import Board from "~/ui/Board"
@@ -35,9 +36,9 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                             </p>
                         </header>
                         <Board
-                            items={(contributors as readonly Contributor[]).map(({ count, name, uuid }) => [
+                            items={(contributors as readonly Contributor[]).map(({ _links, count, name, uuid }) => [
                                 uuid,
-                                <Link key={`link:${uuid}`} href={`/contributors/${encodeURIComponent(uuid)}`}>
+                                <Link key={`link:${uuid}`} href={getContributorHRef(_links.self)}>
                                     {name || "Anonymous"}
                                 </Link>,
                                 <NumberView key={`count:${uuid}`} value={count} />,
