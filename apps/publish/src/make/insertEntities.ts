@@ -1,6 +1,13 @@
 import { normalizeQuery, TitledLink } from "@phylopic/api-models"
 import { Contributor } from "@phylopic/source-models"
-import { chunk, compareStrings, LicenseURL, stringifyNormalized, UUID } from "@phylopic/utils"
+import {
+    chunk,
+    compareStrings,
+    LicenseURL,
+    stringifyNomen,
+    stringifyNormalized,
+    UUID,
+} from "@phylopic/utils"
 import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
 import { cleanTables } from "./cleanEntities.js"
@@ -72,12 +79,14 @@ const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryCo
     let index = queryConfigs.nodes.values.length + 1
     queryConfigs.nodes.text += index === 1 ? " " : ","
     queryConfigs.nodes.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::text)`
+    const titleNomen = data.nodes.get(nodeUUID)?.names[0]
     queryConfigs.nodes.values.push(
         nodeUUID,
         data.build,
         node.parent ?? null,
         data.sortIndices.get(nodeUUID) ?? 0,
         stringifyNormalized(json),
+        titleNomen ? getNormalizedName(titleNomen) : null
     )
     processNodeNames(data.build, nodeUUID, node.names, queryConfigs.names)
     const nodeHRef = `/nodes/${nodeUUID}`
@@ -100,7 +109,7 @@ const insertNodes = async (client: ClientBase, data: SourceData) => {
     const chunks = chunk(sorted, 500)
     for (const c of chunks) {
         const nodes: QueryConfig = {
-            text: 'INSERT INTO node ("uuid",build,parent_uuid,sort_index,json) VALUES',
+            text: 'INSERT INTO node ("uuid",build,parent_uuid,sort_index,json,title) VALUES',
             values: [],
         }
         const names: QueryConfig = {
@@ -140,7 +149,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
         const chunks = chunk(data.images.entries(), 1024)
         for (const c of chunks) {
             const config: QueryConfig = {
-                text: 'INSERT INTO image ("uuid",build,contributor_uuid,depth,license_by,license_nc,license_sa,created,json) VALUES',
+                text: 'INSERT INTO image ("uuid",build,contributor_uuid,depth,license_by,license_nc,license_sa,created,json,title) VALUES',
                 values: [],
             }
             if (!config.values) {
@@ -148,6 +157,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
             }
             let index = 1
             for (const [uuid, image] of c) {
+                const titleNomen = data.nodes.get(image.specific)?.names[0]
                 config.text += index === 1 ? " " : ","
                 config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::text)`
                 config.values.push(
@@ -160,6 +170,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
                     isSA(image.license!) ? 1 : 0,
                     image.created,
                     stringifyNormalized(await getImageJSON(uuid, data)),
+                    titleNomen ? getNormalizedName(titleNomen) : null,
                 )
             }
             await tryQuery(client, config)
