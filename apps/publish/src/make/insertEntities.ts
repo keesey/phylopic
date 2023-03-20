@@ -71,7 +71,7 @@ const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryCo
     const json = getNodeJSON(nodeUUID, data)
     let index = queryConfigs.nodes.values.length + 1
     queryConfigs.nodes.text += index === 1 ? " " : ","
-    queryConfigs.nodes.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::text)`
+    queryConfigs.nodes.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::text,$${index++}::character varying)`
     const titleNomen = data.nodes.get(nodeUUID)?.names[0]
     queryConfigs.nodes.values.push(
         nodeUUID,
@@ -152,7 +152,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
             for (const [uuid, image] of c) {
                 const titleNomen = data.nodes.get(image.specific)?.names[0]
                 config.text += index === 1 ? " " : ","
-                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::text)`
+                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::character varying)`
                 config.values.push(
                     uuid,
                     data.build,
@@ -192,7 +192,7 @@ const insertContributors = async (client: ClientBase, data: SourceData) => {
         let sortIndex = 0
         for (const c of chunks) {
             const config: QueryConfig = {
-                text: 'INSERT INTO contributor ("uuid",build,created,json,sort_index) VALUES',
+                text: 'INSERT INTO contributor ("uuid",build,created,json,sort_index,title) VALUES',
                 values: [],
             }
             if (!config.values) {
@@ -201,13 +201,14 @@ const insertContributors = async (client: ClientBase, data: SourceData) => {
             let index = 1
             for (const [uuid, contributor, count] of c) {
                 config.text += index === 1 ? " " : ","
-                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::bigint)`
+                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::bigint,$${index++}::character varying)`
                 config.values.push(
                     uuid,
                     data.build,
                     contributor.created,
                     stringifyNormalized(getContributorJSON(uuid, data, count)),
                     sortIndex++,
+                    contributor.name || null,
                 )
             }
             await tryQuery(client, config)
@@ -225,7 +226,7 @@ const insertIllustrations = async (client: ClientBase, data: SourceData) => {
         const chunks = chunk(data.illustration.entries(), 1024)
         for (const c of chunks) {
             const config: QueryConfig = {
-                text: "INSERT INTO image_node (node_uuid,build,image_uuid) VALUES",
+                text: "INSERT INTO image_node (node_uuid,build,image_uuid,title) VALUES",
                 values: [],
             }
             let index = 1
@@ -235,7 +236,7 @@ const insertIllustrations = async (client: ClientBase, data: SourceData) => {
             for (const [imageUUID, nodeUUIDs] of c) {
                 for (const nodeUUID of nodeUUIDs) {
                     config.text += index === 1 ? " " : ","
-                    config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid)`
+                    config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::character varying)`
                     config.values.push(nodeUUID, data.build, imageUUID)
                 }
             }
