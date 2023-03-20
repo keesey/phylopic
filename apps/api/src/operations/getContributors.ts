@@ -21,14 +21,15 @@ import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetContributorsParameters = DataRequestHeaders & ContributorListParameters
 export type GetContributorsService = PgClientService
+const DEFAULT_TITLE = "[Anonymous]"
 const ITEMS_PER_PAGE = 96
 const USER_MESSAGE = "There was a problem with a request to list contributors."
-const getQueryBuilder = (parameters: ContributorListParameters, results: "total" | "uuid" | "json") => {
+const getQueryBuilder = (parameters: ContributorListParameters, results: "total" | "href" | "json") => {
     const builder = new QueryConfigBuilder()
     const selection =
         results === "total"
             ? 'COUNT(contributor."uuid") as total'
-            : results === "uuid"
+            : results === "href"
             ? 'contributor.title AS title,contributor."uuid" AS "uuid"'
             : 'contributor.json AS json,contributor.title AS title,contributor."uuid" AS "uuid"'
     if (parameters.filter_collection) {
@@ -54,10 +55,13 @@ const getTotalItems = (parameters: ContributorListParameters) => async (client: 
 const getItemLinks =
     (parameters: ContributorListParameters) =>
     async (client: ClientBase, offset: number, limit: number): Promise<readonly TitledLink[]> => {
-        const queryBuilder = getQueryBuilder(parameters, "uuid")
+        const queryBuilder = getQueryBuilder(parameters, "href")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
         const queryResult = await client.query<{ title: string; uuid: UUID }>(queryBuilder.build())
-        return queryResult.rows.map(({ title, uuid }) => ({ href: `/contributors/${uuid}?build=${BUILD}`, title }))
+        return queryResult.rows.map(({ title, uuid }) => ({
+            href: `/contributors/${uuid}?build=${BUILD}`,
+            title: title || DEFAULT_TITLE,
+        }))
     }
 const getItemLinksAndJSON =
     (parameters: ContributorListParameters) =>
@@ -72,7 +76,7 @@ const getItemLinksAndJSON =
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
         const queryResult = await client.query<{ json: string; title: string; uuid: UUID }>(queryBuilder.build())
         return queryResult.rows.map(({ json, title, uuid }) => [
-            { href: `/contributors/${uuid}?build=${BUILD}`, title },
+            { href: `/contributors/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
             json,
         ])
         // :TODO: embeds

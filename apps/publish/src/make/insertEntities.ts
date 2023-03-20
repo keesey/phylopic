@@ -1,13 +1,6 @@
 import { normalizeQuery, TitledLink } from "@phylopic/api-models"
 import { Contributor } from "@phylopic/source-models"
-import {
-    chunk,
-    compareStrings,
-    LicenseURL,
-    stringifyNomen,
-    stringifyNormalized,
-    UUID,
-} from "@phylopic/utils"
+import { chunk, compareStrings, LicenseURL, stringifyNomen, stringifyNormalized, UUID } from "@phylopic/utils"
 import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
 import { cleanTables } from "./cleanEntities.js"
@@ -86,7 +79,7 @@ const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryCo
         node.parent ?? null,
         data.sortIndices.get(nodeUUID) ?? 0,
         stringifyNormalized(json),
-        titleNomen ? getNormalizedName(titleNomen) : null
+        titleNomen ? getNormalizedName(titleNomen) : null,
     )
     processNodeNames(data.build, nodeUUID, node.names, queryConfigs.names)
     const nodeHRef = `/nodes/${nodeUUID}`

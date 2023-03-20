@@ -2,12 +2,12 @@ import {
     DATA_MEDIA_TYPE,
     isNode,
     isNodeListParameters,
-    Link,
     Node,
     NodeEmbedded,
     NodeLinks,
     NodeListParameters,
     NODE_EMBEDDED_PARAMETERS,
+    TitledLink,
 } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
 import { ClientBase } from "pg"
@@ -25,16 +25,17 @@ import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetNodesParameters = DataRequestHeaders & NodeListParameters
 export type GetNodesService = PgClientService
+const DEFAULT_TITLE = "[Unnamed]"
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list taxonomic groups."
-const getQueryBuilder = (parameters: NodeListParameters, results: "total" | "uuid" | "json") => {
+const getQueryBuilder = (parameters: NodeListParameters, results: "total" | "href" | "json") => {
     const builder = new QueryConfigBuilder()
     const selection =
         results === "total"
             ? 'COUNT(node."uuid") as total'
-            : results === "uuid"
-            ? 'node."uuid" AS "uuid"'
-            : 'node.json AS json,node."uuid" AS "uuid"'
+            : results === "href"
+            ? 'node.title AS title,node."uuid" AS "uuid"'
+            : 'node.json AS json,node.title AS title,node."uuid" AS "uuid"'
     if (parameters.filter_name) {
         builder.add(
             `
@@ -70,11 +71,14 @@ const getTotalItems = (parameters: NodeListParameters) => async (client: ClientB
 }
 const getItemLinks =
     (parameters: NodeListParameters) =>
-    async (client: ClientBase, offset: number, limit: number): Promise<readonly Link[]> => {
-        const queryBuilder = getQueryBuilder(parameters, "uuid")
+    async (client: ClientBase, offset: number, limit: number): Promise<readonly TitledLink[]> => {
+        const queryBuilder = getQueryBuilder(parameters, "href")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ uuid: UUID }>(queryBuilder.build())
-        return queryResult.rows.map(({ uuid }) => ({ href: `/nodes/${uuid}?build=${BUILD}` }))
+        const queryResult = await client.query<{ title: string | null; uuid: UUID }>(queryBuilder.build())
+        return queryResult.rows.map(({ title, uuid }) => ({
+            href: `/nodes/${uuid}?build=${BUILD}`,
+            title: title || DEFAULT_TITLE,
+        }))
     }
 const getItemLinksAndJSON =
     (parameters: NodeListParameters) =>
@@ -83,17 +87,20 @@ const getItemLinksAndJSON =
         offset: number,
         limit: number,
         embeds: ReadonlyArray<string & keyof NodeEmbedded>,
-    ): Promise<ReadonlyArray<Readonly<[Link, string]>>> => {
+    ): Promise<ReadonlyArray<Readonly<[TitledLink, string]>>> => {
         const queryBuilder = getQueryBuilder(parameters, "json")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
-        const queryResult = await client.query<{ json: string; uuid: UUID }>(queryBuilder.build())
+        const queryResult = await client.query<{ json: string; title: string | null; uuid: UUID }>(queryBuilder.build())
         if (!embeds.length) {
-            return queryResult.rows.map(({ json, uuid }) => [{ href: `/nodes/${uuid}?build=${BUILD}` }, json])
+            return queryResult.rows.map(({ json, title, uuid }) => [
+                { href: `/nodes/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
+                json,
+            ])
         }
         return await Promise.all(
-            queryResult.rows.map(async ({ json, uuid }) => {
+            queryResult.rows.map(async ({ json, title, uuid }) => {
                 return [
-                    { href: `/nodes/${uuid}?build=${BUILD}` },
+                    { href: `/nodes/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
                     await parseEntityJSONAndEmbed<Node, NodeLinks>(client, json, embeds, isNode, "taxonomic group"),
                 ]
             }),
