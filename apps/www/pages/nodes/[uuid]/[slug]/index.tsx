@@ -76,7 +76,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
             nodeHasOwnCladeImages(node._embedded.parentNode)
                 ? getHRefFromAPILink(node._links.parentNode)
                 : undefined,
-        [node._embedded.parentNode, node._links.parentNode?.href],
+        [node._embedded.parentNode, node._links.parentNode],
     )
     const parentName = node._embedded?.parentNode?.names?.[0]
     const afterItems = useMemo(
