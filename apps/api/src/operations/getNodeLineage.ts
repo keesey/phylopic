@@ -39,7 +39,7 @@ const getQueryBuilder = (uuid: UUID, results: "total" | "href" | "json") => {
     builder.add(
         `
 WITH RECURSIVE predecessors AS (
-    SELECT ${additional}"uuid",parent_uuid,build,0 as lineage_index
+    SELECT ${additional}title,"uuid",parent_uuid,build,0 as lineage_index
         FROM node
         WHERE "uuid"=$::uuid AND build=$::bigint
     UNION
