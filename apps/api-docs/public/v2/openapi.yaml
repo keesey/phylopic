@@ -551,11 +551,11 @@ components:
                 contributor:
                   allOf:
                     - $ref: "#/components/schemas/TitledLink"
-                    - description: A `mailto:` URL with the contributor's email address.
+                    - description: A link to the contributor who uploaded this image.
                 generalNode:
                   allOf:
                     - $ref: "#/components/schemas/TitledLink"
-                    - description: A link to the node indicating how generally the image can be applied, either an ancestor of `specificNode` or a node indicating a common ancestor with `specificNode`.
+                    - description: A link to the node indicating how generally this image can be applied, either an ancestor of `specificNode` or a node indicating a common ancestor with `specificNode`.
                       nullable: true
                 "http://ogp.me/ns#image":
                   allOf:
