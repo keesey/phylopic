@@ -53,5 +53,5 @@
         "dev": "ROOT_PATH=\"/prod\" sls offline --httpPort 3003",
         "lint": "eslint --ext .js,.ts . --fix"
     },
-    "version": "2.1.1"
+    "version": "2.2.0"
 }

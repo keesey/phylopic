@@ -19,4 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.1.0] - 2023-03-21
+
+### Added
+
+-   New column, `title`, to entities.
+
 ## [2.0.0] - 2023-02-12
