@@ -57,7 +57,9 @@ SELECT ${selection} FROM node_name
         // Add nothing
     } else if (parameters.filter_name) {
         builder.add(
-            `GROUP BY node.title,node."uuid",node.sort_index${results === "json" ? ",node.json" : ""} ORDER BY node.sort_index`,
+            `GROUP BY node.title,node."uuid",node.sort_index${
+                results === "json" ? ",node.json" : ""
+            } ORDER BY node.sort_index`,
         )
     } else {
         builder.add("ORDER BY node.sort_index")

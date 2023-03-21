@@ -5,7 +5,7 @@ import isLink from "./isLink"
 import isLinks from "./isLinks"
 import isTitledLink from "./isTitledLink"
 const isAPILinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is API["_links"] =>
-    isLinks(x, faultCollector) &&
+    isLinks(x, isLink(isNormalizedText), faultCollector) &&
     isTitledLink(isNormalizedText)((x as API["_links"]).contact, faultCollector?.sub("contact")) &&
     isLink(isURL)((x as API["_links"]).documentation, faultCollector?.sub("documentation")) &&
     isArray(isTitledLink(isNormalizedText))((x as API["_links"]).resources, faultCollector?.sub("resources"))

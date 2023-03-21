@@ -147,7 +147,10 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     return {
         _links: {
             childNodes: getChildNodes(vertex, data),
-            cladeImages: { href: `/images?build=${data.build}&filter_clade=${cladeImagesUUID}` },
+            cladeImages: {
+                href: `/images?build=${data.build}&filter_clade=${cladeImagesUUID}`,
+                title: stringifyNomen(shortenNomen(data.nodes.get(cladeImagesUUID)?.names[0] ?? [])) || "[Unnamed]",
+            },
             external: getExternal(uuid, data),
             images: { href: `/images?build=${data.build}&filter_node=${uuid}` },
             lineage: { href: `/nodes/${uuid}/lineage?build=${data.build}` },
