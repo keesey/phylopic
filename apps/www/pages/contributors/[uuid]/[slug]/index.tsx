@@ -44,7 +44,7 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
 export default PageComponent
 const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
     const imagesQuery = useMemo(
-        () => ({ filter_contributor: contributor.uuid, embed_specificNode: "true" } as ImageListParameters & Query),
+        () => ({ filter_contributor: contributor.uuid } as ImageListParameters & Query),
         [contributor.uuid],
     )
     return (
@@ -135,7 +135,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             const getImagesPageKey = (page: number) =>
                 process.env.NEXT_PUBLIC_API_URL +
                 "/images" +
-                createSearch({ ...imagesQuery, build, embed_items: true, embed_specificNode: true, page })
+                createSearch({ ...imagesQuery, build, embed_items: true, page })
             const imagesPageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getImagesPageKey(0))
             if (imagesPageResponse.ok) {
                 fallback[unstable_serialize_infinite(getImagesPageKey)] = [imagesPageResponse.data]

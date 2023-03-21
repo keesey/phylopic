@@ -123,7 +123,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             if (imagesResult.ok && imagesResult.data.totalPages) {
                 const getPageKey = (page: number) =>
                     imagesKey +
-                    createSearch({ build, embed_items: true, embed_specificNode: true, filter_node: uuid, page })
+                    createSearch({ build, embed_items: true, filter_node: uuid, page })
                 const pageResponse = await fetchData<Page>(getPageKey(0))
                 if (pageResponse.ok) {
                     fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]

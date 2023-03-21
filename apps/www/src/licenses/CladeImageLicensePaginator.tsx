@@ -11,7 +11,7 @@ const CladeImageLicensePaginator: FC<Props> = ({ node, ...otherProps }) => {
     const query = useMemo(
         () =>
             node
-                ? ({ embed_specificNode: "true", filter_clade: getCladeImagesUUID(node) } as ImageListParameters &
+                ? ({ filter_clade: getCladeImagesUUID(node) } as ImageListParameters &
                       Query)
                 : null,
         [node],

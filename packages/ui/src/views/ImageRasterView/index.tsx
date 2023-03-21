@@ -2,7 +2,6 @@ import { ImageWithEmbedded, MediaLink } from "@phylopic/api-models"
 import { ImageMediaType, URL } from "@phylopic/utils"
 import Image from "next/image"
 import React from "react"
-import useImageAlt from "../../hooks/useImageAlt"
 import useImageLoader from "../../hooks/useImageLoader"
 import compareMediaLinks from "../../models/compareMediaLinks"
 export interface ImageRasterViewProps {
@@ -12,7 +11,6 @@ const useLinkSize = (link: MediaLink<URL, ImageMediaType>) => {
     return React.useMemo(() => link.sizes.split("x", 2).map(size => parseInt(size, 10)), [link.sizes])
 }
 export const ImageRasterView: React.FC<ImageRasterViewProps> = ({ value }) => {
-    const alt = useImageAlt(value)
     const loader = useImageLoader(value._links.rasterFiles)
     const smallestRasterFile = React.useMemo(
         () => [...value._links.rasterFiles].sort(compareMediaLinks)[0],
@@ -21,7 +19,7 @@ export const ImageRasterView: React.FC<ImageRasterViewProps> = ({ value }) => {
     const [width, height] = useLinkSize(smallestRasterFile)
     return (
         <Image
-            alt={alt}
+            alt={value._links.self.title}
             height={height}
             loader={loader}
             priority

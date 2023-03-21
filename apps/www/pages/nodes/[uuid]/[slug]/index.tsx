@@ -227,7 +227,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             const getPageKey = (page: number) =>
                 process.env.NEXT_PUBLIC_API_URL +
                 "/images" +
-                createSearch({ ...imagesQuery, build, embed_items: true, embed_specificNode: true, page })
+                createSearch({ ...imagesQuery, build, embed_items: true, page })
             const pageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getPageKey(0))
             if (pageResponse.ok) {
                 fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]

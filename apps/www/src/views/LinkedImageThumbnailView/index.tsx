@@ -1,5 +1,5 @@
 import { DATA_MEDIA_TYPE, ImageWithEmbedded } from "@phylopic/api-models"
-import { ImageThumbnailView, useImageAlt } from "@phylopic/ui"
+import { ImageThumbnailView } from "@phylopic/ui"
 import { extractPath, stringifyNormalized } from "@phylopic/utils"
 import clsx from "clsx"
 import Link from "next/link"
@@ -10,7 +10,6 @@ export interface Props {
     value: ImageWithEmbedded
 }
 const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
-    const title = useImageAlt(value)
     const handleDragStart = (event: DragEvent) => {
         event.dataTransfer.setData(DATA_MEDIA_TYPE, stringifyNormalized(value))
     }
@@ -20,7 +19,7 @@ const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
             draggable
             href={extractPath(value._links.self.href)}
             onDragStart={handleDragStart}
-            title={title}
+            title={value._links.self.title}
         >
             <ImageThumbnailView value={value} />
         </Link>

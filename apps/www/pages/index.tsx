@@ -91,7 +91,6 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 />
                 <PaginationContainer
                     endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
-                    query={{ embed_specificNode: true }}
                     maxPages={1}
                 >
                     {(images, totalImages) => (
@@ -155,6 +154,4 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     </CompressedSWRConfig>
 )
 export default PageComponent
-export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images", {
-    embed_specificNode: true,
-})
+export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images")
