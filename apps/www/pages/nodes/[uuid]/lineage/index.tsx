@@ -96,7 +96,9 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (nodeResult.data.uuid !== uuid) {
         return {
             redirect: {
-                destination: `${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(nodeResult.data.uuid)}/lineage`,
+                destination: `${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(
+                    nodeResult.data.uuid,
+                )}/lineage`,
                 permanent: true,
             },
         }
