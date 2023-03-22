@@ -195,19 +195,11 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
     }
-    if (getNodeSlug(nodeResult.data._links.self.title) !== slug) {
+    if (nodeResult.data.uuid !== uuid || getNodeSlug(nodeResult.data._links.self.title) !== slug) {
         return {
             redirect: {
                 destination: `${process.env.NEXT_PUBLIC_WWW_URL}/${getNodeHRef(nodeResult.data._links.self)}`,
-                permanent: false,
-            },
-        }
-    }
-    if (nodeResult.data.uuid !== uuid) {
-        return {
-            redirect: {
-                destination: getNodeHRef(nodeResult.data._links.self),
-                permanent: false,
+                permanent: nodeResult.data.uuid !== uuid,
             },
         }
     }
