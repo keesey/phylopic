@@ -439,6 +439,8 @@ components:
                   allOf:
                     - $ref: "#/components/schemas/TitledLink"
                     - description: A link to a list of all images uploaded by this user.
+                self:
+                  $ref: "#/components/schemas/TitledLink"
             count:
               type: integer
               description: The number of images uploaded by this user.
@@ -575,6 +577,8 @@ components:
                   description: A list of links to raster image files (PNG format) of various sizes.
                   items:
                     $ref: "#/components/schemas/MediaLink"
+                self:
+                  $ref: "#/components/schemas/TitledLink"
                 sourceFile:
                   allOf:
                     - $ref: "#/components/schemas/MediaLink"
@@ -753,6 +757,8 @@ components:
                     - $ref: "#/components/schemas/TitledLink"
                     - description: Link to the primary image for this node.
                       nullable: true
+                self:
+                  $ref: "#/components/schemas/TitledLink"
             names:
               type: array
               description: A list of all of this node's names, starting with the preferred name.
