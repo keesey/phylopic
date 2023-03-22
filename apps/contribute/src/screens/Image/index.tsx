@@ -2,7 +2,7 @@ import { shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { FC, useState } from "react"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_ARROW_UP, ICON_DANGER, ICON_X } from "~/ui/ICON_SYMBOLS"
+import { ICON_ARROW_UP, ICON_DANGER, ICON_PENCIL, ICON_X } from "~/ui/ICON_SYMBOLS"
 import NameView from "~/ui/NameView"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
@@ -45,7 +45,7 @@ const Image: FC<Props> = ({ uuid }) => {
             </Speech>
             {!selection && (
                 <UserOptions>
-                    <UserLinkButton icon={ICON_ARROW_UP} href={`/upload?replace=${encodeURIComponent(uuid)}`}>
+                    <UserLinkButton icon={ICON_PENCIL} href={`/upload?replace=${encodeURIComponent(uuid)}`}>
                         Upload a revision.
                     </UserLinkButton>
                     <UserButton icon={ICON_DANGER} onClick={() => setSelection("delete")} danger>

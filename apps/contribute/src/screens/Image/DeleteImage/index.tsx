@@ -10,7 +10,7 @@ import axios from "axios"
 import useAuthorizedImageDeletor from "./useAuthorizedImageDeletor"
 import { Loader } from "@phylopic/ui"
 import ErrorState from "~/screens/ErrorState"
-import { ICON_ARROW_CIRCLE, ICON_ARROW_UP, ICON_HAND_POINT_RIGHT, ICON_X } from "~/ui/ICON_SYMBOLS"
+import { ICON_ARROW_CIRCLE, ICON_ARROW_UP, ICON_HAND_POINT_RIGHT, ICON_PLUS, ICON_X } from "~/ui/ICON_SYMBOLS"
 import UserLinkButton from "~/ui/UserLinkButton"
 export type Props = {
     onCancel?: () => void
@@ -122,13 +122,13 @@ const DeleteImage: FC<Props> = ({ onCancel, uuid }) => {
                                 <p>What do you want to do next?</p>
                             </Speech>
                             <UserOptions>
-                                <UserLinkButton icon={ICON_ARROW_UP} href="/upload">
+                                <UserLinkButton icon={ICON_PLUS} href="/upload">
                                     Upload a new image.
                                 </UserLinkButton>
                                 <UserLinkButton icon={ICON_HAND_POINT_RIGHT} href="/images">
                                     Check out my accepted submissions.
                                 </UserLinkButton>
-                                <UserLinkButton icon={ICON_HAND_POINT_RIGHT} href="/submission">
+                                <UserLinkButton icon={ICON_HAND_POINT_RIGHT} href="/submissions">
                                     Check out my pending submissions.
                                 </UserLinkButton>
                             </UserOptions>

@@ -16,6 +16,7 @@ const useAuthorizedImageDeletor = (uuid: UUID) => {
                 axios.delete(`/api/images/${encodeURIComponent(uuid)}`, {
                     headers: { authorization: `Bearer ${authToken}` },
                 })
+                setDeleted(true)
             } catch (e) {
                 setError(e instanceof Error ? e : new Error(String(e)))
             } finally {
