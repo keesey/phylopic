@@ -301,6 +301,14 @@ components:
         example: "homo s"
         pattern: "^([a-z-]+ )*[a-z-]+$"
         type: string
+    replace_uuid:
+      name: replace_uuid
+      in: query
+      required: false
+      description: The UUID of the image that this upload is meant to replace.
+      schema:
+        format: uuid
+        type: string
     uuid:
       name: uuid
       in: path
@@ -1589,6 +1597,7 @@ paths:
         - uploads
       parameters:
         - $ref: "#/components/parameters/Content-Type-image"
+        - $ref: "#/components/parameters/replace_uuid"
       requestBody:
         description: File to upload.
         required: true
