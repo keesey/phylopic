@@ -47,11 +47,13 @@ const Unpublished: FC<Props> = ({ uuid }) => {
         fetcher,
     )
     return (
-        <figure className={clsx(styles.main, styles.unpublished)}>
-            <FileThumbnailView src={`/api/images/${encodeURIComponent(uuid)}/file`} small />
-            <figcaption className={styles.caption}>
-                {specific ? <NameView value={specific.names[0]} short /> : null}
-            </figcaption>
-        </figure>
+        <Link className={styles.link} href={`/images/${encodeURIComponent(uuid)}`}>
+            <figure className={clsx(styles.main, styles.unpublished)}>
+                <FileThumbnailView src={`/api/images/${encodeURIComponent(uuid)}/file`} small />
+                <figcaption className={styles.caption}>
+                    {specific ? <NameView value={specific.names[0]} short /> : null}
+                </figcaption>
+            </figure>
+        </Link>
     )
 }
