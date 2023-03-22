@@ -25,4 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Many links changed to `TitledLink`.
 
+### Fixed
+
+-   Invalid `list` link in page response.
+
 ## [2.1.1] - 2023-02-12

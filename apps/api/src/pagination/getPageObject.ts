@@ -1,5 +1,6 @@
 import { Page, TitledLink } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
+import omit from "lodash/omit"
 import BUILD from "../build/BUILD"
 const getPageObject = (
     listEndpoint: string,
@@ -11,7 +12,7 @@ const getPageObject = (
     return {
         _links: {
             items,
-            list: { href: listEndpoint + createSearch(listQuery) },
+            list: { href: listEndpoint + createSearch(omit(listQuery, "page")) },
             next: lastPage ? null : { href: listEndpoint + createSearch({ ...listQuery, page: index + 1 }) },
             previous: index > 0 ? { href: listEndpoint + createSearch({ ...listQuery, page: index - 1 }) } : null,
             self: { href: listEndpoint + createSearch({ ...listQuery, page: index }) },
