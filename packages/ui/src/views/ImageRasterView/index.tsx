@@ -1,11 +1,11 @@
-import { ImageWithEmbedded, MediaLink } from "@phylopic/api-models"
+import { Image as ImageModel, MediaLink } from "@phylopic/api-models"
 import { ImageMediaType, URL } from "@phylopic/utils"
 import Image from "next/image"
 import React from "react"
 import useImageLoader from "../../hooks/useImageLoader"
 import compareMediaLinks from "../../models/compareMediaLinks"
 export interface ImageRasterViewProps {
-    value: ImageWithEmbedded
+    value: ImageModel
 }
 const useLinkSize = (link: MediaLink<URL, ImageMediaType>) => {
     return React.useMemo(() => link.sizes.split("x", 2).map(size => parseInt(size, 10)), [link.sizes])

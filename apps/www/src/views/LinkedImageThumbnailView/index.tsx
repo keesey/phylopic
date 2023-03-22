@@ -1,4 +1,4 @@
-import { DATA_MEDIA_TYPE, ImageWithEmbedded } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, Image } from "@phylopic/api-models"
 import { ImageThumbnailView } from "@phylopic/ui"
 import { extractPath, stringifyNormalized } from "@phylopic/utils"
 import clsx from "clsx"
@@ -7,7 +7,7 @@ import { DragEvent, FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {
     inverted?: boolean
-    value: ImageWithEmbedded
+    value: Image
 }
 const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
     const handleDragStart = (event: DragEvent) => {

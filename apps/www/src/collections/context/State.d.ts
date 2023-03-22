@@ -1,17 +1,16 @@
-import { Contributor, ImageWithEmbedded, NodeWithEmbedded } from "@phylopic/api-models"
+import { Contributor, Image, Node } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
-import { CollectionPermalinkData } from "~/permalinks/types/CollectionPermalinkData"
 export type EntityRecord =
     | Readonly<{
           entity: Contributor
           type: "contributor"
       }>
     | Readonly<{
-          entity: ImageWithEmbedded
+          entity: Image
           type: "image"
       }>
     | Readonly<{
-          entity: NodeWithEmbedded
+          entity: Node
           type: "node"
       }>
 export type State = Readonly<{
