@@ -4,6 +4,7 @@ import { ImageThumbnailView } from "@phylopic/ui"
 import { UUID } from "@phylopic/utils"
 import { useAPIFetcher } from "@phylopic/utils-api"
 import clsx from "clsx"
+import Link from "next/link"
 import { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
@@ -25,19 +26,14 @@ const UserImageThumbnail: FC<Props> = ({ uuid }) => {
     }
     if (publishedSWR.data) {
         return (
-            <a
-                className={styles.link}
-                href={`${process.env.NEXT_PUBLIC_WWW_URL}/images/${encodeURIComponent(uuid)}`}
-                target="_blank"
-                rel="noreferrer"
-            >
+            <Link className={styles.link} href={`/images/${encodeURIComponent(uuid)}`}>
                 <figure className={clsx(styles.main, styles.published)}>
                     <ImageThumbnailView value={publishedSWR.data} />
                     <figcaption className={styles.caption}>
                         <NameView value={publishedSWR.data._embedded.specificNode?.names[0]} short />
                     </figcaption>
                 </figure>
-            </a>
+            </Link>
         )
     }
     return null
