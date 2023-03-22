@@ -18,7 +18,7 @@ const Page: NextPage = () => (
             <p>You appear to be offline. Please reload the page when your Internet connection is reestablished.</p>
             <p>
                 If you believe this is a bug, please{" "}
-                <a href="https://github.com/keesey/phylopic/issues/new">report the issue</a>.
+                <a href="//github.com/keesey/phylopic/issues/new">report the issue</a>.
             </p>
         </header>
     </PageLayout>

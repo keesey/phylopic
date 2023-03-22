@@ -114,7 +114,7 @@ export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
                         <strong>{String(error)}</strong>
                     </p>
                     <p>
-                        (You may <a href="https://github.com/keesey/phylopic/issues/new">report this issue</a>.)
+                        (You may <a href="//github.com/keesey/phylopic/issues/new">report this issue</a>.)
                     </p>
                 </section>
             )}

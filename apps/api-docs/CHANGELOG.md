@@ -25,4 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Many links changed to `TitledLink`.
 
+## [2.1.2] - 2023-03-10
+
+### Changed
+
+-   Removed trailing slash from canonical URL.
+
 ## [2.1.1] - 2023-02-12

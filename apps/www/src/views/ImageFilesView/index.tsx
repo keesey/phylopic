@@ -41,7 +41,7 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                         <th>
                             {sourceFileExtension === "SVG" ? "Vector" : "Vectorized"}
                             {" File ("}
-                            <a href={EXTENSION_LINKS.svg}>
+                            <a href={EXTENSION_LINKS.svg} rel="external">
                                 <abbr title="Scalable Vector Graphics">SVG</abbr>
                             </a>
                             )
@@ -59,7 +59,7 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 <tr key="raster">
                     <th>
                         Alternate Sizes (
-                        <a href={EXTENSION_LINKS.png}>
+                        <a href={EXTENSION_LINKS.png} rel="external">
                             <abbr title="Portable Network Graphics">PNG</abbr>
                         </a>
                         )
@@ -73,7 +73,7 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 <tr key="thumbnail">
                     <th>
                         Thumbnails (
-                        <a href={EXTENSION_LINKS.png}>
+                        <a href={EXTENSION_LINKS.png} rel="external">
                             <abbr title="Portable Network Graphics">PNG</abbr>
                         </a>
                         )

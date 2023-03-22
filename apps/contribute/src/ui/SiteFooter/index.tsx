@@ -13,7 +13,10 @@ const SiteFooter: FC = () => (
     <nav className={styles.main}>
         <ul>
             <li className={styles.item}>
-                <abbr title="Copyright">©</abbr> {YEAR} <a href="http://tmkeesey.net">T. Michael Keesey</a>
+                <abbr title="Copyright">©</abbr> {YEAR}{" "}
+                <a href="http://tmkeesey.net" rel="author">
+                    T. Michael Keesey
+                </a>
             </li>
             <li className={clsx(styles.item, styles.logos)}>
                 <Link
@@ -23,27 +26,27 @@ const SiteFooter: FC = () => (
                 >
                     <Image src={logoMail} width={28} height={28} alt="Mailing List" unoptimized />
                 </Link>
-                <a href="https://sauropods.win/@phylopic" rel="me" title="Follow PhyloPic on Mastodon.">
+                <a href="//sauropods.win/@phylopic" rel="me" title="Follow PhyloPic on Mastodon.">
                     <Image src={logoMastodon} width={25} height={25} alt="Mastodon" unoptimized />
                 </a>
-                <a href="https://discord.gg/RtrWAzTEce" title="Join the discussion on Discord.">
+                <a href="//discord.gg/RtrWAzTEce" rel="me" title="Join the discussion on Discord.">
                     <Image src={logoDiscord} width={27.7} height={21} alt="Discord" unoptimized />
                 </a>
-                <a href="https://www.facebook.com/phylopic" rel="me" title="Follow PhyloPic on Facebook.">
+                <a href="//www.facebook.com/phylopic" rel="me" title="Follow PhyloPic on Facebook.">
                     <Image src={logoFacebook} width={21} height={21} alt="Facebook" unoptimized />
                 </a>
                 <a
-                    href="https://www.patreon.com/tmkeesey?fan_landing=true"
+                    href="//www.patreon.com/tmkeesey?fan_landing=true"
                     rel="author"
                     title="Support the creator of PhyloPic on Patreon."
                 >
                     <Image src={logoPatreon} width={80} height={11} alt="Patreon" />
                 </a>
-                <a href="https://www.buymeacoffee.com/phylopic" className={styles.optional}>
+                <a href="//www.buymeacoffee.com/phylopic" className={styles.optional}>
                     <Image
                         alt="Buy me a coffee."
                         height={50}
-                        src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phylopic&button_colour=f5bb00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=fade85"
+                        src="//img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phylopic&button_colour=f5bb00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=fade85"
                         unoptimized
                         width={235}
                     />

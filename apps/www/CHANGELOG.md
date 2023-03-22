@@ -25,6 +25,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Added slugs to Contributor, Image, and Node Page URLs.
 
+## [2.0.10] - 2023-03-19
+
+### Changed
+
+-   Removed schema from some outbound `https` links and external image links.
+-   Updated link for API Docs.
+-   Replaced `/donate` links with direct URL.
+-   Updated `rel` attribute for links.
+
+### Removed
+
+-   Unused page for `/donate`.
+
+## [2.0.9] - 2023-03-13
+
+### Changed
+
+-   Drastically reducing SWR fallback payload for Lineage Pages.
+
 ## [2.0.8] - 2023-03-10
 
 ### Fixed
