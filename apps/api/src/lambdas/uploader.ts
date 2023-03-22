@@ -5,10 +5,15 @@ import errorToResult from "../errors/errorToResult"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import TEMPORARY_HEADERS from "../headers/responses/TEMPORARY_HEADERS"
 import postUpload from "../operations/postUpload"
+import { PgClientService } from "../services/PgClientService"
 import { S3ClientService } from "../services/S3ClientService"
 import getParameters from "./parameters/getParameters"
+import PG_CLIENT_SERVICE from "./services/PG_CLIENT_SERVICE"
 import S3_CLIENT_SERVICE from "./services/S3_CLIENT_SERVICE"
-const SERVICE: S3ClientService = S3_CLIENT_SERVICE
+const SERVICE: PgClientService & S3ClientService = {
+    ...PG_CLIENT_SERVICE,
+    ...S3_CLIENT_SERVICE,
+}
 const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (event: APIGatewayProxyEvent) => {
     const { path } = event
     switch (path) {
@@ -19,6 +24,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             body: event.body ?? undefined,
                             encoding: event.isBase64Encoded ? "base64" : "utf8",
+                            replace_uuid: event.queryStringParameters?.replace_uuid,
                             ...getParameters(event.headers, ["accept", "authorization", "content-type"]),
                         },
                         SERVICE,
