@@ -210,6 +210,28 @@ components:
         example: "060f03a9-fafd-4d08-81d1-b8f82080573f"
         format: uuid
         type: string
+    filter_created_after:
+      name: filter_created_after
+      in: query
+      required: false
+      description: |
+        Limits results to image entries created (that is, approved) at or after a given date-time. 
+      schema:
+        example: "2011-02-02T08:03:57.891Z"
+        format: date-time
+        pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
+        type: string
+    filter_created_before:
+      name: filter_created_before
+      in: query
+      required: false
+      description: |
+        Limits results to image entries created (that is, approved) at or before a given date-time. 
+      schema:
+        example: "2023-03-22T15:05:00.895Z"
+        format: date-time
+        pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
+        type: string
     filter_license_by:
       name: filter_license_by
       in: query
@@ -242,6 +264,50 @@ components:
       schema:
         example: "false"
         pattern: "^(true|false)$"
+        type: string
+    filter_modified_after:
+      name: filter_modified_after
+      in: query
+      required: false
+      description: |
+        Limits results to image entries modified at or after a given date-time. 
+      schema:
+        example: "2011-02-02T08:03:57.891Z"
+        format: date-time
+        pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
+        type: string
+    filter_modified_before:
+      name: filter_modified_before
+      in: query
+      required: false
+      description: |
+        Limits results to image entries modified at or before a given date-time. 
+      schema:
+        example: "2011-02-02T08:03:57.891Z"
+        format: date-time
+        pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
+        type: string
+    filter_modifiedFile_after:
+      name: filter_modifiedFile_after
+      in: query
+      required: false
+      description: |
+        Limits results to images whose file was modified at or after a given date-time. 
+      schema:
+        example: "2011-02-02T08:03:57.891Z"
+        format: date-time
+        pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
+        type: string
+    filter_modifiedFile_before:
+      name: filter_modifiedFile_before
+      in: query
+      required: false
+      description: |
+        Limits results to images whose file was modified at or before a given date-time. 
+      schema:
+        example: "2023-03-22T15:05:00.895Z"
+        format: date-time
+        pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
         type: string
     filter_name:
       name: filter_name
@@ -475,8 +541,9 @@ components:
                   $ref: "#/components/schemas/TitledLink"
             created:
               description: The time this was created.
-              example: 1970-01-01T00:00:00.000Z
-              pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$'
+              example: "2011-02-02T08:03:57Z"
+              format: date-time
+              pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
               type: string
             uuid:
               description: The universally unique identifier for this entity.
@@ -524,6 +591,8 @@ components:
             - _links
             - attribution
             - build
+            - modified
+            - modifiedFile
             - sponsor
           type: object
           properties:
@@ -531,6 +600,18 @@ components:
               type: string
               example: "Charles Knight"
               nullable: true
+            modified:
+              description: The last time the image metadata (that is, the data in this record) was modified.
+              example: "2011-02-02T08:03:57.891Z"
+              format: date-time
+              pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
+              type: string
+            modifiedFile:
+              description: The last time the image file was modified.
+              example: "2011-02-02T08:03:57.891Z"
+              format: date-time
+              pattern: '^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\.\d{3}Z$'
+              type: string
             sponsor:
               type: string
               example: "Patron Name"
