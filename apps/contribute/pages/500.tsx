@@ -6,7 +6,7 @@ import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 const Page: NextPage = () => (
-    <PageLayout head={{ title: "PhyloPic: Server Error" }}>
+    <PageLayout seo={{ noindex: true, title: "PhyloPic: Server Error" }}>
         <Dialogue>
             <Speech mode="system">
                 <p>Something weird happened.</p>

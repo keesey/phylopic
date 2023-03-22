@@ -1,5 +1,5 @@
 import { NextPage } from "next"
-import Head from "next/head"
+import { NextSeo } from "next-seo"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 export type Props = {
@@ -7,9 +7,7 @@ export type Props = {
 }
 const Page: NextPage<Props> = ({ statusCode }) => (
     <PageLayout>
-        <Head>
-            <title>PhyloPic: Error</title>
-        </Head>
+        <NextSeo noindex title="PhyloPic: Error" />
         <header>
             <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Error</strong> }]} />
             <h1>Error</h1>

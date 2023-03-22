@@ -1,4 +1,4 @@
-import { DATA_MEDIA_TYPE, isImageWithEmbedded } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, isImage } from "@phylopic/api-models"
 const getImageFromDataTransfer = (dataTransfer: DataTransfer) => {
     const json = dataTransfer.getData(DATA_MEDIA_TYPE)
     if (!json) {
@@ -6,7 +6,7 @@ const getImageFromDataTransfer = (dataTransfer: DataTransfer) => {
     }
     try {
         const image = JSON.parse(json)
-        if (isImageWithEmbedded(image)) {
+        if (isImage(image)) {
             return image
         }
     } catch {

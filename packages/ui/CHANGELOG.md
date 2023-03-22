@@ -19,4 +19,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [2.0.0-rc.1] - 2022-09-16
+## [1.2.0] - 2023-03-21
+
+### Changed
+
+-   `ImageRasterView` and `ImageThumbnailView` no longer take `ImageWithEmbedded`. The `alt` values are now based on `_links.self.title`.
+
+### Removed
+
+-   The `useImageAlt()` function.
+
+## [1.1.1] - 2023-03-10
+
+### Fixed
+
+-   The _Open Tree of Life_ resolver was not including the search result in the lineage list.
+
+## [1.1.0] - 2023-02-29
+
+### Added
+
+-   Function for generating flat-color blur images (`rgbDataURL()`).
+
+## [1.0.0] - 2023-02-12

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, Suspense, useCallback, useEffect, useState } from "react"
 import SearchBar from "../SearchBar"
 import SiteTitle from "../SiteTitle"
 import styles from "./index.module.scss"
@@ -27,7 +27,12 @@ const SiteNav: FC = () => {
             <div key="menuButton" className={styles.menuButton}>
                 <button onClick={handleMenuButtonClick}>☰</button>
             </div>
-            {dropdownOpen && <DropdownNav onClose={handleDropdownNavClose} />}
+            {dropdownOpen && (
+                <Suspense>
+                    {" "}
+                    <DropdownNav onClose={handleDropdownNavClose} />
+                </Suspense>
+            )}
         </nav>
     )
 }

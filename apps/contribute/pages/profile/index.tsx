@@ -7,9 +7,9 @@ import LoadingState from "~/screens/LoadingState"
 const AccountProfile = dynamic(() => import("~/screens/AccountProfile"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
-        head={{
+        seo={{
+            noindex: true,
             title: "PhyloPic: Your Profile",
-            url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/profile`,
         }}
     >
         <AuthorizedOnly>

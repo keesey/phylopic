@@ -1,6 +1,7 @@
 export * from "./controls"
 export * from "./core"
 export * from "./hooks"
+export * from "./images"
 export * from "./models"
 export * from "./search"
 export * from "./swr"

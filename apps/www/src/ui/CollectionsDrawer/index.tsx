@@ -1,7 +1,7 @@
-import { DATA_MEDIA_TYPE, isImageWithEmbedded } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE } from "@phylopic/api-models"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
-import { DragEvent, FC, useContext, useState } from "react"
+import { DragEvent, FC, Suspense, useContext, useState } from "react"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import useEmpty from "~/collections/hooks/useEmpty"
@@ -45,7 +45,7 @@ const CollectionsDrawer: FC = () => {
             <a className={styles.toggle} onClick={() => dispatch({ type: "TOGGLE" })} role="button">
                 {open ? "▼" : "▲"}
             </a>
-            {open ? <Open /> : <Closed />}
+            <Suspense>{open ? <Open /> : <Closed />}</Suspense>
         </aside>
     )
 }

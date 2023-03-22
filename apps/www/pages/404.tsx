@@ -1,13 +1,11 @@
 import { NextPage } from "next"
-import Head from "next/head"
+import { NextSeo } from "next-seo"
 import Link from "next/link"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 const Page: NextPage = () => (
     <PageLayout>
-        <Head>
-            <title>PhyloPic: Incertae Sedis</title>
-        </Head>
+        <NextSeo noindex title="PhyloPic: Incertae Sedis" />
         <header>
             <Breadcrumbs
                 items={[
@@ -29,7 +27,7 @@ const Page: NextPage = () => (
             </p>
             <p>
                 If you believe this is a bug, please{" "}
-                <a href="https://github.com/keesey/phylopic/issues/new">report the issue</a>.
+                <a href="//github.com/keesey/phylopic/issues/new">report the issue</a>.
             </p>
         </header>
     </PageLayout>

@@ -16,11 +16,7 @@ const IllustratedNodeView: FC<Props> = ({ caption, value, short }) => {
     return (
         <Link href={href}>
             <figure className={styles.figure}>
-                {value?._embedded?.primaryImage && (
-                    <ImageThumbnailView
-                        value={{ ...value._embedded.primaryImage, _embedded: { specificNode: value } }}
-                    />
-                )}
+                {value?._embedded?.primaryImage && <ImageThumbnailView value={value._embedded.primaryImage} />}
                 {!value?._embedded?.primaryImage && <EmptyImage />}
                 <figcaption>{caption || <NomenView value={value.names[0]} short={short} />}</figcaption>
             </figure>

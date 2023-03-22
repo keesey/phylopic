@@ -34,19 +34,24 @@ const SearchBar: FC = () => {
     )
     const handleInputFocus = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: true }), [dispatch])
     return (
-        <form className={styles.main} onSubmit={handleFormSubmit}>
+        <form action="/search" aria-label="Taxonomic" className={styles.main} onSubmit={handleFormSubmit} role="search">
+            <p id="search-description" style={{ display: "none" }}>
+                Search for a taxonomic group by typing in the name.
+            </p>
             <input
+                aria-describedby="search-description"
+                aria-label="Enter the name of a group of organisms."
                 className={clsx(focused && styles.focused)}
-                key="input"
-                id="searchName"
+                id="q"
                 list="autocomplete"
                 maxLength={128}
                 minLength={2}
-                name="searchName"
+                name="q"
                 onBlur={handleInputBlur}
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
                 placeholder="Enter the name of a group of organisms."
+                spellCheck={false}
                 type="search"
                 value={value}
             />

@@ -94,7 +94,7 @@ const Usage: FC<Props> = ({ hash }) => {
                 )}
                 {complete && (
                     <UserLinkButton icon={ICON_CHECK} href={`/edit/${encodeURIComponent(hash)}`}>
-                        All done.{!submission.attribution && " No need to credit anyone."}
+                        {!submission.attribution ? "No need to credit anyone." : "Ready for the last step!"}
                     </UserLinkButton>
                 )}
             </UserOptions>

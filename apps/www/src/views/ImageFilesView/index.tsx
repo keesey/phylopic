@@ -1,5 +1,5 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
-import { useLicenseText, useNomenText } from "@phylopic/ui"
+import { Image } from "@phylopic/api-models"
+import { useLicenseText } from "@phylopic/ui"
 import { isString } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import slugify from "slugify"
@@ -8,22 +8,21 @@ import getImageFileExtension from "../../files/getImageFileExtension"
 import DownLoadLink from "./DownloadLink"
 import styles from "./index.module.scss"
 export interface Props {
-    value: ImageWithEmbedded
+    value: Image
 }
 const EXTENSION_LINKS: Readonly<Record<string, string>> = {
     png: "http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html",
     svg: "https://www.w3.org/TR/SVG/",
 }
 const ImageFilesView: FC<Props> = ({ value }) => {
-    const specificNameShort = useNomenText(value._embedded.specificNode?.names[0], true, "incertae sedis")
     const licenseShort = useLicenseText(value._links.license.href, true)
     const filenamePrefix = useMemo(
         () =>
-            [specificNameShort, value.attribution, licenseShort, value.uuid]
+            [value._links.self.title, value.attribution, licenseShort, value.uuid]
                 .filter(isString)
-                .map(s => slugify(s))
+                .map(s => slugify(s ?? ""))
                 .join("_"),
-        [value, licenseShort, specificNameShort],
+        [value, licenseShort],
     )
     const sourceFileExtension = useMemo(
         () => getImageFileExtension(value._links.sourceFile.type).toUpperCase(),
@@ -42,7 +41,7 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                         <th>
                             {sourceFileExtension === "SVG" ? "Vector" : "Vectorized"}
                             {" File ("}
-                            <a href={EXTENSION_LINKS.svg}>
+                            <a href={EXTENSION_LINKS.svg} rel="external">
                                 <abbr title="Scalable Vector Graphics">SVG</abbr>
                             </a>
                             )
@@ -60,7 +59,7 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 <tr key="raster">
                     <th>
                         Alternate Sizes (
-                        <a href={EXTENSION_LINKS.png}>
+                        <a href={EXTENSION_LINKS.png} rel="external">
                             <abbr title="Portable Network Graphics">PNG</abbr>
                         </a>
                         )
@@ -74,7 +73,7 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 <tr key="thumbnail">
                     <th>
                         Thumbnails (
-                        <a href={EXTENSION_LINKS.png}>
+                        <a href={EXTENSION_LINKS.png} rel="external">
                             <abbr title="Portable Network Graphics">PNG</abbr>
                         </a>
                         )

@@ -3,14 +3,14 @@ import { Entity } from "./Entity"
 import { Link } from "./Link"
 import { Links } from "./Links"
 import { TitledLink } from "./TitledLink"
-export interface NodeLinks extends Links {
-    readonly childNodes: readonly Link[]
-    readonly cladeImages: Link | null
+export interface NodeLinks extends Links<TitledLink> {
+    readonly childNodes: readonly TitledLink[]
+    readonly cladeImages: TitledLink | null
     readonly external: readonly TitledLink[]
     readonly images: Link | null
     readonly lineage: Link
-    readonly parentNode: Link | null
-    readonly primaryImage: Link | null
+    readonly parentNode: TitledLink | null
+    readonly primaryImage: TitledLink | null
 }
 export interface Node extends Entity {
     readonly _links: NodeLinks

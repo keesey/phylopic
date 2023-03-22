@@ -2,6 +2,7 @@ import { Node } from "@phylopic/api-models"
 import Link from "next/link"
 import { FC } from "react"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
+import getNodeHRef from "~/routes/getNodeHRef"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
 export interface Props {
@@ -13,7 +14,12 @@ const NodeListViewItems: FC<Props> = ({ short, value }) => {
         <>
             {value.map(node => (
                 <li key={node.uuid} className={styles.item}>
-                    <Link href={`/nodes/${getCladeImagesUUID(node)}`}>
+                    <Link
+                        href={getNodeHRef({
+                            href: `/nodes/${getCladeImagesUUID(node)}`,
+                            title: node._links.cladeImages?.title ?? "[Unnamed]",
+                        })}
+                    >
                         <NomenView value={node.names[0]} short={short} />
                     </Link>
                 </li>

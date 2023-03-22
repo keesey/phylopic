@@ -8,9 +8,9 @@ import NumberAsWords from "~/ui/NumberAsWords"
 const Submissions = dynamic(() => import("~/screens/Submissions"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
-        head={{
+        seo={{
+            noindex: true,
             title: "PhyloPic: Current Submissions",
-            url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/submissions`,
         }}
     >
         <AuthorizedOnly>

@@ -1,6 +1,7 @@
 import { Contributor } from "@phylopic/api-models"
 import { FC, useMemo } from "react"
 import { Person, WithContext } from "schema-dts"
+import getContributorHRef from "~/routes/getContributorHRef"
 import SchemaScript from ".."
 
 export type Props = {
@@ -8,7 +9,7 @@ export type Props = {
 }
 const PersonSchemaScript: FC<Props> = ({ contributor }) => {
     const object = useMemo<WithContext<Person>>(() => {
-        const url = `${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributor.uuid)}`
+        const url = `${process.env.NEXT_PUBLIC_WWW_URL}${getContributorHRef(contributor._links.self)}`
         return {
             "@context": "https://schema.org",
             "@type": "Person",

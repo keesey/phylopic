@@ -1,8 +1,7 @@
 import { SearchContainer } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import dynamic from "next/dynamic"
-import { FC, ReactNode, useEffect } from "react"
-import { SWRConfig, SWRConfiguration } from "swr"
+import { FC, ReactNode, Suspense, useEffect } from "react"
 import CollectionsContainer from "~/collections/context/CollectionsContainer"
 import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
@@ -15,37 +14,31 @@ export type Props = {
     aside?: ReactNode
     build?: number
     children: ReactNode
-    fallback?: SWRConfiguration["fallback"]
     initialText?: string
 }
-const PageLayout: FC<Props> = ({ aside, build, children, fallback = {}, initialText }) => {
-    useEffect(() => {
-        try {
-            document.domain = "phylopic.org"
-        } catch (e) {
-            console.warn(e)
-        }
-    }, [])
+const PageLayout: FC<Props> = ({ aside, build, children, initialText }) => {
     return (
-        <SWRConfig value={{ fallback }}>
-            <BuildContainer initialValue={build}>
+        <BuildContainer initialValue={build}>
+            <Suspense>
                 <BuildChecker />
-                <PageLoader />
-                {aside && <aside key="aside">{aside}</aside>}
-                <SearchContainer initialText={initialText}>
+            </Suspense>
+            <PageLoader />
+            {aside && <aside key="aside">{aside}</aside>}
+            <SearchContainer initialText={initialText}>
+                <Suspense>
                     <Search />
-                    <CollectionsContainer>
-                        <header className={styles.header}>
-                            <SiteNav />
-                        </header>
-                        <main>
-                            <SearchOverlay>{children}</SearchOverlay>
-                        </main>
-                        <SiteFooter />
-                    </CollectionsContainer>
-                </SearchContainer>
-            </BuildContainer>
-        </SWRConfig>
+                </Suspense>
+                <CollectionsContainer>
+                    <header className={styles.header}>
+                        <SiteNav />
+                    </header>
+                    <main>
+                        <SearchOverlay>{children}</SearchOverlay>
+                    </main>
+                    <SiteFooter />
+                </CollectionsContainer>
+            </SearchContainer>
+        </BuildContainer>
     )
 }
 export default PageLayout

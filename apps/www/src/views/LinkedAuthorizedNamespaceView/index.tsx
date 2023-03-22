@@ -23,7 +23,7 @@ const LinkedAuthorizedNamespaceView: FC<Props> = ({ value, short }) => {
         return <AuthorizedNamespaceView value={value} short={short} />
     }
     return (
-        <a href={href}>
+        <a href={href} rel="external">
             <AuthorizedNamespaceView value={value} short={short} />
         </a>
     )

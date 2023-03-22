@@ -2,12 +2,14 @@ import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps } from "next"
-import type { SWRConfiguration } from "swr"
+import type { Compressed } from "compress-json"
 import { unstable_serialize } from "swr"
+import type { SWRConfiguration } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
+import compressFallback from "~/swr/compressFallback"
 export type Props = {
-    fallback: NonNullable<SWRConfiguration["fallback"]>
+    fallback: Compressed
 } & Pick<List, "build">
 const createListStaticPropsGetter =
     <TEntity>(endpoint: string, query?: Query): GetStaticProps<Props, Record<string, never>> =>
@@ -18,11 +20,8 @@ const createListStaticPropsGetter =
             return getStaticPropsResult(listResponse)
         }
         const build = listResponse.data.build
-        const props: Props = {
-            build,
-            fallback: {
-                [unstable_serialize(addBuildToURL(listKey, build))]: listResponse.data,
-            },
+        const fallback: NonNullable<SWRConfiguration["fallback"]> = {
+            [unstable_serialize(addBuildToURL(listKey, build))]: listResponse.data,
         }
         if (listResponse.data.totalPages > 0) {
             const getPageKey = (page: number) =>
@@ -35,9 +34,14 @@ const createListStaticPropsGetter =
                 })
             const pageResponse = await fetchData<PageWithEmbedded<TEntity>>(getPageKey(0))
             if (pageResponse.ok) {
-                props.fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
+                fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
             }
         }
-        return { props }
+        return {
+            props: {
+                build,
+                fallback: compressFallback(fallback),
+            },
+        }
     }
 export default createListStaticPropsGetter

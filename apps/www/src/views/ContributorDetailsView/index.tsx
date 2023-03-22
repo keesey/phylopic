@@ -20,7 +20,7 @@ const ContributorDetailsView: FC<Props> = ({ value }) => {
                 <tr>
                     <th>Email</th>
                     <td>
-                        <a href={emailHRef} rel="external">
+                        <a href={emailHRef} rel="author">
                             {emailAddress}
                         </a>
                     </td>

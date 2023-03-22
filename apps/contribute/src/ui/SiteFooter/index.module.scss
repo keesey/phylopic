@@ -10,6 +10,7 @@
     min-height: 75px;
     overflow: hidden;
     padding: 1em;
+    text-align: center;
 
     a {
         text-decoration: none;
@@ -31,4 +32,10 @@
     align-items: center;
     display: flex;
     gap: 0.75em;
+}
+
+.optional {
+    @media screen and (max-width: 755px) {
+        display: none;
+    }
 }

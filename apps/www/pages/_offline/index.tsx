@@ -1,12 +1,10 @@
 import { NextPage } from "next"
-import Head from "next/head"
+import { NextSeo } from "next-seo"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 const Page: NextPage = () => (
     <PageLayout>
-        <Head>
-            <title>PhyloPic: Offline</title>
-        </Head>
+        <NextSeo noindex title="PhyloPic: Offline" />
         <header>
             <Breadcrumbs
                 items={[
@@ -20,7 +18,7 @@ const Page: NextPage = () => (
             <p>You appear to be offline. Please reload the page when your Internet connection is reestablished.</p>
             <p>
                 If you believe this is a bug, please{" "}
-                <a href="https://github.com/keesey/phylopic/issues/new">report the issue</a>.
+                <a href="//github.com/keesey/phylopic/issues/new">report the issue</a>.
             </p>
         </header>
     </PageLayout>

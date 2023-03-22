@@ -1,6 +1,6 @@
 # _PhyloPic_ API Documentation
 
-This project is for documenting the API (Application Programming Interface) for [_PhyloPic_](https://beta/phylopic.org). The primary file is [`public/2.0/openapi.yaml`](./public/2.0/openapi.yaml), which is written using the [OpenAPI Specification](https://swagger.io/specification/).
+This project is for documenting the API (Application Programming Interface) for [_PhyloPic_](https://www.phylopic.org). The primary file is [`public/2.0/openapi.yaml`](./public/2.0/openapi.yaml), which is written using the [OpenAPI Specification](https://swagger.io/specification/).
 
 ## View online
 

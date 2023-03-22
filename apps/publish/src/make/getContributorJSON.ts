@@ -20,6 +20,7 @@ const getContributorJSON = (uuid: UUID, data: SourceData, count: number): Contri
             },
             self: {
                 href: `/contributors/${encodeURIComponent(uuid)}?build=${data.build}`,
+                title: data.contributors.get(uuid)?.name || "[Anonymous]",
             },
         },
         build: data.build,

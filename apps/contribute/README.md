@@ -1,6 +1,6 @@
 # _PhyloPic_ Contribution Webapp
 
-This [Next.js](https://nextjs.org/) application allows users to upload silhouette images to [_PhyloPic_](https://beta/phylopic.org).
+This [Next.js](https://nextjs.org/) application allows users to upload silhouette images to [_PhyloPic_](https://www.phylopic.org).
 
 The app is hosted at [https://contribute.phylopic.org](https://contribute.phylopic.org).
 

@@ -6,6 +6,7 @@
     left: 0;
     position: fixed;
     right: 0;
+    text-align: center;
 }
 
 .content {
@@ -42,7 +43,7 @@
 }
 
 .optional {
-    @media screen and (max-width: 430px) {
+    @media screen and (max-width: 755px) {
         display: none;
     }
 }

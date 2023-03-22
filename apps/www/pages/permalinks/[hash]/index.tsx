@@ -3,7 +3,7 @@ import { TimestampView } from "@phylopic/ui"
 import { Hash, isHash } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
-import PageHead from "~/metadata/PageHead"
+import { NextSeo } from "next-seo"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import PERMALINKS_BUCKET_NAME from "~/permalinks/constants/PERMALINKS_BUCKET_NAME"
 import usePermalinkSubheader from "~/permalinks/hooks/usePermalinkSubheader"
@@ -18,10 +18,10 @@ type Props = Omit<PageLayoutProps, "children"> & {
 }
 const PageComponent: NextPage<Props> = props => {
     const subheader = usePermalinkSubheader(props.data)
-    const url = `${process.env.NEXT_PUBLIC_WWW_URL}/permalink/${encodeURIComponent(props.hash)}`
+    const url = `${process.env.NEXT_PUBLIC_WWW_URL}/permalinks/${encodeURIComponent(props.hash)}`
     return (
         <PageLayout {...props}>
-            <PageHead title="PhyloPic: Permalink" url={url} description="Permanent data resource for PhyloPic." />
+            <NextSeo title="PhyloPic: Permalink" canonical={url} description="Permanent data resource for PhyloPic." />
             <header>
                 <Breadcrumbs
                     items={[
@@ -74,7 +74,11 @@ export const getStaticProps: GetStaticProps<Props, { hash: Hash }> = async conte
     } finally {
         client.destroy()
     }
-    if (typeof output.$metadata.httpStatusCode === "number" && output.$metadata.httpStatusCode >= 400) {
+    if (
+        typeof output.$metadata.httpStatusCode === "number" &&
+        output.$metadata.httpStatusCode >= 400 &&
+        output.$metadata.httpStatusCode < 500
+    ) {
         return { notFound: true }
     }
     return {

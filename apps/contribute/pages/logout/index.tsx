@@ -8,9 +8,9 @@ const ConfirmLogout = dynamic(() => import("~/screens/ConfirmLogout"), { ssr: fa
 const Farewell = dynamic(() => import("~/screens/Farewell"), { ssr: false })
 const Page: NextPage = () => (
     <PageLayout
-        head={{
+        seo={{
+            noindex: true,
             title: "PhyloPic: Sign Out",
-            url: `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/logout`,
         }}
     >
         <Content />

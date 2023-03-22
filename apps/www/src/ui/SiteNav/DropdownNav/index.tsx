@@ -15,9 +15,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                 <SiteTitle />
             </Link>{" "}
             &mdash; free silhouette images of organisms
-            <div className={styles.subheader}>
-                version 2.0 <abbr title="beta version">βɛτα</abbr>
-            </div>
+            <div className={styles.subheader}>version 2.0</div>
         </div>
         <section>
             <h2>Browse</h2>
@@ -40,10 +38,15 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     <a href={process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/"}>Upload Images</a>
                 </li>
                 <li>
-                    <Link href="/donate">Make a Donation</Link>
+                    <a href="//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW">Make a Donation</a>
                 </li>
                 <li>
-                    <a href="https://www.patreon.com/tmkeesey?fan_landing=true">Become a Patron</a>
+                    <a href="//www.patreon.com/tmkeesey?fan_landing=true" rel="author">
+                        Become a Patron
+                    </a>
+                </li>
+                <li>
+                    <a href="//www.buymeacoffee.com/phylopic">Buy Me a Coffee</a>
                 </li>
             </ul>
         </section>
@@ -51,7 +54,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <h2>Educational Materials</h2>
             <ul>
                 <li>
-                    <a href="https://keesey.gumroad.com/l/pocketphylogenies">Pocket Phylogenies</a>
+                    <a href="//keesey.gumroad.com/l/pocketphylogenies">Pocket Phylogenies</a>
                 </li>
             </ul>
         </section>
@@ -59,7 +62,7 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <h2>Follow</h2>
             <ul>
                 <li>
-                    <a href="https://www.patreon.com/tmkeesey?fan_landing=true" rel="author">
+                    <a href="//www.patreon.com/tmkeesey?fan_landing=true" rel="author">
                         Patreon
                     </a>
                 </li>
@@ -67,13 +70,13 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     <Link href="/mailinglist">Mailing List</Link>
                 </li>
                 <li>
-                    <a href="https://sauropods.win/@phylopic" rel="me">
+                    <a href="//sauropods.win/@phylopic" rel="me">
                         Mastodon
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.facebook.com/phylopic" rel="me">
-                        Facebook
+                    <a href="//discord.gg/RtrWAzTEce" rel="me">
+                        Discord
                     </a>
                 </li>
             </ul>
@@ -82,13 +85,13 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <h2>Technical</h2>
             <ul>
                 <li>
-                    <a href="https://github.com/keesey/phylopic/issues/new">Report an Issue</a>
+                    <a href="//github.com/keesey/phylopic/issues/new">Report an Issue</a>
                 </li>
                 <li>
-                    <a href="http://api-docs.phylopic.org/2.0">API Documentation</a>
+                    <a href="http://api-docs.phylopic.org/v2">API Documentation</a>
                 </li>
                 <li>
-                    <a href="https://github.com/keesey/phylopic">Code Repository</a>
+                    <a href="//github.com/keesey/phylopic">Code Repository</a>
                 </li>
             </ul>
         </section>

@@ -15,8 +15,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   Redirect for social media image was not implemented correctly.
+
 ### Removed
 
 ### Security
 
-## [2.0.0-rc.1] - 2022-09-16
+## [2.0.8] - 2023-03-19
+
+### Changed
+
+-   Removed schema from some outbound `https` links.
+-   Replaced `/donate` links with direct URL.
+-   Updated `rel` attribute for links.
+
+## [2.0.7] - 2023-03-10
+
+### Fixed
+
+-   The _Open Tree of Life_ resolver was not including the search result in the lineage list.
+
+## [2.0.6] - 2023-03-06
+
+### Removed
+
+-   No longer setting `document.domain`.
+
+## [2.0.5] - 2023-02-29
+
+### Changed
+
+-   Not optimizing social media icons in footers.
+
+## [2.0.4] - 2023-02-21
+
+### Added
+
+-   Redirect for `public/social/1200x1200.png`.
+
+### Removed
+
+-   `public/social/1200x1200.png`
+
+## [2.0.3] - 2023-02-18
+
+### Changed
+
+-   Serving all social media images from `images.phylopic.org`.
+
+### Deprecated
+
+-   `public/social/1200x1200.png`
+
+## [2.0.2] - 2023-02-13
+
+### Added
+
+-   Vercel analytics.
+
+## [2.0.1] - 2023-02-13
+
+### Changed
+
+-   Removed `lazyOnLoad` strategy for Google Measurement script.
+
+## [2.0.0] - 2023-02-12

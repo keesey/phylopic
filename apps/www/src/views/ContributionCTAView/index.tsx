@@ -26,10 +26,12 @@ const ContributionCTAView: FC = () => {
                     </p>
                     <ul className={styles.ctaList}>
                         <li>
-                            <a href="http://api-docs.phylopic.org/2.0">API Documentation</a>
+                            <a href="http://api-docs.phylopic.org/v2" rel="help">
+                                API Documentation
+                            </a>
                         </li>
                         <li>
-                            <a href="https://github.com/keesey/phylopic">Codebase</a>
+                            <a href="//github.com/keesey/phylopic">Codebase</a>
                         </li>
                     </ul>
                 </section>
@@ -41,10 +43,10 @@ const ContributionCTAView: FC = () => {
                     </p>
                     <ul className={styles.ctaList}>
                         <li>
-                            <Link href="/donate">Make a donation</Link>
+                            <a href="//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW">Make a donation</a>
                         </li>
                         <li>
-                            <a href="https://www.patreon.com/tmkeesey?fan_landing=true">
+                            <a href="//www.patreon.com/tmkeesey?fan_landing=true" rel="author">
                                 Support the creator on Patreon
                             </a>
                         </li>

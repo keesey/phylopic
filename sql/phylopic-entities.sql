@@ -36,12 +36,11 @@ CREATE TABLE IF NOT EXISTS public.contributor
     created timestamp without time zone NOT NULL,
     json text COLLATE pg_catalog."default" NOT NULL,
     sort_index bigint NOT NULL,
+    title character varying(64) COLLATE pg_catalog."default",
     CONSTRAINT contributor_id PRIMARY KEY (uuid, build),
     CONSTRAINT contributor_sort_index_unique UNIQUE (sort_index, build)
 )
-WITH (
-    OIDS = FALSE
-)
+
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.contributor
@@ -62,17 +61,15 @@ CREATE TABLE IF NOT EXISTS public.image
     license_sa bit(1) NOT NULL,
     json text COLLATE pg_catalog."default" NOT NULL,
     depth bigint NOT NULL DEFAULT 0,
+    title character varying(64) COLLATE pg_catalog."default" NOT NULL DEFAULT ''::character varying,
     tags character varying[] COLLATE pg_catalog."default",
     CONSTRAINT image_id PRIMARY KEY (uuid, build),
-    CONSTRAINT image_contributor_fkey FOREIGN KEY (contributor_uuid, build)
-        REFERENCES public.contributor (uuid, build) MATCH SIMPLE
+    CONSTRAINT image_contributor_fkey FOREIGN KEY (build, contributor_uuid)
+        REFERENCES public.contributor (build, uuid) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-        NOT VALID
 )
-WITH (
-    OIDS = FALSE
-)
+
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.image
@@ -89,6 +86,7 @@ CREATE TABLE IF NOT EXISTS public.node
     parent_uuid uuid,
     json text COLLATE pg_catalog."default" NOT NULL,
     sort_index bigint NOT NULL,
+    title character varying(64) COLLATE pg_catalog."default",
     CONSTRAINT node_id PRIMARY KEY (uuid, build),
     CONSTRAINT node_sort_index_unique UNIQUE (sort_index, build),
     CONSTRAINT node_parent FOREIGN KEY (build, parent_uuid)
@@ -96,9 +94,7 @@ CREATE TABLE IF NOT EXISTS public.node
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-WITH (
-    OIDS = FALSE
-)
+
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.node
