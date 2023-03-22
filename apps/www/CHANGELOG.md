@@ -15,11 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   Wrapped all dynamically-loaded components in `<Suspense>`.
-
 ### Removed
 
 ### Security
+
+## [2.1.1] - 2023-03-21
+
+### Fixed
+
+-   Updated paths for revalidation.
 
 ## [2.1.0] - 2023-03-21
 
@@ -27,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Added slugs to Contributor, Image, and Node Page URLs.
 -   Simplified silhouette `alt` descriptions.
+
+### Fixed
+
+-   Wrapped all dynamically-loaded components in `<Suspense>`.
 
 ## [2.0.10] - 2023-03-19
 

@@ -2,11 +2,11 @@ import { NextApiHandler } from "next"
 const PATHS_TO_REVALIDATE = [
     "/",
     "/contributors",
-    "/contributors/[email]",
+    "/contributors/[uuid]/[slug]",
     "/images",
-    "/images/[uuid]",
+    "/images/[uuid]/[slug]",
     "/nodes",
-    "/nodes/[uuid]",
+    "/nodes/[uuid]/[slug]",
     "/nodes/[uuid]/lineage",
     "/thanks",
 ]
