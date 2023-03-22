@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.0] - 2023-03-21
+
+### Changed
+
+-   `ImageRasterView` and `ImageThumbnailView` no longer take `ImageWithEmbedded`. The `alt` values are now based on `_links.self.title`.
+
+### Removed
+
+-   The `useImageAlt()` function.
+
 ## [1.1.1] - 2023-03-10
 
 ### Fixed

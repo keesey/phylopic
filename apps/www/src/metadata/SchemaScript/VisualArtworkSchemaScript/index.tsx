@@ -2,6 +2,9 @@ import { Image } from "@phylopic/api-models"
 import { extractPath } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import { ImageObject, Thing, VisualArtwork, WithContext } from "schema-dts"
+import getContributorHRef from "~/routes/getContributorHRef"
+import getImageHRef from "~/routes/getImageHRef"
+import getNodeHRef from "~/routes/getNodeHRef"
 import SchemaScript from ".."
 
 export type Props = {
@@ -9,12 +12,12 @@ export type Props = {
 }
 const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
     const object = useMemo<WithContext<VisualArtwork>>(() => {
-        const url = `${process.env.NEXT_PUBLIC_WWW_URL}/images/${image.uuid}`
-        const taxonURL = `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(image._links.specificNode.href)}`
-        const contributorURL = `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(image._links.contributor.href)}`
+        const url = `${process.env.NEXT_PUBLIC_WWW_URL}${getImageHRef(image._links.self)}`
+        const taxonURL = `${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(image._links.specificNode)}`
+        const contributorURL = `${process.env.NEXT_PUBLIC_WWW_URL}${getContributorHRef(image._links.contributor)}`
         const about = image._links.nodes.map<Thing>(link => ({
             "@type": "Taxon",
-            "@id": taxonURL,
+            "@id": `${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(link)}`,
         }))
         return {
             "@context": "https://schema.org",

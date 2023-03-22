@@ -50,8 +50,8 @@
     "scripts": {
         "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf node_modules",
         "deploy": "sls deploy",
-        "dev": "sls offline --httpPort 3003",
+        "dev": "ROOT_PATH=\"/prod\" sls offline --httpPort 3003",
         "lint": "eslint --ext .js,.ts . --fix"
     },
-    "version": "2.1.1"
+    "version": "2.2.0"
 }

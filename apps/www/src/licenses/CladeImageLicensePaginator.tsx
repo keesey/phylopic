@@ -9,11 +9,7 @@ export type Props = Omit<PaginationContainerProps<ImageWithEmbedded>, "endpoint"
 }
 const CladeImageLicensePaginator: FC<Props> = ({ node, ...otherProps }) => {
     const query = useMemo(
-        () =>
-            node
-                ? ({ embed_specificNode: "true", filter_clade: getCladeImagesUUID(node) } as ImageListParameters &
-                      Query)
-                : null,
+        () => (node ? ({ filter_clade: getCladeImagesUUID(node) } as ImageListParameters & Query) : null),
         [node],
     )
     return query ? <ImageLicensePaginator {...otherProps} query={query} /> : null

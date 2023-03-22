@@ -15,19 +15,20 @@ import isEntity from "./isEntity"
 import isLink from "./isLink"
 import isLinks from "./isLinks"
 import isMediaLink from "./isMediaLink"
+import isTitledLink from "./isTitledLink"
 const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image["_links"] =>
-    isLinks(x, faultCollector) &&
-    isLink(isNormalizedText)((x as Image["_links"]).contributor, faultCollector?.sub("contributor")) &&
-    isNullOr(isLink(isNormalizedText))((x as Image["_links"]).generalNode, faultCollector?.sub("general")) &&
+    isLinks(x, isTitledLink(isNormalizedText), faultCollector) &&
+    isTitledLink(isNormalizedText)((x as Image["_links"]).contributor, faultCollector?.sub("contributor")) &&
+    isNullOr(isTitledLink(isNormalizedText))((x as Image["_links"]).generalNode, faultCollector?.sub("general")) &&
     isLink(isURL)((x as Image["_links"])["http://ogp.me/ns#image"], faultCollector?.sub("http://ogp.me/ns#image")) &&
     isLink(isLicenseURL)((x as Image["_links"]).license, faultCollector?.sub("license")) &&
-    isArray(isLink(isNormalizedText))((x as Image["_links"]).nodes, faultCollector?.sub("nodes")) &&
+    isArray(isTitledLink(isNormalizedText))((x as Image["_links"]).nodes, faultCollector?.sub("nodes")) &&
     isArray(isMediaLink(isURL, isRasterMediaType))(
         (x as Image["_links"]).rasterFiles,
         faultCollector?.sub("rasterFiles"),
     ) &&
     isMediaLink(isURL, isImageMediaType)((x as Image["_links"]).sourceFile, faultCollector?.sub("sourceFile")) &&
-    isLink(isNormalizedText)((x as Image["_links"]).specificNode, faultCollector?.sub("specificNode")) &&
+    isTitledLink(isNormalizedText)((x as Image["_links"]).specificNode, faultCollector?.sub("specificNode")) &&
     isArray(isMediaLink(isURL, isRasterMediaType))(
         (x as Image["_links"]).thumbnailFiles,
         faultCollector?.sub("thumbnailFiles"),

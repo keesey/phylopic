@@ -12,7 +12,6 @@ const useLicenseFilterQuery = () => {
             ...(licenses === "publicdomain" || licenses === "-sa" || licenses === "-nc-sa"
                 ? { filter_license_sa: "false" }
                 : null),
-            embed_specificNode: "true",
         }),
         [licenses],
     )

@@ -1,9 +1,7 @@
 import { Image, ImageWithEmbedded } from "@phylopic/api-models"
-import { useImageAlt } from "@phylopic/ui"
 import { OpenGraph } from "next-seo/lib/types"
 import { useMemo } from "react"
 const useOpenGraphForImage = (image: Image | ImageWithEmbedded | null | undefined): OpenGraph | undefined => {
-    const alt = useImageAlt(image)
     return useMemo(() => {
         if (!image) {
             return undefined
@@ -13,7 +11,7 @@ const useOpenGraphForImage = (image: Image | ImageWithEmbedded | null | undefine
         return {
             images: [
                 {
-                    alt,
+                    alt: image._links.self.title,
                     height,
                     type: media.type,
                     url: media.href,
@@ -21,6 +19,6 @@ const useOpenGraphForImage = (image: Image | ImageWithEmbedded | null | undefine
                 },
             ],
         }
-    }, [alt, image])
+    }, [image])
 }
 export default useOpenGraphForImage

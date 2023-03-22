@@ -47,4 +47,4 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => {
     )
 }
 export default PageComponent
-export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images", { embed_specificNode: true })
+export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images")

@@ -1,4 +1,4 @@
-import { Link } from "@phylopic/api-models"
+import { Link, TitledLink } from "@phylopic/api-models"
 import { stringifyNormalized } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { ClientBase } from "pg"
@@ -11,13 +11,13 @@ import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
 export interface Parameters<TEmbedded = Record<string, never>> {
-    getItemLinks: (client: ClientBase, offset: number, limit: number) => Promise<readonly Link[]>
+    getItemLinks: (client: ClientBase, offset: number, limit: number) => Promise<readonly TitledLink[]>
     getItemLinksAndJSON: (
         client: ClientBase,
         offset: number,
         limit: number,
         embed: ReadonlyArray<keyof TEmbedded>,
-    ) => Promise<ReadonlyArray<Readonly<[Link, string]>>>
+    ) => Promise<ReadonlyArray<Readonly<[TitledLink, string]>>>
     getTotalItems: (client: ClientBase) => Promise<number>
     itemsPerPage: number
     listPath: string

@@ -12,10 +12,12 @@ import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
-import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import PersonSchemaScript from "~/metadata/SchemaScript/PersonSchemaScript"
+import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import getContributorName from "~/models/getContributorName"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import getContributorHRef from "~/routes/getContributorHRef"
+import getContributorSlug from "~/routes/getContributorSlug"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
@@ -42,7 +44,7 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
 export default PageComponent
 const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
     const imagesQuery = useMemo(
-        () => ({ filter_contributor: contributor.uuid, embed_specificNode: "true" } as ImageListParameters & Query),
+        () => ({ filter_contributor: contributor.uuid } as ImageListParameters & Query),
         [contributor.uuid],
     )
     return (
@@ -88,7 +90,7 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
     return (
         <>
             <NextSeo
-                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors/${encodeURIComponent(contributor.uuid)}`}
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getContributorHRef(contributor._links.self)}`}
                 description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
                 openGraph={openGraph}
                 title={`PhyloPic: Silhouette Images Contributed by ${name}`}
@@ -99,7 +101,7 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
 }
 export const getStaticPaths = createStaticPathsGetter("/contributors")
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
-    const { uuid } = context.params ?? {}
+    const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
@@ -113,6 +115,16 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (contributorResult.status !== "success") {
         return getStaticPropsResult(contributorResult)
     }
+    if (getContributorSlug(contributorResult.data._links.self.title) !== slug || contributorResult.data.uuid !== uuid) {
+        return {
+            redirect: {
+                destination: `${process.env.NEXT_PUBLIC_WWW_URL}/${getContributorHRef(
+                    contributorResult.data._links.self,
+                )}`,
+                permanent: contributorResult.data.uuid !== uuid,
+            },
+        }
+    }
     const build = contributorResult.data.build
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {
         [unstable_serialize(addBuildToURL(contributorKey, build))]: contributorResult.data,
@@ -123,7 +135,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             const getImagesPageKey = (page: number) =>
                 process.env.NEXT_PUBLIC_API_URL +
                 "/images" +
-                createSearch({ ...imagesQuery, build, embed_items: true, embed_specificNode: true, page })
+                createSearch({ ...imagesQuery, build, embed_items: true, page })
             const imagesPageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getImagesPageKey(0))
             if (imagesPageResponse.ok) {
                 fallback[unstable_serialize_infinite(getImagesPageKey)] = [imagesPageResponse.data]

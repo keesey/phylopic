@@ -93,6 +93,16 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
     }
+    if (nodeResult.data.uuid !== uuid) {
+        return {
+            redirect: {
+                destination: `${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(
+                    nodeResult.data.uuid,
+                )}/lineage`,
+                permanent: true,
+            },
+        }
+    }
     const build = nodeResult.data.build
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {
         [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data,

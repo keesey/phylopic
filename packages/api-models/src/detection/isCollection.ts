@@ -3,7 +3,7 @@ import { Collection } from "../types/Collection"
 import isLink from "./isLink"
 import isLinks from "./isLinks"
 const isCollectionLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Collection["_links"] =>
-    isLinks(x) &&
+    isLinks(x, isLink(isNormalizedText)) &&
     isLink(isNormalizedText)((x as Collection["_links"]).contributors, faultCollector?.sub("contributors")) &&
     isLink(isNormalizedText)((x as Collection["_links"]).images, faultCollector?.sub("images")) &&
     isLink(isNormalizedText)((x as Collection["_links"]).nodes, faultCollector?.sub("nodes"))

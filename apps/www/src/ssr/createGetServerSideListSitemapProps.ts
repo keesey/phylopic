@@ -2,6 +2,7 @@ import { List, Page } from "@phylopic/api-models"
 import { extractPath } from "@phylopic/utils"
 import { FetchResult, fetchResult } from "@phylopic/utils-api"
 import { GetServerSideProps } from "next"
+import getSlug from "~/routes/getSlug"
 
 const createGetServerSideListSitemapProps =
     (path: string): GetServerSideProps =>
@@ -23,11 +24,18 @@ const createGetServerSideListSitemapProps =
             )
         }
         const pageResults = await Promise.all(pagePromises)
-        const paths = pageResults.reduce<string[]>(
-            (prev, result) =>
-                result.ok ? [...prev, ...result.data._links.items.map(link => extractPath(link.href))] : prev,
-            [],
-        )
+        const paths = pageResults.reduce<string[]>((prev, result) => {
+            if (!result.ok) {
+                return prev
+            }
+            return [
+                ...prev,
+                ...result.data._links.items.map(link => {
+                    const path = extractPath(link.href)
+                    return path + "/" + encodeURIComponent(getSlug(path, link.title))
+                }),
+            ]
+        }, [])
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       ${paths

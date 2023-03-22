@@ -12,7 +12,7 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.1.1
+  version: 2.2.0
 tags:
   - name: general
     description: General API information and status.
@@ -437,8 +437,10 @@ components:
                       nullable: true
                 images:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
+                    - $ref: "#/components/schemas/TitledLink"
                     - description: A link to a list of all images uploaded by this user.
+                self:
+                  $ref: "#/components/schemas/TitledLink"
             count:
               type: integer
               description: The number of images uploaded by this user.
@@ -470,7 +472,7 @@ components:
                 - self
               properties:
                 self:
-                  $ref: "#/components/schemas/Link"
+                  $ref: "#/components/schemas/TitledLink"
             created:
               description: The time this was created.
               example: 1970-01-01T00:00:00.000Z
@@ -550,12 +552,12 @@ components:
               properties:
                 contributor:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
-                    - description: A `mailto:` URL with the contributor's email address.
+                    - $ref: "#/components/schemas/TitledLink"
+                    - description: A link to the contributor who uploaded this image.
                 generalNode:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
-                    - description: A link to the node indicating how generally the image can be applied, either an ancestor of `specificNode` or a node indicating a common ancestor with `specificNode`.
+                    - $ref: "#/components/schemas/TitledLink"
+                    - description: A link to the node indicating how generally this image can be applied, either an ancestor of `specificNode` or a node indicating a common ancestor with `specificNode`.
                       nullable: true
                 "http://ogp.me/ns#image":
                   allOf:
@@ -569,19 +571,21 @@ components:
                   type: array
                   description: Links to all nodes that this image illustrates, based on `specificNode` and (if provided) `generalNode`.
                   items:
-                    $ref: "#/components/schemas/Link"
+                    $ref: "#/components/schemas/TitledLink"
                 rasterFiles:
                   type: array
                   description: A list of links to raster image files (PNG format) of various sizes.
                   items:
                     $ref: "#/components/schemas/MediaLink"
+                self:
+                  $ref: "#/components/schemas/TitledLink"
                 sourceFile:
                   allOf:
                     - $ref: "#/components/schemas/MediaLink"
                     - description: A link to the raster or vector image file as it was submitted. May be an SVG file or any of the accepted raster image formats.
                 specificNode:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
+                    - $ref: "#/components/schemas/TitledLink"
                     - description: A link to the node indicating the specific taxon that this image illustrates.
                 thumbnailFiles:
                   type: array
@@ -715,7 +719,7 @@ components:
                     Note that this only includes illustrated nodes.
                   items:
                     allOf:
-                      - $ref: "#/components/schemas/Link"
+                      - $ref: "#/components/schemas/TitledLink"
                 cladeImages:
                   allOf:
                     - $ref: "#/components/schemas/Link"
@@ -725,7 +729,7 @@ components:
                         (For unillustrated nodes, this will be the same as the `cladeImages` link of a descendant node.)
                 contributor:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
+                    - $ref: "#/components/schemas/TitledLink"
                     - description: A link to data about the user who uploaded the image.
                 external:
                   type: array
@@ -734,7 +738,7 @@ components:
                     $ref: "#/components/schemas/TitledLink"
                 images:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
+                    - $ref: "#/components/schemas/TitledLink"
                     - description: A link to a list of all images illustrating this node.
                 lineage:
                   allOf:
@@ -742,7 +746,7 @@ components:
                     - description: A link to a list of this node and all nodes ancestral to it.
                 parentNode:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
+                    - $ref: "#/components/schemas/TitledLink"
                     - description: |
                         Link to the parent node (immediate ancestor).
 
@@ -750,9 +754,11 @@ components:
                       nullable: true
                 primaryImage:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
+                    - $ref: "#/components/schemas/TitledLink"
                     - description: Link to the primary image for this node.
                       nullable: true
+                self:
+                  $ref: "#/components/schemas/TitledLink"
             names:
               type: array
               description: A list of all of this node's names, starting with the preferred name.
@@ -822,7 +828,7 @@ components:
                   description: Links to the entities in the page.
                   type: array
                   items:
-                    $ref: "#/components/schemas/Link"
+                    $ref: "#/components/schemas/TitledLink"
                 list:
                   allOf:
                     - description: The list that this page is part of.

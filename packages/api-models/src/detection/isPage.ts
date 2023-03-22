@@ -5,7 +5,7 @@ import isData from "./isData"
 import isLink from "./isLink"
 import isLinks from "./isLinks"
 const isPageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Page["_links"] =>
-    isLinks(x, faultCollector) &&
+    isLinks(x, isLink(isNormalizedText), faultCollector) &&
     isArray(isLink(isNormalizedText))((x as Page["_links"]).items, faultCollector?.sub("items")) &&
     isLink(isNormalizedText)((x as Page["_links"]).list, faultCollector?.sub("list")) &&
     isNullOr(isLink(isNormalizedText))((x as Page["_links"]).next, faultCollector?.sub("next")) &&

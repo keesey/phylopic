@@ -1,9 +1,9 @@
-import { Link, Node, TitledLink } from "@phylopic/api-models"
+import { Node, TitledLink } from "@phylopic/api-models"
 import { Entity, Image } from "@phylopic/source-models"
-import { isDefined, isString, UUID } from "@phylopic/utils"
+import { isDefined, isString, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { immediateSuccessors } from "simple-digraph"
 import type { SourceData } from "./getSourceData.js"
-const getChildNodes = (vertex: number, data: SourceData): readonly Link[] => {
+const getChildNodes = (vertex: number, data: SourceData): readonly TitledLink[] => {
     const childVertices = immediateSuccessors(data.phylogeny, new Set([vertex]))
     return [...childVertices]
         .map(v => data.verticesToNodeUUIDs.get(v))
@@ -13,7 +13,10 @@ const getChildNodes = (vertex: number, data: SourceData): readonly Link[] => {
                 (data.sortIndices.get(a) ?? Number.MAX_SAFE_INTEGER) -
                 (data.sortIndices.get(b) ?? Number.MAX_SAFE_INTEGER),
         )
-        .map(childUUID => ({ href: `/nodes/${childUUID}?build=${data.build}` }))
+        .map(childUUID => ({
+            href: `/nodes/${childUUID}?build=${data.build}`,
+            title: stringifyNomen(shortenNomen(data.nodes.get(childUUID)?.names[0] ?? [])) || "[Unnamed]",
+        }))
 }
 const compareImageEntitiesByCreated = (a: Entity<Image>, b: Entity<Image>) => {
     const aValue = a.value.created + a.uuid
@@ -79,7 +82,7 @@ const getImageFromPredecessors = (uuid: UUID, data: SourceData): Entity<Image> |
     }
     return getDirectImage(parent, data) ?? getImageFromPredecessors(parent, data)
 }
-const getPrimaryImage = (uuid: UUID, data: SourceData): Link | null => {
+const getPrimaryImage = (uuid: UUID, data: SourceData): TitledLink | null => {
     const imageEntity =
         getDirectImage(uuid, data) ?? getImageFromSuccessors(uuid, data) ?? getImageFromPredecessors(uuid, data)
     if (!imageEntity) {
@@ -87,6 +90,7 @@ const getPrimaryImage = (uuid: UUID, data: SourceData): Link | null => {
     }
     return {
         href: `/images/${imageEntity.uuid}?build=${data.build}`,
+        title: stringifyNomen(shortenNomen(data.nodes.get(imageEntity.value.specific)?.names[0] ?? [])) || "[Untitled]",
     }
 }
 const getExternal = (uuid: UUID, data: SourceData) => {
@@ -143,13 +147,26 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     return {
         _links: {
             childNodes: getChildNodes(vertex, data),
-            cladeImages: { href: `/images?build=${data.build}&filter_clade=${cladeImagesUUID}` },
+            cladeImages: {
+                href: `/images?build=${data.build}&filter_clade=${cladeImagesUUID}`,
+                title: stringifyNomen(shortenNomen(data.nodes.get(cladeImagesUUID)?.names[0] ?? [])) || "[Unnamed]",
+            },
             external: getExternal(uuid, data),
             images: { href: `/images?build=${data.build}&filter_node=${uuid}` },
             lineage: { href: `/nodes/${uuid}/lineage?build=${data.build}` },
-            parentNode: sourceNode.parent ? { href: `/nodes/${sourceNode.parent}?build=${data.build}` } : null,
+            parentNode: sourceNode.parent
+                ? {
+                      href: `/nodes/${sourceNode.parent}?build=${data.build}`,
+                      title:
+                          stringifyNomen(shortenNomen(data.nodes.get(sourceNode.parent)?.names[0] ?? [])) ||
+                          "[Unnamed]",
+                  }
+                : null,
             primaryImage: getPrimaryImage(uuid, data),
-            self: { href: `/nodes/${uuid}?build=${data.build}` },
+            self: {
+                href: `/nodes/${uuid}?build=${data.build}`,
+                title: stringifyNomen(shortenNomen(sourceNode?.names[0] ?? [])) || "[Unnamed]",
+            },
         },
         build: data.build,
         created: sourceNode.created,

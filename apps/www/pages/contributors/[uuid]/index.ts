@@ -1,9 +1,9 @@
-import { Image } from "@phylopic/api-models"
+import { Contributor } from "@phylopic/api-models"
 import { isUUIDv4 } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
-import getImageHRef from "~/routes/getImageHRef"
+import getContributorHRef from "~/routes/getContributorHRef"
 const PageComponent: NextPage = () => null
 export default PageComponent
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -11,14 +11,14 @@ export const getServerSideProps: GetServerSideProps = async context => {
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const imageKey = process.env.NEXT_PUBLIC_API_URL + "/images/" + uuid
-    const imageResult = await fetchResult<Image>(imageKey)
-    if (imageResult.status !== "success") {
-        return getStaticPropsResult(imageResult)
+    const contributorKey = process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid
+    const contributorResult = await fetchResult<Contributor>(contributorKey)
+    if (contributorResult.status !== "success") {
+        return getStaticPropsResult(contributorResult)
     }
     return {
         redirect: {
-            destination: getImageHRef(imageResult.data._links.self),
+            destination: getContributorHRef(contributorResult.data._links.self),
             permanent: false,
         },
     }
