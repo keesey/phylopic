@@ -35,11 +35,7 @@ const Content: FC<Props> = ({ replace }) => {
         }
     }
     const complete = (hash: Hash) => {
-        if (replace) {
-            router.push(`/images/${encodeURIComponent(replace)}`)
-        } else {
-            router.push(`/edit/${encodeURIComponent(hash)}`)
-        }
+        router.push(`/edit/${encodeURIComponent(hash)}`)
     }
     return (
         <Suspense fallback={<LoadingState>Let&rsquo;s go!</LoadingState>}>

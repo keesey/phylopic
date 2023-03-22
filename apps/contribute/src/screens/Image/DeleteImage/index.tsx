@@ -6,6 +6,12 @@ import UserButton from "~/ui/UserButton"
 import UserInput from "~/ui/UserInput"
 import UserOptions from "~/ui/UserOptions"
 import UserTextForm from "~/ui/UserTextForm"
+import axios from "axios"
+import useAuthorizedImageDeletor from "./useAuthorizedImageDeletor"
+import { Loader } from "@phylopic/ui"
+import ErrorState from "~/screens/ErrorState"
+import { ICON_ARROW_CIRCLE, ICON_ARROW_UP, ICON_HAND_POINT_RIGHT, ICON_X } from "~/ui/ICON_SYMBOLS"
+import UserLinkButton from "~/ui/UserLinkButton"
 export type Props = {
     onCancel?: () => void
     uuid: UUID
@@ -13,13 +19,7 @@ export type Props = {
 const CONFIRMATION_TEXT = "PERMANENTLY DELETE"
 const DeleteImage: FC<Props> = ({ onCancel, uuid }) => {
     const [confirming, setConfirming] = useState(false)
-    const handleConfirmationFormSubmit = (value: string) => {
-        if (value !== CONFIRMATION_TEXT) {
-            alert("That is not what I asked you to type.")
-        } else {
-            // Delete the image
-        }
-    }
+    const deletor = useAuthorizedImageDeletor(uuid)
     return (
         <>
             <Speech mode="user">
@@ -50,23 +50,90 @@ const DeleteImage: FC<Props> = ({ onCancel, uuid }) => {
                             <em>{CONFIRMATION_TEXT}</em> below.
                         </p>
                     </Speech>
-                    <UserTextForm editable value="" onSubmit={handleConfirmationFormSubmit}>
-                        {(value, setValue) => (
-                            <UserInput
-                                id="confirmation"
-                                name="confirmation"
-                                onChange={setValue}
-                                placeholder={CONFIRMATION_TEXT}
-                                required
-                                showSubmit
-                                type="text"
-                                value={value}
-                            />
-                        )}
-                    </UserTextForm>
-                    <UserOptions>
-                        <UserButton onClick={onCancel}>Actually, no, I do not want to delete this!</UserButton>
-                    </UserOptions>
+                    {!deletor.deleted && !deletor.isLoading && (
+                        <>
+                            <UserTextForm editable value="" onSubmit={() => deletor.mutate()}>
+                                {(value, setValue) => (
+                                    <UserInput
+                                        id="confirmation"
+                                        name="confirmation"
+                                        onChange={setValue}
+                                        placeholder={CONFIRMATION_TEXT}
+                                        required
+                                        showSubmit
+                                        type="text"
+                                        value={value}
+                                    />
+                                )}
+                            </UserTextForm>
+                            <UserOptions>
+                                <UserButton onClick={onCancel}>Actually, no, I do not want to delete this!</UserButton>
+                            </UserOptions>
+                        </>
+                    )}
+                    {deletor.isLoading && (
+                        <>
+                            <Speech mode="user">
+                                <p>
+                                    <strong>PERMANENTLY DELETE</strong>
+                                </p>
+                            </Speech>
+                            <Speech mode="system">
+                                <div>All right, you asked for it.</div>
+                                <Loader />
+                            </Speech>
+                        </>
+                    )}
+                    {deletor.error && (
+                        <>
+                            <Speech mode="user">
+                                <p>
+                                    <strong>PERMANENTLY DELETE</strong>
+                                </p>
+                            </Speech>
+                            <Speech mode="system">
+                                <p>Whoops! There was some kind of error.</p>
+                                <p>&ldquo;{String(deletor.error)}&rdquo;</p>
+                            </Speech>
+                            <UserOptions>
+                                <UserButton icon={ICON_ARROW_CIRCLE} danger onClick={deletor.mutate}>
+                                    Try again.
+                                </UserButton>
+                                <UserButton icon={ICON_X} onClick={onCancel}>
+                                    Never mind.
+                                </UserButton>
+                            </UserOptions>
+                        </>
+                    )}
+                    {deletor.deleted && (
+                        <>
+                            <Speech mode="user">
+                                <p>
+                                    <strong>PERMANENTLY DELETE</strong>
+                                </p>
+                            </Speech>
+                            <Speech mode="system">
+                                <p>All right, you asked for it.</p>
+                                <p>
+                                    The next time <SiteTitle /> is updated, this image will be gone.
+                                </p>
+                            </Speech>
+                            <Speech mode="system">
+                                <p>What do you want to do next?</p>
+                            </Speech>
+                            <UserOptions>
+                                <UserLinkButton icon={ICON_ARROW_UP} href="/upload">
+                                    Upload a new image.
+                                </UserLinkButton>
+                                <UserLinkButton icon={ICON_HAND_POINT_RIGHT} href="/images">
+                                    Check out my accepted submissions.
+                                </UserLinkButton>
+                                <UserLinkButton icon={ICON_HAND_POINT_RIGHT} href="/submission">
+                                    Check out my pending submissions.
+                                </UserLinkButton>
+                            </UserOptions>
+                        </>
+                    )}
                 </>
             )}
         </>

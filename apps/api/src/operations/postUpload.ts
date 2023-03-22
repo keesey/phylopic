@@ -171,7 +171,7 @@ const upload = async (
                 existingUUID: image?.uuid,
                 license: image?._links.license.href,
                 sponsor: image?.sponsor,
-                status: image ? "submitted" : "incomplete",
+                status: "incomplete",
             } as Partial<Submission> & Record<string, string>),
         }),
     )

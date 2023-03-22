@@ -11,7 +11,7 @@ export type Props = {
 const ImageBox: FC<Props> = ({ alt, mode, onClick, source }) => {
     return (
         <a onClick={onClick} role="button" className={clsx(styles.main, styles[mode])} title={alt}>
-            <Image alt={alt} src={source} />
+            <Image alt={alt} src={source} width={256} height={256} unoptimized />
         </a>
     )
 }
