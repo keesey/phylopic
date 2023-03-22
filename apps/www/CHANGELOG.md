@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Added slugs to Contributor, Image, and Node Page URLs.
+-   Simplified silhouette `alt` descriptions.
 
 ## [2.0.10] - 2023-03-19
 
