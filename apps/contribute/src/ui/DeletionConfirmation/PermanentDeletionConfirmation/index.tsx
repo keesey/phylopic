@@ -22,7 +22,7 @@ const PermanentDeletionConfirmation: FC<Props> = ({ error, isLoading, onCancel, 
                     below.
                 </p>
             </Speech>
-            {!isLoading && (
+            {!isLoading && !error && (
                 <>
                     <UserTextForm
                         editable

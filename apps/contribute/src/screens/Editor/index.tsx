@@ -3,9 +3,10 @@ import { Hash, LICENSE_NAMES } from "@phylopic/utils"
 import { FC, useCallback, useMemo, useState } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
+import DeletionConfirmation from "~/ui/DeletionConfirmation"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_CHECK, ICON_PENCIL, ICON_PLUS } from "~/ui/ICON_SYMBOLS"
+import { ICON_CHECK, ICON_DANGER, ICON_PENCIL, ICON_PLUS } from "~/ui/ICON_SYMBOLS"
 import IdentifierView from "~/ui/IdentifierView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
@@ -15,6 +16,7 @@ import UserOptions from "~/ui/UserOptions"
 import UserVerification from "../../ui/UserVerification"
 import NameRenderer from "../Assignment/NodeForm/NameRenderer"
 import LoadingState from "../LoadingState"
+import useAuthorizedSubmissionDeletor from "./useAuthorizedSubmissionDeletor"
 export type Props = {
     hash: Hash
 }
@@ -27,6 +29,8 @@ const Editor: FC<Props> = ({ hash }) => {
     const [unready, setUnready] = useState<boolean | null>(null)
     const mutate = useSubmissionMutator(hash)
     const submit = useCallback(() => mutate({ status: "submitted" }), [mutate])
+    const deletor = useAuthorizedSubmissionDeletor(hash)
+    const [deletionRequested, setDeletionRequested] = useState(false)
     if (!submission) {
         return <LoadingState>Checking submission status&hellip;</LoadingState>
     }
@@ -148,14 +152,31 @@ const Editor: FC<Props> = ({ hash }) => {
                             <strong>Sweet.</strong> This image has been submitted for review.
                         </p>
                     </Speech>
-                    <UserOptions>
-                        <UserLinkButton href="/" icon={ICON_CHECK}>
-                            Cool.
-                        </UserLinkButton>
-                        <UserLinkButton href="/upload" icon={ICON_PLUS}>
-                            Let&rsquo;s upload another!
-                        </UserLinkButton>
-                    </UserOptions>
+                    {!deletionRequested && (
+                        <UserOptions>
+                            <UserLinkButton href="/" icon={ICON_CHECK}>
+                                Cool.
+                            </UserLinkButton>
+                            <UserLinkButton href="/upload" icon={ICON_PLUS}>
+                                Let&rsquo;s upload another!
+                            </UserLinkButton>
+                            <UserButton icon={ICON_DANGER} danger onClick={() => setDeletionRequested(true)}>
+                                Delete this submission.
+                            </UserButton>
+                        </UserOptions>
+                    )}
+                    {deletionRequested && (
+                        <>
+                            <Speech mode="user">
+                                <p>Delete this submission.</p>
+                            </Speech>
+                            <DeletionConfirmation
+                                {...deletor}
+                                onCancel={() => setDeletionRequested(false)}
+                                onConfirm={deletor.mutate}
+                            />
+                        </>
+                    )}
                 </>
             )}
         </Dialogue>

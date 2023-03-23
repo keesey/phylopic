@@ -4,6 +4,7 @@ import PermanentDeletionConfirmation from "~/ui/DeletionConfirmation/PermanentDe
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
+import { ICON_CHECK, ICON_DANGER, ICON_X } from "../ICON_SYMBOLS"
 export type Props = {
     error?: Error
     isDeleted?: boolean
@@ -29,8 +30,10 @@ const DeletionConfirmation: FC<Props> = ({ error, isDeleted, isLoading, onCancel
             </Speech>
             {!confirming && (
                 <UserOptions>
-                    <UserButton onClick={onCancel}>Whoops! No, I do not want to delete this.</UserButton>
-                    <UserButton danger onClick={() => setConfirming(true)}>
+                    <UserButton icon={ICON_X} onClick={onCancel}>
+                        Whoops! No, I do not want to delete this.
+                    </UserButton>
+                    <UserButton icon={ICON_CHECK} danger onClick={() => setConfirming(true)}>
                         {USER_PROMPT}
                     </UserButton>
                 </UserOptions>

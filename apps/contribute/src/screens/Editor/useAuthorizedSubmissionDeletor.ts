@@ -1,8 +1,8 @@
-import { UUID } from "@phylopic/utils"
+import { Hash } from "@phylopic/utils"
+import axios from "axios"
 import { useCallback, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
-import axios from "axios"
-const useAuthorizedImageDeletor = (uuid: UUID) => {
+const useAuthorizedSubmissionDeletor = (hash: Hash) => {
     const authToken = useAuthToken()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<Error | undefined>()
@@ -13,7 +13,7 @@ const useAuthorizedImageDeletor = (uuid: UUID) => {
         setIsDeleted(false)
         ;(async () => {
             try {
-                await axios.delete(`/api/images/${encodeURIComponent(uuid)}`, {
+                await axios.delete(`/api/submissions/${encodeURIComponent(hash)}`, {
                     headers: { authorization: `Bearer ${authToken}` },
                 })
                 setIsDeleted(true)
@@ -23,7 +23,7 @@ const useAuthorizedImageDeletor = (uuid: UUID) => {
                 setIsLoading(false)
             }
         })()
-    }, [authToken, uuid])
+    }, [authToken, hash])
     return { error, isDeleted, isLoading, mutate }
 }
-export default useAuthorizedImageDeletor
+export default useAuthorizedSubmissionDeletor
