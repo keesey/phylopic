@@ -74,7 +74,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, exi
             })()
             return () => controller.abort()
         }
-    }, [buffer, contributorUUID, onComplete, token, type])
+    }, [buffer, contributorUUID, existingUUID, onComplete, token, type])
     if (error) {
         return (
             <Dialogue>

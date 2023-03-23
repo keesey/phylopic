@@ -5,7 +5,7 @@ import { Suspense } from "react"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
-const Image = dynamic(() => import("~/screens/Image"), { ssr: false })
+const ImageScreen = dynamic(() => import("~/screens/Image"), { ssr: false })
 export type Props = {
     uuid: UUID
 }
@@ -18,7 +18,7 @@ const Page: NextPage<Props> = ({ uuid }) => (
     >
         <AuthorizedOnly>
             <Suspense fallback={<LoadingState>Loading…</LoadingState>}>
-                <Image uuid={uuid} />
+                <ImageScreen uuid={uuid} />
             </Suspense>
         </AuthorizedOnly>
     </PageLayout>
