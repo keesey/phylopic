@@ -30,12 +30,12 @@ export type PostUploadParameters = DataRequestHeaders & {
     authorization?: string
     "content-type"?: string
     encoding: "base64" | "utf8"
-    replace_uuid?: UUID
+    existing_uuid?: UUID
 }
 export type PostUploadService = PgClientService & S3ClientService
 const ACCEPT = "image/svg+xml,image/png,image/gif,image/bmp,image/jpeg"
 export const postUpload: Operation<PostUploadParameters, PostUploadService> = async (
-    { accept, authorization, body, "content-type": contentType, encoding, replace_uuid },
+    { accept, authorization, body, "content-type": contentType, encoding, existing_uuid },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
@@ -47,7 +47,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
         throw createMissingBodyError()
     }
     const contributor = getContributor(authorization)
-    const image = replace_uuid ? await getReplacementImage(replace_uuid, contributor, service) : undefined
+    const image = existing_uuid ? await getReplacementImage(existing_uuid, contributor, service) : undefined
     const hash = getHash(body)
     const key = `files/${encodeURIComponent(hash)}`
     await uploadBody(service, key, contributor, Buffer.from(body, encoding), contentType, image)
@@ -79,7 +79,7 @@ const createInvalidReplaceUUIDError = () =>
     new APIError(400, [
         {
             developerMessage: "Invalid replacement UUID.",
-            field: "replace_uuid",
+            field: "existing_uuid",
             type: "BAD_REQUEST_PARAMETERS",
             userMessage: USER_MESSAGE,
         },
@@ -88,7 +88,7 @@ const createForbiddenReplacementError = () =>
     new APIError(403, [
         {
             developerMessage: "The user is not the contributor for this image.",
-            field: "replace_uuid",
+            field: "existing_uuid",
             type: "ACCESS_DENIED",
             userMessage: USER_MESSAGE,
         },

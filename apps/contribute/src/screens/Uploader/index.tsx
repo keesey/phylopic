@@ -8,9 +8,9 @@ import UploadProgress from "./UploadProgress"
 export type Props = {
     onCancel: () => void
     onComplete: (hash: Hash) => void
-    replaceUUID?: UUID
+    existingUUID?: UUID
 }
-const Uploader: FC<Props> = ({ onCancel, onComplete, replaceUUID }) => {
+const Uploader: FC<Props> = ({ onCancel, onComplete, existingUUID }) => {
     const [fileResult, setFileResult] = useState<FileResult | undefined>()
     const [reviewResult, setReviewResult] = useState<ReviewResult | undefined>()
     const handleImageReviewCancel = useCallback(() => {
@@ -21,7 +21,7 @@ const Uploader: FC<Props> = ({ onCancel, onComplete, replaceUUID }) => {
         setReviewResult(undefined)
     }, [])
     if (!fileResult) {
-        return <SelectFile onCancel={onCancel} onComplete={setFileResult} isReplacement={isUUIDv4(replaceUUID)} />
+        return <SelectFile onCancel={onCancel} onComplete={setFileResult} isReplacement={isUUIDv4(existingUUID)} />
     }
     if (!reviewResult) {
         return <ImageReview {...fileResult} onCancel={handleImageReviewCancel} onComplete={setReviewResult} />
@@ -29,10 +29,10 @@ const Uploader: FC<Props> = ({ onCancel, onComplete, replaceUUID }) => {
     return (
         <UploadProgress
             buffer={reviewResult.buffer}
+            existingUUID={existingUUID}
             filename={fileResult?.file.name}
             onCancel={handleUploadProgressCancel}
             onComplete={onComplete}
-            replaceUUID={replaceUUID}
             type={reviewResult.type}
         />
     )

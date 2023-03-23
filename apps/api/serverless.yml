@@ -469,4 +469,4 @@ functions:
                               authorization: true
                               content-type: true
                           querystrings:
-                              replace_uuid: false
+                              existing_uuid: false

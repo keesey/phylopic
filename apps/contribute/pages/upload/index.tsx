@@ -39,7 +39,7 @@ const Content: FC<Props> = ({ replace }) => {
     }
     return (
         <Suspense fallback={<LoadingState>Let&rsquo;s go!</LoadingState>}>
-            <Uploader onCancel={cancel} onComplete={complete} replaceUUID={replace} />
+            <Uploader onCancel={cancel} onComplete={complete} existingUUID={replace} />
         </Suspense>
     )
 }

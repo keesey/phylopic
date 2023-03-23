@@ -14,11 +14,7 @@ const DeleteImage: FC<Props> = ({ onCancel, uuid }) => {
             <Speech mode="user">
                 <p>Remove this from the site.</p>
             </Speech>
-            <DeletionConfirmation
-                {...deletor}
-                onCancel={onCancel}
-                onConfirm={deletor.mutate}
-            />
+            <DeletionConfirmation {...deletor} onCancel={onCancel} onConfirm={deletor.mutate} />
         </>
     )
 }

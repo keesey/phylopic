@@ -15,10 +15,10 @@ export interface Props {
     filename?: string
     onCancel: () => void
     onComplete: (hash: Hash) => void
-    replaceUUID?: UUID
+    existingUUID?: UUID
     type: ImageMediaType
 }
-const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, replaceUUID, type }) => {
+const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, existingUUID, type }) => {
     const token = useAuthToken()
     const contributorUUID = useContributorUUID()
     const [loaded, setLoaded] = useState(0)
@@ -33,7 +33,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, rep
             const controller = new AbortController()
             const promise = axios.post<Link>(
                 `${process.env.NEXT_PUBLIC_API_URL}/uploads${
-                    replaceUUID ? `?replace=${encodeURIComponent(replaceUUID)}` : ""
+                    existingUUID ? `?replace=${encodeURIComponent(existingUUID)}` : ""
                 }`,
                 buffer,
                 {

@@ -24,7 +24,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             body: event.body ?? undefined,
                             encoding: event.isBase64Encoded ? "base64" : "utf8",
-                            replace_uuid: event.queryStringParameters?.replace_uuid,
+                            existing_uuid: event.queryStringParameters?.existing_uuid,
                             ...getParameters(event.headers, ["accept", "authorization", "content-type"]),
                         },
                         SERVICE,
