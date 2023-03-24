@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Filtering by dates (`created`, `modified`, `modifiedFile`) for images.
+
 ### Changed
 
 ### Deprecated

@@ -39,5 +39,6 @@ const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x 
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isEntity(x, isImageLinks, faultCollector) &&
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&
+    // :TODO: Add validation for modified and modifiedFile
     isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor"))
 export default isImage
