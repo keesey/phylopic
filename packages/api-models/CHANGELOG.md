@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -   New properties for `Image`: `modified`, `modifiedFile`.
+-   New optional properties for `ImageListParameters`: `filter_created_after`, `filter_created_before`, `filter_modified_after`, `filter_modified_before`, `filter_modifiedFile_after`, and `filter_modifiedFile_before`.
 
 ### Changed
 
