@@ -293,7 +293,7 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
             loadContributors({ client, contributors }),
             loadNodes({ client, nodes }),
             loadImages({ client, images }),
-            loadImageFileMetadata({ filesModified }),
+            loadImageFileMetadata({ client, filesModified }),
             loadExternals({ client, externals }),
         ])
         const { nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs } = getPhylogeny({
