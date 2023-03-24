@@ -327,6 +327,8 @@ components:
       required: false
       description: |
         Limits results to entries matching a given name. The name should be normalized (all lower-case letters or hyphens, no diacritics, single spaces between words).
+
+        Cannot be used alongside other `filter_*` parameters (except `filter_license_*`).
       schema:
         example: "homo sapiens"
         pattern: "^([a-z-]+ )*[a-z-]+$"
@@ -336,9 +338,9 @@ components:
       in: query
       required: false
       description: |
-        Limits results to entries matching a given name. The name should be normalized (all lower-case letters or hyphens, no diacritics, single spaces between words).
+        Limits results to entries matching a given node.
 
-        Cannot be used alongside `filter_clade`, `filter_contributor`, `filter_created_after`, `filter_created_before`, `filter_modified_after`, `filter_modified_before`, `filter_modifiedFile_after`, or `filter_modifiedFile_before`.
+        Cannot be used alongside other `filter_*` parameters (except `filter_license_*`).
       schema:
         example: "8f901db5-84c1-4dc0-93ba-2300eeddf4ab"
         format: uuid
