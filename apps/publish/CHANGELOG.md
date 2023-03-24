@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Inserting `modified` and `modified_file` for `image` entities.
+-   Including `modified` and `modifiedFile` in `image` JSON.
+
 ### Changed
 
 ### Deprecated
