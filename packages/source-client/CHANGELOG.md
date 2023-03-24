@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   S3 Listers now return an object with a `Key` and `LastModified`, not just the key.
+
 ### Deprecated
 
 ### Fixed

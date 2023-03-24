@@ -1,13 +1,14 @@
 import { ListObjectsV2Command, ListObjectsV2Output } from "@aws-sdk/client-s3"
-import { FaultDetector } from "@phylopic/utils"
+import { FaultDetector, ISOTimestamp } from "@phylopic/utils"
 import { Listable } from "../../interfaces/Listable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
-export default class S3Lister<TValue extends string = string> implements Listable<TValue, string> {
+export type S3Entry<TKey extends string = string> = { Key: TKey; LastModified?: ISOTimestamp }
+export default class S3Lister<TKey extends string = string> implements Listable<S3Entry<TKey>, string> {
     constructor(
         protected readonly provider: S3ClientProvider,
         protected readonly bucket: string,
         protected readonly prefix: string,
-        protected readonly validate: FaultDetector<TValue>,
+        protected readonly validateKey: FaultDetector<TKey>,
         protected readonly pageSize: number | undefined = undefined,
         protected readonly delimiter: string | null = "/",
     ) {}
@@ -47,18 +48,27 @@ export default class S3Lister<TValue extends string = string> implements Listabl
             Prefix: this.prefix,
         })
     }
-    protected getItems(output: ListObjectsV2Output): readonly TValue[] {
+    protected getItems(output: ListObjectsV2Output): readonly S3Entry<TKey>[] {
         if (!this.delimiter) {
             return (
-                output.Contents?.map(content => content.Key?.slice(this.prefix.length)).filter<TValue>(
-                    (value): value is TValue => this.validate(value),
-                ) ?? []
+                output.Contents?.map(
+                    content =>
+                        ({
+                            Key: content.Key?.slice(this.prefix.length),
+                            LastModified: content.LastModified,
+                        } as S3Entry<TKey>),
+                ).filter<S3Entry<TKey>>((value): value is S3Entry<TKey> => this.validateKey(value.Key)) ?? []
             )
         }
         return (
-            output.CommonPrefixes?.map(commonPrefix =>
-                decodeURIComponent(commonPrefix.Prefix?.slice(this.prefix.length).replace(/\/$/, "") ?? ""),
-            ).filter<TValue>((value): value is TValue => this.validate(value)) ?? []
+            output.CommonPrefixes?.map(
+                commonPrefix =>
+                    ({
+                        Key: decodeURIComponent(
+                            commonPrefix.Prefix?.slice(this.prefix.length).replace(/\/$/, "") ?? "",
+                        ),
+                    } as S3Entry<TKey>),
+            ).filter<S3Entry<TKey>>((value): value is S3Entry<TKey> => this.validateKey(value.Key)) ?? []
         )
     }
 }
