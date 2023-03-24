@@ -78,7 +78,7 @@ const Image: FC<Props> = ({ uuid }) => {
             </Speech>
             {!selection && (
                 <UserOptions>
-                    <UserLinkButton icon={ICON_PENCIL} href={`/upload?replace=${encodeURIComponent(uuid)}`}>
+                    <UserLinkButton icon={ICON_PENCIL} href={`/upload?existing=${encodeURIComponent(uuid)}`}>
                         Upload a revision.
                     </UserLinkButton>
                     <UserButton icon={ICON_DANGER} onClick={() => setSelection("delete")} danger>

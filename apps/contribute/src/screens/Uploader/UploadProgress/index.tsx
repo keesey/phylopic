@@ -33,7 +33,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, exi
             const controller = new AbortController()
             const promise = axios.post<Link>(
                 `${process.env.NEXT_PUBLIC_API_URL}/uploads${
-                    existingUUID ? `?replace=${encodeURIComponent(existingUUID)}` : ""
+                    existingUUID ? `?existing=${encodeURIComponent(existingUUID)}` : ""
                 }`,
                 buffer,
                 {

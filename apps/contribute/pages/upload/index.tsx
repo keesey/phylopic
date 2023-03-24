@@ -8,9 +8,9 @@ import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
 const Uploader = dynamic(() => import("~/screens/Uploader"), { ssr: false })
 export type Props = {
-    replace?: UUID
+    existing?: UUID
 }
-const Page: NextPage<Props> = ({ replace }) => {
+const Page: NextPage<Props> = ({ existing }) => {
     return (
         <PageLayout
             seo={{
@@ -19,17 +19,17 @@ const Page: NextPage<Props> = ({ replace }) => {
             }}
         >
             <AuthorizedOnly>
-                <Content replace={replace} />
+                <Content existing={existing} />
             </AuthorizedOnly>
         </PageLayout>
     )
 }
 export default Page
-const Content: FC<Props> = ({ replace }) => {
+const Content: FC<Props> = ({ existing }) => {
     const router = useRouter()
     const cancel = () => {
-        if (replace) {
-            router.push(`/images/${encodeURIComponent(replace)}`)
+        if (existing) {
+            router.push(`/images/${encodeURIComponent(existing)}`)
         } else {
             router.push("/")
         }
@@ -39,14 +39,14 @@ const Content: FC<Props> = ({ replace }) => {
     }
     return (
         <Suspense fallback={<LoadingState>Let&rsquo;s go!</LoadingState>}>
-            <Uploader onCancel={cancel} onComplete={complete} existingUUID={replace} />
+            <Uploader onCancel={cancel} onComplete={complete} existingUUID={existing} />
         </Suspense>
     )
 }
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
-    const { replace } = context.query ?? {}
-    if (replace) {
-        if (!isUUIDv4(replace)) {
+    const { existing } = context.query ?? {}
+    if (existing) {
+        if (!isUUIDv4(existing)) {
             return {
                 redirect: {
                     destination: "/upload",
@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
                 },
             }
         }
-        return { props: { replace } }
+        return { props: { existing: existing } }
     }
     return { props: {} }
 }
