@@ -1,5 +1,5 @@
 import { TitledLink } from "@phylopic/api-models"
-import { Page, SourceClient as ISourceClient } from "@phylopic/source-client"
+import { Page, S3Entry, SourceClient as ISourceClient } from "@phylopic/source-client"
 import { Contributor, External, Image, isContributor, isExternal, isImage, isNode, Node } from "@phylopic/source-models"
 import {
     Authority,
@@ -9,7 +9,7 @@ import {
     ISOTimestamp,
     Namespace,
     ObjectID,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { Arc, Digraph, sources } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
@@ -131,16 +131,14 @@ const loadImageFileMetadata = async (args: Pick<ProcessArgs, "client" | "filesMo
     console.info("Looking up image file metadata...")
     const total = await args.client.sourceImages.totalItems()
     console.info(`Loading metadata for ${total} image files...`)
-    let nextPageToken: string | undefined = undefined
+    let pageSpecifier: string | undefined = undefined
     do {
-        const page: Page<{ Key: UUID; LastModified?: string }, string> = await args.client.sourceImages.page(
-            nextPageToken,
-        )
+        const page: Page<S3Entry<UUID>, string> = await args.client.sourceImages.page(pageSpecifier)
         for (const item of page.items) {
             args.filesModified.set(item.Key, item.LastModified)
         }
-        nextPageToken = page.next
-    } while (nextPageToken !== undefined)
+        pageSpecifier = page.next
+    } while (pageSpecifier !== undefined)
     console.info(`Loaded metadata for ${args.filesModified.size} image files.`)
 }
 const loadNodes = async (args: Pick<ProcessArgs, "client" | "nodes">): Promise<void> => {

@@ -1,8 +1,8 @@
 import { ListObjectsV2Command, ListObjectsV2Output } from "@aws-sdk/client-s3"
-import { FaultDetector, ISOTimestamp } from "@phylopic/utils"
+import { FaultDetector } from "@phylopic/utils"
+import { S3Entry } from "../../interfaces"
 import { Listable } from "../../interfaces/Listable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
-export type S3Entry<TKey extends string = string> = { Key: TKey; LastModified?: ISOTimestamp }
 export default class S3Lister<TKey extends string = string> implements Listable<S3Entry<TKey>, string> {
     constructor(
         protected readonly provider: S3ClientProvider,

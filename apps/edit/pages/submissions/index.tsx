@@ -1,3 +1,4 @@
+import { S3Entry } from "@phylopic/source-client"
 import { Contributor, INCOMPLETE_STRING, Submission } from "@phylopic/source-models"
 import { fetchJSON } from "@phylopic/ui"
 import { Hash, UUID } from "@phylopic/utils"
@@ -24,7 +25,7 @@ const Page: NextPage = () => {
                     {(items, invalidating) =>
                         items.length ? (
                             <ul>
-                                {(items as ReadonlyArray<{ Key: Hash }>).map(item => (
+                                {(items as ReadonlyArray<S3Entry<Hash>>).map(item => (
                                     <li key={item.Key}>
                                         <Link href={`/submissions/${encodeURIComponent(item.Key)}`}>
                                             <SubmissionView hash={item.Key} />
