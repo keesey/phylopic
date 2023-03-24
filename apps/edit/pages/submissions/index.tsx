@@ -24,10 +24,10 @@ const Page: NextPage = () => {
                     {(items, invalidating) =>
                         items.length ? (
                             <ul>
-                                {(items as ReadonlyArray<Hash>).map(hash => (
-                                    <li key={hash}>
-                                        <Link href={`/submissions/${encodeURIComponent(hash)}`}>
-                                            <SubmissionView hash={hash} />
+                                {(items as ReadonlyArray<{ Key: Hash }>).map(item => (
+                                    <li key={item.Key}>
+                                        <Link href={`/submissions/${encodeURIComponent(item.Key)}`}>
+                                            <SubmissionView hash={item.Key} />
                                         </Link>
                                     </li>
                                 ))}
