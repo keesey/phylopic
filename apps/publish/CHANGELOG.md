@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.0] - 2023-03-24
+
+### Added
+
+-   Inserting `modified` and `modified_file` for `image` entities.
+-   Including `modified` and `modifiedFile` in `image` JSON.
+
 ## [1.1.0] - 2023-03-21
 
 ### Changed

@@ -111,6 +111,7 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
     if (!sourceImage) {
         throw new Error(`Source image not found! <${uuid}>`)
     }
+    const modifiedFile = data.filesModified.get(uuid) ?? sourceImage.modified
     const [rasterFiles, socialFile, sourceFile, thumbnailFiles, vectorFile] = await Promise.all([
         getRasterLinks(uuid),
         getSocialLink(uuid),
@@ -157,6 +158,8 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
         attribution: sourceImage.attribution || null,
         build: data.build,
         created: sourceImage.created,
+        modified: sourceImage.modified,
+        modifiedFile,
         sponsor: sourceImage.sponsor || null,
         uuid,
     }

@@ -99,7 +99,13 @@ SELECT ${selection} FROM node_name
             } ORDER BY image.created DESC,image."uuid"`,
         )
     } else {
-        builder.add('ORDER BY image.created DESC,image."uuid"')
+        const sortField =
+            parameters.filter_modified_after || parameters.filter_modified_before
+                ? `modified`
+                : parameters.filter_modifiedFile_after || parameters.filter_modifiedFile_before
+                ? "modified_file"
+                : "created"
+        builder.add(`ORDER BY image.${sortField} DESC,image."uuid"`)
     }
     return builder
 }

@@ -4,6 +4,6 @@ import TEMPORARY_HEADERS from "./TEMPORARY_HEADERS"
 const createRedirectHeaders = (href: string, permanent: boolean) => ({
     ...CORS_HEADERS,
     ...(permanent ? PERMANENT_HEADERS : TEMPORARY_HEADERS),
-    location: (process.env.ROOT_PATH ?? "") + href,
+    location: (process.env.IS_OFFLINE === "true" ? "/prod" : "") + href,
 })
 export default createRedirectHeaders

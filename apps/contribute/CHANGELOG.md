@@ -15,11 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   Redirect for social media image was not implemented correctly.
-
 ### Removed
 
 ### Security
+
+## [2.0.9] - 2023-03-24
+
+### Added
+
+-   Cache-buster based on modification date for image file views.
+
+### Fixed
+
+-   Redirect for social media image was not implemented correctly.
 
 ## [2.0.8] - 2023-03-19
 

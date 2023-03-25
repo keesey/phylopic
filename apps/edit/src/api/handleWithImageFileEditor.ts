@@ -50,7 +50,6 @@ const handleWithImageFileEditor = async (
                 data: await convertS3BodyToBuffer(req.body),
                 type,
             })
-            await imageClient.patch({ modified: now.toISOString() })
             res.status(204)
             break
         }

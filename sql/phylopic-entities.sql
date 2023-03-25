@@ -63,6 +63,8 @@ CREATE TABLE IF NOT EXISTS public.image
     depth bigint NOT NULL DEFAULT 0,
     title character varying(64) COLLATE pg_catalog."default" NOT NULL DEFAULT ''::character varying,
     tags character varying[] COLLATE pg_catalog."default",
+    modified timestamp without time zone NOT NULL,
+    modified_file timestamp without time zone NOT NULL,
     CONSTRAINT image_id PRIMARY KEY (uuid, build),
     CONSTRAINT image_contributor_fkey FOREIGN KEY (build, contributor_uuid)
         REFERENCES public.contributor (build, uuid) MATCH SIMPLE
