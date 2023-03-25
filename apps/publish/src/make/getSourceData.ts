@@ -9,7 +9,7 @@ import {
     ISOTimestamp,
     Namespace,
     ObjectID,
-    UUID
+    UUID,
 } from "@phylopic/utils"
 import { Arc, Digraph, sources } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"

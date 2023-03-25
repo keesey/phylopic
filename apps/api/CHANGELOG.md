@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.3.1] - 2023-03-24
+
+### Fixed
+
+-   Sorting for images when filtering by modification times.
+
 ## [2.3.0] - 2023-03-24
 
 ### Added

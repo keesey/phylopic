@@ -13,6 +13,9 @@ const findBestSize = (links: readonly MediaLink<URL, RasterMediaType>[], width: 
     return linksByWidth[linksByWidth.length - 1].link.href
 }
 export const useImageLoader = (links: readonly MediaLink<URL, RasterMediaType>[], modified?: ISOTimestamp) => {
-    return useCallback<ImageLoader>(props => findBestSize(links, props.width) + (modified ? `?v=${new Date(modified).valueOf().toString(16)}` : ""), [links])
+    return useCallback<ImageLoader>(
+        props => findBestSize(links, props.width) + (modified ? `?v=${new Date(modified).valueOf().toString(16)}` : ""),
+        [links],
+    )
 }
 export default useImageLoader
