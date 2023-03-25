@@ -1,4 +1,4 @@
-import type { LicenseURL, RasterMediaType, URL, VectorMediaType } from "@phylopic/utils"
+import type { ISOTimestamp, LicenseURL, RasterMediaType, URL, VectorMediaType } from "@phylopic/utils"
 import { Entity } from "./Entity"
 import { Link } from "./Link"
 import { Links } from "./Links"
@@ -20,5 +20,7 @@ export interface ImageLinks extends Links<TitledLink> {
 }
 export interface Image extends Entity<ImageLinks> {
     readonly attribution: string | null
+    readonly modified: ISOTimestamp
+    readonly modifiedFile: ISOTimestamp
     readonly sponsor: string | null
 }

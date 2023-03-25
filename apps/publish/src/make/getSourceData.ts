@@ -1,7 +1,16 @@
 import { TitledLink } from "@phylopic/api-models"
-import { Page, SourceClient as ISourceClient } from "@phylopic/source-client"
+import { Page, S3Entry, SourceClient as ISourceClient } from "@phylopic/source-client"
 import { Contributor, External, Image, isContributor, isExternal, isImage, isNode, Node } from "@phylopic/source-models"
-import { Authority, compareStrings, isAuthority, isNamespace, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import {
+    Authority,
+    compareStrings,
+    isAuthority,
+    isNamespace,
+    ISOTimestamp,
+    Namespace,
+    ObjectID,
+    UUID,
+} from "@phylopic/utils"
 import { Arc, Digraph, sources } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
 import SourceClient from "../source/SourceClient.js"
@@ -11,6 +20,7 @@ export type SourceData = Readonly<{
     contributors: ReadonlyMap<UUID, Contributor>
     depths: ReadonlyMap<UUID, number>
     externals: ReadonlyMap<string, TitledLink>
+    filesModified: ReadonlyMap<UUID, ISOTimestamp>
     illustration: ReadonlyMap<UUID, readonly UUID[]>
     images: ReadonlyMap<UUID, Image>
     nodeUUIDsToVertices: ReadonlyMap<UUID, number>
@@ -28,6 +38,7 @@ type ProcessArgs = Args &
         contributors: Map<UUID, Contributor>
         depths: Map<UUID, number>
         externals: Map<string, TitledLink>
+        filesModified: Map<UUID, ISOTimestamp | undefined>
         illustration: Map<UUID, Set<UUID>>
         images: Map<UUID, Image>
         nodeUUIDsToVertices: Map<UUID, number>
@@ -115,6 +126,20 @@ const loadImages = async (args: Pick<ProcessArgs, "client" | "images">): Promise
         pageIndex = page.next
     } while (pageIndex !== undefined)
     console.info(`Loaded ${args.images.size} images.`)
+}
+const loadImageFileMetadata = async (args: Pick<ProcessArgs, "client" | "filesModified">): Promise<void> => {
+    console.info("Looking up image file metadata...")
+    const total = await args.client.sourceImages.totalItems()
+    console.info(`Loading metadata for ${total} image files...`)
+    let pageSpecifier: string | undefined = undefined
+    do {
+        const page: Page<S3Entry<UUID>, string> = await args.client.sourceImages.page(pageSpecifier)
+        for (const item of page.items) {
+            args.filesModified.set(item.Key, item.LastModified)
+        }
+        pageSpecifier = page.next
+    } while (pageSpecifier !== undefined)
+    console.info(`Loaded metadata for ${args.filesModified.size} image files.`)
 }
 const loadNodes = async (args: Pick<ProcessArgs, "client" | "nodes">): Promise<void> => {
     console.info("Looking up nodes...")
@@ -261,12 +286,14 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
     try {
         const contributors = new Map<UUID, Contributor>()
         const externals = new Map<string, TitledLink>()
+        const filesModified = new Map<UUID, ISOTimestamp>()
         const images = new Map<UUID, Image>()
         const nodes = new Map<UUID, Node>()
         await Promise.all([
             loadContributors({ client, contributors }),
             loadNodes({ client, nodes }),
             loadImages({ client, images }),
+            loadImageFileMetadata({ client, filesModified }),
             loadExternals({ client, externals }),
         ])
         const { nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs } = getPhylogeny({
@@ -276,6 +303,7 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
             build: args.build,
             contributors,
             externals,
+            filesModified,
             images,
             nodeUUIDsToVertices,
             nodes,

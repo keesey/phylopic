@@ -249,9 +249,15 @@ functions:
                               build: false
                               filter_clade: false
                               filter_contributor: false
+                              filter_created_after: false
+                              filter_created_before: false
                               filter_license_by: false
                               filter_license_nc: false
                               filter_license_sa: false
+                              filter_modified_after: false
+                              filter_modified_before: false
+                              filter_modifiedFile_after: false
+                              filter_modifiedFile_before: false
                               filter_name: false
                               filter_node: false
                               embed_contributor: false

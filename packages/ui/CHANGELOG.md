@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.1] - 2023-03-24
+
+### Added
+
+-   Cache-buster based on modification date for image file views.
+
 ## [1.2.0] - 2023-03-21
 
 ### Changed

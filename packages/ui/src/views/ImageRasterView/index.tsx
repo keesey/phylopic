@@ -11,7 +11,7 @@ const useLinkSize = (link: MediaLink<URL, ImageMediaType>) => {
     return React.useMemo(() => link.sizes.split("x", 2).map(size => parseInt(size, 10)), [link.sizes])
 }
 export const ImageRasterView: React.FC<ImageRasterViewProps> = ({ value }) => {
-    const loader = useImageLoader(value._links.rasterFiles)
+    const loader = useImageLoader(value._links.rasterFiles, value.modifiedFile)
     const smallestRasterFile = React.useMemo(
         () => [...value._links.rasterFiles].sort(compareMediaLinks)[0],
         [value._links.rasterFiles],
