@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Cache-buster based on modification date for image file views.
+
 ### Changed
 
 ### Deprecated
