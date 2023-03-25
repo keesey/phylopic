@@ -5,8 +5,9 @@ import { Editable } from "./Editable"
 import { ImageFile } from "./ImageFile"
 import { Listable } from "./Listable"
 import { Patchable } from "./Patchable"
+import { S3Entry } from "./S3Entry"
 export type SourceClient = Readonly<{
-    authEmails: Listable<EmailAddress, string>
+    authEmails: Listable<S3Entry<EmailAddress>, string>
     authToken(emailAddress: EmailAddress): Editable<JWT>
     contributor(uuid: UUID): Patchable<Contributor> & {
         images: Listable<Image & { uuid: UUID }, number>
@@ -55,7 +56,7 @@ export type SourceClient = Readonly<{
     }
     root: Patchable<Node & { uuid: UUID }>
     sourceImage(uuid: UUID): Editable<ImageFile>
-    sourceImages: Listable<UUID, string>
+    sourceImages: Listable<S3Entry<UUID>, string>
     submission(hash: Hash): Patchable<Submission> & { file: Deletable<ImageFile> }
-    submissions: Listable<Hash, string>
+    submissions: Listable<S3Entry<Hash>, string>
 }>
