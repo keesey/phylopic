@@ -12,7 +12,7 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.2.0
+  version: 2.3.0
 tags:
   - name: general
     description: General API information and status.
@@ -32,7 +32,7 @@ tags:
     description: Methods related to file uploads.
 servers:
   - url: https://api.phylopic.org
-    description: Production API
+    description: Production APIs
 components:
   headers:
     Accept:

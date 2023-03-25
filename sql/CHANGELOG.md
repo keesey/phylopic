@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   New columns to `image`: `modified`, `modified_file`.
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.2.0] - 2023-03-24
+
+### Added
+
+-   New columns to `image`: `modified`, `modified_file`.
 
 ## [2.1.0] - 2023-03-21
 
