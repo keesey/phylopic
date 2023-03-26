@@ -1,6 +1,6 @@
 import { NodeParameters, NodeWithEmbedded } from "@phylopic/api-models"
 import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/ui"
-import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
+import { createSearch, isUUIDv4, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticProps, NextPage } from "next"
@@ -36,19 +36,36 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) 
 const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     const name = node.names[0]
     const nameString = useNomenText(name, false, "[Unnamed Group]")
-    const shortNameStrong = useNomenText(name, true, "[Unnamed Group]")
+    const shortNameString = useNomenText(name, true, "[Unnamed Group]")
     const lineageUUID = useMemo(
         () => extractUUIDv4(node._links.parentNode?.href) ?? undefined,
         [node._links.parentNode?.href],
     )
     const openGraph = useOpenGraphForImage(node._embedded.primaryImage)
+    const keywords = useMemo(
+        () =>
+            [
+                "ancestry",
+                "evolution",
+                "illustration",
+                "lineage",
+                "phylogeny",
+                "silhouettes",
+                "systematics",
+                ...Array.from(new Set(node.names.map(nomen => stringifyNomen(shortenNomen(nomen))))),
+            ]
+                .sort()
+                .join(","),
+        [node.names],
+    )
     return (
         <>
             <NextSeo
+                additionalMetaTags={[{ name: "keywords", content: keywords }]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}/lineage`}
                 description={`Illustrated evolutionary lineage of ${nameString}.`}
                 openGraph={openGraph}
-                title={`PhyloPic: Lineage of ${shortNameStrong}`}
+                title={`Lineage of ${shortNameString} - PhyloPic`}
             />
             <header>
                 <ExpandableLineageBreadcrumbs

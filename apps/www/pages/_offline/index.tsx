@@ -4,7 +4,7 @@ import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 const Page: NextPage = () => (
     <PageLayout>
-        <NextSeo noindex title="PhyloPic: Offline" />
+        <NextSeo noindex title="Offline - PhyloPic" />
         <header>
             <Breadcrumbs
                 items={[

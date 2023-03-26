@@ -63,7 +63,7 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                     canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/collections/${encodeURIComponent(uuid)}`}
                     description={`A collection of ${TYPE_LABELS[type]} from PhyloPic.`}
                     noindex
-                    title={`PhyloPic: ${COLLECTION_LABELS[type]}`}
+                    title={`${COLLECTION_LABELS[type]} - PhyloPic`}
                 />
                 <header>
                     <Breadcrumbs

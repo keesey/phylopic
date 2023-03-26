@@ -21,7 +21,7 @@ const PageComponent: NextPage<Props> = props => {
     const url = `${process.env.NEXT_PUBLIC_WWW_URL}/permalinks/${encodeURIComponent(props.hash)}`
     return (
         <PageLayout {...props}>
-            <NextSeo title="PhyloPic: Permalink" canonical={url} description="Permanent data resource for PhyloPic." />
+            <NextSeo title="Permalink - PhyloPic" canonical={url} description="Permanent data resource for PhyloPic." />
             <header>
                 <Breadcrumbs
                     items={[

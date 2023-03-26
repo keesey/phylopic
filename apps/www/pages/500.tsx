@@ -4,7 +4,7 @@ import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 const Page: NextPage = () => (
     <PageLayout>
-        <NextSeo noindex title="PhyloPic: Server Error" />
+        <NextSeo noindex title="Server Error - PhyloPic" />
         <header>
             <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Server Error</strong> }]} />
             <h1>Server Error</h1>

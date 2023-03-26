@@ -22,7 +22,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => {
                 <NextSeo
                     canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/images`}
                     description="Browse all the free silhouette images in PhyloPic."
-                    title="PhyloPic: Silhouette Images"
+                    title="All Silhouette Images on PhyloPic"
                 />
                 <header>
                     <Breadcrumbs

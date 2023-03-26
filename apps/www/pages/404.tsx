@@ -5,7 +5,7 @@ import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 const Page: NextPage = () => (
     <PageLayout>
-        <NextSeo noindex title="PhyloPic: Incertae Sedis" />
+        <NextSeo noindex title="Incertae Sedis - PhyloPic" />
         <header>
             <Breadcrumbs
                 items={[

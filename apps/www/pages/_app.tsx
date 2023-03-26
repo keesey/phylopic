@@ -14,8 +14,12 @@ const App = ({ Component, pageProps }: AppProps) => {
                     { href: "/favicon-32x32.png", rel: "icon", sizes: "32x32", type: "image/png" },
                     { href: "/favicon-16x16.png", rel: "icon", sizes: "16x16", type: "image/png" },
                     { href: "/site.webmanifest", rel: "manifest" },
-                    { href: "/search", rel: "search" },
-                    { href: "/opensearch.xml", rel: "search", type: "application/opensearchdescription+xml" },
+                    { href: `${process.env.NEXT_PUBLIC_WWW_URL}/search`, rel: "search" },
+                    {
+                        href: `${process.env.NEXT_PUBLIC_WWW_URL}/opensearch.xml`,
+                        rel: "search",
+                        type: "application/opensearchdescription+xml",
+                    },
                 ]}
                 additionalMetaTags={[
                     { name: "author", content: "T. Michael Keesey" },

@@ -8,7 +8,7 @@ import { InfiniteScroll } from "../../controls"
 import { createPageKeyGetter } from "./createPageKeyGetter"
 export type PaginationContainerProps<T> = {
     autoLoad?: boolean
-    children: (value: readonly T[], total: number) => React.ReactNode
+    children: (value: readonly T[], total: number, isLoading: boolean) => React.ReactNode
     endpoint: URL
     hideControls?: boolean
     hideLoader?: boolean
@@ -99,7 +99,9 @@ export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
     }, [autoLoad, error, list.isValidating, loadNextPage, moreToLoad, pages.isValidating])
     return (
         <>
-            <React.Fragment key="items">{children(items, totalItems)}</React.Fragment>
+            <React.Fragment key="items">
+                {children(items, totalItems, list.isLoading || pages.isLoading)}
+            </React.Fragment>
             {moreToLoad && !error && !hideControls && (
                 <InfiniteScroll
                     hideLoader={hideLoader}

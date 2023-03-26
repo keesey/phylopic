@@ -12,7 +12,7 @@ const PageComponent: NextPage = () => (
             canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contribute/cancel`}
             description="Ways to contribute to PhyloPic, an open database of freely reusable silhouette images of organisms."
             noindex
-            title="PhyloPic: Other Ways to Contribute"
+            title="Other Ways to Contribute to PhyloPic"
         />
         <header>
             <Breadcrumbs

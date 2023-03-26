@@ -1,16 +1,26 @@
 @use "@phylopic/styles/colors.scss";
+
 .main {
     align-items: center;
     display: flex;
     flex-direction: column;
 }
+
 .header {
     line-height: 1.5;
 }
+
 .images {
     background: colors.$white;
     border: 1pt solid colors.$cerulean;
     border-radius: 1rem;
     margin-top: 1rem;
     padding: 1rem;
+}
+
+.loader {
+    align-items: center;
+    display: flex;
+    min-width: 256px;
+    justify-content: center;
 }

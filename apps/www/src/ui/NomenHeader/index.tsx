@@ -47,7 +47,7 @@ const NomenHeader: FC<Props> = ({ value }) => {
                 header={<NomenView value={value?.names[0]} short defaultText="[Unnamed]" />}
                 headerLevel={1}
             />
-            {detailsActive && hasDetails && <NodeDetailsView value={value} />}
+            {hasDetails && <NodeDetailsView active={detailsActive} value={value} />}
         </>
     )
 }

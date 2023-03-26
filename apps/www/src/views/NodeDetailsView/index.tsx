@@ -5,10 +5,12 @@ import NodeExternalView from "~/views/NodeExternalView"
 import NodeListView from "~/views/NodeListView"
 import NomenListView from "~/views/NomenListView"
 import NomenView from "../NomenView"
+import styles from "./index.module.scss"
 export interface Props {
+    active?: boolean
     value?: NodeWithEmbedded
 }
-const NodeDetailsView: FC<Props> = ({ value }) => {
+const NodeDetailsView: FC<Props> = ({ active, value }) => {
     if (!value) {
         return null
     }
@@ -19,7 +21,7 @@ const NodeDetailsView: FC<Props> = ({ value }) => {
         return null
     }
     return (
-        <section>
+        <section className={active ? undefined : styles.hidden}>
             <h2>
                 Details about <NomenView value={value.names[0]} />
             </h2>

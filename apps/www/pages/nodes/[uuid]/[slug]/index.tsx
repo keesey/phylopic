@@ -15,6 +15,8 @@ import {
     isUUIDv4,
     parseQueryString,
     Query,
+    shortenNomen,
+    stringifyNomen,
     UUID,
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
@@ -79,6 +81,27 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         [node._embedded.parentNode, node._links.parentNode],
     )
     const parentName = node._embedded?.parentNode?.names?.[0]
+    const keywords = useMemo(
+        () =>
+            Array.from(
+                new Set(
+                    [
+                        "Creative Commons",
+                        "clip art",
+                        "clipart",
+                        "free art",
+                        "phylogeny",
+                        "public domain",
+                        "silhouettes",
+                        `${shortNameString} silhouettes`,
+                        ...Array.from(new Set(node.names.map(nomen => stringifyNomen(shortenNomen(nomen))))),
+                    ].map(s => s.toLowerCase()),
+                ),
+            )
+                .sort()
+                .join(","),
+        [node.names, shortNameString],
+    )
     const afterItems = useMemo(
         () =>
             [
@@ -113,10 +136,11 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     return (
         <LicenseTypeFilterContainer>
             <NextSeo
+                additionalMetaTags={[{ name: "keywords", content: keywords }]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}`}
                 description={`Freely reusable silhouette images of ${nameString}.`}
                 openGraph={openGraph}
-                title={`PhyloPic: ${shortNameString}`}
+                title={`${shortNameString} - PhyloPic`}
             />
             <TaxonSchemaScript node={node} />
             <header key="header">

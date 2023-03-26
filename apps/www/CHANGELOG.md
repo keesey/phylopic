@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.2.0] - 2023-03-26
+
+### Added
+
+-   SEO improvements (taxonomic names in body, keywords, revised titles and descriptions, etc.).
+-   Loaders on Lineage Pages.
+
 ## [2.1.2] - 2023-03-24
 
 ### Added

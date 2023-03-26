@@ -1,6 +1,16 @@
 import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
-import { createSearch, extractPath, isDefined, isUUIDv4, Query, UUID } from "@phylopic/utils"
+import {
+    createSearch,
+    extractPath,
+    isDefined,
+    isUUIDv4,
+    Nomen,
+    Query,
+    shortenNomen,
+    stringifyNomen,
+    UUID,
+} from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticProps, NextPage } from "next"
@@ -26,6 +36,7 @@ import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import HeaderNav from "~/ui/HeaderNav"
+import NameList from "~/ui/NameList"
 import SiteTitle from "~/ui/SiteTitle"
 import ImageFilesView from "~/views/ImageFilesView"
 import ImageRasterView from "~/views/ImageRasterView"
@@ -60,8 +71,38 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
     const nameShort = useNomenText(image._embedded.specificNode?.names[0], true)
     const licenseLong = useLicenseText(image._links.license.href)
     const licenseShort = useLicenseText(image._links.license.href, true)
+    const keywords = useMemo(
+        () =>
+            Array.from(
+                new Set(
+                    [
+                        "clip art",
+                        "clipart",
+                        "Creative Commons",
+                        "free art",
+                        "illustration",
+                        "silhouette",
+                        `${nameShort} silhouette`,
+                        ...Array.from(
+                            new Set<string>(
+                                image._embedded.nodes?.reduce<readonly string[]>(
+                                    (prev, node) => [
+                                        ...prev,
+                                        ...node.names.map(nomen => stringifyNomen(shortenNomen(nomen))),
+                                    ],
+                                    [],
+                                ),
+                            ),
+                        ),
+                    ].map(s => s.toLowerCase()),
+                ),
+            )
+                .sort()
+                .join(","),
+        [image._embedded.nodes, nameShort],
+    )
     const title = useMemo(
-        () => `PhyloPic: ${nameShort}${image.attribution ? ` by ${image.attribution}` : ""} (${licenseShort})`,
+        () => `${nameShort}${image.attribution ? ` by ${image.attribution}` : ""} (${licenseShort}) - PhyloPic`,
         [image.attribution, licenseShort, nameShort],
     )
     const description = useMemo(
@@ -85,9 +126,12 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
     return (
         <>
             <NextSeo
-                additionalMetaTags={image.attribution ? [{ content: image.attribution, name: "author" }] : undefined}
+                additionalMetaTags={[
+                    ...(image.attribution ? [{ content: image.attribution, name: "author" }] : []),
+                    { name: "keywords", content: keywords },
+                ]}
                 additionalLinkTags={[
-                    { href: image._links.contributor.href, rel: "contributor" },
+                    { href: image._links.contributor.href, rel: "author" },
                     { href: image._links.license.href, rel: "license" },
                 ]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getImageHRef(image._links.self)}`}
@@ -179,6 +223,13 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                         )}
                     </tbody>
                 </table>
+                <NameList
+                    header="Names for Subject Matter"
+                    names={
+                        image._embedded.nodes?.reduce<readonly Nomen[]>((prev, node) => [...prev, ...node.names], []) ??
+                        []
+                    }
+                />
             </header>
             <br key="br" />
             <ImageRasterView key="raster" value={image} />

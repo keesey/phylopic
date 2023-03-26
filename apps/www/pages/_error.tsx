@@ -7,7 +7,7 @@ export type Props = {
 }
 const Page: NextPage<Props> = ({ statusCode }) => (
     <PageLayout>
-        <NextSeo noindex title="PhyloPic: Error" />
+        <NextSeo noindex title="Error - PhyloPic" />
         <header>
             <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Error</strong> }]} />
             <h1>Error</h1>

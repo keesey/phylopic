@@ -20,7 +20,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
             <NextSeo
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contributors`}
                 description="A list of everyone who has contributed free silhouette images to PhyloPic."
-                title="PhyloPic: Contributors"
+                title="Contributors to PhyloPic"
             />
             <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>
                 {(contributors: readonly Contributor[], totalContributors: number) => (

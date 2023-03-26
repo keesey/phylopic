@@ -17,7 +17,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
             <NextSeo
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes`}
                 description="A list of all taxonomic groups covered by PhyloPic, the open database of freely reusable silhouette images of organisms."
-                title="PhyloPic: Taxonomic Groups"
+                title="All Taxonomic Groups on PhyloPic"
             />
             <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}>
                 {(nodes, totalNodes) => (

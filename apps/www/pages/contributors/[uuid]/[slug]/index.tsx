@@ -90,10 +90,11 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
     return (
         <>
             <NextSeo
+                additionalMetaTags={[{ name: "keywords", content: `silhouettes,${contributor.name}` }]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getContributorHRef(contributor._links.self)}`}
                 description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
                 openGraph={openGraph}
-                title={`PhyloPic: Silhouette Images Contributed by ${name}`}
+                title={`Silhouette Images Contributed by ${name} to PhyloPic`}
             />
             <PersonSchemaScript contributor={contributor} />
         </>

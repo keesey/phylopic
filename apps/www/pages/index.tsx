@@ -31,8 +31,15 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
             <NextSeo
+                additionalMetaTags={[
+                    {
+                        name: "keywords",
+                        content:
+                            "animals,archaea,bacteria,biology,clip art,clipart,diagrams,free art,free clip art,free clipart,fungi,microorganisms,organisms,phylogeny,plants,protists,silhouette,silhouettes,species,taxonomy,visualization,viz",
+                    },
+                ]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}`}
-                description="PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses."
+                description="PhyloPic is an open database of free silhouette images of animals, plants, and other life forms, available for reuse under Creative Commons licenses. Download silhouettes for use in educational materials, research articles, and other projects."
             />
             <SchemaScript
                 id="WebSite"
