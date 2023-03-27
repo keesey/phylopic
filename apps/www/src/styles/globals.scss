@@ -48,9 +48,16 @@ hr {
 }
 
 main {
-    margin: 0 auto;
-    max-width: 11in;
-    padding: 1rem;
+    margin: 0;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+
+    >* {
+        margin: 0 auto;
+        max-width: 11in;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
 
 img:not([src]) {

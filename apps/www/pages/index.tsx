@@ -108,27 +108,29 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 </PaginationContainer>
             </section>
             <ContributionCTAView />
-            <section>
-                <HeaderNav
-                    buttons={[
-                        {
-                            children: "Download →",
-                            href: "/materials",
-                            key: "materials",
-                            type: "anchor",
-                        },
-                    ]}
-                    header="Pocket Phylogenies"
-                    headerLevel={2}
-                />
-                <p>
-                    Free wallet-sized cards with common questions about evolution on one side, and diagrams for
-                    explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
-                    <a href="//keesey.gumroad.com/l/pocketphylogenies">
-                        click here to print out Pocket Phylogenies for yourself
-                    </a>
-                    .
-                </p>
+            <section style={{ minWidth: "100vw" }}>
+                <header style={{ maxWidth: "11in", margin: "0 auto" }}>
+                    <HeaderNav
+                        buttons={[
+                            {
+                                children: "Download →",
+                                href: "/materials",
+                                key: "materials",
+                                type: "anchor",
+                            },
+                        ]}
+                        header="Pocket Phylogenies"
+                        headerLevel={2}
+                    />
+                    <p>
+                        Free wallet-sized cards with common questions about evolution on one side, and diagrams for
+                        explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
+                        <a href="//keesey.gumroad.com/l/pocketphylogenies">
+                            click here to print out Pocket Phylogenies for yourself
+                        </a>
+                        .
+                    </p>
+                </header>
                 <PocketPhylogenies />
             </section>
             <section>

@@ -30,18 +30,20 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => {
                     />
                     <h1>Silhouette Images</h1>
                 </header>
-                <LicenseTypeFilterContainer>
-                    <ImageLicensePaginator>
-                        {(items, total) => (
-                            <>
-                                <ImageLicenseControls total={total} />
-                                {isNaN(total) && <Loader key="loader" />}
-                                <br />
-                                <ImageListView value={items} />
-                            </>
-                        )}
-                    </ImageLicensePaginator>
-                </LicenseTypeFilterContainer>
+                <section>
+                    <LicenseTypeFilterContainer>
+                        <ImageLicensePaginator>
+                            {(items, total) => (
+                                <>
+                                    <ImageLicenseControls total={total} />
+                                    {isNaN(total) && <Loader key="loader" />}
+                                    <br />
+                                    <ImageListView value={items} />
+                                </>
+                            )}
+                        </ImageLicensePaginator>
+                    </LicenseTypeFilterContainer>
+                </section>
             </PageLayout>
         </CompressedSWRConfig>
     )

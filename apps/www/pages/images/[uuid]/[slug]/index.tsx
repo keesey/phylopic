@@ -140,7 +140,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 title={title}
             />
             <VisualArtworkSchemaScript image={image} />
-            <header key="header">
+            <header>
                 <Breadcrumbs
                     items={[
                         { children: "Home", href: "/" },
@@ -196,13 +196,13 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 />
                 <table>
                     <tbody>
-                        <tr key="license">
+                        <tr>
                             <th>License</th>
                             <td>
                                 <LicenseView value={image._links.license.href} />
                             </td>
                         </tr>
-                        <tr key="uploaded">
+                        <tr>
                             <th>Uploaded</th>
                             <td>
                                 <TimestampView value={image.created} /> by{" "}
@@ -212,7 +212,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             </td>
                         </tr>
                         {image._embedded.specificNode && (
-                            <tr key="nodes">
+                            <tr>
                                 <th>Taxon</th>
                                 <td>
                                     <Link href={getNodeHRef(image._links.specificNode)} rel="subject">
@@ -231,10 +231,10 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                     }
                 />
             </header>
-            <br key="br" />
-            <ImageRasterView key="raster" value={image} />
+            <br />
+            <ImageRasterView value={image} />
             {image.sponsor && (
-                <section key="sponsor">
+                <section>
                     <p style={{ textAlign: "center" }}>
                         <em>
                             This silhouette&rsquo;s inclusion in <SiteTitle /> has been sponsored by{" "}
@@ -243,7 +243,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                     </p>
                 </section>
             )}
-            <section key="download">
+            <section>
                 <h2>Download Files</h2>
                 <section>
                     <h3>General Notes on Usage</h3>
