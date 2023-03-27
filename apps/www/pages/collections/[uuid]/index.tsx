@@ -102,19 +102,23 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                         {(has.contributors || has.nodes) && <h2>Silhouette Images</h2>}
                         <LicenseTypeFilterContainer>
                             <ImageLicensePaginator autoLoad query={{ ...IMAGE_QUERY, filter_collection: uuid }}>
-                                {(items, total) => (
-                                    <>
-                                        {total === 0 && <p>There are no silhouette images in this collection.</p>}
-                                        {total > 0 && (
-                                            <>
-                                                <ImageCollectionUsage items={items} total={total} uuid={uuid} />
-                                                {isNaN(total) && <Loader key="loader" />}
-                                                <br />
-                                                <ImageListView value={items} />
-                                            </>
-                                        )}
-                                    </>
-                                )}
+                                {(items, total, isLoading) =>
+                                    isLoading ? (
+                                        <Loader />
+                                    ) : (
+                                        <>
+                                            {total === 0 && <p>There are no silhouette images in this collection.</p>}
+                                            {total > 0 && (
+                                                <>
+                                                    <ImageCollectionUsage items={items} total={total} uuid={uuid} />
+                                                    {isNaN(total) && <Loader key="loader" />}
+                                                    <br />
+                                                    <ImageListView value={items} />
+                                                </>
+                                            )}
+                                        </>
+                                    )
+                                }
                             </ImageLicensePaginator>
                         </LicenseTypeFilterContainer>
                     </section>
