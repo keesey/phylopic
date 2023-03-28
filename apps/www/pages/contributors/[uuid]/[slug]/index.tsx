@@ -48,40 +48,42 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
         [contributor.uuid],
     )
     return (
-        <LicenseTypeFilterContainer>
-            <ImageLicensePaginator query={imagesQuery} hideControls>
-                {images => <Seo contributor={contributor} images={images} />}
-            </ImageLicensePaginator>
-            <header>
-                <Breadcrumbs
-                    items={[
-                        { children: "Home", href: "/" },
-                        { children: "Contributors", href: "/contributors" },
-                        {
-                            children: (
-                                <strong>
-                                    <ContributorNameView value={contributor} />
-                                </strong>
-                            ),
-                        },
-                    ]}
-                />
-                <h1>
-                    Silhouette Images Contributed by <ContributorNameView value={contributor} />
-                </h1>
-                <ContributorDetailsView value={contributor} />
-            </header>
-            <ImageLicensePaginator query={imagesQuery}>
-                {(images, totalImages) => (
-                    <>
-                        <ImageLicenseControls total={totalImages} />
-                        {isNaN(totalImages) && <Loader key="loader" />}
-                        <br />
-                        <ImageListView key="images" value={images} />
-                    </>
-                )}
-            </ImageLicensePaginator>
-        </LicenseTypeFilterContainer>
+        <section>
+            <LicenseTypeFilterContainer>
+                <ImageLicensePaginator query={imagesQuery} hideControls>
+                    {images => <Seo contributor={contributor} images={images} />}
+                </ImageLicensePaginator>
+                <header>
+                    <Breadcrumbs
+                        items={[
+                            { children: "Home", href: "/" },
+                            { children: "Contributors", href: "/contributors" },
+                            {
+                                children: (
+                                    <strong>
+                                        <ContributorNameView value={contributor} />
+                                    </strong>
+                                ),
+                            },
+                        ]}
+                    />
+                    <h1>
+                        Silhouette Images Contributed by <ContributorNameView value={contributor} />
+                    </h1>
+                    <ContributorDetailsView value={contributor} />
+                </header>
+                <ImageLicensePaginator query={imagesQuery}>
+                    {(images, totalImages) => (
+                        <>
+                            <ImageLicenseControls total={totalImages} />
+                            {isNaN(totalImages) && <Loader key="loader" />}
+                            <br />
+                            <ImageListView key="images" value={images} />
+                        </>
+                    )}
+                </ImageLicensePaginator>
+            </LicenseTypeFilterContainer>
+        </section>
     )
 }
 const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }> = ({ contributor, images }) => {
