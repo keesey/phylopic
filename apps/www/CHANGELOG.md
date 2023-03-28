@@ -9,21 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.2.1] - 2023-03-27
+
+### Added
+
 -   Loader to Collection Pages.
 
 ### Changed
 
 -   Pocket Phylogenies take up the full screen width.
 
-### Deprecated
-
 ### Fixed
 
 -   Collection Pages were displaying inaccurate information before data loaded.
-
-### Removed
-
-### Security
 
 ## [2.2.0] - 2023-03-26
 
