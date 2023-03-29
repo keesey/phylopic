@@ -9,7 +9,7 @@ import SiteTitle from "~/ui/SiteTitle"
 const PageComponent: NextPage = () => (
     <PageLayout>
         <NextSeo
-            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/contribute/cancel`}
+            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/donate/cancel`}
             description="Ways to contribute to PhyloPic, an open database of freely reusable silhouette images of organisms."
             noindex
             title="Other Ways to Contribute to PhyloPic"
