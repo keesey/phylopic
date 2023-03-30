@@ -3,7 +3,7 @@ import { useMemo } from "react"
 import { CurlOptions } from "./CurlOptions"
 const useCommandKey = (url: string, options?: CurlOptions): AxiosRequestConfig => {
     return useMemo(() => {
-        let method: Method  = "GET"
+        let method: Method = "GET"
         if (options?.data) {
             method = "POST"
         }
