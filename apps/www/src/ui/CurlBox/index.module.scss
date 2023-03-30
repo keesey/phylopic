@@ -6,7 +6,7 @@
 }
 
 .sample {
-    align-items: center;
+    align-items: stretch;
     background-color: colors.$ink;
     border-radius: 1em;
     border: none;
@@ -14,7 +14,6 @@
     display: flex;
     font-size: larger;
     overflow: hidden;
-    padding: 1em;
     position: relative;
     text-align: left;
     transition: background-color 0.3s;
@@ -27,16 +26,31 @@
 
     >code {
         flex-grow: 1;
+        padding: 1em;
     }
 
-    .copyButton {
-        @include buttons.text(colors.$sunshine, colors.$dandelion);
-        transition: color 0.3s;
-    }
 }
 
-.sendButton {
-    @include buttons.cta(colors.$sunshine, colors.$dandelion);
+.controlButton {
+    background-color: colors.$dandelion;
+    border: none;
+    border-left: 2pt solid colors.$sunshine;
+    color: colors.$black;
+    font-size: larger;
+    padding-left: 1em;
+    padding-right: 1em;
+    transition: background-color 0.3s;
+    width: 3em;
+
+    &:hover {
+        background-color: colors.$sunshine;
+        color: colors.$ink;
+    }
+
+    &:active {
+        background-color: colors.$white;
+        color: colors.$inkFade;
+    }
 }
 
 .clearButton {
@@ -45,6 +59,7 @@
 
 .status {
     background-color: colors.$deep;
+    border-top: 2pt solid colors.$sunshine;
     color: colors.$vellum;
     font-weight: bold;
     margin: 0;
