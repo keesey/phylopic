@@ -71,13 +71,12 @@ const CurlBox: FC<Props> = ({ options, url }) => {
                         </LoaderContext.Provider>
                     ) : error ? (
                         <p className={styles.error}>
-                            Error! <code>{String(error)}</code>
+                            <code>{String(error)}</code>
                         </p>
                     ) : !data ? (
                         <p className={styles.empty}>No response.</p>
                     ) : data.status >= 400 ? (
                         <p className={styles.error}>
-                            Error!{" "}
                             <code>
                                 {data.status}: {data.statusText}
                             </code>

@@ -29,11 +29,18 @@ const Article: FC = () => {
             <section id="introduction">
                 <p>
                     The <SiteTitle /> <abbr title="Application Programming Interface">API</abbr> is thoroughly
-                    documented at the <a href="http://api-docs.phylopic.org">API Documentation Website</a>. This page
-                    offers a simpler introduction to using the{" "}
+                    documented at the <a href="http://api-docs.phylopic.org">API Documentation Website</a>. As an
+                    alternative or introduction, this page offers a simpler but non-comprehensive guide to using the{" "}
                     <abbr title="Application Programming Interface">API</abbr>, with some examples of commonly-needed
                     functionality, like listing image files and searching for taxa. As well, it documents how{" "}
                     <SiteTitle /> uses external resources to augment searching capabilities.
+                </p>
+                <p>This page is intended for readers who are familiar with:
+                    <ul style={{ listStyleType: "disc", marginInlineStart: "1em"}}>
+                        <li>using a command prompt (UNIX, etc.)</li>
+                        <li>basic World Wide Web terms (URL, HTTP, POST, GET, etc.)</li>
+                        <li>JSON data format</li>
+                    </ul>
                 </p>
                 <p>
                     Examples are given as{" "}
@@ -55,6 +62,9 @@ const Article: FC = () => {
                     </a>{" "}
                     data detailing other resource endpoints and general metadata about the site.
                 </p>
+                <p>For compatibility with future versions of the API, it is <em>strongly recommended</em> that you include the <strong>major API version</strong> in the HTTP headers thusly:</p>
+                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}`} options={{ headers: { "Content-Type": "application/vnd.phylopic.v2+json"}, location: true }} />
+                <p>This is not a strict requirement, and for brevity the ensuing examples will forgo it.</p>
             </section>
             <section id="builds">
                 <h2>Builds</h2>
@@ -157,9 +167,9 @@ const Article: FC = () => {
             <section id="searching-name">
                 <h2>Searching for a Taxonomic Name</h2>
                 <p>
-                    <SiteTitle /> generally only covers taxa for which it has silhouettes. But it also provides tools for
-                    augmenting searches with external resources that cover other taxa. To take full advantage, you may
-                    need to make multiple calls both to the <SiteTitle /> API and to external APIs
+                    <SiteTitle /> generally only covers taxa for which it has silhouettes. But it also provides tools
+                    for augmenting searches with external resources that cover other taxa. To take full advantage, you
+                    may need to make multiple calls both to the <SiteTitle /> API and to external APIs
                 </p>
                 <section id="searching-name-phylopic">
                     <h3>
@@ -194,16 +204,29 @@ const Article: FC = () => {
                     <h3>
                         In the <cite>Open Tree of Life</cite>
                     </h3>
+                    <p>The full documentation for the <cite>Open Tree of Life</cite> API is available here: <a href="//opentreeoflife.github.io/develop/api" rel="noreferrer"><code>https://opentreeoflife.github.io/develop/api</code></a></p>
+                    <p>To get a list of taxa matching a search string, POST a JSON object to the <code>/autocomplete_name</code> endpoint:</p>
+                    <CurlBox url="https://api.opentreeoflife.org/v3/tnrs/autocomplete_name" options={{ data: { name: "prim" }}} />
+                    <p>This will yield a list of objects with an <code>ott_id</code> property serving as a unique identifier. You may use that to get the full lineage of a particular taxon.</p>
+                    <CurlBox url="https://api.opentreeoflife.org/v3/taxonomy/taxon_info" options={{ data: { include_lineage: true, ott_id: 7501342   }}} />
+                    <p>Collect the <code>ott_id</code> values from the <code>lineage</code>, from the least inclusive taxon to the most inclusive taxon, and POST those as an array of strings to the <SiteTitle /> <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint to find the closest match in <SiteTitle />.</p>
+                    <CurlBox
+                        url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?build=${build}`}
+                        options={{ data: ["70119", "937683", "329706", "844843", "2914936", "178260", "409995", "802117", "155737", "189832", "117569", "641038", "691846", "5246131", "332573", "304358", "93302", "805080"],
+                            headers: { "Content-Type": "application/vnd.phylopic.v2+json"}}}
+                    />
                 </section>
                 <section id="searching-name-pbdb">
                     <h3>
                         In the <cite>Paleobiology Database</cite>
                     </h3>
+                    <p>The full documentation for the <cite>Paleobiology Database</cite> API version 1.2 is available here: <a href="//paleobiodb.org/data1.2/" rel="noreferrer"><code>https://paleobiodb.org/data1.2/</code></a></p>
                 </section>
                 <section id="searching-name-eol">
                     <h3>
                         In the <cite>Encyclopedia of Life</cite>
                     </h3>
+                    <p>The full documentation for the <cite>Encyclopedia of Life</cite> Classic API is available here: <a href="//eol.org/docs/what-is-eol/classic-apis" rel="noreferrer"><code>https://eol.org/docs/what-is-eol/classic-apis</code></a></p>
                 </section>
             </section>
             <section id="choosing-image">

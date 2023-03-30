@@ -26,6 +26,7 @@
 
     >code {
         flex-grow: 1;
+        overflow: hidden;
         padding: 1em;
     }
 
@@ -65,5 +66,27 @@
     margin: 0;
     padding: 1em;
     text-align: center;
+}
 
+.error {
+    background-color: colors.$black;
+    border: 2pt solid colors.$sunshine;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    color: colors.$dandelion;
+    margin: 0;
+    padding: 1em;
+    text-align: center;
+}
+
+.empty {
+    background-color: colors.$white;
+    border: 2pt solid colors.$ink;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    color: colors.$inkFade;
+    font-weight: bold;
+    margin: 0;
+    padding: 1em;
+    text-align: center;
 }
