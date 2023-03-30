@@ -51,7 +51,7 @@ const CurlBox: FC<Props> = ({ options, url }) => {
     const key = useCommandKey(url, options)
     const { data, error, isLoading } = useSWR(requested ? key : null, fetcher)
     return (
-        <section className={styles.main}>
+        <section>
             <div className={clsx(styles.sample, requested && styles.requested)}>
                 <code>{line}</code>
                 {!isLoading && !(data || error) && (

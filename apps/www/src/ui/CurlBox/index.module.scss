@@ -1,10 +1,6 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/buttons.scss";
 
-.main {
-    display: block;
-}
-
 .loaderContainer {
     align-items: center;
     background-color: colors.$deep;

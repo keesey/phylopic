@@ -23,6 +23,7 @@ const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/contributors`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/thanks`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/api-recipes`,
     "http://api-docs.phylopic.org/v2",
     `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}`,
     "https://keesey.gumroad.com/l/pocketphylogenies",

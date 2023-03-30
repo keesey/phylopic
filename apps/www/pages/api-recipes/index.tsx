@@ -68,7 +68,7 @@ const Article: FC = () => {
                 </p>
                 <p>
                     For compatibility with future versions of the API, it is <em>strongly recommended</em> that you
-                    include the <strong>major API version</strong> in the HTTP headers thusly:
+                    include the <strong>major API version</strong> (<code>2</code>) in the HTTP headers thusly:
                 </p>
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}`}

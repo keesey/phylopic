@@ -88,6 +88,9 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     <a href="//github.com/keesey/phylopic/issues/new">Report an Issue</a>
                 </li>
                 <li>
+                    <Link href="/api-recipes">API Recipes</Link>
+                </li>
+                <li>
                     <a href="http://api-docs.phylopic.org/v2">API Documentation</a>
                 </li>
                 <li>
