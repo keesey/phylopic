@@ -95,7 +95,7 @@ const CurlBox: FC<Props> = ({ options, url }) => {
                                 )}
                             >
                                 <code>
-                                    {data.status}: {data.statusText}
+                                    {data.status} {data.statusText}
                                 </code>
                             </p>
                             <Suspense fallback={<Loader />}>
