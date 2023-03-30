@@ -5,6 +5,18 @@
     display: block;
 }
 
+.loaderContainer {
+    align-items: center;
+    background-color: colors.$deep;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    border-top: 2pt solid colors.$sunshine;
+    display: flex;
+    justify-content: center;
+    padding: 1em;
+    min-height: 3em;
+}
+
 .sample {
     align-items: stretch;
     background-color: colors.$ink;
@@ -59,13 +71,23 @@
 }
 
 .status {
-    background-color: colors.$deep;
-    border-top: 2pt solid colors.$sunshine;
-    color: colors.$vellum;
     font-weight: bold;
     margin: 0;
     padding: 1em;
     text-align: center;
+
+    &.statusError {
+        background-color: colors.$black;
+        border: 2pt solid colors.$sunshine;
+        color: colors.$dandelion;
+    }
+
+    &.statusSuccess {
+        background-color: colors.$deep;
+        border-bottom: 2pt solid colors.$sunshine;
+        border-top: 2pt solid colors.$sunshine;
+        color: colors.$vellum;
+    }
 }
 
 .error {

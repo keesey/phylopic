@@ -30,38 +30,41 @@ const Article: FC = () => {
                 <p>
                     The <SiteTitle /> <abbr title="Application Programming Interface">API</abbr> is thoroughly
                     documented at the <a href="http://api-docs.phylopic.org">API Documentation Website</a>. As an
-                    alternative or introduction, this page offers a simpler but non-comprehensive guide to using the{" "}
-                    <abbr title="Application Programming Interface">API</abbr>, with some examples of commonly-needed
-                    functionality, like listing image files and searching for taxa. As well, it documents how{" "}
-                    <SiteTitle /> uses external resources to augment searching capabilities.
+                    alternative introduction, this page offers a simpler (but non-comprehensive) guide to using the API,
+                    with some examples of commonly-needed functionality, like listing image files and searching for
+                    taxa. As well, it documents how other resources may be used to augment searching capabilities.
                 </p>
-                <p>
-                    This page is intended for readers who are familiar with:
-                    <ul style={{ listStyleType: "disc", marginInlineStart: "1em" }}>
-                        <li>using a command prompt (UNIX, etc.)</li>
-                        <li>basic World Wide Web terms (URL, HTTP, POST, GET, etc.)</li>
-                        <li>JSON data format</li>
-                    </ul>
-                </p>
+                <p>This page is intended for readers who are familiar with:</p>
+                <ul style={{ listStyleType: "disc", marginInlineStart: "1em" }}>
+                    <li>using a command-line prompt (UNIX, etc.)</li>
+                    <li>
+                        basic World Wide Web technological terms (<abbr title="Uniform Resource Locator">URL</abbr>,
+                        POST, <abbr title="Hypertext Transfer Protocol">HTTP</abbr> header, query parameter, etc.)
+                    </li>
+                    <li>
+                        the{" "}
+                        <a href="//www.json.org/" rel="noreferrer">
+                            <abbr title="JavaScript Object Notation">JSON</abbr>
+                        </a>{" "}
+                        data format
+                    </li>
+                </ul>
                 <p>
                     Examples are given as{" "}
                     <a href="//curl.se/" rel="noreferrer">
                         curl
                     </a>{" "}
-                    statements which may be run in a command prompt. Or, click the &ldquo;play&ldquo; icon to run
-                    queries and see results in your browser. As an example, this call loads the index for the{" "}
+                    commands which may be run in a command-line prompt. Or, click the &ldquo;play&ldquo; icon to run
+                    queries and see results on this page. As an example, this call loads the index for the{" "}
                     <a href="//en.wikipedia.org/wiki/Representational_state_transfer" rel="noreferrer">
                         RESTful
                     </a>{" "}
-                    <abbr title="Application Programming Interface">API</abbr>.
+                    API.
                 </p>
                 <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}`} options={{ location: true }} />
                 <p>
-                    Loading this endpoint returns{" "}
-                    <a href="//www.json.org/" rel="noreferrer">
-                        JSON
-                    </a>{" "}
-                    data detailing other resource endpoints and general metadata about the site.
+                    Loading this endpoint returns JSON data detailing other resource endpoints and general metadata
+                    about the site.
                 </p>
                 <p>
                     For compatibility with future versions of the API, it is <em>strongly recommended</em> that you
@@ -82,7 +85,7 @@ const Article: FC = () => {
                     You may notice that the response includes properties called <code>"build"</code> and{" "}
                     <code>"buildTimestamp"</code>. Updates to <SiteTitle /> are published in discrete{" "}
                     <strong>builds</strong> in order to improve caching. In order to return data, each API call must
-                    including a build number in the query string. If a build number is not including, a{" "}
+                    including a build number in the query string. If a build number is not included, a{" "}
                     <code>307 Temporary Redirect</code> response is returned indicating a modified URL (
                     <code>Location</code> header) with the current build number added in the query string. (This is why
                     the command above includes the <code style={{ whiteSpace: "pre" }}>--location</code> option.) The
@@ -90,14 +93,14 @@ const Article: FC = () => {
                     number.
                 </p>
                 <p>
-                    {" "}
                     To skip the redirect, simply place the current <code>build</code> in the query string:
                 </p>
                 <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}?build=${build}`} />
                 <p>
-                    URLs that specify a build other than the current build will result in a <code>410 Gone</code>,{" "}
-                    <code>404 Not Found</code>, or <code>400 Invalid Request</code> error response.
+                    URLs that specify a previous build will result in a <code>410 Gone</code> error response, with the
+                    current build included in the response.
                 </p>
+                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}?build=1`} />
             </section>
             <section id="entities">
                 <h2>Entities</h2>
@@ -106,10 +109,9 @@ const Article: FC = () => {
                     &rsquo;s database: <strong>images</strong>, <strong>nodes</strong>, and{" "}
                     <strong>contributors</strong>. Each individual entity is identified by a{" "}
                     <a href="//wikipedia.org/wiki/Universally_unique_identifier" rel="noreferrer">
-                        <abbr title="Universsaluy Unique Identifier">UUID</abbr>
+                        <abbr title="Universally Unique Identifier">UUID</abbr>
                     </a>
-                    , which can be included in the <abbr title="Uniform Resource Locator">URL</abbr> to retrieve data
-                    about it. Examples:
+                    , which can be included in the URL to retrieve data about it. Examples:
                 </p>
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images/045279d5-24e5-4838-bec9-0bea86812e35`}
@@ -335,8 +337,88 @@ const Article: FC = () => {
                 </section>
             </section>
             <section id="choosing-image">
-                <h2>Choosing an Image</h2>
-                <p>TBD</p>
+                <h2>Choosing an Image for a Taxa</h2>
+                <p>
+                    Once you have found the node (or as close as <SiteTitle /> has to it), how do you select a
+                    silhouette for it? The easiest way is to use the <code>primaryImage</code> property. In general this
+                    is the earliest-submitted image of the those that most closely illustrate the node.
+                </p>
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}/nodes/37040a3d-bf9c-4aa0-9ca4-d953caac1d1c?embed_primaryImage=true`}
+                    options={{ location: true }}
+                />
+                <p>
+                    However, you may want to select from a list of images that directly represent the node. Use this to
+                    get the list:
+                </p>
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}/images?filter_node=37040a3d-bf9c-4aa0-9ca4-d953caac1d1c`}
+                    options={{ location: true }}
+                />
+                <p>
+                    And this to get the first page in the list (usually the only page) with image metadata embedded in
+                    the response:
+                </p>
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&filter_node=37040a3d-bf9c-4aa0-9ca4-d953caac1d1c&page=0`}
+                />
+                <p>
+                    Using <code>filter_node</code> will only retrieve images that directly represent that particular
+                    taxon. For higher taxa (clades), it may be better to get all the images within the clade. (The
+                    images will be roughly sorted in order of their subject matter&rsquo;s proximity to the root.)
+                </p>
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&filter_clade=36c04f2f-b7d2-4891-a4a9-138d79592bf2&page=0`}
+                />
+            </section>
+            <section id="choosing-image-file">
+                <h2>Choosing an Image File</h2>
+                <p>Once you have the metadata for the image, there will be several options for the image file.</p>
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}/images/c466a71f-90b9-4ea7-b6ba-56cb37d47f22`}
+                    options={{ location: true }}
+                />
+                <p>
+                    Look in the <code>_links</code> object and select from one of these:
+                </p>
+                <dl>
+                    <dt>
+                        <code>http://ogp.me/ns#image</code>
+                    </dt>
+                    <dd>An image meant to be used for a preview in social media.</dd>
+                    <dt>
+                        <code>rasterFiles</code>
+                    </dt>
+                    <dd>A list of raster files (pixel-based), from largest to smallest.</dd>
+                    <dt>
+                        <code>sourceFile</code>
+                    </dt>
+                    <dd>The original file, as uploaded.</dd>
+                    <dt>
+                        <code>thumbnailFiles</code>
+                    </dt>
+                    <dd>A list of square thumbnail files, from largest to smallest.</dd>
+                    <dt>
+                        <code>vectorFile</code>
+                    </dt>
+                    <dd>
+                        A scalable vector version of the image. Same as <code>sourceFile</code> if a vector file was
+                        submitted, or automatically generated from it otherwise.
+                    </dd>
+                </dl>
+            </section>
+            <section id="making-your-own">
+                <h2>Making Your Own Recipes</h2>
+                <p>
+                    It is hoped that this page has provided a gentle introduction to the <SiteTitle /> API. You may read
+                    the <a href="http://api-docs.phylopic.org">complete documentation</a> to see about other
+                    possibilities and optimizations for your own needs.
+                </p>
+                <p>
+                    You may also take a look at the{" "}
+                    <a href="//github.com/keesey/phylopic">open source code repository</a> and even{" "}
+                    <a href="//github.com/keesey/phylopic#contributing">make contributions</a> to it.
+                </p>
             </section>
         </article>
     )

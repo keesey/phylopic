@@ -15,7 +15,16 @@ export interface Props {
     options?: CurlOptions
     url: string
 }
-const fetcher = (config: AxiosRequestConfig): Promise<AxiosResponse> => axios(config)
+const fetcher = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {
+    try {
+        return await axios(config)
+    } catch (e) {
+        if (axios.isAxiosError(e) && e.response) {
+            return e.response
+        }
+        throw e
+    }
+}
 const shouldCollapse: ReactJsonViewProps["shouldCollapse"] = ({ src, name, type }) =>
     name === "_links" || name === "_embedded" || (type === "array" && (src as unknown[])?.length > 1)
 const THEME: ThemeObject = {
@@ -30,11 +39,11 @@ const THEME: ThemeObject = {
     base08: "#000",
     base09: "#f5bb00", // strings, ellipses
     base0A: "#000", // null
-    base0B: "#000",
+    base0B: "#fade85", // floats
     base0C: "#fade85", // array indices
     base0D: "#16aba6", // down carets
     base0E: "#16aba6", // right carets
-    base0F: "#fade85", // numbers, booleans, copy buttons
+    base0F: "#fade85", // integers, copy buttons
 }
 const CurlBox: FC<Props> = ({ options, url }) => {
     const [requested, setRequested] = useState(false)
@@ -64,26 +73,27 @@ const CurlBox: FC<Props> = ({ options, url }) => {
                 </button>
             </div>
             {requested && (
-                <div className={styles.response}>
-                    {isLoading ? (
-                        <LoaderContext.Provider value={{ color: "" }}>
-                            <Loader />
-                        </LoaderContext.Provider>
+                <>
+                    {!data && !error ? (
+                        <div className={styles.loaderContainer}>
+                            <LoaderContext.Provider value={{ color: "#f7fffb" }}>
+                                <Loader />
+                            </LoaderContext.Provider>
+                        </div>
                     ) : error ? (
                         <p className={styles.error}>
                             <code>{String(error)}</code>
                         </p>
                     ) : !data ? (
                         <p className={styles.empty}>No response.</p>
-                    ) : data.status >= 400 ? (
-                        <p className={styles.error}>
-                            <code>
-                                {data.status}: {data.statusText}
-                            </code>
-                        </p>
                     ) : (
                         <div>
-                            <p className={styles.status}>
+                            <p
+                                className={clsx(
+                                    styles.status,
+                                    data.status >= 400 ? styles.statusError : styles.statusSuccess,
+                                )}
+                            >
                                 <code>
                                     {data.status}: {data.statusText}
                                 </code>
@@ -105,7 +115,7 @@ const CurlBox: FC<Props> = ({ options, url }) => {
                             </Suspense>
                         </div>
                     )}
-                </div>
+                </>
             )}
         </section>
     )
