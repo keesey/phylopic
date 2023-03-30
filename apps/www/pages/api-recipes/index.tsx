@@ -35,8 +35,9 @@ const Article: FC = () => {
                     functionality, like listing image files and searching for taxa. As well, it documents how{" "}
                     <SiteTitle /> uses external resources to augment searching capabilities.
                 </p>
-                <p>This page is intended for readers who are familiar with:
-                    <ul style={{ listStyleType: "disc", marginInlineStart: "1em"}}>
+                <p>
+                    This page is intended for readers who are familiar with:
+                    <ul style={{ listStyleType: "disc", marginInlineStart: "1em" }}>
                         <li>using a command prompt (UNIX, etc.)</li>
                         <li>basic World Wide Web terms (URL, HTTP, POST, GET, etc.)</li>
                         <li>JSON data format</li>
@@ -62,9 +63,18 @@ const Article: FC = () => {
                     </a>{" "}
                     data detailing other resource endpoints and general metadata about the site.
                 </p>
-                <p>For compatibility with future versions of the API, it is <em>strongly recommended</em> that you include the <strong>major API version</strong> in the HTTP headers thusly:</p>
-                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}`} options={{ headers: { "Content-Type": "application/vnd.phylopic.v2+json"}, location: true }} />
-                <p>This is not a strict requirement, and for brevity the ensuing examples will forgo it.</p>
+                <p>
+                    For compatibility with future versions of the API, it is <em>strongly recommended</em> that you
+                    include the <strong>major API version</strong> in the HTTP headers thusly:
+                </p>
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}`}
+                    options={{ headers: { "Content-Type": "application/vnd.phylopic.v2+json" }, location: true }}
+                />
+                <p>
+                    This is not a strict requirement, and for brevity the ensuing examples will forgo it (except for
+                    POST calls).
+                </p>
             </section>
             <section id="builds">
                 <h2>Builds</h2>
@@ -204,33 +214,129 @@ const Article: FC = () => {
                     <h3>
                         In the <cite>Open Tree of Life</cite>
                     </h3>
-                    <p>The full documentation for the <cite>Open Tree of Life</cite> API is available here: <a href="//opentreeoflife.github.io/develop/api" rel="noreferrer"><code>https://opentreeoflife.github.io/develop/api</code></a></p>
-                    <p>To get a list of taxa matching a search string, POST a JSON object to the <code>/autocomplete_name</code> endpoint:</p>
-                    <CurlBox url="https://api.opentreeoflife.org/v3/tnrs/autocomplete_name" options={{ data: { name: "prim" }}} />
-                    <p>This will yield a list of objects with an <code>ott_id</code> property serving as a unique identifier. You may use that to get the full lineage of a particular taxon.</p>
-                    <CurlBox url="https://api.opentreeoflife.org/v3/taxonomy/taxon_info" options={{ data: { include_lineage: true, ott_id: 7501342   }}} />
-                    <p>Collect the <code>ott_id</code> values from the <code>lineage</code>, from the least inclusive taxon to the most inclusive taxon, and POST those as an array of strings to the <SiteTitle /> <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint to find the closest match in <SiteTitle />.</p>
+                    <p>
+                        The full documentation for the <cite>Open Tree of Life</cite> API is available here:{" "}
+                        <a href="//opentreeoflife.github.io/develop/api" rel="noreferrer">
+                            <code>https://opentreeoflife.github.io/develop/api</code>
+                        </a>
+                    </p>
+                    <p>
+                        To get a list of taxa matching a search string, POST a JSON object to the{" "}
+                        <code>/autocomplete_name</code> endpoint:
+                    </p>
+                    <CurlBox
+                        url="https://api.opentreeoflife.org/v3/tnrs/autocomplete_name"
+                        options={{ data: { name: "prim" } }}
+                    />
+                    <p>
+                        This will yield a list of objects with an <code>ott_id</code> property serving as a unique
+                        identifier. You may use that to get the full lineage of a particular taxon.
+                    </p>
+                    <CurlBox
+                        url="https://api.opentreeoflife.org/v3/taxonomy/taxon_info"
+                        options={{ data: { include_lineage: true, ott_id: 7501342 } }}
+                    />
+                    <p>
+                        Collect the <code>ott_id</code> values from the <code>lineage</code>, from the least inclusive
+                        taxon to the most inclusive taxon (i.e., the way they were returned), and POST those as an array
+                        of strings to the <SiteTitle /> <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint to
+                        find the closest match in <SiteTitle />.
+                    </p>
                     <CurlBox
                         url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?build=${build}`}
-                        options={{ data: ["70119", "937683", "329706", "844843", "2914936", "178260", "409995", "802117", "155737", "189832", "117569", "641038", "691846", "5246131", "332573", "304358", "93302", "805080"],
-                            headers: { "Content-Type": "application/vnd.phylopic.v2+json"}}}
+                        options={{
+                            data: [
+                                "70119",
+                                "937683",
+                                "329706",
+                                "844843",
+                                "2914936",
+                                "178260",
+                                "409995",
+                                "802117",
+                                "155737",
+                                "189832",
+                                "117569",
+                                "641038",
+                                "691846",
+                                "5246131",
+                                "332573",
+                                "304358",
+                                "93302",
+                                "805080",
+                            ],
+                            headers: { "Content-Type": "application/vnd.phylopic.v2+json" },
+                            location: true,
+                        }}
                     />
                 </section>
                 <section id="searching-name-pbdb">
                     <h3>
                         In the <cite>Paleobiology Database</cite>
                     </h3>
-                    <p>The full documentation for the <cite>Paleobiology Database</cite> API version 1.2 is available here: <a href="//paleobiodb.org/data1.2/" rel="noreferrer"><code>https://paleobiodb.org/data1.2/</code></a></p>
-                </section>
-                <section id="searching-name-eol">
-                    <h3>
-                        In the <cite>Encyclopedia of Life</cite>
-                    </h3>
-                    <p>The full documentation for the <cite>Encyclopedia of Life</cite> Classic API is available here: <a href="//eol.org/docs/what-is-eol/classic-apis" rel="noreferrer"><code>https://eol.org/docs/what-is-eol/classic-apis</code></a></p>
+                    <p>
+                        The full documentation for the <cite>Paleobiology Database</cite> API version 1.2 is available
+                        here:{" "}
+                        <a href="//paleobiodb.org/data1.2/" rel="noreferrer">
+                            <code>https://paleobiodb.org/data1.2/</code>
+                        </a>
+                    </p>
+                    <p>
+                        To get a list of taxa matching a search string, use the <code>/taxa/auto.json</code> endpoint:
+                    </p>
+                    <CurlBox url="https://training.paleobiodb.org/data1.2/taxa/auto.json?limit=10&name=prim" />
+                    <p>
+                        This will yield an object with a list of <code>records</code> with an <code>oid</code> property
+                        serving as a unique identifier. You may use that to get the full lineage of a particular taxon.
+                    </p>
+                    <CurlBox url="https://training.paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents" />
+                    <p>
+                        Collect the <code>oid</code> values (minues the <code>"txn:"</code> prefix) from the{" "}
+                        <code>records</code>, from the least inclusive taxon to the most inclusive taxon (i.e., the
+                        reverse of the way they were returned), and POST those as an array of strings to the{" "}
+                        <SiteTitle /> <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint to find the closest
+                        match in <SiteTitle />.
+                    </p>
+                    <CurlBox
+                        url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn?build=${build}`}
+                        options={{
+                            data: [
+                                "133360",
+                                "133359",
+                                "39168",
+                                "38935",
+                                "91793",
+                                "38882",
+                                "53189",
+                                "56749",
+                                "465406",
+                                "37177",
+                                "125547",
+                                "53190",
+                                "77135",
+                                "219195",
+                                "67348",
+                                "34881",
+                                "67344",
+                                "67149",
+                                "33815",
+                                "67145",
+                                "272902",
+                                "67103",
+                                "67091",
+                                "212579",
+                                "1",
+                                "28595",
+                            ],
+                            headers: { "Content-Type": "application/vnd.phylopic.v2+json" },
+                            location: true,
+                        }}
+                    />
                 </section>
             </section>
             <section id="choosing-image">
                 <h2>Choosing an Image</h2>
+                <p>TBD</p>
             </section>
         </article>
     )
