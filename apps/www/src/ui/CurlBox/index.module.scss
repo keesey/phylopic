@@ -1,0 +1,54 @@
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/buttons.scss";
+
+.main {
+    display: block;
+}
+
+.sample {
+    align-items: center;
+    background-color: colors.$ink;
+    border-radius: 1em;
+    border: none;
+    color: colors.$white;
+    display: flex;
+    font-size: larger;
+    overflow: hidden;
+    padding: 1em;
+    position: relative;
+    text-align: left;
+    transition: background-color 0.3s;
+    width: 100%;
+
+    &.requested {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    >code {
+        flex-grow: 1;
+    }
+
+    .copyButton {
+        @include buttons.text(colors.$sunshine, colors.$dandelion);
+        transition: color 0.3s;
+    }
+}
+
+.sendButton {
+    @include buttons.cta(colors.$sunshine, colors.$dandelion);
+}
+
+.clearButton {
+    @include buttons.cta(colors.$sunshine, colors.$dandelion);
+}
+
+.status {
+    background-color: colors.$deep;
+    color: colors.$vellum;
+    font-weight: bold;
+    margin: 0;
+    padding: 1em;
+    text-align: center;
+
+}
