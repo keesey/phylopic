@@ -82,15 +82,15 @@ const Article: FC = () => {
             <section id="builds">
                 <h2>Builds</h2>
                 <p>
-                    You may notice that the response includes properties called <code>"build"</code> and{" "}
-                    <code>"buildTimestamp"</code>. Updates to <SiteTitle /> are published in discrete{" "}
+                    You may notice that the response includes properties called <code>&quot;build&quot;</code> and{" "}
+                    <code>&quot;buildTimestamp&quot;</code>. Updates to <SiteTitle /> are published in discrete{" "}
                     <strong>builds</strong> in order to improve caching. In order to return data, each API call must
                     including a build number in the query string. If a build number is not included, a{" "}
                     <code>307 Temporary Redirect</code> response is returned indicating a modified URL (
                     <code>Location</code> header) with the current build number added in the query string. (This is why
                     the command above includes the <code style={{ whiteSpace: "pre" }}>--location</code> option.) The
-                    response to that URL will always include a<code>"build"</code> property with the current build
-                    number.
+                    response to that URL will always include a<code>&quot;build&quot;</code> property with the current
+                    build number.
                 </p>
                 <p>
                     To skip the redirect, simply place the current <code>build</code> in the query string:
@@ -293,7 +293,7 @@ const Article: FC = () => {
                     </p>
                     <CurlBox url="https://training.paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents" />
                     <p>
-                        Collect the <code>oid</code> values (minues the <code>"txn:"</code> prefix) from the{" "}
+                        Collect the <code>oid</code> values (minues the <code>&quot;txn:&quot;</code> prefix) from the{" "}
                         <code>records</code>, from the least inclusive taxon to the most inclusive taxon (i.e., the
                         reverse of the way they were returned), and POST those as an array of strings to the{" "}
                         <SiteTitle /> <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint to find the closest
