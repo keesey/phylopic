@@ -12,7 +12,7 @@ const useCommandKey = (url: string, options?: CurlOptions): AxiosRequestConfig =
             headers: options?.headers,
             method,
             url,
-            maxRedirects: options?.location ? undefined : 0,
+            maxRedirects: options?.location ? 5 : 0,
         }
         return config
     }, [options?.data, options?.headers, options?.location, url])

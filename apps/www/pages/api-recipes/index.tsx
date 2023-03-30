@@ -296,8 +296,8 @@ const Article: FC = () => {
                         Collect the <code>oid</code> values (minues the <code>&quot;txn:&quot;</code> prefix) from the{" "}
                         <code>records</code>, from the least inclusive taxon to the most inclusive taxon (i.e., the
                         reverse of the way they were returned), and POST those as an array of strings to the{" "}
-                        <SiteTitle /> <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint to find the closest
-                        match in <SiteTitle />.
+                        <SiteTitle /> <code>/resolve/paleobiodb.org/txn</code> endpoint to find the closest match in{" "}
+                        <SiteTitle />.
                     </p>
                     <CurlBox
                         url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn?build=${build}`}
