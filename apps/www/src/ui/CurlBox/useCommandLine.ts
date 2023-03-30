@@ -15,7 +15,7 @@ const useCommandLine = (url: string, options?: CurlOptions) => {
         if (options?.location) {
             line += "--location "
         }
-        line += url
+        line += JSON.stringify(url)
         return line
     }, [options?.data, options?.headers, options?.location, url])
 }

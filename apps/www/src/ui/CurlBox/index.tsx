@@ -29,7 +29,7 @@ const THEME: ThemeObject = {
     base07: "#fff", // base text
     base08: "#000",
     base09: "#f5bb00", // strings, ellipses
-    base0A: "#000",
+    base0A: "#000", // null
     base0B: "#000",
     base0C: "#fade85", // array indices
     base0D: "#16aba6", // down carets
