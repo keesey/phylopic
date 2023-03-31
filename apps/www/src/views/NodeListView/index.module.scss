@@ -3,7 +3,7 @@
 @use "@phylopic/styles/mixins/hierarchy.scss";
 
 .main {
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
 }
 
