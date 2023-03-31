@@ -54,13 +54,15 @@ const customEvents = {
         })
         gtag.event("click_image_link", getImageOptions(image))
     },
-    clickNodeLink(id: string, node: Node, label?: string, type: LinkType = "link") {
-        gtag.event("click_link", {
-            id,
-            href: getHRefFromAPILink(node._links.self),
-            label: label ?? node._links.self.title,
-            type,
-        })
+    clickNodeLink(id: string, node: Node, label?: string, type: LinkType = "link", suppressLink = false) {
+        if (!suppressLink) {
+            gtag.event("click_link", {
+                id,
+                href: getHRefFromAPILink(node._links.self),
+                label: label ?? node._links.self.title,
+                type,
+            })
+        }
         gtag.event("click_node_link", {
             title: node._links.self.title,
             uuid: node.uuid,

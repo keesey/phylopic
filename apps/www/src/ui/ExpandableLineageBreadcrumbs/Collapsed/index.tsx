@@ -14,7 +14,6 @@ const Collapsed: FC<Props> = ({ afterItems, beforeItems, onClick }) => {
             {
                 children: <NomenView value={[{ class: "scientific", text: "Pan-Biota" }]} />,
                 href: `/nodes/${process.env.NEXT_PUBLIC_ROOT_UUID}/pan-biota-silhouettes`,
-                // :TODO: tracking
             },
             {
                 children: (
