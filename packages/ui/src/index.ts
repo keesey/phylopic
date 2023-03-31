@@ -1,3 +1,4 @@
+export * from "./analytics"
 export * from "./controls"
 export * from "./core"
 export * from "./hooks"
