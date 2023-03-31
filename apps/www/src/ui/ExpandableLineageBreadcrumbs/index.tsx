@@ -12,6 +12,7 @@ export interface Props {
     beforeItems: readonly BreadcrumbItem[]
     uuid?: UUID
 }
+
 const ExpandableLineageBreadcrumbs: FC<Props> = ({ afterItems, beforeItems, uuid }) => {
     const [active, setActive] = useState(false)
     const handleActiveButtonClick = useCallback(() => setActive(true), [])
