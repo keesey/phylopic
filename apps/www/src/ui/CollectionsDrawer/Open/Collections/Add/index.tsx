@@ -1,5 +1,6 @@
 import clsx from "clsx"
 import { FC, useCallback, useContext } from "react"
+import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import Icon from "~/ui/Icon"
 import styles from "./index.module.scss"
@@ -8,6 +9,7 @@ const Add: FC = () => {
     const handleAddClick = useCallback(() => {
         const payload = prompt("What do you want to call your new collection?")
         if (payload) {
+            customEvents.createCollection(payload)
             dispatch({ type: "ADD_COLLECTION", payload })
         }
     }, [dispatch])

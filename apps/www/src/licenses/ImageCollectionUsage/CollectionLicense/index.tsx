@@ -2,6 +2,7 @@ import { ImageWithEmbedded } from "@phylopic/api-models"
 import { NumberView } from "@phylopic/ui"
 import { isPublicDomainLicenseURL, LICENSE_NAMES } from "@phylopic/utils"
 import { FC } from "react"
+import customEvents from "~/analytics/customEvents"
 import useCollectionLicense from "./useCollectionLicense"
 export interface Props {
     images: readonly ImageWithEmbedded[]
@@ -38,7 +39,14 @@ const CollectionLicense: FC<Props> = ({ images }) => {
             )}
             should be made available under the{" "}
             <strong>
-                <a href={license} target="_blank" rel="noreferrer">
+                <a
+                    href={license}
+                    onClick={() =>
+                        customEvents.clickLink("collection_license", license, LICENSE_NAMES[license], "link")
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     {LICENSE_NAMES[license]}
                 </a>
             </strong>{" "}

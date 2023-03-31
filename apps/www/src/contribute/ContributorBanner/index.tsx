@@ -6,6 +6,7 @@ import { useAPIFetcher } from "@phylopic/utils-api"
 import { decode } from "jsonwebtoken"
 import { FC, useMemo, useState } from "react"
 import useSWRImmutable from "swr/immutable"
+import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
 export type Props = {
     imageUUID: UUID
@@ -37,7 +38,14 @@ const ContributorBanner: FC<Props> = ({ imageUUID }) => {
     return (
         <div className={styles.main}>
             <span>Hey, you uploaded this one! Nice job!</span>
-            <a className={styles.closer} onClick={() => setDismissed(true)} role="button">
+            <a
+                className={styles.closer}
+                onClick={() => {
+                    customEvents.dismissContributorBanner()
+                    setDismissed(true)
+                }}
+                role="button"
+            >
                 ×
             </a>
         </div>

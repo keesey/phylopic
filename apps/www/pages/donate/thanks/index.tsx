@@ -3,12 +3,12 @@ import { NextSeo } from "next-seo"
 import customEvents from "~/analytics/customEvents"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
-import EngineeringSection from "~/ui/EngineeringSection"
+import EngineeringSection from "~/sections/EngineeringSection"
 import InlineSections from "~/ui/InlineSections"
-import PatreonSection from "~/ui/PatreonSection"
+import PatreonSection from "~/sections/PatreonSection"
 import SiteTitle from "~/ui/SiteTitle"
-import SpreadWordSection from "~/ui/SpreadWordSection"
-import TechDonateList from "~/ui/TechDonateList"
+import SpreadWordSection from "~/sections/SpreadWordSection"
+import TechDonateList from "~/sections/TechDonateList"
 const PageComponent: NextPage = () => (
     <PageLayout>
         <NextSeo

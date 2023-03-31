@@ -3,7 +3,10 @@ import { ImageThumbnailView } from "@phylopic/ui"
 import { URL } from "@phylopic/utils"
 import Link from "next/link"
 import { FC } from "react"
+import customEvents from "~/analytics/customEvents"
 import CollectionLicense from "~/licenses/ImageCollectionUsage/CollectionLicense"
+import getImageSlug from "~/routes/getImageSlug"
+import getNodeSlug from "~/routes/getNodeSlug"
 import LicenseView from "~/views/LicenseView"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
@@ -39,12 +42,31 @@ const ImagesView: FC<Props> = ({ url, value }) => {
                     {value.map(image => (
                         <tr key={image.uuid}>
                             <td>
-                                <Link href={`/images/${encodeURIComponent(image.uuid)}`}>
+                                <Link
+                                    href={`/images/${encodeURIComponent(image.uuid)}/${encodeURIComponent(
+                                        getImageSlug(image._links.self.title),
+                                    )}`}
+                                    onClick={() => customEvents.clickImageLink("permalink_image", image)}
+                                >
                                     <ImageThumbnailView value={image} />
                                 </Link>
                             </td>
                             <td>
-                                <Link href={image._links.specificNode.href}>
+                                <Link
+                                    href={`/nodes/${encodeURIComponent(
+                                        image._embedded.specificNode?.uuid ?? "",
+                                    )}/${encodeURIComponent(
+                                        getNodeSlug(image._embedded.specificNode?._links.self.title ?? ""),
+                                    )}`}
+                                    onClick={() =>
+                                        image._embedded.specificNode
+                                            ? customEvents.clickNodeLink(
+                                                  "permalink_taxon",
+                                                  image._embedded.specificNode,
+                                              )
+                                            : undefined
+                                    }
+                                >
                                     <NomenView value={image._embedded.specificNode?.names[0]} short />
                                 </Link>
                             </td>

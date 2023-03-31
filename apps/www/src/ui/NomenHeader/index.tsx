@@ -1,5 +1,6 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
 import { FC, Key, useCallback, useMemo, useState } from "react"
+import customEvents from "~/analytics/customEvents"
 import NodeDetailsView from "~/views/NodeDetailsView"
 import NomenView from "~/views/NomenView"
 import HeaderNav, { Props as HeaderNavProps } from "../HeaderNav"
@@ -19,7 +20,12 @@ const NomenHeader: FC<Props> = ({ value }) => {
         return hasNames || hasChildNodes || hasExternal
     }, [value])
     const hasParent = useMemo(() => Boolean(value?._links.parentNode), [value])
-    const handleDetailsButtonClick = useCallback(() => setDetailsActive(!detailsActive), [detailsActive])
+    const handleDetailsButtonClick = () => {
+        if (value) {
+            customEvents.toggleNodeDetails(!detailsActive, value)
+        }
+        setDetailsActive(!detailsActive)
+    }
     const buttons = useMemo<HeaderNavProps["buttons"]>(() => {
         const buttons: Array<HeaderNavButtonProps & { key: Key }> = []
         if (hasDetails) {
@@ -35,6 +41,8 @@ const NomenHeader: FC<Props> = ({ value }) => {
                 children: "View Lineage →",
                 href: `/nodes/${value.uuid}/lineage`,
                 key: "lineage",
+                onClick: () =>
+                    customEvents.clickLink("view_lineage", `/nodes/${value.uuid}/lineage`, "View Lineage →", "button"),
                 type: "anchor",
             })
         }

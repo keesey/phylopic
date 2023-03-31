@@ -1,5 +1,6 @@
 import { Node } from "@phylopic/api-models"
 import { FC, useMemo } from "react"
+import customEvents from "~/analytics/customEvents"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import getNodeHRef from "~/routes/getNodeHRef"
 import NomenView from "~/views/NomenView"
@@ -16,6 +17,7 @@ const Expanded: FC<Props> = ({ afterItems, beforeItems, values }) => {
                 ? [...values].reverse().map(node => ({
                       children: <NomenView value={node.names[0]} short />,
                       href: nodeHasOwnCladeImages(node) ? getNodeHRef(node._links.self) : undefined,
+                      onClick: () => customEvents.clickNodeLink("breadcrumb", node),
                   }))
                 : [
                       {
