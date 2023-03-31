@@ -82,10 +82,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                             children: <strong>Lineage</strong>,
                         },
                     ]}
-                    beforeItems={[
-                        { children: "Home", href: "/" },
-                        { children: "Taxonomic Groups", href: "/nodes" },
-                    ]}
+                    beforeItems={[{ children: "Home", href: "/" }]}
                     uuid={lineageUUID}
                 />
                 <h1>

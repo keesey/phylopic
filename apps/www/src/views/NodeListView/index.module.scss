@@ -3,7 +3,7 @@
 @use "@phylopic/styles/mixins/hierarchy.scss";
 
 .main {
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
 }
 
@@ -14,5 +14,6 @@
 }
 
 .list {
+    display: flex;
     justify-content: center;
 }

@@ -147,10 +147,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                 <ExpandableLineageBreadcrumbs
                     key={node.uuid}
                     afterItems={afterItems}
-                    beforeItems={[
-                        { children: "Home", href: "/" },
-                        { children: "Taxonomic Groups", href: "/nodes" },
-                    ]}
+                    beforeItems={[{ children: "Home", href: "/" }]}
                     uuid={lineageUUID}
                 />
                 <NomenHeader value={node} />

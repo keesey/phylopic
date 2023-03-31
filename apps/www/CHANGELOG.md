@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Always showing _Pan-Biota_ link in Node Page breadcrumbs.
+
 ### Deprecated
 
 ### Fixed
@@ -19,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Display error on Nodes Page.
 
 ### Removed
+
+-   "Taxonomic Groups" link from Node Page breadcrumbs.
 
 ### Security
 
