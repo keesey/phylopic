@@ -2,7 +2,7 @@ import { Loader, LoaderContext } from "@phylopic/ui"
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
-import { FC, Suspense, useState } from "react"
+import { FC, ReactNode, Suspense, useState } from "react"
 import type { ReactJsonViewProps, ThemeObject } from "react-json-view"
 import useSWR from "swr"
 import { CurlOptions } from "./CurlOptions"
@@ -13,6 +13,7 @@ const ReactJsonView = dynamic(() => import("react-json-view"), { ssr: false })
 
 export interface Props {
     options?: CurlOptions
+    title: ReactNode
     url: string
 }
 const fetcher = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {
@@ -45,13 +46,14 @@ const THEME: ThemeObject = {
     base0E: "#16aba6", // right carets
     base0F: "#fade85", // integers, copy buttons
 }
-const CurlBox: FC<Props> = ({ options, url }) => {
+const CurlBox: FC<Props> = ({ options, title, url }) => {
     const [requested, setRequested] = useState(false)
     const line = useCommandLine(url, options)
     const key = useCommandKey(url, options)
     const { data, error, isLoading } = useSWR(requested ? key : null, fetcher)
     return (
         <section>
+            <header className={styles.header}>{title}</header>
             <div className={clsx(styles.sample, requested && styles.requested)}>
                 <code>{line}</code>
                 {!isLoading && !(data || error) && (

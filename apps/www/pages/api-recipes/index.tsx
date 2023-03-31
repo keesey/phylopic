@@ -31,15 +31,15 @@ const Article: FC = () => {
                     The <SiteTitle /> <abbr title="Application Programming Interface">API</abbr> is thoroughly
                     documented at the <a href="http://api-docs.phylopic.org">API Documentation Website</a>. As an
                     alternative introduction, this page offers a simpler (but non-comprehensive) guide to using the API,
-                    with some examples of commonly-needed functionality, like listing image files and searching for
-                    taxa. As well, it documents how other resources may be used to augment searching capabilities.
+                    with some examples of commonly-needed functionality, like listing images and searching for taxa. As
+                    well, it documents how other resources may be used to augment searching capabilities.
                 </p>
                 <p>This page is intended for readers who are familiar with:</p>
                 <ul style={{ listStyleType: "disc", marginInlineStart: "1em" }}>
                     <li>using a command-line prompt (UNIX, etc.)</li>
                     <li>
                         basic World Wide Web technological terms (<abbr title="Uniform Resource Locator">URL</abbr>,
-                        POST, <abbr title="Hypertext Transfer Protocol">HTTP</abbr> header, query parameter, etc.)
+                        <abbr title="Hypertext Transfer Protocol">HTTP</abbr> header, query parameter, etc.)
                     </li>
                     <li>
                         the{" "}
@@ -59,25 +59,19 @@ const Article: FC = () => {
                     <a href="//en.wikipedia.org/wiki/Representational_state_transfer" rel="noreferrer">
                         RESTful
                     </a>{" "}
-                    API.
+                    API, JSON data detailing other resource endpoints and general metadata about the site.
                 </p>
-                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}`} options={{ location: true }} />
-                <p>
-                    Loading this endpoint returns JSON data detailing other resource endpoints and general metadata
-                    about the site.
-                </p>
+                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}`} options={{ location: true }} title="API Index" />
                 <p>
                     For compatibility with future versions of the API, it is <em>strongly recommended</em> that you
                     include the <strong>major API version</strong> (<code>2</code>) in the HTTP headers thusly:
                 </p>
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}`}
-                    options={{ headers: { "Content-Type": "application/vnd.phylopic.v2+json" }, location: true }}
+                    options={{ headers: { Accept: "application/vnd.phylopic.v2+json" }, location: true }}
+                    title="API Index (major API version specified)"
                 />
-                <p>
-                    This is not a strict requirement, and for brevity the ensuing examples will forgo it (except for
-                    POST calls).
-                </p>
+                <p>This is not a strict requirement, and for brevity the ensuing examples will forgo it.</p>
             </section>
             <section id="builds">
                 <h2>Builds</h2>
@@ -95,17 +89,23 @@ const Article: FC = () => {
                 <p>
                     To skip the redirect, simply place the current <code>build</code> in the query string:
                 </p>
-                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}?build=${build}`} />
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}?build=${build}`}
+                    title="API Index (current build specified)"
+                />
                 <p>
                     URLs that specify a previous build will result in a <code>410 Gone</code> error response, with the
                     current build included in the response.
                 </p>
-                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}?build=1`} />
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}?build=1`}
+                    title="API Index (obsolete build specified)"
+                />
             </section>
             <section id="entities">
                 <h2>Entities</h2>
                 <p>
-                    There are three major type of entity in <SiteTitle />
+                    There are three major types of entity in <SiteTitle />
                     &rsquo;s database: <strong>images</strong>, <strong>nodes</strong>, and{" "}
                     <strong>contributors</strong>. Each individual entity is identified by a{" "}
                     <a href="//wikipedia.org/wiki/Universally_unique_identifier" rel="noreferrer">
@@ -116,16 +116,19 @@ const Article: FC = () => {
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images/045279d5-24e5-4838-bec9-0bea86812e35`}
                     options={{ location: true }}
+                    title="Image"
                 />
                 <br />
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/nodes/8f901db5-84c1-4dc0-93ba-2300eeddf4ab`}
                     options={{ location: true }}
+                    title="Node"
                 />
                 <br />
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/contributors/060f03a9-fafd-4d08-81d1-b8f82080573f`}
                     options={{ location: true }}
+                    title="Contributor"
                 />
                 <p>
                     Each entity may includes links to other individual entities, in the <code>_links</code> object. For
@@ -138,11 +141,13 @@ const Article: FC = () => {
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images/045279d5-24e5-4838-bec9-0bea86812e35?embed_generalNode=true&embed_nodes=true&embed_specificNode=true`}
                     options={{ location: true }}
+                    title="Image with Embedded Entities"
                 />
                 <br />
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/nodes/8f901db5-84c1-4dc0-93ba-2300eeddf4ab?embed_parentNode=true&embed_primaryImage=true`}
                     options={{ location: true }}
+                    title="Node with Embedded Entities"
                 />
             </section>
             <section id="lists">
@@ -151,24 +156,31 @@ const Article: FC = () => {
                     The API uses the same structure for lists of any type of entity. First, a call must be made to a
                     list endpoint to get metadata about the list.
                 </p>
-                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}`} />
+                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}`} title="List of All Images" />
                 <p>
                     Subsequent calls to the same endpoint can include a <code>page</code> query parameter to get a
                     particular page of entities. Examples are included in the list metadata, under{" "}
                     <code>_links.firstPage</code> and <code>_links.lastPage</code>. The <code>build</code> parameter{" "}
                     <em>must</em> be included for page queries.
                 </p>
-                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&page=0`} />
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&page=0`}
+                    title="First Page of All Images"
+                />
                 <p>
                     Page responses list links to individual entities in <code>_links.items</code>. These entities can
                     also be embedded in the response itself with the <code>embed_items</code> parameter.
                 </p>
-                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&page=0`} />
+                <CurlBox
+                    url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&page=0`}
+                    title="First Page of All Images, with Items Embedded"
+                />
                 <p>
                     Lists can also be filtered with certain parameters. For example, this returns all images created
                     (i.e., approved) on or after <time dateTime="2023-02-12T00:00:00.000Z">2023 February 12</time>:
                 </p>
                 <CurlBox
+                    title="List of Images Created after a Given Date"
                     url={`${
                         process.env.NEXT_PUBLIC_API_URL
                     }/images?build=${build}&filter_created_after=${encodeURIComponent(
@@ -181,11 +193,20 @@ const Article: FC = () => {
                 <p>
                     <SiteTitle /> generally only covers taxa for which it has silhouettes. But it also provides tools
                     for augmenting searches with external resources that cover other taxa. To take full advantage, you
-                    may need to make multiple calls both to the <SiteTitle /> API and to external APIs
+                    may need to make multiple calls both to the <SiteTitle /> API and to other APIs. Example below
+                    include the
+                    <a href="//tree.opentreeoflife.org/" rel="noreferrer">
+                        <cite>Open Tree of Life</cite>
+                    </a>{" "}
+                    API and the{" "}
+                    <a href="//paleobiodb.org/" rel="noreferrer">
+                        <cite>Paleobiology Database</cite>
+                    </a>{" "}
+                    API.
                 </p>
                 <section id="searching-name-phylopic">
                     <h3>
-                        In <SiteTitle /> &rsquo;s Database
+                        Searching in <SiteTitle />
                     </h3>
                     <p>
                         To search for a taxonomic name in <SiteTitle />, send the search text (preferably lower-case,
@@ -195,6 +216,7 @@ const Article: FC = () => {
                     <CurlBox
                         url={`${process.env.NEXT_PUBLIC_API_URL}/nodes?filter_name=primates`}
                         options={{ location: true }}
+                        title="Search for a Taxonomic Name"
                     />
                     <p>
                         You may optionally preface these searches with autocomplete calls, to get strings that{" "}
@@ -203,6 +225,7 @@ const Article: FC = () => {
                     <CurlBox
                         url={`${process.env.NEXT_PUBLIC_API_URL}/autocomplete?query=prim`}
                         options={{ location: true }}
+                        title="Autocomplete for Taxonomic Names"
                     />
                     <p>
                         You may also wish to simply skip to loading loading the list and just load the first page (which
@@ -210,11 +233,12 @@ const Article: FC = () => {
                     </p>
                     <CurlBox
                         url={`${process.env.NEXT_PUBLIC_API_URL}/nodes?build=${build}&filter_name=primates&page=0`}
+                        title="First Page of Search Results for a Taxonomic Name"
                     />
                 </section>
                 <section id="searching-name-otol">
                     <h3>
-                        In the <cite>Open Tree of Life</cite>
+                        Searching in the <cite>Open Tree of Life</cite>
                     </h3>
                     <p>
                         The full documentation for the <cite>Open Tree of Life</cite> API is available here:{" "}
@@ -229,6 +253,11 @@ const Article: FC = () => {
                     <CurlBox
                         url="https://api.opentreeoflife.org/v3/tnrs/autocomplete_name"
                         options={{ data: { name: "prim" } }}
+                        title={
+                            <>
+                                Autocomplete for <cite>Open Tree of Life</cite>
+                            </>
+                        }
                     />
                     <p>
                         This will yield a list of objects with an <code>ott_id</code> property serving as a unique
@@ -237,12 +266,17 @@ const Article: FC = () => {
                     <CurlBox
                         url="https://api.opentreeoflife.org/v3/taxonomy/taxon_info"
                         options={{ data: { include_lineage: true, ott_id: 7501342 } }}
+                        title={
+                            <>
+                                Lineage for <cite>Open Tree of Life</cite>
+                            </>
+                        }
                     />
                     <p>
                         Collect the <code>ott_id</code> values from the <code>lineage</code>, from the least inclusive
                         taxon to the most inclusive taxon (i.e., the way they were returned), and POST those as an array
-                        of strings to the <SiteTitle /> <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint to
-                        find the closest match in <SiteTitle />.
+                        of strings to the <SiteTitle /> API&rsquo;s <code>/resolve/opentreeoflife.org/taxonomy</code>{" "}
+                        endpoint to find the closest match in <SiteTitle />.
                     </p>
                     <CurlBox
                         url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?build=${build}`}
@@ -270,34 +304,53 @@ const Article: FC = () => {
                             headers: { "Content-Type": "application/vnd.phylopic.v2+json" },
                             location: true,
                         }}
+                        title={
+                            <>
+                                Resolve Node for <cite>Open Tree of Life</cite>
+                            </>
+                        }
                     />
                 </section>
                 <section id="searching-name-pbdb">
                     <h3>
-                        In the <cite>Paleobiology Database</cite>
+                        Searching in the <cite>Paleobiology Database</cite>
                     </h3>
                     <p>
                         The full documentation for the <cite>Paleobiology Database</cite> API version 1.2 is available
                         here:{" "}
-                        <a href="//paleobiodb.org/data1.2/" rel="noreferrer">
-                            <code>https://paleobiodb.org/data1.2/</code>
+                        <a href="//paleobiodb.org/data1.2" rel="noreferrer">
+                            <code>https://paleobiodb.org/data1.2</code>
                         </a>
                     </p>
                     <p>
                         To get a list of taxa matching a search string, use the <code>/taxa/auto.json</code> endpoint:
                     </p>
-                    <CurlBox url="https://training.paleobiodb.org/data1.2/taxa/auto.json?limit=10&name=prim" />
+                    <CurlBox
+                        url="https://training.paleobiodb.org/data1.2/taxa/auto.json?limit=10&name=prim"
+                        title={
+                            <>
+                                Autocomplete for <cite>Paleobiology Database</cite>
+                            </>
+                        }
+                    />
                     <p>
                         This will yield an object with a list of <code>records</code> with an <code>oid</code> property
                         serving as a unique identifier. You may use that to get the full lineage of a particular taxon.
                     </p>
-                    <CurlBox url="https://training.paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents" />
+                    <CurlBox
+                        url="https://training.paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents"
+                        title={
+                            <>
+                                Lineage for <cite>Paleobiology Database</cite>
+                            </>
+                        }
+                    />
                     <p>
                         Collect the <code>oid</code> values (minues the <code>&quot;txn:&quot;</code> prefix) from the{" "}
                         <code>records</code>, from the least inclusive taxon to the most inclusive taxon (i.e., the
                         reverse of the way they were returned), and POST those as an array of strings to the{" "}
-                        <SiteTitle /> <code>/resolve/paleobiodb.org/txn</code> endpoint to find the closest match in{" "}
-                        <SiteTitle />.
+                        <SiteTitle /> API&rsquo;s <code>/resolve/paleobiodb.org/txn</code> endpoint to find the closest
+                        match in <SiteTitle />.
                     </p>
                     <CurlBox
                         url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn?build=${build}`}
@@ -333,6 +386,11 @@ const Article: FC = () => {
                             headers: { "Content-Type": "application/vnd.phylopic.v2+json" },
                             location: true,
                         }}
+                        title={
+                            <>
+                                Resolve Node for <cite>Paleobiology Database</cite>
+                            </>
+                        }
                     />
                 </section>
             </section>
@@ -346,21 +404,24 @@ const Article: FC = () => {
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/nodes/37040a3d-bf9c-4aa0-9ca4-d953caac1d1c?embed_primaryImage=true`}
                     options={{ location: true }}
+                    title="Node with Embedded Primary Image"
                 />
                 <p>
-                    However, you may want to select from a list of images that directly represent the node. Use this to
-                    get the list:
+                    However, you may want to select from a list of images that directly represent the node. Use the
+                    node&rsquo;s UUID as a filter to get the list:
                 </p>
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?filter_node=37040a3d-bf9c-4aa0-9ca4-d953caac1d1c`}
                     options={{ location: true }}
+                    title="List of Images for a Node"
                 />
                 <p>
-                    And this to get the first page in the list (usually the only page) with image metadata embedded in
-                    the response:
+                    And use this to get the first page in the list (usually the only page) with image metadata embedded
+                    in the response:
                 </p>
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&filter_node=37040a3d-bf9c-4aa0-9ca4-d953caac1d1c&page=0`}
+                    title="First Page of Images for a Node"
                 />
                 <p>
                     Using <code>filter_node</code> will only retrieve images that directly represent that particular
@@ -369,6 +430,7 @@ const Article: FC = () => {
                 </p>
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&filter_clade=36c04f2f-b7d2-4891-a4a9-138d79592bf2&page=0`}
+                    title="List of Images within a Clade"
                 />
             </section>
             <section id="choosing-image-file">
@@ -377,6 +439,7 @@ const Article: FC = () => {
                 <CurlBox
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images/c466a71f-90b9-4ea7-b6ba-56cb37d47f22`}
                     options={{ location: true }}
+                    title="Image"
                 />
                 <p>
                     Look in the <code>_links</code> object and select from one of these:

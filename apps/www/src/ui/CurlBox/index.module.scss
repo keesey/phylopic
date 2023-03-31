@@ -1,6 +1,18 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/buttons.scss";
 
+.header {
+    background-color: colors.$white;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    border: 2pt solid colors.$ink;
+    color: colors.$ink;
+    font-size: larger;
+    font-weight: bold;
+    padding: 1em;
+    text-align: center;
+}
+
 .loaderContainer {
     align-items: center;
     background-color: colors.$deep;
@@ -16,7 +28,8 @@
 .sample {
     align-items: stretch;
     background-color: colors.$ink;
-    border-radius: 1em;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
     border: none;
     color: colors.$white;
     display: flex;
@@ -67,6 +80,8 @@
 }
 
 .status {
+    border-bottom: 2pt solid colors.$sunshine;
+    border-top: 2pt solid colors.$sunshine;
     font-weight: bold;
     margin: 0;
     padding: 1em;
@@ -74,14 +89,11 @@
 
     &.statusError {
         background-color: colors.$black;
-        border: 2pt solid colors.$sunshine;
         color: colors.$dandelion;
     }
 
     &.statusSuccess {
         background-color: colors.$deep;
-        border-bottom: 2pt solid colors.$sunshine;
-        border-top: 2pt solid colors.$sunshine;
         color: colors.$vellum;
     }
 }
