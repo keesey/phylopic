@@ -82,6 +82,7 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                         {(has.images || has.nodes) && <h2>Image Contributors</h2>}
                         <PaginationContainer
                             endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
+                            onPage={customEvents.loadContributorListPage}
                             query={{ filter_collection: uuid }}
                         >
                             {(contributors: readonly Contributor[]) => (
@@ -137,6 +138,7 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                         {(has.contributors || has.images) && <h2>Taxonomic Groups</h2>}
                         <PaginationContainer
                             endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}
+                            onPage={customEvents.loadNodeListPage}
                             query={{ filter_collection: uuid }}
                         >
                             {nodes => (

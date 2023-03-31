@@ -1,4 +1,5 @@
 import { FC } from "react"
+import customEvents from "~/analytics/customEvents"
 import AuthorizedNamespaceView from "../AuthorizedNamespaceView"
 export interface Props {
     short?: boolean
@@ -23,7 +24,11 @@ const LinkedAuthorizedNamespaceView: FC<Props> = ({ value, short }) => {
         return <AuthorizedNamespaceView value={value} short={short} />
     }
     return (
-        <a href={href} rel="external">
+        <a
+            href={href}
+            onClick={() => customEvents.clickLink("authorized_namespace", href, value, "link")}
+            rel="external"
+        >
             <AuthorizedNamespaceView value={value} short={short} />
         </a>
     )

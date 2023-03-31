@@ -1,6 +1,7 @@
 import { Image, Node, TitledLink } from "@phylopic/api-models"
 import { gtag } from "@phylopic/ui"
 import { EmailAddress, Hash, UUIDish } from "@phylopic/utils"
+import { LicenseFilterType } from "~/models/LicenseFilterType"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getHRefFromAPILink from "~/routes/getHRefFromAPILink"
 export type LinkType = "button" | "link"
@@ -92,8 +93,8 @@ const customEvents = {
     expandBreadcrumbs() {
         gtag.event("expand_breadcrumbs")
     },
-    filterImages(filter_mode: FilterMode) {
-        gtag.event("filter_images", { filter_mode })
+    filterImages(filter_type: LicenseFilterType) {
+        gtag.event("filter_images", { filter_type: filter_type ?? "all" })
     },
     flipPocketPhylogeny(index: number, to_side: "front" | "back") {
         gtag.event("flip_pocket_phylogeny", { index, to_side })
@@ -101,8 +102,8 @@ const customEvents = {
     loadContributorListPage(index: number) {
         gtag.event("load_contributor_list_page", { index })
     },
-    loadImageListPage(index: number, filter_mode: FilterMode) {
-        gtag.event("load_image_list_page", { filter_mode, index })
+    loadImageListPage(index: number, filter_type: LicenseFilterType = undefined) {
+        gtag.event("load_image_list_page", { filter_type: filter_type ?? "all", index })
     },
     loadNodeListPage(index: number) {
         gtag.event("load_node_list_page", { index })

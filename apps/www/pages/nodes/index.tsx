@@ -3,6 +3,7 @@ import { CountView, PaginationContainer } from "@phylopic/ui"
 import type { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
+import customEvents from "~/analytics/customEvents"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
@@ -19,7 +20,10 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 description="A list of all taxonomic groups covered by PhyloPic, the open database of freely reusable silhouette images of organisms."
                 title="All Taxonomic Groups on PhyloPic"
             />
-            <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}>
+            <PaginationContainer
+                endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}
+                onPage={customEvents.loadNodeListPage}
+            >
                 {(nodes, totalNodes) => (
                     <>
                         <header>

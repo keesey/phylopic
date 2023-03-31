@@ -1,5 +1,5 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
-import { FC, Key, useCallback, useMemo, useState } from "react"
+import { FC, Key, useMemo, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import NodeDetailsView from "~/views/NodeDetailsView"
 import NomenView from "~/views/NomenView"
@@ -20,19 +20,18 @@ const NomenHeader: FC<Props> = ({ value }) => {
         return hasNames || hasChildNodes || hasExternal
     }, [value])
     const hasParent = useMemo(() => Boolean(value?._links.parentNode), [value])
-    const handleDetailsButtonClick = () => {
-        if (value) {
-            customEvents.toggleNodeDetails(!detailsActive, value)
-        }
-        setDetailsActive(!detailsActive)
-    }
     const buttons = useMemo<HeaderNavProps["buttons"]>(() => {
         const buttons: Array<HeaderNavButtonProps & { key: Key }> = []
         if (hasDetails) {
             buttons.push({
                 children: detailsActive ? "Collapse Details ↑" : "See Details ↓",
                 key: "details",
-                onClick: handleDetailsButtonClick,
+                onClick: () => {
+                    if (value) {
+                        customEvents.toggleNodeDetails(!detailsActive, value)
+                    }
+                    setDetailsActive(!detailsActive)
+                },
                 type: "button",
             })
         }
@@ -47,7 +46,7 @@ const NomenHeader: FC<Props> = ({ value }) => {
             })
         }
         return buttons
-    }, [detailsActive, handleDetailsButtonClick, hasDetails, hasParent, value])
+    }, [detailsActive, hasDetails, hasParent, value])
     return (
         <>
             <HeaderNav

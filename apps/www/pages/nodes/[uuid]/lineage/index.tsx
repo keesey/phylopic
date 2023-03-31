@@ -8,6 +8,7 @@ import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { FC, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
+import customEvents from "~/analytics/customEvents"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -92,7 +93,10 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                     Lineage of <NomenView value={name} defaultText="[Unnamed Group]" short />
                 </h1>
             </header>
-            <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes/" + node.uuid + "/lineage"}>
+            <PaginationContainer
+                endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes/" + node.uuid + "/lineage"}
+                onPage={customEvents.loadNodeListPage}
+            >
                 {lineageNodes => <LineageView short value={lineageNodes as readonly NodeWithEmbedded[]} />}
             </PaginationContainer>
         </>

@@ -23,7 +23,10 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 description="A list of everyone who has contributed free silhouette images to PhyloPic."
                 title="Contributors to PhyloPic"
             />
-            <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}>
+            <PaginationContainer
+                endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
+                onPage={customEvents.loadContributorListPage}
+            >
                 {(contributors: readonly Contributor[], totalContributors: number) => (
                     <>
                         <header>
