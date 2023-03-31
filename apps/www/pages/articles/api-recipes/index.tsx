@@ -26,6 +26,14 @@ const PageComponent: NextPage = () => (
             <h1>
                 <abbr title="Application Programming Interface">API</abbr> Recipes
             </h1>
+            <div style={{ fontStyle: "italic", textAlign: "right" }}>
+                <Link
+                    href="/contributors/060f03a9-fafd-4d08-81d1-b8f82080573f/t-michael-keesey-silhouettes"
+                    rel="author"
+                >
+                    T. Michael Keesey
+                </Link>
+            </div>
         </header>
         <Article />
     </PageLayout>
