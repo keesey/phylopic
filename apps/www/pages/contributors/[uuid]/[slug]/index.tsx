@@ -76,9 +76,9 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
                     {(images, totalImages) => (
                         <>
                             <ImageLicenseControls total={totalImages} />
-                            {isNaN(totalImages) && <Loader key="loader" />}
+                            {isNaN(totalImages) && <Loader />}
                             <br />
-                            <ImageListView key="images" value={images} />
+                            <ImageListView value={images} />
                         </>
                     )}
                 </ImageLicensePaginator>

@@ -1,4 +1,4 @@
-import { Contributor, Image, Node } from "@phylopic/api-models"
+import { Contributor, Image, Node, TitledLink } from "@phylopic/api-models"
 import { gtag } from "@phylopic/ui"
 import { EmailAddress, UUIDish } from "@phylopic/utils"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
@@ -14,7 +14,7 @@ const customEvents = {
     clickLink(id: string, href: string, label: string, type: LinkType) {
         gtag.event("click_link", { id, href, label, type })
     },
-    clickContributorLink(id: string, contributor: Contributor, type: LinkType = "link") {
+    clickContributorLink(id: string, contributor: { _links: { self: TitledLink } }, type: LinkType = "link") {
         gtag.event("click_link", { id, href: contributor._links.self.href, label: contributor._links.self.title, type })
         gtag.event("click_contributor_link", {
             name: contributor._links.self.title,

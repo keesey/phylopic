@@ -8,6 +8,7 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { unstable_serialize } from "swr"
+import customEvents from "~/analytics/customEvents"
 import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
@@ -87,7 +88,15 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                                 <BulletList>
                                     {contributors.map(contributor => (
                                         <li key={contributor.uuid}>
-                                            <Link href={`/contributors/${encodeURIComponent(contributor.uuid)}`}>
+                                            <Link
+                                                href={`/contributors/${encodeURIComponent(contributor.uuid)}`}
+                                                onClick={() =>
+                                                    customEvents.clickContributorLink(
+                                                        "collection_contributors",
+                                                        contributor,
+                                                    )
+                                                }
+                                            >
                                                 {contributor.name}
                                             </Link>
                                         </li>
@@ -134,7 +143,10 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                                 <BulletList>
                                     {(nodes as readonly Node[]).map(node => (
                                         <li key={node.uuid}>
-                                            <Link href={`/nodes/${encodeURIComponent(node.uuid)}`}>
+                                            <Link
+                                                href={`/nodes/${encodeURIComponent(node.uuid)}`}
+                                                onClick={() => customEvents.clickNodeLink("collection_nodes", node)}
+                                            >
                                                 <NomenView value={node.names[0]} short />
                                             </Link>
                                         </li>
