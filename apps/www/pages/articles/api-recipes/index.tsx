@@ -38,11 +38,11 @@ const Article: FC = () => {
                 <p>
                     The <SiteTitle /> <abbr title="Application Programming Interface">API</abbr> is thoroughly
                     documented at the <a href="http://api-docs.phylopic.org/">API Documentation Website</a>. As an
-                    alternative introduction, this page offers a simpler (but non-comprehensive) guide to using the API,
-                    with some examples of commonly-needed functionality, like listing images and searching for taxa. As
-                    well, it documents how other APIs may be used to augment searching capabilities.
+                    alternative introduction, this article offers a simpler (but non-comprehensive) guide to using the
+                    API, with some examples of commonly-needed functionality, like listing images and searching for
+                    taxa. As well, it documents how other APIs may be used to augment searching capabilities.
                 </p>
-                <p>This page is intended for readers who are familiar with:</p>
+                <p>This article is intended for readers who are familiar with:</p>
                 <ul style={{ listStyleType: "disc", marginInlineStart: "1em" }}>
                     <li>using a command-line prompt (UNIX, etc.),</li>
                     <li>
@@ -512,7 +512,7 @@ const Article: FC = () => {
             <section id="making-your-own">
                 <h2>Making Your Own Recipes</h2>
                 <p>
-                    Hopefully this page has provided a gentle introduction to the <SiteTitle /> API. You may read the{" "}
+                    Hopefully this article has provided a gentle introduction to the <SiteTitle /> API. You may read the{" "}
                     <a href="http://api-docs.phylopic.org/">complete documentation</a> to see about other possibilities
                     and optimizations for your own needs.
                 </p>
