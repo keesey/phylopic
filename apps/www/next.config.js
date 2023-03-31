@@ -21,6 +21,11 @@ const nextConfig = {
                 permanent: true,
             },
             {
+                source: "/articles",
+                destination: "/articles/api-recipes",
+                permanent: false,
+            },
+            {
                 source: "/contact",
                 destination: `/contributors/${encodeURIComponent(process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID)}`,
                 permanent: true,

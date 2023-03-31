@@ -9,12 +9,12 @@ import SiteTitle from "~/ui/SiteTitle"
 const PageComponent: NextPage = () => (
     <PageLayout>
         <NextSeo
-            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/api-recipes`}
+            canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/articles/api-recipes`}
             description="A gentle introduction for software engineers to the PhyloPic Application Programming Interface (API). Examples including searching for silhouette images of biological taxa."
             title="Code Recipes for the PhyloPic API"
         />
         <header>
-            <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>API Recipes</strong> }]} />
+            <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: "Articles" },  { children: <strong>API Recipes</strong> }]} />
             <h1>
                 <abbr title="Application Programming Interface">API</abbr> Recipes
             </h1>

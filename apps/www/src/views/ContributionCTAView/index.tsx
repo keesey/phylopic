@@ -27,7 +27,7 @@ const ContributionCTAView: FC = () => {
                     </p>
                     <ul className={styles.ctaList}>
                         <li>
-                            <Link href="/api-recipes">API Recipes</Link>
+                            <Link href="/articles/api-recipes">API Recipes</Link>
                         </li>
                         <li>
                             <a href="http://api-docs.phylopic.org/v2" rel="help">
