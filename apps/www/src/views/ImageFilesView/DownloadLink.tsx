@@ -1,6 +1,7 @@
 import { MediaLink } from "@phylopic/api-models"
 import { FC, useMemo } from "react"
 import slugify from "slugify"
+import customEvents from "~/analytics/customEvents"
 import getImageFileExtension from "~/files/getImageFileExtension"
 import DimensionView from "./DimensionView"
 import styles from "./DownloadLink.module.scss"
@@ -18,7 +19,12 @@ const DownLoadLink: FC<Props> = ({ filenamePrefix, link }) => {
     )
     const title = useMemo(() => [width, height].map(getDimensionTitle).join(" × "), [height, width])
     return (
-        <a className={styles.main} download={filename} href={link.href}>
+        <a
+            className={styles.main}
+            download={filename}
+            onClick={() => customEvents.clickLink("download", link.href, `${width}×${height}`, "link")}
+            href={link.href}
+        >
             <abbr title={title}>
                 <DimensionView value={width} />
                 {" × "}

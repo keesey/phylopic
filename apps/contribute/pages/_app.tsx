@@ -32,9 +32,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 }}
                 themeColor="#305860"
             />
-            {process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID && (
-                <GTagAnalytics gaMeasurementId={process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID} />
-            )}
+            <GTagAnalytics gaMeasurementId={process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID} />
             <Component {...pageProps} />
             <VercelAnalytics />
         </>

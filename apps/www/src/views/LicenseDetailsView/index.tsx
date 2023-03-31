@@ -1,7 +1,9 @@
 import { Image } from "@phylopic/api-models"
+import { useLicenseText } from "@phylopic/ui"
 import { extractPath, LicenseURL } from "@phylopic/utils"
 import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"
+import customEvents from "~/analytics/customEvents"
 import LicenseTextView from "../LicenseTextView"
 import styles from "./index.module.scss"
 export interface Props {
@@ -34,6 +36,7 @@ const useFlags = (value: LicenseURL): Readonly<[boolean, boolean, boolean, boole
 }
 const LicenseDetailsView: FC<Props> = ({ value }) => {
     const [pdm, cc0, by, nc, sa] = useFlags(value._links.license.href)
+    const label = useLicenseText(value._links.license.href)
     return (
         <>
             <ul className={styles.list}>
@@ -46,7 +49,18 @@ const LicenseDetailsView: FC<Props> = ({ value }) => {
                         </li>
                         <li>
                             You must provide{" "}
-                            <a href={value._links.license.href} rel="license">
+                            <a
+                                href={value._links.license.href}
+                                onClick={() =>
+                                    customEvents.clickLink(
+                                        "provide_link",
+                                        value._links.license.href,
+                                        "a link to the license",
+                                        "link",
+                                    )
+                                }
+                                rel="license"
+                            >
                                 a link to the license
                             </a>
                             .
@@ -57,7 +71,15 @@ const LicenseDetailsView: FC<Props> = ({ value }) => {
                 {nc && (
                     <li key="nc">
                         You may not use the material for commercial purposes. (But you may{" "}
-                        <Link href={extractPath(value._links.contributor.href)} rel="author">
+                        <Link
+                            href={extractPath(value._links.contributor.href)}
+                            onClick={() =>
+                                customEvents.clickContributorLink("contact", {
+                                    _links: { self: value._links.contributor },
+                                })
+                            }
+                            rel="author"
+                        >
                             contact the contributor
                         </Link>{" "}
                         to request a waiver.)
@@ -66,7 +88,18 @@ const LicenseDetailsView: FC<Props> = ({ value }) => {
                 {sa && <li key="sa">You must distribute your work under the same license as the original.</li>}
             </ul>
             <p>
-                <a href={value._links.license.href} rel="license">
+                <a
+                    href={value._links.license.href}
+                    onClick={() =>
+                        customEvents.clickLink(
+                            "read_more",
+                            value._links.license.href,
+                            `Read more about the ${label} license.`,
+                            "link",
+                        )
+                    }
+                    rel="license"
+                >
                     Read more about the <LicenseTextView value={value._links.license.href} /> license.
                 </a>
             </p>

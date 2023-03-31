@@ -1,13 +1,17 @@
+import { useLicenseText } from "@phylopic/ui"
 import { LicenseURL } from "@phylopic/utils"
 import { FC } from "react"
-import LicenseTextView from "../LicenseTextView"
+import customEvents from "~/analytics/customEvents"
 export interface Props {
     short?: boolean
     value: LicenseURL
 }
-const LicenseView: FC<Props> = ({ value, short }) => (
-    <a href={value} rel="license">
-        <LicenseTextView value={value} short={short} />
-    </a>
-)
+const LicenseView: FC<Props> = ({ value, short }) => {
+    const text = useLicenseText(value, short)
+    return (
+        <a href={value} onClick={() => customEvents.clickLink("license", value, text ?? "", "link")} rel="license">
+            {text}
+        </a>
+    )
+}
 export default LicenseView

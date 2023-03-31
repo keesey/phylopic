@@ -47,15 +47,6 @@ const get = (targetId: string, fieldName: "client_id" | "session_id" | string, c
         console.info(CONSOLE_ID, "get", targetId, fieldName, callback)
     }
 }
-// https://developers.google.com/analytics/devguides/collection/gtagjs/pages
-const pageview = (page_path: string, googleMeasurementId: string) => {
-    const options = { page_path }
-    if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
-        window.gtag?.("config", googleMeasurementId, options)
-    } else {
-        console.info(CONSOLE_ID, "config", googleMeasurementId, options)
-    }
-}
 const set = (params: GTagInfo) => {
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
         window.gtag?.("set", params)
@@ -68,6 +59,5 @@ export const gtag = {
     consent,
     event,
     get,
-    pageview,
     set,
 }

@@ -39,9 +39,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 }}
                 themeColor="#f7fffb"
             />
-            {process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID && (
-                <GTagAnalytics gaMeasurementId={process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID} />
-            )}
+            <GTagAnalytics gaMeasurementId={process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID} />
             <LoaderContext.Provider value={{ color: "#00809f" }}>
                 <Component {...pageProps} />
             </LoaderContext.Provider>

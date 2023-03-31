@@ -19,6 +19,7 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { FC, useContext, useMemo } from "react"
 import { unstable_serialize } from "swr"
+import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
@@ -166,11 +167,14 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             : {
                                   children: "Add to Collection ＋",
                                   key: "collection",
-                                  onClick: () =>
+                                  onClick: () => {
+                                      customEvents.collectImage(image)
+                                      customEvents.clickLink("add_to_collection", "", "Add to Collection ＋", "button")
                                       dispatch({
                                           type: "ADD_TO_CURRENT_COLLECTION",
                                           payload: { type: "image", entity: image },
-                                      }),
+                                      })
+                                  },
                                   type: "button" as const,
                               },
                         lineageNodeHRef
@@ -178,6 +182,14 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                   children: "View Lineage →",
                                   key: "lineage",
                                   href: extractPath(lineageNodeHRef) + "/lineage",
+                                  onClick: () => {
+                                      customEvents.clickLink(
+                                          "view_lineage",
+                                          extractPath(lineageNodeHRef) + "/lineage",
+                                          "View Lineage →",
+                                          "button",
+                                      )
+                                  },
                                   type: "anchor" as const,
                               }
                             : null,
@@ -206,7 +218,15 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             <th>Uploaded</th>
                             <td>
                                 <TimestampView value={image.created} /> by{" "}
-                                <Link href={getContributorHRef(image._links.contributor)} rel="author">
+                                <Link
+                                    href={getContributorHRef(image._links.contributor)}
+                                    onClick={() =>
+                                        customEvents.clickContributorLink("uploaded_by", {
+                                            _links: { self: image._links.contributor },
+                                        })
+                                    }
+                                    rel="author"
+                                >
                                     {image._links.contributor.title}
                                 </Link>
                             </td>
@@ -215,7 +235,15 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             <tr>
                                 <th>Taxon</th>
                                 <td>
-                                    <Link href={getNodeHRef(image._links.specificNode)} rel="subject">
+                                    <Link
+                                        href={getNodeHRef(image._links.specificNode)}
+                                        onClick={() =>
+                                            image._embedded.specificNode
+                                                ? customEvents.clickNodeLink("taxon", image._embedded.specificNode)
+                                                : undefined
+                                        }
+                                        rel="subject"
+                                    >
                                         <NomenView value={image._embedded.specificNode.names[0]} />
                                     </Link>
                                 </td>

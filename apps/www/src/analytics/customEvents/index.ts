@@ -1,4 +1,4 @@
-import { Contributor, Image, Node, TitledLink } from "@phylopic/api-models"
+import { Image, Node, TitledLink } from "@phylopic/api-models"
 import { gtag } from "@phylopic/ui"
 import { EmailAddress, UUIDish } from "@phylopic/utils"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
@@ -14,12 +14,24 @@ const customEvents = {
     clickLink(id: string, href: string, label: string, type: LinkType) {
         gtag.event("click_link", { id, href, label, type })
     },
+    clickBreadcrumb(href: string | undefined, index: number) {
+        gtag.event("click_breadcrumb", { href, index })
+    },
     clickContributorLink(id: string, contributor: { _links: { self: TitledLink } }, type: LinkType = "link") {
         gtag.event("click_link", { id, href: contributor._links.self.href, label: contributor._links.self.title, type })
         gtag.event("click_contributor_link", {
             name: contributor._links.self.title,
             uuid: extractUUIDv4(contributor._links.self.href),
         })
+    },
+    clickDonatePromoLink(id: string, href: string, label: string, variant: string) {
+        gtag.event("click_donate_promo_link", {
+            id,
+            href,
+            label,
+            variant,
+        })
+        gtag.event("click_link", { id, href, label, type: "link" })
     },
     clickImageLink(id: string, image: Image, type: LinkType = "link") {
         gtag.event("click_link", { id, href: image._links.self.href, label: image._links.self.title, type })
@@ -40,6 +52,15 @@ const customEvents = {
     },
     deleteCollection(label: string) {
         gtag.event("delete_collection", { label })
+    },
+    dragImage(id: string, image: Image) {
+        gtag.event("drag_image", {
+            id,
+            ...getImageOptions(image),
+        })
+    },
+    dropImage(image: Image) {
+        gtag.event("drop_image", getImageOptions(image))
     },
     expandBreadcrumbs() {
         gtag.event("expand_breadcrumbs")
