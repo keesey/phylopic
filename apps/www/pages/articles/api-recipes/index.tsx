@@ -14,7 +14,13 @@ const PageComponent: NextPage = () => (
             title="Code Recipes for the PhyloPic API"
         />
         <header>
-            <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: "Articles" },  { children: <strong>API Recipes</strong> }]} />
+            <Breadcrumbs
+                items={[
+                    { children: "Home", href: "/" },
+                    { children: "Articles" },
+                    { children: <strong>API Recipes</strong> },
+                ]}
+            />
             <h1>
                 <abbr title="Application Programming Interface">API</abbr> Recipes
             </h1>
@@ -38,7 +44,7 @@ const Article: FC = () => {
                 <ul style={{ listStyleType: "disc", marginInlineStart: "1em" }}>
                     <li>using a command-line prompt (UNIX, etc.)</li>
                     <li>
-                        basic World Wide Web technological terms (<abbr title="Uniform Resource Locator">URL</abbr>,
+                        basic World Wide Web technological terms (<abbr title="Uniform Resource Locator">URL</abbr>,{" "}
                         <abbr title="Hypertext Transfer Protocol">HTTP</abbr> header, query parameter, etc.)
                     </li>
                     <li>
