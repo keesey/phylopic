@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Custom event tracking.
-
 ### Changed
+
+-   Refactored Google Analytics code.
 
 ### Deprecated
 
