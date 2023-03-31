@@ -5,18 +5,19 @@ export type GTagConsentInfo = Partial<{
 }>
 export type GTagInfo = Record<string, string | number | boolean | null | undefined>
 const CONSOLE_ID = "[GTAG]"
-declare const window: Window & {
-    gtag(command: "config", targetId: string, additionalConfigInfo: GTagInfo): void
-    gtag(command: "consent", info: GTagConsentInfo): void
-    gtag(command: "event", eventName: string, eventParams: GTagInfo): void
-    gtag(
-        command: "get",
-        targetId: string,
-        fieldName: "client_id" | "session_id" | string,
-        callback?: (value: string) => void,
-    ): void
-    gtag(command: "set", params: GTagInfo): void
-}
+declare const window: Window &
+    Partial<{
+        gtag(command: "config", targetId: string, additionalConfigInfo: GTagInfo): void
+        gtag(command: "consent", info: GTagConsentInfo): void
+        gtag(command: "event", eventName: string, eventParams: GTagInfo): void
+        gtag(
+            command: "get",
+            targetId: string,
+            fieldName: "client_id" | "session_id" | string,
+            callback?: (value: string) => void,
+        ): void
+        gtag(command: "set", params: GTagInfo): void
+    }>
 const config = (targetId: string, additionalConfigInfo: GTagInfo) => {
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
         window.gtag?.("config", targetId, additionalConfigInfo)
@@ -62,5 +63,11 @@ const set = (params: GTagInfo) => {
         console.info(CONSOLE_ID, "set", params)
     }
 }
-const gtag = { config, consent, event, get, pageview, set }
-export default gtag
+export const gtag = {
+    config,
+    consent,
+    event,
+    get,
+    pageview,
+    set,
+}
