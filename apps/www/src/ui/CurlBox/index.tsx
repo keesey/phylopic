@@ -110,6 +110,8 @@ const CurlBox: FC<Props> = ({ options, title, url }) => {
                                     style={{
                                         borderBottomLeftRadius: "1em",
                                         borderBottomRightRadius: "1em",
+                                        fontSize: "larger",
+                                        letterSpacing: 0,
                                         padding: "1em",
                                     }}
                                     theme={THEME}
