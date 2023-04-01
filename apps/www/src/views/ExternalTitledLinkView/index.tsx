@@ -1,6 +1,8 @@
 import { TitledLink } from "@phylopic/api-models"
+import { stringifyNomen } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { FC, useMemo } from "react"
+import customEvents from "~/analytics/customEvents"
 import resolveExternalHRef from "~/models/resolveExternalHRef"
 import NomenView from "../NomenView"
 export interface Props {
@@ -14,7 +16,12 @@ const ExternalTitledLinkView: FC<Props> = ({ value, title }) => {
         return <NomenView value={name} />
     }
     return (
-        <a href={href} title={title} rel="external">
+        <a
+            href={href}
+            onClick={() => customEvents.clickLink("external_link", href, stringifyNomen(name), "link")}
+            title={title}
+            rel="external"
+        >
             <NomenView value={name} />
         </a>
     )

@@ -4,7 +4,9 @@ import { Query } from "@phylopic/utils"
 import clsx from "clsx"
 import Link from "next/link"
 import { FC, useMemo } from "react"
+import customEvents from "~/analytics/customEvents"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
+import getNodeHRef from "~/routes/getNodeHRef"
 import ImageListView from "~/views/ImageListView"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
@@ -21,7 +23,11 @@ const LineageNodeView: FC<Props> = ({ value }) => {
     const linked = useMemo(() => nodeHasOwnCladeImages(value), [value])
     return (
         <section className={styles.main}>
-            <PaginationContainer endpoint={`${process.env.NEXT_PUBLIC_API_URL}/images`} query={query}>
+            <PaginationContainer
+                endpoint={`${process.env.NEXT_PUBLIC_API_URL}/images`}
+                onPage={index => customEvents.loadImageListPage("lineage", index)}
+                query={query}
+            >
                 {(items, _total, isLoading) =>
                     items.length ? (
                         <div className={styles.images}>
@@ -36,7 +42,7 @@ const LineageNodeView: FC<Props> = ({ value }) => {
             </PaginationContainer>
             <header className={styles.header}>
                 {linked ? (
-                    <Link href={`/nodes/${value.uuid}`}>
+                    <Link href={getNodeHRef(value._links.self)}>
                         <NomenView value={value.names[0]} short />
                     </Link>
                 ) : (

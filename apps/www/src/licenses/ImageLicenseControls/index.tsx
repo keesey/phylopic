@@ -1,6 +1,7 @@
 import { CountView } from "@phylopic/ui"
 import clsx from "clsx"
 import { FC, useContext, useEffect, useMemo, useState } from "react"
+import customEvents from "~/analytics/customEvents"
 import LicenseFilterView from "~/views/LicenseFilterView"
 import LicenseFilterTypeContext from "../LicenseFilterTypeContext"
 import styles from "./index.module.scss"
@@ -29,7 +30,14 @@ const ImageLicenseControls: FC<Props> = ({ total }) => {
                 {totalDisplayed === 1 ? "" : "s"}
                 {licenses ? "" : " in all"}.
             </p>
-            <LicenseFilterView onChange={setLicenses} pending={isNaN(total)} value={licenses} />
+            <LicenseFilterView
+                onChange={value => {
+                    customEvents.filterImages(value)
+                    setLicenses?.(value)
+                }}
+                pending={isNaN(total)}
+                value={licenses}
+            />
         </>
     )
 }

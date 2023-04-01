@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Custom event tracking.
+-   "Buy Me a Coffee" link on Home Page.
+
 ### Changed
 
 -   Always showing _Pan-Biota_ link in Node Page breadcrumbs.
@@ -17,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   Direct links (including slug) for entities in several places.
 -   Canonical URL for Donate: Cancel Page.
 -   Display error on Nodes Page.
 

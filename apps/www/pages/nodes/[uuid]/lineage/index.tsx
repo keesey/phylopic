@@ -8,10 +8,12 @@ import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { FC, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
+import customEvents from "~/analytics/customEvents"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
+import getNodeHRef from "~/routes/getNodeHRef"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
@@ -73,7 +75,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                     afterItems={[
                         {
                             children: (
-                                <Link href={`/nodes/` + node.uuid}>
+                                <Link href={getNodeHRef(node._links.self)}>
                                     <NomenView value={name} defaultText="[Unnamed Group]" />
                                 </Link>
                             ),
@@ -89,7 +91,10 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                     Lineage of <NomenView value={name} defaultText="[Unnamed Group]" short />
                 </h1>
             </header>
-            <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes/" + node.uuid + "/lineage"}>
+            <PaginationContainer
+                endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes/" + node.uuid + "/lineage"}
+                onPage={index => customEvents.loadNodeListPage("lineage", index)}
+            >
                 {lineageNodes => <LineageView short value={lineageNodes as readonly NodeWithEmbedded[]} />}
             </PaginationContainer>
         </>
