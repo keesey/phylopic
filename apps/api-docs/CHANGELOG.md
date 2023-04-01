@@ -9,19 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Link to API recipes.
-
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
--   Correct version numbers.
-
 ### Removed
 
 ### Security
+
+## [2.3.2] - 2023-04-01
+
+### Added
+
+-   Link to API recipes.
+
+### Fixed
+
+-   Correct version numbers.
 
 ## [2.3.1] - 2023-03-25
 

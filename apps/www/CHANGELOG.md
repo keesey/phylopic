@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.3.0] - 2023-04-01
+
+### Added
+
 -   API Recipes Page.
 -   Custom event tracking.
 -   "Buy Me a Coffee" link on Home Page.
@@ -16,8 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Always showing _Pan-Biota_ link in Node Page breadcrumbs.
-
-### Deprecated
 
 ### Fixed
 
@@ -28,8 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 -   "Taxonomic Groups" link from Node Page breadcrumbs.
-
-### Security
 
 ## [2.2.1] - 2023-03-27
 

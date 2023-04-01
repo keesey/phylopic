@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Refactored Google Analytics code.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.0.10] - 2023-04-01
+
+### Changed
+
+-   Refactored Google Analytics code.
 
 ## [2.0.9] - 2023-03-24
 
