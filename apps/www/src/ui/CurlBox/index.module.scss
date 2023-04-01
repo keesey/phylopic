@@ -1,0 +1,122 @@
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/buttons.scss";
+
+.header {
+    background-color: colors.$white;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    border: 2pt solid colors.$ink;
+    color: colors.$ink;
+    font-size: larger;
+    font-weight: bold;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.loaderContainer {
+    align-items: center;
+    background-color: colors.$deep;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    border-top: 2pt solid colors.$sunshine;
+    display: flex;
+    justify-content: center;
+    padding: 1em;
+    min-height: 3em;
+}
+
+.sample {
+    align-items: stretch;
+    background-color: colors.$ink;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    border: none;
+    color: colors.$white;
+    display: flex;
+    font-size: larger;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    transition: background-color 0.3s;
+    width: 100%;
+
+    &.requested {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    >code {
+        flex-grow: 1;
+        overflow: hidden;
+        padding: 1em;
+    }
+
+}
+
+.controlButton {
+    background-color: colors.$dandelion;
+    border: none;
+    border-left: 2pt solid colors.$sunshine;
+    color: colors.$black;
+    font-size: larger;
+    padding-left: 1em;
+    padding-right: 1em;
+    transition: background-color 0.3s;
+    width: 3em;
+
+    &:hover {
+        background-color: colors.$sunshine;
+        color: colors.$ink;
+    }
+
+    &:active {
+        background-color: colors.$white;
+        color: colors.$inkFade;
+    }
+}
+
+.clearButton {
+    @include buttons.cta(colors.$sunshine, colors.$dandelion);
+}
+
+.status {
+    border-bottom: 2pt solid colors.$sunshine;
+    border-top: 2pt solid colors.$sunshine;
+    font-weight: bold;
+    margin: 0;
+    padding: 1em;
+    text-align: center;
+
+    &.statusError {
+        background-color: colors.$black;
+        color: colors.$dandelion;
+    }
+
+    &.statusSuccess {
+        background-color: colors.$deep;
+        color: colors.$vellum;
+    }
+}
+
+.error {
+    background-color: colors.$black;
+    border: 2pt solid colors.$sunshine;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    color: colors.$dandelion;
+    margin: 0;
+    padding: 1em;
+    text-align: center;
+}
+
+.empty {
+    background-color: colors.$white;
+    border: 2pt solid colors.$ink;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    color: colors.$inkFade;
+    font-weight: bold;
+    margin: 0;
+    padding: 1em;
+    text-align: center;
+}

@@ -34,10 +34,26 @@ const ContributionCTAView: FC = () => {
                 <section>
                     <h3>Engineering</h3>
                     <p>
-                        Software engineers may access the data in <SiteTitle /> using the API. They may also add
-                        features to the <SiteTitle /> website.
+                        Software engineers may access the data in <SiteTitle /> using the{" "}
+                        <abbr title="Application Programming Interface">API</abbr>. They may also add features to the{" "}
+                        <SiteTitle /> website.
                     </p>
                     <ul className={styles.ctaList}>
+                        <li>
+                            <Link
+                                href="/articles/api-recipes"
+                                onClick={() =>
+                                    customEvents.clickLink(
+                                        "contribution_cta_link",
+                                        "/articles/api-recipes",
+                                        "API Recipes",
+                                        "link",
+                                    )
+                                }
+                            >
+                                API Recipes
+                            </Link>
+                        </li>
                         <li>
                             <a
                                 href="http://api-docs.phylopic.org/v2"

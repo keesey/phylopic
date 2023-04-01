@@ -214,6 +214,16 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                     </a>
                 </li>
                 <li>
+                    <Link
+                        href="/articles/api-recipes"
+                        onClick={() =>
+                            customEvents.clickLink("menu_link", "/articles/api-recipes", "API Recipes", "link")
+                        }
+                    >
+                        API Recipes
+                    </Link>
+                </li>
+                <li>
                     <a
                         href="http://api-docs.phylopic.org/v2"
                         onClick={() =>

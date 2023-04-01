@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   API Recipes Page.
 -   Custom event tracking.
 -   "Buy Me a Coffee" link on Home Page.
 
