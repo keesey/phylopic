@@ -14,7 +14,7 @@ const ReactJsonView = dynamic(() => import("react-json-view"), { ssr: false })
 
 export interface Props {
     options?: CurlOptions
-    title: ReactNode
+    title: string
     url: string
 }
 const fetcher = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {
