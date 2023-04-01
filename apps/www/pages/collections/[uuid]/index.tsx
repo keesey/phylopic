@@ -13,6 +13,8 @@ import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import getContributorHRef from "~/routes/getContributorHRef"
+import getNodeHRef from "~/routes/getNodeHRef"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
@@ -90,7 +92,7 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                                     {contributors.map(contributor => (
                                         <li key={contributor.uuid}>
                                             <Link
-                                                href={`/contributors/${encodeURIComponent(contributor.uuid)}`}
+                                                href={getContributorHRef(contributor._links.self)}
                                                 onClick={() =>
                                                     customEvents.clickContributorLink(
                                                         "collection_contributors",
@@ -146,7 +148,7 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                                     {(nodes as readonly Node[]).map(node => (
                                         <li key={node.uuid}>
                                             <Link
-                                                href={`/nodes/${encodeURIComponent(node.uuid)}`}
+                                                href={getNodeHRef(node._links.self)}
                                                 onClick={() => customEvents.clickNodeLink("collection_nodes", node)}
                                             >
                                                 <NomenView value={node.names[0]} short />

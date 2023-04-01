@@ -31,11 +31,15 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                 </li>
                 <li>
                     <Link
-                        href={`/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID!)}`}
+                        href={`/nodes/${encodeURIComponent(
+                            process.env.NEXT_PUBLIC_ROOT_UUID ?? "",
+                        )}/pan-biota-silhouettes`}
                         onClick={() =>
                             customEvents.clickLink(
                                 "menu_link",
-                                `/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID!)}`,
+                                `/nodes/${encodeURIComponent(
+                                    process.env.NEXT_PUBLIC_ROOT_UUID ?? "",
+                                )}/pan-biota-silhouettes`,
                                 "All Life",
                                 "link",
                             )

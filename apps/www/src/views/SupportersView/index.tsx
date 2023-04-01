@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { FC, ReactNode } from "react"
 import customEvents from "~/analytics/customEvents"
+import getContributorHRef from "~/routes/getContributorHRef"
 import logoIndiegogo from "../../../public/logos/indiegogo-cerulean.svg"
 import logoPatreon from "../../../public/logos/patreon-cerulean.svg"
 import logoSSB from "../../../public/logos/ssb-cerulean.svg"
@@ -113,7 +114,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                             <ul className={styles.list}>
                                 {(items as readonly Contributor[]).map(item => (
                                     <li key={item.uuid}>
-                                        <Link href={`/contributors/${encodeURIComponent(item.uuid)}`}>
+                                        <Link href={getContributorHRef(item._links.self)}>
                                             {item.name || "Anonymous"}
                                         </Link>
                                     </li>

@@ -6,6 +6,7 @@ import { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionLicense from "~/licenses/ImageCollectionUsage/CollectionLicense"
 import getImageSlug from "~/routes/getImageSlug"
+import getNodeHRef from "~/routes/getNodeHRef"
 import getNodeSlug from "~/routes/getNodeSlug"
 import LicenseView from "~/views/LicenseView"
 import NomenView from "~/views/NomenView"
@@ -51,25 +52,18 @@ const ImagesView: FC<Props> = ({ url, value }) => {
                                     <ImageThumbnailView value={image} />
                                 </Link>
                             </td>
-                            <td>
-                                <Link
-                                    href={`/nodes/${encodeURIComponent(
-                                        image._embedded.specificNode?.uuid ?? "",
-                                    )}/${encodeURIComponent(
-                                        getNodeSlug(image._embedded.specificNode?._links.self.title ?? ""),
-                                    )}`}
-                                    onClick={() =>
-                                        image._embedded.specificNode
-                                            ? customEvents.clickNodeLink(
-                                                  "permalink_taxon",
-                                                  image._embedded.specificNode,
-                                              )
-                                            : undefined
-                                    }
-                                >
-                                    <NomenView value={image._embedded.specificNode?.names[0]} short />
-                                </Link>
-                            </td>
+                            {image._embedded.specificNode && (
+                                <td>
+                                    <Link
+                                        href={getNodeHRef(image._embedded.specificNode._links.self)}
+                                        onClick={() =>
+                                            customEvents.clickNodeLink("permalink_taxon", image._embedded.specificNode!)
+                                        }
+                                    >
+                                        <NomenView value={image._embedded.specificNode.names[0]} short />
+                                    </Link>
+                                </td>
+                            )}
                             <td>{image.attribution || "—"}</td>
                             <td>
                                 <LicenseView value={image._links.license.href} short />

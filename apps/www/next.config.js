@@ -22,7 +22,9 @@ const nextConfig = {
             },
             {
                 source: "/contact",
-                destination: `/contributors/${encodeURIComponent(process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID)}`,
+                destination: `/contributors/${encodeURIComponent(
+                    process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID,
+                )}/t-michael-keesey-silhouettes`,
                 permanent: true,
             },
             {
@@ -57,7 +59,7 @@ const nextConfig = {
             },
             {
                 source: "/root",
-                destination: `/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID)}`,
+                destination: `/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID)}/pan-biota-silhouettes`,
                 permanent: true,
             },
             {

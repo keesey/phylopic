@@ -13,6 +13,7 @@ import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
+import getNodeHRef from "~/routes/getNodeHRef"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
@@ -74,7 +75,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                     afterItems={[
                         {
                             children: (
-                                <Link href={`/nodes/` + node.uuid}>
+                                <Link href={getNodeHRef(node._links.self)}>
                                     <NomenView value={name} defaultText="[Unnamed Group]" />
                                 </Link>
                             ),
