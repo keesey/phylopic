@@ -27,6 +27,7 @@ import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
+import customEvents from "~/analytics/customEvents"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import CladeImageLicensePaginator from "~/licenses/CladeImageLicensePaginator"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
@@ -147,10 +148,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
                 <ExpandableLineageBreadcrumbs
                     key={node.uuid}
                     afterItems={afterItems}
-                    beforeItems={[
-                        { children: "Home", href: "/" },
-                        { children: "Taxonomic Groups", href: "/nodes" },
-                    ]}
+                    beforeItems={[{ children: "Home", href: "/" }]}
                     uuid={lineageUUID}
                 />
                 <NomenHeader value={node} />
@@ -180,7 +178,17 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
                 <Fragment key="empty">
                     {node._links.lineage && (
                         <p>
-                            <Link href={lineagePath}>
+                            <Link
+                                href={lineagePath}
+                                onClick={() =>
+                                    customEvents.clickLink(
+                                        "empty_lineage",
+                                        lineagePath,
+                                        "Look through the ancestors...",
+                                        "link",
+                                    )
+                                }
+                            >
                                 Look through the ancestors of{" "}
                                 <NomenView value={name} short defaultText="this taxonomic group" /> to find an
                                 approximation.
@@ -189,11 +197,21 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
                     )}
                     <p>
                         Or,{" "}
-                        <Link href="/contribute">
+                        <a
+                            href={`${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/`}
+                            onClick={() =>
+                                customEvents.clickLink(
+                                    "empty_contribute",
+                                    `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/`,
+                                    "be the first to contribute...",
+                                    "link",
+                                )
+                            }
+                        >
                             be the first to contribute a silhouette of{" "}
                             <NomenView value={name} short defaultText="this taxon" />
                             <LicenseQualifier />!
-                        </Link>
+                        </a>
                     </p>
                 </Fragment>
             )}

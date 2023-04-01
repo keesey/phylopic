@@ -8,10 +8,13 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { unstable_serialize } from "swr"
+import customEvents from "~/analytics/customEvents"
 import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import getContributorHRef from "~/routes/getContributorHRef"
+import getNodeHRef from "~/routes/getNodeHRef"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
@@ -81,13 +84,22 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                         {(has.images || has.nodes) && <h2>Image Contributors</h2>}
                         <PaginationContainer
                             endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
+                            onPage={index => customEvents.loadContributorListPage("collection_contributors", index)}
                             query={{ filter_collection: uuid }}
                         >
                             {(contributors: readonly Contributor[]) => (
                                 <BulletList>
                                     {contributors.map(contributor => (
                                         <li key={contributor.uuid}>
-                                            <Link href={`/contributors/${encodeURIComponent(contributor.uuid)}`}>
+                                            <Link
+                                                href={getContributorHRef(contributor._links.self)}
+                                                onClick={() =>
+                                                    customEvents.clickContributorLink(
+                                                        "collection_contributors",
+                                                        contributor,
+                                                    )
+                                                }
+                                            >
                                                 {contributor.name}
                                             </Link>
                                         </li>
@@ -128,13 +140,17 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                         {(has.contributors || has.images) && <h2>Taxonomic Groups</h2>}
                         <PaginationContainer
                             endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}
+                            onPage={index => customEvents.loadNodeListPage("collection_nodes", index)}
                             query={{ filter_collection: uuid }}
                         >
                             {nodes => (
                                 <BulletList>
                                     {(nodes as readonly Node[]).map(node => (
                                         <li key={node.uuid}>
-                                            <Link href={`/nodes/${encodeURIComponent(node.uuid)}`}>
+                                            <Link
+                                                href={getNodeHRef(node._links.self)}
+                                                onClick={() => customEvents.clickNodeLink("collection_nodes", node)}
+                                            >
                                                 <NomenView value={node.names[0]} short />
                                             </Link>
                                         </li>

@@ -1,5 +1,6 @@
 import { Node } from "@phylopic/api-models"
 import { FC, useMemo } from "react"
+import customEvents from "~/analytics/customEvents"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import getNodeHRef from "~/routes/getNodeHRef"
 import NomenView from "~/views/NomenView"
@@ -11,17 +12,23 @@ export interface Props {
 }
 const Expanded: FC<Props> = ({ afterItems, beforeItems, values }) => {
     const valueItems = useMemo<readonly BreadcrumbItem[]>(
-        () =>
-            values.length > 0
-                ? [...values].reverse().map(node => ({
+        () => [
+            {
+                children: <NomenView value={[{ class: "scientific", text: "Pan-Biota" }]} />,
+                href: `/nodes/${process.env.NEXT_PUBLIC_ROOT_UUID}/pan-biota-silhouettes`,
+            },
+            ...(values.length > 0
+                ? [...values.filter(node => node.uuid !== process.env.NEXT_PUBLIC_ROOT_UUID)].reverse().map(node => ({
                       children: <NomenView value={node.names[0]} short />,
                       href: nodeHasOwnCladeImages(node) ? getNodeHRef(node._links.self) : undefined,
+                      onClick: () => customEvents.clickNodeLink("breadcrumb", node, undefined, "link", true),
                   }))
                 : [
                       {
                           children: "...",
                       },
-                  ],
+                  ]),
+        ],
         [values],
     )
     const items = useMemo(() => [...beforeItems, ...valueItems, ...afterItems], [afterItems, beforeItems, valueItems])

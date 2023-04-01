@@ -3,6 +3,7 @@ import axios from "axios"
 import { useRouter } from "next/router"
 import { FC, ReactNode, useEffect, useState } from "react"
 import useSWRImmutable from "swr/immutable"
+import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
 export interface Props {
     children: ReactNode
@@ -23,7 +24,13 @@ const PermalinkButton: FC<Props> = ({ children, uuid }) => {
     const { data: hash } = data ?? {}
     const router = useRouter()
     useEffect(() => {
+        if (error) {
+            customEvents.exception(String(error))
+        }
+    }, [error])
+    useEffect(() => {
         if (isHash(hash)) {
+            customEvents.navigateToPermalink(hash)
             void router.push(`/permalinks/${encodeURIComponent(hash)}`)
         }
     }, [hash, router])
@@ -31,7 +38,10 @@ const PermalinkButton: FC<Props> = ({ children, uuid }) => {
         <a
             aria-disabled={isValidating}
             className={isValidating ? styles.pending : undefined}
-            onClick={() => setRequested(true)}
+            onClick={() => {
+                customEvents.requestPermalink(uuid)
+                setRequested(true)
+            }}
             role="button"
         >
             {children}

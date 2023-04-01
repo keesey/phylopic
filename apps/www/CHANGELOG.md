@@ -10,14 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -   API Recipes Page.
+-   Custom event tracking.
+-   "Buy Me a Coffee" link on Home Page.
 
 ### Changed
+
+-   Always showing _Pan-Biota_ link in Node Page breadcrumbs.
 
 ### Deprecated
 
 ### Fixed
 
+-   Direct links (including slug) for entities in several places.
+-   Canonical URL for Donate: Cancel Page.
+-   Display error on Nodes Page.
+
 ### Removed
+
+-   "Taxonomic Groups" link from Node Page breadcrumbs.
 
 ### Security
 

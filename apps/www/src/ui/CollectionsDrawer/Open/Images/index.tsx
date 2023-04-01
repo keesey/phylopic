@@ -1,11 +1,12 @@
 import { FC, useContext } from "react"
+import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import LinkedImageThumbnailView from "~/views/LinkedImageThumbnailView"
 import styles from "./index.module.scss"
 const Images: FC = () => {
     const images = useCurrentCollectionImages()
-    const [, dispatch] = useContext(CollectionsContext)
+    const [{ currentCollection }, dispatch] = useContext(CollectionsContext)
     return (
         <section className={styles.main}>
             {!images.length && (
@@ -18,9 +19,12 @@ const Images: FC = () => {
                     <LinkedImageThumbnailView inverted value={image} />
                     <div>
                         <a
-                            onClick={() => dispatch({ type: "REMOVE_FROM_CURRENT_COLLECTION", payload: image.uuid })}
-                            title="Remove"
+                            onClick={() => {
+                                customEvents.removeFromCollection(currentCollection, image)
+                                dispatch({ type: "REMOVE_FROM_CURRENT_COLLECTION", payload: image.uuid })
+                            }}
                             role="button"
+                            title="Remove"
                         >
                             ✖
                         </a>

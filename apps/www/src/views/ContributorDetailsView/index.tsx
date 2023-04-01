@@ -1,6 +1,7 @@
 import { Contributor } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import { FC, useMemo } from "react"
+import customEvents from "~/analytics/customEvents"
 export interface Props {
     value?: Contributor
 }
@@ -20,7 +21,18 @@ const ContributorDetailsView: FC<Props> = ({ value }) => {
                 <tr>
                     <th>Email</th>
                     <td>
-                        <a href={emailHRef} rel="author">
+                        <a
+                            href={emailHRef}
+                            onClick={() =>
+                                customEvents.clickLink(
+                                    "contributor_detail_email",
+                                    emailHRef,
+                                    emailAddress ?? "",
+                                    "link",
+                                )
+                            }
+                            rel="author"
+                        >
                             {emailAddress}
                         </a>
                     </td>

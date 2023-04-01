@@ -10,6 +10,7 @@ import axios from "axios"
 import { Collection, Link } from "@phylopic/api-models"
 import { NumberView } from "@phylopic/ui"
 import Icon from "~/ui/Icon"
+import customEvents from "~/analytics/customEvents"
 export interface Props {
     name: string
 }
@@ -20,6 +21,7 @@ const Tab: FC<Props> = ({ name }) => {
     const router = useRouter()
     const handleDeleteClick = () => {
         if (currentImages.length === 0 || confirm(`Are you sure you want to delete this collection (“${name}”)?`)) {
+            customEvents.deleteCollection(name)
             dispatch({ type: "REMOVE_COLLECTION", payload: name })
         }
     }
@@ -29,18 +31,25 @@ const Tab: FC<Props> = ({ name }) => {
             try {
                 const response = await axios.post<Collection>(process.env.NEXT_PUBLIC_API_URL + "/collections", uuids)
                 if (isUUIDish(response?.data?.uuid)) {
+                    customEvents.toggleCollectionDrawer(false)
                     dispatch({ type: "CLOSE" })
+                    customEvents.openCollectionPage(response.data.uuid, currentName)
                     await router.push(`/collections/${encodeURIComponent(response.data.uuid)}`)
                 }
             } catch (e) {
+                customEvents.exception(String(e))
                 alert("There was an error creating the Collection Page.")
             }
         })()
     }
-    const handleSelectClick = () => dispatch({ type: "SET_CURRENT_COLLECTION", payload: name })
+    const handleSelectClick = () => {
+        customEvents.selectCollection(name)
+        dispatch({ type: "SET_CURRENT_COLLECTION", payload: name })
+    }
     const handleRenameClick = () => {
         const newName = normalizeText(prompt("What do you want to rename this collection to?", name) ?? "")
         if (newName) {
+            customEvents.renameCollection(name, newName)
             dispatch({ type: "RENAME_COLLECTION", payload: [name, newName] })
         }
     }

@@ -1,8 +1,7 @@
-import { LoaderContext } from "@phylopic/ui"
-import { Analytics } from "@vercel/analytics/react"
+import { GTagAnalytics, LoaderContext } from "@phylopic/ui"
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react"
 import { DefaultSeo } from "next-seo"
 import type { AppProps } from "next/app"
-import Script from "next/script"
 import "../src/styles/globals.scss"
 const App = ({ Component, pageProps }: AppProps) => {
     return (
@@ -40,30 +39,11 @@ const App = ({ Component, pageProps }: AppProps) => {
                 }}
                 themeColor="#f7fffb"
             />
-            {process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID && (
-                <>
-                    <Script
-                        async
-                        id="script:gtm"
-                        src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(
-                            process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
-                        )}`}
-                        strategy="lazyOnload"
-                    />
-                    <Script
-                        dangerouslySetInnerHTML={{
-                            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config",${JSON.stringify(
-                                process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID,
-                            )})`,
-                        }}
-                        id="script:gtm-init"
-                    />
-                </>
-            )}
+            <GTagAnalytics gaMeasurementId={process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID} />
             <LoaderContext.Provider value={{ color: "#00809f" }}>
                 <Component {...pageProps} />
             </LoaderContext.Provider>
-            <Analytics />
+            <VercelAnalytics />
         </>
     )
 }
