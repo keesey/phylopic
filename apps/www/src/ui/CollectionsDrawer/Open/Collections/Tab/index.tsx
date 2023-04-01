@@ -33,7 +33,7 @@ const Tab: FC<Props> = ({ name }) => {
                 if (isUUIDish(response?.data?.uuid)) {
                     customEvents.toggleCollectionDrawer(false)
                     dispatch({ type: "CLOSE" })
-                    customEvents.openCollectionPage(response.data.uuid, "[link]")
+                    customEvents.openCollectionPage(response.data.uuid, currentName)
                     await router.push(`/collections/${encodeURIComponent(response.data.uuid)}`)
                 }
             } catch (e) {

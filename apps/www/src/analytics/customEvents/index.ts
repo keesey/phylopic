@@ -114,7 +114,7 @@ const customEvents = {
         gtag.event("navigate_to_permalink", { hash })
     },
     openCollectionPage(uuid: UUIDish, label: string) {
-        gtag.event("create_collection", { label, uuid })
+        gtag.event("open_collection", { label, uuid })
     },
     removeFromCollection(label: string, image: Image) {
         gtag.event("remove_from_collection", {
