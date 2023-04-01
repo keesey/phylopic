@@ -24,7 +24,7 @@ const LineageNodeView: FC<Props> = ({ value }) => {
         <section className={styles.main}>
             <PaginationContainer
                 endpoint={`${process.env.NEXT_PUBLIC_API_URL}/images`}
-                onPage={index => customEvents.loadImageListPage(index)}
+                onPage={index => customEvents.loadImageListPage("lineage", index)}
                 query={query}
             >
                 {(items, _total, isLoading) =>

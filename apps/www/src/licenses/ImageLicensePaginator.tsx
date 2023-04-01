@@ -21,7 +21,7 @@ const ImageLicensePaginator: FC<Props> = props => {
         <PaginationContainer
             {...props}
             endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"}
-            onPage={index => customEvents.loadImageListPage(index, licenses)}
+            onPage={index => customEvents.loadImageListPage("images", index, licenses)}
             query={query}
         />
     )

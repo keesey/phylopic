@@ -25,7 +25,7 @@ const ExpandableLineageBreadcrumbs: FC<Props> = ({ afterItems, beforeItems, uuid
     return (
         <PaginationContainer
             endpoint={`${process.env.NEXT_PUBLIC_API_URL}/nodes/${uuid}/lineage`}
-            onPage={customEvents.loadNodeListPage}
+            onPage={index => customEvents.loadNodeListPage("breadcrumbs", index)}
             hideLoader
         >
             {values => (

@@ -25,7 +25,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
             />
             <PaginationContainer
                 endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
-                onPage={customEvents.loadContributorListPage}
+                onPage={index => customEvents.loadContributorListPage("contributors", index)}
             >
                 {(contributors: readonly Contributor[], totalContributors: number) => (
                     <>

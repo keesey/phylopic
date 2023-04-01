@@ -22,7 +22,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
             />
             <PaginationContainer
                 endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}
-                onPage={customEvents.loadNodeListPage}
+                onPage={index => customEvents.loadNodeListPage("nodes", index)}
             >
                 {(nodes, totalNodes) => (
                     <>

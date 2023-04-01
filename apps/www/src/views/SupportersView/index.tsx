@@ -107,7 +107,7 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
                 {showContributors && (
                     <PaginationContainer
                         endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
-                        onPage={customEvents.loadContributorListPage}
+                        onPage={index => customEvents.loadContributorListPage("supporters_contributors", index)}
                     >
                         {items => (
                             <ul className={styles.list}>

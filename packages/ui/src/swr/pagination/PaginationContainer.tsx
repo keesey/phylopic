@@ -73,7 +73,8 @@ export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
         ...swrConfigs?.page,
     })
     const { data, setSize, size } = pages
-    useEffect(() => (pages.data ? onPage?.(pages.data.length) : undefined), [onPage, pages.data])
+    const pageIndex = pages.data?.length ?? 0
+    useEffect(() => (pageIndex ? onPage?.(pageIndex) : undefined), [pageIndex])
     const loadNextPage = () => setSize(size + 1)
     const totalItems = list.data?.totalItems ?? NaN
     const totalPages = list.data?.totalPages ?? NaN

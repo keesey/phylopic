@@ -101,14 +101,14 @@ const customEvents = {
     flipPocketPhylogeny(index: number, to_side: "front" | "back") {
         gtag.event("flip_pocket_phylogeny", { index, to_side })
     },
-    loadContributorListPage(index: number) {
-        gtag.event("load_contributor_list_page", { index })
+    loadContributorListPage(id: string, index: number) {
+        gtag.event("load_contributor_list_page", { id, index })
     },
-    loadImageListPage(index: number, filter_type: LicenseFilterType = undefined) {
-        gtag.event("load_image_list_page", { filter_type: filter_type ?? "all", index })
+    loadImageListPage(id: string, index: number, filter_type: LicenseFilterType = undefined) {
+        gtag.event("load_image_list_page", { filter_type: filter_type ?? "all", id, index })
     },
-    loadNodeListPage(index: number) {
-        gtag.event("load_node_list_page", { index })
+    loadNodeListPage(id: string, index: number) {
+        gtag.event("load_node_list_page", { id, index })
     },
     navigateToPermalink(hash: Hash) {
         gtag.event("navigate_to_permalink", { hash })

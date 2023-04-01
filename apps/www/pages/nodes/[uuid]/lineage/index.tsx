@@ -92,7 +92,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
             </header>
             <PaginationContainer
                 endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes/" + node.uuid + "/lineage"}
-                onPage={customEvents.loadNodeListPage}
+                onPage={index => customEvents.loadNodeListPage("lineage", index)}
             >
                 {lineageNodes => <LineageView short value={lineageNodes as readonly NodeWithEmbedded[]} />}
             </PaginationContainer>
