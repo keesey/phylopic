@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import { FC, ReactNode, Suspense, useState } from "react"
 import type { ReactJsonViewProps, ThemeObject } from "react-json-view"
 import useSWR from "swr"
+import customEvents from "~/analytics/customEvents"
 import { CurlOptions } from "./CurlOptions"
 import styles from "./index.module.scss"
 import useCommandKey from "./useCommandKey"
@@ -57,18 +58,36 @@ const CurlBox: FC<Props> = ({ options, title, url }) => {
             <div className={clsx(styles.sample, requested && styles.requested)}>
                 <code>{line}</code>
                 {!isLoading && !(data || error) && (
-                    <button className={styles.controlButton} onClick={() => setRequested(true)} title="Make API Call">
+                    <button
+                        className={styles.controlButton}
+                        onClick={() => {
+                            customEvents.makeApiCall(title)
+                            setRequested(true)
+                        }}
+                        title="Make API Call"
+                    >
                         ⏵
                     </button>
                 )}
                 {!isLoading && (data || error) && (
-                    <button className={styles.controlButton} onClick={() => setRequested(false)} title="Clear">
+                    <button
+                        className={styles.controlButton}
+                        onClick={() => {
+                            customEvents.clearApiResults(title)
+
+                            setRequested(false)
+                        }}
+                        title="Clear"
+                    >
                         ✖
                     </button>
                 )}
                 <button
                     className={styles.controlButton}
-                    onClick={() => navigator.clipboard.writeText(line)}
+                    onClick={() => {
+                        customEvents.copyApiCommand(title)
+                        navigator.clipboard.writeText(line)
+                    }}
                     title="Copy to Clipboard"
                 >
                     ⎘

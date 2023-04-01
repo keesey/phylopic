@@ -4,6 +4,7 @@ import { NextSeo } from "next-seo"
 import Image from "next/image"
 import Link from "next/link"
 import { FC, useContext } from "react"
+import customEvents from "~/analytics/customEvents"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import CurlBox from "~/ui/CurlBox"
@@ -532,7 +533,17 @@ const Article: FC = () => {
             </section>
             <p>Happy coding!</p>
             <div style={{ textAlign: "center" }}>
-                <a href="//www.buymeacoffee.com/phylopic">
+                <a
+                    href="//www.buymeacoffee.com/phylopic"
+                    onClick={() =>
+                        customEvents.clickLink(
+                            "api_recipes_buymeacoffee",
+                            "//www.buymeacoffee.com/phylopic",
+                            "Buy me a coffee.",
+                            "button",
+                        )
+                    }
+                >
                     <Image
                         alt="Buy me a coffee."
                         height={50}
