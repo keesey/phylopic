@@ -13,8 +13,9 @@ import useCommandLine from "./useCommandLine"
 const ReactJsonView = dynamic(() => import("react-json-view"), { ssr: false })
 
 export interface Props {
+    id: string
     options?: CurlOptions
-    title: string
+    title: ReactNode
     url: string
 }
 const fetcher = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {
@@ -47,7 +48,7 @@ const THEME: ThemeObject = {
     base0E: "#16aba6", // right carets
     base0F: "#fade85", // integers, copy buttons
 }
-const CurlBox: FC<Props> = ({ options, title, url }) => {
+const CurlBox: FC<Props> = ({ id, options, title, url }) => {
     const [requested, setRequested] = useState(false)
     const line = useCommandLine(url, options)
     const key = useCommandKey(url, options)
@@ -61,7 +62,7 @@ const CurlBox: FC<Props> = ({ options, title, url }) => {
                     <button
                         className={styles.controlButton}
                         onClick={() => {
-                            customEvents.makeApiCall(title)
+                            customEvents.makeApiCall(id)
                             setRequested(true)
                         }}
                         title="Make API Call"
@@ -73,7 +74,7 @@ const CurlBox: FC<Props> = ({ options, title, url }) => {
                     <button
                         className={styles.controlButton}
                         onClick={() => {
-                            customEvents.clearApiResults(title)
+                            customEvents.clearApiResults(id)
 
                             setRequested(false)
                         }}
@@ -85,7 +86,7 @@ const CurlBox: FC<Props> = ({ options, title, url }) => {
                 <button
                     className={styles.controlButton}
                     onClick={() => {
-                        customEvents.copyApiCommand(title)
+                        customEvents.copyApiCommand(id)
                         navigator.clipboard.writeText(line)
                     }}
                     title="Copy to Clipboard"

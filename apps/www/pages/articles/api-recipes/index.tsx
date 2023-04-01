@@ -78,13 +78,19 @@ const Article: FC = () => {
                     </a>{" "}
                     API, with JSON data detailing other resource endpoints and general metadata about the site.
                 </p>
-                <CurlBox url={`${process.env.NEXT_PUBLIC_API_URL}`} options={{ location: true }} title="API Index" />
+                <CurlBox
+                    id="index"
+                    url={`${process.env.NEXT_PUBLIC_API_URL}`}
+                    options={{ location: true }}
+                    title="API Index"
+                />
                 <p>
                     For compatibility with future versions of the API, it is <em>strongly recommended</em> that you
                     include the <strong>major API version</strong> (<code>2</code>) in the <code>Accept</code> header
                     thusly:
                 </p>
                 <CurlBox
+                    id="index_with_version"
                     url={`${process.env.NEXT_PUBLIC_API_URL}`}
                     options={{ headers: { Accept: "application/vnd.phylopic.v2+json" }, location: true }}
                     title="API Index (major API version specified)"
@@ -107,6 +113,7 @@ const Article: FC = () => {
                     To skip the redirect, simply place the current <code>build</code> number in the query string:
                 </p>
                 <CurlBox
+                    id="index_with_build"
                     url={`${process.env.NEXT_PUBLIC_API_URL}?build=${build}`}
                     title="API Index (current build specified)"
                 />
@@ -115,6 +122,7 @@ const Article: FC = () => {
                     current build number is included in the response so that it can be used in subsequent calls.
                 </p>
                 <CurlBox
+                    id="index_with_obsolete_version"
                     url={`${process.env.NEXT_PUBLIC_API_URL}?build=1`}
                     title="API Index (obsolete build specified)"
                 />
@@ -142,18 +150,21 @@ const Article: FC = () => {
                     , which can be included in the URL to retrieve data about it. Examples:
                 </p>
                 <CurlBox
+                    id="image"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images/045279d5-24e5-4838-bec9-0bea86812e35`}
                     options={{ location: true }}
                     title="Image"
                 />
                 <br />
                 <CurlBox
+                    id="node"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/nodes/8f901db5-84c1-4dc0-93ba-2300eeddf4ab`}
                     options={{ location: true }}
                     title="Node"
                 />
                 <br />
                 <CurlBox
+                    id="contributor"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/contributors/060f03a9-fafd-4d08-81d1-b8f82080573f`}
                     options={{ location: true }}
                     title="Contributor"
@@ -170,12 +181,14 @@ const Article: FC = () => {
                     names start with <code>&quot;embed_&quot;</code>.
                 </p>
                 <CurlBox
+                    id="image_with_embedded"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images/045279d5-24e5-4838-bec9-0bea86812e35?embed_generalNode=true&embed_nodes=true&embed_specificNode=true`}
                     options={{ location: true }}
                     title="Image with Embedded Entities"
                 />
                 <br />
                 <CurlBox
+                    id="node_with_embedded"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/nodes/8f901db5-84c1-4dc0-93ba-2300eeddf4ab?embed_parentNode=true&embed_primaryImage=true`}
                     options={{ location: true }}
                     title="Node with Embedded Entities"
@@ -188,6 +201,7 @@ const Article: FC = () => {
                     metadata about the list: number of items, number of pages, and links to the first and last page.
                 </p>
                 <CurlBox
+                    id="image_list"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images`}
                     options={{ location: true }}
                     title="List of All Images"
@@ -199,6 +213,7 @@ const Article: FC = () => {
                     <em>must</em> be included for page queries.
                 </p>
                 <CurlBox
+                    id="image_page"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&page=0`}
                     title="First Page of All Images"
                 />
@@ -207,6 +222,7 @@ const Article: FC = () => {
                     also be embedded in the response itself, using the <code>embed_items</code> parameter.
                 </p>
                 <CurlBox
+                    id="image_page_with_embedded"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&page=0`}
                     title="First Page of All Images, with Items Embedded"
                 />
@@ -216,6 +232,7 @@ const Article: FC = () => {
                     submitted on or after <time dateTime="2023-02-12T00:00:00.000Z">2023 February 12</time>:
                 </p>
                 <CurlBox
+                    id="image_filter_date"
                     title="List of Images Created after a Given Date"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&filter_created_after=${new Date(
                         Date.UTC(2023, 1, 12),
@@ -249,6 +266,7 @@ const Article: FC = () => {
                         <code>/nodes</code> endpoint:
                     </p>
                     <CurlBox
+                        id="nodes_list_filter_name"
                         url={`${process.env.NEXT_PUBLIC_API_URL}/nodes?filter_name=primates`}
                         options={{ location: true }}
                         title="Search for a Taxonomic Name"
@@ -258,6 +276,7 @@ const Article: FC = () => {
                         <SiteTitle /> will definitely return results for:
                     </p>
                     <CurlBox
+                        id="autocomplete"
                         url={`${process.env.NEXT_PUBLIC_API_URL}/autocomplete?query=prim`}
                         options={{ location: true }}
                         title="Autocomplete for Taxonomic Names"
@@ -268,6 +287,7 @@ const Article: FC = () => {
                         this will yield a <code>404 Not Found</code> response if there are no results.)
                     </p>
                     <CurlBox
+                        id="nodes_page_filter_name"
                         url={`${process.env.NEXT_PUBLIC_API_URL}/nodes?build=${build}&filter_name=primates&page=0`}
                         title="First Page of Search Results for a Taxonomic Name"
                     />
@@ -287,6 +307,7 @@ const Article: FC = () => {
                         <code>/tnrs/autocomplete_name</code> endpoint:
                     </p>
                     <CurlBox
+                        id="otol_autocomplete"
                         url="https://api.opentreeoflife.org/v3/tnrs/autocomplete_name"
                         options={{ data: { name: "prim" } }}
                         title={
@@ -300,6 +321,7 @@ const Article: FC = () => {
                         identifier. You may use the <code>ott_id</code> to get the full lineage of a particular taxon.
                     </p>
                     <CurlBox
+                        id="otol_lineage"
                         url="https://api.opentreeoflife.org/v3/taxonomy/taxon_info"
                         options={{ data: { include_lineage: true, ott_id: 7501342 } }}
                         title={
@@ -315,6 +337,7 @@ const Article: FC = () => {
                         endpoint to find the closest match in <SiteTitle />.
                     </p>
                     <CurlBox
+                        id="otol_resolve"
                         url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?build=${build}`}
                         options={{
                             data: [
@@ -362,6 +385,7 @@ const Article: FC = () => {
                         To get a list of taxa matching a search string, use the <code>/taxa/auto.json</code> endpoint:
                     </p>
                     <CurlBox
+                        id="pbdb_autocomplete"
                         url="https://training.paleobiodb.org/data1.2/taxa/auto.json?limit=10&name=prim"
                         title={
                             <>
@@ -375,6 +399,7 @@ const Article: FC = () => {
                         lineage of a particular taxon.
                     </p>
                     <CurlBox
+                        id="pbdb_lineage"
                         url="https://training.paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents"
                         title={
                             <>
@@ -390,6 +415,7 @@ const Article: FC = () => {
                         find the closest match in <SiteTitle />.
                     </p>
                     <CurlBox
+                        id="pbdb_resolve"
                         url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn?build=${build}`}
                         options={{
                             data: [
@@ -439,6 +465,7 @@ const Article: FC = () => {
                     is the earliest-submitted image of those that most closely illustrate the node.
                 </p>
                 <CurlBox
+                    id="node_embedded_primary_image"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/nodes/37040a3d-bf9c-4aa0-9ca4-d953caac1d1c?embed_primaryImage=true`}
                     options={{ location: true }}
                     title="Node with Embedded Primary Image"
@@ -448,6 +475,7 @@ const Article: FC = () => {
                     node&rsquo;s UUID as a filter to get the list metadata:
                 </p>
                 <CurlBox
+                    id="images_list_filter_node"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?filter_node=37040a3d-bf9c-4aa0-9ca4-d953caac1d1c`}
                     options={{ location: true }}
                     title="List of Images for a Node"
@@ -457,6 +485,7 @@ const Article: FC = () => {
                     in the response:
                 </p>
                 <CurlBox
+                    id="images_page_filter_node"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&filter_node=37040a3d-bf9c-4aa0-9ca4-d953caac1d1c&page=0`}
                     title="First Page of Images for a Node"
                 />
@@ -467,6 +496,7 @@ const Article: FC = () => {
                     matter&rsquo;s proximity to the ancestral node.
                 </p>
                 <CurlBox
+                    id="images_list_filter_clade"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images?build=${build}&embed_items=true&filter_clade=36c04f2f-b7d2-4891-a4a9-138d79592bf2&page=0`}
                     title="List of Images within a Clade"
                 />
@@ -475,6 +505,7 @@ const Article: FC = () => {
                 <h2>Choosing an Image File</h2>
                 <p>Once you have the metadata for the image, there will be several options for the image file.</p>
                 <CurlBox
+                    id="image2"
                     url={`${process.env.NEXT_PUBLIC_API_URL}/images/c466a71f-90b9-4ea7-b6ba-56cb37d47f22`}
                     options={{ location: true }}
                     title="Image"

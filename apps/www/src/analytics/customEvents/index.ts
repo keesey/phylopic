@@ -13,8 +13,8 @@ const getImageOptions = (image: Image) => ({
     image_uuid: image.uuid,
 })
 const customEvents = {
-    clearApiResults(title: string) {
-        gtag.event("clear_api_results", { title })
+    clearApiResults(id: string) {
+        gtag.event("clear_api_results", { id })
     },
     clickLink(id: string, href: string, label: string, type: LinkType) {
         gtag.event("click_link", { id, href, label, type })
@@ -74,8 +74,8 @@ const customEvents = {
     collectImage(image: Image) {
         gtag.event("collect_image", getImageOptions(image))
     },
-    copyApiCommand(title: string) {
-        gtag.event("copy_api_command", { title })
+    copyApiCommand(id: string) {
+        gtag.event("copy_api_command", { id })
     },
     createCollection(label: string) {
         gtag.event("create_collection", { label })
@@ -116,8 +116,8 @@ const customEvents = {
     loadNodeListPage(id: string, index: number) {
         gtag.event("load_node_list_page", { id, index })
     },
-    makeApiCall(title: string) {
-        gtag.event("make_api_call", { title })
+    makeApiCall(id: string) {
+        gtag.event("make_api_call", { id })
     },
     navigateToPermalink(hash: Hash) {
         gtag.event("navigate_to_permalink", { hash })
