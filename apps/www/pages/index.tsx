@@ -4,6 +4,7 @@ import { URL } from "@phylopic/utils"
 import { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
+import Link from "next/link"
 import customEvents from "~/analytics/customEvents"
 import MailingListForm from "~/forms/MailingListForm"
 import PocketPhylogenies from "~/materials/PocketPhylogenies"
@@ -115,7 +116,8 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 <header>
                     <h2>Quick Links</h2>
                     <p>
-                        The most popular taxon pages on <SiteTitle />, as determined by actual traffic:
+                        The most popular <Link href="/nodes">taxonomic groups</Link> on <SiteTitle />, as determined by
+                        actual traffic:
                     </p>
                 </header>
                 <QuickLinks />
