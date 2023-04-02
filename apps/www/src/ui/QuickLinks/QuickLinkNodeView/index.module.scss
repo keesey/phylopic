@@ -1,0 +1,19 @@
+@use "@phylopic/styles/colors.scss";
+
+.operator {
+    color: colors.$wash;
+
+    &:hover {
+        color: colors.$inkFade;
+    }
+}
+
+.name {
+    color: colors.$cerulean;
+    font-weight: bold;
+    white-space: pre;
+
+    &:hover {
+        color: colors.$glacier;
+    }
+}
