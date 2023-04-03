@@ -4,6 +4,7 @@ import { URL } from "@phylopic/utils"
 import { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
+import Link from "next/link"
 import customEvents from "~/analytics/customEvents"
 import MailingListForm from "~/forms/MailingListForm"
 import PocketPhylogenies from "~/materials/PocketPhylogenies"
@@ -13,6 +14,7 @@ import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import HeaderNav from "~/ui/HeaderNav"
+import QuickLinks from "~/ui/QuickLinks"
 import SiteTitle from "~/ui/SiteTitle"
 import ContributionCTAView from "~/views/ContributionCTAView"
 import ImageListView from "~/views/ImageListView"
@@ -110,8 +112,18 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 </PaginationContainer>
             </section>
             <ContributionCTAView />
+            <section>
+                <header>
+                    <h2>Quick Links</h2>
+                    <p>
+                        The most popular <Link href="/nodes">taxonomic groups</Link> on <SiteTitle />, as determined by
+                        actual traffic:
+                    </p>
+                </header>
+                <QuickLinks />
+            </section>
             <section style={{ minWidth: "100vw" }}>
-                <header style={{ maxWidth: "11in", margin: "0 auto" }}>
+                <header style={{ maxWidth: "11in", margin: "0 auto", paddingLeft: "1rem", paddingRight: "1rem" }}>
                     <HeaderNav
                         buttons={[
                             {
