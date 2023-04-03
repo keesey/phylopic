@@ -9,19 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Quick Links to Home Page.
-
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
--   Width of Pocket Phylogenies header on Home Page.
-
 ### Removed
 
 ### Security
+
+## [2.4.0] - 2023-04-03
+
+### Added
+
+-   Quick Links to Home Page.
+
+### Fixed
+
+-   Width of Pocket Phylogenies header on Home Page.
 
 ## [2.3.0] - 2023-04-01
 
