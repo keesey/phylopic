@@ -4,7 +4,6 @@ import { Action } from "./Actions"
 import { State } from "./State"
 
 const reducer: Reducer<State, Action> = (prevState, action) => {
-    console.info(action)
     switch (action.type) {
         case "ADD_NAME": {
             return {

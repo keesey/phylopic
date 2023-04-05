@@ -8,7 +8,10 @@ import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
 import SourceClient from "~/source/SourceClient"
-const Assignment = dynamic(() => import("~/screens/Assignment"), { ssr: false })
+const Assignment = dynamic(() => import("~/screens/Assignment"), {
+    loading: () => <LoadingState>One moment…</LoadingState>,
+    ssr: false,
+})
 type Props = {
     build: number
     hash: Hash
@@ -23,7 +26,7 @@ const Page: NextPage<Props> = ({ build, hash }) => (
         submissionHash={hash}
     >
         <AuthorizedOnly>
-            <Suspense fallback={<LoadingState>One moment…</LoadingState>}>
+            <Suspense>
                 <Assignment hash={hash} />
             </Suspense>
         </AuthorizedOnly>
