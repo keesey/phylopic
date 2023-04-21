@@ -72,6 +72,11 @@ const nextConfig = {
                 destination: "https://images.phylopic.org/social/1200x1200.png",
                 permanent: true,
             },
+            {
+                source: "/sponsorship",
+                destination: "https://forms.gle/LR6sBChZNdxtJBHz8",
+                permanent: false
+            }
         ]
     },
     swcMinify: true,
