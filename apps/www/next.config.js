@@ -75,8 +75,8 @@ const nextConfig = {
             {
                 source: "/sponsorship",
                 destination: "https://forms.gle/LR6sBChZNdxtJBHz8",
-                permanent: false
-            }
+                permanent: false,
+            },
         ]
     },
     swcMinify: true,

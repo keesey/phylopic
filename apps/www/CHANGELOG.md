@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   Issue with _Open Tree of Life_ resolver.
+
 ### Removed
 
 ### Security
