@@ -15,12 +15,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   Assignment screen was not showing a loader.
--   Issue with _Open Tree of Life_ resolver.
-
 ### Removed
 
 ### Security
+
+## [2.0.11] - 2023-04-21
+
+### Fixed
+
+-   Assignment screen was not showing a loader.
+-   Issue with _Open Tree of Life_ resolver.
 
 ## [2.0.10] - 2023-04-01
 
