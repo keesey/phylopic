@@ -14,12 +14,12 @@ import validate from "../validation/validate"
 import { Operation } from "./Operation"
 const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
-export type PostResolveObjectsParameters = DataRequestHeaders & {
+export type GetResolveObjectsParameters = DataRequestHeaders & {
     "content-type"?: string
 } & Partial<Omit<ResolveParameters, "objectID">> & {
-        readonly body?: string
+        readonly objectIDs?: string
     }
-export type PostResolveObjectsService = PgClientService
+export type GetResolveObjectsService = PgClientService
 const getRedirect = async (
     service: PgClientService,
     authority: Authority | undefined,
@@ -73,43 +73,33 @@ const getRedirect = async (
     }
     return link
 }
-const getObjectIDsFromBody = (body: string | null) => {
-    if (!body) {
+const isObjectIDs = (x: unknown): x is readonly ObjectID[] =>
+    Array.isArray(x) && x.length > 0 && x.every(item => typeof item === "string")
+const getObjectIDsFromQueryValue = (value: string | undefined) => {
+    if (typeof value !== "string") {
         throw new APIError(400, [
             {
-                developerMessage: "Missing body.",
-                field: "body",
-                type: "BAD_REQUEST_BODY",
+                developerMessage: "Missing `objectIDs` parameter.",
+                field: "objectIDs",
+                type: "BAD_REQUEST_PARAMETERS",
                 userMessage: USER_MESSAGE,
             },
         ])
     }
-    let objectIDs: ObjectID[]
-    try {
-        objectIDs = JSON.parse(body)
-    } catch (e) {
+    const objectIDs = value.split(",")
+    if (!isObjectIDs(objectIDs)) {
         throw new APIError(400, [
             {
-                developerMessage: "Invalid JSON in body",
-                field: "body",
-                type: "BAD_REQUEST_BODY",
-                userMessage: USER_MESSAGE,
-            },
-        ])
-    }
-    if (!Array.isArray(objectIDs) || !objectIDs.every(item => typeof item === "string" && item.length > 0)) {
-        throw new APIError(400, [
-            {
-                developerMessage: "Expected body to be an array of nonempty strings.",
-                field: "body",
-                type: "BAD_REQUEST_BODY",
+                developerMessage: "Invalid `objectIDs` value. Should be a comma-separated list of ID values.",
+                field: "objectIDs",
+                type: "BAD_REQUEST_PARAMETERS",
                 userMessage: USER_MESSAGE,
             },
         ])
     }
     return objectIDs
 }
-export const postResolveObjects: Operation<PostResolveObjectsParameters, PostResolveObjectsService> = async (
+export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
     { accept, body, "content-type": contentType, ...queryAndPathParameters },
     service,
 ) => {
@@ -126,7 +116,7 @@ export const postResolveObjects: Operation<PostResolveObjectsParameters, PostRes
             },
         ])
     }
-    const objectIDs = getObjectIDsFromBody(body)
+    const objectIDs = getObjectIDsFromQueryValue(queryAndPathParameters.objectIDs)
     const { authority, namespace, ...queryParameters } = queryAndPathParameters
     if (queryParameters.build) {
         checkBuild(queryParameters.build, USER_MESSAGE)
@@ -138,14 +128,8 @@ export const postResolveObjects: Operation<PostResolveObjectsParameters, PostRes
             ...DATA_HEADERS,
             ...createRedirectHeaders(link.href, false),
             "access-control-allow-methods": "OPTIONS,GET,POST",
-            warning: `This method is deprecated. Please use \`GET /resolve/${encodeURIComponent(
-                authority ?? "",
-            )}/${encodeURIComponent(namespace ?? "")}${createSearch({
-                ...queryParameters,
-                objectIDs: objectIDs.join(","),
-            })}\` instead.`,
         },
         statusCode: 303,
     } as APIGatewayProxyResult
 }
-export default postResolveObjects
+export default GetResolveObjects
