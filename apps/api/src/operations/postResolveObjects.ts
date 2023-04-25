@@ -159,7 +159,6 @@ export const postResolveObjects: Operation<PostResolveObjectsParameters, PostRes
             "access-control-allow-methods": "OPTIONS,GET,POST",
             deprecation: "version=v2",
             link: `<https://api.phylopic.org${alternate}>; rel="alternate"`,
-            warning: `299 - "This method is deprecated. Please use \`GET ${alternate}\` instead."`,
         },
         statusCode: 303,
     } as APIGatewayProxyResult

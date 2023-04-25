@@ -450,7 +450,6 @@ functions:
                           - Content-Type
                           - Deprecation
                           - Link
-                          - Warning
                           - X-Amz-Date
                           - X-Amz-Security-Token
                           - X-Amz-User-Agent
