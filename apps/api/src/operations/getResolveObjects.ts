@@ -1,4 +1,4 @@
-import { DATA_MEDIA_TYPE, isResolveObjectParameters, ResolveObjectParameters, TitledLink } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, isResolveObjectsParameters, ResolveObjectsParameters, TitledLink } from "@phylopic/api-models"
 import { Authority, createSearch, Namespace, ObjectID, stringifyNormalized, UUID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
@@ -12,11 +12,7 @@ import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
-export type GetResolveObjectsParameters = DataRequestHeaders &
-    Partial<Omit<ResolveObjectParameters, "objectID">> & {
-        readonly build?: number
-        readonly objectIDs?: string
-    }
+export type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
 export type GetResolveObjectsService = PgClientService
 const getRedirect = async (
     service: PgClientService,
@@ -71,44 +67,17 @@ const getRedirect = async (
     }
     return link
 }
-const isObjectIDs = (x: unknown): x is readonly ObjectID[] =>
-    Array.isArray(x) && x.length > 0 && x.every(item => typeof item === "string")
-const getObjectIDsFromQueryValue = (value: string | undefined) => {
-    if (typeof value !== "string") {
-        throw new APIError(400, [
-            {
-                developerMessage: "Missing `objectIDs` parameter.",
-                field: "objectIDs",
-                type: "BAD_REQUEST_PARAMETERS",
-                userMessage: USER_MESSAGE,
-            },
-        ])
-    }
-    const objectIDs = value.split(",")
-    if (!isObjectIDs(objectIDs)) {
-        throw new APIError(400, [
-            {
-                developerMessage: "Invalid `objectIDs` value. Should be a comma-separated list of ID values.",
-                field: "objectIDs",
-                type: "BAD_REQUEST_PARAMETERS",
-                userMessage: USER_MESSAGE,
-            },
-        ])
-    }
-    return objectIDs
-}
 export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
     { accept, body, ...queryAndPathParameters },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    validate({ ...queryAndPathParameters, objectID: "-" }, isResolveObjectParameters, USER_MESSAGE)
-    const objectIDs = getObjectIDsFromQueryValue(queryAndPathParameters.objectIDs)
-    const { authority, namespace, ...queryParameters } = queryAndPathParameters
+    validate(queryAndPathParameters, isResolveObjectsParameters, USER_MESSAGE)
+    const { authority, namespace, objectIDs, ...queryParameters } = queryAndPathParameters as ResolveObjectsParameters
     if (queryParameters.build) {
         checkBuild(queryParameters.build, USER_MESSAGE)
     }
-    const link = await getRedirect(service, authority, namespace, objectIDs, queryParameters)
+    const link = await getRedirect(service, authority, namespace, objectIDs.split(","), queryParameters)
     return {
         body: stringifyNormalized(link),
         headers: {
