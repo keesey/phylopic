@@ -333,9 +333,9 @@ const Article: FC = () => {
                     <p>
                         Collect the <code>ott_id</code> values from the <code>lineage</code>, from the least inclusive
                         taxon to the most inclusive taxon (i.e., the order in the response), and place those as a
-                        comma-separated list in a query to the <SiteTitle />
-                        API&rsquo;s <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint in order to find the
-                        closest match in <SiteTitle />.
+                        comma-separated list in a query to the <SiteTitle /> API&rsquo;s{" "}
+                        <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint in order to find the closest match in{" "}
+                        <SiteTitle />.
                     </p>
                     <CurlBox
                         id="otol_resolve"
@@ -362,7 +362,6 @@ const Article: FC = () => {
                             "805080",
                         ].join(",")}`}
                         options={{
-                            headers: { "Content-Type": "application/vnd.phylopic.v2+json" },
                             location: true,
                         }}
                         title={
@@ -448,7 +447,6 @@ const Article: FC = () => {
                             "28595",
                         ].join(",")}`}
                         options={{
-                            headers: { "Content-Type": "application/vnd.phylopic.v2+json" },
                             location: true,
                         }}
                         title={
