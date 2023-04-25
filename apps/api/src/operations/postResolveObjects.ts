@@ -88,7 +88,7 @@ const getRedirect = async (
             namespace,
             objectIDs,
             queryParameters,
-        )}\``,
+        )}\`.`,
     }
 }
 const getObjectIDsFromBody = (body: string | null) => {
