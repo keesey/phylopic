@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Using `GET /resolve/{authority}/{namespace}` instead of `POST /resolve/{authority}/{namespace}` for external resolvers.
+-   Updated examples for resolving external objects in the _API Recipes_ article.
+
 ### Deprecated
 
 ### Fixed

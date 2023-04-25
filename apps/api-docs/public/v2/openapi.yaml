@@ -1596,7 +1596,6 @@ paths:
         - search
       parameters:
         - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/Content-Type"
         - $ref: "#/components/parameters/authority"
         - $ref: "#/components/parameters/build"
         - $ref: "#/components/parameters/embed_childNodes"

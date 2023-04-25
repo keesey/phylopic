@@ -1,4 +1,4 @@
-import { DATA_MEDIA_TYPE, isResolveParameters, ResolveParameters, TitledLink } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, isResolveObjectParameters, ResolveObjectParameters, TitledLink } from "@phylopic/api-models"
 import { Authority, Namespace, ObjectID, stringifyNormalized } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
@@ -12,7 +12,7 @@ import getExternalLink from "../search/getExternalLink"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveParameters>
+export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
 export type GetResolveObjectsService = PgClientService
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 const getRedirectLink = async (
@@ -56,8 +56,8 @@ export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveO
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    validate(queryAndPathParameters, isResolveParameters, USER_MESSAGE)
-    const { authority, namespace, objectID, ...queryParameters } = queryAndPathParameters as ResolveParameters
+    validate(queryAndPathParameters, isResolveObjectParameters, USER_MESSAGE)
+    const { authority, namespace, objectID, ...queryParameters } = queryAndPathParameters as ResolveObjectParameters
     if (queryParameters.build) {
         checkBuild(queryParameters.build, USER_MESSAGE)
     }

@@ -1,4 +1,4 @@
-import { DATA_MEDIA_TYPE, isResolveParameters, ResolveParameters, TitledLink } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, isResolveObjectParameters, ResolveObjectParameters, TitledLink } from "@phylopic/api-models"
 import { Authority, createSearch, Namespace, ObjectID, stringifyNormalized, UUID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
@@ -16,7 +16,7 @@ const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 export type PostResolveObjectsParameters = DataRequestHeaders & {
     "content-type"?: string
-} & Partial<Omit<ResolveParameters, "objectID">> & {
+} & Partial<Omit<ResolveObjectParameters, "objectID">> & {
         readonly body?: string
     }
 export type PostResolveObjectsService = PgClientService
@@ -115,7 +115,7 @@ export const postResolveObjects: Operation<PostResolveObjectsParameters, PostRes
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     checkContentType(contentType, ACCEPT)
-    validate({ ...queryAndPathParameters, objectID: "-" }, isResolveParameters, USER_MESSAGE)
+    validate({ ...queryAndPathParameters, objectID: "-" }, isResolveObjectParameters, USER_MESSAGE)
     if (!body) {
         throw new APIError(400, [
             {

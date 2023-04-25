@@ -432,11 +432,11 @@ functions:
                       parameters:
                           headers:
                               accept: false
-                              content-type: true
                           paths:
                               authority: true
                               namespace: true
                           querystrings:
+                              build: false
                               embed_childNodes: false
                               embed_parentNode: false
                               embed_primaryImage: false

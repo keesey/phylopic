@@ -1,4 +1,4 @@
-import { DATA_MEDIA_TYPE, isResolveParameters, ResolveParameters, TitledLink } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, isResolveObjectParameters, ResolveObjectParameters, TitledLink } from "@phylopic/api-models"
 import { Authority, createSearch, Namespace, ObjectID, stringifyNormalized, UUID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
@@ -8,15 +8,13 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import checkContentType from "../mediaTypes/checkContentType"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
-export type GetResolveObjectsParameters = DataRequestHeaders & {
-    "content-type"?: string
-} & Partial<Omit<ResolveParameters, "objectID">> & {
+export type GetResolveObjectsParameters = DataRequestHeaders &
+    Partial<Omit<ResolveObjectParameters, "objectID">> & {
+        readonly build?: number
         readonly objectIDs?: string
     }
 export type GetResolveObjectsService = PgClientService
@@ -100,22 +98,11 @@ const getObjectIDsFromQueryValue = (value: string | undefined) => {
     return objectIDs
 }
 export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
-    { accept, body, "content-type": contentType, ...queryAndPathParameters },
+    { accept, body, ...queryAndPathParameters },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
-    checkContentType(contentType, ACCEPT)
-    validate({ ...queryAndPathParameters, objectID: "-" }, isResolveParameters, USER_MESSAGE)
-    if (!body) {
-        throw new APIError(400, [
-            {
-                developerMessage: "Missing body.",
-                field: "body",
-                type: "BAD_REQUEST_BODY",
-                userMessage: USER_MESSAGE,
-            },
-        ])
-    }
+    validate({ ...queryAndPathParameters, objectID: "-" }, isResolveObjectParameters, USER_MESSAGE)
     const objectIDs = getObjectIDsFromQueryValue(queryAndPathParameters.objectIDs)
     const { authority, namespace, ...queryParameters } = queryAndPathParameters
     if (queryParameters.build) {

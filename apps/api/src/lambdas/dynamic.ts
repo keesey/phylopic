@@ -274,10 +274,9 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "GET": {
                     return getResolveObjects(
                         {
-                            body: event.body ?? undefined,
-                            ...getParameters(event.headers, ["accept", "content-type"]),
+                            ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.pathParameters, ["authority", "namespace"]),
-                            ...getParameters(event.queryStringParameters, ["build"]),
+                            ...getParameters(event.queryStringParameters, ["build", "objectIDs"]),
                             ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },
                         SERVICE,

@@ -24,16 +24,8 @@ const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async ([
     })
     return response.data
 }
-const fetchDirect: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
+const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url)
-    return response.data
-}
-const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = async ([url, objectIDs]) => {
-    const response = await fetchDataAndCheck<NodeWithEmbedded>(url, {
-        data: objectIDs,
-        headers: { "content-type": "application/json" },
-        method: "POST",
-    })
     return response.data
 }
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
@@ -54,7 +46,7 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
             ),
         [build, ott_id, setDirectKey],
     )
-    const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchDirect)
+    const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchNode)
     const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
     const lineageIDs = React.useMemo(() => {
         if (!lineage.data?.lineage) {
@@ -62,23 +54,21 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
         }
         return [String(ott_id), ...lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))]
     }, [lineage.data?.lineage, ott_id])
-    const [indirectKey, setIndirectKey] = useDebounce<[string, string[]] | null>(null, DEBOUNCE_WAIT, true)
+    const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
             setIndirectKey(
                 lineageIDs.length
-                    ? ([
-                          `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy${createSearch({
-                              build,
-                              embed_primaryImage: true,
-                          })}`,
-                          lineageIDs,
-                      ] as [string, string[]])
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy${createSearch({
+                          build,
+                          embed_primaryImage: true,
+                          objectIDs: lineageIDs.join(","),
+                      })}`
                     : null,
             ),
         [build, lineageIDs, setIndirectKey],
     )
-    const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchIndirect)
+    const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchNode)
     React.useEffect(() => {
         const node = direct.data ?? indirect.data
         if (node && dispatch) {
