@@ -132,18 +132,21 @@ export const postResolveObjects: Operation<PostResolveObjectsParameters, PostRes
         checkBuild(queryParameters.build, USER_MESSAGE)
     }
     const link = await getRedirect(service, authority, namespace, objectIDs, queryParameters)
+    const alternate = `/resolve/${encodeURIComponent(
+        authority ?? "",
+    )}/${encodeURIComponent(namespace ?? "")}${createSearch({
+        ...queryParameters,
+        objectIDs: objectIDs.join(","),
+    })}`
     return {
         body: stringifyNormalized(link),
         headers: {
             ...DATA_HEADERS,
             ...createRedirectHeaders(link.href, false),
             "access-control-allow-methods": "OPTIONS,GET,POST",
-            warning: `This method is deprecated. Please use \`GET /resolve/${encodeURIComponent(
-                authority ?? "",
-            )}/${encodeURIComponent(namespace ?? "")}${createSearch({
-                ...queryParameters,
-                objectIDs: objectIDs.join(","),
-            })}\` instead.`,
+            deprecation: "version=v2",
+            link: `<https://api.phylopic.org${alternate}>; rel="alternate"`,
+            warning: `299 - "This method is deprecated. Please use \`GET ${alternate}\` instead."`,
         },
         statusCode: 303,
     } as APIGatewayProxyResult
