@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Scroll issue on mobile sizes.
 -   Footer could be too wide for mobile sizes.
+-   Quick links have appropriate line breaks.
 
 ### Removed
 
