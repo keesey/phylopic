@@ -5,7 +5,6 @@ import { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
-import customEvents from "~/analytics/customEvents"
 import MailingListForm from "~/forms/MailingListForm"
 import PocketPhylogenies from "~/materials/PocketPhylogenies"
 import SchemaScript from "~/metadata/SchemaScript"
@@ -17,7 +16,7 @@ import HeaderNav from "~/ui/HeaderNav"
 import QuickLinks from "~/ui/QuickLinks"
 import SiteTitle from "~/ui/SiteTitle"
 import ContributionCTAView from "~/views/ContributionCTAView"
-import ImageListView from "~/views/ImageListView"
+import ImageRail from "~/views/ImageRail"
 import SupportersView from "~/views/SupportersView"
 type Props = Omit<PageLayoutProps, "children"> & { fallback?: Compressed }
 const ITEM_URLS: readonly URL[] = [
@@ -103,7 +102,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"} maxPages={1}>
                     {(images, totalImages) => (
                         <>
-                            <ImageListView value={images as readonly ImageWithEmbedded[]} />
+                            <ImageRail value={images as readonly ImageWithEmbedded[]} />
                             <p>
                                 <CountView value={totalImages} /> silhouette images in the database.
                             </p>
