@@ -64,6 +64,15 @@ const getHash = (body: string) => {
     hashSum.update(body)
     return hashSum.digest("hex")
 }
+const createImageNotFoundError = (uuid: UUID) =>
+    new APIError(404, [
+        {
+            developerMessage: `Image not found. UUID: ${uuid}`,
+            field: "existing_uuid",
+            type: "RESOURCE_NOT_FOUND",
+            userMessage: USER_MESSAGE,
+        },
+    ])
 const createMissingBodyError = () =>
     new APIError(400, [
         {
@@ -137,7 +146,10 @@ const getReplacementImage = async (uuid: UUID, contributorUUID: UUID, service: P
     }
     const client = await service.createPgClient()
     try {
-        const imageJSON = await selectEntityJSON(client, "image", uuid, "Could not find the specified image.")
+        const imageJSON = await selectEntityJSON(client, "image", uuid)
+        if (imageJSON === "null") {
+            throw createImageNotFoundError(uuid)
+        }
         image = parseEntityJSON(imageJSON, isImage)
         if (image._links.contributor.href !== `/contributors/${contributorUUID}`) {
             throw createForbiddenReplacementError()
