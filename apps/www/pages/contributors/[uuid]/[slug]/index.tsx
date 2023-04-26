@@ -23,6 +23,7 @@ import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import Container from "~/ui/Container"
 import ContributorDetailsView from "~/views/ContributorDetailsView"
 import ContributorNameView from "~/views/ContributorNameView"
 import ImageListView from "~/views/ImageListView"
@@ -34,9 +35,11 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
     return (
         <CompressedSWRConfig fallback={fallback}>
             <PageLayout {...props}>
-                <ContributorContainer uuid={uuid}>
-                    {contributor => (contributor ? <Content contributor={contributor} /> : null)}
-                </ContributorContainer>
+                <Container>
+                    <ContributorContainer uuid={uuid}>
+                        {contributor => (contributor ? <Content contributor={contributor} /> : null)}
+                    </ContributorContainer>
+                </Container>
             </PageLayout>
         </CompressedSWRConfig>
     )

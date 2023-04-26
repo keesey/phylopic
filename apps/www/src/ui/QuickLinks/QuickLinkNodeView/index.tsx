@@ -33,7 +33,7 @@ const QuickLinkNodeView: FC<Props> = ({ node }) => {
                         </Fragment>
                     ))}
                     <Link className={styles.operator} href={href} title={title}>
-                        {")"}
+                        {")\u200B"}
                     </Link>
                 </>
             )}
