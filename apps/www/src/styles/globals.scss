@@ -14,7 +14,8 @@ html {
 body {
     background-color: colors.$vellum;
     min-height: 100vh;
-    min-width: 250px;
+    min-width: 320px;
+    width: 100%;
     padding-bottom: 16rem;
 
     #__next {
@@ -55,13 +56,6 @@ main {
     margin: 0;
     padding-bottom: 1rem;
     padding-top: 1rem;
-
-    >* {
-        margin: 0 auto;
-        max-width: 11in;
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
 }
 
 img:not([src]) {

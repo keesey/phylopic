@@ -12,6 +12,7 @@ import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
+import Container from "~/ui/Container"
 import HeaderNav from "~/ui/HeaderNav"
 import QuickLinks from "~/ui/QuickLinks"
 import SiteTitle from "~/ui/SiteTitle"
@@ -77,97 +78,111 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
             />
             <ItemListSchemaScript urls={ITEM_URLS} />
             <header>
-                <p>
+                <Container>
                     <strong>Free silhouette images</strong> of animals, plants, and other life forms,{" "}
                     <strong>available for reuse</strong> under{" "}
                     <a href="//creativecommons.org" rel="external">
                         Creative Commons
                     </a>{" "}
                     licenses.
-                </p>
+                </Container>
             </header>
             <section>
-                <HeaderNav
-                    buttons={[
-                        {
-                            children: "See more →",
-                            href: "/images",
-                            key: "images",
-                            type: "anchor",
-                        },
-                    ]}
-                    header="Latest Uploads"
-                    headerLevel={2}
-                />
+                <Container>
+                    <HeaderNav
+                        buttons={[
+                            {
+                                children: "See more →",
+                                href: "/images",
+                                key: "images",
+                                type: "anchor",
+                            },
+                        ]}
+                        header="Latest Uploads"
+                        headerLevel={2}
+                    />
+                </Container>
                 <PaginationContainer endpoint={process.env.NEXT_PUBLIC_API_URL + "/images"} maxPages={1}>
                     {(images, totalImages) => (
                         <>
-                            <ImageRail value={images as readonly ImageWithEmbedded[]} />
-                            <p>
-                                <CountView value={totalImages} /> silhouette images in the database.
-                            </p>
+                            <Container variant="varying">
+                                <ImageRail value={images as readonly ImageWithEmbedded[]} />
+                            </Container>
+                            <Container>
+                                <p style={{ textAlign: "center" }}>
+                                    <CountView value={totalImages} /> silhouette images in the database.
+                                </p>
+                            </Container>
                         </>
                     )}
                 </PaginationContainer>
             </section>
             <ContributionCTAView />
             <section>
-                <header>
-                    <h2>Quick Links</h2>
-                    <p>
-                        The most popular <Link href="/nodes">taxonomic groups</Link> on <SiteTitle />, as determined by
-                        actual traffic:
-                    </p>
-                </header>
-                <QuickLinks />
+                <Container>
+                    <header>
+                        <h2>Quick Links</h2>
+                        <p>
+                            The most popular <Link href="/nodes">taxonomic groups</Link> on <SiteTitle />, as determined
+                            by actual traffic:
+                        </p>
+                    </header>
+                    <QuickLinks />
+                </Container>
             </section>
             <section style={{ minWidth: "100vw" }}>
-                <header style={{ maxWidth: "11in", margin: "0 auto", paddingLeft: "1rem", paddingRight: "1rem" }}>
-                    <HeaderNav
-                        buttons={[
-                            {
-                                children: "Download →",
-                                href: "/materials",
-                                key: "materials",
-                                type: "anchor",
-                            },
-                        ]}
-                        header="Pocket Phylogenies"
-                        headerLevel={2}
-                    />
-                    <p>
-                        Free wallet-sized cards with common questions about evolution on one side, and diagrams for
-                        explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
-                        <a href="//keesey.gumroad.com/l/pocketphylogenies">
-                            click here to print out Pocket Phylogenies for yourself
-                        </a>
-                        .
-                    </p>
-                </header>
+                <Container>
+                    <header>
+                        <HeaderNav
+                            buttons={[
+                                {
+                                    children: "Download →",
+                                    href: "/materials",
+                                    key: "materials",
+                                    type: "anchor",
+                                },
+                            ]}
+                            header="Pocket Phylogenies"
+                            headerLevel={2}
+                        />
+                        <p>
+                            Free wallet-sized cards with common questions about evolution on one side, and diagrams for
+                            explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
+                            <a href="//keesey.gumroad.com/l/pocketphylogenies">
+                                click here to print out Pocket Phylogenies for yourself
+                            </a>
+                            .
+                        </p>
+                    </header>
+                </Container>
                 <PocketPhylogenies />
             </section>
             <section>
-                <h2>Mailing List</h2>
-                <p>
-                    Subscribe to the <SiteTitle /> newsletter to receives updates about the site&mdash;improvements, new
-                    features, and more!
-                </p>
-                <MailingListForm />
+                <Container>
+                    <h2>Mailing List</h2>
+                    <p>
+                        Subscribe to the <SiteTitle /> newsletter to receives updates about the site&mdash;improvements,
+                        new features, and more!
+                    </p>
+                    <MailingListForm />
+                </Container>
             </section>
             <section>
-                <HeaderNav
-                    buttons={[
-                        {
-                            children: "See more →",
-                            href: "/thanks",
-                            key: "thanks",
-                            type: "anchor",
-                        },
-                    ]}
-                    header="Special Thanks"
-                    headerLevel={2}
-                />
-                <SupportersView />
+                <Container>
+                    <HeaderNav
+                        buttons={[
+                            {
+                                children: "See more →",
+                                href: "/thanks",
+                                key: "thanks",
+                                type: "anchor",
+                            },
+                        ]}
+                        header="Special Thanks"
+                        headerLevel={2}
+                    />
+                    <SupportersView />
+                </Container>
             </section>
         </PageLayout>
     </CompressedSWRConfig>

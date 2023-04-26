@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Image List View on Home Page to Image Rail.
+-   Refactored styling for content width.
 
 ### Deprecated
 
@@ -19,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Scroll issue on mobile sizes.
 -   Footer could be too wide for mobile sizes.
--   Quick links have appropriate line breaks.
+-   Quick links now have appropriate line breaks.
 
 ### Removed
 

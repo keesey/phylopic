@@ -7,6 +7,7 @@ import { FC, useContext } from "react"
 import customEvents from "~/analytics/customEvents"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import Container from "~/ui/Container"
 import CurlBox from "~/ui/CurlBox"
 import SiteTitle from "~/ui/SiteTitle"
 const PageComponent: NextPage = () => (
@@ -16,27 +17,29 @@ const PageComponent: NextPage = () => (
             description="A gentle introduction for software engineers to the PhyloPic Application Programming Interface (API). Examples including searching for silhouette images of biological taxa."
             title="Code Recipes for the PhyloPic API"
         />
-        <header>
-            <Breadcrumbs
-                items={[
-                    { children: "Home", href: "/" },
-                    { children: "Articles" },
-                    { children: <strong>API Recipes</strong> },
-                ]}
-            />
-            <h1>
-                <abbr title="Application Programming Interface">API</abbr> Recipes
-            </h1>
-            <div style={{ fontStyle: "italic", textAlign: "right" }}>
-                <Link
-                    href="/contributors/060f03a9-fafd-4d08-81d1-b8f82080573f/t-michael-keesey-silhouettes"
-                    rel="author"
-                >
-                    T. Michael Keesey
-                </Link>
-            </div>
-        </header>
-        <Article />
+        <Container>
+            <header>
+                <Breadcrumbs
+                    items={[
+                        { children: "Home", href: "/" },
+                        { children: "Articles" },
+                        { children: <strong>API Recipes</strong> },
+                    ]}
+                />
+                <h1>
+                    <abbr title="Application Programming Interface">API</abbr> Recipes
+                </h1>
+                <div style={{ fontStyle: "italic", textAlign: "right" }}>
+                    <Link
+                        href="/contributors/060f03a9-fafd-4d08-81d1-b8f82080573f/t-michael-keesey-silhouettes"
+                        rel="author"
+                    >
+                        T. Michael Keesey
+                    </Link>
+                </div>
+            </header>
+            <Article />
+        </Container>
     </PageLayout>
 )
 const Article: FC = () => {

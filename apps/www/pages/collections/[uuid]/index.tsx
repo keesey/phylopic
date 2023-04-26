@@ -20,6 +20,7 @@ import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import BulletList from "~/ui/BulletList"
+import Container from "~/ui/Container"
 import ImageListView from "~/views/ImageListView"
 import NomenView from "~/views/NomenView"
 const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
@@ -68,98 +69,102 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                     noindex
                     title={`${COLLECTION_LABELS[type]} - PhyloPic`}
                 />
-                <header>
-                    <Breadcrumbs
-                        items={[
-                            { children: "Home", href: "/" },
-                            { children: "Collections" },
-                            { children: <strong>{COLLECTION_LABELS_SHORT[type]}</strong> },
-                        ]}
-                    />
-                    <h1>{COLLECTION_LABELS[type]}</h1>
-                </header>
-                {!has.contributors && !has.images && !has.nodes && <p>This collection is empty.</p>}
-                {has.contributors && (
-                    <section id="contributors">
-                        {(has.images || has.nodes) && <h2>Image Contributors</h2>}
-                        <PaginationContainer
-                            endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
-                            onPage={index => customEvents.loadContributorListPage("collection_contributors", index)}
-                            query={{ filter_collection: uuid }}
-                        >
-                            {(contributors: readonly Contributor[]) => (
-                                <BulletList>
-                                    {contributors.map(contributor => (
-                                        <li key={contributor.uuid}>
-                                            <Link
-                                                href={getContributorHRef(contributor._links.self)}
-                                                onClick={() =>
-                                                    customEvents.clickContributorLink(
-                                                        "collection_contributors",
-                                                        contributor,
-                                                    )
-                                                }
-                                            >
-                                                {contributor.name}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </BulletList>
-                            )}
-                        </PaginationContainer>
-                    </section>
-                )}
-                {has.images && (
-                    <section id="images">
-                        {(has.contributors || has.nodes) && <h2>Silhouette Images</h2>}
-                        <LicenseTypeFilterContainer>
-                            <ImageLicensePaginator autoLoad query={{ ...IMAGE_QUERY, filter_collection: uuid }}>
-                                {(items, total, isLoading) =>
-                                    isLoading ? (
-                                        <Loader />
-                                    ) : (
-                                        <>
-                                            {total === 0 && <p>There are no silhouette images in this collection.</p>}
-                                            {total > 0 && (
-                                                <>
-                                                    <ImageCollectionUsage items={items} total={total} uuid={uuid} />
-                                                    {isNaN(total) && <Loader key="loader" />}
-                                                    <br />
-                                                    <ImageListView value={items} />
-                                                </>
-                                            )}
-                                        </>
-                                    )
-                                }
-                            </ImageLicensePaginator>
-                        </LicenseTypeFilterContainer>
-                    </section>
-                )}
-                {has.nodes && (
-                    <section id="nodes">
-                        {(has.contributors || has.images) && <h2>Taxonomic Groups</h2>}
-                        <PaginationContainer
-                            endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}
-                            onPage={index => customEvents.loadNodeListPage("collection_nodes", index)}
-                            query={{ filter_collection: uuid }}
-                        >
-                            {nodes => (
-                                <BulletList>
-                                    {(nodes as readonly Node[]).map(node => (
-                                        <li key={node.uuid}>
-                                            <Link
-                                                href={getNodeHRef(node._links.self)}
-                                                onClick={() => customEvents.clickNodeLink("collection_nodes", node)}
-                                            >
-                                                <NomenView value={node.names[0]} short />
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </BulletList>
-                            )}
-                        </PaginationContainer>
-                    </section>
-                )}
+                <Container>
+                    <header>
+                        <Breadcrumbs
+                            items={[
+                                { children: "Home", href: "/" },
+                                { children: "Collections" },
+                                { children: <strong>{COLLECTION_LABELS_SHORT[type]}</strong> },
+                            ]}
+                        />
+                        <h1>{COLLECTION_LABELS[type]}</h1>
+                    </header>
+                    {!has.contributors && !has.images && !has.nodes && <p>This collection is empty.</p>}
+                    {has.contributors && (
+                        <section id="contributors">
+                            {(has.images || has.nodes) && <h2>Image Contributors</h2>}
+                            <PaginationContainer
+                                endpoint={process.env.NEXT_PUBLIC_API_URL + "/contributors"}
+                                onPage={index => customEvents.loadContributorListPage("collection_contributors", index)}
+                                query={{ filter_collection: uuid }}
+                            >
+                                {(contributors: readonly Contributor[]) => (
+                                    <BulletList>
+                                        {contributors.map(contributor => (
+                                            <li key={contributor.uuid}>
+                                                <Link
+                                                    href={getContributorHRef(contributor._links.self)}
+                                                    onClick={() =>
+                                                        customEvents.clickContributorLink(
+                                                            "collection_contributors",
+                                                            contributor,
+                                                        )
+                                                    }
+                                                >
+                                                    {contributor.name}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </BulletList>
+                                )}
+                            </PaginationContainer>
+                        </section>
+                    )}
+                    {has.images && (
+                        <section id="images">
+                            {(has.contributors || has.nodes) && <h2>Silhouette Images</h2>}
+                            <LicenseTypeFilterContainer>
+                                <ImageLicensePaginator autoLoad query={{ ...IMAGE_QUERY, filter_collection: uuid }}>
+                                    {(items, total, isLoading) =>
+                                        isLoading ? (
+                                            <Loader />
+                                        ) : (
+                                            <>
+                                                {total === 0 && (
+                                                    <p>There are no silhouette images in this collection.</p>
+                                                )}
+                                                {total > 0 && (
+                                                    <>
+                                                        <ImageCollectionUsage items={items} total={total} uuid={uuid} />
+                                                        {isNaN(total) && <Loader key="loader" />}
+                                                        <br />
+                                                        <ImageListView value={items} />
+                                                    </>
+                                                )}
+                                            </>
+                                        )
+                                    }
+                                </ImageLicensePaginator>
+                            </LicenseTypeFilterContainer>
+                        </section>
+                    )}
+                    {has.nodes && (
+                        <section id="nodes">
+                            {(has.contributors || has.images) && <h2>Taxonomic Groups</h2>}
+                            <PaginationContainer
+                                endpoint={process.env.NEXT_PUBLIC_API_URL + "/nodes"}
+                                onPage={index => customEvents.loadNodeListPage("collection_nodes", index)}
+                                query={{ filter_collection: uuid }}
+                            >
+                                {nodes => (
+                                    <BulletList>
+                                        {(nodes as readonly Node[]).map(node => (
+                                            <li key={node.uuid}>
+                                                <Link
+                                                    href={getNodeHRef(node._links.self)}
+                                                    onClick={() => customEvents.clickNodeLink("collection_nodes", node)}
+                                                >
+                                                    <NomenView value={node.names[0]} short />
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </BulletList>
+                                )}
+                            </PaginationContainer>
+                        </section>
+                    )}
+                </Container>
             </PageLayout>
         </CompressedSWRConfig>
     )
