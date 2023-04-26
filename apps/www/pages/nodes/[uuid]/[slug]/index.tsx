@@ -45,6 +45,7 @@ import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
+import Container from "~/ui/Container"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import NomenHeader from "~/ui/NomenHeader"
 import ImageListView from "~/views/ImageListView"
@@ -62,9 +63,11 @@ type Props = Omit<PageLayoutProps, "children"> & {
 const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...pageLayoutProps}>
-            <NodeContainer uuid={uuid} query={NODE_QUERY}>
-                {node => (node ? <Content node={node} /> : null)}
-            </NodeContainer>
+            <Container>
+                <NodeContainer uuid={uuid} query={NODE_QUERY}>
+                    {node => (node ? <Content node={node} /> : null)}
+                </NodeContainer>
+            </Container>
         </PageLayout>
     </CompressedSWRConfig>
 )

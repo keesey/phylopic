@@ -36,6 +36,7 @@ import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import Container from "~/ui/Container"
 import HeaderNav from "~/ui/HeaderNav"
 import NameList from "~/ui/NameList"
 import SiteTitle from "~/ui/SiteTitle"
@@ -141,145 +142,154 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 title={title}
             />
             <VisualArtworkSchemaScript image={image} />
-            <header>
-                <Breadcrumbs
-                    items={[
-                        { children: "Home", href: "/" },
-                        { children: "Silhouette Images", href: "/images" },
-                        {
-                            children: (
-                                <strong>
-                                    <NomenView
-                                        value={image._embedded.specificNode?.names?.[0]}
-                                        short
-                                        defaultText="Silhouette"
-                                    />
-                                    {image.attribution && ` by ${image.attribution}`}
-                                </strong>
-                            ),
-                        },
-                    ]}
-                />
-                <HeaderNav
-                    buttons={[
-                        isInCollection
-                            ? null
-                            : {
-                                  children: "Add to Collection ＋",
-                                  key: "collection",
-                                  onClick: () => {
-                                      customEvents.collectImage(image)
-                                      customEvents.clickLink("add_to_collection", "", "Add to Collection ＋", "button")
-                                      dispatch({
-                                          type: "ADD_TO_CURRENT_COLLECTION",
-                                          payload: { type: "image", entity: image },
-                                      })
+            <Container>
+                <header>
+                    <Breadcrumbs
+                        items={[
+                            { children: "Home", href: "/" },
+                            { children: "Silhouette Images", href: "/images" },
+                            {
+                                children: (
+                                    <strong>
+                                        <NomenView
+                                            value={image._embedded.specificNode?.names?.[0]}
+                                            short
+                                            defaultText="Silhouette"
+                                        />
+                                        {image.attribution && ` by ${image.attribution}`}
+                                    </strong>
+                                ),
+                            },
+                        ]}
+                    />
+                    <HeaderNav
+                        buttons={[
+                            isInCollection
+                                ? null
+                                : {
+                                      children: "Add to Collection ＋",
+                                      key: "collection",
+                                      onClick: () => {
+                                          customEvents.collectImage(image)
+                                          customEvents.clickLink(
+                                              "add_to_collection",
+                                              "",
+                                              "Add to Collection ＋",
+                                              "button",
+                                          )
+                                          dispatch({
+                                              type: "ADD_TO_CURRENT_COLLECTION",
+                                              payload: { type: "image", entity: image },
+                                          })
+                                      },
+                                      type: "button" as const,
                                   },
-                                  type: "button" as const,
-                              },
-                        lineageNodeHRef
-                            ? {
-                                  children: "View Lineage →",
-                                  key: "lineage",
-                                  href: extractPath(lineageNodeHRef) + "/lineage",
-                                  onClick: () => {
-                                      customEvents.clickLink(
-                                          "view_lineage",
-                                          extractPath(lineageNodeHRef) + "/lineage",
-                                          "View Lineage →",
-                                          "button",
-                                      )
-                                  },
-                                  type: "anchor" as const,
-                              }
-                            : null,
-                    ].filter(isDefined)}
-                    headerLevel={1}
-                    header={
-                        <>
-                            <NomenView
-                                value={image._embedded.specificNode?.names?.[0]}
-                                short
-                                defaultText="Silhouette"
-                            />
-                            {image.attribution && ` by ${image.attribution}`}
-                        </>
-                    }
-                />
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>License</th>
-                            <td>
-                                <LicenseView value={image._links.license.href} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Uploaded</th>
-                            <td>
-                                <TimestampView value={image.created} /> by{" "}
-                                <Link
-                                    href={getContributorHRef(image._links.contributor)}
-                                    onClick={() =>
-                                        customEvents.clickContributorLink("uploaded_by", {
-                                            _links: { self: image._links.contributor },
-                                        })
-                                    }
-                                    rel="author"
-                                >
-                                    {image._links.contributor.title}
-                                </Link>
-                            </td>
-                        </tr>
-                        {image._embedded.specificNode && (
+                            lineageNodeHRef
+                                ? {
+                                      children: "View Lineage →",
+                                      key: "lineage",
+                                      href: extractPath(lineageNodeHRef) + "/lineage",
+                                      onClick: () => {
+                                          customEvents.clickLink(
+                                              "view_lineage",
+                                              extractPath(lineageNodeHRef) + "/lineage",
+                                              "View Lineage →",
+                                              "button",
+                                          )
+                                      },
+                                      type: "anchor" as const,
+                                  }
+                                : null,
+                        ].filter(isDefined)}
+                        headerLevel={1}
+                        header={
+                            <>
+                                <NomenView
+                                    value={image._embedded.specificNode?.names?.[0]}
+                                    short
+                                    defaultText="Silhouette"
+                                />
+                                {image.attribution && ` by ${image.attribution}`}
+                            </>
+                        }
+                    />
+                    <table>
+                        <tbody>
                             <tr>
-                                <th>Taxon</th>
+                                <th>License</th>
                                 <td>
+                                    <LicenseView value={image._links.license.href} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Uploaded</th>
+                                <td>
+                                    <TimestampView value={image.created} /> by{" "}
                                     <Link
-                                        href={getNodeHRef(image._links.specificNode)}
+                                        href={getContributorHRef(image._links.contributor)}
                                         onClick={() =>
-                                            image._embedded.specificNode
-                                                ? customEvents.clickNodeLink("taxon", image._embedded.specificNode)
-                                                : undefined
+                                            customEvents.clickContributorLink("uploaded_by", {
+                                                _links: { self: image._links.contributor },
+                                            })
                                         }
-                                        rel="subject"
+                                        rel="author"
                                     >
-                                        <NomenView value={image._embedded.specificNode.names[0]} />
+                                        {image._links.contributor.title}
                                     </Link>
                                 </td>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
-                <NameList
-                    header="Names for Subject Matter"
-                    names={
-                        image._embedded.nodes?.reduce<readonly Nomen[]>((prev, node) => [...prev, ...node.names], []) ??
-                        []
-                    }
-                />
-            </header>
-            <br />
-            <ImageRasterView value={image} />
-            {image.sponsor && (
+                            {image._embedded.specificNode && (
+                                <tr>
+                                    <th>Taxon</th>
+                                    <td>
+                                        <Link
+                                            href={getNodeHRef(image._links.specificNode)}
+                                            onClick={() =>
+                                                image._embedded.specificNode
+                                                    ? customEvents.clickNodeLink("taxon", image._embedded.specificNode)
+                                                    : undefined
+                                            }
+                                            rel="subject"
+                                        >
+                                            <NomenView value={image._embedded.specificNode.names[0]} />
+                                        </Link>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                    <NameList
+                        header="Names for Subject Matter"
+                        names={
+                            image._embedded.nodes?.reduce<readonly Nomen[]>(
+                                (prev, node) => [...prev, ...node.names],
+                                [],
+                            ) ?? []
+                        }
+                    />
+                </header>
+                <br />
+                <ImageRasterView value={image} />
+                {image.sponsor && (
+                    <section>
+                        <p style={{ textAlign: "center" }}>
+                            <em>
+                                This silhouette&rsquo;s inclusion in <SiteTitle /> has been sponsored by{" "}
+                                <strong>{image.sponsor}</strong>.
+                            </em>
+                        </p>
+                    </section>
+                )}
                 <section>
-                    <p style={{ textAlign: "center" }}>
-                        <em>
-                            This silhouette&rsquo;s inclusion in <SiteTitle /> has been sponsored by{" "}
-                            <strong>{image.sponsor}</strong>.
-                        </em>
-                    </p>
+                    <h2>Download Files</h2>
+                    <section>
+                        <h3>General Notes on Usage</h3>
+                        <LicenseDetailsView value={image} />
+                    </section>
+                    <ImageFilesView value={image} />
+                    <DonationPromo />
                 </section>
-            )}
-            <section>
-                <h2>Download Files</h2>
-                <section>
-                    <h3>General Notes on Usage</h3>
-                    <LicenseDetailsView value={image} />
-                </section>
-                <ImageFilesView value={image} />
-                <DonationPromo />
-            </section>
+            </Container>
         </>
     )
 }

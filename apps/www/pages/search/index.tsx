@@ -17,6 +17,7 @@ import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import Container from "~/ui/Container"
 import SearchAside from "~/ui/SearchAside"
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
@@ -29,11 +30,13 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 description="Search for free silhouette images of animals, plants, and other life forms."
                 title="Search for Silhouette Images on PhyloPic"
             />
-            <header>
-                <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />
-                <h1>Search</h1>
-            </header>
-            <SearchAside />
+            <Container>
+                <header>
+                    <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />
+                    <h1>Search</h1>
+                </header>
+                <SearchAside />
+            </Container>
         </PageLayout>
     </CompressedSWRConfig>
 )

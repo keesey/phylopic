@@ -4,4 +4,12 @@
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    @media screen and (max-width: calc(1080px + 2rem)) {
+        justify-content: start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
 }

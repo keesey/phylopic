@@ -11,12 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Image List View on Home Page to Image Rail.
+-   Refactored styling for content width.
+-   Hiding drag-and-drop prompt for Collections Drawer if device does not have hovering capabilities.
 -   Using `GET /resolve/{authority}/{namespace}` instead of `POST /resolve/{authority}/{namespace}` for external resolvers.
 -   Updated examples for resolving external objects in the _API Recipes_ article.
 
 ### Deprecated
 
 ### Fixed
+
+-   Scroll issue on mobile sizes.
+-   Footer could be too wide for mobile sizes.
+-   Quick links now have appropriate line breaks.
 
 ### Removed
 
