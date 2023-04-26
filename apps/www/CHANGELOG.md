@@ -15,11 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   Invalid links for "snails" and "mollusks" in Quick Links.
-
 ### Removed
 
 ### Security
+
+## [2.5.2] - 2023-04-25
+
+### Fixed
+
+-   Invalid links for "snails" and "mollusks" in Quick Links.
 
 ## [2.5.1] - 2023-04-25
 
