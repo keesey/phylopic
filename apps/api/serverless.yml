@@ -478,6 +478,7 @@ functions:
             PGPASSWORD: "${ssm:PGPASSWORD}"
             PGPORT: "${ssm:PGPORT}"
             PGUSER: "${ssm:PGUSER}"
+            PHYLOPIC_BUILD: "${ssm:PHYLOPIC_BUILD}"
         events:
             - http:
                   authorizer:
