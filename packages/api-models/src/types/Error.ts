@@ -1,3 +1,4 @@
+import { URL } from "@phylopic/utils"
 import { ErrorType } from "./ErrorType"
 export interface Error {
     readonly developerMessage: string
