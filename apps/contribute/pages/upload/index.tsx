@@ -35,7 +35,11 @@ const Content: FC<Props> = ({ existing }) => {
         }
     }
     const complete = (hash: Hash) => {
-        router.push(`/edit/${encodeURIComponent(hash)}`)
+        if (existing) {
+            router.push(`/images/${encodeURIComponent(existing)}`)
+        } else {
+            router.push(`/edit/${encodeURIComponent(hash)}`)
+        }
     }
     return (
         <Suspense fallback={<LoadingState>Let&rsquo;s go!</LoadingState>}>
@@ -54,7 +58,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
                 },
             }
         }
-        return { props: { existing: existing } }
+        return { props: { existing } }
     }
     return { props: {} }
 }

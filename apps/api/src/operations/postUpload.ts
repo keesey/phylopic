@@ -41,7 +41,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     checkAccept(accept, DATA_MEDIA_TYPE)
     checkContentType(contentType, ACCEPT)
     if (!isImageMediaType(contentType)) {
-        throw new Error("Unexpected condition.")
+        throw new Error("Unexpected condition.") // This should never happen.
     }
     if (!body) {
         throw createMissingBodyError()
@@ -51,9 +51,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     const hash = getHash(body)
     const key = `files/${encodeURIComponent(hash)}`
     await uploadBody(service, key, contributor, Buffer.from(body, encoding), contentType, image)
-    const link: Link = {
-        href: "https://uploads.phylopic.org/" + key,
-    }
+    const link: Link = { href: "https://uploads.phylopic.org/" + encodeURIComponent(key) }
     return {
         body: stringifyNormalized(link),
         headers: DATA_HEADERS,

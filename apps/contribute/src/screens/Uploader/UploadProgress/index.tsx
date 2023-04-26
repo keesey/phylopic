@@ -1,5 +1,5 @@
 import { Link } from "@phylopic/api-models"
-import { getImageFileExtension, Hash, ImageMediaType, isHash, UUID } from "@phylopic/utils"
+import { createSearch, getImageFileExtension, Hash, ImageMediaType, isHash, UUID } from "@phylopic/utils"
 import axios, { AxiosProgressEvent } from "axios"
 import { FC, useEffect, useMemo, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
@@ -32,9 +32,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, exi
         if (buffer && contributorUUID && token) {
             const controller = new AbortController()
             const promise = axios.post<Link>(
-                `${process.env.NEXT_PUBLIC_API_URL}/uploads${
-                    existingUUID ? `?existing=${encodeURIComponent(existingUUID)}` : ""
-                }`,
+                `${process.env.NEXT_PUBLIC_API_URL}/uploads${createSearch({ existing_uuid: existingUUID })}`,
                 buffer,
                 {
                     headers: {
