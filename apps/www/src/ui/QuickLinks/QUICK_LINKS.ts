@@ -70,12 +70,12 @@ const QUICK_LINKS: QuickLinkNode = {
                                                         {
                                                             label: "mollusks",
                                                             slug: "mollusca",
-                                                            uuid: "--",
+                                                            uuid: "8755d5c3-05f9-41e7-b103-e3420f9ecfc7",
                                                             children: [
                                                                 {
                                                                     label: "snails",
                                                                     slug: "gastropoda",
-                                                                    uuid: "8755d5c3-05f9-41e7-b103-e3420f9ecfc7",
+                                                                    uuid: "076dfd9c-048b-4b54-84f6-f4545fb96bc6",
                                                                 },
                                                             ],
                                                         },
