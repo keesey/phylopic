@@ -16,6 +16,10 @@ body {
     min-height: 100vh;
     min-width: 250px;
     padding-bottom: 16rem;
+
+    #__next {
+        overflow-x: hidden;
+    }
 }
 
 a {

@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   Scroll issue on mobile sizes.
+-   Footer could be too wide for mobile sizes.
+
 ### Removed
 
 ### Security
