@@ -1,6 +1,6 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
-import { fetchDataAndCheck } from "@phylopic/utils-api"
-import React, { useMemo } from "react"
+import { BuildContext, fetchDataAndCheck } from "@phylopic/utils-api"
+import React, { useContext, useMemo } from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import SearchContext from "../../context"
@@ -26,18 +26,12 @@ const fetchLineage: Fetcher<PBDBResponse, string> = async url => {
     const response = await fetchDataAndCheck<PBDBResponse>(url)
     return response.data
 }
-const fetchDirect: Fetcher<NodeWithEmbedded, string> = async url => {
+const fetchNode: Fetcher<NodeWithEmbedded, string> = async url => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url)
     return response.data
 }
-const fetchIndirect: Fetcher<NodeWithEmbedded, [string, readonly number[]]> = async ([url, objectIDs]) => {
-    const response = await fetchDataAndCheck<NodeWithEmbedded>(url, {
-        data: objectIDs,
-        method: "POST",
-    })
-    return response.data
-}
 const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
+    const [build] = useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
     const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
@@ -51,7 +45,7 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
             ),
         [oid, setDirectKey],
     )
-    const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchDirect)
+    const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchNode)
     const lineageKey = useMemo(() => {
         return PBDB_URL + "/taxa/list.json" + createSearch({ id: "txn:" + oid, rel: "all_parents" })
     }, [oid])
@@ -62,20 +56,21 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
         }
         return lineage.data.records.map(({ oid }) => oid.replace(/^txn:/, "")).reverse()
     }, [lineage.data?.records])
-    const [indirectKey, setIndirectKey] = useDebounce<[string, string[]] | null>(null, DEBOUNCE_WAIT, true)
+    const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
             setIndirectKey(
                 lineageOIDs.length
-                    ? ([
-                          `${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn?embed_primaryImage=true`,
-                          lineageOIDs,
-                      ] as [string, string[]])
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn${createSearch({
+                          build,
+                          embed_primaryImage: true,
+                          objectIDs: lineageOIDs.join(","),
+                      })}`
                     : null,
             ),
         [lineageOIDs, setIndirectKey],
     )
-    const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchIndirect)
+    const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchNode)
     React.useEffect(() => {
         const node = direct.data ?? indirect.data
         if (node && dispatch) {

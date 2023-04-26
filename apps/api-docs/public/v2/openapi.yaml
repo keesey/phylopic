@@ -363,6 +363,14 @@ components:
       schema:
         example: "1"
         type: string
+    objectIDs:
+      name: objectIDs
+      in: query
+      description: A comma-separated list of object IDs.
+      required: true
+      schema:
+        example: "123,456,789"
+        type: string
     page:
       name: page
       in: query
@@ -1578,10 +1586,47 @@ paths:
         "204":
           $ref: "#/components/responses/204"
   /resolve/{authority}/{namespace}:
-    post:
-      operationId: postResolveObjects
+    get:
+      operationId: getResolveObjects
       summary: Resolves a list of external identifiers under a single authorized namespace to a single phylogenetic node.
       description: Identifiers toward the beginning of the list have priority. Subsequent identifiers are checked if a node cannot be found for an earlier identifier.
+      tags:
+        - external identifiers
+        - nodes
+        - search
+      parameters:
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/authority"
+        - $ref: "#/components/parameters/build"
+        - $ref: "#/components/parameters/embed_childNodes"
+        - $ref: "#/components/parameters/embed_parentNode"
+        - $ref: "#/components/parameters/embed_primaryImage"
+        - $ref: "#/components/parameters/namespace"
+        - $ref: "#/components/parameters/objectIDs"
+      responses:
+        "303":
+          description: A matching node was found.
+          headers:
+            Location:
+              $ref: "#/components/headers/Location"
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                $ref: "#/components/schemas/TitledLink"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "406":
+          $ref: "#/components/responses/406"
+        "410":
+          $ref: "#/components/responses/410"
+        "415":
+          $ref: "#/components/responses/415"
+    post:
+      deprecated: true
+      operationId: postResolveObjects
+      summary: This method is deprecated. Use `getResolveObjects` instead.
       tags:
         - external identifiers
         - nodes

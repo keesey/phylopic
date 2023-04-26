@@ -335,35 +335,36 @@ const Article: FC = () => {
                     />
                     <p>
                         Collect the <code>ott_id</code> values from the <code>lineage</code>, from the least inclusive
-                        taxon to the most inclusive taxon (i.e., the order in the response), and POST those as an array
-                        of strings to the <SiteTitle /> API&rsquo;s <code>/resolve/opentreeoflife.org/taxonomy</code>{" "}
-                        endpoint to find the closest match in <SiteTitle />.
+                        taxon to the most inclusive taxon (i.e., the order in the response), and place those as a
+                        comma-separated list in a query to the <SiteTitle /> API&rsquo;s{" "}
+                        <code>/resolve/opentreeoflife.org/taxonomy</code> endpoint in order to find the closest match in{" "}
+                        <SiteTitle />.
                     </p>
                     <CurlBox
                         id="otol_resolve"
-                        url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy?build=${build}`}
+                        url={`${
+                            process.env.NEXT_PUBLIC_API_URL
+                        }/resolve/opentreeoflife.org/taxonomy?build=${build}&objectIDs=${[
+                            "70119",
+                            "937683",
+                            "329706",
+                            "844843",
+                            "2914936",
+                            "178260",
+                            "409995",
+                            "802117",
+                            "155737",
+                            "189832",
+                            "117569",
+                            "641038",
+                            "691846",
+                            "5246131",
+                            "332573",
+                            "304358",
+                            "93302",
+                            "805080",
+                        ].join(",")}`}
                         options={{
-                            data: [
-                                "70119",
-                                "937683",
-                                "329706",
-                                "844843",
-                                "2914936",
-                                "178260",
-                                "409995",
-                                "802117",
-                                "155737",
-                                "189832",
-                                "117569",
-                                "641038",
-                                "691846",
-                                "5246131",
-                                "332573",
-                                "304358",
-                                "93302",
-                                "805080",
-                            ],
-                            headers: { "Content-Type": "application/vnd.phylopic.v2+json" },
                             location: true,
                         }}
                         title={
@@ -413,43 +414,42 @@ const Article: FC = () => {
                     <p>
                         Collect the <code>oid</code> values (minues the <code>&quot;txn:&quot;</code> prefix) from the{" "}
                         <code>records</code> into an array, in order from the least inclusive taxon to the most
-                        inclusive taxon (i.e., the reverse of the order in the response). POST those as an array of
-                        strings to the <SiteTitle /> API&rsquo;s <code>/resolve/paleobiodb.org/txn</code> endpoint to
-                        find the closest match in <SiteTitle />.
+                        inclusive taxon (i.e., the reverse of the order in the response). Place those as a
+                        comma-separated list in a query to the
+                        <SiteTitle /> API&rsquo;s <code>/resolve/paleobiodb.org/txn</code> endpoint in order to find the
+                        closest match in <SiteTitle />.
                     </p>
                     <CurlBox
                         id="pbdb_resolve"
-                        url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn?build=${build}`}
+                        url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn?build=${build}&objectIDs=${[
+                            "133360",
+                            "133359",
+                            "39168",
+                            "38935",
+                            "91793",
+                            "38882",
+                            "53189",
+                            "56749",
+                            "465406",
+                            "37177",
+                            "125547",
+                            "53190",
+                            "77135",
+                            "219195",
+                            "67348",
+                            "34881",
+                            "67344",
+                            "67149",
+                            "33815",
+                            "67145",
+                            "272902",
+                            "67103",
+                            "67091",
+                            "212579",
+                            "1",
+                            "28595",
+                        ].join(",")}`}
                         options={{
-                            data: [
-                                "133360",
-                                "133359",
-                                "39168",
-                                "38935",
-                                "91793",
-                                "38882",
-                                "53189",
-                                "56749",
-                                "465406",
-                                "37177",
-                                "125547",
-                                "53190",
-                                "77135",
-                                "219195",
-                                "67348",
-                                "34881",
-                                "67344",
-                                "67149",
-                                "33815",
-                                "67145",
-                                "272902",
-                                "67103",
-                                "67091",
-                                "212579",
-                                "1",
-                                "28595",
-                            ],
-                            headers: { "Content-Type": "application/vnd.phylopic.v2+json" },
                             location: true,
                         }}
                         title={
