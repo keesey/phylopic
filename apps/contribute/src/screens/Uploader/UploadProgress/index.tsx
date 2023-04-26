@@ -5,11 +5,9 @@ import { FC, useEffect, useMemo, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useContributorUUID from "~/profile/useContributorUUID"
 import Dialogue from "~/ui/Dialogue"
-import { ICON_ARROW_LEFT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
-import UserButton from "~/ui/UserButton"
-import UserOptions from "~/ui/UserOptions"
 import styles from "./index.module.scss"
+import UploadError from "./UploadError"
 export interface Props {
     buffer: Buffer
     filename?: string
@@ -74,21 +72,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, exi
         }
     }, [buffer, contributorUUID, existingUUID, onComplete, token, type])
     if (error) {
-        return (
-            <Dialogue>
-                <Speech mode="system">
-                    <p>
-                        <strong>Ack!</strong> There was some kind of error:
-                    </p>
-                    <p>“{String(error)}”</p>
-                </Speech>
-                <UserOptions>
-                    <UserButton icon={ICON_ARROW_LEFT} onClick={onCancel}>
-                        Start over.
-                    </UserButton>
-                </UserOptions>
-            </Dialogue>
-        )
+        return <UploadError error={error} onCancel={onCancel} />
     }
     return (
         <Dialogue>
