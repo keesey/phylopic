@@ -23,6 +23,7 @@ import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import Container from "~/ui/Container"
 import ContributorDetailsView from "~/views/ContributorDetailsView"
 import ContributorNameView from "~/views/ContributorNameView"
 import ImageListView from "~/views/ImageListView"
@@ -34,9 +35,11 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
     return (
         <CompressedSWRConfig fallback={fallback}>
             <PageLayout {...props}>
-                <ContributorContainer uuid={uuid}>
-                    {contributor => (contributor ? <Content contributor={contributor} /> : null)}
-                </ContributorContainer>
+                <Container>
+                    <ContributorContainer uuid={uuid}>
+                        {contributor => (contributor ? <Content contributor={contributor} /> : null)}
+                    </ContributorContainer>
+                </Container>
             </PageLayout>
         </CompressedSWRConfig>
     )
@@ -48,40 +51,42 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
         [contributor.uuid],
     )
     return (
-        <LicenseTypeFilterContainer>
-            <ImageLicensePaginator query={imagesQuery} hideControls>
-                {images => <Seo contributor={contributor} images={images} />}
-            </ImageLicensePaginator>
-            <header>
-                <Breadcrumbs
-                    items={[
-                        { children: "Home", href: "/" },
-                        { children: "Contributors", href: "/contributors" },
-                        {
-                            children: (
-                                <strong>
-                                    <ContributorNameView value={contributor} />
-                                </strong>
-                            ),
-                        },
-                    ]}
-                />
-                <h1>
-                    Silhouette Images Contributed by <ContributorNameView value={contributor} />
-                </h1>
-                <ContributorDetailsView value={contributor} />
-            </header>
-            <ImageLicensePaginator query={imagesQuery}>
-                {(images, totalImages) => (
-                    <>
-                        <ImageLicenseControls total={totalImages} />
-                        {isNaN(totalImages) && <Loader key="loader" />}
-                        <br />
-                        <ImageListView key="images" value={images} />
-                    </>
-                )}
-            </ImageLicensePaginator>
-        </LicenseTypeFilterContainer>
+        <section>
+            <LicenseTypeFilterContainer>
+                <ImageLicensePaginator query={imagesQuery} hideControls>
+                    {images => <Seo contributor={contributor} images={images} />}
+                </ImageLicensePaginator>
+                <header>
+                    <Breadcrumbs
+                        items={[
+                            { children: "Home", href: "/" },
+                            { children: "Contributors", href: "/contributors" },
+                            {
+                                children: (
+                                    <strong>
+                                        <ContributorNameView value={contributor} />
+                                    </strong>
+                                ),
+                            },
+                        ]}
+                    />
+                    <h1>
+                        Silhouette Images Contributed by <ContributorNameView value={contributor} />
+                    </h1>
+                    <ContributorDetailsView value={contributor} />
+                </header>
+                <ImageLicensePaginator query={imagesQuery}>
+                    {(images, totalImages) => (
+                        <>
+                            <ImageLicenseControls total={totalImages} />
+                            {isNaN(totalImages) && <Loader />}
+                            <br />
+                            <ImageListView value={images} />
+                        </>
+                    )}
+                </ImageLicensePaginator>
+            </LicenseTypeFilterContainer>
+        </section>
     )
 }
 const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }> = ({ contributor, images }) => {
@@ -90,10 +95,11 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
     return (
         <>
             <NextSeo
+                additionalMetaTags={[{ name: "keywords", content: `silhouettes,${contributor.name}` }]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getContributorHRef(contributor._links.self)}`}
                 description={`All free silhouette images that have been contributed to PhyloPic by ${name}.`}
                 openGraph={openGraph}
-                title={`PhyloPic: Silhouette Images Contributed by ${name}`}
+                title={`Silhouette Images Contributed by ${name} to PhyloPic`}
             />
             <PersonSchemaScript contributor={contributor} />
         </>

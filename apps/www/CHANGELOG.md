@@ -19,6 +19,103 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.5.2] - 2023-04-25
+
+### Fixed
+
+-   Invalid links for "snails" and "mollusks" in Quick Links.
+
+## [2.5.1] - 2023-04-25
+
+### Fixed
+
+-   Width issue for search asides and results.
+
+## [2.5.0] - 2023-04-25
+
+### Changed
+
+-   Image List View on Home Page to Image Rail.
+-   Refactored styling for content width.
+-   Hiding drag-and-drop prompt for Collections Drawer if device does not have hovering capabilities.
+-   Using `GET /resolve/{authority}/{namespace}` instead of `POST /resolve/{authority}/{namespace}` for external resolvers.
+-   Updated examples for resolving external objects in the _API Recipes_ article.
+
+### Fixed
+
+-   Scroll issue on mobile sizes.
+-   Footer could be too wide for mobile sizes.
+-   Quick links now have appropriate line breaks.
+
+## [2.4.2] - 2023-04-20
+
+### Fixed
+
+-   Issue with _Open Tree of Life_ resolver.
+
+## [2.4.1] - 2023-04-20
+
+### Added
+
+-   Redirect for `/sponsorship`.
+
+### Changed
+
+-   Refactored `useCollectionLicense()`.
+
+## [2.4.0] - 2023-04-03
+
+### Added
+
+-   Quick Links to Home Page.
+
+### Fixed
+
+-   Width of Pocket Phylogenies header on Home Page.
+
+## [2.3.0] - 2023-04-01
+
+### Added
+
+-   API Recipes Page.
+-   Custom event tracking.
+-   "Buy Me a Coffee" link on Home Page.
+
+### Changed
+
+-   Always showing _Pan-Biota_ link in Node Page breadcrumbs.
+
+### Fixed
+
+-   Direct links (including slug) for entities in several places.
+-   Canonical URL for Donate: Cancel Page.
+-   Display error on Nodes Page.
+
+### Removed
+
+-   "Taxonomic Groups" link from Node Page breadcrumbs.
+
+## [2.2.1] - 2023-03-27
+
+### Added
+
+-   Loader to Collection Pages.
+
+### Changed
+
+-   Pocket Phylogenies take up the full screen width.
+
+### Fixed
+
+-   Collection Pages were displaying inaccurate information before data loaded.
+
+## [2.2.0] - 2023-03-26
+
+### Added
+
+-   SEO improvements (taxonomic names in body, keywords, revised titles and descriptions, etc.).
+-   Loaders on Lineage Pages.
+
 ## [2.1.2] - 2023-03-24
 
 ### Added

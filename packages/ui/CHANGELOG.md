@@ -19,6 +19,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.5.0] - 2023-04-25
+
+### Changed
+
+-   Using `GET /resolve/{authority}/{namespace}` instead of `POST /resolve/{authority}/{namespace}` for external resolvers.
+
+## [1.4.1] - 2023-04-21
+
+### Fixed
+
+-   Issue with _Open Tree of Life_ resolver.
+
+## [1.4.0] - 2023-04-01
+
+### Added
+
+-   Analytics code (GA4).
+-   `onPage()` property for `PaginationContainer`.
+
+### Fixed
+
+-   Missing dependency in `useImageLoader()`.
+-   Alignment of `InfiniteScroll` loader.
+
+## [1.3.0] - 2023-03-26
+
+### Added
+
+-   Passing `isLoading` from `PaginationContainer`.
+
 ## [1.2.1] - 2023-03-24
 
 ### Added

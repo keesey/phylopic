@@ -25,6 +25,7 @@ import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
 import postCollection from "../operations/postCollection"
+import getResolveObjects from "../operations/getResolveObjects"
 import postResolveObjects from "../operations/postResolveObjects"
 import { PgClientService } from "../services/PgClientService"
 import getEmbedParameters from "./parameters/getEmbedParameters"
@@ -276,6 +277,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.pathParameters, ["authority", "namespace", "objectID"], true),
+                            ...getParameters(event.queryStringParameters, ["build", "objectIDs"]),
                             ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
                         },
                         SERVICE,
@@ -287,6 +289,17 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
             }
         } else {
             switch (event.httpMethod) {
+                case "GET": {
+                    return getResolveObjects(
+                        {
+                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.pathParameters, ["authority", "namespace"]),
+                            ...getParameters(event.queryStringParameters, ["build", "objectIDs"], true),
+                            ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
+                        },
+                        SERVICE,
+                    )
+                }
                 case "POST": {
                     return postResolveObjects(
                         {

@@ -1,19 +1,20 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query, URL } from "@phylopic/utils"
 import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
-import React from "react"
+import React, { useEffect } from "react"
 import useSWR, { BareFetcher, SWRConfiguration } from "swr"
 import useSWRInfinite, { SWRInfiniteConfiguration, SWRInfiniteFetcher, SWRInfiniteKeyLoader } from "swr/infinite"
 import { InfiniteScroll } from "../../controls"
 import { createPageKeyGetter } from "./createPageKeyGetter"
 export type PaginationContainerProps<T> = {
     autoLoad?: boolean
-    children: (value: readonly T[], total: number) => React.ReactNode
+    children: (value: readonly T[], total: number, isLoading: boolean) => React.ReactNode
     endpoint: URL
     hideControls?: boolean
     hideLoader?: boolean
     maxPages?: number
     onError?: (error: Error) => void
+    onPage?: (index: number) => void
     query?: Query
     swrConfigs?: {
         list?: SWRConfiguration<List, Error, BareFetcher<List>>
@@ -41,6 +42,7 @@ export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
     hideLoader,
     maxPages,
     onError,
+    onPage,
     query,
     swrConfigs,
 }) => {
@@ -71,7 +73,9 @@ export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
         ...swrConfigs?.page,
     })
     const { data, setSize, size } = pages
-    const loadNextPage = React.useCallback(() => setSize(size + 1), [setSize, size])
+    const pageIndex = pages.data?.length ?? 0
+    useEffect(() => (pageIndex ? onPage?.(pageIndex) : undefined), [pageIndex])
+    const loadNextPage = () => setSize(size + 1)
     const totalItems = list.data?.totalItems ?? NaN
     const totalPages = list.data?.totalPages ?? NaN
     const displayedPages = React.useMemo(
@@ -99,7 +103,9 @@ export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
     }, [autoLoad, error, list.isValidating, loadNextPage, moreToLoad, pages.isValidating])
     return (
         <>
-            <React.Fragment key="items">{children(items, totalItems)}</React.Fragment>
+            <React.Fragment key="items">
+                {children(items, totalItems, list.isLoading || pages.isLoading)}
+            </React.Fragment>
             {moreToLoad && !error && !hideControls && (
                 <InfiniteScroll
                     hideLoader={hideLoader}

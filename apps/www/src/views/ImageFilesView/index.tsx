@@ -3,6 +3,7 @@ import { useLicenseText } from "@phylopic/ui"
 import { isString } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import slugify from "slugify"
+import customEvents from "~/analytics/customEvents"
 import compareMediaLinks from "~/models/compareMediaLinks"
 import getImageFileExtension from "../../files/getImageFileExtension"
 import DownLoadLink from "./DownloadLink"
@@ -39,9 +40,12 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 {value._links.vectorFile && (
                     <tr key="vector">
                         <th>
-                            {sourceFileExtension === "SVG" ? "Vector" : "Vectorized"}
-                            {" File ("}
-                            <a href={EXTENSION_LINKS.svg} rel="external">
+                            {sourceFileExtension === "SVG" ? "Vector" : "Vectorized"} File (
+                            <a
+                                href={EXTENSION_LINKS.svg}
+                                onClick={() => customEvents.clickLink("svg", EXTENSION_LINKS.svg, "SVG", "link")}
+                                rel="external"
+                            >
                                 <abbr title="Scalable Vector Graphics">SVG</abbr>
                             </a>
                             )
@@ -59,7 +63,11 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 <tr key="raster">
                     <th>
                         Alternate Sizes (
-                        <a href={EXTENSION_LINKS.png} rel="external">
+                        <a
+                            href={EXTENSION_LINKS.png}
+                            onClick={() => customEvents.clickLink("png_alternate", EXTENSION_LINKS.png, "PNG", "link")}
+                            rel="external"
+                        >
                             <abbr title="Portable Network Graphics">PNG</abbr>
                         </a>
                         )
@@ -73,7 +81,11 @@ const ImageFilesView: FC<Props> = ({ value }) => {
                 <tr key="thumbnail">
                     <th>
                         Thumbnails (
-                        <a href={EXTENSION_LINKS.png} rel="external">
+                        <a
+                            href={EXTENSION_LINKS.png}
+                            onClick={() => customEvents.clickLink("png_thumbnail", EXTENSION_LINKS.png, "PNG", "link")}
+                            rel="external"
+                        >
                             <abbr title="Portable Network Graphics">PNG</abbr>
                         </a>
                         )

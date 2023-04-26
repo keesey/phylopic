@@ -5,7 +5,6 @@ import { State } from "./State"
 
 const normalizeTextOrUndefined = (s: string | undefined) => (typeof s === "string" && normalizeText(s)) || undefined
 const reducer: Reducer<State, Action> = (prevState, action) => {
-    console.info(action)
     switch (action.type) {
         case "COMPLETE_SAVE": {
             return {

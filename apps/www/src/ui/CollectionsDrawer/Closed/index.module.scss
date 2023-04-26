@@ -1,5 +1,11 @@
 .main {
     padding: 0.5em;
+
+    &.empty {
+        @media (any-hover: none) {
+            display: none
+        }
+    }
 }
 
 .optional {

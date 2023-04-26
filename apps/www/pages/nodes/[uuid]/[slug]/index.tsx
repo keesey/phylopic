@@ -15,6 +15,8 @@ import {
     isUUIDv4,
     parseQueryString,
     Query,
+    shortenNomen,
+    stringifyNomen,
     UUID,
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
@@ -25,6 +27,7 @@ import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
+import customEvents from "~/analytics/customEvents"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import CladeImageLicensePaginator from "~/licenses/CladeImageLicensePaginator"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
@@ -42,6 +45,7 @@ import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
+import Container from "~/ui/Container"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import NomenHeader from "~/ui/NomenHeader"
 import ImageListView from "~/views/ImageListView"
@@ -59,9 +63,11 @@ type Props = Omit<PageLayoutProps, "children"> & {
 const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...pageLayoutProps}>
-            <NodeContainer uuid={uuid} query={NODE_QUERY}>
-                {node => (node ? <Content node={node} /> : null)}
-            </NodeContainer>
+            <Container>
+                <NodeContainer uuid={uuid} query={NODE_QUERY}>
+                    {node => (node ? <Content node={node} /> : null)}
+                </NodeContainer>
+            </Container>
         </PageLayout>
     </CompressedSWRConfig>
 )
@@ -79,6 +85,27 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         [node._embedded.parentNode, node._links.parentNode],
     )
     const parentName = node._embedded?.parentNode?.names?.[0]
+    const keywords = useMemo(
+        () =>
+            Array.from(
+                new Set(
+                    [
+                        "Creative Commons",
+                        "clip art",
+                        "clipart",
+                        "free art",
+                        "phylogeny",
+                        "public domain",
+                        "silhouettes",
+                        `${shortNameString} silhouettes`,
+                        ...Array.from(new Set(node.names.map(nomen => stringifyNomen(shortenNomen(nomen))))),
+                    ].map(s => s.toLowerCase()),
+                ),
+            )
+                .sort()
+                .join(","),
+        [node.names, shortNameString],
+    )
     const afterItems = useMemo(
         () =>
             [
@@ -113,20 +140,18 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     return (
         <LicenseTypeFilterContainer>
             <NextSeo
+                additionalMetaTags={[{ name: "keywords", content: keywords }]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}`}
                 description={`Freely reusable silhouette images of ${nameString}.`}
                 openGraph={openGraph}
-                title={`PhyloPic: ${shortNameString}`}
+                title={`${shortNameString} - PhyloPic`}
             />
             <TaxonSchemaScript node={node} />
             <header key="header">
                 <ExpandableLineageBreadcrumbs
                     key={node.uuid}
                     afterItems={afterItems}
-                    beforeItems={[
-                        { children: "Home", href: "/" },
-                        { children: "Taxonomic Groups", href: "/nodes" },
-                    ]}
+                    beforeItems={[{ children: "Home", href: "/" }]}
                     uuid={lineageUUID}
                 />
                 <NomenHeader value={node} />
@@ -156,7 +181,17 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
                 <Fragment key="empty">
                     {node._links.lineage && (
                         <p>
-                            <Link href={lineagePath}>
+                            <Link
+                                href={lineagePath}
+                                onClick={() =>
+                                    customEvents.clickLink(
+                                        "empty_lineage",
+                                        lineagePath,
+                                        "Look through the ancestors...",
+                                        "link",
+                                    )
+                                }
+                            >
                                 Look through the ancestors of{" "}
                                 <NomenView value={name} short defaultText="this taxonomic group" /> to find an
                                 approximation.
@@ -165,11 +200,21 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
                     )}
                     <p>
                         Or,{" "}
-                        <Link href="/contribute">
+                        <a
+                            href={`${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/`}
+                            onClick={() =>
+                                customEvents.clickLink(
+                                    "empty_contribute",
+                                    `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/`,
+                                    "be the first to contribute...",
+                                    "link",
+                                )
+                            }
+                        >
                             be the first to contribute a silhouette of{" "}
                             <NomenView value={name} short defaultText="this taxon" />
                             <LicenseQualifier />!
-                        </Link>
+                        </a>
                     </p>
                 </Fragment>
             )}

@@ -19,6 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.0] - 2023-04-25
+
+### Changed
+
+-   Using `GET /resolve/{authority}/{namespace}` instead of `POST /resolve/{authority}/{namespace}` for external resolvers.
+
+## [1.0.3] - 2023-04-22
+
+### Fixed
+
+-   Issue with _Open Tree of Life_ resolver.
+
+### Removed
+
+-   Console logging for reducers.
+
 ## [1.0.2] - 2023-03-24
 
 ### Changed

@@ -3,6 +3,7 @@ import { FC, useCallback, useState } from "react"
 import styles from "./index.module.scss"
 import Image from "next/image"
 import { rgbDataURL } from "@phylopic/ui"
+import customEvents from "~/analytics/customEvents"
 export type Props = {
     index: 1 | 2 | 3 | 4 | 5
 }
@@ -22,7 +23,10 @@ const ALT_BACK: Record<Props["index"], string> = {
 }
 const Card: FC<Props> = ({ index }) => {
     const [flipped, setFlipped] = useState(false)
-    const handleClick = useCallback(() => setFlipped(!flipped), [flipped])
+    const handleClick = () => {
+        customEvents.flipPocketPhylogeny(index, flipped ? "back" : "front")
+        setFlipped(!flipped)
+    }
     return (
         <div className={styles.main} onClick={handleClick}>
             <div className={clsx(styles.side, styles.front, flipped ? styles.hidden : styles.showing)}>

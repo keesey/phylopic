@@ -446,6 +446,35 @@ functions:
                           - X-Amz-User-Agent
                           - X-Api-Key
                   path: resolve/{authority}/{namespace}
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              authority: true
+                              namespace: true
+                          querystrings:
+                              build: false
+                              embed_childNodes: false
+                              embed_parentNode: false
+                              embed_primaryImage: false
+                              objectIDs: true
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - Deprecation
+                          - Link
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: resolve/{authority}/{namespace}
                   method: post
                   request:
                       parameters:

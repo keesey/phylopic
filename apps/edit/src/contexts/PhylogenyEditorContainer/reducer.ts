@@ -58,7 +58,6 @@ const replaceNodeInMap = (nodesMap: NodesMap, replacee: UUID, replacer: UUID | u
             {},
         )
 const reducer: Reducer<State, Action> = (prevState, action) => {
-    console.info(action)
     switch (action.type) {
         case "COMPLETE_LOAD":
         case "COMPLETE_SAVE": {

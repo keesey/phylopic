@@ -10,8 +10,10 @@ const STYLE: React.CSSProperties = {
     display: "flex",
     height: "3rem",
     justifyContent: "center",
-    margin: "1rem",
+    margin: "0 auto",
+    padding: "1rem",
     textAlign: "center",
+    width: "100%",
 }
 export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({ hideLoader, onInViewport, pending }) => {
     pending = Boolean(pending)
