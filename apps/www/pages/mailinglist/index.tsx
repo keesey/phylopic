@@ -4,6 +4,7 @@ import MailingListForm from "~/forms/MailingListForm"
 import SchemaScript from "~/metadata/SchemaScript"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
 const PageComponent: NextPage = () => (
     <PageLayout>
@@ -23,19 +24,21 @@ const PageComponent: NextPage = () => (
                 url: `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
             }}
         />
-        <header>
-            <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Mailing List</strong> }]} />
-            <h1>
-                <SiteTitle /> Mailing List
-            </h1>
-        </header>
-        <section>
-            <p>
-                Subscribe to the <SiteTitle /> newsletter to receives updates about the site&mdash;improvements, new
-                features, and more!
-            </p>
-            <MailingListForm />
-        </section>
+        <Container>
+            <header>
+                <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Mailing List</strong> }]} />
+                <h1>
+                    <SiteTitle /> Mailing List
+                </h1>
+            </header>
+            <section>
+                <p>
+                    Subscribe to the <SiteTitle /> newsletter to receives updates about the site&mdash;improvements, new
+                    features, and more!
+                </p>
+                <MailingListForm />
+            </section>
+        </Container>
     </PageLayout>
 )
 export default PageComponent

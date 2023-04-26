@@ -28,14 +28,18 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.12.0/swagger-ui.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PhyloPic API Documentation","url":"http://api-docs.phylopic.org"}</script>
 </head>
-<body>
+<body style="font-family: Roboto, sans-serif">
+  <section style="background-color:#f5bb00;color:#000;border-bottom:1px solid #000;position:absolute;top:0;left:0;right:0;padding:0.5em;">
+    <strong>Too complicated?</strong>
+    <span>Check out the <a style="color:#305860" href="https://www.phylopic.org/articles/api-recipes">API Recipes</a>.</span>
+  </section>
 <div id="openapi">
 <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.12.0/swagger-ui-standalone-preset.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.12.0/swagger-ui-bundle.js"></script>
 <script>    
 window.onload = function () {
   const ui = SwaggerUIBundle({
-    url: "http://api-docs.phylopic.org/v2/openapi.yaml?cb=2&v=2.2.0",
+    url: "http://api-docs.phylopic.org/v2/openapi.yaml?v=2.4.0",
     dom_id: "#openapi"
   })
 }

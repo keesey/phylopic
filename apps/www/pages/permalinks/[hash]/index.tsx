@@ -10,6 +10,7 @@ import usePermalinkSubheader from "~/permalinks/hooks/usePermalinkSubheader"
 import { PermalinkData } from "~/permalinks/types/PermalinkData"
 import PermalinkView from "~/permalinks/views/PermalinkView"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
 type Props = Omit<PageLayoutProps, "children"> & {
     data: PermalinkData
@@ -21,27 +22,29 @@ const PageComponent: NextPage<Props> = props => {
     const url = `${process.env.NEXT_PUBLIC_WWW_URL}/permalinks/${encodeURIComponent(props.hash)}`
     return (
         <PageLayout {...props}>
-            <NextSeo title="PhyloPic: Permalink" canonical={url} description="Permanent data resource for PhyloPic." />
-            <header>
-                <Breadcrumbs
-                    items={[
-                        { children: "Home", href: "/" },
-                        { children: "Permalinks" },
-                        { children: <strong>{subheader ?? "Permalink"}</strong> },
-                    ]}
-                />
-                <h1>Permalink{subheader && `: ${subheader}`}</h1>
-            </header>
-            <p>
-                {props.date && (
-                    <>
-                        Created at <TimestampView value={props.date} format="datetime" />.{" "}
-                    </>
-                )}
-                This is a permanent reference. The information on this page will not change when the rest of{" "}
-                <SiteTitle /> changes.
-            </p>
-            <PermalinkView url={url} value={props.data} />
+            <NextSeo title="Permalink - PhyloPic" canonical={url} description="Permanent data resource for PhyloPic." />
+            <Container>
+                <header>
+                    <Breadcrumbs
+                        items={[
+                            { children: "Home", href: "/" },
+                            { children: "Permalinks" },
+                            { children: <strong>{subheader ?? "Permalink"}</strong> },
+                        ]}
+                    />
+                    <h1>Permalink{subheader && `: ${subheader}`}</h1>
+                </header>
+                <p>
+                    {props.date && (
+                        <>
+                            Created at <TimestampView value={props.date} format="datetime" />.{" "}
+                        </>
+                    )}
+                    This is a permanent reference. The information on this page will not change when the rest of{" "}
+                    <SiteTitle /> changes.
+                </p>
+                <PermalinkView url={url} value={props.data} />
+            </Container>
         </PageLayout>
     )
 }

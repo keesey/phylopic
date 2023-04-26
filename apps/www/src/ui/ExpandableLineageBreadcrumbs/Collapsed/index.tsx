@@ -1,4 +1,5 @@
-import { useMemo, FC } from "react"
+import { FC, useMemo } from "react"
+import NomenView from "~/views/NomenView"
 import Breadcrumbs, { BreadcrumbItem } from "../../Breadcrumbs"
 import styles from "./index.module.scss"
 export interface Props {
@@ -10,6 +11,10 @@ const Collapsed: FC<Props> = ({ afterItems, beforeItems, onClick }) => {
     const items = useMemo<readonly BreadcrumbItem[]>(
         () => [
             ...beforeItems,
+            {
+                children: <NomenView value={[{ class: "scientific", text: "Pan-Biota" }]} />,
+                href: `/nodes/${process.env.NEXT_PUBLIC_ROOT_UUID}/pan-biota-silhouettes`,
+            },
             {
                 children: (
                     <button className={styles.button} onClick={onClick}>

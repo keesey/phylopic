@@ -1,5 +1,4 @@
 import { Image } from "@phylopic/api-models"
-import { extractPath } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import { ImageObject, Thing, VisualArtwork, WithContext } from "schema-dts"
 import getContributorHRef from "~/routes/getContributorHRef"

@@ -21,8 +21,15 @@ const nextConfig = {
                 permanent: true,
             },
             {
+                source: "/articles",
+                destination: "/articles/api-recipes",
+                permanent: false,
+            },
+            {
                 source: "/contact",
-                destination: `/contributors/${encodeURIComponent(process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID)}`,
+                destination: `/contributors/${encodeURIComponent(
+                    process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID,
+                )}/t-michael-keesey-silhouettes`,
                 permanent: true,
             },
             {
@@ -57,13 +64,18 @@ const nextConfig = {
             },
             {
                 source: "/root",
-                destination: `/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID)}`,
+                destination: `/nodes/${encodeURIComponent(process.env.NEXT_PUBLIC_ROOT_UUID)}/pan-biota-silhouettes`,
                 permanent: true,
             },
             {
                 source: "/social/1200x1200.png",
                 destination: "https://images.phylopic.org/social/1200x1200.png",
                 permanent: true,
+            },
+            {
+                source: "/sponsorship",
+                destination: "https://forms.gle/LR6sBChZNdxtJBHz8",
+                permanent: false,
             },
         ]
     },

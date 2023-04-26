@@ -18,7 +18,8 @@ const useOpenGraphForImage = (image: Image | ImageWithEmbedded | null | undefine
                     width,
                 },
             ],
-        }
+            siteName: "PhyloPic",
+        } as OpenGraph
     }, [image])
 }
 export default useOpenGraphForImage

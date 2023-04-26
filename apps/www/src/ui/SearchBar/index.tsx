@@ -2,7 +2,8 @@ import { SearchContext, useExternalResolutions, useMatches } from "@phylopic/ui"
 import { extractPath } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
-import { ChangeEvent, FC, FormEvent, useCallback, useContext, useState } from "react"
+import { ChangeEvent, FC, FormEvent, useContext, useState } from "react"
+import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
 const MAX_MATCHES = 16
 const SearchBar: FC = () => {
@@ -13,26 +14,29 @@ const SearchBar: FC = () => {
     const resolution = useExternalResolutions()[0]
     const matches = useMatches(MAX_MATCHES)
     const router = useRouter()
-    const handleFormSubmit = useCallback(
-        (event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault()
-            const node = internalResult ?? resolution?.node
-            if (node) {
-                router.push(extractPath(node._links.self.href))
-            }
-        },
-        [resolution, internalResult, router],
-    )
-    const handleInputBlur = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: false }), [dispatch])
-    const handleInputChange = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            const { value: payload } = event.currentTarget
-            setValue(payload)
-            dispatch?.({ type: "SET_TEXT", payload })
-        },
-        [dispatch],
-    )
-    const handleInputFocus = useCallback(() => dispatch?.({ type: "SET_ACTIVE", payload: true }), [dispatch])
+    const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        customEvents.submitForm("search")
+        const node = internalResult ?? resolution?.node
+        if (node) {
+            customEvents.searchDirect(value, node)
+            router.push(extractPath(node._links.self.href))
+        }
+    }
+    const handleInputBlur = () => {
+        customEvents.toggleSearch(false)
+        dispatch?.({ type: "SET_ACTIVE", payload: false })
+    }
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { value: payload } = event.currentTarget
+        setValue(payload)
+        customEvents.search(payload)
+        dispatch?.({ type: "SET_TEXT", payload })
+    }
+    const handleInputFocus = () => {
+        customEvents.toggleSearch(true)
+        dispatch?.({ type: "SET_ACTIVE", payload: true })
+    }
     return (
         <form action="/search" aria-label="Taxonomic" className={styles.main} onSubmit={handleFormSubmit} role="search">
             <p id="search-description" style={{ display: "none" }}>
