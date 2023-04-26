@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Image List View on Home Page to Image Rail.
 -   Refactored styling for content width.
+-   Hiding drag-and-drop prompt for Collections Drawer if device does not have hovering capabilities.
 
 ### Deprecated
 
