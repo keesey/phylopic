@@ -35,8 +35,8 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                     <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Search</strong> }]} />
                     <h1>Search</h1>
                 </header>
-                <SearchAside />
             </Container>
+            <SearchAside />
         </PageLayout>
     </CompressedSWRConfig>
 )
