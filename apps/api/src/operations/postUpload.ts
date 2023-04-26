@@ -1,19 +1,17 @@
 import { GetObjectTaggingCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import { DATA_MEDIA_TYPE, Image, isImage, Link } from "@phylopic/api-models"
-import { Submission } from "@phylopic/source-models"
+import { DATA_MEDIA_TYPE, Link } from "@phylopic/api-models"
+import { Image, Submission } from "@phylopic/source-models"
 import {
-    createQueryString,
     ImageMediaType,
+    UUID,
+    createQueryString,
     isImageMediaType,
     isUUIDv4,
     stringifyNormalized,
-    UUID,
 } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { createHash } from "crypto"
 import decodeJWT from "../auth/jwt/decodeJWT"
-import parseEntityJSON from "../entities/parseEntityJSON"
-import selectEntityJSON from "../entities/selectEntityJSON"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
@@ -21,6 +19,7 @@ import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
 import { PgClientService } from "../services/PgClientService"
 import { S3ClientService } from "../services/S3ClientService"
+import SourceClient from "../source/SourceClient"
 import { Operation } from "./Operation"
 const Bucket = "uploads.phylopic.org"
 const USER_MESSAGE = "There was a problem with an attempt to upload your file."
@@ -50,7 +49,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     const image = existing_uuid ? await getReplacementImage(existing_uuid, contributor, service) : undefined
     const hash = getHash(body)
     const key = `files/${encodeURIComponent(hash)}`
-    await uploadBody(service, key, contributor, Buffer.from(body, encoding), contentType, image)
+    await uploadBody(service, key, contributor, Buffer.from(body, encoding), contentType, existing_uuid, image)
     const link: Link = { href: "https://uploads.phylopic.org/" + encodeURIComponent(key) }
     return {
         body: stringifyNormalized(link),
@@ -70,7 +69,7 @@ const createImageNotFoundError = (uuid: UUID) =>
             developerMessage: `Image not found. UUID: ${uuid}`,
             field: "existing_uuid",
             type: "RESOURCE_NOT_FOUND",
-            userMessage: USER_MESSAGE,
+            userMessage: "The image you are attempting to update cannot be found.",
         },
     ])
 const createMissingBodyError = () =>
@@ -144,18 +143,18 @@ const getReplacementImage = async (uuid: UUID, contributorUUID: UUID, service: P
     if (!isUUIDv4(uuid)) {
         throw createInvalidReplaceUUIDError()
     }
-    const client = await service.createPgClient()
+    const client = new SourceClient()
     try {
-        const imageJSON = await selectEntityJSON(client, "image", uuid)
-        if (imageJSON === "null") {
+        const imageClient = client.image(uuid)
+        if (!(await imageClient.exists())) {
             throw createImageNotFoundError(uuid)
         }
-        image = parseEntityJSON(imageJSON, isImage)
-        if (image._links.contributor.href !== `/contributors/${contributorUUID}`) {
+        image = await imageClient.get()
+        if (image.contributor !== contributorUUID) {
             throw createForbiddenReplacementError()
         }
     } finally {
-        service.deletePgClient(client)
+        await client.destroy()
     }
     return image
 }
@@ -165,6 +164,7 @@ const upload = async (
     ContentType: ImageMediaType,
     Key: string,
     contributor: UUID,
+    existingUUID?: UUID,
     image?: Image,
 ) => {
     await client.send(
@@ -178,10 +178,10 @@ const upload = async (
                 attribution: image?.attribution,
                 contributor,
                 created: image ? image.created : new Date().toISOString(),
-                existingUUID: image?.uuid,
-                license: image?._links.license.href,
+                existingUUID,
+                license: image?.license,
                 sponsor: image?.sponsor,
-                status: "incomplete",
+                status: image ? "submitted" : "incomplete",
             } as Partial<Submission> & Record<string, string>),
         }),
     )
@@ -192,6 +192,7 @@ const uploadBody = async (
     contributor: UUID,
     body: Buffer,
     contentType: ImageMediaType,
+    existingUUID?: UUID,
     image?: Image,
 ) => {
     const client = service.createS3Client()
@@ -200,7 +201,7 @@ const uploadBody = async (
         if (status.uploaded) {
             throw createExistingError(status.contributor === contributor)
         } else {
-            await upload(client, body, contentType, key, contributor, image)
+            await upload(client, body, contentType, key, contributor, existingUUID, image)
         }
     } finally {
         service.deleteS3Client(client)
