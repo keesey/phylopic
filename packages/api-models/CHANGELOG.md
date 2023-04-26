@@ -9,12 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   `ResolveObjectsParameters` and `isResolveObjectsParameters`.
-
 ### Changed
-
--   Renamed `ResolveParameters` to `ResolveObjectParameters` and removed `uuid` property.
--   Renamed `isResolveParameters` to `isResolveObjectParameters`.
 
 ### Deprecated
 
@@ -23,6 +18,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.3.0] - 2023-04-25
+
+### Added
+
+-   `ResolveObjectsParameters` and `isResolveObjectsParameters`.
+
+### Changed
+
+-   Renamed `ResolveParameters` to `ResolveObjectParameters` and removed `uuid` property.
+-   Renamed `isResolveParameters` to `isResolveObjectParameters`.
 
 ## [1.2.0] - 2023-03-24
 

@@ -9,19 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   `getResolveObjects` method.
-
 ### Changed
 
 ### Deprecated
-
--   `postResolveObjects` method.
 
 ### Fixed
 
 ### Removed
 
 ### Security
+
+## [2.4.0] - 2023-04-25
+
+### Added
+
+-   `getResolveObjects` method.
+
+### Deprecated
+
+-   `postResolveObjects` method.
 
 ## [2.3.2] - 2023-04-01
 
