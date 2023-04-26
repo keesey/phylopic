@@ -100,13 +100,13 @@ const createUUIDError = (falseUUID: unknown) =>
             userMessage: USER_AUTH_MESSAGE,
         },
     ])
-const createExistingError = () =>
-    new APIError(403, [
+const createExistingError = (isSameUser: boolean) =>
+    new APIError(409, [
         {
-            developerMessage: "Upload already exists and is attributed to another contributor.",
-            field: "authorization",
-            type: "ACCESS_DENIED",
-            userMessage: "Somebody else already uploaded that file.",
+            developerMessage: `Upload already exists${isSameUser ? "" : " and is attributed to another contributor"}."`,
+            field: "body",
+            type: "DEFAULT_4XX",
+            userMessage: `${isSameUser ? "You" : "Somebody else"} already uploaded that file.`,
         },
     ])
 const getCurrentStatus = async (
@@ -186,10 +186,7 @@ const uploadBody = async (
     try {
         const status = await getCurrentStatus(client, key)
         if (status.uploaded) {
-            if (status.contributor !== contributor) {
-                throw createExistingError()
-            }
-            console.warn("User already uploaded this file.")
+            throw createExistingError(status.contributor === contributor)
         } else {
             await upload(client, body, contentType, key, contributor, image)
         }

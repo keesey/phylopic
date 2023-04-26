@@ -479,6 +479,15 @@ components:
         application/vnd.phylopic.v2+json:
           schema:
             $ref: "#/components/schemas/Errors"
+    "409":
+      description: The file was already uploaded.
+      headers:
+        Content-Type:
+          $ref: "#/components/headers/Content-Type"
+      content:
+        application/vnd.phylopic.v2+json:
+          schema:
+            $ref: "#/components/schemas/Errors"
     "410":
       description: The specified build is old and no longer present. Remove the `build` parameter to be redirected (`307`) to the latest version of this resource.
       headers:
@@ -1782,6 +1791,8 @@ paths:
                 $ref: "#/components/schemas/Link"
         "401":
           $ref: "#/components/responses/401"
+        "409":
+          $ref: "#/components/responses/409"
         "413":
           $ref: "#/components/responses/413"
         "415":
