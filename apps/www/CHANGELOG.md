@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Section on _GBIF_ to _API Recipes_ article.
-
 ### Changed
-
--   Upgraded `next` to `13.3.1`.
 
 ### Deprecated
 
@@ -22,6 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.5.3] - 2023-04-30
+
+### Added
+
+-   Section on _GBIF_ to _API Recipes_ article.
+
+### Changed
+
+-   Upgraded `next` to `13.3.1`.
 
 ## [2.5.2] - 2023-04-25
 
