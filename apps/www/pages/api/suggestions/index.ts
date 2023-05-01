@@ -81,6 +81,28 @@ const getEOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]>
     }
     return []
 }
+const getGBIFSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
+    try {
+        if (prefix.length >= 2) {
+            const response = await axios.post<ReadonlyArray<{ readonly canonicalName: string }>>(
+                `https://api.gbif.org/v1/species/suggest?q=${encodeURIComponent(prefix)}`,
+            )
+            return response.data
+                .filter(value => value.canonicalName)
+                .map(({ canonicalName }) => {
+                    const term = normalizeQuery(canonicalName)
+                    return {
+                        description: "Approximate matches only",
+                        term,
+                        url: `/search?q=` + encodeURIComponent(term),
+                    }
+                })
+        }
+    } catch (e) {
+        console.error(e)
+    }
+    return []
+}
 const getOTOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     try {
         if (prefix.length >= 2) {

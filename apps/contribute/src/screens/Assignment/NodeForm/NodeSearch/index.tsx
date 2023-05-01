@@ -47,7 +47,11 @@ export const NodeSearch: FC = () => {
                 <>
                     <Speech mode="system">
                         <small>
-                            (Search partly powered by the{" "}
+                            (Search partly powered by{" "}
+                            <a href="//www.gbif.org/" target="_blank" rel="noreferrer">
+                                <abbr title="Global Biodiversity Information Facility">GBIF</abbr>
+                            </a>
+                            , the{" "}
                             <a
                                 href="//tree.opentreeoflife.org/about/open-tree-of-life"
                                 target="_blank"
@@ -55,7 +59,7 @@ export const NodeSearch: FC = () => {
                             >
                                 Open Tree of Life
                             </a>
-                            {" and the "}
+                            , and the{" "}
                             <a href="//paleobiodb.org/" target="_blank" rel="noreferrer">
                                 Paleobiology Database
                             </a>
