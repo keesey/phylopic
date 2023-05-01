@@ -3,8 +3,10 @@ import { Page } from "@phylopic/source-client"
 import { Entity, Node } from "@phylopic/source-models"
 import {
     fetchJSON,
+    GBIFAutocomplete,
+    GBIFResolve,
     Loader,
-    OTOLAutocompleteName,
+    OTOLAutocomplete,
     OTOLResolve,
     PBDBAutocomplete,
     PBDBResolve,
@@ -75,9 +77,11 @@ const NodeSelector: FC<Props> = ({ open, onSelect }) => {
                     <SearchContainer initialText={searchText}>
                         <>
                             <PhyloPicAutocomplete />
-                            <OTOLAutocompleteName />
+                            <GBIFAutocomplete />
+                            <OTOLAutocomplete />
                             <PBDBAutocomplete />
                             <PhyloPicNodeSearch />
+                            <GBIFResolve />
                             <OTOLResolve />
                             <PBDBResolve />
                         </>

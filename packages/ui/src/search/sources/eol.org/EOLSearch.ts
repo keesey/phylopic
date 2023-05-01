@@ -59,4 +59,3 @@ export const EOLSearch: React.FC = () => {
     }, [dispatch, response.data])
     return null
 }
-export default EOLSearch

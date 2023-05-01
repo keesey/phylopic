@@ -67,4 +67,3 @@ export const PBDBAutocomplete: React.FC<PBDBAutocompleteProps> = ({ limit = 10 }
     }, [dispatch, response.data])
     return null
 }
-export default PBDBAutocomplete

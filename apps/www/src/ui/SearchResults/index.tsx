@@ -43,6 +43,21 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
                             >
                                 Encyclopedia of Life
                             </a>
+                            {", "}
+                            <a
+                                href="//www.gbif.org/"
+                                onClick={() =>
+                                    customEvents.clickLink(
+                                        "search_gbif",
+                                        "//www.gbif.org/",
+                                        "Global Biodiversity Information Facility",
+                                        "link",
+                                    )
+                                }
+                                rel="external"
+                            >
+                                <abbr title="Global Biodiversity Information Facility">GBIF</abbr>
+                            </a>
                             , the{" "}
                             <a
                                 href="//tree.opentreeoflife.org/"

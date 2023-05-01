@@ -22,7 +22,7 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
     return [response.data, name]
 }
 const sanitizeUniqueName = (name: string) => name.replace(/\s*\([a-z\s+(in|with)[^)]+\)/gi, "")
-export const OTOLAutocompleteName: React.FC = () => {
+export const OTOLAutocomplete: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const response = useSWRImmutable(state?.text ? [OTOL_URL + "/tnrs/autocomplete_name", state.text] : null, fetcher)
     React.useEffect(() => {
@@ -51,4 +51,3 @@ export const OTOLAutocompleteName: React.FC = () => {
     }, [dispatch, response.data])
     return null
 }
-export default OTOLAutocompleteName
