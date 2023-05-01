@@ -13,9 +13,7 @@ export const GBIFAutocomplete: React.FC = () => {
         if (dispatch && response.data) {
             dispatch({
                 type: "ADD_EXTERNAL_MATCHES",
-                payload: response.data[0].map(
-                    species => species.canonicalName ?? species.scientificName ?? "",
-                ),
+                payload: response.data[0].map(species => species.canonicalName ?? species.scientificName ?? ""),
                 meta: { basis: response.data[1] },
             })
             dispatch({
