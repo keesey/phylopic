@@ -14,7 +14,7 @@ export const GBIFAutocomplete: React.FC = () => {
             dispatch({
                 type: "ADD_EXTERNAL_MATCHES",
                 payload: response.data[0].map(
-                    species => species.scientificName ?? species.canonicalName ?? "[Unnamed]",
+                    species => species.canonicalName ?? species.scientificName ?? "",
                 ),
                 meta: { basis: response.data[1] },
             })
@@ -23,7 +23,7 @@ export const GBIFAutocomplete: React.FC = () => {
                 payload: response.data[0].reduce<Record<string, string>>(
                     (prev, { canonicalName, key, scientificName }) => ({
                         ...prev,
-                        [String(key)]: scientificName ?? canonicalName ?? "[Unnamed]",
+                        [String(key)]: canonicalName ?? scientificName ?? "",
                     }),
                     {},
                 ),

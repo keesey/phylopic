@@ -13,7 +13,7 @@ const GBIFSpeciesView: FC<Props> = ({ id }) => {
         fetchJSON,
     )
     const name = useMemo(() => {
-        const nameSource = data?.scientificName ?? data?.canonicalName
+        const nameSource = data?.canonicalName ?? data?.scientificName
         return nameSource ? parseNomen(nameSource) : null
     }, [data?.canonicalName, data?.scientificName])
     if (!name) {
