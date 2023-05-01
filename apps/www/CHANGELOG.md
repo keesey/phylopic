@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Search suggestions return full URL.
+-   Search: node results appear in a separate container from resolutions.
 
 ### Deprecated
 
