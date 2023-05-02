@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   GBIF to search capabilities.
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.2.0] - 2023-05-01
+
+### Added
+
+-   GBIF to search capabilities.
 
 ## [1.1.1] - 2023-04-30
 

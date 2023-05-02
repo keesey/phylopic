@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.0] - 2023-05-01
+
+### Added
+
+-   Autolinking for GBIF.
+
 ## [1.2.0] - 2023-03-24
 
 ### Added
