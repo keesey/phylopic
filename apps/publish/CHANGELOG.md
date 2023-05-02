@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Autolinking for GBIF.
+
 ### Changed
 
 ### Deprecated
@@ -18,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.3.0] - 2023-05-02
+
+### Added
+
+-   Autolinking for GBIF.
 
 ## [1.2.0] - 2023-03-24
 

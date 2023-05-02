@@ -295,6 +295,65 @@ const Article: FC = () => {
                         title="First Page of Search Results for a Taxonomic Name"
                     />
                 </section>
+                <section id="searching-name-gbif">
+                    <h3>
+                        Searching in <cite>GBIF</cite>
+                    </h3>
+                    <p>
+                        The full documentation for the <cite>GBIF</cite> API is available here:{" "}
+                        <a href="//www.gbif.org/developer/summary" rel="noreferrer">
+                            <code>https://www.gbif.org/developer/summary</code>
+                        </a>
+                    </p>
+                    <p>
+                        To get a list of taxon suggestions for a search string, use the <code>/species/suggest</code>{" "}
+                        endpoint:
+                    </p>
+                    <CurlBox
+                        id="gbif_suggest"
+                        url="https://api.gbif.org/v1/species/suggest?q=dionaea+m"
+                        title={
+                            <>
+                                Taxon Suggestions for <cite>GBIF</cite>
+                            </>
+                        }
+                    />
+                    <p>
+                        Alternately, you can search for a full-string match with the <code>/species/match</code>{" "}
+                        endpoint:
+                    </p>
+                    <CurlBox
+                        id="gbif_match"
+                        url="https://api.gbif.org/v1/species/match?name=Dionaea+muscipula&verbose=true"
+                        title={
+                            <>
+                                Taxonomic Name Matches for <cite>GBIF</cite>
+                            </>
+                        }
+                    />
+                    <p>
+                        Once you have a matching object, collect the rank keys from lowest rank to highest rank:{" "}
+                        <code>speciesKey</code>, <code>genusKey</code>, <code>familyKey</code>, <code>orderKey</code>,{" "}
+                        <code>classKey</code>, <code>phylumKey</code>, and <code>kingdomKey</code>. Place those as a
+                        comma-separated list in a query to the <SiteTitle /> API&rsquo;s{" "}
+                        <code>/resolve/gbif.org/species</code> endpoint in order to find the closest match in{" "}
+                        <SiteTitle />.
+                    </p>
+                    <CurlBox
+                        id="gbif_resolve"
+                        url={`${process.env.NEXT_PUBLIC_API_URL}/resolve/gbif.org/species?build=${build}&objectIDs=${[
+                            5421410, 3191248, 5399, 422, 220, 7707728, 6,
+                        ].join(",")}`}
+                        options={{
+                            location: true,
+                        }}
+                        title={
+                            <>
+                                Resolve Node for <cite>GBIF</cite>
+                            </>
+                        }
+                    />
+                </section>
                 <section id="searching-name-otol">
                     <h3>
                         Searching in the <cite>Open Tree of Life</cite>

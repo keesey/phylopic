@@ -46,4 +46,3 @@ export const PhyloPicImageSearch: React.FC = () => {
     }, [data, dispatch])
     return null
 }
-export default PhyloPicImageSearch

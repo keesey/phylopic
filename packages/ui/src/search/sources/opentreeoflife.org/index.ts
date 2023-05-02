@@ -1,2 +1,2 @@
-export * from "./OTOLAutocompleteName"
+export * from "./OTOLAutocomplete"
 export * from "./OTOLResolve"

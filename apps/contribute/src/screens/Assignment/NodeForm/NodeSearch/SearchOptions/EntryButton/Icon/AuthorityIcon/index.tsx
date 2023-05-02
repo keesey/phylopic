@@ -18,6 +18,16 @@ const AuthorityIcon: FC<Props> = ({ authority }) => {
             />
         )
     }
+    if (authority === "gbif.org") {
+        return (
+            <Image
+                alt="Global Biodiversity Information Facility"
+                src="/logos/gbif.svg"
+                unoptimized
+                className={styles.main}
+            />
+        )
+    }
     if (authority === "opentreeoflife.org") {
         return (
             <Image

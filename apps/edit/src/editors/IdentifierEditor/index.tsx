@@ -1,7 +1,9 @@
 import { Submission } from "@phylopic/source-models"
 import {
     fetchJSON,
-    OTOLAutocompleteName,
+    GBIFAutocomplete,
+    GBIFResolve,
+    OTOLAutocomplete,
     OTOLResolve,
     PBDBAutocomplete,
     PBDBResolve,
@@ -34,9 +36,11 @@ const IdentifierEditor: FC<Props> = ({ hash }) => {
                 <SearchContainer initialText={data.newTaxonName}>
                     <>
                         <PhyloPicAutocomplete />
-                        <OTOLAutocompleteName />
+                        <GBIFAutocomplete />
+                        <OTOLAutocomplete />
                         <PBDBAutocomplete />
                         <PhyloPicNodeSearch />
+                        <GBIFResolve />
                         <OTOLResolve />
                         <PBDBResolve />
                     </>

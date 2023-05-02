@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgraded `next` to `13.3.1`.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.6.0] - 2023-05-02
+
+### Added
+
+-   `GBIFAutocomplete` and `GBIFResolve`.
+
+### Changed
+
+-   Renamed `OTOLAutocompleteName` to `OTOLAutocomplete`.
+
+## [1.5.1] - 2023-04-30
+
+### Changed
+
+-   Upgraded `next` to `13.3.1`.
 
 ## [1.5.0] - 2023-04-25
 

@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgraded `next` to `13.3.1`.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.6.0] - 2023-05-02
+
+### Added
+
+-   GBIF to search capabilities.
+
+### Changed
+
+-   Search suggestions return full URL.
+-   Search: node results appear in a separate container from resolutions.
+
+## [2.5.3] - 2023-04-30
+
+### Added
+
+-   Section on _GBIF_ to _API Recipes_ article.
+
+### Changed
+
+-   Upgraded `next` to `13.3.1`.
 
 ## [2.5.2] - 2023-04-25
 
