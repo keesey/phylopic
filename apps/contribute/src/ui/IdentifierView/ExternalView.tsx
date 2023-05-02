@@ -6,6 +6,7 @@ import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"
 import OTOLTaxonomyView from "./OTOLTaxonomyView"
 import PBDBTxnView from "./PBDBTxnView"
+import GBIFSpeciesView from "./GBIFSpeciesView"
 export type Props = {
     authority: Authority
     namespace: Namespace
@@ -22,6 +23,12 @@ const ExternalView: FC<Props> = ({ authority, namespace, objectID, short }) => {
     )
     if (node) {
         return <NameView value={node.names[0]} short={short} />
+    }
+    if (authority === "gbif.org" && namespace === "species") {
+        const id = parseInt(objectID, 10)
+        if (isPositiveInteger(id)) {
+            return <GBIFSpeciesView id={id} />
+        }
     }
     if (authority === "opentreeoflife.org" && namespace === "taxonomy") {
         const id = parseInt(objectID, 10)

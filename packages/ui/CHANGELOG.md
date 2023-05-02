@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   `GBIFAutocomplete` and `GBIFResolve`.
+
 ### Changed
+
+-   Renamed `OTOLAutocompleteName` to `OTOLAutocomplete`.
 
 ### Deprecated
 

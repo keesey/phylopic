@@ -101,4 +101,3 @@ export const PBDBResolve: React.FC = () => {
         </>
     )
 }
-export default PBDBResolve

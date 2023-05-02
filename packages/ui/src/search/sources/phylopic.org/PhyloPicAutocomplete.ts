@@ -32,4 +32,3 @@ export const PhyloPicAutocomplete: React.FC = () => {
     }, [dispatch, response.data])
     return null
 }
-export default PhyloPicAutocomplete

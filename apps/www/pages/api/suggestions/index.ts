@@ -41,6 +41,7 @@ const getString = (value: string | string[] | undefined) => {
 const getSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     const suggestionBatches: ReadonlyArray<readonly Suggestion[]> = await Promise.all([
         getPhyloPicSuggestions(prefix),
+        getGBIFSuggestions(prefix),
         getOTOLSuggestions(prefix),
         getPBDBSuggestions(prefix),
         getEOLSuggestions(prefix),
@@ -72,9 +73,31 @@ const getEOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]>
                 return {
                     description: "Approximate matches only",
                     term,
-                    url: `/search?q=` + encodeURIComponent(term),
+                    url: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q=${encodeURIComponent(term)}`,
                 }
             })
+        }
+    } catch (e) {
+        console.error(e)
+    }
+    return []
+}
+const getGBIFSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
+    try {
+        if (prefix.length >= 2) {
+            const response = await axios.post<ReadonlyArray<{ readonly canonicalName: string }>>(
+                `https://api.gbif.org/v1/species/suggest?q=${encodeURIComponent(prefix)}`,
+            )
+            return response.data
+                .filter(value => value.canonicalName)
+                .map(({ canonicalName }) => {
+                    const term = normalizeQuery(canonicalName)
+                    return {
+                        description: "Approximate matches only",
+                        term,
+                        url: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q=${encodeURIComponent(term)}`,
+                    }
+                })
         }
     } catch (e) {
         console.error(e)
@@ -96,7 +119,7 @@ const getOTOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]
                 return {
                     description: "Approximate matches only",
                     term,
-                    url: `/search?q=` + encodeURIComponent(term),
+                    url: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q=${encodeURIComponent(term)}`,
                 }
             })
         }
@@ -116,7 +139,7 @@ const getPBDBSuggestions = async (prefix: string): Promise<readonly Suggestion[]
                 return {
                     description: "Approximate matches only",
                     term,
-                    url: `/search?q=` + encodeURIComponent(term),
+                    url: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q=${encodeURIComponent(term)}`,
                 }
             })
         }
@@ -132,10 +155,10 @@ const getPhyloPicSuggestions = async (prefix: string): Promise<readonly Suggesti
             const response = await axios.get<QueryMatches>(
                 process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ query }),
             )
-            return response.data.matches.map(match => ({
+            return response.data.matches.map(term => ({
                 description: "Illustrated",
-                term: match,
-                url: `/search?q=` + encodeURIComponent(match),
+                term,
+                url: `${process.env.NEXT_PUBLIC_WWW_URL}/search?q=${encodeURIComponent(term)}`,
             }))
         }
     } catch (e) {

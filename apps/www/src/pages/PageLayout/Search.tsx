@@ -1,6 +1,8 @@
 import {
     EOLSearch,
-    OTOLAutocompleteName,
+    GBIFAutocomplete,
+    GBIFResolve,
+    OTOLAutocomplete,
     OTOLResolve,
     PBDBAutocomplete,
     PBDBResolve,
@@ -13,9 +15,11 @@ const Search: FC = () => (
         <PhyloPicAutocomplete />
         {/*<PhyloPicImageSearch />*/}
         <PhyloPicNodeSearch />
-        <OTOLAutocompleteName />
-        <OTOLResolve />
+        <GBIFAutocomplete />
+        <OTOLAutocomplete />
         <PBDBAutocomplete />
+        <GBIFResolve />
+        <OTOLResolve />
         <PBDBResolve />
         <EOLSearch />
     </>

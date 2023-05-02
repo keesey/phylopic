@@ -99,4 +99,3 @@ export const OTOLResolve: React.FC = () => {
         </>
     )
 }
-export default OTOLResolve

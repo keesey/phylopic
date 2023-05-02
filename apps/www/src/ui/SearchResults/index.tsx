@@ -43,6 +43,21 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
                             >
                                 Encyclopedia of Life
                             </a>
+                            {", "}
+                            <a
+                                href="//www.gbif.org/"
+                                onClick={() =>
+                                    customEvents.clickLink(
+                                        "search_gbif",
+                                        "//www.gbif.org/",
+                                        "Global Biodiversity Information Facility",
+                                        "link",
+                                    )
+                                }
+                                rel="external"
+                            >
+                                <abbr title="Global Biodiversity Information Facility">GBIF</abbr>
+                            </a>
                             , the{" "}
                             <a
                                 href="//tree.opentreeoflife.org/"
@@ -75,19 +90,25 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
                             </a>
                             .
                         </p>
-                        <div className={styles.results}>
-                            {nodeResults.map(node => (
-                                <IllustratedNodeView key={node.uuid} value={node} short />
-                            ))}
-                            {resolutions.map(resolution => (
-                                <IllustratedNodeView
-                                    key={resolution.uuid}
-                                    caption={<ExternalResolutionCaption value={resolution} />}
-                                    value={resolution.node}
-                                    short
-                                />
-                            ))}
-                        </div>
+                        {nodeResults.length > 0 && (
+                            <div className={styles.results}>
+                                {nodeResults.map(node => (
+                                    <IllustratedNodeView key={node.uuid} value={node} short />
+                                ))}
+                            </div>
+                        )}
+                        {resolutions.length > 0 && (
+                            <div className={styles.results}>
+                                {resolutions.map(resolution => (
+                                    <IllustratedNodeView
+                                        key={resolution.uuid}
+                                        caption={<ExternalResolutionCaption value={resolution} />}
+                                        value={resolution.node}
+                                        short
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </Fragment>
                 )}
             </Container>
