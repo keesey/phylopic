@@ -22,7 +22,7 @@ const getRedirectLink = (
     objectIDs: readonly ObjectID[],
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
 ): Link & { __WARNING__: string } => ({
-    __WARNING__: "This method is obsolete, and will return 410 (Gone) in the future.",
+    __WARNING__: "This method is deprecated, and will return 410 (Gone) in the future.",
     href: `/resolve/${encodeURIComponent(authority ?? "")}/${encodeURIComponent(namespace ?? "")}${createSearch({
         ...queryParameters,
         objectIDs: objectIDs.join(","),
