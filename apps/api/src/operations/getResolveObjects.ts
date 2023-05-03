@@ -53,7 +53,7 @@ const getRedirect = async (
             throw new APIError(404, [
                 {
                     developerMessage: "Object could not be found. None of the IDs matched.",
-                    field: "body",
+                    field: "objectIDs",
                     type: "RESOURCE_NOT_FOUND",
                     userMessage: USER_MESSAGE,
                 },

@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   Validations were always of type `BAD_REQUEST_BODY` even when the field was in the parameters.
+
 ### Removed
 
 ### Security
