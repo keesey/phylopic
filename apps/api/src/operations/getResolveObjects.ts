@@ -85,10 +85,10 @@ export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolv
         body: stringifyNormalized(link),
         headers: {
             ...DATA_HEADERS,
-            ...createRedirectHeaders(link.href, false),
-            "access-control-allow-methods": "OPTIONS,GET,POST",
+            ...createRedirectHeaders(link.href, true),
+            "access-control-allow-methods": "OPTIONS,GET",
         },
-        statusCode: 303,
+        statusCode: 308,
     } as APIGatewayProxyResult
 }
 export default GetResolveObjects
