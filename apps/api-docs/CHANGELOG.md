@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Revised response types for `getResolveObjects` and `postResolveObjects`.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.5.0] - 2023-05-03
+
+### Changed
+
+-   Revised response types for `getResolveObjects` and `postResolveObjects`.
 
 ## [2.4.0] - 2023-04-25
 

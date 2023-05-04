@@ -11,16 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   `postResolveObjects` returns a permanent redirect to `getResolveObjects`.
--   `getResolveObjects` does not include `POST` as an allowed method.
-
 ### Deprecated
 
 ### Fixed
 
--   Validations were always of type `BAD_REQUEST_BODY` even when the field was in the parameters.
-
 ### Removed
+
+### Security
+
+## [2.5.0] - 2023-05-03
+
+### Changed
+
+-   `postResolveObjects` returns a permanent redirect to `getResolveObjects`.
+-   `getResolveObjects` does not include `POST` as an allowed method.
+
+### Fixed
+
+-   Validations were always of type `BAD_REQUEST_BODY` even when the field was in the parameters.
 
 ### Security
 

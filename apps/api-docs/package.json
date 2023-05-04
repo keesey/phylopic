@@ -31,5 +31,5 @@
         "predeploy": "yarn test",
         "test": "swagger-cli validate ./public/v2/openapi.yaml"
     },
-    "version": "2.4.0"
+    "version": "2.5.0"
 }
