@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.2.1] - 2023-05-04
+
+### Changed
+
+-   Upgraded `next` to `13.4.0`.
+
 ## [2.2.0] - 2023-05-02
 
 ### Added
