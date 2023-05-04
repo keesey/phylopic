@@ -400,6 +400,17 @@ components:
   responses:
     "204":
       description: The request completed successfully. No further information is provided.
+    "301":
+      description: The requested resource is available at another location, permanently, using the `GET` method.
+      headers:
+        Content-Type:
+          $ref: "#/components/headers/Content-Type"
+        Location:
+          $ref: "#/components/headers/Location"
+      content:
+        application/vnd.phylopic.v2+json:
+          schema:
+            $ref: "#/components/schemas/Link"
     "303":
       description: The requested resource should be loaded from another location.
       headers:
@@ -1604,7 +1615,9 @@ paths:
         - $ref: "#/components/parameters/namespace"
         - $ref: "#/components/parameters/objectIDs"
       responses:
-        "303":
+        "307":
+          $ref: "#/components/responses/307"
+        "308":
           description: A matching node was found.
           headers:
             Location:
@@ -1650,19 +1663,10 @@ paths:
               items:
                 type: string
       responses:
-        "303":
-          description: A matching node was found.
-          headers:
-            Location:
-              $ref: "#/components/headers/Location"
-          content:
-            application/vnd.phylopic.v2+json:
-              schema:
-                $ref: "#/components/schemas/TitledLink"
+        "301":
+          $ref: "#/components/responses/301"
         "400":
           $ref: "#/components/responses/400"
-        "404":
-          $ref: "#/components/responses/404"
         "406":
           $ref: "#/components/responses/406"
         "410":
