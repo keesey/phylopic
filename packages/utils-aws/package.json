@@ -14,7 +14,7 @@
     "description": "Common utilities for using Amazon Web Services in *PhyloPic* project.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/chai": "^4.3.4",
+        "@types/chai": "^4.3.5",
         "@types/mocha": "^10.0.1",
         "chai": "^4.3.7",
         "eslint": "^8.39.0",
@@ -22,7 +22,7 @@
         "mocha": "^10.2.0",
         "prettier": "^2.8.8",
         "ts-node": "^10.9.1",
-        "tsup": "^6.5.0",
+        "tsup": "^6.7.0",
         "typescript": "^5.0.4",
         "yarn": "^1.22.19"
     },
