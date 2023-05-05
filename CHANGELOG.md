@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Upgrades:
+    -   `axios` to `1.4.0`.
     -   `next` to `13.4.0`.
     -   `swr` to `2.1.5`.
 
