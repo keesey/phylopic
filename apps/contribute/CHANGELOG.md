@@ -11,8 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgraded `next` to `13.4.0`.
--   Upgraded `swr` to `2.1.5`.
+-   Upgrades:
+    -   `next` to `13.4.0`.
+    -   `next-seo` to `6.0.0`.
+    -   `swr` to `2.1.5`.
 
 ### Deprecated
 
