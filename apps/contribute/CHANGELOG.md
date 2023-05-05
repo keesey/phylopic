@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Upgraded `swr` to `2.1.5`.
+
 ### Deprecated
 
 ### Fixed

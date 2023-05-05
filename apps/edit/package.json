@@ -20,7 +20,7 @@
         "react-spinners": "^0.13.8",
         "simple-digraph": "^1.0.1",
         "slugify": "^1.6.5",
-        "swr": "^2.0.3"
+        "swr": "^2.1.5"
     },
     "description": "Web application (run locally) for editing *Phylopic* source data and image files.",
     "devDependencies": {

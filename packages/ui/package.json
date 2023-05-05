@@ -45,7 +45,7 @@
         "next": "^13.4.0",
         "parse-nomen": "^2.1.2",
         "react": "^18.2.0",
-        "swr": "^2.0.3"
+        "swr": "^2.1.5"
     },
     "publishConfig": {
         "access": "public"

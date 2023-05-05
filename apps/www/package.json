@@ -26,7 +26,8 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-json-view": "^1.21.3",
-        "slugify": "^1.6.5"
+        "slugify": "^1.6.5",
+        "swr": "^2.1.5"
     },
     "description": "Primary public web application for *PhyloPic*.",
     "devDependencies": {
