@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Upgraded `next` to `13.4.0`.
+
 ### Deprecated
 
 ### Fixed
@@ -18,12 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
-
-## [1.1.2] - 2023-05-04
-
-### Changed
-
--   Upgraded `next` to `13.4.0`.
 
 ## [1.1.1] - 2023-04-30
 
