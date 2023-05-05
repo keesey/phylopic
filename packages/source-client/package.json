@@ -52,7 +52,7 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/source-client",
     "peerDependencies": {
-        "@aws-sdk/client-s3": "^3.262.0",
+        "@aws-sdk/client-s3": "^3.327.0",
         "jsonwebtoken": "^9.0.0",
         "next": "^13.4.0",
         "pg": "^8.9.0",

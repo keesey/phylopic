@@ -18,7 +18,7 @@
         "eslint-config-phylopic": "*",
         "flux-standard-action": "^2.1.2",
         "react-spinners": "^0.13.8",
-        "sharp": "^0.31.3",
+        "sharp": "^0.32.1",
         "typescript": "^5.0.4"
     },
     "exports": {

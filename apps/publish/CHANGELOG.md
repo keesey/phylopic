@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Autolinking for GBIF.
-
 ### Changed
 
--   Upgraded `axios` to `1.4.0`.
+-   Upgrades:
+    -   `@aws-sdk/client-lambda` to `3.327.0`.
+    -   `@aws-sdk/client-s3` to `3.327.0`.
+    -   `@aws-sdk/client-ssm` to `3.327.0`.
+    -   `axios` to `1.4.0`.
 
 ### Deprecated
 

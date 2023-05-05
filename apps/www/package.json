@@ -31,14 +31,14 @@
     },
     "description": "Primary public web application for *PhyloPic*.",
     "devDependencies": {
-        "@next/bundle-analyzer": "^13.1.6",
+        "@next/bundle-analyzer": "^13.4.0",
         "@phylopic/tsconfig": "*",
         "@types/react": "^18.2.5",
         "@types/react-dom": "^18.2.3",
         "eslint-config-phylopic": "*",
         "next-unused": "^0.0.6",
-        "sass": "^1.58.0",
-        "schema-dts": "^1.1.0",
+        "sass": "^1.62.1",
+        "schema-dts": "^1.1.2",
         "typescript": "^5.0.4"
     },
     "license": "MIT",
