@@ -35,6 +35,9 @@
     "license": "MIT",
     "name": "@phylopic/edit",
     "private": true,
+    "resolutions": {
+        "@types/react": "^18.2.5"
+    },
     "scripts": {
         "clean": "rm -rf .next && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3001",

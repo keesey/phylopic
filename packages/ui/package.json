@@ -55,7 +55,8 @@
         "url": "git+https://github.com/keesey/phylopic.git"
     },
     "resolutions": {
-        "@types/node": "*"
+        "@types/node": "*",
+        "@types/react": "^18.2.5"
     },
     "scripts": {
         "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils @phylopic/utils-api clsx next next/image next/link parse-nomen react swr",

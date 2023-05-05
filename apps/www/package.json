@@ -44,6 +44,9 @@
     "license": "MIT",
     "name": "@phylopic/www",
     "private": true,
+    "resolutions": {
+        "@types/react": "^18.2.5"
+    },
     "scripts": {
         "analyze": "ANALYZE=true yarn build",
         "build": "next build",
