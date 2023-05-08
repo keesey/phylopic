@@ -1,5 +1,5 @@
 import { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
-import { Loader, PaginationContainer } from "@phylopic/ui"
+import { Loader, NumberView, PaginationContainer } from "@phylopic/ui"
 import { Query } from "@phylopic/utils"
 import clsx from "clsx"
 import Link from "next/link"
@@ -10,6 +10,7 @@ import getNodeHRef from "~/routes/getNodeHRef"
 import ImageListView from "~/views/ImageListView"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
+import AgeView from "./AgeView"
 export interface Props {
     pageSize?: number
     short?: boolean
@@ -48,6 +49,7 @@ const LineageNodeView: FC<Props> = ({ value }) => {
                 ) : (
                     <NomenView value={value.names[0]} short />
                 )}
+                <AgeView value={value} />
             </header>
         </section>
     )
