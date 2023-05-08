@@ -1,10 +1,18 @@
-import type { ValidationFaultCollector } from "@phylopic/utils"
-import { isArray, isNomen, isNormalizedText, isNullOr, isURL } from "@phylopic/utils"
+import {
+    ValidationFaultCollector,
+    isArray,
+    isNomen,
+    isNonnegativeInteger,
+    isNormalizedText,
+    isNullOr,
+    isURL,
+} from "@phylopic/utils"
 import { Node } from "../types/Node"
 import isEntity from "./isEntity"
 import isLink from "./isLink"
 import isLinks from "./isLinks"
 import isTitledLink from "./isTitledLink"
+import isValueLink from "./isValueLink"
 const isNodeLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Node["_links"] =>
     isLinks(x, isTitledLink(isNormalizedText), faultCollector) &&
     isArray(isTitledLink(isNormalizedText))((x as Node["_links"]).childNodes, faultCollector?.sub("childNodes")) &&
@@ -13,7 +21,11 @@ const isNodeLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x i
     isNullOr(isLink(isNormalizedText))((x as Node["_links"]).images, faultCollector?.sub("images")) &&
     isLink(isNormalizedText)((x as Node["_links"]).lineage, faultCollector?.sub("lineage")) &&
     isNullOr(isTitledLink(isNormalizedText))((x as Node["_links"]).parentNode, faultCollector?.sub("parentNode")) &&
-    isNullOr(isTitledLink(isNormalizedText))((x as Node["_links"]).primaryImage, faultCollector?.sub("primaryImage"))
+    isNullOr(isTitledLink(isNormalizedText))((x as Node["_links"]).primaryImage, faultCollector?.sub("primaryImage")) &&
+    isNullOr(isValueLink(isNormalizedText, isNonnegativeInteger))(
+        (x as Node["_links"])["timetree.org/age"],
+        faultCollector?.sub("timetree.org/age"),
+    )
 export const isNode = (x: unknown, faultCollector?: ValidationFaultCollector): x is Node =>
     isEntity(x, isNodeLinks, faultCollector) && isArray(isNomen)((x as Node).names, faultCollector?.sub("names"))
 export default isNode
