@@ -1,4 +1,4 @@
-import { Nomen } from "@phylopic/utils"
+import { Nomen, URL } from "@phylopic/utils"
 import { Entity } from "./Entity"
 import { Link } from "./Link"
 import { Links } from "./Links"
@@ -12,7 +12,7 @@ export interface NodeLinks extends Links<TitledLink> {
     readonly lineage: Link
     readonly parentNode: TitledLink | null
     readonly primaryImage: TitledLink | null
-    readonly ["timetree.org/age"]: ValueLink | null
+    readonly ["timetree.org/age"]: ValueLink<URL, number> | null
 }
 export interface Node extends Entity {
     readonly _links: NodeLinks

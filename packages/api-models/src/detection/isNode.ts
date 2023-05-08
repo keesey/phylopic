@@ -22,7 +22,7 @@ const isNodeLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x i
     isLink(isNormalizedText)((x as Node["_links"]).lineage, faultCollector?.sub("lineage")) &&
     isNullOr(isTitledLink(isNormalizedText))((x as Node["_links"]).parentNode, faultCollector?.sub("parentNode")) &&
     isNullOr(isTitledLink(isNormalizedText))((x as Node["_links"]).primaryImage, faultCollector?.sub("primaryImage")) &&
-    isNullOr(isValueLink(isNormalizedText, isNonnegativeInteger))(
+    isNullOr(isValueLink(isURL, isNonnegativeInteger))(
         (x as Node["_links"])["timetree.org/age"],
         faultCollector?.sub("timetree.org/age"),
     )
