@@ -30,7 +30,7 @@
         "eslint-config-phylopic": "*",
         "next-unused": "^0.0.6",
         "sass": "^1.58.0",
-        "typescript": "^4.9.5"
+        "typescript": "^5.0.4"
     },
     "license": "MIT",
     "name": "@phylopic/edit",
