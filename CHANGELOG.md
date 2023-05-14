@@ -11,10 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgrades:
-    -   Node.js 18.
-    -   TypeScript 5.0.4.
-
 ### Deprecated
 
 ### Fixed
@@ -22,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.0.7] - 2023-05-14
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 18.
+    -   TypeScript 5.0.4.
 
 ## [2.0.6] - 2023-04-30
 
