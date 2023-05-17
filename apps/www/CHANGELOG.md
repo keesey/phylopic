@@ -11,17 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Using Quick Links to generate list of initially-generated static Node Pages.
-
 ### Deprecated
 
 ### Fixed
 
--   No longer potentially returning "Not Found" state for invalid fetch errors.
-
 ### Removed
 
 ### Security
+
+## [2.6.2] - 2023-05-17
+
+### Changed
+
+-   Using Quick Links to generate list of initially-generated static Node Pages.
+
+### Fixed
+
+-   No longer potentially returning "Not Found" state for invalid fetch errors.
 
 ## [2.6.1] - 2023-05-14
 

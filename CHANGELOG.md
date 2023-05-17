@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.8] - 2023-05-17
+
+### Changed
+
+-   Upgraded `turborepo` to `1.9.7`.
+
 ## [2.0.7] - 2023-05-14
 
 ### Changed
