@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   No longer potentially returning "Not Found" state for invalid fetch errors.
+
 ### Removed
 
 ### Security
