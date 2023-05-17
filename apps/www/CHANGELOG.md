@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Using Quick Links to generate list of initially-generated static Node Pages.
+
 ### Deprecated
 
 ### Fixed
