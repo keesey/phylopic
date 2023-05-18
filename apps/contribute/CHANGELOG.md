@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.2.3] - 2023-05-17
+
+### Fixed
+
+-   Possible fix for hanging edit screen.
+
 ## [2.2.2] - 2023-05-17
 
 ### Changed
