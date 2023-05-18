@@ -12,7 +12,7 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.5.1
+  version: 2.6.0
 tags:
   - name: general
     description: General API information and status.
@@ -1541,6 +1541,8 @@ paths:
                 $ref: "#/components/schemas/NodeWithEmbedded"
         "307":
           $ref: "#/components/responses/307"
+        "308":
+          $ref: "#/components/responses/308"
         "400":
           $ref: "#/components/responses/400"
         "404":
