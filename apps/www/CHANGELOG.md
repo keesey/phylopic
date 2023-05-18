@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.3] - 2023-05-17
+
+### Changed
+
+-   Revalidation endpoint takes `path` parameter.
+
+### Fixed
+
+-   Revalidation endpoint was not working properly.
+
 ## [2.6.2] - 2023-05-17
 
 ### Changed
