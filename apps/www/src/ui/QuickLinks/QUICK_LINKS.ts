@@ -51,8 +51,8 @@ const QUICK_LINKS: QuickLinkNode = {
                                     uuid: "d7324a9c-c170-4abc-b092-a5f5168f9365",
                                 },
                                 {
-                                    slug: "nephrozoa",
-                                    uuid: "68226175-f88d-4ea8-8228-3204c49bfda0",
+                                    slug: "bilateria",
+                                    uuid: "594044a1-68fa-4b7f-affc-b9c9364cf442",
                                     children: [
                                         {
                                             slug: "protostomia",

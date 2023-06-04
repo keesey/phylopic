@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.5] - 2023-06-04
+
+### Changed
+
+-   Replaced _Nephrozoa_ with _Bilateria_ in Quick Links.
+
 ## [2.6.4] - 2023-05-17
 
 ### Changed
