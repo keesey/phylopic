@@ -43,7 +43,7 @@ const PageComponent: NextPage = () => (
     </PageLayout>
 )
 const Article: FC = () => {
-    const [build] = useContext(BuildContext) ?? [0]
+    const [build] = useContext(BuildContext) ?? []
     return (
         <article>
             <section id="introduction">
