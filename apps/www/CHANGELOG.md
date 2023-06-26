@@ -19,13 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [2.6.7] - 2023-06-26
+## [2.6.8] - 2023-06-26
+
+### Fixed
+
+-   Updated two taxa in Qucik Links.
+
+## [2.6.7] - 2023-06-26 [YANKED]
 
 ### Fixed
 
 -   Not allowing build #0.
 
-## [2.6.6] - 2023-06-26
+## [2.6.6] - 2023-06-26 [YANKED]
 
 ### Fixed
 

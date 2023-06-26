@@ -60,7 +60,7 @@ const QUICK_LINKS: QuickLinkNode = {
                                             children: [
                                                 {
                                                     slug: "trochozoa",
-                                                    uuid: "64ce784a-52da-441e-b100-5f343172f138",
+                                                uuid: "0142f156-01f2-4912-9a54-c37614d5e6cb",
                                                     children: [
                                                         {
                                                             label: "annelids",
@@ -110,29 +110,23 @@ const QUICK_LINKS: QuickLinkNode = {
                                                                             uuid: "a779ce10-9ba1-4ec8-867a-52abf90f4733",
                                                                         },
                                                                         {
-                                                                            slug: "aparaglossata",
-                                                                            uuid: "d916db5c-b15c-4ec4-ae9b-f8f56f06461c",
+                                                                            label: "beetles",
+                                                                            slug: "coleoptera",
+                                                                            uuid: "7d611043-d8e6-4141-a2d1-1a2209f846b2",
+                                                                        },
+                                                                        {
+                                                                            slug: "panorpida",
+                                                                            uuid: "31edc5d4-7b5a-47b9-b35b-c5ad047ed030",
                                                                             children: [
                                                                                 {
-                                                                                    label: "beetles",
-                                                                                    slug: "coleoptera",
-                                                                                    uuid: "7d611043-d8e6-4141-a2d1-1a2209f846b2",
+                                                                                    label: "flies",
+                                                                                    slug: "diptera",
+                                                                                    uuid: "7ab0a659-1e87-43c5-9ae0-202dc3088590",
                                                                                 },
                                                                                 {
-                                                                                    slug: "panorpida",
-                                                                                    uuid: "31edc5d4-7b5a-47b9-b35b-c5ad047ed030",
-                                                                                    children: [
-                                                                                        {
-                                                                                            label: "flies",
-                                                                                            slug: "diptera",
-                                                                                            uuid: "7ab0a659-1e87-43c5-9ae0-202dc3088590",
-                                                                                        },
-                                                                                        {
-                                                                                            label: "moths",
-                                                                                            slug: "lepidoptera",
-                                                                                            uuid: "cd2f1099-70c5-494b-8c13-2ebe60b51cf1",
-                                                                                        },
-                                                                                    ],
+                                                                                    label: "moths",
+                                                                                    slug: "lepidoptera",
+                                                                                    uuid: "cd2f1099-70c5-494b-8c13-2ebe60b51cf1",
                                                                                 },
                                                                             ],
                                                                         },
