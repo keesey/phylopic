@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.4] - 2023-06-26
+
+### Fixed
+
+-   No more flickering between build versions.
+
 ## [1.2.2] - 2023-05-17
 
 ### Changed

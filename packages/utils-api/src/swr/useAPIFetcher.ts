@@ -5,7 +5,7 @@ import createAPIFetcher from "./createAPIFetcher"
 export const useAPIFetcher = <
     T extends Readonly<{ build: number }> = Readonly<{ build: number }>,
 >(): BareFetcher<T> => {
-    const [, setBuild] = useContext(BuildContext) ?? []
-    return useMemo(() => createAPIFetcher<T>(setBuild), [setBuild])
+    const [build, setBuild] = useContext(BuildContext) ?? [0]
+    return useMemo(() => createAPIFetcher<T>(build, setBuild), [build, setBuild])
 }
 export default useAPIFetcher
