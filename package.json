@@ -31,7 +31,7 @@
         "test": "turbo run test",
         "version-packages": "changeset version"
     },
-    "version": "2.0.8",
+    "version": "2.0.9",
     "workspaces": [
         "apps/*",
         "packages/*"
