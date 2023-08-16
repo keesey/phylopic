@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   Updated two taxa in Qucik Links.
+-   Updated two taxa in Quick Links.
 
 ## [2.6.7] - 2023-06-26 [YANKED]
 
