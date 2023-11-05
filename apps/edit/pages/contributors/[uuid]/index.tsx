@@ -37,7 +37,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
 }
 const Content: FC<Props> = ({ uuid }) => {
-    const { data: contributor, mutate: mutateNode } = useSWR<Contributor & { uuid: UUID }>(`/api/contributors/_/${uuid}`, fetchJSON)
+    const { data: contributor, mutate: mutateNode } = useSWR<Contributor & { uuid: UUID }>(
+        `/api/contributors/_/${uuid}`,
+        fetchJSON,
+    )
     return (
         <>
             <Head>
@@ -56,8 +59,10 @@ const Content: FC<Props> = ({ uuid }) => {
                                 },
                             ]}
                         />
-                        <h1>{contributor &&  <>{contributor.name}</>}</h1>
-                        <a href={`mailto:${contributor.emailAddress}`}><code>{contributor.emailAddress}</code></a>
+                        <h1>{contributor && <>{contributor.name}</>}</h1>
+                        <a href={`mailto:${contributor.emailAddress}`}>
+                            <code>{contributor.emailAddress}</code>
+                        </a>
                     </header>
                     <section>
                         <h2>Submissions</h2>
@@ -65,10 +70,14 @@ const Content: FC<Props> = ({ uuid }) => {
                             {(submissions, isValidating) =>
                                 submissions.length ? (
                                     <BubbleList>
-                                        {(submissions as ReadonlyArray<Submission & { hash: Hash }>).map(submission => (
-                                            <BubbleItem key={submission.hash}>
-                                                <Link href={`/submissions/${encodeURIComponent(submission.hash)}`}>
-                                                    {submission.identifier ? <IdentifierView value={submission.identifier} /> : "[Unassigned]"}
+                                        {(submissions as ReadonlyArray<Submission & { Key: string }>).map(submission => (
+                                            <BubbleItem key={submission.Key}>
+                                                <Link href={`/submissions/${encodeURIComponent(submission.Key.replace(/^files\//, ""))}`}>
+                                                    {submission.identifier ? (
+                                                        <IdentifierView value={submission.identifier} />
+                                                    ) : (
+                                                        "[Unassigned]"
+                                                    )}
                                                 </Link>
                                             </BubbleItem>
                                         ))}

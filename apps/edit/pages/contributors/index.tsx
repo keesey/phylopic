@@ -40,5 +40,12 @@ const Page: NextPage = () => {
 }
 export default Page
 const ContributorView: FC<{ contributor: Contributor & { uuid: UUID } }> = ({ contributor }) => {
-    return (<>{contributor.name || INCOMPLETE_STRING} <code>&lt;<a href={`mailto:${contributor.emailAddress}`}>{contributor.emailAddress}</a>&gt;</code></>)
+    return (
+        <>
+            {contributor.name || INCOMPLETE_STRING}{" "}
+            <code>
+                &lt;<a href={`mailto:${contributor.emailAddress}`}>{contributor.emailAddress}</a>&gt;
+            </code>
+        </>
+    )
 }

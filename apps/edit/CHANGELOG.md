@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.1] - 2023-11-05
+
+### Fixed
+
+-   Links to submissions for Contributor Pages.
+
 ## [1.3.0] - 2023-11-05
 
 ### Added

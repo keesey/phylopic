@@ -60,7 +60,7 @@ const QUICK_LINKS: QuickLinkNode = {
                                             children: [
                                                 {
                                                     slug: "trochozoa",
-                                                uuid: "0142f156-01f2-4912-9a54-c37614d5e6cb",
+                                                    uuid: "0142f156-01f2-4912-9a54-c37614d5e6cb",
                                                     children: [
                                                         {
                                                             label: "annelids",
