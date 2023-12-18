@@ -11,6 +11,7 @@ import checkAccept from "../mediaTypes/checkAccept"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+import createBuildRedirect from "../build/createBuildRedirect"
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 export type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
 export type GetResolveObjectsService = PgClientService
@@ -52,7 +53,7 @@ const getRedirect = async (
             throw new APIError(404, [
                 {
                     developerMessage: "Object could not be found. None of the IDs matched.",
-                    field: "body",
+                    field: "objectIDs",
                     type: "RESOURCE_NOT_FOUND",
                     userMessage: USER_MESSAGE,
                 },
@@ -74,18 +75,20 @@ export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolv
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryAndPathParameters, isResolveObjectsParameters, USER_MESSAGE)
     const { authority, namespace, objectIDs, ...queryParameters } = queryAndPathParameters as ResolveObjectsParameters
-    if (queryParameters.build) {
-        checkBuild(queryParameters.build, USER_MESSAGE)
+    const path = `/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`
+    if (!queryParameters.build) {
+        return createBuildRedirect(path, { ...queryParameters, objectIDs })
     }
+    checkBuild(queryParameters.build, USER_MESSAGE)
     const link = await getRedirect(service, authority, namespace, objectIDs.split(","), queryParameters)
     return {
         body: stringifyNormalized(link),
         headers: {
             ...DATA_HEADERS,
-            ...createRedirectHeaders(link.href, false),
-            "access-control-allow-methods": "OPTIONS,GET,POST",
+            ...createRedirectHeaders(link.href, true),
+            "access-control-allow-methods": "OPTIONS,GET",
         },
-        statusCode: 303,
+        statusCode: 308,
     } as APIGatewayProxyResult
 }
 export default GetResolveObjects

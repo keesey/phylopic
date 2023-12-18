@@ -15,6 +15,12 @@ import SourceClient from "./source/SourceClient.js"
                         await linker.default(client)
                         break
                     }
+                    case "gbif": {
+                        console.info("Auto-linking Global Biodiversity Information Facility.")
+                        const linker = await import("./autolink/gbif.js")
+                        await linker.default(client)
+                        break
+                    }
                     case "otol": {
                         console.info("Auto-linking Open Tree of Life.")
                         const linker = await import("./autolink/otol.js")

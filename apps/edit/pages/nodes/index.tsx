@@ -60,7 +60,6 @@ const Page: NextPage = () => {
 }
 export default Page
 const NodeView: FC<{ node: Node & { uuid: UUID } }> = ({ node }) => {
-    node.parent
     const { data: parent } = useSWR<Node & { uuid: UUID }>(
         node.parent ? `/api/nodes/_/${encodeURIComponent(node.parent)}` : null,
         fetchJSON,

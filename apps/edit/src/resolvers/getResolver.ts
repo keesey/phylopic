@@ -1,10 +1,13 @@
 import { Authority, Namespace } from "@phylopic/utils"
+import { Resolver } from "./Resolver"
+import resolveGBIF from "./namespaces/resolveGBIF"
 import resolveOTOL from "./namespaces/resolveOTOL"
 import resolvePBDB from "./namespaces/resolvePBDB"
 import resolvePhyloPic from "./namespaces/resolvePhyloPic"
-import { Resolver } from "./Resolver"
 const getResolver = (authority: Authority, namespace: Namespace): Resolver | null => {
-    // :TODO: EoL, etc.
+    if (authority === "gbif.org" && namespace === "species") {
+        return resolveGBIF
+    }
     if (authority === "opentreeoflife.org" && namespace === "taxonomy") {
         return resolveOTOL
     }

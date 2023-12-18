@@ -19,6 +19,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.9] - 2023-06-26
+
+### Changed
+
+-   Upgraded `turborepo` to `1.10.6`.
+-   Updated `caniuse-lite`.
+
+## [2.0.8] - 2023-05-17
+
+### Changed
+
+-   Upgraded `turborepo` to `1.9.7`.
+
+## [2.0.7] - 2023-05-14
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 18.
+    -   TypeScript 5.0.4.
+
+## [2.0.6] - 2023-04-30
+
+### Changed
+
+-   Upgraded `next` to `13.3.1`.
+
 ## [2.0.5] - 2023-04-23
 
 ### Changed

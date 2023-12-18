@@ -9,6 +9,16 @@ const AuthorityIcon: FC<Props> = ({ authority }) => {
     if (authority === "eol.org") {
         return <Image alt="Encyclopedia of Life" src="/logos/eol.svg" unoptimized className={styles.main} />
     }
+    if (authority === "gbif.org") {
+        return (
+            <Image
+                alt="Global Biodiversity Information Facility"
+                src="/logos/gbif.svg"
+                unoptimized
+                className={styles.main}
+            />
+        )
+    }
     if (authority === "opentreeoflife.org") {
         return <Image alt="Open Tree of Life" src="/logos/otol.svg" unoptimized className={styles.main} />
     }

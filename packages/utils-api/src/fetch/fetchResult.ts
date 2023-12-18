@@ -38,7 +38,7 @@ export const fetchResult = async <T>(
             }
         }
         case "HTTPError": {
-            if (response.status >= 400 && response.status < 500) {
+            if (response.status === 404) {
                 return {
                     ok: false,
                     status: "notFound",

@@ -19,6 +19,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.1] - 2023-11-05
+
+### Fixed
+
+-   Links to submissions for Contributor Pages.
+
+## [1.3.0] - 2023-11-05
+
+### Added
+
+-   Contributor Pages.
+
+## [1.2.4] - 2023-06-26
+
+### Fixed
+
+-   No more flickering between build versions.
+
+## [1.2.2] - 2023-05-17
+
+### Changed
+
+-   Upgraded `@phylopic/utils-api` to `1.0.2`.
+
+## [1.2.1] - 2023-05-14
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 18.
+    -   TypeScript 5.0.4.
+
+## [1.2.0] - 2023-05-02
+
+### Added
+
+-   GBIF to search capabilities.
+
+## [1.1.1] - 2023-04-30
+
+### Changed
+
+-   Upgraded `next` to `13.3.1`.
+
 ## [1.1.0] - 2023-04-25
 
 ### Changed
