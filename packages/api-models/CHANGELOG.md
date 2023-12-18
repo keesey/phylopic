@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -   `ValueLink` type.
--   `timetreeorg/age` property to `Node._links`.
+-   `timetree.org/age` property to `Node._links`.
 
 ### Changed
 
