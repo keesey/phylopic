@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.0] - 2023-12-18
+
+### Added
+
+-   Sanitization of `vectorFile` images (re-vectorized from largest raster).
+
 ## [1.3.1] - 2023-05-14
 
 ### Added
