@@ -14,6 +14,7 @@ import useDispatch from "./AssignmentContainer/hooks/useDispatch"
 import usePending from "./AssignmentContainer/hooks/usePending"
 import useSubmissionHash from "./AssignmentContainer/hooks/useSubmissionHash"
 import NodeForm from "./NodeForm"
+import LoadingState from "../LoadingState"
 const Content: FC = () => {
     const changeRequested = useChangeRequested()
     const pending = usePending()
@@ -21,7 +22,7 @@ const Content: FC = () => {
     const submission = useAssignmentSubmission()
     const dispatch = useDispatch()
     if (!hash || !submission) {
-        return null
+        return <LoadingState>Loading submission…</LoadingState>
     }
     return (
         <Dialogue>

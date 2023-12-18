@@ -19,6 +19,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.10] - 2023-12-18
+
+### Added
+
+-   Missing mention of _GBIF_ API in API Recipes Article.
+
+## [2.6.9] - 2023-08-30
+
+### Fixed
+
+-   Issue with updating build number.
+
+## [2.6.8] - 2023-06-26
+
+### Fixed
+
+-   Updated two taxa in Quick Links.
+
+## [2.6.7] - 2023-06-26 [YANKED]
+
+### Fixed
+
+-   Not allowing build #0.
+
+## [2.6.6] - 2023-06-26 [YANKED]
+
+### Fixed
+
+-   No more flickering between build versions.
+
+## [2.6.5] - 2023-06-04
+
+### Changed
+
+-   Replaced _Nephrozoa_ with _Bilateria_ in Quick Links.
+
+## [2.6.4] - 2023-05-17
+
+### Changed
+
+-   Upgraded `@phylopic/utils-api` to `1.0.2`.
+
+## [2.6.3] - 2023-05-17
+
+### Changed
+
+-   Revalidation endpoint takes `path` parameter.
+
+### Fixed
+
+-   Revalidation endpoint was not working properly.
+
+## [2.6.2] - 2023-05-17
+
+### Changed
+
+-   Using Quick Links to generate list of initially-generated static Node Pages.
+
+### Fixed
+
+-   No longer potentially returning "Not Found" state for invalid fetch errors.
+
+## [2.6.1] - 2023-05-14
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 18.
+    -   TypeScript 5.0.4.
+
 ## [2.6.0] - 2023-05-02
 
 ### Added

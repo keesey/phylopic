@@ -26,7 +26,7 @@ const Page: NextPage<Props> = ({ build, hash }) => (
         submissionHash={hash}
     >
         <AuthorizedOnly>
-            <Suspense>
+            <Suspense fallback={<LoadingState>One moment…</LoadingState>}>
                 <Assignment hash={hash} />
             </Suspense>
         </AuthorizedOnly>

@@ -24,7 +24,7 @@
         "@phylopic/tsconfig": "*",
         "@types/probe-image-size": "^7.2.0",
         "eslint-config-phylopic": "*",
-        "typescript": "^4.9.5"
+        "typescript": "^5.0.4"
     },
     "name": "@phylopic/publish",
     "private": true,
@@ -48,5 +48,5 @@
         "upload:images": "aws s3 sync --acl public-read ./.s3/images.phylopic.org s3://images.phylopic.org/"
     },
     "type": "module",
-    "version": "1.3.0"
+    "version": "1.3.1"
 }

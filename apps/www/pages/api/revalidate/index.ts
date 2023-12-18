@@ -1,32 +1,17 @@
 import { NextApiHandler } from "next"
-const PATHS_TO_REVALIDATE = [
-    "/",
-    "/contributors",
-    "/contributors/[uuid]/[slug]",
-    "/images",
-    "/images/[uuid]/[slug]",
-    "/nodes",
-    "/nodes/[uuid]/[slug]",
-    "/nodes/[uuid]/lineage",
-    "/thanks",
-]
 const index: NextApiHandler = async (req, res) => {
     if (req.query.secret !== process.env.REVALIDATE_TOKEN) {
         return res.status(401).json({ message: "Invalid secret token." })
     }
+    if (typeof req.query.path !== "string") {
+        return res.status(400).json({ message: "No path provided." })
+    }
     try {
-        const results = await Promise.allSettled(PATHS_TO_REVALIDATE.map(path => res.revalidate(path)))
-        let revalidated = true
-        for (const result of results) {
-            if (result.status === "rejected") {
-                console.error(result.reason)
-                revalidated = false
-            }
-        }
-        return res.json({ revalidated })
+        await res.revalidate(req.query.path)
+        return res.json({ revalidated: true })
     } catch (err) {
         console.error(err)
-        return res.status(500).send(String(err))
+        return res.status(500).json({ message: String(err) })
     }
 }
 export default index

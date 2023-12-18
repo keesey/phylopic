@@ -1,5 +1,5 @@
 {
-    "extends": "@phylopic/tsconfig/node14.json",
+    "extends": "@phylopic/tsconfig/node18.json",
     "include": ["."],
     "exclude": ["dist", "build", "node_modules"]
 }

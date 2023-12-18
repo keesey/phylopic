@@ -43,7 +43,7 @@ const PageComponent: NextPage = () => (
     </PageLayout>
 )
 const Article: FC = () => {
-    const [build] = useContext(BuildContext) ?? [""]
+    const [build] = useContext(BuildContext) ?? []
     return (
         <article>
             <section id="introduction">
@@ -249,10 +249,16 @@ const Article: FC = () => {
                     augmenting searches with external resources that cover other taxa. To take full advantage, you may
                     need to make multiple calls both to the <SiteTitle /> API and to other APIs. Examples below include
                     the{" "}
+                    <a href="//www.gbif.org/" rel="noreferrer">
+                        <cite>
+                            <abbr title="Global Biodiversity Information Facility">GBIF</abbr>
+                        </cite>
+                    </a>{" "}
+                    API, the{" "}
                     <a href="//tree.opentreeoflife.org/" rel="noreferrer">
                         <cite>Open Tree of Life</cite>
                     </a>{" "}
-                    API and the{" "}
+                    API, and the{" "}
                     <a href="//paleobiodb.org/" rel="noreferrer">
                         <cite>Paleobiology Database</cite>
                     </a>{" "}

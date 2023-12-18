@@ -19,6 +19,9 @@ const Home: NextPage = () => (
             <nav>
                 <ul>
                     <li>
+                        <Link href="contributors">Contributors</Link>
+                    </li>
+                    <li>
                         <Link href="images">Images</Link>
                     </li>
                     <li>
