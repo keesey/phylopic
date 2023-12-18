@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.10] - 2023-12-18
+
+### Added
+
+-   Missing mention of _GBIF_ API in API Recipes Article.
+
 ## [2.6.9] - 2023-08-30
 
 ### Fixed

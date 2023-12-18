@@ -70,17 +70,23 @@ const Content: FC<Props> = ({ uuid }) => {
                             {(submissions, isValidating) =>
                                 submissions.length ? (
                                     <BubbleList>
-                                        {(submissions as ReadonlyArray<Submission & { Key: string }>).map(submission => (
-                                            <BubbleItem key={submission.Key}>
-                                                <Link href={`/submissions/${encodeURIComponent(submission.Key.replace(/^files\//, ""))}`}>
-                                                    {submission.identifier ? (
-                                                        <IdentifierView value={submission.identifier} />
-                                                    ) : (
-                                                        "[Unassigned]"
-                                                    )}
-                                                </Link>
-                                            </BubbleItem>
-                                        ))}
+                                        {(submissions as ReadonlyArray<Submission & { Key: string }>).map(
+                                            submission => (
+                                                <BubbleItem key={submission.Key}>
+                                                    <Link
+                                                        href={`/submissions/${encodeURIComponent(
+                                                            submission.Key.replace(/^files\//, ""),
+                                                        )}`}
+                                                    >
+                                                        {submission.identifier ? (
+                                                            <IdentifierView value={submission.identifier} />
+                                                        ) : (
+                                                            "[Unassigned]"
+                                                        )}
+                                                    </Link>
+                                                </BubbleItem>
+                                            ),
+                                        )}
                                     </BubbleList>
                                 ) : isValidating ? (
                                     <Loader />
