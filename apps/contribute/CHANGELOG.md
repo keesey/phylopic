@@ -23,6 +23,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.2.6] - 2023-08-30
+
+### Fixed
+
+-   Issue with updating build number.
+
+## [2.2.5] - 2023-06-26
+
+### Fixed
+
+-   No more flickering between build versions.
+
+## [2.2.4] - 2023-05-19
+
+### Fixed
+
+-   Another possible fix for hanging edit screen.
+
+## [2.2.3] - 2023-05-17
+
+### Fixed
+
+-   Possible fix for hanging edit screen.
+
+## [2.2.2] - 2023-05-17
+
+### Changed
+
+-   Upgraded `@phylopic/utils-api` to `1.0.2`.
+
+## [2.2.1] - 2023-05-14
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 18.
+    -   TypeScript 5.0.4.
+
 ## [2.2.0] - 2023-05-02
 
 ### Added

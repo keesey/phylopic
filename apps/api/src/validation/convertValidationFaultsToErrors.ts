@@ -6,7 +6,7 @@ const convertValidationFaultsToErrors = (faults: readonly ValidationFault[], use
             ({
                 developerMessage: fault.message,
                 field: fault.field || undefined,
-                type: "BAD_REQUEST_BODY",
+                type: fault.field === "body" ? "BAD_REQUEST_BODY" : "BAD_REQUEST_PARAMETERS",
                 userMessage,
             } as Error),
     )

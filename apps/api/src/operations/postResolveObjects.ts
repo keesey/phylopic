@@ -1,17 +1,14 @@
-import { DATA_MEDIA_TYPE, isResolveObjectParameters, ResolveObjectParameters, TitledLink } from "@phylopic/api-models"
-import { Authority, createSearch, Namespace, ObjectID, ObjectIDs, stringifyNormalized, UUID } from "@phylopic/utils"
-import { APIGatewayProxyResult } from "aws-lambda"
-import BUILD from "../build/BUILD"
-import checkBuild from "../build/checkBuild"
+import { DATA_MEDIA_TYPE, isResolveObjectParameters, Link, ResolveObjectParameters } from "@phylopic/api-models"
+import { Authority, createSearch, isNormalizedText, Namespace, ObjectID, stringifyNormalized } from "@phylopic/utils"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
-import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+import { APIGatewayProxyResult } from "aws-lambda"
 const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 export type PostResolveObjectsParameters = DataRequestHeaders & {
@@ -19,78 +16,18 @@ export type PostResolveObjectsParameters = DataRequestHeaders & {
 } & Partial<Omit<ResolveObjectParameters, "objectID">> & {
         readonly body?: string
     }
-export type PostResolveObjectsService = PgClientService
-const getAlternate = (
+const getRedirectLink = (
     authority: Authority,
     namespace: Namespace,
     objectIDs: readonly ObjectID[],
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-) =>
-    `/resolve/${encodeURIComponent(authority ?? "")}/${encodeURIComponent(namespace ?? "")}${createSearch({
+): Link & { __WARNING__: string } => ({
+    __WARNING__: "This method is deprecated, and will return 410 (Gone) in the future.",
+    href: `/resolve/${encodeURIComponent(authority ?? "")}/${encodeURIComponent(namespace ?? "")}${createSearch({
         ...queryParameters,
         objectIDs: objectIDs.join(","),
-    })}`
-const getRedirect = async (
-    service: PgClientService,
-    authority: Authority | undefined,
-    namespace: Namespace | undefined,
-    objectIDs: ObjectID[],
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<TitledLink & { __WARNING__: string }> => {
-    if (!authority || !namespace) {
-        throw new APIError(400, [
-            {
-                developerMessage: "Not enough information to resolve.",
-                field: authority ? "namespace" : "authority",
-                type: "BAD_REQUEST_PARAMETERS",
-                userMessage: USER_MESSAGE,
-            },
-        ])
-    }
-    if (authority === "phylopic.org") {
-        throw new APIError(400, [
-            {
-                developerMessage: "This method is not meant to be used for PhyloPic objects.",
-                field: "authority",
-                type: "BAD_REQUEST_PARAMETERS",
-                userMessage: USER_MESSAGE,
-            },
-        ])
-    }
-    const client = await service.createPgClient()
-    let link: TitledLink
-    try {
-        const result = await client.query<{ node_uuid: UUID; title: string | null }>(
-            'SELECT node_uuid,title FROM node_external WHERE authority=$1::character varying AND "namespace"=$2::character varying AND objectid=ANY($3::character varying[]) AND build=$4::bigint ORDER BY array_position($3::character varying[],objectid) LIMIT 1',
-            [authority, namespace, objectIDs, BUILD],
-        )
-        if (result.rowCount !== 1) {
-            throw new APIError(404, [
-                {
-                    developerMessage: "Object could not be found. None of the IDs matched.",
-                    field: "body",
-                    type: "RESOURCE_NOT_FOUND",
-                    userMessage: USER_MESSAGE,
-                },
-            ])
-        }
-        link = {
-            href: `/nodes/` + encodeURIComponent(result.rows[0].node_uuid) + createSearch(queryParameters),
-            title: result.rows[0].title ?? "",
-        }
-    } finally {
-        await service.deletePgClient(client)
-    }
-    return {
-        ...link,
-        __WARNING__: `This method is deprecated! Please use \`GET ${getAlternate(
-            authority,
-            namespace,
-            objectIDs,
-            queryParameters,
-        )}\`.`,
-    }
-}
+    })}`,
+})
 const getObjectIDsFromBody = (body: string | null) => {
     if (!body) {
         throw new APIError(400, [
@@ -115,10 +52,10 @@ const getObjectIDsFromBody = (body: string | null) => {
             },
         ])
     }
-    if (!Array.isArray(objectIDs) || !objectIDs.every(item => typeof item === "string" && item.length > 0)) {
+    if (!Array.isArray(objectIDs) || !objectIDs.every(item => isNormalizedText(item))) {
         throw new APIError(400, [
             {
-                developerMessage: "Expected body to be an array of nonempty strings.",
+                developerMessage: "Expected body to be an array of ID strings.",
                 field: "body",
                 type: "BAD_REQUEST_BODY",
                 userMessage: USER_MESSAGE,
@@ -127,10 +64,12 @@ const getObjectIDsFromBody = (body: string | null) => {
     }
     return objectIDs
 }
-export const postResolveObjects: Operation<PostResolveObjectsParameters, PostResolveObjectsService> = async (
-    { accept, body, "content-type": contentType, ...queryAndPathParameters },
-    service,
-) => {
+export const postResolveObjects: Operation<PostResolveObjectsParameters> = async ({
+    accept,
+    body,
+    "content-type": contentType,
+    ...queryAndPathParameters
+}) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     checkContentType(contentType, ACCEPT)
     validate({ ...queryAndPathParameters, objectID: "-" }, isResolveObjectParameters, USER_MESSAGE)
@@ -146,21 +85,16 @@ export const postResolveObjects: Operation<PostResolveObjectsParameters, PostRes
     }
     const objectIDs = getObjectIDsFromBody(body)
     const { authority, namespace, ...queryParameters } = queryAndPathParameters
-    if (queryParameters.build) {
-        checkBuild(queryParameters.build, USER_MESSAGE)
-    }
-    const link = await getRedirect(service, authority, namespace, objectIDs, queryParameters)
-    const alternate = getAlternate(authority as Authority, namespace as Namespace, objectIDs, queryParameters)
+    const link = getRedirectLink(authority ?? "", namespace ?? "", objectIDs, queryParameters)
     return {
         body: stringifyNormalized(link),
         headers: {
             ...DATA_HEADERS,
-            ...createRedirectHeaders(link.href, false),
-            "access-control-allow-methods": "OPTIONS,GET,POST",
+            ...createRedirectHeaders(link.href, true),
+            "access-control-allow-methods": "OPTIONS,GET",
             deprecation: "version=v2",
-            link: `<https://api.phylopic.org${alternate}>; rel="alternate"`,
         },
-        statusCode: 303,
+        statusCode: 301,
     } as APIGatewayProxyResult
 }
 export default postResolveObjects

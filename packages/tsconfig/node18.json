@@ -1,10 +1,11 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "jsx": "react-jsx",
         "lib": ["ES2022"],
-        "module": "ESNext"
+        "module": "ES2022",
+        "resolveJsonModule": true,
+        "target": "ES2022"
     },
-    "display": "React Library",
+    "display": "Node 18",
     "extends": "./base.json"
 }

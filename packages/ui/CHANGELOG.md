@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.6.2] - 2023-05-17
+
+### Changed
+
+-   Upgraded `@phylopic/utils-api` to `1.0.2`.
+
+## [1.6.1] - 2023-05-14
+
+### Changed
+
+-   Upgraded to TypeScript 5.0.4.
+
 ## [1.6.0] - 2023-05-02
 
 ### Added
