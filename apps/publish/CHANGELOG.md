@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Sanitization of `vectorFile` images (re-vectorized from largest raster).
-
 ### Changed
 
 ### Deprecated
