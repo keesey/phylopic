@@ -610,10 +610,10 @@ const Article: FC = () => {
                     <dd>
                         A <a href="//wikipedia.org/wiki/Vector_graphics">vector</a> version of the image (
                         <a href="//www.w3.org/TR/SVG">
-                            <abbr title="Scalable Vector Graphics">SVG</abbr> format
-                        </a>
-                        ). Same as <code>sourceFile</code> if a vector file was submitted, or automatically generated
-                        from it otherwise.
+                            <abbr title="Scalable Vector Graphics">SVG</abbr>
+                        </a>{" "}
+                        format), automatically generated from <code>sourceFile</code>. This image is pure black on a
+                        transparent background, and may look different from the original file.
                     </dd>
                 </dl>
             </section>

@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.12] - 2024-01-04
+
+### Changed
+
+-   Description of `vectorFile` in API Recipes article.
+
 ## [2.6.11] - 2023-12-18
 
 ### Added
