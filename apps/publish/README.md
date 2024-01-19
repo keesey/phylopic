@@ -55,6 +55,7 @@ These commands will pull data from external APIs and try to match themn to nodes
 
 ```sh
 yarn autolink eol
+yarn autolink gbif
 yarn autolink otol
 yarn autolink pbdb
 ```
