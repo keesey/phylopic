@@ -8,7 +8,7 @@ The app is hosted at [https://contribute.phylopic.org](https://contribute.phylop
 
 See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [AWS Command Line Interface](https://aws.amazon.com/cli/).
 
-### Environment Variables
+### Environment variables
 
 The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
 
