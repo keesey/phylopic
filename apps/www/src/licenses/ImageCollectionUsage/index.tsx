@@ -3,6 +3,7 @@ import { UUIDish } from "@phylopic/utils"
 import { FC } from "react"
 import CollectionAttribution from "./CollectionAttribution"
 import CollectionLicense from "./CollectionLicense"
+import CollectionSponsors from "./CollectionSponsors"
 export interface Props {
     items?: readonly ImageWithEmbedded[]
     total?: number
@@ -18,6 +19,7 @@ const ImageCollectionUsage: FC<Props> = ({ items, total, uuid }) => {
         <section>
             <CollectionLicense images={images} />
             <CollectionAttribution images={images} uuid={uuid} />
+            <CollectionSponsors images={images} />
         </section>
     )
 }
