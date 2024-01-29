@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.10] - 2024-01-29
+
+### Changed
+
+-   Upgraded `turborepo` to `1.11.3`.
+-   Updated `caniuse-lite`.
+
 ## [2.0.9] - 2023-06-26
 
 ### Changed
