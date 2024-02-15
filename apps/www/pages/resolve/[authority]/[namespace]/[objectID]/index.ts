@@ -1,4 +1,4 @@
-import { isAuthority, isNamespace, isObjectID } from "@phylopic/utils"
+import { isAuthority, isNamespace, isObjectID, isUUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetServerSideProps, NextPage } from "next"
 import { ParsedUrlQuery } from "querystring"
@@ -13,6 +13,14 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
     const { authority, namespace, objectID } = context.query
     if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
         return { notFound: true }
+    }
+    if (authority === "phylopic.org" && namespace === "nodes" && isUUID(objectID)) {
+        return {
+            redirect: {
+                destination: `/nodes/${encodeURIComponent(objectID)}`,
+                permanent: true,
+            },
+        }
     }
     try {
         await axios.get<never>(
