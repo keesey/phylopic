@@ -6,7 +6,7 @@ import getMrcaUrl from "./getMrcaAgeUrl"
 import getNcbiTaxId from "./getNcbiTaxId"
 const MILLION = 1000000
 const useNodeAge = (node: Node | null) => {
-    const ncbiTaxId = useMemo(() =>node ?  getNcbiTaxId(node._links) : null, [node])
+    const ncbiTaxId = useMemo(() => (node ? getNcbiTaxId(node._links) : null), [node])
     const key = ncbiTaxId ? getMrcaUrl([ncbiTaxId]) : null
     const { data } = useSWRImmutable(key, fetchField)
     return useMemo(() => (data ? parseInt(data, 10) * MILLION || null : null), [data])

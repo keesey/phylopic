@@ -1,4 +1,5 @@
-const arrayBufferTOString = (buffer: ArrayBufferLike | ArrayLike<number>) => String.fromCharCode.apply(null, Array.from(new Uint16Array(buffer).values()));
+const arrayBufferTOString = (buffer: ArrayBufferLike | ArrayLike<number>) =>
+    String.fromCharCode.apply(null, Array.from(new Uint16Array(buffer).values()))
 const fetchField = async (url: string): Promise<string | null> => {
     try {
         const response = await fetch(url, {

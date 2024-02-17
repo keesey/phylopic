@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react"
-import type { BareFetcher } from "swr"
+import { type BareFetcher } from "swr/core"
 import { BuildContext } from "../builds"
 import createAPIFetcher from "./createAPIFetcher"
 export const useAPIFetcher = <

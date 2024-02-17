@@ -1,7 +1,7 @@
-import { Node, NodeLinks } from "@phylopic/api-models";
-import { NumberView } from "@phylopic/ui";
-import { FC } from "react";
-import useNodeAge from "~/external/timetree.org/useNodeAge";
+import { Node, NodeLinks } from "@phylopic/api-models"
+import { NumberView } from "@phylopic/ui"
+import { FC } from "react"
+import useNodeAge from "~/external/timetree.org/useNodeAge"
 export interface Props {
     value?: Node
 }
@@ -10,6 +10,11 @@ const AgeView: FC<Props> = ({ value }) => {
     if (age === null) {
         return null
     }
-    return <>{" "}(<NumberView value={age} /> years ago)</>
+    return (
+        <>
+            {" "}
+            (<NumberView value={age} /> years ago)
+        </>
+    )
 }
 export default AgeView

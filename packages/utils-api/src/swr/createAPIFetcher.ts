@@ -1,7 +1,7 @@
-import { DATA_MEDIA_TYPE, ErrorResponse } from "@phylopic/api-models"
-import { URL } from "@phylopic/utils"
+import { DATA_MEDIA_TYPE, type ErrorResponse } from "@phylopic/api-models"
+import { type URL } from "@phylopic/utils"
 import axios from "axios"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, type SetStateAction } from "react"
 import { type Fetcher } from "swr"
 import APISWRError from "./APISWRError"
 export const createAPIFetcher =
