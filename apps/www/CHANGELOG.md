@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Support for `phylopic/nodes` identifiers to `/resolve/[authority]/[namespace]/[objectID]` path.
+
 ### Changed
 
 -   Verbiage change for Search Input.
