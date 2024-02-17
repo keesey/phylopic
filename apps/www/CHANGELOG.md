@@ -13,11 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Moved Lineage Pages to a subfolder of the full Node Page path.
+
 ### Deprecated
 
 ### Fixed
-
--   Blocking invalid use of `"lineage"` as a Node slug.
 
 ### Removed
 
