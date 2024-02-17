@@ -19,6 +19,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.8.0] - 2024-02-17
+
+### Added
+
+-   Support for `phylopic/nodes` identifiers to `/resolve/[authority]/[namespace]/[objectID]` path.
+
+### Changed
+
+-   Verbiage change for Search Input.
+
+## [2.7.0] - 2024-01-24
+
+### Added
+
+-   Paragraph about sponsors on Image Collection Pages.
+
+## [2.6.12] - 2024-01-04
+
+### Changed
+
+-   Description of `vectorFile` in API Recipes article.
+
+## [2.6.11] - 2023-12-18
+
+### Added
+
+-   Source file in Image Downloads.
+
+### Changed
+
+-   Verbiage for vector file in Image Downloads.
+
 ## [2.6.10] - 2023-12-18
 
 ### Added

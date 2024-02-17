@@ -45,7 +45,7 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
     const numAttributions = attributionEntries.length
     const hasAttributions = numAttributions > 0
     return (
-        <div className={styles.main}>
+        <div id="attribution" className={styles.main}>
             {!attributionRequired && !hasAttributions && "Attribution is not required."}
             {attributionRequired && !hasAttributions && (
                 <>

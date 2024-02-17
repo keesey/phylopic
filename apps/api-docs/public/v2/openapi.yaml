@@ -709,8 +709,7 @@ components:
                 vectorFile:
                   allOf:
                     - $ref: "#/components/schemas/MediaLink"
-                    - description: A link to the vector image file as it was submitted. Always in SVG format.
-                      nullable: true
+                    - description: A link to a vector file generated from the largest raster file. This will always be black on a transparent backgounrd, cropped to the size of the silhouette. It may look different from the source file.
     ImageWithEmbedded:
       description: An image with related entities embedded.
       required:

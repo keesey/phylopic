@@ -2,11 +2,9 @@ import {
     Collection,
     Contributor,
     Data,
-    ImageEmbedded,
     ImageWithEmbedded,
     isCollection,
     List,
-    NodeEmbedded,
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"

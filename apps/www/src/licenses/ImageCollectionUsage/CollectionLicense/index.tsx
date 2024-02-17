@@ -21,7 +21,7 @@ const CollectionLicense: FC<Props> = ({ images }) => {
         )
     }
     return (
-        <p>
+        <p id="license">
             Any work that uses{" "}
             {images.length === 1 ? (
                 "this silhouette image"

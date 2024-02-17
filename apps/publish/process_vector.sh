@@ -69,6 +69,12 @@ for prefix in 0 1 2 3 4 5 6 7 8 9 a b c d e f; do
     magick convert \
         $prefix'*.raster.png' \
         -set filename:basename '%[basename]' \
+        -background white \
+        -alpha remove \
+        '%[filename:basename].bmp'
+    magick convert \
+        $prefix'*.raster.png' \
+        -set filename:basename '%[basename]' \
         -define png:compression-level=9 \
         '%[filename:basename].1536.png' &
     magick convert \
@@ -135,7 +141,18 @@ for prefix in 0 1 2 3 4 5 6 7 8 9 a b c d e f; do
     wait
 done
 
-echo "[VECTOR] Created raster variants. Cleaning up raster bases..."
+echo "[VECTOR] Created raster variants. Sanitizing vector files..."
+for file in *.raster.bmp; do
+    dest=$(echo $file |
+        sed 's/\.raster\.bmp$/.vector.svg/')
+    potrace \
+        $file \
+        --svg \
+        --output $dest
+done
+
+echo "[VECTOR] Sanitized vector files. Cleaning up raster bases..."
+rm *.raster.bmp
 rm *.raster.png
 cd ../..
 
