@@ -239,6 +239,9 @@ export const getStaticPaths: GetStaticPaths<{ uuid: UUID; slug: string }> = () =
 })
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
+    if (slug === "lineage") {
+        throw new Error("Invalid state.")
+    }
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }

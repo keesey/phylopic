@@ -7,7 +7,7 @@ import getNcbiTaxId from "./getNcbiTaxId"
 const MILLION = 1000000
 const fetcher = (key: string) => axios.get<{ value: number }>(key).then(({ data }) => data)
 const useNodeAge = (node: Node | null) => {
-    const ncbiTaxId = useMemo(() =>node ?  getNcbiTaxId(node._links) : null, [node])
+    const ncbiTaxId = useMemo(() => (node ? getNcbiTaxId(node._links) : null), [node])
     const key = ncbiTaxId ? getMrcaUrl(ncbiTaxId) : null
     const { data, isLoading } = useSWRImmutable(key, fetcher)
     if (ncbiTaxId && !isLoading && typeof data?.value !== "number") {

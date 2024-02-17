@@ -3,6 +3,7 @@ import { NextApiHandler } from "next"
 import TIMETREE_API_URL from "~/external/timetree.org/TIMETREE_API_URL"
 import fetchField from "~/external/timetree.org/fetchField"
 const index: NextApiHandler = async (req, res) => {
+    // :TODO: CORS protection
     const ncbiTaxId = getString(req.query.ncbiTaxId)
     if (!ncbiTaxId) {
         res.status(404)
@@ -12,7 +13,6 @@ const index: NextApiHandler = async (req, res) => {
         const url = `${TIMETREE_API_URL}/mrca/id/${encodeURIComponent(ncbiTaxId)}/age`
         const value = await fetchField(url)
         const numericValue = value ? parseFloat(value) : NaN
-        // :TODO: CORS protection
         res.setHeader("cache-control", "immutable,max-age=2592000,stale-if-error")
         res.setHeader("content-type", "application/json")
         res.send(JSON.stringify({ value: isFinite(numericValue) ? numericValue : null }))
