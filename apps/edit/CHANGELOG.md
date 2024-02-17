@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.1] - 2024-02-17
+
+### Fixed
+
+-   Linting issues.
+
 ## [1.4.0] - 2024-02-17
 
 ### Added
