@@ -10839,7 +10839,7 @@ simple-concat@^1.0.0:
 
 simple-digraph@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/simple-digraph/-/simple-digraph-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/simple-digraph/-/simple-digraph-1.0.1.tgz#2461f03b88ca44982748121b1c021878be42d19e"
   integrity sha512-N0tNmXtlMtUHHevJ8mfMQyN6LJ3kHV2jnXGEMOuMBMqNxs+iOx6+Q09RqYYKNilEimv8C1cQ4l8Umxpqz3WAcw==
 
 simple-get@^4.0.0, simple-get@^4.0.1:

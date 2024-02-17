@@ -258,7 +258,7 @@ const QUICK_LINKS: QuickLinkNode = {
                                                                     children: [
                                                                         {
                                                                             imageUUID:
-                                                                                "c089caae-43ef-4e4e-bf26-973dd4cb65c5",
+                                                                                "41b127f6-0824-4594-a941-5ff571f32378",
                                                                             label: "humans",
                                                                             slug: "homo-sapiens",
                                                                             uuid: "1ee65cf3-53db-4a52-9960-a9f7093d845d",
