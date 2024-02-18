@@ -1,13 +1,13 @@
-import { Node, NodeLinks } from "@phylopic/api-models"
-import { NumberView } from "@phylopic/ui"
-import { FC } from "react"
-import useNodeAge from "~/external/timetree.org/useNodeAge"
+import { Node } from "@phylopic/api-models"
+import { type FC } from "react"
+import useNodeAge from "~/external/useNodeAge"
+import Content from "./Content"
 export interface Props {
     value?: Node
 }
 const AgeView: FC<Props> = ({ value }) => {
-    const age = useNodeAge(value ?? null)
-    if (age === null || !isFinite(age)) {
+    const ageResult = useNodeAge(value ?? null)
+    if (!ageResult || !value) {
         return null
     }
     return (
@@ -15,45 +15,11 @@ const AgeView: FC<Props> = ({ value }) => {
             <br />
             <small>
                 (
-                <a href="https://timetree.org/" rel="noreferrer" target="_blank" title="Timetree of Life">
-                    <YearsView value={age} />
+                <a href={ageResult.source} title={ageResult.sourceTitle}>
+                    <Content {...ageResult} isTerminal={value._links.childNodes.length === 0} />
                 </a>
                 )
             </small>
-        </>
-    )
-}
-const BILLION = 1000000000
-const MILLION = 1000000
-const THOUSAND = 1000000
-const YearsView: FC<{ value: number }> = ({ value }) => {
-    if (value > BILLION) {
-        return (
-            <>
-                ~<NumberView value={parseFloat((value / BILLION).toPrecision(4))} />{" "}
-                <abbr title="giga-years ago">Ga</abbr>
-            </>
-        )
-    }
-    if (value > MILLION) {
-        return (
-            <>
-                ~<NumberView value={parseFloat((value / MILLION).toPrecision(4))} />{" "}
-                <abbr title="mega-years ago">Ma</abbr>
-            </>
-        )
-    }
-    if (value > THOUSAND) {
-        return (
-            <>
-                ~<NumberView value={parseFloat((value / THOUSAND).toPrecision(4))} />{" "}
-                <abbr title="kilo-years ago">kya</abbr>
-            </>
-        )
-    }
-    return (
-        <>
-            <NumberView value={value} /> years ago
         </>
     )
 }

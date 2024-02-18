@@ -1,2 +1,3 @@
-const getAgeUrl = (ncbiTaxId: string) => "/api/external/timetree.org/id/" + encodeURIComponent(ncbiTaxId) + "/age"
+const getAgeUrl = (ncbiTaxIds: readonly string[]) =>
+    "/api/external/timetree.org/id/" + encodeURIComponent(ncbiTaxIds.join(" ")) + "/age"
 export default getAgeUrl
