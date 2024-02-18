@@ -1,13 +1,12 @@
 import { Node } from "@phylopic/api-models"
+import { UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
+import getObjectIDs from "./getObjectIDs"
 import { PBDBResponse } from "./paleobiodb.org/PBDBResponse"
-import getPaleobioDbTxnIds from "./paleobiodb.org/getPaleobioDbTxnIds"
 import getStrataUrl from "./paleobiodb.org/getStrataUrl"
 import getMrcaUrl from "./timetree.org/getAgeUrl"
-import getNcbiTaxIds from "./timetree.org/getNcbiTaxIds"
-import { UUID } from "@phylopic/utils"
 const MILLION = 1000000
 const fetcher = <T>(key: string) => axios.get<T>(key).then(({ data }) => data)
 export type AgeResult = Readonly<{
@@ -26,37 +25,43 @@ const PREDEFINED: Record<UUID, AgeResult | null | undefined> = {
     // Pan-Biota
     "8f901db5-84c1-4dc0-93ba-2300eeddf4ab": null,
 }
+const getAgeResult = (
+    pbdbData: PBDBResponse | undefined,
+    predefined: AgeResult | null | undefined,
+    timeTreeData: { value: number } | undefined,
+): AgeResult | null => {
+    if (predefined !== undefined) {
+        return predefined
+    }
+    if (typeof timeTreeData?.value === "number") {
+        return {
+            ages: [timeTreeData.value * MILLION, timeTreeData.value * MILLION],
+            source: "https://timetree.org/",
+            sourceTitle: "Timetree of Life",
+        }
+    }
+    if (pbdbData?.records.length) {
+        const eag = Math.max(...pbdbData.records.map(record => record.eag))
+        const lag = Math.min(...pbdbData.records.map(record => record.lag))
+        return {
+            ages: [eag * MILLION, lag * MILLION],
+            source: "https://paleobiodb.org/",
+            sourceTitle: "Paleobiology Database",
+        }
+    }
+    return null
+}
 const useNodeAge = (node: Node | null) => {
     const predefined = node ? PREDEFINED[node.uuid] : undefined
-    const ncbiTaxIds = useMemo(() => (node ? getNcbiTaxIds(node._links) : null), [node])
-    const pbdbTxnIds = useMemo(() => (node ? getPaleobioDbTxnIds(node._links) : []), [node])
-    const timeTreeKey = predefined === undefined && ncbiTaxIds?.length ? getMrcaUrl(ncbiTaxIds) : null
-    const pbdbKey = predefined === undefined && pbdbTxnIds.length && !timeTreeKey ? getStrataUrl(pbdbTxnIds) : null
+    const ncbiTaxIds = useMemo(() => (node ? getObjectIDs(node._links, "ncbi.nlm.nih.gov", "taxid") : []), [node])
+    const pbdbTxnIds = useMemo(() => (node ? getObjectIDs(node._links, "paleobiodb.org", "txn") : []), [node])
+    const timeTreeKey = predefined === undefined && ncbiTaxIds.length ? getMrcaUrl(ncbiTaxIds) : null
+    const pbdbKey = predefined === undefined && !timeTreeKey && pbdbTxnIds.length ? getStrataUrl(pbdbTxnIds) : null
     const { data: timeTreeData } = useSWRImmutable<{ value: number }>(timeTreeKey, fetcher)
     const { data: pbdbData } = useSWRImmutable<PBDBResponse>(pbdbKey, fetcher)
-    return useMemo<AgeResult | null>(() => {
-        if (predefined !== undefined) {
-            return predefined
-        }
-        if (node) {
-            if (typeof timeTreeData?.value === "number") {
-                return {
-                    ages: [timeTreeData.value * MILLION, timeTreeData.value * MILLION],
-                    source: "https://timetree.org/",
-                    sourceTitle: "Timetree of Life",
-                }
-            }
-            if (pbdbData?.records.length) {
-                const eag = Math.max(...pbdbData.records.map(record => record.eag))
-                const lag = Math.min(...pbdbData.records.map(record => record.lag))
-                return {
-                    ages: [eag * MILLION, lag * MILLION],
-                    source: "https://paleobiodb.org/",
-                    sourceTitle: "Paleobiology Database",
-                }
-            }
-        }
-        return null
-    }, [pbdbData, predefined, timeTreeData])
+    return useMemo<AgeResult | null>(
+        () => getAgeResult(pbdbData, predefined, timeTreeData),
+        [pbdbData, predefined, timeTreeData],
+    )
 }
 export default useNodeAge
