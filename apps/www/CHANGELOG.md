@@ -23,6 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.8.1] - 2024-02-17
+
+### Security
+
+-   Protecting API routes from external domains.
+
 ## [2.8.0] - 2024-02-17
 
 ### Added
