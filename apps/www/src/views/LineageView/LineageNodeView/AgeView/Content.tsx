@@ -14,9 +14,6 @@ const Content: FC<{ ages: AgeResult["ages"]; isTerminal: boolean }> = ({ ages, i
             </>
         )
     }
-    {
-        const presentation = getAgePresentation(ages[0])
-        return <AgePresentationView presentation={presentation} showTilde showUnit />
-    }
+    return <AgePresentationView presentation={getAgePresentation(ages[0])} showTilde showUnit />
 }
 export default Content
