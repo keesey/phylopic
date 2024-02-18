@@ -35,7 +35,7 @@ const TaxonSchemaScript: FC<Props> = ({ node }) => {
             image: node._links.primaryImage
                 ? `${process.env.NEXT_PUBLIC_WWW_URL}${getImageHRef(node._links.primaryImage)}`
                 : undefined,
-            mainEntityOfPage: `${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(node._links.self)}`,
+            mainEntityOfPage: `${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(node._links.self)}/lineage`,
             name,
             parentTaxon: node._links.parentNode
                 ? `${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(node._links.parentNode)}`
