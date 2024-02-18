@@ -1,4 +1,3 @@
-import { NumberView } from "@phylopic/ui"
 import { type FC } from "react"
 import { type AgeResult } from "~/external/useNodeAge"
 import AgePresentationView from "./AgePresentationView"
