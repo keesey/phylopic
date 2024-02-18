@@ -14,12 +14,12 @@ const Content: FC<{ ages: AgeResult["ages"]; isTerminal: boolean }> = ({ ages, i
                     "–"
                 ) : (
                     <>
+                        {" "}
                         <UnitView {...presentations[0]} />
                         {" – ~"}
                     </>
                 )}
-                <NumberView value={presentations[1].value} />
-                <UnitView {...presentations[1]} />
+                <NumberView value={presentations[1].value} /> <UnitView {...presentations[1]} />
             </>
         )
     }
@@ -27,8 +27,7 @@ const Content: FC<{ ages: AgeResult["ages"]; isTerminal: boolean }> = ({ ages, i
         const presentation = getAgePresentation(ages[0])
         return (
             <>
-                ~<NumberView value={presentation.value} />
-                <UnitView {...presentation} />
+                ~<NumberView value={presentation.value} /> <UnitView {...presentation} />
             </>
         )
     }

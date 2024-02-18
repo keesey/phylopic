@@ -1,10 +1,10 @@
 const BILLION = 1000000000
 const MILLION = 1000000
-const THOUSAND = 1000000
+const THOUSAND = 1000
 const getAgePresentation = (age: number) => {
     if (age >= BILLION) {
         return {
-            text: "Ga",
+            text: "Gya",
             title: `giga-year${age === BILLION ? "" : "s"} ago`,
             value: parseFloat((age / BILLION).toPrecision(3)),
             years: BILLION,
@@ -12,7 +12,7 @@ const getAgePresentation = (age: number) => {
     }
     if (age >= MILLION) {
         return {
-            text: "Ma",
+            text: "Mya",
             full: `mega-year${age === MILLION ? "" : "s"} ago`,
             value: parseFloat((age / MILLION).toPrecision(3)),
             years: MILLION,
