@@ -10,8 +10,9 @@ const Content: FC<{ ages: AgeResult["ages"]; isTerminal: boolean }> = ({ ages, i
             <>
                 ~<NumberView value={presentations[0].value} />
                 {presentations[0].years === presentations[1].years ? null : <UnitView {...presentations[0]} />}
-                {" – "}
-                ~<NumberView value={presentations[1].value} />
+                {presentations[0].years === presentations[1].years ? "–" : " – "}
+                {presentations[0].years === presentations[1].years ? "" : "~"}
+                <NumberView value={presentations[1].value} />
                 <UnitView {...presentations[1]} />
             </>
         )
