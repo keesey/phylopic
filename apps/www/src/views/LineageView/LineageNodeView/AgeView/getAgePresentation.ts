@@ -1,7 +1,13 @@
 const BILLION = 1000000000
 const MILLION = 1000000
 const THOUSAND = 1000
-const getAgePresentation = (age: number) => {
+export type AgePresentation = Readonly<{
+    text: string
+    title?: string
+    value: number
+    years: number
+}>
+const getAgePresentation = (age: number): AgePresentation => {
     if (age >= BILLION) {
         return {
             text: "Gya",
@@ -13,7 +19,7 @@ const getAgePresentation = (age: number) => {
     if (age >= MILLION) {
         return {
             text: "Mya",
-            full: `mega-year${age === MILLION ? "" : "s"} ago`,
+            title: `mega-year${age === MILLION ? "" : "s"} ago`,
             value: parseFloat((age / MILLION).toPrecision(3)),
             years: MILLION,
         }
@@ -26,11 +32,18 @@ const getAgePresentation = (age: number) => {
             years: THOUSAND,
         }
     }
+    if (age > 0) {
+        return {
+            text: "ya",
+            title: `year${age === 1 ? "" : "s"} ago`,
+            value: Math.round(age),
+            years: 1,
+        }
+    }
     return {
-        text: "ya",
-        title: `year${age === 1 ? "" : "s"} ago`,
-        value: Math.round(age),
-        years: 1,
+        text: "present",
+        value: 0,
+        years: 0,
     }
 }
 export default getAgePresentation

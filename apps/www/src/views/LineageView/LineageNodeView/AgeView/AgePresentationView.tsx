@@ -1,0 +1,26 @@
+import { NumberView } from "@phylopic/ui"
+import { type FC } from "react"
+import UnitView from "./UnitView"
+import { type AgePresentation } from "./getAgePresentation"
+const AgePresentationView: FC<{ presentation: AgePresentation; showTilde: boolean; showUnit: boolean }> = ({
+    presentation,
+    showTilde,
+    showUnit,
+}) => {
+    if (presentation.years === 0) {
+        return <UnitView {...presentation} />
+    }
+    return (
+        <>
+            {showTilde && "~"}
+            <NumberView value={presentation.value} />
+            {showUnit && (
+                <>
+                    {" "}
+                    <UnitView {...presentation} />
+                </>
+            )}
+        </>
+    )
+}
+export default AgePresentationView
