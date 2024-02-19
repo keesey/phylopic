@@ -1,4 +1,4 @@
-import PALEOBIODB_API_URL from "./PALEOBIODB_API_URL"
+import PALEOBIODB_API_URL from "./PALEOBIODB_API_URL.js"
 const getStrataUrl = (pbdbTxnIds: readonly string[]) =>
     `${PALEOBIODB_API_URL}/occs/strata.json?taxon_id=${encodeURIComponent(pbdbTxnIds.join(","))}`
 export default getStrataUrl
