@@ -324,27 +324,36 @@ const getExternalPhylogenyDerivedData = async (
             }
             for (const identifier of identifiers) {
                 const [authority, namespace, objectID] = parseIdentifier(identifier)
-                objectIDs[`${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`].add(objectID)
+                objectIDs[`${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`]?.add(objectID)
             }
             const [isExtant, pbdbAge, timeTreeAge] = await Promise.all([
-                objectIDs["paleobiodb.org/txn"].size ? getIsExtant(objectIDs["paleobiodb.org/txn"]) : Promise.resolve(false),
-                objectIDs["paleobiodb.org/txn"].size ? getAgePaleobioDb(objectIDs["paleobiodb.org/txn"]) : Promise.resolve(null),
-                objectIDs["ncbi.nlm.nih.gov/taxid"].size ? getAgeTimeTree(objectIDs["ncbi.nlm.nih.gov/taxid"]) : Promise.resolve(null),
+                objectIDs["paleobiodb.org/txn"].size
+                    ? getIsExtant(objectIDs["paleobiodb.org/txn"])
+                    : Promise.resolve(false),
+                objectIDs["paleobiodb.org/txn"].size
+                    ? getAgePaleobioDb(objectIDs["paleobiodb.org/txn"])
+                    : Promise.resolve(null),
+                objectIDs["ncbi.nlm.nih.gov/taxid"].size
+                    ? getAgeTimeTree(objectIDs["ncbi.nlm.nih.gov/taxid"])
+                    : Promise.resolve(null),
             ])
             if (isExtant || pbdbAge || timeTreeAge) {
                 ages.set(uuid, {
-                    sources: [isExtant || pbdbAge ? PALEOBIODB_TITLED_LINK : null, timeTreeAge ? TIMETREE_TITLED_LINK : null].filter(isDefined),
+                    sources: [
+                        isExtant || pbdbAge ? PALEOBIODB_TITLED_LINK : null,
+                        timeTreeAge ? TIMETREE_TITLED_LINK : null,
+                    ].filter(isDefined),
                     values: [
                         Math.max(0, pbdbAge?.[0] ?? Number.MIN_VALUE, timeTreeAge ?? Number.MIN_VALUE),
-                        isExtant ? 0 : Math.min(pbdbAge?.[1] ?? Number.MAX_VALUE, timeTreeAge ?? Number.MAX_VALUE)
-                    ]
+                        isExtant ? 0 : Math.min(pbdbAge?.[1] ?? Number.MAX_VALUE, timeTreeAge ?? Number.MAX_VALUE),
+                    ],
                 })
             }
-        })
+        }),
     )
     // :TODO: Make sure ancestral nodes have a late age no earlier than the latest age of all descendant nodes.
     // :TODO: Remove entries for ancestral nodes when a descendant node has an early age that is earlier than the ancestral node's early age
-    return {ages}
+    return { ages }
 }
 const getPhylogenyDerivedData = (
     args: Pick<SourceData, "nodeUUIDsToVertices" | "phylogeny" | "verticesToNodeUUIDs">,
