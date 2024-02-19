@@ -3,23 +3,41 @@ import { Page, S3Entry, SourceClient as ISourceClient } from "@phylopic/source-c
 import { Contributor, External, Image, isContributor, isExternal, isImage, isNode, Node } from "@phylopic/source-models"
 import {
     Authority,
+    AuthorizedNamespace,
     compareStrings,
+    extractUUIDv4,
+    Identifier,
     isAuthority,
+    isDefined,
     isNamespace,
     ISOTimestamp,
     Namespace,
     ObjectID,
+    parseIdentifier,
     UUID,
 } from "@phylopic/utils"
 import { Arc, Digraph, sources } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
 import SourceClient from "../source/SourceClient.js"
+import getIsExtant from "./externals/paleobiodb.org/getIsExtant.js"
+import getAgeTimeTree from "./externals/timetree.org/getAge.js"
+import getAgePaleobioDb from "./externals/paleobiodb.org/getAge.js"
+export type AgeSourceData =
+    | {
+          sources: Readonly<[]>
+          values: null
+      }
+    | {
+          sources: readonly TitledLink[]
+          values: Readonly<[number, number]>
+      }
 export type SourceData = Readonly<{
+    ages: ReadonlyMap<UUID, AgeSourceData>
     build: number
     cladeImages: ReadonlyMap<UUID, ReadonlySet<UUID>>
     contributors: ReadonlyMap<UUID, Contributor>
     depths: ReadonlyMap<UUID, number>
-    externals: ReadonlyMap<string, TitledLink>
+    externals: ReadonlyMap<Identifier, TitledLink>
     filesModified: ReadonlyMap<UUID, ISOTimestamp>
     illustration: ReadonlyMap<UUID, readonly UUID[]>
     images: ReadonlyMap<UUID, Image>
@@ -34,10 +52,11 @@ export type Args = Readonly<{
 }>
 type ProcessArgs = Args &
     Readonly<{
+        ages: Map<UUID, AgeSourceData>
         client: ISourceClient
         contributors: Map<UUID, Contributor>
         depths: Map<UUID, number>
-        externals: Map<string, TitledLink>
+        externals: Map<Identifier, TitledLink>
         filesModified: Map<UUID, ISOTimestamp | undefined>
         illustration: Map<UUID, Set<UUID>>
         images: Map<UUID, Image>
@@ -47,6 +66,25 @@ type ProcessArgs = Args &
         sortIndices: Map<UUID, number>
         verticesToNodeUUIDs: Map<number, UUID>
     }>
+const createExternalsLookup = (
+    args: Pick<SourceData, "externals">,
+    prefixes: readonly string[],
+): ReadonlyMap<UUID, ReadonlySet<Identifier>> => {
+    const externalsLookup = new Map<UUID, Set<Identifier>>()
+    for (const [identifier, titledLink] of args.externals.entries()) {
+        if (prefixes.some(prefix => identifier.startsWith(prefix))) {
+            const uuid = extractUUIDv4(titledLink.href)
+            if (uuid) {
+                if (externalsLookup.has(uuid)) {
+                    externalsLookup.get(uuid)?.add(identifier)
+                } else {
+                    externalsLookup.set(uuid, new Set<Identifier>([identifier]))
+                }
+            }
+        }
+    }
+    return externalsLookup
+}
 const loadExternalObjects = async (
     authority: Authority,
     namespace: Namespace,
@@ -265,6 +303,49 @@ const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, verte
     sizes.set(vertex, size)
     return size
 }
+const PALEOBIODB_TITLED_LINK: TitledLink = {
+    href: "https://paleobiodb.org/",
+    title: "Paleobiology Database",
+}
+const TIMETREE_TITLED_LINK: TitledLink = {
+    href: "https://timetree.org/",
+    title: "TimeTree",
+}
+const getExternalPhylogenyDerivedData = async (
+    args: Pick<SourceData, "externals" | "nodeUUIDsToVertices" | "phylogeny" | "verticesToNodeUUIDs">,
+): Promise<Pick<SourceData, "ages">> => {
+    const externalsLookup = createExternalsLookup(args, ["ncbi.nlm.nih.gov/taxid/", "paleobiodb.org/txn/"])
+    const ages = new Map<UUID, AgeSourceData>()
+    await Promise.all(
+        Array.from(externalsLookup.entries()).map(async ([uuid, identifiers]) => {
+            const objectIDs: Record<AuthorizedNamespace, Set<ObjectID>> = {
+                "ncbi.nlm.nih.gov/taxid": new Set<ObjectID>(),
+                "paleobiodb.org/txn": new Set<ObjectID>(),
+            }
+            for (const identifier of identifiers) {
+                const [authority, namespace, objectID] = parseIdentifier(identifier)
+                objectIDs[`${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`].add(objectID)
+            }
+            const [isExtant, pbdbAge, timeTreeAge] = await Promise.all([
+                objectIDs["paleobiodb.org/txn"].size ? getIsExtant(objectIDs["paleobiodb.org/txn"]) : Promise.resolve(false),
+                objectIDs["paleobiodb.org/txn"].size ? getAgePaleobioDb(objectIDs["paleobiodb.org/txn"]) : Promise.resolve(null),
+                objectIDs["ncbi.nlm.nih.gov/taxid"].size ? getAgeTimeTree(objectIDs["ncbi.nlm.nih.gov/taxid"]) : Promise.resolve(null),
+            ])
+            if (isExtant || pbdbAge || timeTreeAge) {
+                ages.set(uuid, {
+                    sources: [isExtant || pbdbAge ? PALEOBIODB_TITLED_LINK : null, timeTreeAge ? TIMETREE_TITLED_LINK : null].filter(isDefined),
+                    values: [
+                        Math.max(0, pbdbAge?.[0] ?? Number.MIN_VALUE, timeTreeAge ?? Number.MIN_VALUE),
+                        isExtant ? 0 : Math.min(pbdbAge?.[1] ?? Number.MAX_VALUE, timeTreeAge ?? Number.MAX_VALUE)
+                    ]
+                })
+            }
+        })
+    )
+    // :TODO: Make sure ancestral nodes have a late age no earlier than the latest age of all descendant nodes.
+    // :TODO: Remove entries for ancestral nodes when a descendant node has an early age that is earlier than the ancestral node's early age
+    return {ages}
+}
 const getPhylogenyDerivedData = (
     args: Pick<SourceData, "nodeUUIDsToVertices" | "phylogeny" | "verticesToNodeUUIDs">,
 ): Pick<SourceData, "depths" | "sortIndices"> => {
@@ -285,7 +366,7 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
     let result: SourceData
     try {
         const contributors = new Map<UUID, Contributor>()
-        const externals = new Map<string, TitledLink>()
+        const externals = new Map<Identifier, TitledLink>()
         const filesModified = new Map<UUID, ISOTimestamp>()
         const images = new Map<UUID, Image>()
         const nodes = new Map<UUID, Node>()
@@ -311,6 +392,12 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
             verticesToNodeUUIDs,
             ...getImageNodeDerivedData({ images, nodes }),
             ...getPhylogenyDerivedData({ nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
+            ...(await getExternalPhylogenyDerivedData({
+                externals,
+                nodeUUIDsToVertices,
+                phylogeny,
+                verticesToNodeUUIDs,
+            })),
         }
     } finally {
         await client.destroy()

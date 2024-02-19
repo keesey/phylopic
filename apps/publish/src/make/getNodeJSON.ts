@@ -144,8 +144,10 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
         throw new Error(`Vertex not found! (UUID=${uuid})`)
     }
     const cladeImagesUUID = getCladeImagesUUID(uuid, data)
+    const ageData = data.ages.get(uuid)
     return {
         _links: {
+            ageSources: ageData ? ageData.sources : [],
             childNodes: getChildNodes(vertex, data),
             cladeImages: {
                 href: `/images?build=${data.build}&filter_clade=${cladeImagesUUID}`,
@@ -168,6 +170,7 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
                 title: stringifyNomen(shortenNomen(sourceNode?.names[0] ?? [])) || "[Unnamed]",
             },
         },
+        age: ageData?.values ? ageData.values : null,
         build: data.build,
         created: sourceNode.created,
         names: sourceNode.names,

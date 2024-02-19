@@ -1,5 +1,6 @@
-import { extractPath, isUUIDv4 } from "@phylopic/utils"
-const extractUUIDv4 = (href?: string) => {
+import { extractPath } from "."
+import { isUUIDv4 } from "../models"
+export const extractUUIDv4 = (href?: string) => {
     if (!href) {
         return null
     }

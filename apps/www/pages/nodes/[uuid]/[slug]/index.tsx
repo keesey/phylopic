@@ -13,6 +13,7 @@ import {
     createSearch,
     extractPath,
     extractQueryString,
+    extractUUIDv4,
     isDefined,
     isUUIDv4,
     parseQueryString,
@@ -37,7 +38,6 @@ import TaxonSchemaScript from "~/metadata/SchemaScript/TaxonSchemaScript"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
-import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getHRefFromAPILink from "~/routes/getHRefFromAPILink"
 import getNodeHRef from "~/routes/getNodeHRef"
 import getNodeSlug from "~/routes/getNodeSlug"

@@ -8,8 +8,8 @@ import PBDB_URL from "./PBDB_URL"
 import { useDebounce } from "@react-hook/debounce"
 import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
 import { createSearch } from "@phylopic/utils"
-type PBDBRecord = Readonly<{
-    ext: string
+type PBDBTaxonRecord = Readonly<{
+    ext: "0" | "1"
     nam: string
     noc: number
     oid: string
@@ -18,12 +18,12 @@ type PBDBRecord = Readonly<{
     rnk: number
     vid: string
 }>
-type PBDBResponse = Readonly<{
+type PBDBTaxonResponse = Readonly<{
     elapsed_time: number
-    records: readonly PBDBRecord[]
+    records: readonly PBDBTaxonRecord[]
 }>
-const fetchLineage: Fetcher<PBDBResponse, string> = async url => {
-    const response = await fetchDataAndCheck<PBDBResponse>(url)
+const fetchLineage: Fetcher<PBDBTaxonResponse, string> = async url => {
+    const response = await fetchDataAndCheck<PBDBTaxonResponse>(url)
     return response.data
 }
 const fetchNode: Fetcher<NodeWithEmbedded, string> = async url => {

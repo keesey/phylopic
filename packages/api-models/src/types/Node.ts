@@ -4,6 +4,7 @@ import { Link } from "./Link"
 import { Links } from "./Links"
 import { TitledLink } from "./TitledLink"
 export interface NodeLinks extends Links<TitledLink> {
+    readonly ageSources: readonly TitledLink[]
     readonly childNodes: readonly TitledLink[]
     readonly cladeImages: TitledLink | null
     readonly external: readonly TitledLink[]
@@ -14,5 +15,6 @@ export interface NodeLinks extends Links<TitledLink> {
 }
 export interface Node extends Entity {
     readonly _links: NodeLinks
+    readonly age: Readonly<[number, number]> | null
     readonly names: readonly Nomen[]
 }

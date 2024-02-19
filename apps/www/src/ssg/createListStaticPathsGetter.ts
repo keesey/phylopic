@@ -1,9 +1,7 @@
 import { List, Page } from "@phylopic/api-models"
-import { createSearch } from "@phylopic/utils"
+import { createSearch, extractUUIDv4 } from "@phylopic/utils"
 import { fetchData } from "@phylopic/utils-api"
 import { GetStaticPaths, GetStaticPathsResult } from "next"
-import slugify from "slugify"
-import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getSlug from "~/routes/getSlug"
 import { EntityPageQuery } from "./EntityPageQuery"
 const isEntityPageQuery = (x: Partial<EntityPageQuery>): x is EntityPageQuery => Boolean(x?.uuid)

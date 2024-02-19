@@ -10,5 +10,5 @@
     },
     "exclude": ["node_modules"],
     "extends": "@phylopic/tsconfig/next.json",
-    "include": ["pages", "src", "next-env.d.ts"]
+    "include": ["pages", "src", "next-env.d.ts", "../../packages/utils/src/http/extractUUIDv4.ts"]
 }

@@ -1,5 +1,5 @@
 import { TitledLink } from "@phylopic/api-models"
-import extractUUIDv4 from "./extractUUIDv4"
+import { extractUUIDv4 } from "@phylopic/utils"
 import getNodeSlug from "./getNodeSlug"
 const getNodeHRef = (link: TitledLink) => {
     const uuid = extractUUIDv4(link.href)
