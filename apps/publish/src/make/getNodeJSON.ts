@@ -1,6 +1,6 @@
 import { Node, TitledLink } from "@phylopic/api-models"
 import { Entity, Image } from "@phylopic/source-models"
-import { isDefined, isString, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { isDefined, isString, normalizeUUID, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { immediateSuccessors } from "simple-digraph"
 import type { SourceData } from "./getSourceData.js"
 const getChildNodes = (vertex: number, data: SourceData): readonly TitledLink[] => {
@@ -134,7 +134,7 @@ const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData): UUID => {
     return nodeUUID
 }
 const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
-    uuid = uuid.toLowerCase()
+    uuid = normalizeUUID(uuid)
     const sourceNode = data.nodes.get(uuid)
     if (!sourceNode) {
         throw new Error(`Source node not found! (UUID=${uuid})`)
@@ -170,7 +170,7 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
                 title: stringifyNomen(shortenNomen(sourceNode?.names[0] ?? [])) || "[Unnamed]",
             },
         },
-        age: ageData?.values ? ageData.values : null,
+        age: ageData ? ageData.values : null,
         build: data.build,
         created: sourceNode.created,
         names: sourceNode.names,

@@ -1,36 +1,31 @@
 import { TitledLink } from "@phylopic/api-models"
-import { Page, S3Entry, SourceClient as ISourceClient } from "@phylopic/source-client"
-import { Contributor, External, Image, isContributor, isExternal, isImage, isNode, Node } from "@phylopic/source-models"
+import { SourceClient as ISourceClient, Page, S3Entry } from "@phylopic/source-client"
+import { Contributor, External, Image, Node, isContributor, isExternal, isImage, isNode } from "@phylopic/source-models"
 import {
     Authority,
     AuthorizedNamespace,
+    ISOTimestamp,
+    Identifier,
+    Namespace,
+    ObjectID,
+    UUID,
     compareStrings,
     extractUUIDv4,
-    Identifier,
     isAuthority,
     isDefined,
     isNamespace,
-    ISOTimestamp,
-    Namespace,
-    ObjectID,
     parseIdentifier,
-    UUID,
 } from "@phylopic/utils"
-import { Arc, Digraph, sources } from "simple-digraph"
+import { Arc, Digraph, sources, transitiveClosure } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
 import SourceClient from "../source/SourceClient.js"
+import getAgePaleobioDb from "./externals/paleobiodb.org/getAge.js"
 import getIsExtant from "./externals/paleobiodb.org/getIsExtant.js"
 import getAgeTimeTree from "./externals/timetree.org/getAge.js"
-import getAgePaleobioDb from "./externals/paleobiodb.org/getAge.js"
-export type AgeSourceData =
-    | {
-          sources: Readonly<[]>
-          values: null
-      }
-    | {
-          sources: readonly TitledLink[]
-          values: Readonly<[number, number]>
-      }
+export type AgeSourceData = {
+    sources: readonly TitledLink[]
+    values: Readonly<[number, number]>
+}
 export type SourceData = Readonly<{
     ages: ReadonlyMap<UUID, AgeSourceData>
     build: number
@@ -311,7 +306,7 @@ const TIMETREE_TITLED_LINK: TitledLink = {
     href: "https://timetree.org/",
     title: "TimeTree",
 }
-const getExternalPhylogenyDerivedData = async (
+const getExternalPhylogenyDependentData = async (
     args: Pick<SourceData, "externals" | "nodeUUIDsToVertices" | "phylogeny" | "verticesToNodeUUIDs">,
 ): Promise<Pick<SourceData, "ages">> => {
     const externalsLookup = createExternalsLookup(args, ["ncbi.nlm.nih.gov/taxid/", "paleobiodb.org/txn/"])
@@ -351,8 +346,38 @@ const getExternalPhylogenyDerivedData = async (
             }
         }),
     )
-    // :TODO: Make sure ancestral nodes have a late age no earlier than the latest age of all descendant nodes.
-    // :TODO: Remove entries for ancestral nodes when a descendant node has an early age that is earlier than the ancestral node's early age
+    const closure = transitiveClosure(args.phylogeny)
+    for (const [uuid, age] of ages.entries()) {
+        const vertex = args.nodeUUIDsToVertices.get(uuid)
+        if (typeof vertex === "number") {
+            const descendantAges = Array.from(closure[1].values())
+                .filter(arc => arc[0] === vertex)
+                .map(arc => arc[1])
+                .map(vertex => args.verticesToNodeUUIDs.get(vertex))
+                .filter(isDefined)
+                .map(descendantUUID => ages.get(descendantUUID))
+                .filter(isDefined)
+            if (descendantAges.some(descendantAge => descendantAge.values[0] > age.values[0])) {
+                // Remove discrepancies
+                ages.delete(uuid)
+            } else if (age.values[1] > 0) {
+                // Extend subtaxa latest ages.
+                const latestDescendantAge = descendantAges.reduce<AgeSourceData | null>(
+                    (prev, descendantAge) =>
+                        prev ? (descendantAge.values[1] < prev.values[1] ? descendantAge : prev) : descendantAge,
+                    null,
+                )
+                if (latestDescendantAge && latestDescendantAge.values[1] < age.values[1]) {
+                    ages.set(uuid, {
+                        sources: Array.from(
+                            new Set<TitledLink>([...age.sources, ...latestDescendantAge.sources]),
+                        ).sort(),
+                        values: [age.values[0], latestDescendantAge.values[1]],
+                    })
+                }
+            }
+        }
+    }
     return { ages }
 }
 const getPhylogenyDerivedData = (
@@ -401,7 +426,7 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
             verticesToNodeUUIDs,
             ...getImageNodeDerivedData({ images, nodes }),
             ...getPhylogenyDerivedData({ nodeUUIDsToVertices, phylogeny, verticesToNodeUUIDs }),
-            ...(await getExternalPhylogenyDerivedData({
+            ...(await getExternalPhylogenyDependentData({
                 externals,
                 nodeUUIDsToVertices,
                 phylogeny,
