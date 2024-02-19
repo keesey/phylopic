@@ -313,8 +313,8 @@ const getExternalPhylogenyDependentData = async (
     console.info("Looking up age data...")
     const externalsLookup = createExternalsLookup(args, ["ncbi.nlm.nih.gov/taxid/", "paleobiodb.org/txn/"])
     const ages = new Map<UUID, AgeSourceData>()
-    const timeTreeQueue = new TaskQueue(Promise as PromisyClass, 100)
-    const pbdbQueue = new TaskQueue(Promise as PromisyClass, 10000)
+    const timeTreeQueue = new TaskQueue(Promise as PromisyClass, 10)
+    const pbdbQueue = new TaskQueue(Promise as PromisyClass, 10)
     await Promise.all(
         Array.from(externalsLookup.entries()).map(async ([uuid, identifiers]) => {
             const objectIDs: Record<AuthorizedNamespace, Set<ObjectID>> = {
@@ -327,13 +327,13 @@ const getExternalPhylogenyDependentData = async (
             }
             const [isExtant, pbdbAge, timeTreeAge] = await Promise.all([
                 objectIDs["paleobiodb.org/txn"].size
-                    ? pbdbQueue.wrap<boolean>(async () => await getIsExtant(objectIDs["paleobiodb.org/txn"]))()
+                    ? pbdbQueue.wrap(async () => await getIsExtant(objectIDs["paleobiodb.org/txn"]))()
                     : Promise.resolve(false),
                 objectIDs["paleobiodb.org/txn"].size
-                    ? pbdbQueue.wrap<number[] | null>(async () => await getAgePaleobioDb(objectIDs["paleobiodb.org/txn"]))()
+                    ? pbdbQueue.wrap(async () => await getAgePaleobioDb(objectIDs["paleobiodb.org/txn"]))()
                     : Promise.resolve(null),
                 objectIDs["ncbi.nlm.nih.gov/taxid"].size
-                    ? timeTreeQueue.wrap<number | null>(async () => await getAgeTimeTree(objectIDs["ncbi.nlm.nih.gov/taxid"]))()
+                    ? timeTreeQueue.wrap(async () => await getAgeTimeTree(objectIDs["ncbi.nlm.nih.gov/taxid"]))()
                     : Promise.resolve(null),
             ])
             if (isExtant || pbdbAge || timeTreeAge) {
