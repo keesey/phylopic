@@ -1,6 +1,5 @@
-import { ObjectID } from "@phylopic/utils"
-import fetchField from "./fetchField"
-import getAgeUrl from "./getAgeUrl"
+import fetchField from "./fetchField.js"
+import getAgeUrl from "./getAgeUrl.js"
 const getAge = async (ncbiTaxIDs: Iterable<string>) => {
     const result = await fetchField(getAgeUrl(Array.from(ncbiTaxIDs).sort()))
     if (typeof result === "string") {

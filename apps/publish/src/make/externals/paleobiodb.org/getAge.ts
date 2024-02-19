@@ -1,6 +1,6 @@
 import axios from "axios"
 import { PBDBStrataResponse } from "./PBDBStrataResponse"
-import getStrataUrl from "./getStrataUrl"
+import getStrataUrl from "./getStrataUrl.js"
 const getAge = async (pbdbTxnIds: Iterable<string>) => {
     const response = await axios.get<PBDBStrataResponse>(getStrataUrl(Array.from(pbdbTxnIds).sort()))
     if (!response.data?.records?.length) {

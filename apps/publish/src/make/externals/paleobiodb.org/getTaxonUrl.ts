@@ -1,3 +1,3 @@
-import PALEOBIODB_API_URL from "./PALEOBIODB_API_URL"
+import PALEOBIODB_API_URL from "./PALEOBIODB_API_URL.js"
 const getTaxonUrl = (pbdbTxnId: string) => `${PALEOBIODB_API_URL}/taxa/single.json?id=${encodeURIComponent(pbdbTxnId)}`
 export default getTaxonUrl

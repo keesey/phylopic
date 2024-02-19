@@ -1,6 +1,6 @@
 import axios from "axios"
 import { PBDBTaxonResponse } from "./PBDBTaxonResponse"
-import getTaxonUrl from "./getTaxonUrl"
+import getTaxonUrl from "./getTaxonUrl.js"
 const getIsExtant = async (pbdbTxnIds: Iterable<string>) => {
     const results = await Promise.all(
         Array.from(pbdbTxnIds).map(async txnId => {
