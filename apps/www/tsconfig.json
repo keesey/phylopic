@@ -5,8 +5,7 @@
         "outDir": "dist",
         "paths": {
             "~/*": ["src/*"]
-        },
-        "rootDir": "."
+        }
     },
     "exclude": ["node_modules"],
     "extends": "@phylopic/tsconfig/next.json",
