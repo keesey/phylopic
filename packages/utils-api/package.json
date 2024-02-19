@@ -15,7 +15,7 @@
         "@phylopic/tsconfig": "*",
         "@types/react": "^18.0.27",
         "eslint-config-phylopic": "*",
-        "typescript": "^5.0.4"
+        "typescript": "^5.3.3"
     },
     "exports": {
         "import": "./dist/index.mjs",

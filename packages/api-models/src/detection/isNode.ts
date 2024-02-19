@@ -13,7 +13,7 @@ const isNodeAge = (x: unknown, faultCollector?: ValidationFaultCollector): x is 
 }
 const isNodeLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Node["_links"] =>
     isLinks(x, isTitledLink(isNormalizedText), faultCollector) &&
-    isArray(isTitledLink(isNormalizedText))((x as Node["_links"]).ageSources, faultCollector?.sub("ageSources")) &&
+    //isArray(isTitledLink(isNormalizedText))((x as Node["_links"]).ageSources, faultCollector?.sub("ageSources")) &&
     isArray(isTitledLink(isNormalizedText))((x as Node["_links"]).childNodes, faultCollector?.sub("childNodes")) &&
     isNullOr(isTitledLink(isNormalizedText))((x as Node["_links"]).cladeImages, faultCollector?.sub("cladeImages")) &&
     isArray(isTitledLink(isURL))((x as Node["_links"]).external, faultCollector?.sub("external")) &&
@@ -23,6 +23,6 @@ const isNodeLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x i
     isNullOr(isTitledLink(isNormalizedText))((x as Node["_links"]).primaryImage, faultCollector?.sub("primaryImage"))
 export const isNode = (x: unknown, faultCollector?: ValidationFaultCollector): x is Node =>
     isEntity(x, isNodeLinks, faultCollector) &&
-    isNullOr(isNodeAge)((x as Node).age, faultCollector?.sub("age")) &&
+    //isNullOr(isNodeAge)((x as Node).age, faultCollector?.sub("age")) &&
     isArray(isNomen)((x as Node).names, faultCollector?.sub("names"))
 export default isNode

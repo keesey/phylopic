@@ -1,4 +1,5 @@
 {
+    "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "@phylopic/tsconfig/base.json",
     "include": [".", "../source-client/src/implementations/s3/constants/AUTH_BUCKET_NAME.ts"],
     "exclude": ["dist", "build", "node_modules"]

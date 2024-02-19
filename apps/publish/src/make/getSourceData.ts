@@ -22,6 +22,7 @@ import SourceClient from "../source/SourceClient.js"
 import getAgePaleobioDb from "./externals/paleobiodb.org/getAge.js"
 import getIsExtant from "./externals/paleobiodb.org/getIsExtant.js"
 import getAgeTimeTree from "./externals/timetree.org/getAge.js"
+import { PromisyClass, TaskQueue } from "cwait"
 export type AgeSourceData = {
     sources: readonly TitledLink[]
     values: Readonly<[number, number]>
@@ -309,8 +310,11 @@ const TIMETREE_TITLED_LINK: TitledLink = {
 const getExternalPhylogenyDependentData = async (
     args: Pick<SourceData, "externals" | "nodeUUIDsToVertices" | "phylogeny" | "verticesToNodeUUIDs">,
 ): Promise<Pick<SourceData, "ages">> => {
+    console.info("Looking up age data...")
     const externalsLookup = createExternalsLookup(args, ["ncbi.nlm.nih.gov/taxid/", "paleobiodb.org/txn/"])
     const ages = new Map<UUID, AgeSourceData>()
+    const timeTreeQueue = new TaskQueue(Promise as PromisyClass, 10)
+    const pbdbQueue = new TaskQueue(Promise as PromisyClass, 10)
     await Promise.all(
         Array.from(externalsLookup.entries()).map(async ([uuid, identifiers]) => {
             const objectIDs: Record<AuthorizedNamespace, Set<ObjectID>> = {
@@ -323,13 +327,13 @@ const getExternalPhylogenyDependentData = async (
             }
             const [isExtant, pbdbAge, timeTreeAge] = await Promise.all([
                 objectIDs["paleobiodb.org/txn"].size
-                    ? getIsExtant(objectIDs["paleobiodb.org/txn"])
+                    ? pbdbQueue.wrap<boolean>(async () => getIsExtant(objectIDs["paleobiodb.org/txn"]))
                     : Promise.resolve(false),
                 objectIDs["paleobiodb.org/txn"].size
-                    ? getAgePaleobioDb(objectIDs["paleobiodb.org/txn"])
+                    ? pbdbQueue.wrap<number[] | null>(async () => getAgePaleobioDb(objectIDs["paleobiodb.org/txn"]))
                     : Promise.resolve(null),
                 objectIDs["ncbi.nlm.nih.gov/taxid"].size
-                    ? getAgeTimeTree(objectIDs["ncbi.nlm.nih.gov/taxid"])
+                    ? timeTreeQueue.wrap<number | null>(async () => getAgeTimeTree(objectIDs["ncbi.nlm.nih.gov/taxid"]))
                     : Promise.resolve(null),
             ])
             if (isExtant || pbdbAge || timeTreeAge) {
@@ -378,6 +382,7 @@ const getExternalPhylogenyDependentData = async (
             }
         }
     }
+    console.info("Looked up age data.")
     return { ages }
 }
 const getPhylogenyDerivedData = (

@@ -1,4 +1,5 @@
 {
+    "$schema": "https://json.schemastore.org/tsconfig",
     "exclude": ["dist", "build", "node_modules"],
     "extends": "@phylopic/tsconfig/node18.json",
     "include": ["."]
