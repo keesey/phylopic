@@ -11,18 +11,26 @@ const getAPIResult = async <R, D = unknown>(
 ): Promise<R> => {
     const now = new Date().valueOf()
     const ref = database.ref<{ data: R; expiry: number }>(md5(url))
-    const snapshot = await ref.get()
-    if (snapshot.exists()) {
-        const value = snapshot.val()
-        if (value && value.expiry > now) {
-            return value.data
+    try {
+        const snapshot = await ref.get()
+        if (snapshot.exists()) {
+            const value = snapshot.val()
+            if (value && value.expiry > now) {
+                return value.data
+            }
         }
+    } catch (e) {
+        console.warn(e)
     }
     const response = await queue.wrap(() => axios.get<R>(url, config))()
-    await ref.set({
-        data: response.data,
-        expiry: now + ttl,
-    })
+    try {
+        await ref.set({
+            data: response.data,
+            expiry: now + ttl,
+        })
+    } catch (e) {
+        console.warn(e)
+    }
     return response.data
 }
 export default getAPIResult
