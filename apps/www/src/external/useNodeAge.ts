@@ -1,10 +1,10 @@
-import { Node } from "@phylopic/api-models"
-import { UUID } from "@phylopic/utils"
+import { type Node } from "@phylopic/api-models"
+import { type UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import getObjectIDs from "./getObjectIDs"
-import { PBDBResponse } from "./paleobiodb.org/PBDBResponse"
+import { type PBDBStrataResponse } from "./paleobiodb.org/PBDBStrataResponse"
 import getStrataUrl from "./paleobiodb.org/getStrataUrl"
 import getMrcaUrl from "./timetree.org/getAgeUrl"
 const MILLION = 1000000
@@ -26,7 +26,7 @@ const PREDEFINED: Record<UUID, AgeResult | null | undefined> = {
     "8f901db5-84c1-4dc0-93ba-2300eeddf4ab": null,
 }
 const getAgeResult = (
-    pbdbData: PBDBResponse | undefined,
+    pbdbStrataData: PBDBStrataResponse | undefined,
     predefined: AgeResult | null | undefined,
     timeTreeData: { value: number } | undefined,
 ): AgeResult | null => {
@@ -40,9 +40,9 @@ const getAgeResult = (
             sourceTitle: "Timetree of Life",
         }
     }
-    if (pbdbData?.records.length) {
-        const eag = Math.max(...pbdbData.records.map(record => record.eag))
-        const lag = Math.min(...pbdbData.records.map(record => record.lag))
+    if (pbdbStrataData?.records.length) {
+        const eag = Math.max(...pbdbStrataData.records.map(record => record.eag))
+        const lag = Math.min(...pbdbStrataData.records.map(record => record.lag))
         return {
             ages: [eag * MILLION, lag * MILLION],
             source: "https://paleobiodb.org/",
@@ -58,10 +58,10 @@ const useNodeAge = (node: Node | null) => {
     const timeTreeKey = predefined === undefined && ncbiTaxIds.length ? getMrcaUrl(ncbiTaxIds) : null
     const pbdbKey = predefined === undefined && !timeTreeKey && pbdbTxnIds.length ? getStrataUrl(pbdbTxnIds) : null
     const { data: timeTreeData } = useSWRImmutable<{ value: number }>(timeTreeKey, fetcher)
-    const { data: pbdbData } = useSWRImmutable<PBDBResponse>(pbdbKey, fetcher)
+    const { data: pbdbStrataData } = useSWRImmutable<PBDBStrataResponse>(pbdbKey, fetcher)
     return useMemo<AgeResult | null>(
-        () => getAgeResult(pbdbData, predefined, timeTreeData),
-        [pbdbData, predefined, timeTreeData],
+        () => getAgeResult(pbdbStrataData, predefined, timeTreeData),
+        [pbdbStrataData, predefined, timeTreeData],
     )
 }
 export default useNodeAge
