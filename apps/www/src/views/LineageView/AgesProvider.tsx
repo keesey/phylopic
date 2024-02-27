@@ -69,15 +69,21 @@ export const useAgeResult = (uuid: UUID | undefined): AgeResult | null => {
             return null
         }
         if (index === 0) {
+            if (!existing) {
+                const extantAncestor = state.slice(1).find(n => n.ageResult && n.ageResult.ages.includes(0))
+                if (extantAncestor) {
+                    return {
+                        ...extantAncestor,
+                        ages: [0, 0],
+                    }
+                }
+            }
             return existing
+        } else if (existing.ages[0] === 0) {
+            return null
         }
         for (const descendant of state.slice(0, index)) {
-            if (
-                descendant.ageResult &&
-                descendant.ageResult.ages.some(descendantAge =>
-                    existing?.ages.some(ancestorAge => ancestorAge < descendantAge),
-                )
-            ) {
+            if (descendant.ageResult && descendant.ageResult.ages[0] >= existing.ages[0]) {
                 return null
             }
         }
