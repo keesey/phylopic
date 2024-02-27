@@ -56,7 +56,7 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
 }
 export const useAgeResult = (uuid: UUID | undefined): AgeResult | null => {
     const { state } = useContext(AgesContext) ?? {}
-    return useMemo(() => {
+    return useMemo<AgeResult | null>(() => {
         if (!state || !uuid) {
             return null
         }
@@ -64,7 +64,7 @@ export const useAgeResult = (uuid: UUID | undefined): AgeResult | null => {
         if (index < 0) {
             return null
         }
-        const existing = state[index].ageResult
+        const existing = state[index]?.ageResult
         if (!existing) {
             return null
         }
@@ -73,9 +73,9 @@ export const useAgeResult = (uuid: UUID | undefined): AgeResult | null => {
                 const extantAncestor = state.slice(1).find(n => n.ageResult && n.ageResult.ages.includes(0))
                 if (extantAncestor) {
                     return {
-                        ...extantAncestor,
+                        ...extantAncestor.ageResult,
                         ages: [0, 0],
-                    }
+                    } as AgeResult
                 }
             }
             return existing
