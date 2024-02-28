@@ -2,12 +2,13 @@ import { NumberView } from "@phylopic/ui"
 import { type FC } from "react"
 import UnitView from "./UnitView"
 import { type AgePresentation } from "./getAgePresentation"
+import RECENT from "~/external/RECENT"
 const AgePresentationView: FC<{ presentation: AgePresentation; showTilde: boolean; showUnit: boolean }> = ({
     presentation,
     showTilde,
     showUnit,
 }) => {
-    if (presentation.years === 0) {
+    if (presentation.years <= RECENT) {
         return <UnitView {...presentation} />
     }
     return (

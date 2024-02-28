@@ -88,7 +88,7 @@ export const useAgeResult = (uuid: UUID | undefined): AgeResult | null => {
             }
         }
         return existing
-    }, [state])
+    }, [state, uuid])
 }
 export const useIsTerminal = (uuid: UUID | undefined) => {
     const { state } = useContext(AgesContext) ?? {}

@@ -10,6 +10,7 @@ import getStrataUrl from "./paleobiodb.org/getStrataUrl"
 import getMrcaUrl from "./timetree.org/getAgeUrl"
 import getTaxonUrl from "./paleobiodb.org/getTaxonUrl"
 import { PBDBTaxonResponse } from "./paleobiodb.org/PBDBTaxonResponse"
+import RECENT from "./RECENT"
 const MILLION = 1000000
 const fetcher = <T>(key: string) => axios.get<T>(key).then(({ data }) => data)
 export type AgeResult = Readonly<{
@@ -51,7 +52,7 @@ const getAgeResult = (
         const eag = Math.max(...pbdbStrataData.records.map(record => record.eag))
         const lag = Math.min(...pbdbStrataData.records.map(record => record.lag))
         return {
-            ages: [eag * MILLION, extant ? 0 : lag * MILLION],
+            ages: [eag * MILLION, extant ? 0 : lag === 0 ? RECENT : lag * MILLION],
             source: "https://paleobiodb.org/",
             sourceTitle: "Paleobiology Database",
         }
@@ -79,7 +80,7 @@ const useNodeAge = (node: Node | null) => {
     )
     return useMemo<AgeResult | null>(
         () => getAgeResult(pbdbStrataData, pbdbTaxonData, predefined, timeTreeData),
-        [pbdbStrataData, predefined, timeTreeData],
+        [pbdbStrataData, pbdbTaxonData, predefined, timeTreeData],
     )
 }
 export default useNodeAge

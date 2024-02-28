@@ -1,3 +1,5 @@
+import RECENT from "~/external/RECENT"
+
 const BILLION = 1000000000
 const MILLION = 1000000
 const THOUSAND = 1000
@@ -24,7 +26,7 @@ const getAgePresentation = (age: number): AgePresentation => {
             years: MILLION,
         }
     }
-    if (age >= THOUSAND) {
+    if (age > RECENT) {
         return {
             text: "kya",
             title: `kilo-year${age === MILLION ? "" : "s"} (millenni${age === MILLION ? "um" : "a"}) ago`,
@@ -34,8 +36,7 @@ const getAgePresentation = (age: number): AgePresentation => {
     }
     if (age > 0) {
         return {
-            text: "ya",
-            title: `year${age === 1 ? "" : "s"} ago`,
+            text: "Recent",
             value: Math.round(age),
             years: 1,
         }
@@ -43,7 +44,7 @@ const getAgePresentation = (age: number): AgePresentation => {
     return {
         text: "present",
         value: 0,
-        years: 0,
+        years: 1,
     }
 }
 export default getAgePresentation
