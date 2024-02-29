@@ -8,7 +8,7 @@ const AgePresentationView: FC<{ presentation: AgePresentation; showTilde: boolea
     showTilde,
     showUnit,
 }) => {
-    if (presentation.years <= RECENT) {
+    if (isNaN(presentation.years)) {
         return <UnitView {...presentation} />
     }
     return (

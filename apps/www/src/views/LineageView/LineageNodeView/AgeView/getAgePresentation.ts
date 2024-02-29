@@ -37,14 +37,14 @@ const getAgePresentation = (age: number): AgePresentation => {
     if (age > 0) {
         return {
             text: "Recent",
-            value: Math.round(age),
-            years: 1,
+            value: NaN,
+            years: NaN,
         }
     }
     return {
         text: "present",
         value: 0,
-        years: 1,
+        years: NaN,
     }
 }
 export default getAgePresentation
