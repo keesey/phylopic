@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.8.2] - 2024-03-18
+
+### Removed
+
+-   Temporarily removed Pocket Phylogenies section on Home Page to decrease bandwidth. (Will move images to alternate host and reinstate section later.)
+
 ## [2.8.1] - 2024-02-17
 
 ### Security

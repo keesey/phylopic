@@ -9,8 +9,8 @@ const nextConfig = {
                     { key: "Access-Control-Allow-Origin", value: "https://www.phylopic.org" },
                     { key: "Access-Control-Allow-Methods", value: "GET,HEAD" },
                     { key: "Access-Control-Allow-Headers", value: "Accept,Content-Type" },
-                ]
-            }
+                ],
+            },
         ]
     },
     i18n: {
