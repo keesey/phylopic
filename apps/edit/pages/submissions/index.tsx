@@ -1,15 +1,12 @@
 import { S3Entry } from "@phylopic/source-client"
-import { Contributor, INCOMPLETE_STRING, Submission } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
-import { Hash, UUID } from "@phylopic/utils"
+import { Hash } from "@phylopic/utils"
 import { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
-import { FC } from "react"
-import useSWR, { SWRConfig } from "swr"
+import { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
-import SubmissionNameView from "~/views/SubmissionNameView"
+import SubmissionView from "~/views/SubmissionView"
 const Page: NextPage = () => {
     return (
         <SWRConfig>
@@ -43,28 +40,3 @@ const Page: NextPage = () => {
     )
 }
 export default Page
-const SubmissionView: FC<{ hash: Hash }> = ({ hash }) => {
-    const { data: submission, error } = useSWR<Submission>(`/api/submissions/_/${encodeURIComponent(hash)}`, fetchJSON)
-    const { data: contributor } = useSWR<Contributor & { uuid: UUID }>(
-        submission?.contributor ? `/api/contributors/_/${encodeURIComponent(submission.contributor)}` : null,
-        fetchJSON,
-    )
-    if (error) {
-        return (
-            <>
-                <strong>Error!</strong> {String(error)}
-            </>
-        )
-    }
-    if (!submission) {
-        return <>{INCOMPLETE_STRING}</>
-    }
-    return (
-        <>
-            {submission ? <SubmissionNameView submission={submission} /> : INCOMPLETE_STRING}
-            <> by </>
-            {submission.attribution || "[Anonymous]"}
-            <> (uploaded by {contributor ? contributor.name : INCOMPLETE_STRING})</>
-        </>
-    )
-}

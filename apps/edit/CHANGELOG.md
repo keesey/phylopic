@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.5.0] - 2024-03-27
+
+### Added
+
+-   Showing incomplete submissions as faded.
+
 ## [1.4.1] - 2024-02-17
 
 ### Fixed
