@@ -12,7 +12,7 @@ import {
     type PropsWithChildren,
     type Reducer,
 } from "react"
-import { type AgeResult } from "~/external/useNodeAge"
+import { type AgeResult } from "~/external/AgeResult"
 export type AgeEntry = Readonly<{
     ageResult: AgeResult | null
     uuid: UUID

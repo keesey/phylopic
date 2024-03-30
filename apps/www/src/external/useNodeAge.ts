@@ -6,13 +6,13 @@ import useSWRInfinite from "swr/infinite"
 import { type AgeResult } from "./AgeResult"
 import PREDEFINED from "./PREDEFINED"
 import RECENT from "./RECENT"
+import { PALEOBIOLOGY_DATABASE, TIMETREE } from "./SOURCES"
 import getObjectIDs from "./getObjectIDs"
 import { type PBDBStrataResponse } from "./paleobiodb.org/PBDBStrataResponse"
 import { type PBDBTaxonResponse } from "./paleobiodb.org/PBDBTaxonResponse"
 import getStrataUrl from "./paleobiodb.org/getStrataUrl"
 import getTaxonUrl from "./paleobiodb.org/getTaxonUrl"
 import getMrcaUrl from "./timetree.org/getAgeUrl"
-import { PALEOBIOLOGY_DATABASE, TIMETREE } from "./SOURCES"
 const MILLION = 1000000
 const fetcher = <T>(key: string) => axios.get<T>(key).then(({ data }) => data)
 const getAgeResult = (
