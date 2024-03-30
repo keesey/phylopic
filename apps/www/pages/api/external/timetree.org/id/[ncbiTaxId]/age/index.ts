@@ -2,6 +2,7 @@ import axios from "axios"
 import { NextApiHandler } from "next"
 import TIMETREE_API_URL from "~/external/timetree.org/TIMETREE_API_URL"
 import fetchField from "~/external/timetree.org/fetchField"
+import getString from "~/routes/getString"
 const index: NextApiHandler = async (req, res) => {
     // :TODO: CORS protection
     const ncbiTaxId = getString(req.query.ncbiTaxId)
@@ -24,12 +25,3 @@ const index: NextApiHandler = async (req, res) => {
     res.end()
 }
 export default index
-const getString = (value: string | string[] | undefined) => {
-    if (typeof value === "string") {
-        return value
-    }
-    if (value === undefined) {
-        return ""
-    }
-    return value[0]
-}
