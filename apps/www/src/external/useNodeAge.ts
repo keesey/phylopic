@@ -1,34 +1,20 @@
 import { type Node } from "@phylopic/api-models"
-import { type UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import useSWRInfinite from "swr/infinite"
+import { type AgeResult } from "./AgeResult"
+import PREDEFINED from "./PREDEFINED"
+import RECENT from "./RECENT"
 import getObjectIDs from "./getObjectIDs"
 import { type PBDBStrataResponse } from "./paleobiodb.org/PBDBStrataResponse"
+import { type PBDBTaxonResponse } from "./paleobiodb.org/PBDBTaxonResponse"
 import getStrataUrl from "./paleobiodb.org/getStrataUrl"
-import getMrcaUrl from "./timetree.org/getAgeUrl"
 import getTaxonUrl from "./paleobiodb.org/getTaxonUrl"
-import { PBDBTaxonResponse } from "./paleobiodb.org/PBDBTaxonResponse"
-import RECENT from "./RECENT"
+import getMrcaUrl from "./timetree.org/getAgeUrl"
+import { PALEOBIOLOGY_DATABASE, TIMETREE } from "./SOURCES"
 const MILLION = 1000000
 const fetcher = <T>(key: string) => axios.get<T>(key).then(({ data }) => data)
-export type AgeResult = Readonly<{
-    ages: Readonly<[number, number]>
-    source: string
-    sourceTitle: string
-}>
-// :KLUDGE: Some rootward nodes are tough to look up via APIs and their estimates are stable.
-const PREDEFINED: Record<UUID, AgeResult | null | undefined> = {
-    // Biota
-    "d2a5e07b-bf10-4733-96f2-cae5a807fc83": {
-        ages: [4250000000, 4250000000],
-        source: "https://timetree.org/",
-        sourceTitle: "Timetree of Life",
-    },
-    // Pan-Biota
-    "8f901db5-84c1-4dc0-93ba-2300eeddf4ab": null,
-}
 const getAgeResult = (
     pbdbStrataData: PBDBStrataResponse | undefined,
     pbdbTaxonData: readonly PBDBTaxonResponse[] | undefined,
@@ -43,25 +29,22 @@ const getAgeResult = (
         : false
     if (typeof timeTreeData?.value === "number") {
         return {
+            ...TIMETREE,
             ages: [timeTreeData.value * MILLION, extant ? 0 : timeTreeData.value * MILLION],
-            source: "https://timetree.org/",
-            sourceTitle: "Timetree of Life",
         }
     }
     if (pbdbStrataData?.records.length) {
         const eag = Math.max(...pbdbStrataData.records.map(record => record.eag))
         const lag = Math.min(...pbdbStrataData.records.map(record => record.lag))
         return {
+            ...PALEOBIOLOGY_DATABASE,
             ages: [eag * MILLION, extant ? 0 : lag === 0 ? RECENT : lag * MILLION],
-            source: "https://paleobiodb.org/",
-            sourceTitle: "Paleobiology Database",
         }
     }
     return extant
         ? {
+              ...PALEOBIOLOGY_DATABASE,
               ages: [0, 0],
-              source: "https://paleobiodb.org/",
-              sourceTitle: "Paleobiology Database",
           }
         : null
 }
