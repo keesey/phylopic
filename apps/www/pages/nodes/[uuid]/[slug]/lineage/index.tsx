@@ -14,6 +14,7 @@ import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getNodeHRef from "~/routes/getNodeHRef"
+import getNodeSlug from "~/routes/getNodeSlug"
 import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
@@ -67,7 +68,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         <>
             <NextSeo
                 additionalMetaTags={[{ name: "keywords", content: keywords }]}
-                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(node.uuid)}/lineage`}
+                canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(node._links.self)}/lineage`}
                 description={`Illustrated evolutionary lineage of ${nameString}.`}
                 openGraph={openGraph}
                 title={`Lineage of ${shortNameString} - PhyloPic`}
@@ -106,7 +107,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
 export default PageComponent
 export const getStaticPaths = createStaticPathsGetter("/nodes")
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
-    const { uuid } = context.params ?? {}
+    const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
@@ -115,12 +116,10 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
     }
-    if (nodeResult.data.uuid !== uuid) {
+    if (nodeResult.data.uuid !== uuid || getNodeSlug(nodeResult.data._links.self.title) !== slug) {
         return {
             redirect: {
-                destination: `${process.env.NEXT_PUBLIC_WWW_URL}/nodes/${encodeURIComponent(
-                    nodeResult.data.uuid,
-                )}/lineage`,
+                destination: `${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(nodeResult.data._links.self)}/lineage`,
                 permanent: true,
             },
         }

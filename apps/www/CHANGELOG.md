@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Ages for Lineage Nodes, taken primarily from _Timetree of Life_ and _The Paleobiology Database_.
+
 ### Changed
+
+-   Moved Lineage Pages to a subfolder of the full Node Page path.
 
 ### Deprecated
 

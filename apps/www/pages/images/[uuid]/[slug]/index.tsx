@@ -114,7 +114,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
             } (License: ${licenseLong}).`,
         [image.attribution, licenseLong, nameLong],
     )
-    const lineageNodeHRef = useMemo(() => {
+    const lineageHRef = useMemo(() => {
         if (!image._embedded.nodes?.length) {
             return null
         }
@@ -122,7 +122,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
         if (!node._links.parentNode) {
             return null
         }
-        return node._links.self.href
+        return getNodeHRef(node._links.self) + "/lineage"
     }, [image._embedded.nodes])
     const openGraph = useOpenGraphForImage(image)
     return (
@@ -184,15 +184,15 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                       },
                                       type: "button" as const,
                                   },
-                            lineageNodeHRef
+                            lineageHRef
                                 ? {
                                       children: "View Lineage →",
                                       key: "lineage",
-                                      href: extractPath(lineageNodeHRef) + "/lineage",
+                                      href: lineageHRef,
                                       onClick: () => {
                                           customEvents.clickLink(
                                               "view_lineage",
-                                              extractPath(lineageNodeHRef) + "/lineage",
+                                              lineageHRef,
                                               "View Lineage →",
                                               "button",
                                           )
