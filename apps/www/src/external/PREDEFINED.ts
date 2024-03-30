@@ -141,8 +141,8 @@ const HOMININI: AgeSourceRecord = {
     },
     // Homo (sapiens)
     "7b1368a2-e505-4a6c-a236-17c2dc529975": {
-        ...SMITHSONIAN_HUMAN_ORIGINS,
-        ages: [700000, 0],
+        ...WIKIPEDIA,
+        ages: [1200000, 0],
     },
     // Homo antecessor
     "345ee81b-7a8e-4e01-a477-935796b51ee7": {
@@ -156,15 +156,15 @@ const HOMININI: AgeSourceRecord = {
         ...SMITHSONIAN_HUMAN_ORIGINS,
         ages: [400000, 40000],
     },
-    // Homo rhodesiensis rhodesiensis
-    "65705fb7-b133-4b4e-96f1-7d98d1e4d3f6": {
-        ...WIKIPEDIA,
-        ages: [324000, 274000],
-    },
     // Homo naledi
     "b3ab7412-6229-40bc-b398-9d6356bf91f8": {
         ...SMITHSONIAN_HUMAN_ORIGINS,
         ages: [335000, 236000],
+    },
+    // Homo rhodesiensis rhodesiensis
+    "65705fb7-b133-4b4e-96f1-7d98d1e4d3f6": {
+        ...WIKIPEDIA,
+        ages: [324000, 274000],
     },
     // Homo sapiens
     "1ee65cf3-53db-4a52-9960-a9f7093d845d": {
