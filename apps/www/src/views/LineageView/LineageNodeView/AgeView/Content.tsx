@@ -1,5 +1,5 @@
 import { type FC } from "react"
-import { type AgeResult } from "~/external/useNodeAge"
+import { type AgeResult } from "~/external/AgeResult"
 import AgePresentationView from "./AgePresentationView"
 import getAgePresentation from "./getAgePresentation"
 const Content: FC<{ ages: AgeResult["ages"]; isTerminal: boolean }> = ({ ages, isTerminal }) => {
