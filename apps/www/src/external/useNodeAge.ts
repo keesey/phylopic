@@ -21,7 +21,7 @@ const getAgeResult = (
     predefined: AgeResult | null | undefined,
     timeTreeData: { value: number } | undefined,
 ): AgeResult | null => {
-    if (typeof predefined !== "undefined") {
+    if (predefined !== undefined) {
         return predefined
     }
     const extant = pbdbTaxonData
@@ -52,9 +52,9 @@ const useNodeAge = (node: Node | null) => {
     const predefined = node ? PREDEFINED[node.uuid] : undefined
     const ncbiTaxIds = useMemo(() => (node ? getObjectIDs(node._links, "ncbi.nlm.nih.gov", "taxid") : []), [node])
     const pbdbTxnIds = useMemo(() => (node ? getObjectIDs(node._links, "paleobiodb.org", "txn") : []), [node])
-    const timeTreeKey = typeof predefined === "undefined" && ncbiTaxIds.length ? getMrcaUrl(ncbiTaxIds) : null
+    const timeTreeKey = predefined === undefined && ncbiTaxIds.length ? getMrcaUrl(ncbiTaxIds) : null
     const pbdbStrataKey =
-        typeof predefined === "undefined" && !timeTreeKey && pbdbTxnIds.length ? getStrataUrl(pbdbTxnIds) : null
+        predefined === undefined && !timeTreeKey && pbdbTxnIds.length ? getStrataUrl(pbdbTxnIds) : null
     const { data: timeTreeData } = useSWRImmutable<{ value: number }>(timeTreeKey, fetcher)
     const { data: pbdbStrataData } = useSWRImmutable<PBDBStrataResponse>(pbdbStrataKey, fetcher)
     const { data: pbdbTaxonData } = useSWRInfinite<PBDBTaxonResponse>(
