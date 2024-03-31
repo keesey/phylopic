@@ -13,6 +13,7 @@ import {
     type Reducer,
 } from "react"
 import { type AgeResult } from "~/external/AgeResult"
+import PREDEFINED from "~/external/PREDEFINED"
 export type AgeEntry = Readonly<{
     ageResult: AgeResult | null
     uuid: UUID
@@ -40,7 +41,7 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
                 if (existing) {
                     return existing
                 }
-                return { ageResult: null, uuid }
+                return { ageResult: PREDEFINED[uuid] ?? null, uuid }
             })
         }
         case "SET": {
