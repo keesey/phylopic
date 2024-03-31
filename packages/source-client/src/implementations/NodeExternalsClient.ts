@@ -13,7 +13,10 @@ type INodeExternalsClient = Listable<
     ) => Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
 }
 export default class NodeExternalsClient implements INodeExternalsClient {
-    constructor(protected provider: PGClientProvider, protected uuid: UUID) {}
+    constructor(
+        protected provider: PGClientProvider,
+        protected uuid: UUID,
+    ) {}
     namespace(authority: Authority, namespace: Namespace) {
         return new NodeExternalsNamespaceClient(this.provider, this.uuid, authority, namespace)
     }

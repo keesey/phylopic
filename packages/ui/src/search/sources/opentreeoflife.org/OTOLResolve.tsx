@@ -46,7 +46,10 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
             ),
         [build, ott_id, setDirectKey],
     )
-    const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchNode)
+    const direct = useSWRImmutable<NodeWithEmbedded, unknown, [string] | null>(
+        directKey ? [directKey] : null,
+        fetchNode,
+    )
     const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
     const lineageIDs = React.useMemo(() => {
         if (!lineage.data?.lineage) {
@@ -68,7 +71,10 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
             ),
         [build, lineageIDs, setIndirectKey],
     )
-    const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchNode)
+    const indirect = useSWRImmutable<NodeWithEmbedded, unknown, [string] | null>(
+        indirectKey ? [indirectKey] : null,
+        fetchNode,
+    )
     React.useEffect(() => {
         const node = direct.data ?? indirect.data
         if (node && dispatch) {

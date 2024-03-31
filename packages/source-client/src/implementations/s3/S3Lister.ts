@@ -56,7 +56,7 @@ export default class S3Lister<TKey extends string = string> implements Listable<
                         ({
                             Key: content.Key?.slice(this.prefix.length),
                             LastModified: content.LastModified,
-                        } as S3Entry<TKey>),
+                        }) as S3Entry<TKey>,
                 ).filter<S3Entry<TKey>>((value): value is S3Entry<TKey> => this.validateKey(value.Key)) ?? []
             )
         }
@@ -67,7 +67,7 @@ export default class S3Lister<TKey extends string = string> implements Listable<
                         Key: decodeURIComponent(
                             commonPrefix.Prefix?.slice(this.prefix.length).replace(/\/$/, "") ?? "",
                         ),
-                    } as S3Entry<TKey>),
+                    }) as S3Entry<TKey>,
             ).filter<S3Entry<TKey>>((value): value is S3Entry<TKey> => this.validateKey(value.Key)) ?? []
         )
     }

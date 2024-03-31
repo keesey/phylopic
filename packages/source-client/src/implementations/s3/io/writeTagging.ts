@@ -4,7 +4,7 @@ const writeTagging = <T extends Readonly<Record<string, string | null>>>(value: 
     return {
         TagSet: Object.entries(value)
             .filter(([, Value]) => Value !== null && Value.length > 0)
-            .map(([Key, Value]) => ({ Key, Value: encodeTagValue(Value) } as Tag)),
+            .map(([Key, Value]) => ({ Key, Value: encodeTagValue(Value) }) as Tag),
     }
 }
 export default writeTagging

@@ -8,21 +8,21 @@
     },
     "dependencies": {
         "@phylopic/utils": "*",
-        "normalize-diacritics": "^4.0.0"
+        "normalize-diacritics": "^4.0.3"
     },
     "description": "Type declarations and validation for PhyloPic API value objects.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/chai": "^4.3.5",
-        "@types/mocha": "^10.0.1",
-        "chai": "^4.3.7",
-        "eslint": "^8.39.0",
+        "@types/chai": "^4.3.14",
+        "@types/mocha": "^10.0.6",
+        "chai": "^5.1.0",
+        "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "mocha": "^10.2.0",
-        "prettier": "^2.8.8",
-        "ts-node": "^10.9.1",
-        "tsup": "^6.7.0",
-        "typescript": "^5.0.4",
+        "mocha": "^10.4.0",
+        "prettier": "^3.2.5",
+        "ts-node": "^10.9.2",
+        "tsup": "^8.0.2",
+        "typescript": "^5.4.3",
         "yarn": "^1.22.19"
     },
     "exports": {

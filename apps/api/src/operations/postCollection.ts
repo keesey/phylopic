@@ -71,7 +71,7 @@ const ensureExistence = async (service: PgClientService, uuid: string, uuids: Re
                 [uuid],
             )
             if (!result.rowCount) {
-                await client.query("INSERT INTO collection (uuid, uuids) VALUES ($1::uuid, $2::uuid[])", [
+                await client.query<never>("INSERT INTO collection (uuid, uuids) VALUES ($1::uuid, $2::uuid[])", [
                     uuid,
                     [...uuids].sort(),
                 ])

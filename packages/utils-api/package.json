@@ -13,9 +13,9 @@
     "description": "Tools for using the *PhyloPic* API.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/react": "^18.2.5",
+        "@types/react": "^18.2.73",
         "eslint-config-phylopic": "*",
-        "typescript": "^5.0.4"
+        "typescript": "^5.4.3"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -43,9 +43,9 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-api",
     "peerDependencies": {
-        "axios": "^1.4.0",
+        "axios": "^1.6.8",
         "react": "^18.2.0",
-        "swr": "^2.1.5"
+        "swr": "^2.2.5"
     },
     "publishConfig": {
         "access": "public"
@@ -56,7 +56,7 @@
     },
     "resolutions": {
         "@types/node": "*",
-        "@types/react": "^18.2.5"
+        "@types/react": "^18.2.73"
     },
     "scripts": {
         "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils axios react swr",

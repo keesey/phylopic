@@ -8,11 +8,11 @@
     },
     "description": "An open database of freely reusable silhouettes of life forms.",
     "devDependencies": {
-        "@changesets/cli": "^2.26.1",
-        "eslint": "^8.39.0",
+        "@changesets/cli": "^2.27.1",
+        "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "prettier": "^2.8.8",
-        "turbo": "^1.9.3"
+        "prettier": "^3.2.5",
+        "turbo": "^1.13.0"
     },
     "license": "MIT",
     "name": "phylopic",

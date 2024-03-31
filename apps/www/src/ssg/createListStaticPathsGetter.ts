@@ -38,7 +38,7 @@ const createStaticPathsGetter =
                         ({
                             slug: getSlug(link.href, link.title),
                             uuid: extractUUIDv4(link.href) ?? undefined,
-                        } as Partial<EntityPageQuery>),
+                        }) as Partial<EntityPageQuery>,
                 )
                 .filter(isEntityPageQuery)
                 .map((params: EntityPageQuery) => ({ params })) ?? []

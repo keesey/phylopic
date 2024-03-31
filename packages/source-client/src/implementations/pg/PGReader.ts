@@ -34,7 +34,7 @@ export default class PGReader<T> implements Readable<T> {
             } WHERE ${this.identification()} AND disabled=0::bit`,
             this.identificationValues(),
         )
-        return output.rowCount >= 1
+        return (output.rowCount ?? 0) >= 1
     }
     protected identification() {
         return this.identifiers.map((field, index) => `${field.column}=$${index + 1}::${field.type}`).join(" AND ")

@@ -23,7 +23,10 @@ import normalizeNode from "./pg/normalization/normalizeNode"
 import PGLister from "./pg/PGLister"
 import PGPatcher from "./pg/PGPatcher"
 export default class NodeClient extends PGPatcher<Node & { uuid: UUID }> implements ReturnType<SourceClient["node"]> {
-    constructor(protected provider: PGClientProvider, protected uuid: UUID) {
+    constructor(
+        protected provider: PGClientProvider,
+        protected uuid: UUID,
+    ) {
         if (!isUUIDv4(uuid)) {
             throw new Error("Invalid UUID.")
         }
