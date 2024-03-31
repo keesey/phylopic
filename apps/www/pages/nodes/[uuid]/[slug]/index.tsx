@@ -8,20 +8,20 @@ import {
 } from "@phylopic/api-models"
 import { Loader, NodeContainer, useNomenText } from "@phylopic/ui"
 import {
+    Query,
+    UUID,
     createSearch,
     extractPath,
     extractQueryString,
     isDefined,
     isUUIDv4,
     parseQueryString,
-    Query,
     shortenNomen,
     stringifyNomen,
-    UUID,
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
-import type { GetStaticProps, NextPage } from "next"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"
@@ -41,13 +41,14 @@ import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getHRefFromAPILink from "~/routes/getHRefFromAPILink"
 import getNodeHRef from "~/routes/getNodeHRef"
 import getNodeSlug from "~/routes/getNodeSlug"
-import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Container from "~/ui/Container"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import NomenHeader from "~/ui/NomenHeader"
+import QUICK_LINKS from "~/ui/QuickLinks/QUICK_LINKS"
+import { QuickLinkNode } from "~/ui/QuickLinks/QuickLinkNode"
 import ImageListView from "~/views/ImageListView"
 import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
@@ -223,7 +224,19 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
     )
 }
 export default PageComponent
-export const getStaticPaths = createStaticPathsGetter("/nodes")
+const convertQuickLinkToPathParams = (link: QuickLinkNode): Array<{ params: { uuid: UUID; slug: string } }> => [
+    { params: { uuid: link.uuid, slug: `${link.slug}-silhouettes` } },
+    ...(Array.isArray(link.children)
+        ? (link.children as readonly QuickLinkNode[]).reduce<Array<{ params: { uuid: UUID; slug: string } }>>(
+              (prev, child) => [...prev, ...convertQuickLinkToPathParams(child)],
+              [],
+          )
+        : []),
+]
+export const getStaticPaths: GetStaticPaths<{ uuid: UUID; slug: string }> = () => ({
+    fallback: "blocking",
+    paths: convertQuickLinkToPathParams(QUICK_LINKS),
+})
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
@@ -239,6 +252,14 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     const nodeResult = await nodeResultPromise
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
+    }
+    if (slug === "lineage") {
+        return {
+            redirect: {
+                destination: `${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(nodeResult.data._links.self)}/lineage`,
+                permanent: true,
+            },
+        }
     }
     if (nodeResult.data.uuid !== uuid || getNodeSlug(nodeResult.data._links.self.title) !== slug) {
         return {

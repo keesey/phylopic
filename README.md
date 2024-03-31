@@ -34,7 +34,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 
 ### Database scripts
 
-The scripts for creating the project's Postgres databases are in [sql](./sql).
+The scripts for creating the project's Postgres databases are in [sql](./sql/README.md).
 
 ## Getting started
 
@@ -81,13 +81,32 @@ Apps will run on the following ports:
 
 ## Releasing versions
 
-TBD
+The [semantic versioning](https://semver.org/) of the monorepo is only updated when root dependencies are updated (for example, `turborepo`), or potentially when major changes are made. To create a new version:
+
+-   Update `version` in [`package.json`](./package.json).
+-   Update [`CHANGELOG.md`](./CHANGELOG.md), moving all `[Unreleased]` items into a new entry for the new version.
+-   Commit the changes.
+-   Tag the commit with `@phylopic/v[M].[m].[p]`, where `[M]`, `[m]`, and `[p]` are integers denoting the major version, minor version, and patch version, respectively. Example: `@phylopic/v2.0.9`. Push the tag to `origin`.
+
+## Apps and packages
+
+Each subproject (app or package) has its own [semantic versioning](https://semver.org/). To release a new version:
+
+-   Update `version` in the subproject's `package.json`.
+-   Update the subproject's `CHANGELOG.md`, moving all `[Unreleased]` items into a new entry for the new version.
+-   Commit the changes.
+-   Tag the commit with `@phylopic/[subproject]/v[M].[m].[p]`, where `[subproject]` is the name of the project (for example, `www`) and `[M]`, `[m]`, and `[p]` are integers denoting the major version, minor version, and patch version, respectively. Example: `@phylopic/www/v2.6.12`. Push the tag to `origin`.
+-   For apps, publish the new version:
+    -   For `api` or `api-docs`, run `yarn deploy`.
+    -   For `contribute`, reset the `@phylopic/contribute/prod` branch to the release's commit and push to `origin`. Deployment can be monitored in Vercel.
+    -   For `www`, reset the `@phylopic/www/prod` branch to the release's commit and push to `origin`. Deployment can be monitored in Vercel.
+    -   No action is necessary for `edit` or `publish`, which are only run locally.
 
 ## Contributing
 
 To contribute to the development of _PhyloPic_, please read the guidelines in [`CONTRIBUTING.md`](./CONTRIBUTING.md) and contact Mike Keesey ([`keesey+phylopic@gmail.com`](mailto:keesey+phylopic@gmail.com)). The repository is open and may be forked, with pull requests made back into the original repository.
 
-## Further Documentation
+## Further documentation
 
 -   [Contributing](./CONTRIBUTING.md)
 -   [AWS S3 Bucket Structure](./S3.md)

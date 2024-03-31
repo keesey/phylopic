@@ -1,3 +1,3 @@
 # `@phylopic/api-models`
 
-> TODO: description
+Data models for the _PhyloPic_ API.

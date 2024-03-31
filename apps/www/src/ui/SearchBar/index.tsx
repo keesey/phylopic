@@ -44,7 +44,7 @@ const SearchBar: FC = () => {
             </p>
             <input
                 aria-describedby="search-description"
-                aria-label="Enter the name of a group of organisms."
+                aria-label="Search for a group of organisms."
                 className={clsx(focused && styles.focused)}
                 id="q"
                 list="autocomplete"
@@ -54,7 +54,7 @@ const SearchBar: FC = () => {
                 onBlur={handleInputBlur}
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
-                placeholder="Enter the name of a group of organisms."
+                placeholder="Search for a group of organisms."
                 spellCheck={false}
                 type="search"
                 value={value}

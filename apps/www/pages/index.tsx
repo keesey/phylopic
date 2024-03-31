@@ -130,6 +130,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                     <QuickLinks />
                 </Container>
             </section>
+            {/*
             <section style={{ minWidth: "100vw" }}>
                 <Container>
                     <header>
@@ -157,6 +158,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 </Container>
                 <PocketPhylogenies />
             </section>
+                        */}
             <section>
                 <Container>
                     <h2>Mailing List</h2>

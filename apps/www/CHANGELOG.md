@@ -26,6 +26,140 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.9.1] - 2024-03-30
+
+### Added
+
+-   Predefined age for _Praeanthropus garhi_.
+
+### Fixed
+
+-   Predefined ages were only showing up in `dev` mode.
+
+## [2.9.0] - 2024-03-30
+
+### Added
+
+-   Ages for Lineage Nodes, taken primarily from _Timetree of Life_ and _The Paleobiology Database_.
+
+### Changed
+
+-   Moved Lineage Pages to a subfolder of the full Node Page path.
+
+## [2.8.2] - 2024-03-18
+
+### Removed
+
+-   Temporarily removed Pocket Phylogenies section on Home Page to decrease bandwidth. (Will move images to alternate host and reinstate section later.)
+
+## [2.8.1] - 2024-02-17
+
+### Security
+
+-   Protecting API routes from external domains.
+
+## [2.8.0] - 2024-02-17
+
+### Added
+
+-   Support for `phylopic/nodes` identifiers to `/resolve/[authority]/[namespace]/[objectID]` path.
+
+### Changed
+
+-   Verbiage change for Search Input.
+
+## [2.7.0] - 2024-01-24
+
+### Added
+
+-   Paragraph about sponsors on Image Collection Pages.
+
+## [2.6.12] - 2024-01-04
+
+### Changed
+
+-   Description of `vectorFile` in API Recipes article.
+
+## [2.6.11] - 2023-12-18
+
+### Added
+
+-   Source file in Image Downloads.
+
+### Changed
+
+-   Verbiage for vector file in Image Downloads.
+
+## [2.6.10] - 2023-12-18
+
+### Added
+
+-   Missing mention of _GBIF_ API in API Recipes Article.
+
+## [2.6.9] - 2023-08-30
+
+### Fixed
+
+-   Issue with updating build number.
+
+## [2.6.8] - 2023-06-26
+
+### Fixed
+
+-   Updated two taxa in Quick Links.
+
+## [2.6.7] - 2023-06-26 [YANKED]
+
+### Fixed
+
+-   Not allowing build #0.
+
+## [2.6.6] - 2023-06-26 [YANKED]
+
+### Fixed
+
+-   No more flickering between build versions.
+
+## [2.6.5] - 2023-06-04
+
+### Changed
+
+-   Replaced _Nephrozoa_ with _Bilateria_ in Quick Links.
+
+## [2.6.4] - 2023-05-17
+
+### Changed
+
+-   Upgraded `@phylopic/utils-api` to `1.0.2`.
+
+## [2.6.3] - 2023-05-17
+
+### Changed
+
+-   Revalidation endpoint takes `path` parameter.
+
+### Fixed
+
+-   Revalidation endpoint was not working properly.
+
+## [2.6.2] - 2023-05-17
+
+### Changed
+
+-   Using Quick Links to generate list of initially-generated static Node Pages.
+
+### Fixed
+
+-   No longer potentially returning "Not Found" state for invalid fetch errors.
+
+## [2.6.1] - 2023-05-14
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 18.
+    -   TypeScript 5.0.4.
+
 ## [2.6.0] - 2023-05-02
 
 ### Added

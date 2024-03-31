@@ -43,7 +43,7 @@ const PageComponent: NextPage = () => (
     </PageLayout>
 )
 const Article: FC = () => {
-    const [build] = useContext(BuildContext) ?? [""]
+    const [build] = useContext(BuildContext) ?? []
     return (
         <article>
             <section id="introduction">
@@ -249,10 +249,16 @@ const Article: FC = () => {
                     augmenting searches with external resources that cover other taxa. To take full advantage, you may
                     need to make multiple calls both to the <SiteTitle /> API and to other APIs. Examples below include
                     the{" "}
+                    <a href="//www.gbif.org/" rel="noreferrer">
+                        <cite>
+                            <abbr title="Global Biodiversity Information Facility">GBIF</abbr>
+                        </cite>
+                    </a>{" "}
+                    API, the{" "}
                     <a href="//tree.opentreeoflife.org/" rel="noreferrer">
                         <cite>Open Tree of Life</cite>
                     </a>{" "}
-                    API and the{" "}
+                    API, and the{" "}
                     <a href="//paleobiodb.org/" rel="noreferrer">
                         <cite>Paleobiology Database</cite>
                     </a>{" "}
@@ -604,10 +610,10 @@ const Article: FC = () => {
                     <dd>
                         A <a href="//wikipedia.org/wiki/Vector_graphics">vector</a> version of the image (
                         <a href="//www.w3.org/TR/SVG">
-                            <abbr title="Scalable Vector Graphics">SVG</abbr> format
-                        </a>
-                        ). Same as <code>sourceFile</code> if a vector file was submitted, or automatically generated
-                        from it otherwise.
+                            <abbr title="Scalable Vector Graphics">SVG</abbr>
+                        </a>{" "}
+                        format), automatically generated from <code>sourceFile</code>. This image is pure black on a
+                        transparent background, and may look different from the original file.
                     </dd>
                 </dl>
             </section>

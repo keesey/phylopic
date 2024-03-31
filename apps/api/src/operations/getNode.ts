@@ -2,26 +2,28 @@ import {
     DATA_MEDIA_TYPE,
     EmbeddableParameters,
     EntityParameters,
-    isNode,
-    isNodeParameters,
+    NODE_EMBEDDED_PARAMETERS,
     Node,
     NodeEmbedded,
     NodeLinks,
-    NODE_EMBEDDED_PARAMETERS,
+    isNode,
+    isNodeParameters,
 } from "@phylopic/api-models"
-import { normalizeUUID } from "@phylopic/utils"
+import { normalizeUUID, stringifyNormalized } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"
-import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
+import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
+import getExternalLink from "../search/getExternalLink"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+import { APIGatewayProxyResult } from "aws-lambda"
 export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
 export type GetNodeService = PgClientService
 const USER_MESSAGE = "There was a problem with an attempt to load taxonomic data."
@@ -48,6 +50,7 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
         .map(key => key.slice("embed_".length) as string & keyof NodeEmbedded)
     const client = await service.createPgClient()
     let body: string
+    let result: APIGatewayProxyResult
     try {
         body = await selectEntityJSONWithEmbedded<Node, NodeLinks>(
             client,
@@ -57,23 +60,26 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
             isNode,
             "taxonomic group",
         )
+        if (body === "null") {
+            const link = await getExternalLink(client, "phylopic.org", "nodes", normalizedUUID, queryParameters)
+            result = {
+                body: stringifyNormalized(link),
+                headers: {
+                    ...DATA_HEADERS,
+                    ...createRedirectHeaders(link.href, true),
+                },
+                statusCode: 308,
+            }
+        } else {
+            result = {
+                body,
+                headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
+                statusCode: 200,
+            }
+        }
     } finally {
         await service.deletePgClient(client)
     }
-    if (body === "null") {
-        throw new APIError(404, [
-            {
-                developerMessage: "Cannot find entity.",
-                field: "uuid",
-                type: "RESOURCE_NOT_FOUND",
-                userMessage: "That taxonomic group could not be found.",
-            },
-        ])
-    }
-    return {
-        body,
-        headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
-        statusCode: 200,
-    }
+    return result
 }
 export default getNode
