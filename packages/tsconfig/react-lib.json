@@ -3,7 +3,7 @@
     "compilerOptions": {
         "jsx": "react-jsx",
         "lib": ["ES2022"],
-        "module": "ESNext"
+        "module": "ES2022"
     },
     "display": "React Library",
     "extends": "./base.json"
