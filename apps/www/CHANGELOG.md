@@ -9,19 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Predefined age for _Praeanthropus garhi_.
-
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
--   Predefined ages were only showing up in `dev` mode.
-
 ### Removed
 
 ### Security
+
+## [2.9.1] - 2024-03-30
+
+### Added
+
+-   Predefined age for _Praeanthropus garhi_.
+
+### Fixed
+
+-   Predefined ages were only showing up in `dev` mode.
 
 ## [2.9.0] - 2024-03-30
 
