@@ -85,10 +85,10 @@ const HOMININI: AgeSourceRecord = {
         ages: [2700000, 2300000],
     },
     // Praeanthropus garhi
-    //"????????-????-????-????-????????????": {
-    //    ...SMITHSONIAN_HUMAN_ORIGINS,
-    //    ages: [2500000, 2500000],
-    //},
+    "a5a71d55-ae24-4890-98cf-936eaa55041f": {
+        ...SMITHSONIAN_HUMAN_ORIGINS,
+        ages: [2500000, 2500000],
+    },
     // Homo habilis
     "dc576506-3d55-4290-8a3f-43d0f9d6b4ff": {
         ...SMITHSONIAN_HUMAN_ORIGINS,
