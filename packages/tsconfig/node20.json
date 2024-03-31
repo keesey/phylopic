@@ -6,6 +6,6 @@
         "resolveJsonModule": true,
         "target": "ES2022"
     },
-    "display": "Node 18",
+    "display": "Node 20",
     "extends": "./base.json"
 }
