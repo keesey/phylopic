@@ -114,7 +114,7 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryParameters, isNodeListParameters, USER_MESSAGE)
-    if (checkListRedirect(queryParameters, NODE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
+    if (checkListRedirect<NodeEmbedded>(queryParameters, NODE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
         return createBuildRedirect("/nodes", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)

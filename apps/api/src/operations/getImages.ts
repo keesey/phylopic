@@ -157,7 +157,7 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryParameters, isImageListParameters, USER_MESSAGE)
-    if (checkListRedirect(queryParameters, IMAGE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
+    if (checkListRedirect<ImageEmbedded>(queryParameters, IMAGE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
         return createBuildRedirect("/images", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
