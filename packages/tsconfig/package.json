@@ -1,7 +1,7 @@
 {
     "files": [
         "base.json",
-        "node20.json",
+        "node18.json",
         "next.json",
         "react-lib.json"
     ],
