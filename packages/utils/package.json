@@ -47,6 +47,7 @@
             "ts"
         ],
         "loader": "ts-node/esm",
+        "require": "ts-node/register",
         "spec": "src/**/*.spec.ts"
     },
     "module": "./dist/index.js",
@@ -59,13 +60,27 @@
         "url": "git+https://github.com/keesey/phylopic.git"
     },
     "scripts": {
-        "build": "tsup src/index.ts --format esm,cjs --dts",
+        "build": "tsup",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-        "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+        "dev": "tsup --watch",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix",
         "test": "mocha"
     },
     "sideEffects": false,
+    "tsup": {
+        "clean": true,
+        "dts": true,
+        "entry": [
+            "src/index.ts"
+        ],
+        "format": [
+            "cjs",
+            "esm"
+        ],
+        "sourcemap": true,
+        "splitting": true,
+        "target": "es2022"
+    },
     "types": "dist/index.d.ts",
     "version": "1.0.1"
 }
