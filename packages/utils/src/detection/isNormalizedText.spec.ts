@@ -1,5 +1,4 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
+import { describe, expect, it } from "vitest"
 import { isNormalizedText } from "./isNormalizedText"
 describe("isNormalizedText", () => {
     const test = (value: unknown, expected: boolean) => {

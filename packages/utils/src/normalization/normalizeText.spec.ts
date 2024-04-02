@@ -1,5 +1,4 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
+import { describe, expect, it } from "vitest"
 import normalizeText from "./normalizeText"
 describe("normalizeText", () => {
     const test = (value: string, expected: string) => {

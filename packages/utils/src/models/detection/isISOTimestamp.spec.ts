@@ -1,5 +1,4 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
+import { describe, expect, it } from "vitest"
 import isISOTimestamp from "./isISOTimestamp"
 describe("isISOTimestamp", () => {
     const test = (value: unknown, expected: boolean) => {

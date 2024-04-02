@@ -15,16 +15,13 @@
     "devDependencies": {
         "@phylopic/tsconfig": "*",
         "@types/chai": "^4.3.14",
-        "@types/mocha": "^10.0.6",
         "@types/uuid": "^9.0.8",
-        "chai": "^5.1.0",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "mocha": "^10.4.0",
         "prettier": "^3.2.5",
-        "ts-node": "^10.9.2",
         "tsup": "^8.0.2",
         "typescript": "^5.4.3",
+        "vitest": "^1.4.0",
         "yarn": "^1.22.22"
     },
     "exports": {
@@ -42,14 +39,6 @@
     ],
     "license": "MIT",
     "main": "./dist/index.mjs",
-    "mocha": {
-        "extension": [
-            "ts"
-        ],
-        "loader": "ts-node/esm",
-        "require": "ts-node/register",
-        "spec": "src/**/*.spec.ts"
-    },
     "module": "./dist/index.js",
     "name": "@phylopic/utils",
     "publishConfig": {
@@ -64,7 +53,7 @@
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup --watch",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix",
-        "test": "TS_NODE_PROJECT='./tsconfig.commonjs.json' mocha"
+        "test": "vitest --watch=false"
     },
     "sideEffects": false,
     "tsup": {
