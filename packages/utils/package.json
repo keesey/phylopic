@@ -64,7 +64,7 @@
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup --watch",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix",
-        "test": "mocha"
+        "test": "TS_NODE_PROJECT='./tsconfig.commonjs.json' mocha"
     },
     "sideEffects": false,
     "tsup": {
