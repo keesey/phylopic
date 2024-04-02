@@ -1,6 +1,5 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
 import { LicenseURL, ValidLicenseURL } from "@phylopic/utils"
+import { describe, expect, it } from "vitest"
 import canChange from "./canChange"
 describe("licenses/canChange", () => {
     const test = (a: LicenseURL, b: ValidLicenseURL, permitted: boolean) => {

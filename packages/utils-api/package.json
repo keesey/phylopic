@@ -33,13 +33,6 @@
     ],
     "license": "MIT",
     "main": "./dist/index.js",
-    "mocha": {
-        "extension": [
-            "ts"
-        ],
-        "loader": "ts-node/esm",
-        "spec": "src/**/*.spec.ts"
-    },
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-api",
     "peerDependencies": {

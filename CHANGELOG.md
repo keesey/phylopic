@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Upgrades:
+    -   Node.js 20.
     -   `@aws-sdk/client-lambda` to `3.327.0`.
     -   `@aws-sdk/client-s3` to `3.327.0`.
     -   `@aws-sdk/client-ses` to `3.327.0`.
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     -   `sharp` to `0.32.1`.
     -   `slugify` to `1.6.6`.
     -   `swr` to `2.1.5`.
+- Switched from `mocha` to `vitest`.
 
 ### Deprecated
 

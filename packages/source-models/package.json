@@ -16,18 +16,15 @@
     "description": "Types, validation, and normalization for *PhyloPic* source model objects.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/chai": "^4.3.14",
         "@types/jsonwebtoken": "^9.0.6",
-        "@types/mocha": "^10.0.6",
         "@types/uuid": "^9.0.8",
-        "chai": "^5.1.0",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "mocha": "^10.4.0",
         "prettier": "^3.2.5",
         "ts-node": "^10.9.2",
         "tsup": "^8.0.2",
         "typescript": "^5.4.3",
+        "vitest": "^1.4.0",
         "yarn": "^1.22.19"
     },
     "exports": {
@@ -45,13 +42,6 @@
     ],
     "license": "MIT",
     "main": "./dist/index.js",
-    "mocha": {
-        "extension": [
-            "ts"
-        ],
-        "loader": "ts-node/esm",
-        "spec": "src/**/*.spec.ts"
-    },
     "module": "./dist/index.mjs",
     "name": "@phylopic/source-models",
     "publishConfig": {
@@ -69,7 +59,7 @@
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
         "lint": "TIMING=1 eslint src/**/*.ts* --fix",
-        "test": "mocha"
+        "test": "vitest --watch=false"
     },
     "types": "./dist/index.d.ts",
     "version": "1.0.1"
