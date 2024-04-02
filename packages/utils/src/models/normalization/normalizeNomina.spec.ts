@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { Nomen } from "../types/Nomen"
-import normalizeNomina from "./normalizeNomina"
+import { normalizeNomina } from "./normalizeNomina"
 const HOMO_SAPIENS: Nomen = [
     {
         class: "scientific",

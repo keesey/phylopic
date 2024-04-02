@@ -1,10 +1,10 @@
 import { Tagging } from "@aws-sdk/client-s3"
 import { Deletable } from "../../interfaces/Deletable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
-import copyToTrash from "./methods/copyToTrash"
-import deleteObject from "./methods/deleteObject"
-import S3TaggingReader from "./S3TaggingReader"
-export default class S3TaggingDeletor<T extends Readonly<Record<string, string | null>>>
+import { copyToTrash } from "./methods/copyToTrash"
+import { deleteObject } from "./methods/deleteObject"
+import { S3TaggingReader } from "./S3TaggingReader"
+export class S3TaggingDeletor<T extends Readonly<Record<string, string | null>>>
     extends S3TaggingReader<T>
     implements Deletable<T>
 {

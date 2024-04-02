@@ -14,15 +14,15 @@ import {
 import { Listable } from "../interfaces"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
 import { SourceClient } from "../interfaces/SourceClient"
-import ExternalClient from "./ExternalClient"
-import NodeExternalsClient from "./NodeExternalsClient"
-import NodeLineageClient from "./NodeLineageClient"
-import NODE_FIELDS from "./pg/constants/NODE_FIELDS"
-import NODE_TABLE from "./pg/constants/NODE_TABLE"
-import normalizeNode from "./pg/normalization/normalizeNode"
-import PGLister from "./pg/PGLister"
-import PGPatcher from "./pg/PGPatcher"
-export default class NodeClient extends PGPatcher<Node & { uuid: UUID }> implements ReturnType<SourceClient["node"]> {
+import { ExternalClient } from "./ExternalClient"
+import { NodeExternalsClient } from "./NodeExternalsClient"
+import { NodeLineageClient } from "./NodeLineageClient"
+import { NODE_FIELDS } from "./pg/constants/NODE_FIELDS"
+import { NODE_TABLE } from "./pg/constants/NODE_TABLE"
+import { normalizeNode } from "./pg/normalization/normalizeNode"
+import { PGLister } from "./pg/PGLister"
+import { PGPatcher } from "./pg/PGPatcher"
+export class NodeClient extends PGPatcher<Node & { uuid: UUID }> implements ReturnType<SourceClient["node"]> {
     constructor(
         protected provider: PGClientProvider,
         protected uuid: UUID,

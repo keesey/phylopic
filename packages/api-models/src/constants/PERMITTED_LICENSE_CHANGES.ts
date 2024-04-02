@@ -20,4 +20,3 @@ export const PERMITTED_LICENSE_CHANGES: Readonly<Record<LicenseURL, readonly Val
     "https://creativecommons.org/publicdomain/mark/1.0/": [],
     "https://creativecommons.org/publicdomain/zero/1.0/": [],
 }
-export default PERMITTED_LICENSE_CHANGES

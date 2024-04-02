@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import normalizeText from "./normalizeText"
+import { normalizeText } from "./normalizeText"
 describe("normalizeText", () => {
     const test = (value: string, expected: string) => {
         it(`should convert ${JSON.stringify(value)} to ${JSON.stringify(expected)}`, () => {

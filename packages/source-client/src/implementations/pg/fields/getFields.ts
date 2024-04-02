@@ -1,5 +1,5 @@
 import { ReadField } from "./ReadField"
-const getFields = <T>(fields: ReadonlyArray<(string & keyof T) | ReadField<T>>) => {
+export const getFields = <T>(fields: ReadonlyArray<(string & keyof T) | ReadField<T>>) => {
     return fields
         .map(field =>
             typeof field === "string"
@@ -10,4 +10,3 @@ const getFields = <T>(fields: ReadonlyArray<(string & keyof T) | ReadField<T>>) 
         )
         .join(",")
 }
-export default getFields

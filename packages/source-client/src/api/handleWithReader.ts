@@ -17,4 +17,3 @@ export const handleWithReader = async <T>(req: NextApiRequest, res: NextApiRespo
         }
     }
 }
-export default handleWithReader

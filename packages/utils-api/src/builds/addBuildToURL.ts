@@ -10,4 +10,3 @@ export const addBuildToURL = (url: URL, build: number) => {
         })
     )
 }
-export default addBuildToURL

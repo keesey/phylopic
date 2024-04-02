@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import isISOTimestamp from "./isISOTimestamp"
+import { isISOTimestamp } from "./isISOTimestamp"
 describe("isISOTimestamp", () => {
     const test = (value: unknown, expected: boolean) => {
         it(`should determine that ${JSON.stringify(value)} is${expected ? "" : " not"} an ISO timestamp.`, () => {

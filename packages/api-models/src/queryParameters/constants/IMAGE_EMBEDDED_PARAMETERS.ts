@@ -6,4 +6,3 @@ export const IMAGE_EMBEDDED_PARAMETERS: ReadonlyArray<string & keyof EmbeddableP
     "embed_nodes",
     "embed_specificNode",
 ]
-export default IMAGE_EMBEDDED_PARAMETERS

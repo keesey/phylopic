@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     -   `sharp` to `0.32.1`.
     -   `slugify` to `1.6.6`.
     -   `swr` to `2.1.5`.
-- Switched from `mocha` to `vitest`.
+-   Switched from `mocha` to `vitest`.
 
 ### Deprecated
 

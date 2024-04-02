@@ -3,7 +3,7 @@ import { FaultDetector } from "@phylopic/utils"
 import { S3Entry } from "../../interfaces"
 import { Listable } from "../../interfaces/Listable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
-export default class S3Lister<TKey extends string = string> implements Listable<S3Entry<TKey>, string> {
+export class S3Lister<TKey extends string = string> implements Listable<S3Entry<TKey>, string> {
     constructor(
         protected readonly provider: S3ClientProvider,
         protected readonly bucket: string,

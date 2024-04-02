@@ -2,8 +2,8 @@ import { Image as ImageModel, MediaLink } from "@phylopic/api-models"
 import { ImageMediaType, URL } from "@phylopic/utils"
 import Image from "next/image"
 import React from "react"
-import useImageLoader from "../../hooks/useImageLoader"
-import compareMediaLinks from "../../models/compareMediaLinks"
+import { useImageLoader } from "../../hooks/useImageLoader"
+import { compareMediaLinks } from "../../models/compareMediaLinks"
 export interface ImageRasterViewProps {
     value: ImageModel
 }
@@ -29,4 +29,3 @@ export const ImageRasterView: React.FC<ImageRasterViewProps> = ({ value }) => {
         />
     )
 }
-export default ImageRasterView

@@ -1,6 +1,6 @@
 import { FaultDetector } from "@phylopic/utils"
 import { AxiosRequestConfig } from "axios"
-import fetchData from "./fetchData"
+import { fetchData } from "./fetchData"
 export type SuccessfulFetchResult<T> = {
     data: T
     ok: true
@@ -52,4 +52,3 @@ export const fetchResult = async <T>(
         }
     }
 }
-export default fetchResult

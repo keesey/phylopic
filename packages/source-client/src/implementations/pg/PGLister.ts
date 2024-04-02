@@ -1,13 +1,13 @@
 import { QueryResultRow } from "pg"
 import { Listable } from "../../interfaces/Listable"
 import { PGClientProvider } from "../../interfaces/PGClientProvider"
-import getFields from "./fields/getFields"
+import { getFields } from "./fields/getFields"
 import { IDField } from "./fields/IDField"
 import { ReadField } from "./fields/ReadField"
 export type WhereField = IDField & {
     operator?: "=" | "<" | ">" | "<=" | ">=" | "!-" | "~" | "~*" | "!~" | "!~*" | "~~" | "~~*" | "!~~" | "!~~*"
 }
-export default class PGLister<TValue, TIdentifier> implements Listable<TValue & Readonly<TIdentifier>, number> {
+export class PGLister<TValue, TIdentifier> implements Listable<TValue & Readonly<TIdentifier>, number> {
     constructor(
         protected provider: PGClientProvider,
         protected table: string,

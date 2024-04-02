@@ -5,9 +5,9 @@ import { useDebounce } from "@react-hook/debounce"
 import React, { useContext } from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import SearchContext from "../../context"
-import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
-import OTOL_URL from "./OTOL_URL"
+import { SearchContext } from "../../context"
+import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
+import { OTOL_URL } from "./OTOL_URL"
 interface OTOLLineageItem {
     // Abridged.
     readonly ott_id: number

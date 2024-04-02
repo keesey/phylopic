@@ -1,8 +1,15 @@
-import { JWT } from "@phylopic/source-models"
-import { EmailAddress, isEmailAddress, isUUID, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
+import { type JWT } from "@phylopic/source-models"
+import {
+    type EmailAddress,
+    isEmailAddress,
+    isUUID,
+    isUUIDv4,
+    type UUID,
+    ValidationFaultCollector,
+} from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import { useRouter } from "next/router"
-import { FC, useContext, useEffect, useMemo } from "react"
+import { type FC, useContext, useEffect, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import AuthContext from "~/auth/AuthContext"
 import fetchJWT from "~/fetchers/fetchJWT"

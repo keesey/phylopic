@@ -18,4 +18,3 @@ export class ValidationFaultCollector {
         return new ValidationFaultCollector([...this.fields, ...fields], this.faults)
     }
 }
-export default ValidationFaultCollector

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import isAWSError from "./isAWSError"
+import { isAWSError } from "./isAWSError"
 describe("isAwSError", () => {
     it("should detect a valid error", () => {
         expect(isAWSError({ $metadata: { httpStatusCode: 200 } })).to.equal(true)

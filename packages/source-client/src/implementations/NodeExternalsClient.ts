@@ -12,7 +12,7 @@ type INodeExternalsClient = Listable<
         namespace: Namespace,
     ) => Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
 }
-export default class NodeExternalsClient implements INodeExternalsClient {
+export class NodeExternalsClient implements INodeExternalsClient {
     constructor(
         protected provider: PGClientProvider,
         protected uuid: UUID,
@@ -30,7 +30,7 @@ export default class NodeExternalsClient implements INodeExternalsClient {
         )
         return {
             items: result.rows.slice(0, EXTERNALS_PAGE_SIZE).map(item => ({ ...item, node: this.uuid })),
-            next: result.rowCount >= EXTERNALS_PAGE_SIZE ? index + 1 : undefined,
+            next: result.rowCount ?? 0 >= EXTERNALS_PAGE_SIZE ? index + 1 : undefined,
         }
     }
     async totalItems() {
@@ -64,7 +64,7 @@ class NodeExternalsNamespaceClient
             items: result.rows
                 .slice(0, EXTERNALS_PAGE_SIZE)
                 .map(item => ({ ...item, authority: this.authority, namespace: this.namespace, node: this.uuid })),
-            next: result.rowCount >= EXTERNALS_PAGE_SIZE ? index + 1 : undefined,
+            next: result.rowCount ?? 0 >= EXTERNALS_PAGE_SIZE ? index + 1 : undefined,
         }
     }
     async totalItems() {
