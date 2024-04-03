@@ -80,9 +80,13 @@
             "next",
             "next/image",
             "next/link",
+            "next/router",
+            "next/script",
             "parse-nomen",
             "react",
-            "swr"
+            "react/jsx-runtime",
+            "swr",
+            "swr/immutable"
         ],
         "format": [
             "cjs",
