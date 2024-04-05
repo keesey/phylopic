@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.9.2] - 2024-04-05
+
+### Added
+
+-   Overriding age estimates for some more nodes.
+
+### Changed
+
+-   Showing "Recent" instead of "Recent – present".
+
 ## [2.9.1] - 2024-03-30
 
 ### Added
