@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.10.0] - 2024-04-07
+
+### Fixed
+
+-   Safari focus issue for search input.
+
 ## [2.9.2] - 2024-04-05
 
 ### Added
