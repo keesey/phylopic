@@ -50,7 +50,7 @@
     "scripts": {
         "analyze": "ANALYZE=true yarn build",
         "build": "next build",
-        "clean": "rm -rf .next && rm -rf .turbo && rm -rf node_modules",
+        "clean": "rm -rf .next && rm -rf .swc && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3000",
         "lint": "TIMING=1 next lint",
         "start": "next start",
