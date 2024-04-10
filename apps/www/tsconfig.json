@@ -1,14 +1,33 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "compilerOptions": {
-        "baseUrl": ".",
-        "outDir": "dist",
-        "paths": {
-            "~/*": ["src/*"]
-        },
-        "rootDir": "."
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {
+      "~/*": [
+        "src/*"
+      ]
     },
-    "exclude": ["node_modules"],
-    "extends": "@phylopic/tsconfig/next.json",
-    "include": ["pages", "src", "next-env.d.ts"]
+    "rootDir": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "extends": "@phylopic/tsconfig/next.json",
+  "include": [
+    "app",
+    "components",
+    "layout",
+    "lib",
+    "pages",
+    "src",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ]
 }

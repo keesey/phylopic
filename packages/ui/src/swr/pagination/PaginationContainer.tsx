@@ -1,3 +1,4 @@
+"use client"
 import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query, URL } from "@phylopic/utils"
 import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"

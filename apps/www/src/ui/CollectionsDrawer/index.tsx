@@ -1,3 +1,4 @@
+"use client"
 import { DATA_MEDIA_TYPE } from "@phylopic/api-models"
 import clsx from "clsx"
 import dynamic from "next/dynamic"

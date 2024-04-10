@@ -25,7 +25,7 @@ import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollection
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { Props as PageLayoutProps } from "~/layout"
 import DonationPromo from "~/promos/DonationPromo"
 import getContributorHRef from "~/routes/getContributorHRef"
 import getImageHRef from "~/routes/getImageHRef"

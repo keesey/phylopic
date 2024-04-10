@@ -1,3 +1,4 @@
+"use client"
 import { FC, ReactNode, useCallback, useEffect, useReducer, useState } from "react"
 import CollectionsContext from "./CollectionsContext"
 import INITIAL_STATE from "./INITIAL_STATE"

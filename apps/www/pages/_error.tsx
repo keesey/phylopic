@@ -1,6 +1,6 @@
 import { NextPage } from "next"
 import { NextSeo } from "next-seo"
-import PageLayout from "~/pages/PageLayout"
+import PageLayout from "~/layout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 export type Props = {

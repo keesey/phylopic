@@ -1,7 +1,7 @@
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import customEvents from "~/analytics/customEvents"
-import PageLayout from "~/pages/PageLayout"
+import PageLayout from "~/layout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import EngineeringSection from "~/sections/EngineeringSection"
 import InlineSections from "~/ui/InlineSections"

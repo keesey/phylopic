@@ -1,7 +1,7 @@
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import { ReactNode } from "react"
-import PageLayout from "~/pages/PageLayout"
+import PageLayout from "~/layout"
 import getBuildStaticProps, { Props } from "~/ssg/getBuildStaticProps"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"

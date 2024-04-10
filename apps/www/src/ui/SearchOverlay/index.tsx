@@ -1,3 +1,4 @@
+"use client"
 import { Loader, SearchContext } from "@phylopic/ui"
 import dynamic from "next/dynamic"
 import { FC, Fragment, ReactNode, Suspense, useContext } from "react"

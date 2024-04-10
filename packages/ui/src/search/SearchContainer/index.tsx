@@ -1,3 +1,4 @@
+"use client"
 import { BuildContext } from "@phylopic/utils-api"
 import { useRouter } from "next/router"
 import React, { ReactNode } from "react"

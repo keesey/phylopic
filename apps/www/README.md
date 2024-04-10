@@ -14,6 +14,10 @@ The following environment variables are required. They may be stored in `.env.lo
 
 | Variable Name                          | Description                                                                                                                                                        |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `KV_REST_API_READ_ONLY_TOKEN`          | Redis RESTful API read-only token                                                                                                                                  |
+| `KV_REST_API_TOKEN`                    | Redis RESTful API token                                                                                                                                            |
+| `KV_REST_API_URL`                      | Redis RESTful API URL                                                                                                                                              |
+| `KV_URL`                               | Redis URL                                                                                                                                                          |
 | `NEXT_PUBLIC_API_URL`                  | Root URL of the _PhyloPic_ API (`https://api.phylopic.org`)                                                                                                        |
 | `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | UUID for the contributing user that is also the site's contact point (`060f03a9-fafd-4d08-81d1-b8f82080573f`)                                                      |
 | `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of the _PhyloPic: Contribute_ website (`https://contribute.phylopic.org`)                                                                                 |
