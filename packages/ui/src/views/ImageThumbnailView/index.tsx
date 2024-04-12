@@ -1,4 +1,4 @@
-import { Image } from "@phylopic/api-models"
+import { type Image } from "@phylopic/api-models"
 import NextImage from "next/image"
 import React from "react"
 import { useImageLoader } from "../../hooks/useImageLoader"
