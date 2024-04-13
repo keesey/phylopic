@@ -26,6 +26,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.10.3] - 2024-04-13
+
+### Fixed
+
+-   Link to documentation for the _Paleobiology Database_ API.
+
+## [2.10.2] - 2024-04-13
+
+### Fixed
+
+-   URL for documentation for the _Paleobiology Database_ API.
+
+## [2.10.1] - 2024-04-13
+
+### Changed
+
+-   Replaced `training.paleobiodb.org` with `paleobiodb.org`.
+
+## [2.10.0] - 2024-04-07
+
+### Fixed
+
+-   Safari focus issue for search input.
+
+## [2.9.2] - 2024-04-05
+
+### Added
+
+-   Overriding age estimates for some more nodes.
+
+### Changed
+
+-   Showing "Recent" instead of "Recent – present".
+
 ## [2.9.1] - 2024-03-30
 
 ### Added

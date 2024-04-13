@@ -1,1 +1,1 @@
-export const PBDB_URL = "https://training.paleobiodb.org/data1.2"
+export const PBDB_URL = "https://paleobiodb.org/data1.2"

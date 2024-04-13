@@ -2,16 +2,6 @@ import { type UUID } from "@phylopic/utils"
 import { type AgeResult } from "./AgeResult"
 import { SMITHSONIAN_HUMAN_ORIGINS, TIMETREE, WIKIPEDIA } from "./SOURCES"
 export type AgeSourceRecord = Record<UUID, AgeResult | null | undefined>
-// :KLUDGE: Some rootward nodes are tough to look up via APIs and their estimates are stable.
-const ROOTWARD: AgeSourceRecord = {
-    // Biota
-    "d2a5e07b-bf10-4733-96f2-cae5a807fc83": {
-        ...TIMETREE,
-        ages: [4250000000, 4250000000],
-    },
-    // Pan-Biota
-    "8f901db5-84c1-4dc0-93ba-2300eeddf4ab": null,
-}
 // :KLUDGE: The Paleobiology Database's hominin dates are too general.
 const HOMININI: AgeSourceRecord = {
     // Hominini
@@ -177,8 +167,27 @@ const HOMININI: AgeSourceRecord = {
         ages: [100000, 50000],
     },
 }
+// :KLUDGE: The root node doesn't have a reliable estimate.
+const ROOT: AgeSourceRecord = {
+    // Pan-Biota
+    "8f901db5-84c1-4dc0-93ba-2300eeddf4ab": null,
+}
+// :KLUDGE: TimeTree has some nodes that have invalid data in the API or are difficult to look up.
+const TIMETREE_ERRATA: AgeSourceRecord = {
+    // Biota
+    "d2a5e07b-bf10-4733-96f2-cae5a807fc83": {
+        ...TIMETREE,
+        ages: [4250000000, 4250000000],
+    },
+    // Felidae
+    "8ca9a277-8b17-4208-a8b5-c8d55ad516a1": {
+        ...TIMETREE,
+        ages: [11900000, 11900000],
+    },
+}
 const PREDEFINED: AgeSourceRecord = {
-    ...ROOTWARD,
     ...HOMININI,
+    ...ROOT,
+    ...TIMETREE_ERRATA,
 }
 export default PREDEFINED
