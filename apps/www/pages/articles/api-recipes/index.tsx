@@ -455,7 +455,7 @@ const Article: FC = () => {
                     </p>
                     <CurlBox
                         id="pbdb_autocomplete"
-                        url="https://training.paleobiodb.org/data1.2/taxa/auto.json?limit=10&name=prim"
+                        url="https://paleobiodb.org/data1.2/taxa/auto.json?limit=10&name=prim"
                         title={
                             <>
                                 Autocomplete for <cite>Paleobiology Database</cite>
@@ -469,7 +469,7 @@ const Article: FC = () => {
                     </p>
                     <CurlBox
                         id="pbdb_lineage"
-                        url="https://training.paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents"
+                        url="https://paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents"
                         title={
                             <>
                                 Lineage for <cite>Paleobiology Database</cite>

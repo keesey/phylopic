@@ -9,7 +9,7 @@ export type Props = {
 }
 const PBDBTxnView: FC<Props> = ({ oid }) => {
     const { data } = useSWRImmutable<{ records: [{ nam: string }] }>(
-        `https://training.paleobiodb.org/data1.2/taxa/single.json?id=txn:${encodeURIComponent(oid)}`,
+        `https://paleobiodb.org/data1.2/taxa/single.json?id=txn:${encodeURIComponent(oid)}`,
         fetchJSON,
     )
     const rawName = data?.records?.[0]?.nam
