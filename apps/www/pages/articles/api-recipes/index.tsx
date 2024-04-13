@@ -446,7 +446,7 @@ const Article: FC = () => {
                     <p>
                         The full documentation for the <cite>Paleobiology Database</cite> API version 1.2 is available
                         here:{" "}
-                        <a href="//paleobiodb.org/data1.2" rel="noreferrer">
+                        <a href="//paleobiodb.org/data1.2/" rel="noreferrer">
                             <code>https://paleobiodb.org/data1.2/</code>
                         </a>
                     </p>
