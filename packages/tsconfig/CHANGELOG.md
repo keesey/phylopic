@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Upgraded to Node.js 20.
+-   Set `allowSyntheticDefaultImports` to `true`.
+
 ### Deprecated
 
 ### Fixed

@@ -1,7 +1,7 @@
 import { stringifyNormalized } from "../../json/stringifyNormalized"
 import { stringifyNomen } from "../../nomina/stringifyNomen"
 import { Nomen } from "../types/Nomen"
-import normalizeNomen from "./normalizeNomen"
+import { normalizeNomen } from "./normalizeNomen"
 const compare = (a: Nomen, b: Nomen) => {
     if (a === b) {
         return 0
@@ -72,4 +72,3 @@ export const normalizeNomina = (nomina: readonly Nomen[]) => {
         .map(json => JSON.parse(json) as Nomen)
         .sort(createCanonicalNameComparator(nomina[0]))
 }
-export default normalizeNomina

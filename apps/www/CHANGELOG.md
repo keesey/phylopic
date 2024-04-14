@@ -11,11 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Upgrades:
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
+
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+-   Link for `mocha` on Donations Page.
 
 ### Security
 

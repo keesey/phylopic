@@ -13,9 +13,9 @@
     "description": "Tools for using the *PhyloPic* API.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/react": "^18.0.27",
+        "@types/react": "^18.2.78",
         "eslint-config-phylopic": "*",
-        "typescript": "^5.0.4"
+        "typescript": "^5.4.5"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -33,19 +33,12 @@
     ],
     "license": "MIT",
     "main": "./dist/index.js",
-    "mocha": {
-        "extension": [
-            "ts"
-        ],
-        "loader": "ts-node/esm",
-        "spec": "src/**/*.spec.ts"
-    },
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-api",
     "peerDependencies": {
-        "axios": "^1.3.1",
+        "axios": "^1.6.8",
         "react": "^18.2.0",
-        "swr": "^2.0.3"
+        "swr": "^2.2.5"
     },
     "publishConfig": {
         "access": "public"
@@ -55,13 +48,14 @@
         "url": "git+https://github.com/keesey/phylopic.git"
     },
     "resolutions": {
-        "@types/node": "*"
+        "@types/node": "*",
+        "@types/react": "^18.2.78"
     },
     "scripts": {
         "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils axios react swr",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils axios react swr",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix"
+        "lint": "TIMING=1 eslint --fix src/**/*.ts*"
     },
     "sideEffects": false,
     "types": "./dist/index.d.ts",

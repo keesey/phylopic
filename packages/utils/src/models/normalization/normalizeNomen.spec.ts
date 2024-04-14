@@ -1,7 +1,6 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
+import { describe, expect, it } from "vitest"
 import { Nomen } from "../types/Nomen"
-import normalizeNomen from "./normalizeNomen"
+import { normalizeNomen } from "./normalizeNomen"
 describe("normalizeNomen", () => {
     const test = (value: Nomen, expected: Nomen) => {
         it(`should convert ${JSON.stringify(value)} to ${JSON.stringify(expected)}`, () => {

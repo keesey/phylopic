@@ -11,11 +11,11 @@ import {
     ValidationFaultCollector,
 } from "@phylopic/utils"
 import { Image } from "../types/Image"
-import isEntity from "./isEntity"
-import isLink from "./isLink"
-import isLinks from "./isLinks"
-import isMediaLink from "./isMediaLink"
-import isTitledLink from "./isTitledLink"
+import { isEntity } from "./isEntity"
+import { isLink } from "./isLink"
+import { isLinks } from "./isLinks"
+import { isMediaLink } from "./isMediaLink"
+import { isTitledLink } from "./isTitledLink"
 const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image["_links"] =>
     isLinks(x, isTitledLink(isNormalizedText), faultCollector) &&
     isTitledLink(isNormalizedText)((x as Image["_links"]).contributor, faultCollector?.sub("contributor")) &&
@@ -41,4 +41,3 @@ export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): 
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&
     // :TODO: Add validation for modified and modifiedFile
     isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor"))
-export default isImage

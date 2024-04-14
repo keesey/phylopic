@@ -7,4 +7,3 @@ export const normalizeQuery = (query: string) => {
         .trim()
         .replace(/\s+/g, " ")
 }
-export default normalizeQuery

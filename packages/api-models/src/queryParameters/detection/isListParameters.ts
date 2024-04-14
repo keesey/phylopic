@@ -1,9 +1,8 @@
-import type { FaultDetector, ValidationFaultCollector } from "@phylopic/utils"
-import { invalidate } from "@phylopic/utils"
-import { EmbeddableParameters } from "../types/EmbeddableParameters"
-import { ListParameters } from "../types/ListParameters"
-import isDataParameters from "./isDataParameters"
-import isEmbeddableParameters from "./isEmbeddableParameters"
+import { invalidate, type FaultDetector, type ValidationFaultCollector } from "@phylopic/utils"
+import { type EmbeddableParameters } from "../types/EmbeddableParameters"
+import { type ListParameters } from "../types/ListParameters"
+import { isDataParameters } from "./isDataParameters"
+import { isEmbeddableParameters } from "./isEmbeddableParameters"
 export const isListParameters =
     <TEmbedded>(
         parameters: ReadonlyArray<string & keyof EmbeddableParameters<TEmbedded>>,
@@ -28,4 +27,3 @@ export const isListParameters =
         }
         return true
     }
-export default isListParameters

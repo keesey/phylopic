@@ -11,4 +11,3 @@ export const SHORT_LICENSE_NAMES: Readonly<Record<ExtendedLicenseURL, string>> =
     "https://creativecommons.org/publicdomain/mark/1.0/": "PDM 1.0",
     "https://creativecommons.org/publicdomain/zero/1.0/": "CC0 1.0",
 }
-export default SHORT_LICENSE_NAMES

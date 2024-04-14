@@ -2,15 +2,18 @@ import { Node } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { Listable } from "../interfaces"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
-import NODE_FIELDS from "./pg/constants/NODE_FIELDS"
-import getFields from "./pg/fields/getFields"
-import normalizeNode from "./pg/normalization/normalizeNode"
+import { NODE_FIELDS } from "./pg/constants/NODE_FIELDS"
+import { getFields } from "./pg/fields/getFields"
+import { normalizeNode } from "./pg/normalization/normalizeNode"
 const LINEAGE_PAGE_SIZE = 64
-export default class NodeLineageClient implements Listable<Node & { uuid: UUID }, number> {
-    constructor(protected provider: PGClientProvider, protected uuid: UUID) {}
+export class NodeLineageClient implements Listable<Node & { uuid: UUID }, number> {
+    constructor(
+        protected provider: PGClientProvider,
+        protected uuid: UUID,
+    ) {}
     async page(index = 0) {
         const client = await this.provider.getPG()
-        const result = await client.query(
+        const result = await client.query<Node & { uuid: UUID }>(
             `
             WITH RECURSIVE predecessors AS (
                 SELECT ${NODE_FIELDS.map(
@@ -35,7 +38,7 @@ export default class NodeLineageClient implements Listable<Node & { uuid: UUID }
         )
         return {
             items: result.rows.slice(0, LINEAGE_PAGE_SIZE).map(normalizeNode),
-            next: result.rowCount >= LINEAGE_PAGE_SIZE ? index + 1 : undefined,
+            next: (result.rowCount ?? 0) >= LINEAGE_PAGE_SIZE ? index + 1 : undefined,
         }
     }
     async totalItems() {
