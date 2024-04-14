@@ -19,7 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [1.4.1] - 2024-04-13
+## [1.4.2] - 2024-04-13
+
+### Fixed
+
+-   Working around an incompatibility between Node.js 20 and `ts-node`.
+
+## [1.4.1] - 2024-04-13 [YANKED]
 
 ### Changed
 
