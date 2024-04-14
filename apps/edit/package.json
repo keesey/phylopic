@@ -44,5 +44,5 @@
         "lint": "TIMING=1 next lint",
         "unused": "next-unused"
     },
-    "version": "1.5.2"
+    "version": "1.5.3"
 }

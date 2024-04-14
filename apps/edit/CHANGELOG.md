@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgraded `simple-digraph` to `1.1.0`.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.5.3] - 2024-04-14
+
+### Changed
+
+-   Upgraded `simple-digraph` to `1.1.1`.
 
 ## [1.5.2] - 2024-04-13
 

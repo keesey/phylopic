@@ -11,9 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgraded `simple-digraph` to `1.1.0`.
--   More informative error message on `insert` tasks when a cycle is encountered.
-
 ### Deprecated
 
 ### Fixed
@@ -21,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.4.3] - 2024-04-14
+
+### Changed
+
+-   Upgraded `simple-digraph` to `1.1.0`.
+-   More informative error message on `insert` tasks when a cycle is encountered.
 
 ## [1.4.2] - 2024-04-13
 
