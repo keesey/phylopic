@@ -12758,10 +12758,10 @@ signal-exit@^4.0.1, signal-exit@^4.1.0:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-4.1.0.tgz#952188c1cbd546070e2dd20d0f41c0ae0530cb04"
   integrity sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==
 
-simple-digraph@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/simple-digraph/-/simple-digraph-1.1.0.tgz#71fbf60193c6cbe4a58ec8c0475d186a11e28eea"
-  integrity sha512-Mtizal3E+HJoe3ZXZKnZbm6FekKl9JxWLRW9SVNnfQfeDSgKEUPeKdfrepltN4EKGATH+lm0dWO3wrx1Ta4i9g==
+simple-digraph@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/simple-digraph/-/simple-digraph-1.1.1.tgz#4499023391bff31dad6e4855d67afed9d832fc3e"
+  integrity sha512-idu6ghSeXohalRKnXSkfWQ/ZTYr/KRyFbE4B6Bp81pOG9xGfSj62qUvm6VTl9cFMFaMwS90x1FAhOS+9EOUHiA==
 
 simple-git@^3.16.0:
   version "3.16.0"

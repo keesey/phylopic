@@ -17,7 +17,7 @@
         "pg": "^8.11.5",
         "probe-image-size": "^7.2.3",
         "readline": "^1.3.0",
-        "simple-digraph": "^1.1.0",
+        "simple-digraph": "^1.1.1",
         "ts-node": "^10.9.2"
     },
     "devDependencies": {
@@ -30,9 +30,9 @@
     "name": "@phylopic/publish",
     "private": true,
     "scripts": {
-        "autolink": "node --loader ts-node/esm  ./src/autolink.ts",
+        "autolink": "node --loader ts-node/esm ./src/autolink.ts",
         "clean": "rm -rf .turbo && rm -rf node_modules",
-        "coverage": "node --loader ts-node/esm  ./src/coverage.ts",
+        "coverage": "node --loader ts-node/esm ./src/coverage.ts",
         "download": "concurrently \"yarn download:images\" \"yarn download:source\"",
         "download:images": "aws s3 sync --delete s3://images.phylopic.org/ ./.s3/images.phylopic.org && find .s3/images.phylopic.org -type d -empty -delete",
         "download:source": "aws s3 sync --delete s3://source-images.phylopic.org/ ./.s3/source-images.phylopic.org && find .s3/source-images.phylopic.org -type d -empty -delete",
@@ -41,8 +41,8 @@
         "make": "yarn download && yarn process && concurrently \"yarn insert\" \"yarn upload\" && yarn release && yarn sync",
         "make:data": "yarn insert && yarn release",
         "process": "./process.sh 2> process-error.log",
-        "release": "node --loader ts-node/esm  ./src/release.ts 2> release-error.log && yarn revalidate",
-        "revalidate": "node --loader ts-node/esm  ./src/revalidate.ts 2> revalidate-error.log",
+        "release": "node --loader ts-node/esm ./src/release.ts 2> release-error.log && yarn revalidate",
+        "revalidate": "node --loader ts-node/esm ./src/revalidate.ts 2> revalidate-error.log",
         "sync": "yarn sync:images",
         "sync:images": "aws s3 sync --acl public-read --delete ./.s3/images.phylopic.org s3://images.phylopic.org/",
         "upload": "yarn upload:images",
