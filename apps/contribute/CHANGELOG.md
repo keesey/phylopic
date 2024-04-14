@@ -11,11 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgrades:
-    -   Node.js 20.
-    -   All dependencies.
--   Switched from `mocha` to `vitest`.
-
 ### Deprecated
 
 ### Fixed
@@ -23,6 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.2.9] - 2024-04-13
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
 
 ## [2.2.8] - 2024-04-13
 

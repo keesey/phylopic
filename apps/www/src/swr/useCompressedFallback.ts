@@ -1,4 +1,4 @@
-import { type Compressed, decompress} from "compress-json"
+import { type Compressed, decompress } from "compress-json"
 import { useMemo } from "react"
 import type { SWRConfiguration } from "swr"
 const useCompressedFallback = (fallback: Compressed | undefined): SWRConfiguration["fallback"] | undefined => {

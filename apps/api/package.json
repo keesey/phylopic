@@ -43,5 +43,5 @@
         "dev": "sls offline --httpPort 3003",
         "lint": "eslint --fix ./**/*.[jt]s"
     },
-    "version": "2.6.0"
+    "version": "2.6.1"
 }
