@@ -13,19 +13,19 @@
         "@phylopic/utils-api": "*",
         "axios": "^1.6.8",
         "clsx": "^2.1.0",
-        "next": "^14.2.0",
+        "next": "^14.2.1",
         "parse-nomen": "^2.1.3",
         "react": "^18.2.0",
         "swr": "^2.2.5"
     },
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/react": "^18.2.73",
+        "@types/react": "^18.2.78",
         "eslint-config-phylopic": "*",
         "flux-standard-action": "^2.1.2",
         "react-spinners": "^0.13.8",
         "sharp": "^0.33.3",
-        "typescript": "^5.4.3"
+        "typescript": "^5.4.5"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -48,7 +48,7 @@
     "peerDependencies": {
         "axios": "^1.6.8",
         "clsx": "^2.1.0",
-        "next": "^14.2.0",
+        "next": "^14.2.1",
         "parse-nomen": "^2.1.3",
         "react": "^18.2.0",
         "swr": "^2.2.5"
@@ -62,13 +62,13 @@
     },
     "resolutions": {
         "@types/node": "*",
-        "@types/react": "^18.2.73"
+        "@types/react": "^18.2.78"
     },
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup --watch",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix"
+        "lint": "TIMING=1 eslint --fix src/**/*.ts*"
     },
     "sideEffects": false,
     "tsup": {

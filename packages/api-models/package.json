@@ -18,9 +18,9 @@
         "prettier": "^3.2.5",
         "ts-node": "^10.9.2",
         "tsup": "^8.0.2",
-        "typescript": "^5.4.3",
-        "vitest": "^1.4.0",
-        "yarn": "^1.22.19"
+        "typescript": "^5.4.5",
+        "vitest": "^1.5.0",
+        "yarn": "^1.22.22"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -47,7 +47,7 @@
         "build": "tsup src/index.ts --format esm,cjs --dts",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix",
+        "lint": "TIMING=1 eslint --fix src/**/*.ts*",
         "test": "vitest --watch=false"
     },
     "types": "./dist/index.d.ts",

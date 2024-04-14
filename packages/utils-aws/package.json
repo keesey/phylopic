@@ -19,8 +19,8 @@
         "prettier": "^3.2.5",
         "ts-node": "10.9.2",
         "tsup": "^8.0.2",
-        "typescript": "^5.4.3",
-        "yarn": "^1.22.19"
+        "typescript": "^5.4.5",
+        "yarn": "^1.22.22"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -43,8 +43,8 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-aws",
     "peerDependencies": {
-        "@aws-sdk/client-s3": "^3.540.0",
-        "@aws-sdk/signature-v4-crt": "^3.535.0"
+        "@aws-sdk/client-s3": "^3.554.0",
+        "@aws-sdk/signature-v4-crt": "^3.552.0"
     },
     "publishConfig": {
         "access": "public"
@@ -57,7 +57,7 @@
         "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix",
+        "lint": "TIMING=1 eslint --fix src/**/*.ts*",
         "test": "vitest --watch=false"
     },
     "sideEffects": false,

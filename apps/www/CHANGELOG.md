@@ -12,17 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Upgrades:
-    -   `@vercel/analytics` to `1.0.1`.
-    -   `axios` to `1.4.0`.
-    -   `next-seo` to `6.0.0`.
-    -   `slugify` to `1.6.6`.
-    -   `swr` to `2.1.5`.
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
 
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+-   Link for `mocha` on Donations Page.
 
 ### Security
 

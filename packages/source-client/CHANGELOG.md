@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgraded `@aws-sdk/client-s3` to `3.327.0`.
+-   Upgraded all dependencies.
+-   Switched from `mocha` to `vitest`.
 
 ### Deprecated
 

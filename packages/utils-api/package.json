@@ -13,9 +13,9 @@
     "description": "Tools for using the *PhyloPic* API.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/react": "^18.2.73",
+        "@types/react": "^18.2.78",
         "eslint-config-phylopic": "*",
-        "typescript": "^5.4.3"
+        "typescript": "^5.4.5"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -49,13 +49,13 @@
     },
     "resolutions": {
         "@types/node": "*",
-        "@types/react": "^18.2.73"
+        "@types/react": "^18.2.78"
     },
     "scripts": {
         "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils axios react swr",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils axios react swr",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix"
+        "lint": "TIMING=1 eslint --fix src/**/*.ts*"
     },
     "sideEffects": false,
     "types": "./dist/index.d.ts",

@@ -12,10 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Upgrades:
-    -   `@aws-sdk/client-lambda` to `3.327.0`.
-    -   `@aws-sdk/client-s3` to `3.327.0`.
-    -   `@aws-sdk/client-ssm` to `3.327.0`.
-    -   `axios` to `1.4.0`.
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
 
 ### Deprecated
 

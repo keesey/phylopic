@@ -11,10 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgrades:
-    -   `axios` to `1.4.0`.
-    -   `slugify` to `1.6.6`.
-    -   `swr` to `2.1.5`.
+-   Upgraded all dependencies.
 
 ### Deprecated
 

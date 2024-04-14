@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Upgrades:
     -   Node.js 20.
-    -   `@aws-sdk/client-s3` to `3.262.0`.
+    -   All dependencies.
+-   Switched to `vitest` from `mocha`.
 
 ### Deprecated
 

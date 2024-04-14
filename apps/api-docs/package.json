@@ -9,7 +9,7 @@
     "description": "Documentation for PhyloPic's Application Programming Interface",
     "devDependencies": {
         "swagger-cli": "^4.0.4",
-        "yarn": "^1.22.19"
+        "yarn": "^1.22.22"
     },
     "homepage": "https://github.com/keesey/phylopic/packages/api-docs#readme",
     "keywords": [

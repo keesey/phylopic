@@ -14,15 +14,16 @@
     "description": "Client for accessing the source data for *PhyloPic* (AWS S3 buckets).",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
+        "@types/pg": "^8.11.5",
         "@types/uuid": "^9.0.8",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
         "prettier": "^3.2.5",
         "ts-node": "^10.9.2",
         "tsup": "^8.0.2",
-        "typescript": "^5.4.3",
-        "vitest": "^1.4.0",
-        "yarn": "^1.22.19"
+        "typescript": "^5.4.5",
+        "vitest": "^1.5.0",
+        "yarn": "^1.22.22"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -42,10 +43,10 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/source-client",
     "peerDependencies": {
-        "@aws-sdk/client-s3": "^3.540.0",
+        "@aws-sdk/client-s3": "^3.554.0",
         "jsonwebtoken": "^9.0.2",
-        "next": "^14.2.0",
-        "pg": "^8.11.4",
+        "next": "^14.2.1",
+        "pg": "^8.11.5",
         "uuid": "^9.0.1"
     },
     "publishConfig": {
@@ -62,7 +63,7 @@
         "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3 @phylopic/source-models @phylopic/utils @phylopic/utils-aws jsonwebtoken next pg uuid",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3 @phylopic/source-models @phylopic/utils @phylopic/utils-aws jsonwebtoken next pg uuid",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix"
+        "lint": "TIMING=1 eslint --fix src/**/*.ts*"
     },
     "types": "./dist/index.d.ts",
     "version": "1.1.2"

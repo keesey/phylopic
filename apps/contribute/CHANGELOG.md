@@ -12,11 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Upgrades:
-    -   `@aws-sdk/client-ses` to `3.327.0`.
-    -   `@vercel/analytics` to `1.0.1`.
-    -   `next-seo` to `6.0.0`.
-    -   `sharp` to `0.32.1`.
-    -   `swr` to `2.1.5`.
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
 
 ### Deprecated
 
