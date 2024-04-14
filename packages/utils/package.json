@@ -67,7 +67,7 @@
         ],
         "sourcemap": true,
         "splitting": true,
-        "target": "es2022"
+        "target": "ESNext"
     },
     "types": "dist/index.d.ts",
     "version": "1.0.1"

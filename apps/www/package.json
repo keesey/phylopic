@@ -17,7 +17,7 @@
         "@vercel/analytics": "^1.2.2",
         "axios": "^1.6.8",
         "clsx": "^2.1.0",
-        "compress-json": "^3.0.3",
+        "compress-json": "3.0.0",
         "jsonwebtoken": "^9.0.2",
         "next": "^14.2.1",
         "next-pwa": "^5.6.0",

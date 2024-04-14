@@ -6429,10 +6429,10 @@ compress-commons@^4.1.0:
     normalize-path "^3.0.0"
     readable-stream "^3.6.0"
 
-compress-json@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/compress-json/-/compress-json-3.0.3.tgz#e974138af73e6ad5bf932ca6c4c966b0dc65c25c"
-  integrity sha512-O7iS9kq39q83h79q0GwuJVEd5g+dPDU7bca/834bMlOIVO5zvJfQsEKRrjg6Tr4qLlN5xJoud4vWyq3lwvLj1w==
+compress-json@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/compress-json/-/compress-json-3.0.0.tgz#68bddf4453d8820e02e820c8c4e35721d4809e4d"
+  integrity sha512-oebYSI+JLtVsZep+rAe1zbZ37vxmf93xnBj+JkHvQyFKvc4ZIAUtiZNX5yB/ERPWpTFEml3cGOKFM7cCpgmyAw==
 
 concat-map@0.0.1:
   version "0.0.1"
