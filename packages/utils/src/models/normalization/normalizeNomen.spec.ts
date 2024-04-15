@@ -57,6 +57,28 @@ describe("normalizeNomen", () => {
         [
             {
                 class: "scientific",
+                text: "Procyon lotor",
+            },
+            {
+                class: "citation",
+                text: "(Linnaeus, 1758)",
+            },
+        ],
+        [
+            {
+                class: "scientific",
+                text: "Procyon lotor",
+            },
+            {
+                class: "citation",
+                text: "(Linnaeus 1758)",
+            },
+        ],
+    )
+    test(
+        [
+            {
+                class: "scientific",
                 text: "   Homo    sapiens     ",
             },
             {

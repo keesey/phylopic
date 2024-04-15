@@ -48,7 +48,9 @@ const resolveItem = async (client: SourceClient, item: GBIFNameUsage, lineage: r
     const newNode: Node & { uuid: UUID } = {
         created: now,
         modified: now,
-        names: normalizeNomina([item.scientificName, item.canonicalName].filter(isDefined).map(name => parseNomen(name))),
+        names: normalizeNomina(
+            [item.scientificName, item.canonicalName].filter(isDefined).map(name => parseNomen(name)),
+        ),
         parent: parent ? parent.uuid : null,
         uuid: normalizeUUID(randomUUID()),
     }

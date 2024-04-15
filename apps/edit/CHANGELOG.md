@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Normalizing name lists in _GBIF_ and _Open Tree of Life_ resolvers.
+-   Normalizing name lists in _GBIF_ and _Open Tree of Life_ resolvers.
 
 ### Deprecated
 

@@ -50,7 +50,7 @@ const ORANG: Nomen = [
         text: "orang",
     },
 ]
-const stringifyNomina =(nomina: readonly Nomen[]) => nomina.map(n => stringifyNomen(n)).join("; ")
+const stringifyNomina = (nomina: readonly Nomen[]) => nomina.map(n => stringifyNomen(n)).join("; ")
 describe("normalizeNomina", () => {
     const test = (value: readonly Nomen[], expected: readonly Nomen[]) => {
         it(`should convert ${stringifyNomina(value)} to ${stringifyNomina(expected)}`, () => {
@@ -69,7 +69,10 @@ describe("normalizeNomina", () => {
     test([HOMO_SAPIENS, HOMO_SAPIENS_UNCITED, HOMO_HELMEI, HUMANS, ORANG], [HOMO_SAPIENS, HOMO_HELMEI, HUMANS, ORANG])
     test([HOMO_SAPIENS_UNCITED, HOMO_SAPIENS, HOMO_HELMEI, HUMANS, ORANG], [HOMO_SAPIENS, HOMO_HELMEI, HUMANS, ORANG])
     test([HOMO_SAPIENS, HOMO_SAPIENS_ALT_CITATION], [HOMO_SAPIENS, HOMO_SAPIENS_ALT_CITATION])
-    test([HOMO_SAPIENS_UNCITED, HOMO_SAPIENS, HOMO_SAPIENS_ALT_CITATION], [HOMO_SAPIENS_UNCITED, HOMO_SAPIENS_ALT_CITATION, HOMO_SAPIENS])
+    test(
+        [HOMO_SAPIENS_UNCITED, HOMO_SAPIENS, HOMO_SAPIENS_ALT_CITATION],
+        [HOMO_SAPIENS_UNCITED, HOMO_SAPIENS_ALT_CITATION, HOMO_SAPIENS],
+    )
     test([HOMO_SAPIENS_UNCITED, HOMO_SAPIENS], [HOMO_SAPIENS])
     test([HOMO_SAPIENS_UNCITED, HOMO_SAPIENS, HUMANS, ORANG], [HOMO_SAPIENS, HUMANS, ORANG])
     test([HOMO_SAPIENS, HOMO_SAPIENS_UNCITED, HOMO_SAPIENS_ALT_CITATION], [HOMO_SAPIENS, HOMO_SAPIENS_ALT_CITATION])

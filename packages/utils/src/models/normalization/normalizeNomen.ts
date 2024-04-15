@@ -3,12 +3,9 @@ import { normalizeText } from "../../normalization/normalizeText"
 import { Nomen } from "../types/Nomen"
 const purify = (part: NomenPart) => {
     if (part.class === "citation") {
-        const match = part.text.match(/^(.+), (\d{4})$/)
-        if (match) {
-            return {
-                ...part,
-                text: `${match[1]} ${match[2]}`
-            }
+        return {
+            ...part,
+            text: part.text.replace(/, (\d{4})/g, " $1").replace(/\bet al\./, "& al."),
         }
     }
     return part

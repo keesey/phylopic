@@ -40,6 +40,7 @@
         "lint": "TIMING=1 eslint --fix ./**/*.[jt]s",
         "make": "yarn download && yarn process && concurrently \"yarn insert\" \"yarn upload\" && yarn release && yarn sync",
         "make:data": "yarn insert && yarn release",
+        "normalize": "node --loader ts-node/esm ./src/normalize.ts",
         "process": "./process.sh 2> process-error.log",
         "release": "node --loader ts-node/esm ./src/release.ts 2> release-error.log && yarn revalidate",
         "revalidate": "node --loader ts-node/esm ./src/revalidate.ts 2> revalidate-error.log",
