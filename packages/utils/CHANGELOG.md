@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The `normalizeNomen()` function now removes commas in citations separating the authorship and year.
 - The `normalizeNomina()` function now:
     - removes uncited scientific names if an equivalent cited one is present, and the uncited one is not canonical.
     - replaces an uncited canonical scientific name with a cited scientific name, if there is a singe alternative.
