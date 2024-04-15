@@ -79,6 +79,94 @@ describe("normalizeNomen", () => {
         [
             {
                 class: "scientific",
+                text: "Beelzebufo ampinga",
+            },
+            {
+                class: "citation",
+                text: "Evans et al., 2008",
+            },
+        ],
+        [
+            {
+                class: "scientific",
+                text: "Beelzebufo ampinga",
+            },
+            {
+                class: "citation",
+                text: "Evans & al. 2008",
+            },
+        ],
+    )
+    test(
+        [
+            {
+                class: "scientific",
+                text: "Beelzebufo ampinga",
+            },
+            {
+                class: "citation",
+                text: "Evans, Jones, and Krause 2008",
+            },
+        ],
+        [
+            {
+                class: "scientific",
+                text: "Beelzebufo ampinga",
+            },
+            {
+                class: "citation",
+                text: "Evans, Jones & Krause 2008",
+            },
+        ],
+    )
+    test(
+        [
+            {
+                class: "scientific",
+                text: "Beelzebufo ampinga",
+            },
+            {
+                class: "citation",
+                text: "Evans, Jones and Krause 2008",
+            },
+        ],
+        [
+            {
+                class: "scientific",
+                text: "Beelzebufo ampinga",
+            },
+            {
+                class: "citation",
+                text: "Evans, Jones & Krause 2008",
+            },
+        ],
+    )
+    test(
+        [
+            {
+                class: "scientific",
+                text: "Beelzebufo ampinga",
+            },
+            {
+                class: "citation",
+                text: "Evans, Jones, & Krause 2008",
+            },
+        ],
+        [
+            {
+                class: "scientific",
+                text: "Beelzebufo ampinga",
+            },
+            {
+                class: "citation",
+                text: "Evans, Jones & Krause 2008",
+            },
+        ],
+    )
+    test(
+        [
+            {
+                class: "scientific",
                 text: "   Homo    sapiens     ",
             },
             {
