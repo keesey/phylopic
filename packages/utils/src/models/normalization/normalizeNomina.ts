@@ -1,3 +1,4 @@
+import { NomenPart } from "parse-nomen"
 import { stringifyNormalized } from "../../json/stringifyNormalized"
 import { stringifyNomen } from "../../nomina/stringifyNomen"
 import { Nomen } from "../types/Nomen"
@@ -57,6 +58,18 @@ const createCanonicalNameComparator = (canonical: Nomen | undefined) => {
         return compare(a, b)
     }
 }
+const isUncitedSynonymOfNomen = (scientificText: string, nomen: Nomen) => {
+    if (nomen.length >= 2 && nomen[0].class === "scientific" && nomen[1].class === "citation") {
+        return nomen[0].text === scientificText
+    }
+    return false
+}
+const isUncitedSynonym = (nomen: Nomen, nomina: readonly Nomen[]) => {
+    if (nomen.length === 1 && nomen[0].class === "scientific") {
+        return nomina.some(otherNomen => isUncitedSynonymOfNomen(nomen[0].text, otherNomen))
+    }
+    return false
+}
 export const normalizeNomina = (nomina: readonly Nomen[]) => {
     if (nomina.length <= 1) {
         return nomina
@@ -70,5 +83,6 @@ export const normalizeNomina = (nomina: readonly Nomen[]) => {
         ),
     )
         .map(json => JSON.parse(json) as Nomen)
+        .filter((nomen, index, nomina) => index === 0 || !isUncitedSynonym(nomen, nomina))
         .sort(createCanonicalNameComparator(nomina[0]))
 }

@@ -11,6 +11,12 @@ const HOMO_SAPIENS: Nomen = [
         text: "Linnaeus 1758",
     },
 ]
+const HOMO_SAPIENS_UNCITED: Nomen = [
+    {
+        class: "scientific",
+        text: "Homo sapiens",
+    },
+]
 const HOMO_HELMEI: Nomen = [
     {
         class: "scientific",
@@ -48,4 +54,6 @@ describe("normalizeNomina", () => {
     )
     test([HOMO_SAPIENS, ORANG, HUMANS, HOMO_HELMEI], [HOMO_SAPIENS, HOMO_HELMEI, HUMANS, ORANG])
     test([ORANG, HOMO_SAPIENS, HUMANS, HOMO_HELMEI], [ORANG, HOMO_HELMEI, HOMO_SAPIENS, HUMANS])
+    test([HOMO_SAPIENS, HOMO_SAPIENS_UNCITED, HOMO_HELMEI, HUMANS, ORANG], [HOMO_SAPIENS, HOMO_HELMEI, HUMANS, ORANG])
+    test([HOMO_SAPIENS_UNCITED, HOMO_SAPIENS, HOMO_HELMEI, HUMANS, ORANG], [HOMO_SAPIENS_UNCITED, HOMO_HELMEI, HOMO_SAPIENS, HUMANS, ORANG])
 })
