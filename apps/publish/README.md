@@ -60,6 +60,14 @@ yarn autolink otol
 yarn autolink pbdb
 ```
 
+### Normalize names
+
+Node names should be normalized already, but to ensure nothing got missed, they can all be normalized by running:
+
+```sh
+yarn normalize
+```
+
 ### Report silhouette coverage
 
 This command will report coverage statistics for nodes (number of silhouettes per number of terminal nodes, as reported by the _[Open Tree of Life](https://opentreeoflife.github.io/)_).

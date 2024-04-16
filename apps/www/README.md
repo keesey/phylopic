@@ -47,7 +47,7 @@ To run a development version on your local machine, on port `3000`:
 yarn dev
 ```
 
-The run the production version locally, on port `3000`:
+Then run the production version locally, on port `3000`:
 
 ```sh
 yarn build && yarn start
