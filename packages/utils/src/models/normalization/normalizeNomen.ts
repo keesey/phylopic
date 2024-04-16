@@ -6,6 +6,7 @@ const cleanCitation = (part: NomenPart) => {
         return {
             ...part,
             text: part.text
+                .replace(/\.([A-Za-z])/g, ". $1")
                 .replace(/, (\d{4})/g, " $1")
                 .replace(/\bet al\./, "& al.")
                 .replace(" and ", " & ")

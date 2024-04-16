@@ -167,6 +167,50 @@ describe("normalizeNomen", () => {
         [
             {
                 class: "scientific",
+                text: "Richea pandanifolia",
+            },
+            {
+                class: "citation",
+                text: "Hook.fil.",
+            },
+        ],
+        [
+            {
+                class: "scientific",
+                text: "Richea pandanifolia",
+            },
+            {
+                class: "citation",
+                text: "Hook. fil.",
+            },
+        ],
+    )
+    test(
+        [
+            {
+                class: "scientific",
+                text: "Nonesuchia",
+            },
+            {
+                class: "citation",
+                text: "T.M.Keesey",
+            },
+        ],
+        [
+            {
+                class: "scientific",
+                text: "Nonesuchia",
+            },
+            {
+                class: "citation",
+                text: "T. M. Keesey",
+            },
+        ],
+    )
+    test(
+        [
+            {
+                class: "scientific",
                 text: "   Homo    sapiens     ",
             },
             {
