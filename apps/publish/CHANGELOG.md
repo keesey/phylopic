@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.5.0] - 2024-04-15
+
+### Added
+
+-   New script: `normalize`.
+
+### Changed
+
+-   Updates to name normalization.
+
 ## [1.4.3] - 2024-04-14
 
 ### Changed

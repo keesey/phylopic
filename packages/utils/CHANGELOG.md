@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.1.0] - 2024-04-15
+
+### Changed
+
 -   The `normalizeNomen()` function now:
     -   changes "et al." to "& al.".
     -   changes "and" to "&".
@@ -20,14 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   The `normalizeNomina()` function now:
     -   removes uncited scientific names if an equivalent cited one is present, and the uncited one is not canonical.
     -   replaces an uncited canonical scientific name with a cited scientific name, if there is a singe alternative.
-
-### Deprecated
-
-### Fixed
-
-### Removed
-
-### Security
 
 ## [1.0.2] - 2024-04-13
 

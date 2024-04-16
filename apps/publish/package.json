@@ -50,5 +50,5 @@
         "upload:images": "aws s3 sync --acl public-read ./.s3/images.phylopic.org s3://images.phylopic.org/"
     },
     "type": "module",
-    "version": "1.4.3"
+    "version": "1.5.0"
 }

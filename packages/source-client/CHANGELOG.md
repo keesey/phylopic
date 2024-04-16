@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.4] - 2024-04-15
+
+### Changed
+
+-   Updates to name normalization.
+
 ## [1.1.3] - 2024-04-13
 
 ### Changed
