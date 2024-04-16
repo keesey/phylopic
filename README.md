@@ -70,6 +70,8 @@ To run all apps locally:
 yarn dev
 ```
 
+Note that some apps require certain environment variables to be set, which are documented in that apps's `README` file.
+
 Apps will run on the following ports:
 
 | App Project                     | Port   |
