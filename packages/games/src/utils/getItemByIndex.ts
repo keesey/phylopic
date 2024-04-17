@@ -15,7 +15,7 @@ export async function getItemByIndex<T>(
     itemQuery: Query,
 ) {
     const listHRef = list._links.self.href
-    const pageIndex = index % list.itemsPerPage
+    const pageIndex = Math.floor(index / list.itemsPerPage)
     const { data: page } = await fetchDataAndCheck<PageWithEmbedded<T>>(
         `${process.env.NEXT_PUBLIC_API_URL}${extractPath(listHRef)}${createSearch({
             ...parseQueryString(extractQueryString(listHRef)),
@@ -28,7 +28,7 @@ export async function getItemByIndex<T>(
     )
     const item = page._embedded.items?.[index - pageIndex * list.itemsPerPage]
     if (!item) {
-        throw new Error(`Unexpected condition for index #${index} in list: ${listHRef}`)
+        throw new Error(`Unexpected condition for index #${index} in list: ${listHRef}, page ${pageIndex}`)
     }
     return item
 }

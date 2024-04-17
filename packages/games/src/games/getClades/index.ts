@@ -37,7 +37,7 @@ const getImages = async (
     }
     return images
 }
-const getAnswers = async (build: number | undefined, minDepth: number, numSets: number, imagesPerClade: number) => {
+const getAnswers = async (build: number, minDepth: number, numSets: number, imagesPerClade: number) => {
     const list = await getNodeList(build)
     const answers = new Array<CladesAnswer>(numSets)
     for (let i = 0; i < numSets; ++i) {
@@ -77,7 +77,7 @@ const getAnswers = async (build: number | undefined, minDepth: number, numSets: 
     }
     return answers
 }
-export async function getClades(build?: number, minDepth = 6, numSets = 4, imagesPerClade = 4) {
+export async function getClades(build: number, minDepth = 6, numSets = 4, imagesPerClade = 4) {
     const answers = await getAnswers(build, minDepth, numSets, imagesPerClade)
     return { answers } as CladesGame
 }

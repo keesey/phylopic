@@ -4,6 +4,7 @@ import { NextSeo } from "next-seo"
 import CladesGame from "~/games/CladesGame"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+import Container from "~/ui/Container"
 type Props = Omit<PageLayoutProps, "children"> & { fallback?: Compressed }
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <PageLayout {...props}>
@@ -17,11 +18,13 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
             canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/games/clades`}
             description="Clades is a puzzle game from PhyloPic. Sort the silhouette images into groups by their evolutionary ancestry."
         />
-        <header>
-            <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Games</strong> }]} />
-            <h1>Clades Game</h1>
-        </header>
-        <CladesGame />
+        <Container>
+            <header>
+                <Breadcrumbs items={[{ children: "Home", href: "/" }, { children: <strong>Games</strong> }]} />
+                <h1>Clades Game</h1>
+            </header>
+            <CladesGame />
+        </Container>
     </PageLayout>
 )
 export default PageComponent
