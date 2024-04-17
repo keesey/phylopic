@@ -1,11 +1,6 @@
 import { ImageWithEmbedded, List, NodeWithEmbedded } from "@phylopic/api-models"
-import { getCladeImages } from "../../utils/getCladeImages"
-import { getNodeLineage } from "../../utils/getNodeLineage"
-import { getNodeList } from "../../utils/getNodeList"
-import { isInList } from "../../utils/isInList"
-import { pickRandomNode } from "../../utils/pickRandomNode"
-import { pickRandomImage } from "../../utils/pickRandomImage"
 import { UUID } from "@phylopic/utils"
+import { getCladeImages, getNodeLineage, getNodeList, isInList, pickRandomImage, pickRandomNode } from "../../utils"
 export type CladesAnswer = Readonly<{
     images: readonly ImageWithEmbedded[]
     node: NodeWithEmbedded
@@ -13,8 +8,8 @@ export type CladesAnswer = Readonly<{
 export type CladesGame = Readonly<{
     answers: readonly CladesAnswer[]
 }>
-const getImages = async (list: List, numImages: number, previousImageUUIDs: readonly UUID[]) => {
-    const images = new Array(numImages)
+const getImages = async (list: List, numImages: number, previousImageUUIDs: readonly UUID[]): Promise<readonly ImageWithEmbedded[]> => {
+    const images = new Array<ImageWithEmbedded>(numImages)
     for (let i = 0; i < numImages; ++i) {
         const image = await pickRandomImage(list, async image => {
             if (previousImageUUIDs.includes(image.uuid) || images.some(otherImage => otherImage.uuid === image.uuid)) {
