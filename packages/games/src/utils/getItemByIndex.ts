@@ -28,7 +28,7 @@ export async function getItemByIndex<T>(
     )
     const item = page._embedded.items?.[index - pageIndex * list.itemsPerPage]
     if (!item) {
-        throw new Error(`Unexpected condition for index #${index} in list: ${listHRef}, page ${pageIndex}`)
+        throw new Error(`Unexpected condition for index #${index} in list: ${listHRef}, page #${pageIndex}.`)
     }
     return item
 }

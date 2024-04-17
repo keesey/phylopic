@@ -39,7 +39,7 @@ const getImages = async (
 }
 const getAnswers = async (build: number, minDepth: number, numSets: number, imagesPerClade: number) => {
     const list = await getNodeList(build)
-    const answers = new Array<CladesAnswer>(numSets)
+    const answers = new Array<CladesAnswer>()
     for (let i = 0; i < numSets; ++i) {
         let cladeImages: List | null = null
         const ancestor = await pickRandomNode(list, async node => {
@@ -48,7 +48,7 @@ const getAnswers = async (build: number, minDepth: number, numSets: number, imag
                 return false
             }
             const lineage = await getNodeLineage(node)
-            if (minDepth < lineage.totalItems) {
+            if (minDepth > lineage.totalItems) {
                 return false
             }
             for (const answer of answers) {
@@ -70,14 +70,11 @@ const getAnswers = async (build: number, minDepth: number, numSets: number, imag
         if (!node) {
             throw new Error("Could not find concestor.")
         }
-        answers[i] = {
-            node,
-            images,
-        }
+        answers.push({ images, node })
     }
     return answers
 }
-export async function getClades(build: number, minDepth = 6, numSets = 4, imagesPerClade = 4) {
+export async function getClades(build: number, minDepth = 8, numSets = 4, imagesPerClade = 4) {
     const answers = await getAnswers(build, minDepth, numSets, imagesPerClade)
     return { answers } as CladesGame
 }
