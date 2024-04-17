@@ -8,7 +8,11 @@ export type CladesAnswer = Readonly<{
 export type CladesGame = Readonly<{
     answers: readonly CladesAnswer[]
 }>
-const getImages = async (list: List, numImages: number, previousImageUUIDs: readonly UUID[]): Promise<readonly ImageWithEmbedded[]> => {
+const getImages = async (
+    list: List,
+    numImages: number,
+    previousImageUUIDs: readonly UUID[],
+): Promise<readonly ImageWithEmbedded[]> => {
     const images = new Array<ImageWithEmbedded>(numImages)
     for (let i = 0; i < numImages; ++i) {
         const image = await pickRandomImage(list, async image => {

@@ -23,6 +23,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 | ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | [api-models](./packages/api-models)                         | Type declarations and utility files for data models used by the API           |
 | [eslint-config-phylopic](./packages/eslint-config-phylopic) | ESLint configurations used throughout the project                             |
+| [games](./packages/games)                                   | Code for creating _PhyloPic_ games                                            |
 | [source-client](./packages/source-client)                   | Client object for reading and writing source models and files                 |
 | [source-models](./packages/source-models)                   | Type declarations and utility files for data models used in the source bucket |
 | [styles](./packages/styles)                                 | Stylesheet values and mixins                                                  |
