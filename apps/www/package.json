@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "@phylopic/api-models": "*",
+        "@phylopic/games": "*",
         "@phylopic/source-models": "*",
         "@phylopic/styles": "*",
         "@phylopic/ui": "*",

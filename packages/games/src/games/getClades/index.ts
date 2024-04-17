@@ -1,6 +1,15 @@
 import { ImageWithEmbedded, List, NodeWithEmbedded } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
-import { getCladeImages, getNodeLineage, getNodeList, isInList, pickRandomImage, pickRandomNode } from "../../utils"
+import {
+    getCladeImages,
+    getConcestorLink,
+    getNodeByLink,
+    getNodeLineage,
+    getNodeList,
+    isInList,
+    pickRandomImage,
+    pickRandomNode,
+} from "../../utils"
 export type CladesAnswer = Readonly<{
     images: readonly ImageWithEmbedded[]
     node: NodeWithEmbedded
@@ -33,7 +42,7 @@ const getAnswers = async (build: number | undefined, minDepth: number, numSets: 
     const answers = new Array<CladesAnswer>(numSets)
     for (let i = 0; i < numSets; ++i) {
         let cladeImages: List | null = null
-        const node = await pickRandomNode(list, async node => {
+        const ancestor = await pickRandomNode(list, async node => {
             cladeImages = await getCladeImages(node)
             if (!cladeImages || imagesPerClade > cladeImages.totalItems) {
                 return false
@@ -49,16 +58,21 @@ const getAnswers = async (build: number | undefined, minDepth: number, numSets: 
             }
             return true
         })
-        if (!node || !cladeImages) {
+        if (!ancestor || !cladeImages) {
             throw new Error(`Could not find ${numSets} appropriate nodes for this game.`)
         }
         const previousImageUUIDs = answers.reduce<readonly UUID[]>(
             (prev, answer) => [...prev, ...answer.images.map(image => image.uuid)],
             [],
         )
+        const images = await getImages(cladeImages, imagesPerClade, previousImageUUIDs)
+        const node = await getNodeByLink(await getConcestorLink(images.map(image => image._embedded.specificNode!)))
+        if (!node) {
+            throw new Error("Could not find concestor.")
+        }
         answers[i] = {
             node,
-            images: await getImages(cladeImages, imagesPerClade, previousImageUUIDs),
+            images,
         }
     }
     return answers

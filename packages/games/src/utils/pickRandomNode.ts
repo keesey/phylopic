@@ -17,6 +17,7 @@ export async function pickRandomNode(
             build,
             embed_childNodes: "true",
             embed_parentNode: "true",
+            embed_primaryImage: "true",
         })
         if (!criterion || (await criterion(item))) {
             return item
