@@ -1,4 +1,4 @@
-import { ImageWithEmbedded, List, NodeWithEmbedded } from "@phylopic/api-models"
+import { List } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
 import {
     getCladeImages,
@@ -7,39 +7,15 @@ import {
     getNodeLineage,
     getNodeList,
     isInList,
-    pickRandomImage,
     pickRandomNode,
-} from "../../utils"
-export type CladesAnswer = Readonly<{
-    images: readonly ImageWithEmbedded[]
-    node: NodeWithEmbedded
-}>
-export type CladesGame = Readonly<{
-    answers: readonly CladesAnswer[]
-}>
-const getImages = async (
-    list: List,
-    numImages: number,
-    previousImageUUIDs: readonly UUID[],
-): Promise<readonly ImageWithEmbedded[]> => {
-    const images = new Array<ImageWithEmbedded>(numImages)
-    for (let i = 0; i < numImages; ++i) {
-        const image = await pickRandomImage(list, async image => {
-            if (previousImageUUIDs.includes(image.uuid) || images.some(otherImage => otherImage.uuid === image.uuid)) {
-                return false
-            }
-            return true
-        })
-        if (!image) {
-            throw new Error(`Could not find ${numImages} in list: ${list._links.self.href}`)
-        }
-        images[i] = image
-    }
-    return images
-}
-const getAnswers = async (build: number, minDepth: number, numSets: number, imagesPerClade: number) => {
+} from "../../../utils"
+import type { CladesGameAnswer } from "./CladesGame"
+import { getImages } from "./getImages"
+import { trimImage } from "./trimImage"
+import { trimNode } from "./trimNode"
+export const getAnswers = async (build: number, minDepth: number, numSets: number, imagesPerClade: number) => {
     const list = await getNodeList(build)
-    const answers = new Array<CladesAnswer>()
+    const answers = new Array<CladesGameAnswer>()
     for (let i = 0; i < numSets; ++i) {
         let cladeImages: List | null = null
         const ancestor = await pickRandomNode(list, async node => {
@@ -52,7 +28,11 @@ const getAnswers = async (build: number, minDepth: number, numSets: number, imag
                 return false
             }
             for (const answer of answers) {
-                if (await isInList(answer.node, lineage)) {
+                const [a, b] = await Promise.all([
+                    isInList(answer.node, lineage),
+                    isInList(node, await getNodeLineage(answer.node)),
+                ])
+                if (a || b) {
                     return false
                 }
             }
@@ -70,11 +50,7 @@ const getAnswers = async (build: number, minDepth: number, numSets: number, imag
         if (!node) {
             throw new Error("Could not find concestor.")
         }
-        answers.push({ images, node })
+        answers.push({ images: images.map(image => trimImage(image)), node: trimNode(node) })
     }
     return answers
-}
-export async function getClades(build: number, minDepth = 8, numSets = 4, imagesPerClade = 4) {
-    const answers = await getAnswers(build, minDepth, numSets, imagesPerClade)
-    return { answers } as CladesGame
 }

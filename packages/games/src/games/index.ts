@@ -1,1 +1,1 @@
-export * from "./getClades"
+export * from "./clades"

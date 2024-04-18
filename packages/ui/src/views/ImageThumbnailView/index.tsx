@@ -8,7 +8,10 @@ if ("default" in ResolvedImage) {
     ResolvedImage = (ResolvedImage as unknown as { default: typeof NextImage }).default
 }
 export interface ImageThumbnailViewProps {
-    value: Image
+    value: Pick<Image, "modifiedFile" | "uuid"> &
+        Readonly<{
+            _links: Pick<Image["_links"], "self" | "thumbnailFiles">
+        }>
 }
 export const ImageThumbnailView: React.FC<ImageThumbnailViewProps> = ({ value }) => {
     const loader = useImageLoader(value._links.thumbnailFiles, value.modifiedFile)

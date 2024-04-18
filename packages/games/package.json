@@ -9,13 +9,15 @@
     "dependencies": {
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
-        "@phylopic/utils-api": "*"
+        "@phylopic/utils-api": "*",
+        "react": "^18.2.0"
     },
     "description": "Functionality for PhyloPic games.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
+        "flux-standard-action": "^2.1.2",
         "prettier": "^3.2.5",
         "tsup": "^8.0.2",
         "typescript": "^5.4.5",
@@ -36,6 +38,9 @@
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "name": "@phylopic/games",
+    "peerDependencies": {
+        "react": "^18.2.0"
+    },
     "publishConfig": {
         "access": "public"
     },
@@ -49,6 +54,30 @@
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
         "lint": "TIMING=1 eslint --fix src/**/*.ts*",
         "test": "vitest --watch=false"
+    },
+    "tsup": {
+        "clean": true,
+        "dts": true,
+        "entry": [
+            "src/index.ts"
+        ],
+        "external": [
+            "@phylopic/api-models",
+            "@phylopic/utils",
+            "@phylopic/utils-api",
+            "@types/react",
+            "axios",
+            "flux-standard-action",
+            "react",
+            "react/jsx-runtime"
+        ],
+        "format": [
+            "cjs",
+            "esm"
+        ],
+        "sourcemap": true,
+        "splitting": true,
+        "target": "ESNext"
     },
     "types": "./dist/index.d.ts",
     "version": "1.0.0"

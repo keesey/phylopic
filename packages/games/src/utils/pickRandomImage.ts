@@ -1,11 +1,12 @@
 import { isImageWithEmbedded, type ImageWithEmbedded, type List } from "@phylopic/api-models"
-import { extractQueryString, parseQueryString } from "@phylopic/utils"
+import { Query, extractQueryString, parseQueryString } from "@phylopic/utils"
 import { createIndexSet } from "./createIndexSet"
 import { getItemByIndex } from "./getItemByIndex"
 import { pickRandomMember } from "./pickRandomMember"
 export async function pickRandomImage(
     list: Pick<List, "_links" | "itemsPerPage" | "totalItems">,
-    criterion?: (node: ImageWithEmbedded) => Promise<boolean>,
+    criterion: (node: ImageWithEmbedded) => Promise<boolean>,
+    query: Query,
 ) {
     const candidates = createIndexSet(list.totalItems)
     while (candidates.size) {
@@ -15,9 +16,9 @@ export async function pickRandomImage(
         }
         const item = await getItemByIndex<ImageWithEmbedded>(index, list, isImageWithEmbedded, {
             ...parseQueryString(extractQueryString(list._links.self.href)),
-            embed_specificNode: "true",
+            ...query,
         })
-        if (!criterion || (await criterion(item))) {
+        if (await criterion(item)) {
             return item
         }
         candidates.delete(index)

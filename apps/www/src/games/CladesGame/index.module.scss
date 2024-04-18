@@ -1,0 +1,8 @@
+@use "@phylopic/styles/colors.scss";
+
+.error {
+    background-color: colors.$sunshine;
+    border-radius: 1em;
+    color: colors.$ink;
+    padding: 1em;
+}

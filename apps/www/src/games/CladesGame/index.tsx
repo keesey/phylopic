@@ -1,31 +1,41 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
-import { CladesGame as CladesGameModel, getBuild, getClades, shuffle } from "@phylopic/games"
-import { ImageThumbnailView, Loader } from "@phylopic/ui"
-import { FC, useEffect, useState } from "react"
+import {
+    CladesBoardContainer,
+    CladesGameImage,
+    CladesGame as CladesGameModel,
+    generateCladesGame,
+    getBuild,
+    shuffle,
+} from "@phylopic/games"
+import { Loader } from "@phylopic/ui"
+import { FC, useCallback, useEffect, useState } from "react"
+import styles from "./index.module.scss"
+import Board from "./Board"
 const CladesGame: FC = () => {
     const [game, setGame] = useState<CladesGameModel | null>(null)
-    const [images, setImages] = useState<readonly ImageWithEmbedded[]>([])
+    const [images, setImages] = useState<readonly CladesGameImage[]>([])
     const [error, setError] = useState<string | null>(null)
     useEffect(() => {
         ;(async () => {
             try {
                 const build = await getBuild()
-                const game = await getClades(build)
-                const images = game.answers.reduce<readonly ImageWithEmbedded[]>(
+                const game = await generateCladesGame(build)
+                const images = game.answers.reduce<readonly CladesGameImage[]>(
                     (prev, answer) => [...prev, ...answer.images],
                     [],
                 )
                 setGame(game)
                 setImages(shuffle(images))
             } catch (e) {
-                console.error(e)
                 setError(String(e))
             }
         })()
     }, [])
+    const handleSubmit = useCallback(async () => {
+        return { type: "loss", discrepancy: 1 } as const
+    }, [])
     if (error) {
         return (
-            <p>
+            <p className={styles.error}>
                 <strong>Error!</strong> {error}
             </p>
         )
@@ -34,11 +44,9 @@ const CladesGame: FC = () => {
         return <Loader />
     }
     return (
-        <>
-            {images.map(image => (
-                <ImageThumbnailView key={image.uuid} value={image} />
-            ))}
-        </>
+        <CladesBoardContainer data={images} onError={error => setError(String(error))} onSubmit={handleSubmit}>
+            <Board />
+        </CladesBoardContainer>
     )
 }
 export default CladesGame
