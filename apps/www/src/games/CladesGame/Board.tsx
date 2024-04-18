@@ -9,22 +9,6 @@ import Mistakes from "./Mistakes"
 
 const Board: FC = () => {
     const [state] = useContext(CladesBoardContext) ?? []
-    if (state?.answers.length === 4) {
-        return (
-            <section className={styles.main}>
-                <p>You won!</p>
-                <Controls />
-            </section>
-        )
-    }
-    if (state && state.mistakes >= 4) {
-        return (
-            <section className={styles.main}>
-                <p>You lost!</p>
-                <Controls />
-            </section>
-        )
-    }
     return (
         <section className={styles.main}>
             <Instructions />

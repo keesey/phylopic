@@ -1,0 +1,17 @@
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/buttons.scss";
+
+.main {
+    align-items: center;
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+}
+
+.secondary {
+    @include buttons.cta(colors.$ink, colors.$white);
+}
+
+.primary {
+    @include buttons.cta(colors.$white, colors.$ink);
+}

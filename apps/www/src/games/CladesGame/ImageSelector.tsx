@@ -9,14 +9,14 @@ export interface ImageSelectorProps {
 const ImageSelector: FC<ImageSelectorProps> = ({ item }) => {
     const [, dispatch] = useContext(CladesBoardContext) ?? []
     const handleClick = useCallback(() => {
-        switch(item.mode) {
+        switch (item.mode) {
             case "selected": {
-                dispatch?.({ type: "DESELECT", payload: item.image.uuid})
-                break;
+                dispatch?.({ type: "DESELECT", payload: item.image.uuid })
+                break
             }
             case null: {
-                dispatch?.({ type: "SELECT", payload: item.image.uuid})
-                break;
+                dispatch?.({ type: "SELECT", payload: item.image.uuid })
+                break
             }
         }
     }, [dispatch, item.mode, item.image.uuid])

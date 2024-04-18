@@ -13,14 +13,14 @@ import type { CladesGameAnswer } from "./CladesGame"
 import { getImages } from "./getImages"
 import { trimImage } from "./trimImage"
 import { trimNode } from "./trimNode"
-export const getAnswers = async (build: number, minDepth: number, numSets: number, imagesPerClade: number) => {
+export const getAnswers = async (build: number, minDepth: number, numSets: number, imagesPerSet: number) => {
     const list = await getNodeList(build)
     const answers = new Array<CladesGameAnswer>()
     for (let i = 0; i < numSets; ++i) {
         let cladeImages: List | null = null
         const ancestor = await pickRandomNode(list, async node => {
             cladeImages = await getCladeImages(node)
-            if (!cladeImages || imagesPerClade > cladeImages.totalItems) {
+            if (!cladeImages || imagesPerSet > cladeImages.totalItems) {
                 return false
             }
             const lineage = await getNodeLineage(node)
@@ -45,7 +45,7 @@ export const getAnswers = async (build: number, minDepth: number, numSets: numbe
             (prev, answer) => [...prev, ...answer.images.map(image => image.uuid)],
             [],
         )
-        const images = await getImages(cladeImages, imagesPerClade, previousImageUUIDs)
+        const images = await getImages(cladeImages, imagesPerSet, previousImageUUIDs)
         const node = await getNodeByLink(await getConcestorLink(images.map(image => image._embedded.specificNode!)))
         if (!node) {
             throw new Error("Could not find concestor.")

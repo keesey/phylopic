@@ -53,16 +53,21 @@ const reducer: Reducer<CladesBoardState, CladesGameAction> = (prevState, action)
             }
         }
         case "INITIALIZE": {
-            const images = action.payload.reduce<CladesBoardState["images"]>(
+            const images = action.payload.images.reduce<CladesBoardState["images"]>(
                 (prev, image) => ({ ...prev, [image.uuid]: { image, mode: null } }),
                 {},
             )
+            const numImages = Object.keys(images).length
+            if (numImages / action.payload.numSets !== Math.floor(numImages / action.payload.numSets)) {
+                return prevState
+            }
             return {
                 answers: [],
                 discrepancy: null,
                 mistakes: 0,
                 images,
                 imageUUIDs: shuffle(Object.keys(images)),
+                numSets: action.payload.numSets,
             }
         }
         case "LOSS": {

@@ -1,0 +1,31 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.row {
+    background-color: colors.$cerulean;
+    border-radius: 2em;
+    border: none;
+    color: colors.$white;
+    padding: 1em;
+    text-align: center;
+    transition: all 0.3s;
+
+    img {
+        filter: invert(100%);
+        mix-blend-mode: lighten;
+    }
+}
+
+.node {
+    margin-bottom: 1em;
+}
+
+.images {
+    display: flex;
+    gap: 2em;
+}

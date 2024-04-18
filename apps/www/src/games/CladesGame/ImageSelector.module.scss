@@ -1,18 +1,25 @@
 @use "@phylopic/styles/colors.scss";
-@use "@phylopic/styles/mixins/buttons.scss";
 
 .main {
-    border-radius: 1em;
+    border-radius: 2em;
     border: none;
+    cursor: pointer;
     height: fit-content;
+    padding: 1em;
+    transition: all 0.3s;
     width: fit-content;
+
+    img {
+        transition: all 0.3s;
+    }
 }
 
 .default {
-    @include buttons.cta(colors.$black, colors.$white);
-    border: none;
+    background-color: colors.$white;
 
     &:hover {
+        background-color: colors.$ink;
+
         img {
             filter: invert(100%);
             mix-blend-mode: lighten;
@@ -20,11 +27,18 @@
     }
 
     &:active {
-        @include buttons.cta(colors.$black, colors.$dandelion);
+        background-color: colors.$dandelion;
     }
 }
 
 .selected {
-    @include buttons.cta(colors.$black, colors.$sunshine);
-    border: none;
+    background-color: colors.$sunshine;
+}
+
+.submitted {
+    background-color: colors.$dandelion;
+
+    img: {
+        opacity: 0.67;
+    }
 }

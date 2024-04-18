@@ -22,12 +22,13 @@ const DEFAULT_STATE: CladesBoardState = {
     images: {},
     imageUUIDs: [],
     mistakes: 0,
+    numSets: 0,
 }
 export const CladesBoardContainer: React.FC<CladesBoardContainerProps> = ({ children, data, onError, onSubmit }) => {
     const contextValue = React.useReducer(reducer, DEFAULT_STATE)
     const [state, dispatch] = contextValue
     React.useEffect(() => {
-        dispatch({ type: "INITIALIZE", payload: data.map(image => trimImage(image)) })
+        dispatch({ type: "INITIALIZE", payload: { ...data, images: data.images.map(image => trimImage(image)) } })
     }, [data, dispatch])
     const submission = React.useMemo(
         () =>
