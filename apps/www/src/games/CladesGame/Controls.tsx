@@ -1,12 +1,20 @@
 import styles from "./Controls.module.scss"
-import { CladesBoardContext } from "@phylopic/games"
-import { useContext } from "react"
+import { CladesBoardContext, cladesGameSelect } from "@phylopic/games"
+import { FC, useContext } from "react"
+export interface ControlsProps {
+    onRestart?: () => void
+}
 
-const Controls = () => {
+const Controls: FC<ControlsProps> = ({ onRestart }) => {
     const [state, dispatch] = useContext(CladesBoardContext) ?? []
-    if (state?.answers.length === 4 || state?.mistakes === 4) {
-        // :TODO: Play again button
-        return null
+    if (state && cladesGameSelect.isOver(state)) {
+        return (
+            <section className={styles.main}>
+                <button className={styles.primary} onClick={() => onRestart?.()}>
+                    Start a new game
+                </button>
+            </section>
+        )
     }
     return (
         <section className={styles.main}>

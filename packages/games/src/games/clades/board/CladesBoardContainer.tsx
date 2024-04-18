@@ -22,7 +22,7 @@ const DEFAULT_STATE: CladesBoardState = {
     images: {},
     imageUUIDs: [],
     mistakes: 0,
-    numSets: 0,
+    totalAnswers: 0,
 }
 export const CladesBoardContainer: React.FC<CladesBoardContainerProps> = ({ children, data, onError, onSubmit }) => {
     const contextValue = React.useReducer(reducer, DEFAULT_STATE)

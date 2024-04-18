@@ -14,5 +14,5 @@ export type CladesBoardState = Readonly<{
     imageUUIDs: readonly UUID[]
     images: Readonly<Record<UUID, CladesBoardImageState>>
     mistakes: number
-    numSets: number
+    totalAnswers: number
 }>

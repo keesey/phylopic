@@ -1,9 +1,11 @@
 @use "@phylopic/styles/colors.scss";
 
 .main {
+    align-items: stretch;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    width: 352px;
 }
 
 .row {
@@ -27,5 +29,5 @@
 
 .images {
     display: flex;
-    gap: 2em;
+    justify-content: space-between;
 }

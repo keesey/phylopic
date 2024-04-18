@@ -1,0 +1,18 @@
+@use "@phylopic/styles/colors.scss";
+
+.indicators {
+    display: inline-flex;
+    gap: 1em;
+}
+
+.indicator {
+    transition: all 0.3s;
+}
+
+.made {
+    color: colors.$black;
+}
+
+.available {
+    color: colors.$wash;
+}

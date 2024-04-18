@@ -1,21 +1,21 @@
-import { CladesBoardContext } from "@phylopic/games"
-import { FC, useContext } from "react"
+import { FC } from "react"
+import AnswersGrid from "./AnswersGrid"
 import styles from "./Board.module.scss"
 import Controls from "./Controls"
-import Instructions from "./Instructions"
-import AnswersGrid from "./AnswersGrid"
 import ImageGrid from "./ImageGrid"
+import Instructions from "./Instructions"
 import Mistakes from "./Mistakes"
-
-const Board: FC = () => {
-    const [state] = useContext(CladesBoardContext) ?? []
+export interface BoardProps {
+    onRestart?: () => void
+}
+const Board: FC<BoardProps> = ({ onRestart }) => {
     return (
         <section className={styles.main}>
             <Instructions />
             <AnswersGrid />
             <ImageGrid />
             <Mistakes />
-            <Controls />
+            <Controls onRestart={onRestart} />
         </section>
     )
 }

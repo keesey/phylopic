@@ -13,14 +13,14 @@ import type { CladesGameAnswer } from "./CladesGame"
 import { getImages } from "./getImages"
 import { trimImage } from "./trimImage"
 import { trimNode } from "./trimNode"
-export const getAnswers = async (build: number, minDepth: number, numSets: number, imagesPerSet: number) => {
+export const getAnswers = async (build: number, minDepth: number, numAnswers: number, imagesPerAnswer: number) => {
     const list = await getNodeList(build)
     const answers = new Array<CladesGameAnswer>()
-    for (let i = 0; i < numSets; ++i) {
+    for (let i = 0; i < numAnswers; ++i) {
         let cladeImages: List | null = null
         const ancestor = await pickRandomNode(list, async node => {
             cladeImages = await getCladeImages(node)
-            if (!cladeImages || imagesPerSet > cladeImages.totalItems) {
+            if (!cladeImages || imagesPerAnswer > cladeImages.totalItems) {
                 return false
             }
             const lineage = await getNodeLineage(node)
@@ -39,13 +39,13 @@ export const getAnswers = async (build: number, minDepth: number, numSets: numbe
             return true
         })
         if (!ancestor || !cladeImages) {
-            throw new Error(`Could not find ${numSets} appropriate nodes for this game.`)
+            throw new Error(`Could not find ${numAnswers} appropriate nodes for this game.`)
         }
         const previousImageUUIDs = answers.reduce<readonly UUID[]>(
             (prev, answer) => [...prev, ...answer.images.map(image => image.uuid)],
             [],
         )
-        const images = await getImages(cladeImages, imagesPerSet, previousImageUUIDs)
+        const images = await getImages(cladeImages, imagesPerAnswer, previousImageUUIDs)
         const node = await getNodeByLink(await getConcestorLink(images.map(image => image._embedded.specificNode!)))
         if (!node) {
             throw new Error("Could not find concestor.")

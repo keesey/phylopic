@@ -4,14 +4,21 @@
 .main {
     align-items: center;
     display: flex;
-    gap: 1em;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .secondary {
     @include buttons.cta(colors.$ink, colors.$white);
+    font-size: smaller;
+    padding: 12px;
 }
 
 .primary {
-    @include buttons.cta(colors.$white, colors.$ink);
+    @include buttons.cta(colors.$black, colors.$dandelion);
+    font-size: smaller;
+    padding: 12px;
+
+    &:disabled {
+        @include buttons.cta(colors.$white, colors.$ink);
+    }
 }

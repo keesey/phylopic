@@ -4,38 +4,32 @@ import {
     CladesGame as CladesGameModel,
     CladesGameSubmission,
     generateCladesGame,
-    getBuild,
-    shuffle,
+    getBuild
 } from "@phylopic/games"
 import { Loader } from "@phylopic/ui"
-import { FC, useCallback, useEffect, useState } from "react"
-import styles from "./index.module.scss"
+import { FC, useCallback, useMemo, useState } from "react"
 import Board from "./Board"
+import styles from "./index.module.scss"
 const MIN_DEPTH = 8
 const NUM_SETS = 4
 const IMAGES_PER_SET = 4
 const CladesGame: FC = () => {
+    const [gameRequested, setGameRequested] = useState(false)
     const [game, setGame] = useState<CladesGameModel | null>(null)
-    const [images, setImages] = useState<readonly CladesGameImage[]>([])
     const [error, setError] = useState<string | null>(null)
-    useEffect(() => {
-        if (!game) {
-            ;(async () => {
-                try {
-                    const build = await getBuild()
-                    const game = await generateCladesGame(build, MIN_DEPTH, NUM_SETS, IMAGES_PER_SET)
-                    const images = game.answers.reduce<readonly CladesGameImage[]>(
-                        (prev, answer) => [...prev, ...answer.images],
-                        [],
-                    )
-                    setGame(game)
-                    setImages(shuffle(images))
-                } catch (e) {
-                    setError(String(e))
-                }
-            })()
-        }
-    }, [game])
+    const startNewGame = useCallback(() => {
+        setGame(null)
+        setGameRequested(true)
+        ;(async () => {
+            try {
+                const build = await getBuild()
+                const game = await generateCladesGame(build, MIN_DEPTH, NUM_SETS, IMAGES_PER_SET)
+                setGame(game)
+            } catch (e) {
+                setError(String(e))
+            }
+        })()
+    }, [])
     const handleSubmit = useCallback(
         async (submission: CladesGameSubmission) => {
             if (submission.size === 4) {
@@ -48,19 +42,42 @@ const CladesGame: FC = () => {
         },
         [game?.answers],
     )
+    const images = useMemo(() => {
+        return game?.answers
+            ? game.answers.reduce<CladesGameImage[]>((prev, answer) => [...prev, ...answer.images], [])
+            : []
+    }, [game?.answers])
     if (error) {
         return (
-            <p className={styles.error}>
-                <strong>Error!</strong> {error}
-            </p>
+            <section className={styles.main}>
+                <p className={styles.error}>
+                    <strong>Error!</strong> {error}
+                </p>
+                <button className={styles.cta} onClick={() => startNewGame()}>
+                    Try again
+                </button>
+            </section>
         )
     }
     if (!game) {
-        return <Loader />
+        if (gameRequested) {
+            return <Loader />
+        }
+        return (
+            <section className={styles.main}>
+                <button className={styles.cta} onClick={() => startNewGame()}>
+                    Start a game
+                </button>
+            </section>
+        )
     }
     return (
-        <CladesBoardContainer data={{images, numSets: NUM_SETS}} onError={error => setError(String(error))} onSubmit={handleSubmit}>
-            <Board />
+        <CladesBoardContainer
+            data={{ images, numSets: NUM_SETS }}
+            onError={error => setError(String(error))}
+            onSubmit={handleSubmit}
+        >
+            <Board onRestart={() => startNewGame()} />
         </CladesBoardContainer>
     )
 }

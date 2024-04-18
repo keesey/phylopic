@@ -1,11 +1,11 @@
 @use "@phylopic/styles/colors.scss";
 
 .main {
-    border-radius: 2em;
+    border-radius: 24px;
     border: none;
     cursor: pointer;
     height: fit-content;
-    padding: 1em;
+    padding: 12px;
     transition: all 0.3s;
     width: fit-content;
 
@@ -15,7 +15,7 @@
 }
 
 .default {
-    background-color: colors.$white;
+    background-color: colors.$vellum;
 
     &:hover {
         background-color: colors.$ink;

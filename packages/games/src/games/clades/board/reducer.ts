@@ -67,7 +67,7 @@ const reducer: Reducer<CladesBoardState, CladesGameAction> = (prevState, action)
                 mistakes: 0,
                 images,
                 imageUUIDs: shuffle(Object.keys(images)),
-                numSets: action.payload.numSets,
+                totalAnswers: action.payload.numSets,
             }
         }
         case "LOSS": {
@@ -81,7 +81,10 @@ const reducer: Reducer<CladesBoardState, CladesGameAction> = (prevState, action)
             }
         }
         case "SELECT": {
-            if (countImagesInMode(prevState.images, "selected") >= 4) {
+            if (
+                countImagesInMode(prevState.images, "selected") >=
+                Object.keys(prevState.images).length / prevState.totalAnswers
+            ) {
                 return prevState
             }
             return {
