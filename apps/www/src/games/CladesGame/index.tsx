@@ -4,7 +4,7 @@ import {
     CladesGame as CladesGameModel,
     CladesGameSubmission,
     generateCladesGame,
-    getBuild
+    getBuild,
 } from "@phylopic/games"
 import { Loader } from "@phylopic/ui"
 import { FC, useCallback, useMemo, useState } from "react"
