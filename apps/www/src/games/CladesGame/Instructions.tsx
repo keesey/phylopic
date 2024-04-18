@@ -6,7 +6,8 @@ const Instructions = () => {
                 <span>Sort these into four separate clades.</span>
                 <br />
                 <span className={styles.comment}>
-                    (A clade is an ancestor plus all descendants, like "mammals" or "frogs" or "flowering plants".)
+                    (A clade is an ancestor plus all descendants, like &ldquo;mammals&rdquo; or &ldquo;frogs&rdquo; or
+                    &ldquo;flowering plants&rdquo;.)
                 </span>
             </p>
         </header>

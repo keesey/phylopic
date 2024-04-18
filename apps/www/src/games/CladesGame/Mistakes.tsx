@@ -10,10 +10,13 @@ const Mistakes = () => {
     const mistakes = state?.mistakes ?? 0
     return (
         <section>
-            Mistakes remaining:{" "}
+            Mistakes:{" "}
             <span className={styles.indicators}>
                 {new Array(4).fill(null).map((_, index) => (
-                    <span className={clsx(styles.indicator, index < mistakes ? styles.unavailable : styles.available)}>
+                    <span
+                        key={index}
+                        className={clsx(styles.indicator, index < mistakes ? styles.unavailable : styles.available)}
+                    >
                         ⬤
                     </span>
                 ))}
