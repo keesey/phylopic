@@ -19,7 +19,7 @@ export const getAnswers = async (build: number, minDepth: number, numAnswers: nu
     for (let i = 0; i < numAnswers; ++i) {
         let cladeImages: List | null = null
         const ancestor = await pickRandomNode(list, async node => {
-            cladeImages = await getCladeImages(node)
+            cladeImages = await getCladeImages(node, { filter_license_nc: "false" })
             if (!cladeImages || imagesPerAnswer > cladeImages.totalItems) {
                 return false
             }

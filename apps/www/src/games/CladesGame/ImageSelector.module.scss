@@ -16,29 +16,18 @@
 
 .default {
     background-color: colors.$vellum;
-
-    &:hover {
-        background-color: colors.$ink;
-
-        img {
-            filter: invert(100%);
-            mix-blend-mode: lighten;
-        }
-    }
-
-    &:active {
-        background-color: colors.$dandelion;
-    }
 }
 
 .selected {
-    background-color: colors.$sunshine;
+    background-color: colors.$dandelion;
 }
 
 .submitted {
     background-color: colors.$dandelion;
 
     img: {
+        filter: invert(100%);
+        mix-blend-mode: lighten;
         opacity: 0.67;
     }
 }

@@ -1,17 +1,15 @@
 import type { UUID } from "@phylopic/utils"
 import React from "react"
-import { CladesGameNode } from "../generate"
-import { CladesBoardState } from "./CladesBoardState"
-import { CladesGameAction, CladesGameInitializeAction } from "./actions"
-import reducer from "./reducer"
-import { trimNode } from "../generate/trimNode"
 import { trimImage } from "../generate/trimImage"
+import { CladesBoardState } from "./CladesBoardState"
+import { CladesGameAction, CladesGameInitializeAction, CladesGameLossAction, CladesGameWinAction } from "./actions"
+import reducer from "./reducer"
+import { cladesGameSelect } from "./cladesGameSelect"
 export type CladesGameSubmission = ReadonlySet<UUID>
-export type CladesGameVerdict = Readonly<{ discrepancy: number; type: "loss" } | { node: CladesGameNode; type: "win" }>
 export type CladesBoardContainerProps = React.PropsWithChildren<{
     data: CladesGameInitializeAction["payload"]
     onError: (e: unknown) => void
-    onSubmit: (submission: CladesGameSubmission) => Promise<CladesGameVerdict>
+    onSubmit: (submission: CladesGameSubmission) => Promise<CladesGameLossAction | CladesGameWinAction>
 }>
 export const CladesBoardContext = React.createContext<
     Readonly<[CladesBoardState, React.Dispatch<CladesGameAction>]> | undefined
@@ -39,24 +37,18 @@ export const CladesBoardContainer: React.FC<CladesBoardContainerProps> = ({ chil
             ),
         [state.images],
     )
+    const imagesPerAnswer = cladesGameSelect.imagesPerAnswer(state)
     React.useEffect(() => {
-        if (submission.size === 4) {
+        if (submission.size === imagesPerAnswer) {
             ;(async () => {
                 try {
-                    const response = await onSubmit(submission)
-                    if (response.type === "loss") {
-                        dispatch({ type: "LOSS", payload: response.discrepancy })
-                    } else if (response.type === "win") {
-                        dispatch({ type: "WIN", payload: trimNode(response.node) })
-                    } else {
-                        throw new Error("Unknown response type.")
-                    }
+                    dispatch(await onSubmit(submission))
                 } catch (e) {
                     dispatch({ type: "SUBMIT_CANCEL" })
                     onError(e)
                 }
             })()
         }
-    }, [submission])
+    }, [dispatch, imagesPerAnswer, submission])
     return <CladesBoardContext.Provider value={contextValue}>{children}</CladesBoardContext.Provider>
 }

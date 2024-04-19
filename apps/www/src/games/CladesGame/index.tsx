@@ -2,7 +2,7 @@ import {
     CladesBoardContainer,
     CladesGameImage,
     CladesGame as CladesGameModel,
-    CladesGameSubmission,
+    adjudicateCladesGame,
     generateCladesGame,
     getBuild,
 } from "@phylopic/games"
@@ -10,9 +10,9 @@ import { Loader } from "@phylopic/ui"
 import { FC, useCallback, useMemo, useState } from "react"
 import Board from "./Board"
 import styles from "./index.module.scss"
-const MIN_DEPTH = 8
-const NUM_SETS = 4
-const IMAGES_PER_SET = 4
+const MIN_DEPTH = 5
+const NUM_ANSWERS = 4
+const IMAGES_PER_ANSWER = 4
 const CladesGame: FC = () => {
     const [gameRequested, setGameRequested] = useState(false)
     const [game, setGame] = useState<CladesGameModel | null>(null)
@@ -23,25 +23,13 @@ const CladesGame: FC = () => {
         ;(async () => {
             try {
                 const build = await getBuild()
-                const game = await generateCladesGame(build, MIN_DEPTH, NUM_SETS, IMAGES_PER_SET)
+                const game = await generateCladesGame(build, MIN_DEPTH, NUM_ANSWERS, IMAGES_PER_ANSWER)
                 setGame(game)
             } catch (e) {
                 setError(String(e))
             }
         })()
     }, [])
-    const handleSubmit = useCallback(
-        async (submission: CladesGameSubmission) => {
-            if (submission.size === 4) {
-                const answer = game?.answers.find(answer => answer.images.every(image => submission.has(image.uuid)))
-                if (answer) {
-                    return { type: "win", node: answer.node } as const
-                }
-            }
-            return { type: "loss", discrepancy: 1 } as const
-        },
-        [game?.answers],
-    )
     const images = useMemo(() => {
         return game?.answers
             ? game.answers.reduce<CladesGameImage[]>((prev, answer) => [...prev, ...answer.images], [])
@@ -73,9 +61,9 @@ const CladesGame: FC = () => {
     }
     return (
         <CladesBoardContainer
-            data={{ images, numSets: NUM_SETS }}
+            data={{ images, numSets: NUM_ANSWERS }}
             onError={error => setError(String(error))}
-            onSubmit={handleSubmit}
+            onSubmit={async submission => adjudicateCladesGame(game, submission)}
         >
             <Board onRestart={() => startNewGame()} />
         </CladesBoardContainer>

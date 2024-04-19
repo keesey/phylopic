@@ -2,10 +2,10 @@ import { CladesGame } from "./CladesGame"
 import { getAnswers } from "./getAnswers"
 export async function generateCladesGame(
     build: number,
-    minDepth = 8,
-    numSets = 4,
-    imagesPerAnswer = 4,
+    minDepth: number,
+    numAnswers: number,
+    imagesPerAnswer: number,
 ): Promise<CladesGame> {
-    const answers = await getAnswers(build, minDepth, numSets, imagesPerAnswer)
+    const answers = await getAnswers(build, minDepth, numAnswers, imagesPerAnswer)
     return { answers }
 }
