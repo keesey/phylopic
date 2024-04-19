@@ -1,8 +1,8 @@
 import { isImageWithEmbedded, type ImageWithEmbedded, type List } from "@phylopic/api-models"
 import { Query, extractQueryString, parseQueryString } from "@phylopic/utils"
-import { createIndexSet } from "./createIndexSet"
-import { getItemByIndex } from "./getItemByIndex"
-import { pickRandomMember } from "./pickRandomMember"
+import { createIndexSet } from "../core/createIndexSet"
+import { getListItemByIndex } from "./getListItemByIndex"
+import { pickRandomMember } from "../core/pickRandomMember"
 export async function pickRandomImage(
     list: Pick<List, "_links" | "itemsPerPage" | "totalItems">,
     criterion: (node: ImageWithEmbedded) => Promise<boolean>,
@@ -14,7 +14,7 @@ export async function pickRandomImage(
         if (index === null) {
             return null
         }
-        const item = await getItemByIndex<ImageWithEmbedded>(index, list, isImageWithEmbedded, {
+        const item = await getListItemByIndex<ImageWithEmbedded>(index, list, isImageWithEmbedded, {
             ...parseQueryString(extractQueryString(list._links.self.href)),
             ...query,
         })

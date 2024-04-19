@@ -8,7 +8,7 @@ import {
     type Query,
 } from "@phylopic/utils"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
-export async function getItemByIndex<T>(
+export async function getListItemByIndex<T>(
     index: number,
     list: Pick<List, "_links" | "itemsPerPage">,
     detector: FaultDetector<T>,
