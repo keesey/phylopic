@@ -14,6 +14,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 | [api-docs](./apps/api-docs)     | Documentation for the _PhyloPic_ API                                                                 |
 | [contribute](./apps/contribute) | Public webapp for contributing silhouette images                                                     |
 | [edit](./apps/edit)             | Private webapp (run locally) for managing _PhyloPic_, including contribution review and data editing |
+| [games](./apps/games)           | Public webapp for puzzle games                                                                       |
 | [publish](./apps/publish)       | Code for administrating _PhyloPic_, including publishing releases and managing source files          |
 | [www](./apps/www)               | Public webapp for searching for and viewing silhouette images                                        |
 

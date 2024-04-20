@@ -1,0 +1,32 @@
+@use "@phylopic/styles/colors.scss";
+@use "@phylopic/styles/mixins/buttons.scss";
+@import "@phylopic/styles/globals.scss";
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap");
+
+body {
+    background-color: colors.$vellum;
+    height: 100vh;
+    min-width: 320px;
+    min-height: 568px;
+}
+
+body,
+html {
+    color: colors.$ink;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: colors.$ink;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}

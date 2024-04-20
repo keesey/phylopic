@@ -1,0 +1,47 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "dependencies": {
+        "@phylopic/api-models": "*",
+        "@phylopic/styles": "*",
+        "@phylopic/ui": "*",
+        "@phylopic/utils": "*",
+        "@phylopic/utils-api": "*",
+        "@phylopic/utils-aws": "*",
+        "@vercel/analytics": "^1.2.2",
+        "clsx": "^2.1.0",
+        "next": "^14.2.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "description": "Image contribution application for *PhyloPic*.",
+    "devDependencies": {
+        "@phylopic/tsconfig": "*",
+        "@types/react": "^18.2.78",
+        "@types/react-dom": "^18.2.25",
+        "eslint-config-phylopic": "*",
+        "flux-standard-action": "^2.1.2",
+        "sass": "^1.72.0",
+        "typescript": "^5.4.5"
+    },
+    "license": "MIT",
+    "name": "@phylopic/games",
+    "private": true,
+    "resolutions": {
+        "@types/react": "^18.2.78"
+    },
+    "scripts": {
+        "build": "next build",
+        "clean": "rm -rf .next && rm -rf .swc && rm -rf .turbo && rm -rf node_modules",
+        "dev": "next dev -p 3004",
+        "lint": "TIMING=1 next lint",
+        "start": "next start",
+        "unused": "next-unused"
+    },
+    "version": "0.0.0"
+}
