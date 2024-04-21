@@ -8,12 +8,12 @@ export const metadata: Metadata = {
     title: "PhyloPic Games",
     description: "Puzzle games that use silhouette images from PhyloPic.",
 }
-const GAME_CODES = ["four-clades"]
+const GAME_CODES = ["four-clades", "ancestor"]
 const Page = () => {
     const todayPath = toPath(fromDate(new Date()))
     return (
         <div className={styles.container}>
-            <h2 className={styles.heading}>Today's Puzzles</h2>
+            <h2 className={styles.heading}>Today&rsquo;s Puzzles</h2>
             <section className={styles.games}>
                 {GAME_CODES.map(code => (
                     <section key={code} className={styles.game}>

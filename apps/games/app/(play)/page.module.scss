@@ -62,4 +62,10 @@
     font-weight: bold;
     padding: 12px;
     text-transform: uppercase;
+    transition: all 0.3s;
+    width: 100%;
+
+    &:hover {
+        background-color: colors.$sunshine;
+    }
 }

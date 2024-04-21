@@ -46,7 +46,7 @@
 
 .nav {
     align-items: center;
-    background-color: colors.$deep;
+    background-color: colors.$cerulean;
     color: colors.$white;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -57,4 +57,10 @@
     overflow: hidden;
     padding: 2px 8px;
     width: 100vw;
+}
+
+.controls {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
 }

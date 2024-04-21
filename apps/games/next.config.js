@@ -4,5 +4,4 @@ module.exports = {
         domains: ["images.phylopic.org"],
     },
     reactStrictMode: true,
-    swcMinify: true,
 }
