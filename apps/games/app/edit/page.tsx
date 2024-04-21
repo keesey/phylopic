@@ -1,19 +1,20 @@
 import { Metadata } from "next"
-import styles from "./page.module.scss"
 import Image from "next/image"
-import { GAMES } from "~/games/GAMES"
 import Link from "next/link"
-import { fromDate, toPath } from "~/lib/datetime"
+import { GAMES } from "~/games/GAMES"
 import { GAME_CODES } from "~/games/GAME_CODES"
+import styles from "./page.module.scss"
 export const metadata: Metadata = {
-    title: "PhyloPic Games",
-    description: "Puzzle games that use silhouette images from PhyloPic.",
+    title: "PhyloPic Games Editor",
+    robots: {
+        index: false,
+        follow: false,
+    }
 }
 const Page = () => {
-    const todayPath = toPath(fromDate(new Date()))
     return (
         <div className={styles.container}>
-            <h2 className={styles.heading}>Today&rsquo;s Puzzles</h2>
+            <h2 className={styles.heading}>Games to Edit</h2>
             <section className={styles.games}>
                 {GAME_CODES.map(code => (
                     <section key={code} className={styles.game}>
@@ -34,8 +35,8 @@ const Page = () => {
                             </h4>
                         </header>
                         <section className={styles.gameContent}>
-                            <Link href={`/games/${code}${todayPath}`}>
-                                <button className={styles.cta}>Play</button>
+                            <Link href={`/edit/${code}`}>
+                                <button className={styles.cta}>Edit</button>
                             </Link>
                         </section>
                     </section>

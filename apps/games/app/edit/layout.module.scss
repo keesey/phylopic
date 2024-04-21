@@ -1,0 +1,59 @@
+@use "@phylopic/styles/colors.scss";
+
+.container {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: absolute;
+    width: 100vw;
+}
+
+.mainContainer {
+    @media screen and (min-height: 896px) {
+        flex-grow: 1;
+        display: flex;
+        height: calc(100vh - 48px);
+        place-items: center;
+    }
+
+    width: 100vw;
+}
+
+.controls {
+    display: flex;
+    gap: 0.5em;
+    place-items: center;
+}
+
+.heading {
+    flex-grow: 1;
+    font-size: x-large;
+    font-weight: normal;
+}
+
+.main {
+    height: calc(100vh - 48px);
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 320px;
+    min-height: 568px;
+    max-height: 896px;
+    max-width: 430px;
+    width: 100vw;
+}
+
+.nav {
+    align-items: center;
+    background-color: colors.$dandelion;
+    color: colors.$black;
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+}
+
+.games {
+    display: inline-flex;
+    gap: 1em;
+    justify-content: flex-end;
+}
