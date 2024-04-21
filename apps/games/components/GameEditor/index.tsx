@@ -8,16 +8,19 @@ export interface Props<TContent = unknown> {
     code: string
     date: CalendarDate
     initialGameInstance: GameInstance<TContent>
+    readOnly: boolean
 }
-export const GameEditor = ({ code, date, initialGameInstance }: Props) => {
+export const GameEditor = ({ code, date, initialGameInstance, readOnly }: Props) => {
     const handleSave = async (instance: GameInstance<unknown>) => {
         "use server"
-        await putGameInstance(code, date, instance)
+        if (!readOnly) {
+            await putGameInstance(code, date, instance)
+        }
     }
     return (
         <EditorContainer data={initialGameInstance.content}>
-            <Controls code={code} onSave={handleSave} />
-            <ContentEditor code={code} />
+            <Controls code={code} onSave={handleSave} readOnly={readOnly} />
+            <ContentEditor code={code} readOnly={readOnly} />
         </EditorContainer>
     )
 }

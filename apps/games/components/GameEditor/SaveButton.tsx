@@ -7,12 +7,13 @@ import styles from "./SaveButton.module.scss"
 export interface Props {
     code: string
     onSave: (instance: GameInstance<unknown>) => Promise<void>
+    readOnly: boolean
 }
-export const SaveButton: FC<Props> = ({ code, onSave }) => {
+export const SaveButton: FC<Props> = ({ code, onSave, readOnly }) => {
     const [state, dispatch] = useContext(EditorContext) ?? []
-    const active = Boolean(state && select.canSave(state))
+    const active = Boolean(!readOnly && state && select.canSave(state))
     const handleClick =
-        state && active
+        state && active && !readOnly
             ? () => {
                   ;(async () => {
                       try {

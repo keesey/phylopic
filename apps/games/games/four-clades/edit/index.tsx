@@ -1,11 +1,14 @@
 "use client"
 import { ImageThumbnailView } from "@phylopic/ui"
-import { useContext } from "react"
+import { FC, useContext } from "react"
 import { EditorContext, EditorState, select } from "~/lib/edit"
 import { Game } from "../models"
 import styles from "./index.module.scss"
 import NomenView from "~/components/NomenView"
-const Editor = () => {
+export interface Props {
+    readOnly: boolean
+}
+const Editor: FC<Props> = ({ readOnly }) => {
     const [state] = useContext(EditorContext) ?? []
     if (!state) {
         return null
@@ -23,7 +26,10 @@ const Editor = () => {
                     </header>
                     <div className={styles.images}>
                         {answer.images.map(image => (
-                            <ImageThumbnailView key={image.uuid} value={image} />
+                            <div key={image.uuid}>
+                                <ImageThumbnailView key={image.uuid} value={image} />
+                                {/* :TODO: Edit button */}
+                            </div>
                         ))}
                     </div>
                 </section>

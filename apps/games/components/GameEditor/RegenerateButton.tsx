@@ -4,14 +4,17 @@ import { EditorContext } from "~/lib/edit"
 import { GameContentGenerateButton } from "../GameContentGenerateButton"
 export interface Props {
     code: string
+    readOnly: boolean
 }
-export const RegenerateButton: FC<Props> = ({ code }) => {
+export const RegenerateButton: FC<Props> = ({ code, readOnly }) => {
     const [, dispatch] = useContext(EditorContext) ?? []
     const handleGenerated = async (content: unknown) => {
-        dispatch?.({ type: "PUSH", payload: content })
+        if (!readOnly) {
+            dispatch?.({ type: "PUSH", payload: content })
+        }
     }
     return (
-        <GameContentGenerateButton code={code} onGenerated={handleGenerated}>
+        <GameContentGenerateButton code={code} onGenerated={handleGenerated} readOnly={readOnly}>
             Regenerate
         </GameContentGenerateButton>
     )
