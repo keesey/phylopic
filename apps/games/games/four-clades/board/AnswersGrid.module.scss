@@ -5,15 +5,17 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-    width: 352px;
+    width: 100%;
 }
 
 .row {
+    align-items: center;
     background-color: colors.$cerulean;
-    border-radius: 2em;
     border: none;
     color: colors.$white;
-    padding: 1em;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px;
     text-align: center;
     transition: all 0.3s;
 
@@ -23,11 +25,25 @@
     }
 }
 
-.node {
-    margin-bottom: 1em;
+.rowGameOver {
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.8;
+    }
 }
 
-.images {
-    display: flex;
-    justify-content: space-between;
+.node {
+    flex-grow: 1;
+    padding-left: 24px;
+}
+
+.arrow {
+    opacity: 0;
+    padding-left: 12px;
+    transition: all 1s;
+}
+
+.arrowGameOver {
+    opacity: initial;
 }

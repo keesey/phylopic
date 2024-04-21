@@ -4,10 +4,10 @@
     border-radius: 24px;
     border: none;
     cursor: pointer;
-    height: fit-content;
-    padding: 12px;
+    height: 100%;
+    padding: min(32px, max(4px, (100vh - 64 * 4 - 96px) / 8)) min(32px, max(4px, (100vw - 64 * 4) / 8));
     transition: all 0.5s;
-    width: fit-content;
+    width: 100%;
 
     img {
         transition: all 0.5s;

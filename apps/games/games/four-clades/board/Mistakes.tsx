@@ -4,13 +4,10 @@ import { BoardContext } from "../play"
 import styles from "./Mistakes.module.scss"
 const Mistakes = () => {
     const [state] = useContext(BoardContext) ?? []
-    if (state?.answers.length === 4) {
-        return null
-    }
     const mistakes = state?.mistakes ?? 0
     return (
-        <section>
-            Mistakes remaining:{" "}
+        <section className={styles.main}>
+            <span className={styles.message}>Mistakes remaining:</span>
             <span className={styles.indicators}>
                 {new Array(4).fill(null).map((_, index) => (
                     <span

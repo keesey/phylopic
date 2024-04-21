@@ -1,9 +1,21 @@
 @use "@phylopic/styles/colors.scss";
 
+.main {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.message {
+    font-size: 18px;
+}
+
 .indicators {
     display: inline-flex;
     flex-direction: row-reverse;
-    gap: 1em;
+    gap: 12px;
 }
 
 .indicator {

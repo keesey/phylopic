@@ -1,6 +1,6 @@
 .main {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    place-items: center;
-    width: fit-content;
+    margin-bottom: 24px;
+    width: 100%;
 }

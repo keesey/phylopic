@@ -8,9 +8,11 @@ const Board: FC = () => {
     return (
         <section className={styles.main}>
             <AnswersGrid />
-            <ImageGrid />
-            <Mistakes />
-            <Controls />
+            <div>
+                <ImageGrid />
+                <Mistakes />
+                <Controls />
+            </div>
         </section>
     )
 }
