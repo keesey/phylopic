@@ -1,11 +1,12 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { GameEditor } from "~/components/GameEditor"
+import { GameGenerator } from "~/components/GameGenerator"
 import { GAMES } from "~/games/GAMES"
 import { formatDate, fromParams, readDateParams } from "~/lib/datetime"
 import { normalizeDate } from "~/lib/datetime/normalizeDate"
 import { getGameInstance } from "~/lib/s3"
 import styles from "./page.module.scss"
-import { GameGenerator } from "~/components/GameGenerator"
 export type Params = { code: string; year: string; month: string; day: string }
 export const generateMetadata = ({ params }: { params: Params }): Metadata => {
     const game = GAMES[params.code]
@@ -27,12 +28,12 @@ const EditGameDayPage = async ({ params }: { params: Params }) => {
     const gameInstance = await getGameInstance(params.code, date)
     if (!gameInstance) {
         return (
-            <>
-                <p>No game found for this date.</p>
+            <div className={styles.main}>
+                <p className={styles.message}>No game found for this date.</p>
                 <GameGenerator code={params.code} date={date} />
-            </>
+            </div>
         )
     }
-    return <p>Game will go here.</p>
+    return <GameEditor code={params.code} date={date} initialGameInstance={gameInstance} />
 }
 export default EditGameDayPage

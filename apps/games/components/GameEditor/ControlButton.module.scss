@@ -1,0 +1,31 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    align-items: center;
+    background-color: colors.$dandelion;
+    border: 2px solid colors.$black;
+    border-radius: 50%;
+    color: colors.$black;
+    cursor: pointer;
+    display: flex;
+    font-size: 24px;
+    font-weight: bold;
+    height: 50px;
+    line-height: 1;
+    justify-content: center;
+    min-width: 50px;
+    overflow: hidden;
+    padding: 12px;
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: colors.$sunshine;
+    }
+
+    &:disabled {
+        background-color: colors.$wash;
+        border: 2px solid colors.$inkFade;
+        color: colors.$inkFade;
+        cursor: not-allowed;
+    }
+}

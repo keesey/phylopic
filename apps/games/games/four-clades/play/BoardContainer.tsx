@@ -1,3 +1,4 @@
+"use client"
 import type { UUID } from "@phylopic/utils"
 import { PropsWithChildren, createContext, useEffect, useMemo, useReducer } from "react"
 import { trimImage } from "../generate/trimImage"

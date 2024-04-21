@@ -1,6 +1,6 @@
 import { CalendarDate, toPath } from "~/lib/datetime"
 import styles from "./index.module.scss"
-import { Button } from "./Button"
+import { ButtonContainer } from "./ButtonContainer"
 import { GameInstance } from "~/lib/s3/GameInstance"
 import { putGameInstance } from "~/lib/s3/putGameInstance"
 import { revalidatePath, revalidateTag } from "next/cache"
@@ -17,7 +17,7 @@ export const GameGenerator = ({ code, date }: Props) => {
     }
     return (
         <div className={styles.main}>
-            <Button code={code} onGenerated={saveGame} />
+            <ButtonContainer code={code} onGenerated={saveGame} />
         </div>
     )
 }

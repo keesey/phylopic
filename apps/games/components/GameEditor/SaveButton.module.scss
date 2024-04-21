@@ -1,16 +1,20 @@
 @use "@phylopic/styles/colors.scss";
 
-.cta {
+.main {
+    align-items: center;
     background-color: colors.$dandelion;
     border: 2px solid colors.$black;
     border-radius: 24px;
     color: colors.$black;
     cursor: pointer;
+    display: flex;
     font-size: 18px;
     font-weight: bold;
-    min-width: 360px;
+    height: 50px;
+    line-height: 1;
+    justify-content: center;
+    overflow: hidden;
     padding: 12px;
-    text-transform: uppercase;
     transition: all 0.3s;
 
     &:hover {
@@ -18,8 +22,9 @@
     }
 
     &:disabled {
-        background-color: colors.$sunshine;
+        background-color: colors.$wash;
         border: 2px solid colors.$inkFade;
         color: colors.$inkFade;
+        cursor: not-allowed;
     }
 }

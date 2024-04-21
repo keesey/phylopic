@@ -1,14 +1,12 @@
 "use client"
-import { Loader } from "@phylopic/ui"
-import { useState } from "react"
-import { GameInstance } from "~/lib/s3/GameInstance"
-import styles from "./BUtton.module.scss"
+import { PropsWithChildren, useState } from "react"
 import { generate } from "./generate"
-export interface Props<TContent = unknown> {
+import styles from "./index.module.scss"
+export type Props<TContent = unknown> = PropsWithChildren<{
     code: string
-    onGenerated: (value: GameInstance<TContent>) => Promise<void>
-}
-export const Button = ({ code, onGenerated }: Props) => {
+    onGenerated: (value: TContent) => Promise<void>
+}>
+export const GameContentGenerateButton = ({ children, code, onGenerated }: Props) => {
     const [generating, setGenerating] = useState(false)
     const handleClick = () => {
         ;(async () => {
@@ -23,12 +21,9 @@ export const Button = ({ code, onGenerated }: Props) => {
             }
         })()
     }
-    if (generating) {
-        return <Loader />
-    }
     return (
-        <button className={styles.cta} onClick={handleClick}>
-            Generate Random
+        <button className={styles.cta} disabled={generating} onClick={generating ? undefined : handleClick}>
+            {children}
         </button>
     )
 }
