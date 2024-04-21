@@ -1,12 +1,12 @@
 import type { UUID } from "@phylopic/utils"
 import type { FSA, FSAWithPayload } from "flux-standard-action"
-import { BoardAnswer, BoardImageState } from "./BoardState"
+import { GameImage, GameNode } from "../models"
 export type DeselectAction = FSAWithPayload<"DESELECT", UUID>
 export type DeselectAllAction = FSA<"DESELECT_ALL">
 export type InitializeAction = FSAWithPayload<
     "INITIALIZE",
     Readonly<{
-        images: ReadonlyArray<BoardImageState["image"]>
+        images: ReadonlyArray<GameImage>
         numAnswers: number
     }>
 >
@@ -15,7 +15,7 @@ export type SelectAction = FSAWithPayload<"SELECT", UUID>
 export type ShuffleAction = FSA<"SHUFFLE">
 export type SubmitAction = FSA<"SUBMIT">
 export type SubmitCancelAction = FSA<"SUBMIT_CANCEL">
-export type WinAction = FSAWithPayload<"WIN", BoardAnswer["node"]>
+export type WinAction = FSAWithPayload<"WIN", GameNode>
 export type Action =
     | DeselectAction
     | DeselectAllAction

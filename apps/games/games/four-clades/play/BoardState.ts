@@ -5,8 +5,6 @@ export type BoardImageState = Readonly<{
     mode: null | "selected" | "submitted" | "completed"
 }>
 export type BoardAnswer = Readonly<{
-    // :TODO: Remove?
-    imageUUIDs: readonly UUID[]
     node: GameNode
 }>
 export type BoardState = Readonly<{
