@@ -14,6 +14,7 @@ export type BoardState = Readonly<{
     discrepancy: number | null
     imageUUIDs: readonly UUID[]
     images: Readonly<Record<UUID, BoardImageState>>
+    lastSubmission: readonly UUID[]
     mistakes: number
     totalAnswers: number
 }>

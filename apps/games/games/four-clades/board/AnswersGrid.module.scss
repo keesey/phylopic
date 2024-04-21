@@ -8,6 +8,12 @@
     width: 100%;
 }
 
+.instructions {
+    color: colors.$inkFade;
+    font-size: 16px;
+    text-align: center;
+}
+
 .row {
     align-items: center;
     background-color: colors.$cerulean;

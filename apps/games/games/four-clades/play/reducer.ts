@@ -3,6 +3,7 @@ import { type Reducer } from "react"
 import { shuffle } from "~/lib/utils"
 import { BoardImageState, type BoardState } from "./BoardState"
 import { Action } from "./actions"
+import { select } from "./select"
 import { MAX_MISTAKES } from "./MAX_MISTAKES"
 const updateImageStates = (images: BoardState["images"], map: (imageState: BoardImageState) => BoardImageState) => {
     return Object.entries(images)
@@ -12,7 +13,7 @@ const updateImageStates = (images: BoardState["images"], map: (imageState: Board
 const deselectAll = (images: BoardState["images"]) => {
     return updateImageStates(images, state => (state.mode === "selected" ? { ...state, mode: null } : state))
 }
-const select = (images: BoardState["images"], uuid: UUID) => {
+const selectOne = (images: BoardState["images"], uuid: UUID) => {
     return updateImageStates(images, state =>
         state.mode === null && state.image.uuid === uuid
             ? {
@@ -62,6 +63,7 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
             return {
                 answers: [],
                 discrepancy: null,
+                lastSubmission: [],
                 mistakes: 0,
                 images,
                 imageUUIDs: shuffle(Object.keys(images)),
@@ -91,7 +93,7 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
             return {
                 ...prevState,
                 discrepancy: null,
-                images: select(prevState.images, action.payload),
+                images: selectOne(prevState.images, action.payload),
             }
         }
         case "SHUFFLE": {
@@ -101,12 +103,18 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
             }
         }
         case "SUBMIT": {
+            const submission = select.getSelectedUUIDs(prevState)
             const selectedCount = countImagesInMode(prevState.images, "selected")
-            if (selectedCount !== 4 || prevState.answers.length === 4) {
+            if (
+                selectedCount !== select.imagesPerAnswer(prevState) ||
+                prevState.answers.length >= prevState.totalAnswers ||
+                prevState.lastSubmission.join(",") === submission.join(",")
+            ) {
                 return prevState
             }
             return {
                 ...prevState,
+                lastSubmission: submission,
                 discrepancy: null,
                 images: updateImageStates(prevState.images, imageState =>
                     imageState.mode === "selected" ? { ...imageState, mode: "submitted" } : imageState,
