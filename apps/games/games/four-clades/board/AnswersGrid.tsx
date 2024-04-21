@@ -16,22 +16,20 @@ const AnswersGrid = () => {
             )}
             {state?.answers.map(answer => (
                 <a
-                    key={answer.node.uuid}
+                    key={answer.uuid}
                     className={clsx(styles.row, over && styles.rowGameOver)}
                     target="_blank"
                     rel="noreferrer"
                     href={
                         over
-                            ? `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(answer.node._links.self.href)}/${slugify(answer.node._links.self.title, { lower: true, strict: true, trim: true })}-silhouettes`
+                            ? `${process.env.NEXT_PUBLIC_WWW_URL}${extractPath(answer._links.self.href)}/${slugify(answer._links.self.title, { lower: true, strict: true, trim: true })}-silhouettes`
                             : undefined
                     }
                     title={over ? "See more" : undefined}
                 >
-                    {answer.node._embedded.primaryImage && (
-                        <ImageThumbnailView value={answer.node._embedded.primaryImage} />
-                    )}
+                    {answer._embedded.primaryImage && <ImageThumbnailView value={answer._embedded.primaryImage} />}
                     <header className={styles.node}>
-                        <NomenView value={answer.node.names[0]} short />
+                        <NomenView value={answer.names[0]} short />
                     </header>
                     <span className={clsx(styles.arrow, over && styles.arrowGameOver)} title="See more">
                         →

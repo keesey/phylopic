@@ -135,15 +135,7 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
             }
             return {
                 ...prevState,
-                answers: [
-                    ...prevState.answers,
-                    {
-                        imageUUIDs: Object.values(prevState.images)
-                            .filter(state => state.mode === "submitted")
-                            .map(state => state.image.uuid),
-                        node: action.payload,
-                    },
-                ],
+                answers: [...prevState.answers, action.payload],
                 discrepancy: null,
                 images: updateImageStates(prevState.images, imageState =>
                     imageState.mode === "submitted" ? { ...imageState, mode: "completed" } : imageState,
