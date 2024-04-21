@@ -10,9 +10,9 @@ import {
     pickRandomNode,
 } from "~/lib/api"
 import type { Answer } from "../models"
+import { trimImage } from "../utils/trimImage"
+import { trimNode } from "../utils/trimNode"
 import { generateImages } from "./generateImages"
-import { trimImage } from "./trimImage"
-import { trimNode } from "./trimNode"
 export const generateAnswers = async (build: number, minDepth: number, numAnswers: number, imagesPerAnswer: number) => {
     const list = await getNodeList(build)
     const answers = new Array<Answer>()
@@ -46,7 +46,9 @@ export const generateAnswers = async (build: number, minDepth: number, numAnswer
             [],
         )
         const images = await generateImages(cladeImages, imagesPerAnswer, previousImageUUIDs)
-        const node = await getNodeByLink(await getConcestorLink(images.map(image => image._embedded.specificNode!)))
+        const node = await getNodeByLink(await getConcestorLink(images.map(image => image._embedded.specificNode!)), {
+            embed_primaryImage: "true",
+        })
         if (!node) {
             throw new Error("Could not find concestor.")
         }

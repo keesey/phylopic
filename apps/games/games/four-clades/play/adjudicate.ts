@@ -1,5 +1,5 @@
 import { isUUIDv4 } from "@phylopic/utils"
-import { trimNode } from "../generate/trimNode"
+import { trimNode } from "../utils/trimNode"
 import { Submission } from "./BoardContainer"
 import { LossAction, WinAction } from "./actions"
 import { Answer, Game } from "../models"

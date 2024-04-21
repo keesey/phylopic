@@ -1,6 +1,7 @@
-import type { Image, Node, NodeWithEmbedded } from "@phylopic/api-models"
+import type { Image, ImageWithEmbedded, Node, NodeWithEmbedded } from "@phylopic/api-models"
 // :TODO: Sponsor?
 export type GameImage = Pick<Image, "attribution" | "modifiedFile" | "uuid"> & {
+    _embedded: Pick<ImageWithEmbedded["_embedded"], "specificNode">
     _links: Pick<Image["_links"], "license" | "rasterFiles" | "self" | "thumbnailFiles" | "vectorFile">
 }
 export type GameNode = Pick<Node, "names" | "uuid"> & {

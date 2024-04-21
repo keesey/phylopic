@@ -1,7 +1,10 @@
-import type { Image } from "@phylopic/api-models"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
 import type { GameImage } from "../models"
-export const trimImage = (image: Image | GameImage): GameImage => {
+export const trimImage = (image: ImageWithEmbedded | GameImage): GameImage => {
     return {
+        _embedded: {
+            specificNode: image._embedded.specificNode,
+        },
         _links: {
             license: image._links.license,
             rasterFiles: image._links.rasterFiles,

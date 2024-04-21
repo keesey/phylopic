@@ -1,7 +1,7 @@
 "use client"
 import type { UUID } from "@phylopic/utils"
 import { PropsWithChildren, createContext, useEffect, useMemo, useReducer } from "react"
-import { trimImage } from "../generate/trimImage"
+import { trimImage } from "../utils/trimImage"
 import { BoardState } from "./BoardState"
 import { Action, InitializeAction, LossAction, WinAction } from "./actions"
 import reducer from "./reducer"
