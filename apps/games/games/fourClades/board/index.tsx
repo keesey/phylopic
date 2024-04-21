@@ -1,21 +1,17 @@
-import {
-    CladesBoardContainer,
-    CladesGameImage,
-    CladesGame as CladesGameModel,
-    adjudicateCladesGame,
-    generateCladesGame,
-    getBuild,
-} from "@phylopic/games"
 import { Loader } from "@phylopic/ui"
 import { FC, useCallback, useMemo, useState } from "react"
 import Board from "./Board"
 import styles from "./index.module.scss"
+import { Game, GameImage } from "../models"
+import { getBuild } from "~/lib/api"
+import { generate } from "../generate"
+import { BoardContainer, adjudicate } from "../play"
 const MIN_DEPTH = 5
 const NUM_ANSWERS = 4
 const IMAGES_PER_ANSWER = 4
 const CladesGame: FC = () => {
     const [gameRequested, setGameRequested] = useState(false)
-    const [game, setGame] = useState<CladesGameModel | null>(null)
+    const [game, setGame] = useState<Game | null>(null)
     const [error, setError] = useState<string | null>(null)
     const startNewGame = useCallback(() => {
         setGame(null)
@@ -23,7 +19,7 @@ const CladesGame: FC = () => {
         ;(async () => {
             try {
                 const build = await getBuild()
-                const game = await generateCladesGame(build, MIN_DEPTH, NUM_ANSWERS, IMAGES_PER_ANSWER)
+                const game = await generate(build, MIN_DEPTH, NUM_ANSWERS, IMAGES_PER_ANSWER)
                 setGame(game)
             } catch (e) {
                 setError(String(e))
@@ -31,9 +27,7 @@ const CladesGame: FC = () => {
         })()
     }, [])
     const images = useMemo(() => {
-        return game?.answers
-            ? game.answers.reduce<CladesGameImage[]>((prev, answer) => [...prev, ...answer.images], [])
-            : []
+        return game?.answers ? game.answers.reduce<GameImage[]>((prev, answer) => [...prev, ...answer.images], []) : []
     }, [game?.answers])
     if (error) {
         return (
@@ -60,13 +54,13 @@ const CladesGame: FC = () => {
         )
     }
     return (
-        <CladesBoardContainer
+        <BoardContainer
             data={{ images, numSets: NUM_ANSWERS }}
             onError={error => setError(String(error))}
-            onSubmit={async submission => adjudicateCladesGame(game, submission)}
+            onSubmit={async submission => adjudicate(game, submission)}
         >
             <Board onRestart={() => startNewGame()} />
-        </CladesBoardContainer>
+        </BoardContainer>
     )
 }
 export default CladesGame

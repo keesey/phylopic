@@ -1,9 +1,9 @@
-import { CladesBoardContext } from "@phylopic/games"
 import { useContext } from "react"
+import { BoardContext } from "../play"
 import styles from "./ImageGrid.module.scss"
 import ImageSelector from "./ImageSelector"
 const ImageGrid = () => {
-    const [state] = useContext(CladesBoardContext) ?? []
+    const [state] = useContext(BoardContext) ?? []
     return (
         <section className={styles.main}>
             {state?.imageUUIDs

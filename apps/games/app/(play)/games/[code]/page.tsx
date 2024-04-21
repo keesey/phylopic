@@ -7,10 +7,12 @@ import { GAMES } from "~/games/GAMES"
 import { Today } from "./Today"
 import styles from "./page.module.scss"
 import { TodayFallback } from "./TodayFallback"
+import { GAME_CODES } from "~/games/GAME_CODES"
 export const metadata: Metadata = {
-    title: "PhyloPic Games",
     description: "Puzzle games that use silhouette images from PhyloPic.",
+    title: "PhyloPic Games",
 }
+export const generateStaticParams = () => GAME_CODES.map(code => ({ code }))
 const Page = ({ params }: { params: { code: string } }) => {
     const game = GAMES[params.code]
     if (!game) {

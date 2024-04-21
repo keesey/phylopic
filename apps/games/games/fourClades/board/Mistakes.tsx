@@ -1,9 +1,9 @@
-import { CladesBoardContext } from "@phylopic/games"
-import { useContext } from "react"
-import styles from "./Mistakes.module.scss"
 import clsx from "clsx"
+import { useContext } from "react"
+import { BoardContext } from "../play"
+import styles from "./Mistakes.module.scss"
 const Mistakes = () => {
-    const [state] = useContext(CladesBoardContext) ?? []
+    const [state] = useContext(BoardContext) ?? []
     if (state?.answers.length === 4) {
         return null
     }

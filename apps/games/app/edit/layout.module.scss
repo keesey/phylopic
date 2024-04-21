@@ -1,31 +1,5 @@
 @use "@phylopic/styles/colors.scss";
 
-.container {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    position: absolute;
-    width: 100vw;
-}
-
-.mainContainer {
-    @media screen and (min-height: 896px) {
-        flex-grow: 1;
-        display: flex;
-        height: calc(100vh - 48px);
-        place-items: center;
-    }
-
-    width: 100vw;
-}
-
-.controls {
-    display: flex;
-    gap: 0.5em;
-    place-items: center;
-}
-
 .heading {
     flex-grow: 1;
     font-size: x-large;
@@ -33,13 +7,7 @@
 }
 
 .main {
-    height: calc(100vh - 48px);
-    margin-left: auto;
-    margin-right: auto;
-    min-width: 320px;
-    min-height: 568px;
-    max-height: 896px;
-    max-width: 430px;
+    padding: 24px;
     width: 100vw;
 }
 

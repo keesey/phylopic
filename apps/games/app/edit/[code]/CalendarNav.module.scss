@@ -1,0 +1,70 @@
+@use "@phylopic/styles/colors.scss";
+
+.calendar {
+    width: 360px;
+
+    [class=react-calendar__navigation] {
+        display: flex;
+        margin-bottom: 1em;
+        text-align: center;
+
+        button {
+            background-color: colors.$cerulean;
+            border: 1.5pt solid colors.$black;
+            border-right-style: none;
+            color: colors.$white;
+            font-family: Roboto;
+            font-size: large;
+            font-weight: bold;
+            padding: 0.5em;
+            transition: all 0.3s;
+
+            &:hover {
+                background-color: colors.$aquatic;
+            }
+
+            &:first-child {
+                border-bottom-left-radius: 50%;
+                border-top-left-radius: 50%;
+            }
+
+            &:last-child {
+                border-right-style: solid;
+                border-bottom-right-radius: 50%;
+                border-top-right-radius: 50%;
+            }
+        }
+
+    }
+
+    [class=react-calendar__navigation__label] {
+        flex-grow: 1;
+    }
+
+}
+
+.tile {
+    background-color: colors.$white;
+    border: 1px solid colors.$black;
+    color: colors.$black;
+    font-size: large;
+    margin-bottom: -1px;
+    margin-left: -1px;
+    margin-right: -1px;
+    padding: 0.5em;
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: colors.$wash;
+        color: colors.$white;
+    }
+}
+
+.tileOtherMonth {
+    color: colors.$inkFade;
+}
+
+.tileCurrent {
+    background-color: colors.$dandelion;
+    font-weight: bold;
+}

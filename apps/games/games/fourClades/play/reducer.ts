@@ -1,6 +1,6 @@
 import { UUID } from "@phylopic/utils"
 import { type Reducer } from "react"
-import { shuffle } from "../../../utils"
+import { shuffle } from "~/lib/utils"
 import { BoardImageState, type BoardState } from "./BoardState"
 import { Action } from "./actions"
 const updateImageStates = (images: BoardState["images"], map: (imageState: BoardImageState) => BoardImageState) => {

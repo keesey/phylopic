@@ -20,7 +20,7 @@ const DEFAULT_STATE: BoardState = {
     mistakes: 0,
     totalAnswers: 0,
 }
-export const CladesBoardContainer: React.FC<BoardContainerProps> = ({ children, data, onError, onSubmit }) => {
+export const BoardContainer: React.FC<BoardContainerProps> = ({ children, data, onError, onSubmit }) => {
     const contextValue = useReducer(reducer, DEFAULT_STATE)
     const [state, dispatch] = contextValue
     useEffect(() => {

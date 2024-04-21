@@ -1,13 +1,13 @@
-import { CladesBoardContext, CladesBoardImageState } from "@phylopic/games"
 import { ImageThumbnailView } from "@phylopic/ui"
-import { FC, useCallback, useContext } from "react"
-import styles from "./ImageSelector.module.scss"
 import clsx from "clsx"
+import { FC, useCallback, useContext } from "react"
+import { BoardContext, BoardImageState } from "../play"
+import styles from "./ImageSelector.module.scss"
 export interface ImageSelectorProps {
-    item: CladesBoardImageState
+    item: BoardImageState
 }
 const ImageSelector: FC<ImageSelectorProps> = ({ item }) => {
-    const [, dispatch] = useContext(CladesBoardContext) ?? []
+    const [, dispatch] = useContext(BoardContext) ?? []
     const handleClick = useCallback(() => {
         switch (item.mode) {
             case "selected": {

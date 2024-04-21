@@ -9,18 +9,23 @@ const EditLayout = ({ children }: PropsWithChildren) => {
     return (
         <>
             <nav className={styles.nav}>
-                    <h1 className={styles.heading}>
+                <h1 className={styles.heading}>
                     <Link href="/edit">
                         <SiteTitle /> Games Editor
+                    </Link>
+                </h1>
+                <section className={styles.games}>
+                    {GAME_CODES.map(code => (
+                        <Link key={code} href={`/edit/${encodeURIComponent(code)}`}>
+                            <Image
+                                src={`/games/${encodeURIComponent(code)}/icon.svg`}
+                                width={24}
+                                height={24}
+                                alt={GAMES[code].title}
+                            />
                         </Link>
-                    </h1>
-                    <section className={styles.games}>
-                        {GAME_CODES.map(code => (
-                            <Link href={`/edit/${encodeURIComponent(code)}`}>
-                                <Image src={`/games/${encodeURIComponent(code)}/icon.svg`} width={24} height={24} alt={GAMES[code].title} />
-                            </Link>
-                        ))}
-                    </section>
+                    ))}
+                </section>
             </nav>
             <main className={styles.main}>{children}</main>
         </>

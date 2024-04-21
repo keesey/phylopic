@@ -12,7 +12,7 @@ const getMinDiscrepancy = (answers: Game["answers"], submission: Submission): nu
         Number.MAX_SAFE_INTEGER,
     )
 }
-export const adjudicateCladesGame = (game: Game, submission: Submission): LossAction | WinAction => {
+export const adjudicate = (game: Game, submission: Submission): LossAction | WinAction => {
     if (!game?.answers?.length) {
         throw new Error("Invalid game.")
     }

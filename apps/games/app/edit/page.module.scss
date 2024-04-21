@@ -1,7 +1,6 @@
 @use "@phylopic/styles/colors.scss";
 
 .container {
-    padding: 12px 24px;
     text-align: center;
 }
 
@@ -12,8 +11,8 @@
 }
 
 .games {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 24px;
 }
 

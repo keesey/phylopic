@@ -1,0 +1,39 @@
+@use "@phylopic/styles/colors.scss";
+
+.container {
+    align-items: flex-start;
+    display: flex;
+    gap: 1em;
+
+    header {
+        align-items: baseline;
+        display: flex;
+        gap: 0.5em;
+
+        h2 {
+            display: inline;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 2;
+        }
+
+        h3 {
+            color: colors.$wash;
+            display: inline;
+            font-weight: normal;
+            font-size: 18px;
+        }
+    }
+}
+
+.main {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.content {
+    background-color: colors.$white;
+    border: 1pt solid colors.$wash;
+}
