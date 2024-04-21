@@ -4,15 +4,7 @@ import { unstable_cache } from "next/cache"
 import { GAMES } from "~/games/GAMES"
 import { toPath, type CalendarDate } from "../datetime"
 import { GAMES_BUCKET_NAME } from "./GAMES_BUCKET_NAME"
-export type GameInstance<TContent> = Readonly<{
-    meta: Readonly<{
-        author: Readonly<{
-            href?: string
-            name: string
-        }>
-    }>
-    content: TContent
-}>
+import { GameInstance } from "./GameInstance"
 export const getGameInstance = async <TContent = unknown>(
     code: string,
     date: CalendarDate,
@@ -35,11 +27,13 @@ export const getGameInstance = async <TContent = unknown>(
                     return null
                 }
                 throw e
+            } finally {
+                client.destroy()
             }
         },
         ["S3", GAMES_BUCKET_NAME, "games", code, date.year.toString(), date.month.toString(), date.day.toString()],
         {
-            revalidate: false,
+            revalidate: 60,
             tags: ["games", `games/${encodeURIComponent(code)}`, `games/${encodeURIComponent(code)}${path}`],
         },
     )()

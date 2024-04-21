@@ -22,16 +22,12 @@ export const CalendarNav = () => {
             router.push(newPath)
         }
     }
-    const tileClass = (args: {
-        activeStartDate: Date;
-        date: Date;
-        view: View;
-    }) => {
+    const tileClass = (args: { activeStartDate: Date; date: Date; view: View }) => {
         if (args.view === "month") {
             if (value && args.date.toISOString().startsWith(toISOString(value))) {
                 return [styles.tile, styles.tileCurrent]
             }
-            const month = args.activeStartDate.getMonth() + (args.activeStartDate.getDate() === 1 ?  0 : 1)
+            const month = args.activeStartDate.getMonth() + (args.activeStartDate.getDate() === 1 ? 0 : 1)
             if (args.date.getMonth() !== month) {
                 return [styles.tile, styles.tileOtherMonth]
             }
@@ -41,7 +37,7 @@ export const CalendarNav = () => {
     return (
         <nav>
             <Calendar
-                calendarType="US"
+                calendarType="gregory"
                 className={styles.calendar}
                 onChange={value => handleChange(value)}
                 selectRange={false}
