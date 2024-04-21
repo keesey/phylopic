@@ -1,11 +1,15 @@
 @use "@phylopic/styles/colors.scss";
 
 .main {
-    border-radius: 24px;
+    align-items: center;
+    border-radius: 12px;
     border: none;
     cursor: pointer;
+    display: flex;
     height: 100%;
-    padding: min(32px, max(4px, (100vh - 64 * 4 - 96px) / 8)) min(32px, max(4px, (100vw - 64 * 4) / 8));
+    padding-bottom: 12px;
+    padding-top: 12px;
+    justify-content: center;
     transition: all 0.5s;
     width: 100%;
 

@@ -7,7 +7,7 @@ export type InitializeAction = FSAWithPayload<
     "INITIALIZE",
     Readonly<{
         images: ReadonlyArray<BoardImageState["image"]>
-        numSets: number
+        numAnswers: number
     }>
 >
 export type LossAction = FSAWithPayload<"LOSS", number>

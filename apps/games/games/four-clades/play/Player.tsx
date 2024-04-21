@@ -1,3 +1,4 @@
+"use client"
 import { FC, useMemo } from "react"
 import { BoardContainer, Submission } from "./BoardContainer"
 import { InitializeAction } from "./actions"
@@ -14,7 +15,7 @@ export const Player: FC<Props> = ({ game }) => {
                 (prev, answer) => [...prev, ...answer.images],
                 [],
             ),
-            numSets: game.answers.length,
+            numAnswers: game.answers.length,
         }
     }, [game])
     const handleSubmit = async (submission: Submission) => {

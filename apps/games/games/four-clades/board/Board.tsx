@@ -8,7 +8,7 @@ const Board: FC = () => {
     return (
         <section className={styles.main}>
             <AnswersGrid />
-            <div>
+            <div className={styles.playArea}>
                 <ImageGrid />
                 <Mistakes />
                 <Controls />

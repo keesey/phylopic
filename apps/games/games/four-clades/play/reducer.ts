@@ -23,7 +23,7 @@ const selectOne = (images: BoardState["images"], uuid: UUID) => {
             : state,
     )
 }
-const deselect = (images: BoardState["images"], uuid: UUID) => {
+const deselectOne = (images: BoardState["images"], uuid: UUID) => {
     return updateImageStates(images, state =>
         state.mode === "selected" && state.image.uuid === uuid
             ? {
@@ -33,15 +33,13 @@ const deselect = (images: BoardState["images"], uuid: UUID) => {
             : state,
     )
 }
-const countImagesInMode = (images: BoardState["images"], mode: BoardImageState["mode"]) =>
-    Object.values(images).reduce<number>((prev, image) => (image.mode === mode ? prev + 1 : prev), 0)
 const reducer: Reducer<BoardState, Action> = (prevState, action) => {
     switch (action.type) {
         case "DESELECT": {
             return {
                 ...prevState,
                 discrepancy: null,
-                images: deselect(prevState.images, action.payload),
+                images: deselectOne(prevState.images, action.payload),
             }
         }
         case "DESELECT_ALL": {
@@ -57,7 +55,7 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
                 {},
             )
             const numImages = Object.keys(images).length
-            if (numImages / action.payload.numSets !== Math.floor(numImages / action.payload.numSets)) {
+            if (numImages / action.payload.numAnswers !== Math.floor(numImages / action.payload.numAnswers)) {
                 return prevState
             }
             return {
@@ -67,7 +65,7 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
                 mistakes: 0,
                 images,
                 imageUUIDs: shuffle(Object.keys(images)),
-                totalAnswers: action.payload.numSets,
+                totalAnswers: action.payload.numAnswers,
             }
         }
         case "LOSS": {
@@ -84,16 +82,14 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
             }
         }
         case "SELECT": {
-            if (
-                countImagesInMode(prevState.images, "selected") >=
-                Object.keys(prevState.images).length / prevState.totalAnswers
-            ) {
+            if (select.countSelected(prevState) >= select.imagesPerAnswer(prevState)) {
                 return prevState
             }
             return {
                 ...prevState,
                 discrepancy: null,
                 images: selectOne(prevState.images, action.payload),
+                lastSubmission: [],
             }
         }
         case "SHUFFLE": {
@@ -104,9 +100,8 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
         }
         case "SUBMIT": {
             const submission = select.getSelectedUUIDs(prevState)
-            const selectedCount = countImagesInMode(prevState.images, "selected")
             if (
-                selectedCount !== select.imagesPerAnswer(prevState) ||
+                submission.length !== select.imagesPerAnswer(prevState) ||
                 prevState.answers.length >= prevState.totalAnswers ||
                 prevState.lastSubmission.join(",") === submission.join(",")
             ) {
@@ -114,11 +109,11 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
             }
             return {
                 ...prevState,
-                lastSubmission: submission,
                 discrepancy: null,
                 images: updateImageStates(prevState.images, imageState =>
                     imageState.mode === "selected" ? { ...imageState, mode: "submitted" } : imageState,
                 ),
+                lastSubmission: submission,
             }
         }
         case "SUBMIT_CANCEL": {
@@ -131,8 +126,11 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
             }
         }
         case "WIN": {
-            const submittedCount = countImagesInMode(prevState.images, "submitted")
-            if (submittedCount !== 4 || prevState.answers.length === 4) {
+            const submittedCount = select.countSubmitted(prevState)
+            if (
+                submittedCount !== select.imagesPerAnswer(prevState) ||
+                prevState.answers.length >= prevState.totalAnswers
+            ) {
                 return prevState
             }
             return {
@@ -150,6 +148,7 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
                 images: updateImageStates(prevState.images, imageState =>
                     imageState.mode === "submitted" ? { ...imageState, mode: "completed" } : imageState,
                 ),
+                lastSubmission: [],
             }
         }
         default: {

@@ -18,6 +18,7 @@ const DEFAULT_STATE: BoardState = {
     discrepancy: null,
     images: {},
     imageUUIDs: [],
+    lastSubmission: [],
     mistakes: 0,
     totalAnswers: 0,
 }

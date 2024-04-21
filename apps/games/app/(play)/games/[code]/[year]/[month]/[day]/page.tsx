@@ -1,5 +1,6 @@
 import { type Metadata } from "next"
 import { notFound } from "next/navigation"
+import { GamePlayer } from "~/components/GamePlayer"
 import { GAMES } from "~/games/GAMES"
 import { formatDate, fromParams, readDateParams } from "~/lib/datetime"
 import { getGameInstance } from "~/lib/s3"
@@ -35,6 +36,6 @@ const GameDayPage = async ({ params }: { params: Params }) => {
     if (!game) {
         return <p>No game found for this day.</p>
     }
-    return <p>Game will go here.</p>
+    return <GamePlayer code={params.code} gameContent={game.content} />
 }
 export default GameDayPage
