@@ -1,0 +1,11 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$vellum;
+    color: colors.$ink;
+    height: 568px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    width: 320px;
+}

@@ -3,6 +3,7 @@ import { type Reducer } from "react"
 import { shuffle } from "~/lib/utils"
 import { BoardImageState, type BoardState } from "./BoardState"
 import { Action } from "./actions"
+import { MAX_MISTAKES } from "./MAX_MISTAKES"
 const updateImageStates = (images: BoardState["images"], map: (imageState: BoardImageState) => BoardImageState) => {
     return Object.entries(images)
         .map(([key, value]) => [key, map(value)] as [UUID, BoardImageState])
@@ -68,13 +69,16 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
             }
         }
         case "LOSS": {
+            const mistakes = Math.min(MAX_MISTAKES, prevState.mistakes + 1)
+            const lost = mistakes === MAX_MISTAKES
+            const images = updateImageStates(prevState.images, imageState =>
+                imageState.mode === "submitted" ? { ...imageState, mode: lost ? null : "selected" } : imageState,
+            )
             return {
                 ...prevState,
                 discrepancy: action.payload,
-                images: updateImageStates(prevState.images, imageState =>
-                    imageState.mode === "submitted" ? { ...imageState, mode: "selected" } : imageState,
-                ),
-                mistakes: prevState.mistakes + 1,
+                images,
+                mistakes,
             }
         }
         case "SELECT": {

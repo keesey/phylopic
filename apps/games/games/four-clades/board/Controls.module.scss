@@ -1,24 +1,62 @@
 @use "@phylopic/styles/colors.scss";
-@use "@phylopic/styles/mixins/buttons.scss";
 
 .main {
     align-items: center;
     display: flex;
+    gap: 4px;
     justify-content: space-between;
 }
 
 .secondary {
-    @include buttons.cta(colors.$ink, colors.$white);
-    font-size: smaller;
+    background-color: colors.$white;
+    border: 2pt solid colors.$black;
+    border-radius: 24px;
+    color: colors.$black;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
     padding: 12px;
+    transition: all 0.3s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:disabled {
+        background-color: colors.$wash;
+        border-color: colors.$inkFade;
+        color: colors.$inkFade;
+        cursor: not-allowed;
+
+        &:hover {
+            opacity: initial;
+        }
+    }
 }
 
 .primary {
-    @include buttons.cta(colors.$black, colors.$dandelion);
-    font-size: smaller;
+    background-color: colors.$dandelion;
+    border: 2pt solid colors.$black;
+    border-radius: 24px;
+    color: colors.$black;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
     padding: 12px;
+    transition: all 0.3s;
+
+    &:hover {
+        opacity: 0.8;
+    }
 
     &:disabled {
-        @include buttons.cta(colors.$white, colors.$ink);
+        background-color: colors.$sunshine;
+        border-color: colors.$inkFade;
+        color: colors.$inkFade;
+        cursor: not-allowed;
+
+        &:hover {
+            opacity: initial;
+        }
     }
 }

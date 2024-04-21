@@ -2,6 +2,7 @@
 
 .indicators {
     display: inline-flex;
+    flex-direction: row-reverse;
     gap: 1em;
 }
 
@@ -10,9 +11,9 @@
 }
 
 .unavailable {
-    color: colors.$ink;
+    color: rgba(0, 0, 0, 0);
 }
 
 .available {
-    color: colors.$wash;
+    color: colors.$ink;
 }

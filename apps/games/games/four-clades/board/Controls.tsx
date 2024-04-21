@@ -7,24 +7,30 @@ export interface ControlsProps {
 
 const Controls: FC<ControlsProps> = ({ onRestart }) => {
     const [state, dispatch] = useContext(BoardContext) ?? []
-    if (state && select.isOver(state)) {
-        return (
-            <section className={styles.main}>
-                <button className={styles.primary} onClick={() => onRestart?.()}>
-                    Start a new game
-                </button>
-            </section>
-        )
-    }
+    const canShuffle = Boolean(state && !select.isOver(state))
+    const canDeselectAll = Boolean(state && select.hasSelection(state))
+    const canSubmit = Boolean(state && select.isSubmittable(state))
     return (
         <section className={styles.main}>
-            <button className={styles.secondary} onClick={() => dispatch?.({ type: "SHUFFLE" })}>
+            <button
+                className={styles.secondary}
+                disabled={!canShuffle}
+                onClick={canShuffle ? () => dispatch?.({ type: "SHUFFLE" }) : undefined}
+            >
                 Shuffle
             </button>
-            <button className={styles.secondary} onClick={() => dispatch?.({ type: "DESELECT_ALL" })}>
+            <button
+                className={styles.secondary}
+                disabled={!canDeselectAll}
+                onClick={canDeselectAll ? () => dispatch?.({ type: "DESELECT_ALL" }) : undefined}
+            >
                 Deselect all
             </button>
-            <button className={styles.primary} onClick={() => dispatch?.({ type: "SUBMIT" })}>
+            <button
+                className={styles.primary}
+                disabled={!canSubmit}
+                onClick={canSubmit ? () => dispatch?.({ type: "SUBMIT" }) : undefined}
+            >
                 Submit
             </button>
         </section>

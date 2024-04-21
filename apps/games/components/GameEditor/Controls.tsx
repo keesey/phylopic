@@ -15,7 +15,7 @@ export const Controls: FC<Props> = ({ code }) => {
             <RegenerateButton code={code} />
             <UndoButton />
             <RedoButton />
-            <PlayButton />
+            <PlayButton code={code} />
         </nav>
     )
 }
