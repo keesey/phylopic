@@ -1,10 +1,10 @@
 "use client"
-import { ImageThumbnailView } from "@phylopic/ui"
 import { FC, useContext } from "react"
+import { ImageUUIDThumbnailView } from "~/components/ImageUUIDThumbnailView"
+import { NodeUUIDNomenView } from "~/components/NodeUUIDNomenView"
 import { EditorContext, EditorState, select } from "~/lib/edit"
 import { Game } from "../models"
 import styles from "./index.module.scss"
-import NomenView from "~/components/NomenView"
 export interface Props {
     readOnly: boolean
 }
@@ -20,14 +20,14 @@ const Editor: FC<Props> = ({ readOnly }) => {
     return (
         <section className={styles.main}>
             {game.answers.map(answer => (
-                <section key={answer.node.uuid} className={styles.row}>
+                <section key={answer.nodeUUID} className={styles.row}>
                     <header className={styles.node}>
-                        <NomenView value={answer.node.names[0]} short />
+                        <NodeUUIDNomenView uuid={answer.nodeUUID} short />
                     </header>
                     <div className={styles.images}>
-                        {answer.images.map(image => (
-                            <div key={image.uuid}>
-                                <ImageThumbnailView key={image.uuid} value={image} />
+                        {answer.imageUUIDs.map(imageUUID => (
+                            <div key={imageUUID}>
+                                <ImageUUIDThumbnailView uuid={imageUUID} />
                                 {/* :TODO: Edit button */}
                             </div>
                         ))}

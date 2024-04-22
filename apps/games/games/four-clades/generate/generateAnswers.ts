@@ -1,17 +1,17 @@
-import { List } from "@phylopic/api-models"
-import { UUID } from "@phylopic/utils"
+import type { List } from "@phylopic/api-models"
+import type { UUID } from "@phylopic/utils"
 import {
     getCladeImages,
     getConcestorLink,
     getNodeByLink,
     getNodeLineage,
+    getNodeLineageByUUID,
     getNodeList,
-    isInList,
+    isEntityInList,
+    isUUIDInList,
     pickRandomNode,
 } from "~/lib/api"
 import type { Answer } from "../models"
-import { trimImage } from "../utils/trimImage"
-import { trimNode } from "../utils/trimNode"
 import { generateImages } from "./generateImages"
 export const generateAnswers = async (build: number, minDepth: number, numAnswers: number, imagesPerAnswer: number) => {
     const list = await getNodeList(build)
@@ -29,8 +29,8 @@ export const generateAnswers = async (build: number, minDepth: number, numAnswer
             }
             for (const answer of answers) {
                 const [a, b] = await Promise.all([
-                    isInList(answer.node, lineage),
-                    isInList(node, await getNodeLineage(answer.node)),
+                    isUUIDInList(answer.nodeUUID, lineage),
+                    isEntityInList(node, await getNodeLineageByUUID(answer.nodeUUID, node.build)),
                 ])
                 if (a || b) {
                     return false
@@ -41,10 +41,7 @@ export const generateAnswers = async (build: number, minDepth: number, numAnswer
         if (!ancestor || !cladeImages) {
             throw new Error(`Could not find ${numAnswers} appropriate nodes for this game.`)
         }
-        const previousImageUUIDs = answers.reduce<readonly UUID[]>(
-            (prev, answer) => [...prev, ...answer.images.map(image => image.uuid)],
-            [],
-        )
+        const previousImageUUIDs: readonly UUID[] = answers.flatMap(answer => answer.imageUUIDs)
         const images = await generateImages(cladeImages, imagesPerAnswer, previousImageUUIDs)
         const node = await getNodeByLink(await getConcestorLink(images.map(image => image._embedded.specificNode!)), {
             embed_primaryImage: "true",
@@ -52,7 +49,7 @@ export const generateAnswers = async (build: number, minDepth: number, numAnswer
         if (!node) {
             throw new Error("Could not find concestor.")
         }
-        answers.push({ images: images.map(image => trimImage(image)), node: trimNode(node) })
+        answers.push({ imageUUIDs: images.map(image => image.uuid), nodeUUID: node.uuid })
     }
     return answers
 }

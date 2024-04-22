@@ -1,5 +1,5 @@
 import type { ImageWithEmbedded } from "@phylopic/api-models"
-import type { GameImage } from "../models"
+import { GameImage } from "./BoardState"
 export const trimImage = (image: ImageWithEmbedded | GameImage): GameImage => {
     return {
         _embedded: {

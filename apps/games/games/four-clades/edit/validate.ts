@@ -1,9 +1,7 @@
-import { Entity } from "@phylopic/api-models"
-import { UUID, ValidationFault, extractQueryString, parseQueryString } from "@phylopic/utils"
-import { getConcestorLink } from "~/lib/api"
+import { isImageWithEmbedded } from "@phylopic/api-models"
+import { UUID, ValidationFault, extractPath } from "@phylopic/utils"
+import { getConcestorLink, getImageByLink } from "~/lib/api"
 import { Game } from "../models"
-const getBuildFromEntity = (entity: Pick<Entity, "_links">) =>
-    parseQueryString(extractQueryString(entity._links.self.href)).build
 export const validate = async (game: Game): Promise<readonly ValidationFault[]> => {
     const faults: ValidationFault[] = []
     try {
@@ -13,7 +11,7 @@ export const validate = async (game: Game): Promise<readonly ValidationFault[]> 
                 message: "No answers.",
             })
         } else {
-            const imagesPerAnswer = game.answers[0].images.length
+            const imagesPerAnswer = game.answers[0].imageUUIDs.length
             if (!(imagesPerAnswer > 0)) {
                 faults.push({
                     field: "answers[0]",
@@ -21,7 +19,7 @@ export const validate = async (game: Game): Promise<readonly ValidationFault[]> 
                 })
             } else {
                 game.answers.forEach((answer, index) => {
-                    if (answer.images.length !== imagesPerAnswer) {
+                    if (answer.imageUUIDs.length !== imagesPerAnswer) {
                         faults.push({
                             field: `answers[${index}]`,
                             message: "Incorrect number of answers.",
@@ -30,7 +28,7 @@ export const validate = async (game: Game): Promise<readonly ValidationFault[]> 
                 })
             }
             const imageUUIDs = new Set<UUID>(
-                game.answers.reduce<UUID[]>((prev, answer) => [...prev, ...answer.images.map(image => image.uuid)], []),
+                game.answers.flatMap(answer => answer.imageUUIDs),
             )
             const expectedSize = game.answers.length * imagesPerAnswer
             if (imageUUIDs.size < expectedSize) {
@@ -45,26 +43,22 @@ export const validate = async (game: Game): Promise<readonly ValidationFault[]> 
                     message: "Incorrect total number of images.",
                 })
             }
-            const allBuilds = new Set<string | undefined>(
-                [...game.answers.map(answer => answer.node), ...game.answers.flatMap(answer => answer.images)].map(
-                    entity => getBuildFromEntity(entity),
-                ),
-            )
-            if (allBuilds.size !== 1) {
-                faults.push({
-                    field: "answers",
-                    message: "Inconsistent builds.",
-                })
-            }
             if (!faults.length) {
                 await Promise.all(
                     game.answers.map(async (answer, index) => {
-                        const nodeLink = await getConcestorLink(
-                            answer.images.map(image => image._embedded.specificNode!),
-                        )
-                        if (nodeLink?.href !== answer.node._links.self.href) {
+                        const images = (await Promise.all(answer.imageUUIDs.map(imageUUID => getImageByLink({ href: `/images/${encodeURIComponent(imageUUID)}`}, { embed_specificNode: "true" })))).filter(image => isImageWithEmbedded(image))
+                        if (images.length !== imagesPerAnswer) {
                             faults.push({
-                                field: `answers[${index}].node`,
+                                field: `answers[${index}].imageUUIDs`,
+                                message: "Could not find one or more images.",
+                            })
+                        }
+                        const nodeLink = await getConcestorLink(
+                            images.map(image => image?._embedded.specificNode!),
+                        )
+                        if (extractPath(nodeLink?.href ?? "") !== `/nodes/${encodeURIComponent(answer.nodeUUID)}`) {
+                            faults.push({
+                                field: `answers[${index}].nodeUUID`,
                                 message: "Incorrect node for images in answer.",
                             })
                         }

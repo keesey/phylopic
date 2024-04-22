@@ -1,25 +1,27 @@
 "use client"
-import { FC, useMemo } from "react"
+import { Loader } from "@phylopic/ui"
+import { FC, useEffect, useState } from "react"
+import Board from "../board/Board"
+import { Game } from "../models"
 import { BoardContainer, Submission } from "./BoardContainer"
 import { InitializeAction } from "./actions"
-import Board from "../board/Board"
 import { adjudicate } from "./adjudicate"
-import { Game } from "../models"
+import { createInitial } from "./createInitial"
 export interface Props {
     game: Game
 }
 export const Player: FC<Props> = ({ game }) => {
-    const data = useMemo<InitializeAction["payload"]>(() => {
-        return {
-            images: game.answers.reduce<InitializeAction["payload"]["images"]>(
-                (prev, answer) => [...prev, ...answer.images],
-                [],
-            ),
-            numAnswers: game.answers.length,
-        }
+    const [data, setData] = useState<InitializeAction["payload"] | null>(null)
+    useEffect(() => {
+        ;(async () => {
+            setData(await createInitial(game))
+        })()
     }, [game])
     const handleSubmit = async (submission: Submission) => {
-        return adjudicate(game, submission)
+        return await adjudicate(game, submission)
+    }
+    if (!data) {
+        return <Loader />
     }
     return (
         <BoardContainer data={data} onError={e => alert(e)} onSubmit={handleSubmit}>

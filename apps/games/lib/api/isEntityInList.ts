@@ -1,6 +1,6 @@
 import { Entity, List, Page, isPage } from "@phylopic/api-models"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
-export const isInList = async (item: Pick<Entity, "_links" | "uuid">, list: Pick<List, "_links">) => {
+export const isEntityInList = async (item: Pick<Entity, "_links" | "uuid">, list: Pick<List, "_links">) => {
     let pageLink = list._links.firstPage
     while (pageLink) {
         const { data: page } = await fetchDataAndCheck<Page>(

@@ -1,6 +1,6 @@
 import type { UUID } from "@phylopic/utils"
 import type { FSA, FSAWithPayload } from "flux-standard-action"
-import { GameImage, GameNode } from "../models"
+import { GameImage, GameNode } from "./BoardState"
 export type DeselectAction = FSAWithPayload<"DESELECT", UUID>
 export type DeselectAllAction = FSA<"DESELECT_ALL">
 export type InitializeAction = FSAWithPayload<
