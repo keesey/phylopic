@@ -4,22 +4,17 @@
     align-items: stretch;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 0.5em;
 }
 
 .row {
-    background-color: colors.$cerulean;
+    background-color: colors.$white;
     border-radius: 2em;
-    border: none;
-    color: colors.$white;
+    border: 1.5pt solid colors.$black;
+    color: colors.$black;
     padding: 1em;
     text-align: center;
     transition: all 0.3s;
-
-    img {
-        filter: invert(100%);
-        mix-blend-mode: lighten;
-    }
 }
 
 .node {

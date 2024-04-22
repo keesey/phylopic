@@ -10,7 +10,7 @@ const EditGameLayout = ({ children, params }: { children: ReactNode; params: Par
     return (
         <div className={styles.container}>
             <div className={styles.main}>
-                <header>
+                <header className={styles.heading}>
                     <Image
                         alt=""
                         height={24}

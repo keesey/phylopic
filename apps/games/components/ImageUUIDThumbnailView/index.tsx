@@ -12,7 +12,7 @@ export const ImageUUIDThumbnailView: FC<Props> = ({ uuid, ...props }) => {
     if (!data) {
         return (
             <svg width={64} height={64} viewBox="0 0 64 64">
-                <circle cx={32} cy={32} radius={32} fill="rgba(0,0,0,0.2)" />
+                <circle cx={32} cy={32} r={32} fill="rgba(0,0,0,0.2)" />
             </svg>
         )
     }
