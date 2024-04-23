@@ -8,17 +8,18 @@ import { NodeUUIDNomenView } from "~/components/NodeUUIDNomenView"
 import { EditorContext, EditorState, select } from "~/lib/edit"
 import { Game } from "../models"
 import styles from "./index.module.scss"
+import { replace } from "./replace"
 export interface Props {
     build: number
     readOnly: boolean
 }
 const Editor: FC<Props> = ({ build, readOnly }) => {
-    const [state] = useContext(EditorContext) ?? []
+    const [state, dispatch] = useContext(EditorContext) ?? []
     const [editedUUID, setEditedUUID] = useState<UUID | null>(null)
     if (!state) {
         return null
     }
-    const game = select.current<Game>(state as EditorState<Game>)
+    const game = select.current(state as EditorState<Game>)
     if (!game?.answers?.length) {
         return null
     }
@@ -47,11 +48,18 @@ const Editor: FC<Props> = ({ build, readOnly }) => {
                 <Modal onClose={() => setEditedUUID(null)}>
                     <ImageSearchSelector
                         build={build}
-                        onSelect={image => {
-                            if (image) {
-                                alert("Selected: " + image._links.self.title)
-                                // :TODO: Make change.
-                                setEditedUUID(null)
+                        excluded={new Set(game.answers.flatMap(answer => answer.imageUUIDs))}
+                        onSelect={async image => {
+                            try {
+                                if (image) {
+                                    dispatch?.({
+                                        type: "PUSH",
+                                        payload: await replace(game, editedUUID, image),
+                                    })
+                                    setEditedUUID(null)
+                                }
+                            } catch (e) {
+                                alert(String(e))
                             }
                         }}
                     />

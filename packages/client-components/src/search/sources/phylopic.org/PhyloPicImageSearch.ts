@@ -15,7 +15,7 @@ export interface PhyloPicImageSearchProps {
     filter_license_nc?: boolean
     filter_license_sa?: boolean
 }
-export const PhyloPicImageSearch: React.FC<PhyloPicImageSearchProps> = (props) => {
+export const PhyloPicImageSearch: React.FC<PhyloPicImageSearchProps> = props => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const basis = state?.text || undefined
     const matchingText = React.useMemo(
