@@ -32,8 +32,11 @@ const EditGameDayPage = async ({ params }: { params: Params }) => {
     if (!gameInstance) {
         return (
             <div className={styles.main}>
+                <header className={styles.heading}>
+                    <h3 className={styles.date}>{formatDate(date, "long")}</h3>
+                    <GameGenerator code={params.code} date={date} />
+                </header>
                 <p className={styles.message}>No game found for this date.</p>
-                <GameGenerator code={params.code} date={date} />
             </div>
         )
     }
