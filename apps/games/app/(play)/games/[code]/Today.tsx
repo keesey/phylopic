@@ -2,14 +2,13 @@ import Link from "next/link"
 import { Suspense } from "react"
 import { formatDate, fromDate, toISOString, toPath } from "~/lib/datetime"
 import { Attribution } from "./Attribution"
-import styles from "./page.module.scss"
-import { TodayFallback } from "./TodayFallback"
 import { AttributionFallback } from "./AttributionFallback"
+import styles from "./page.module.scss"
 export const Today = ({ code }: { code: string }) => {
     const today = fromDate(new Date())
     return (
         <>
-            <Link href={`/games/${encodeURIComponent(code)}${toPath(today)}`}>
+            <Link href={`/games/${encodeURIComponent(code)}/dates${toPath(today)}`}>
                 <button className={styles.cta}>Play</button>
             </Link>
             <h3>

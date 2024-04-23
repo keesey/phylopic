@@ -34,7 +34,7 @@ const Page = () => {
                             </h4>
                         </header>
                         <section className={styles.gameContent}>
-                            <Link href={`/games/${code}${todayPath}`}>
+                            <Link href={`/games/${code}/dates${todayPath}`}>
                                 <button className={styles.cta}>Play</button>
                             </Link>
                         </section>
