@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { Nomen, normalizeNomina, stringifyNormalized, UUID } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { FC, FormEvent, useCallback, useState } from "react"

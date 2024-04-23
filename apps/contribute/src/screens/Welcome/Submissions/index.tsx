@@ -1,5 +1,5 @@
 import { Submission } from "@phylopic/source-models"
-import { Loader } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
 import Link from "next/link"
 import { FC } from "react"
 import useSWR from "swr"

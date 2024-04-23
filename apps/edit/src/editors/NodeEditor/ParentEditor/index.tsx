@@ -1,5 +1,5 @@
 import { Entity, Node } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { stringifyNomen, UUID } from "@phylopic/utils"
 import Link from "next/link"
 import { FC, useCallback, useMemo, useState } from "react"

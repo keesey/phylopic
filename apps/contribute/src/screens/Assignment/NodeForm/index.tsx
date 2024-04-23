@@ -8,7 +8,7 @@ import {
     PhyloPicAutocomplete,
     PhyloPicNodeSearch,
     SearchContainer,
-} from "@phylopic/ui"
+} from "@phylopic/client-components"
 import { FC } from "react"
 import NodeSearch from "./NodeSearch"
 const NodeForm: FC = () => {

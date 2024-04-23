@@ -27,9 +27,7 @@ export const validate = async (game: Game): Promise<readonly ValidationFault[]> 
                     }
                 })
             }
-            const imageUUIDs = new Set<UUID>(
-                game.answers.flatMap(answer => answer.imageUUIDs),
-            )
+            const imageUUIDs = new Set<UUID>(game.answers.flatMap(answer => answer.imageUUIDs))
             const expectedSize = game.answers.length * imagesPerAnswer
             if (imageUUIDs.size < expectedSize) {
                 faults.push({
@@ -46,16 +44,23 @@ export const validate = async (game: Game): Promise<readonly ValidationFault[]> 
             if (!faults.length) {
                 await Promise.all(
                     game.answers.map(async (answer, index) => {
-                        const images = (await Promise.all(answer.imageUUIDs.map(imageUUID => getImageByLink({ href: `/images/${encodeURIComponent(imageUUID)}`}, { embed_specificNode: "true" })))).filter(image => isImageWithEmbedded(image))
+                        const images = (
+                            await Promise.all(
+                                answer.imageUUIDs.map(imageUUID =>
+                                    getImageByLink(
+                                        { href: `/images/${encodeURIComponent(imageUUID)}` },
+                                        { embed_specificNode: "true" },
+                                    ),
+                                ),
+                            )
+                        ).filter(image => isImageWithEmbedded(image))
                         if (images.length !== imagesPerAnswer) {
                             faults.push({
                                 field: `answers[${index}].imageUUIDs`,
                                 message: "Could not find one or more images.",
                             })
                         }
-                        const nodeLink = await getConcestorLink(
-                            images.map(image => image?._embedded.specificNode!),
-                        )
+                        const nodeLink = await getConcestorLink(images.map(image => image?._embedded.specificNode!))
                         if (extractPath(nodeLink?.href ?? "") !== `/nodes/${encodeURIComponent(answer.nodeUUID)}`) {
                             faults.push({
                                 field: `answers[${index}].nodeUUID`,

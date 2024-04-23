@@ -1,5 +1,5 @@
 import { ImageListParameters, ImageWithEmbedded } from "@phylopic/api-models"
-import { PaginationContainer, PaginationContainerProps } from "@phylopic/ui"
+import { PaginationContainer, PaginationContainerProps } from "@phylopic/client-components"
 import { FC, useContext, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import LicenseFilterTypeContext from "./LicenseFilterTypeContext"

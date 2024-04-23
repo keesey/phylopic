@@ -1,6 +1,6 @@
 import { ImageWithEmbedded, NodeWithEmbedded } from "@phylopic/api-models"
 import { ImageThumbnailView } from "@phylopic/ui"
-import { Authority, isUUIDv4, Namespace, ObjectID } from "@phylopic/utils"
+import { Authority, Namespace, ObjectID, isUUIDv4 } from "@phylopic/utils"
 import { useAPIFetcher } from "@phylopic/utils-api"
 import { FC, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"

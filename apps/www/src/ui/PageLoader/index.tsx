@@ -1,4 +1,4 @@
-import { Loader } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
 import { useRouter } from "next/router"
 import { FC, useEffect, useState } from "react"
 import styles from "./index.module.scss"

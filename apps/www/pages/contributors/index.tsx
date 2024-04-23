@@ -1,5 +1,6 @@
 import { Contributor } from "@phylopic/api-models"
-import { CountView, NumberView, PaginationContainer } from "@phylopic/ui"
+import { PaginationContainer } from "@phylopic/client-components"
+import { CountView, NumberView } from "@phylopic/ui"
 import type { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"

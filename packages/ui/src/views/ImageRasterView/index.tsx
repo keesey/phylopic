@@ -2,8 +2,8 @@ import { Image as ImageModel, MediaLink } from "@phylopic/api-models"
 import { ImageMediaType, URL } from "@phylopic/utils"
 import NextImage from "next/image"
 import React from "react"
-import { useImageLoader } from "../../hooks/useImageLoader"
-import { compareMediaLinks } from "../../models/compareMediaLinks"
+import { getImageLoader } from "../../images"
+import { compareMediaLinks } from "../../models"
 // :KLUDGE: Next.js ESM issue.
 let ResolvedImage = NextImage
 if ("default" in ResolvedImage) {
@@ -12,16 +12,13 @@ if ("default" in ResolvedImage) {
 export interface ImageRasterViewProps {
     value: ImageModel
 }
-const useLinkSize = (link: MediaLink<URL, ImageMediaType>) => {
-    return React.useMemo(() => link.sizes.split("x", 2).map(size => parseInt(size, 10)), [link.sizes])
+const getLinkSize = (link: MediaLink<URL, ImageMediaType>) => {
+    return link.sizes.split("x", 2).map(size => parseInt(size, 10))
 }
 export const ImageRasterView: React.FC<ImageRasterViewProps> = ({ value }) => {
-    const loader = useImageLoader(value._links.rasterFiles, value.modifiedFile)
-    const smallestRasterFile = React.useMemo(
-        () => [...value._links.rasterFiles].sort(compareMediaLinks)[0],
-        [value._links.rasterFiles],
-    )
-    const [width, height] = useLinkSize(smallestRasterFile)
+    const loader = getImageLoader(value._links.rasterFiles, value.modifiedFile)
+    const smallestRasterFile = [...value._links.rasterFiles].sort(compareMediaLinks)[0]
+    const [width, height] = getLinkSize(smallestRasterFile)
     return (
         <ResolvedImage
             alt={value._links.self.title}

@@ -1,4 +1,4 @@
-import { SearchContext } from "@phylopic/ui"
+import { SearchContext } from "@phylopic/client-components"
 import { FC, useCallback, useContext } from "react"
 import UserTextForm, { Props as UserTextFormProps } from "~/ui/UserTextForm"
 import NameRenderer from "../NameRenderer"

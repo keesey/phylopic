@@ -10,7 +10,7 @@ import {
     PhyloPicAutocomplete,
     PhyloPicNodeSearch,
     SearchContainer,
-} from "@phylopic/ui"
+} from "@phylopic/client-components"
 import { Hash } from "@phylopic/utils"
 import { FC } from "react"
 import useSWR from "swr"

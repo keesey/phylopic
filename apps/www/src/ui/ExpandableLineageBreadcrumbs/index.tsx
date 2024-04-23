@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/api-models"
-import { PaginationContainer } from "@phylopic/ui"
+import { PaginationContainer } from "@phylopic/client-components"
 import { UUID } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
 import customEvents from "~/analytics/customEvents"

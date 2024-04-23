@@ -1,4 +1,4 @@
-import { NomenView as UINomenView, NomenViewProps } from "@phylopic/ui"
+import { NomenView as UINomenView, type NomenViewProps } from "@phylopic/ui"
 import { FC } from "react"
 import styles from "./index.module.scss"
 export type Props = Omit<NomenViewProps, "classes">

@@ -1,6 +1,6 @@
 import { Page } from "@phylopic/source-client"
 import { Submission } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { Hash, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useRouter } from "next/router"

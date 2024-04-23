@@ -1,5 +1,5 @@
 import { Entity, External, Node } from "@phylopic/source-models"
-import { fetchJSON, Loader } from "@phylopic/ui"
+import { fetchJSON, Loader } from "@phylopic/client-components"
 import { Authority, isAuthority, isNamespace, isObjectID, Namespace, ObjectID, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"

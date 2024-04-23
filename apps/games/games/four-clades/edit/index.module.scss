@@ -26,3 +26,20 @@
     display: flex;
     justify-content: space-around;
 }
+
+.imageEditButton {
+    background: none;
+    border: none;
+    border-radius: 2em;
+    padding: 1em;
+    transition: all 0.3s;
+
+    &:hover:not(:disabled) {
+        background-color: colors.$wash;
+
+        img {
+            filter: invert(100%);
+            mix-blend-mode: lighten;
+        }
+    }
+}

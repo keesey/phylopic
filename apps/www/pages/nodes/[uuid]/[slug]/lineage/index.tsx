@@ -1,5 +1,5 @@
 import { NodeParameters, NodeWithEmbedded } from "@phylopic/api-models"
-import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/ui"
+import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/client-components"
 import { createSearch, isUUIDv4, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"

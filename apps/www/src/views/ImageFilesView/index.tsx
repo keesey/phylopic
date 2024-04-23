@@ -1,5 +1,5 @@
 import { Image } from "@phylopic/api-models"
-import { useLicenseText } from "@phylopic/ui"
+import { useLicenseText } from "@phylopic/client-components"
 import { isString } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import slugify from "slugify"

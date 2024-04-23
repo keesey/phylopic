@@ -1,5 +1,5 @@
 import { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
-import { PaginationContainerProps } from "@phylopic/ui"
+import { PaginationContainerProps } from "@phylopic/client-components"
 import { Query } from "@phylopic/utils"
 import { FC, useMemo } from "react"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"

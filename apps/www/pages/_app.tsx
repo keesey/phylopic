@@ -1,4 +1,4 @@
-import { GTagAnalytics, LoaderContext } from "@phylopic/ui"
+import { GTagAnalytics, LoaderContext } from "@phylopic/client-components"
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react"
 import { DefaultSeo } from "next-seo"
 import type { AppProps } from "next/app"

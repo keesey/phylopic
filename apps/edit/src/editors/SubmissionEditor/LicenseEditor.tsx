@@ -1,5 +1,5 @@
 import { Submission } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { Hash } from "@phylopic/utils"
 import { FC } from "react"
 import useSWR from "swr"

@@ -1,5 +1,5 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { parseNomen } from "parse-nomen"
 import { FC, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"

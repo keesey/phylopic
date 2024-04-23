@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "lib": ["dom", "ESNext"]
+    },
+    "exclude": ["build", "dist", "node_modules"],
+    "extends": "@phylopic/tsconfig/react-lib.json",
+    "include": [".", "../ui/src/images/getImageLoader/index.ts"]
+}

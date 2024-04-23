@@ -1,4 +1,4 @@
-import { Loader } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
 import { FC } from "react"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"

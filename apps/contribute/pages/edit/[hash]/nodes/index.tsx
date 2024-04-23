@@ -1,6 +1,6 @@
 import { API } from "@phylopic/api-models"
-import { fetchJSON } from "@phylopic/ui"
 import { Hash, isHash } from "@phylopic/utils"
+import { fetchJSON } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import { Suspense } from "react"

@@ -1,5 +1,5 @@
 import { Entity, Node } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { UUID } from "@phylopic/utils"
 import { NextPage } from "next"
 import Head from "next/head"

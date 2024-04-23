@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { BuildContext } from "./BuildContext"
 export interface BuildContainerProps {

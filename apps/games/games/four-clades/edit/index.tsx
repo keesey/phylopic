@@ -1,15 +1,20 @@
 "use client"
-import { FC, useContext } from "react"
+import { UUID } from "@phylopic/utils"
+import { FC, useContext, useState } from "react"
+import { ImageSearchSelector } from "~/components/ImageSearchSelector"
 import { ImageUUIDThumbnailView } from "~/components/ImageUUIDThumbnailView"
+import { Modal } from "~/components/Modal"
 import { NodeUUIDNomenView } from "~/components/NodeUUIDNomenView"
 import { EditorContext, EditorState, select } from "~/lib/edit"
 import { Game } from "../models"
 import styles from "./index.module.scss"
 export interface Props {
+    build: number
     readOnly: boolean
 }
-const Editor: FC<Props> = ({ readOnly }) => {
+const Editor: FC<Props> = ({ build, readOnly }) => {
     const [state] = useContext(EditorContext) ?? []
+    const [editedUUID, setEditedUUID] = useState<UUID | null>(null)
     if (!state) {
         return null
     }
@@ -26,14 +31,30 @@ const Editor: FC<Props> = ({ readOnly }) => {
                     </header>
                     <div className={styles.images}>
                         {answer.imageUUIDs.map(imageUUID => (
-                            <div key={imageUUID}>
+                            <button
+                                key={imageUUID}
+                                disabled={readOnly}
+                                className={styles.imageEditButton}
+                                onClick={readOnly ? undefined : () => setEditedUUID(imageUUID)}
+                            >
                                 <ImageUUIDThumbnailView uuid={imageUUID} />
-                                {/* :TODO: Edit button */}
-                            </div>
+                            </button>
                         ))}
                     </div>
                 </section>
             ))}
+            {editedUUID && (
+                <Modal onClose={() => setEditedUUID(null)}>
+                    <ImageSearchSelector
+                        build={build}
+                        onSelect={image => {
+                            if (image) {
+                                /*: TODO */
+                            }
+                        }}
+                    />
+                </Modal>
+            )}
         </section>
     )
 }

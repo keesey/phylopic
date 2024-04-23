@@ -1,6 +1,6 @@
 import { Image } from "@phylopic/api-models"
 import { isJWT, JWT } from "@phylopic/source-models"
-import { useStoredState } from "@phylopic/ui"
+import { useStoredState } from "@phylopic/client-components"
 import { isUUIDv4, UUID } from "@phylopic/utils"
 import { useAPIFetcher } from "@phylopic/utils-api"
 import { decode } from "jsonwebtoken"

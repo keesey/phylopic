@@ -1,5 +1,6 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
-import { CountView, PaginationContainer } from "@phylopic/ui"
+import { PaginationContainer } from "@phylopic/client-components"
+import { CountView } from "@phylopic/ui"
 import { URL } from "@phylopic/utils"
 import { type Compressed } from "compress-json"
 import type { NextPage } from "next"

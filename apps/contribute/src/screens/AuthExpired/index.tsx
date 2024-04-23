@@ -1,4 +1,4 @@
-import { Loader } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
 import { EmailAddress } from "@phylopic/utils"
 import { FC, useCallback, useState } from "react"
 import useContributor from "~/profile/useContributor"

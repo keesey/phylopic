@@ -1,5 +1,5 @@
 import { Submission } from "@phylopic/source-models"
-import { fetchJSON, SearchContext } from "@phylopic/ui"
+import { fetchJSON, SearchContext } from "@phylopic/client-components"
 import { getIdentifier, Hash } from "@phylopic/utils"
 import { ChangeEvent, FC, useCallback, useContext, useState } from "react"
 import useSWR from "swr"

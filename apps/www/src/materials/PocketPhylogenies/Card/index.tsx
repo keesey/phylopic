@@ -1,9 +1,9 @@
-import clsx from "clsx"
-import { FC, useCallback, useState } from "react"
-import styles from "./index.module.scss"
-import Image from "next/image"
 import { rgbDataURL } from "@phylopic/ui"
+import clsx from "clsx"
+import Image from "next/image"
+import { FC, useState } from "react"
 import customEvents from "~/analytics/customEvents"
+import styles from "./index.module.scss"
 export type Props = {
     index: 1 | 2 | 3 | 4 | 5
 }

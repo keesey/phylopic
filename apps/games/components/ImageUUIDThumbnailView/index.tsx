@@ -1,8 +1,9 @@
 "use client"
-import { Image } from "@phylopic/api-models"
-import { ImageThumbnailView, ImageThumbnailViewProps, fetchJSON } from "@phylopic/ui"
-import { UUID } from "@phylopic/utils"
-import { FC } from "react"
+import { type Image } from "@phylopic/api-models"
+import { ImageThumbnailView, type ImageThumbnailViewProps } from "@phylopic/ui"
+import { type UUID } from "@phylopic/utils"
+import { fetchJSON } from "@phylopic/utils-api"
+import { type FC } from "react"
 import useSWR from "swr"
 export type Props = Omit<ImageThumbnailViewProps, "value"> & {
     uuid: UUID

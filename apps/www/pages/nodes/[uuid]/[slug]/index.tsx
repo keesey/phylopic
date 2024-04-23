@@ -6,7 +6,7 @@ import {
     NodeWithEmbedded,
     PageWithEmbedded,
 } from "@phylopic/api-models"
-import { Loader, NodeContainer, useNomenText } from "@phylopic/ui"
+import { Loader, NodeContainer, useNomenText } from "@phylopic/client-components"
 import {
     Query,
     UUID,

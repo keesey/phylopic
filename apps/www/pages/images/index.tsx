@@ -1,5 +1,5 @@
 import { ImageListParameters, ImageWithEmbedded } from "@phylopic/api-models"
-import { Loader } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
 import type { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"

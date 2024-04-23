@@ -1,4 +1,4 @@
-import { gtag } from "@phylopic/ui"
+import { gtag } from "@phylopic/client-components"
 export type LinkType = "button" | "link"
 const customEvents = {
     clickLink(id: string, href: string, label: string, type: LinkType) {

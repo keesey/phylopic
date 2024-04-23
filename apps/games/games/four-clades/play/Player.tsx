@@ -1,5 +1,5 @@
 "use client"
-import { Loader } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
 import { FC, useEffect, useState } from "react"
 import Board from "../board/Board"
 import { Game } from "../models"

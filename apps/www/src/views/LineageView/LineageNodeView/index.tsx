@@ -1,5 +1,5 @@
 import { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
-import { Loader, PaginationContainer } from "@phylopic/ui"
+import { Loader, PaginationContainer } from "@phylopic/client-components"
 import { Query } from "@phylopic/utils"
 import clsx from "clsx"
 import Link from "next/link"

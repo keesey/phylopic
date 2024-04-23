@@ -1,5 +1,5 @@
 import { Image } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { isImageMediaType, UUID } from "@phylopic/utils"
 import axios from "axios"
 import clsx from "clsx"
