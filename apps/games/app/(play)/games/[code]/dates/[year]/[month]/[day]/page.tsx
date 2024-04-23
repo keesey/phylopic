@@ -31,7 +31,7 @@ const GameDayPage = async ({ params }: { params: Params }) => {
     if (!GAMES[params.code]) {
         notFound()
     }
-    const date = readDateParams(params, `/games/${encodeURIComponent(params.code)}`)
+    const date = readDateParams(params, `/games/${encodeURIComponent(params.code)}/dates`)
     const game = await getGameInstance(params.code, date)
     if (!game) {
         return <p>No game found for this day.</p>

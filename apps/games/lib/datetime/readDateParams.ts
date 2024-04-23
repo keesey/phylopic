@@ -10,7 +10,7 @@ export const readDateParams = (params: CalendarDateParams, path: string) => {
     }
     const normalized = normalizeDate(raw)
     const normalizedPath = toPath(normalized)
-    const paramsPath = `/${params.year}/${params.month}/${params.day}`
+    const paramsPath = `/${encodeURIComponent(params.year)}/${encodeURIComponent(params.month)}/${encodeURIComponent(params.day)}`
     if (paramsPath !== normalizedPath) {
         redirect(`${process.env.NEXT_PUBLIC_GAMES_URL}${path}${normalizedPath}`)
     }
