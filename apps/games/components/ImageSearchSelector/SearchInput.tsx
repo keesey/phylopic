@@ -15,27 +15,25 @@ export const SearchInput: FC = () => {
         dispatch?.({ type: "SET_TEXT", payload })
     }
     return (
-        <>
-            <form className={styles.main} role="search">
-                <input
-                    className={clsx(focused && styles.focused)}
-                    id="q"
-                    list="autocomplete"
-                    maxLength={128}
-                    minLength={2}
-                    name="q"
-                    onChange={handleInputChange}
-                    placeholder="Search."
-                    spellCheck={false}
-                    type="search"
-                    value={value}
-                />
-                <datalist id="autocomplete">
-                    {matches.map(match => (
-                        <option key={match}>{match}</option>
-                    ))}
-                </datalist>
-            </form>
-        </>
+        <div className={styles.main} role="search">
+            <input
+                className={clsx(focused && styles.focused)}
+                id="q"
+                list="autocomplete"
+                maxLength={128}
+                minLength={2}
+                name="q"
+                onChange={handleInputChange}
+                placeholder="Search for images."
+                spellCheck={false}
+                type="search"
+                value={value}
+            />
+            <datalist id="autocomplete">
+                {matches.map(match => (
+                    <option key={match}>{match}</option>
+                ))}
+            </datalist>
+        </div>
     )
 }

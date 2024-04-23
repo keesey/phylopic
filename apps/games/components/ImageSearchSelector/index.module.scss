@@ -1,0 +1,10 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$vellum;
+    color: colors.$ink;
+    border-radius: 2em;
+    height: 100%;
+    padding: 2em;
+    width: 100%;
+}

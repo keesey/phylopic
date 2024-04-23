@@ -22,7 +22,6 @@ export const PhyloPicAutocomplete: React.FC = () => {
     const [debouncedKey, setDebouncedKey] = useDebounce<string | null>(key, DEBOUNCE_WAIT, true)
     React.useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
     const response = useSWRImmutable(debouncedKey, fetcher)
-    console.debug({ text, endpoint, key, debouncedKey, data: response.data })
     React.useEffect(() => {
         if (dispatch && response.data) {
             const query = parseQueryString(extractQueryString(response.data._links.self.href))

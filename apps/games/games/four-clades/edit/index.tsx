@@ -49,7 +49,9 @@ const Editor: FC<Props> = ({ build, readOnly }) => {
                         build={build}
                         onSelect={image => {
                             if (image) {
-                                /*: TODO */
+                                alert("Selected: " + image._links.self.title)
+                                // :TODO: Make change.
+                                setEditedUUID(null)
                             }
                         }}
                     />

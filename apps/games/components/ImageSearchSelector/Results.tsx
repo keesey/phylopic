@@ -9,6 +9,7 @@ export interface Props {
 }
 export const Results: FC<Props> = ({ onSelect }) => {
     const [state] = useContext(SearchContext) ?? []
+    console.debug(state)
     const results = state?.imageResults ?? []
     return (
         <ul className={styles.main}>

@@ -10,7 +10,12 @@ import { useQueryFetcher, type QueryKey } from "../../hooks/useQueryFetcher"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { getMatchingText } from "../getMatchingText"
 import { useAPISWRKey } from "../../../swr"
-export const PhyloPicImageSearch: React.FC = () => {
+export interface PhyloPicImageSearchProps {
+    filter_license_by?: boolean
+    filter_license_nc?: boolean
+    filter_license_sa?: boolean
+}
+export const PhyloPicImageSearch: React.FC<PhyloPicImageSearchProps> = (props) => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const basis = state?.text || undefined
     const matchingText = React.useMemo(
@@ -23,6 +28,8 @@ export const PhyloPicImageSearch: React.FC = () => {
                 ? process.env.NEXT_PUBLIC_API_URL +
                   "/images" +
                   createSearch({
+                      ...props,
+                      embed_items: "true",
                       embed_specificNode: "true",
                       filter_name: matchingText,
                       page: "0",

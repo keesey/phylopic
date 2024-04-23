@@ -15,7 +15,7 @@ export const ImageSearchSelector: FC<Props> = ({ build, onSelect }) => {
                 <SearchContainer>
                     <>
                         <PhyloPicAutocomplete />
-                        <PhyloPicImageSearch />
+                        <PhyloPicImageSearch filter_nc={false} />
                     </>
                     <SearchInput />
                     <Results onSelect={onSelect} />

@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Ability to filter image searches by license.
+
 ### Changed
 
 ### Deprecated
 
 ### Fixed
+
+-   `PhyloPicImageSearch` was sending erroneous API calls.
 
 ### Removed
 
