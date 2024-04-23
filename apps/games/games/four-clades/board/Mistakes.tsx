@@ -1,3 +1,4 @@
+"use client"
 import clsx from "clsx"
 import { useContext } from "react"
 import { BoardContext } from "../play"

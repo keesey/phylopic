@@ -1,3 +1,4 @@
+"use client"
 import { ImageThumbnailView } from "@phylopic/ui"
 import clsx from "clsx"
 import { useContext } from "react"

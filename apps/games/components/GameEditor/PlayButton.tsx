@@ -1,7 +1,7 @@
 "use client"
 import { FC, useContext, useState } from "react"
 import { EditorContext, select } from "~/lib/edit"
-import { GamePlayer } from "../GamePlayer"
+import { GamePlayerClient } from "../GamePlayerClient"
 import { MobileContainer } from "../MobileContainer"
 import { Modal } from "../Modal"
 import { ControlButton } from "./ControlButton"
@@ -21,7 +21,7 @@ export const PlayButton: FC<Props> = props => {
             {playing && (
                 <Modal onClose={() => setPlaying(false)}>
                     <MobileContainer>
-                        <GamePlayer {...props} gameContent={current} />
+                        <GamePlayerClient {...props} gameContent={current} />
                     </MobileContainer>
                 </Modal>
             )}

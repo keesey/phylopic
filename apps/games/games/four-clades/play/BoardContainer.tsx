@@ -9,8 +9,7 @@ import { select } from "./select"
 export type Submission = ReadonlySet<UUID>
 export type BoardContainerProps = PropsWithChildren<{
     data: InitializeAction["payload"]
-    onError: (e: unknown) => void
-    onSubmit: (submission: Submission) => Promise<LossAction | WinAction>
+    submit: (submission: Submission) => Promise<LossAction | WinAction>
 }>
 export const BoardContext = createContext<Readonly<[BoardState, React.Dispatch<Action>]> | undefined>(undefined)
 const DEFAULT_STATE: BoardState = {
@@ -22,7 +21,7 @@ const DEFAULT_STATE: BoardState = {
     mistakes: 0,
     totalAnswers: 0,
 }
-export const BoardContainer: React.FC<BoardContainerProps> = ({ children, data, onError, onSubmit }) => {
+export const BoardContainer: React.FC<BoardContainerProps> = ({ children, data, submit }) => {
     const contextValue = useReducer(reducer, DEFAULT_STATE)
     const [state, dispatch] = contextValue
     useEffect(() => {
@@ -42,10 +41,10 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({ children, data, 
         if (submission.size === imagesPerAnswer) {
             ;(async () => {
                 try {
-                    dispatch(await onSubmit(submission))
+                    dispatch(await submit(submission))
                 } catch (e) {
                     dispatch({ type: "SUBMIT_CANCEL" })
-                    onError(e)
+                    alert(String(e))
                 }
             })()
         }

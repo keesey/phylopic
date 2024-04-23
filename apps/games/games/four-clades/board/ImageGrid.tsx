@@ -1,3 +1,4 @@
+"use client"
 import { useContext } from "react"
 import { BoardContext } from "../play"
 import styles from "./ImageGrid.module.scss"

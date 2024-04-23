@@ -1,10 +1,10 @@
+"use client"
 import { FC, useContext } from "react"
 import { BoardContext, select } from "../play"
 import styles from "./Controls.module.scss"
 export interface ControlsProps {
     onRestart?: () => void
 }
-
 const Controls: FC<ControlsProps> = ({ onRestart }) => {
     const [state, dispatch] = useContext(BoardContext) ?? []
     const canShuffle = Boolean(state && !select.isOver(state))
