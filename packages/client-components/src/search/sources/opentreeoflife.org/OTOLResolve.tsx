@@ -1,14 +1,15 @@
 "use client"
 import { NodeWithEmbedded } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
-import { BuildContext, fetchDataAndCheck } from "@phylopic/utils-api"
+import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
-import React, { useContext } from "react"
+import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { OTOL_URL } from "./OTOL_URL"
+import { BuildContext } from "../../../builds"
 interface OTOLLineageItem {
     // Abridged.
     readonly ott_id: number
@@ -30,7 +31,7 @@ const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
     return response.data
 }
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
-    const [build] = useContext(BuildContext) ?? []
+    const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
     const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(

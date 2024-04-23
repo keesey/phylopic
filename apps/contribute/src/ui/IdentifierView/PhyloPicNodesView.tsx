@@ -1,7 +1,7 @@
 import { Node } from "@phylopic/api-models"
+import { useAPIFetcher } from "@phylopic/client-components"
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
-import { useAPIFetcher } from "@phylopic/utils-api"
 import { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"

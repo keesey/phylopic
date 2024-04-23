@@ -1,6 +1,5 @@
 import { Image } from "@phylopic/api-models"
-import { PhyloPicAutocomplete, PhyloPicImageSearch, SearchContainer } from "@phylopic/client-components"
-import { BuildContainer } from "@phylopic/utils-api"
+import { BuildContainer, PhyloPicAutocomplete, PhyloPicImageSearch, SearchContainer } from "@phylopic/client-components"
 import { FC } from "react"
 import { Results } from "./Results"
 import { SearchInput } from "./SearchInput"

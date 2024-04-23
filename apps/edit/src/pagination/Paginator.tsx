@@ -1,6 +1,7 @@
+import { InfiniteScroll } from "@phylopic/client-components"
 import { Page } from "@phylopic/source-client"
-import { fetchJSON, InfiniteScroll } from "@phylopic/client-components"
 import { createSearch, UUID } from "@phylopic/utils"
+import { fetchJSON } from "@phylopic/utils-api"
 import { FC, Fragment, ReactNode, useCallback, useEffect, useMemo } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
 export type Props = {

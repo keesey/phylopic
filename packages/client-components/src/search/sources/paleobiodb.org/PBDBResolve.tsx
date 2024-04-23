@@ -1,14 +1,15 @@
 "use client"
 import { NodeWithEmbedded } from "@phylopic/api-models"
-import { BuildContext, fetchDataAndCheck } from "@phylopic/utils-api"
-import React, { useContext, useMemo } from "react"
+import { createSearch } from "@phylopic/utils"
+import { fetchDataAndCheck } from "@phylopic/utils-api"
+import { useDebounce } from "@react-hook/debounce"
+import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
+import { BuildContext } from "../../../builds"
 import { SearchContext } from "../../context"
-import { PBDB_URL } from "./PBDB_URL"
-import { useDebounce } from "@react-hook/debounce"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
-import { createSearch } from "@phylopic/utils"
+import { PBDB_URL } from "./PBDB_URL"
 type PBDBRecord = Readonly<{
     ext: string
     nam: string
@@ -32,7 +33,7 @@ const fetchNode: Fetcher<NodeWithEmbedded, string> = async url => {
     return response.data
 }
 const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
-    const [build] = useContext(BuildContext) ?? []
+    const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
     const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
@@ -47,7 +48,7 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
         [oid, setDirectKey],
     )
     const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchNode)
-    const lineageKey = useMemo(() => {
+    const lineageKey = React.useMemo(() => {
         return PBDB_URL + "/taxa/list.json" + createSearch({ id: "txn:" + oid, rel: "all_parents" })
     }, [oid])
     const lineage = useSWRImmutable(lineageKey, fetchLineage)

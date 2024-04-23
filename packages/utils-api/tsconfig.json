@@ -5,5 +5,5 @@
     },
     "exclude": ["build", "dist", "node_modules"],
     "extends": "@phylopic/tsconfig/react-lib.json",
-    "include": [".", "../ui/src/builds/BuildContext.ts"]
+    "include": ["."]
 }

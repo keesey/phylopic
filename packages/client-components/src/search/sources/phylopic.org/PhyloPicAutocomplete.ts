@@ -1,12 +1,12 @@
 "use client"
 import { QueryMatches } from "@phylopic/api-models"
 import { createSearch, extractQueryString, parseQueryString } from "@phylopic/utils"
-import { useAPIFetcher, useAPISWRKey } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
+import { useAPIFetcher, useAPISWRKey } from "../../../swr"
 export const PhyloPicAutocomplete: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const { text } = state ?? {}

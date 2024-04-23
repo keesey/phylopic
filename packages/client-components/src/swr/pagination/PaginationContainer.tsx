@@ -1,12 +1,13 @@
 "use client"
 import { List, PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, Query, URL } from "@phylopic/utils"
-import { BuildContext, useAPIFetcher } from "@phylopic/utils-api"
+import { Query, URL, createSearch } from "@phylopic/utils"
 import React, { useEffect } from "react"
 import useSWR, { BareFetcher, SWRConfiguration } from "swr"
 import useSWRInfinite, { SWRInfiniteConfiguration, SWRInfiniteFetcher, SWRInfiniteKeyLoader } from "swr/infinite"
+import { BuildContext } from "../../builds"
 import { InfiniteScroll } from "../../controls"
 import { createPageKeyGetter } from "./createPageKeyGetter"
+import { useAPIFetcher } from "../hooks"
 export type PaginationContainerProps<T> = {
     autoLoad?: boolean
     children: (value: readonly T[], total: number, isLoading: boolean) => React.ReactNode
@@ -48,7 +49,7 @@ export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
     swrConfigs,
 }) => {
     const [build] = React.useContext(BuildContext) ?? []
-    const fetcher = useAPIFetcher<List | PageWithEmbedded<unknown>>()
+    const fetcher = useAPIFetcher()
     const queryWithoutEmbeds = React.useMemo(
         () =>
             Object.entries(query ?? {})

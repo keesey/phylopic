@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "@phylopic/api-models": "*",
+        "@phylopic/client-components": "*",
         "@phylopic/source-models": "*",
         "@phylopic/styles": "*",
         "@phylopic/ui": "*",

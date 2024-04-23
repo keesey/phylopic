@@ -1,7 +1,6 @@
 "use client"
 import { type NodeListParameters, type NodeWithEmbedded, type PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, type Query } from "@phylopic/utils"
-import { useAPISWRKey } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import useSWRImmutable from "swr/immutable"
@@ -10,6 +9,7 @@ import { type SetNodeResultsAction } from "../../context/actions"
 import { useQueryFetcher, type QueryKey } from "../../hooks/useQueryFetcher"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { getMatchingText } from "../getMatchingText"
+import { useAPISWRKey } from "../../../swr"
 export const PhyloPicNodeSearch: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const basis = state?.text || undefined

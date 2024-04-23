@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { Loader } from "../../loading/Loader"
 export interface InfiniteScrollProps {

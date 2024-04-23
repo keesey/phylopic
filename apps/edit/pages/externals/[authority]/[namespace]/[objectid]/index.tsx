@@ -1,5 +1,5 @@
 import { Entity, External, Node } from "@phylopic/source-models"
-import { fetchJSON, Loader } from "@phylopic/client-components"
+import { Loader } from "@phylopic/client-components"
 import { Authority, isAuthority, isNamespace, isObjectID, Namespace, ObjectID, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
@@ -13,6 +13,7 @@ import Breadcrumbs from "~/ui/Breadcrumbs"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
+import { fetchJSON } from "@phylopic/utils-api"
 export type Props = {
     authority: Authority
     namespace: Namespace

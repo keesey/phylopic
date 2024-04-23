@@ -1,12 +1,12 @@
 import { Node } from "@phylopic/api-models"
+import { useAPIFetcher } from "@phylopic/client-components"
 import { Authority, isPositiveInteger, Namespace, ObjectID } from "@phylopic/utils"
-import { useAPIFetcher } from "@phylopic/utils-api"
 import { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"
+import GBIFSpeciesView from "./GBIFSpeciesView"
 import OTOLTaxonomyView from "./OTOLTaxonomyView"
 import PBDBTxnView from "./PBDBTxnView"
-import GBIFSpeciesView from "./GBIFSpeciesView"
 export type Props = {
     authority: Authority
     namespace: Namespace

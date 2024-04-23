@@ -1,5 +1,5 @@
 import { Entity, External, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
-import { fetchJSON, Loader } from "@phylopic/client-components"
+import { Loader } from "@phylopic/client-components"
 import { Authority, getIdentifier, isUUIDv4, Namespace, ObjectID, stringifyNomen, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
@@ -16,6 +16,7 @@ import BubbleList from "~/ui/BubbleList"
 import ExternalView from "~/views/ExternalView"
 import NameView from "~/views/NameView"
 import TimesView from "~/views/TimesView"
+import { fetchJSON } from "@phylopic/utils-api"
 export type Props = {
     uuid: UUID
 }

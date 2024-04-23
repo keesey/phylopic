@@ -3,11 +3,6 @@ export default defineConfig({
     clean: true,
     dts: true,
     entry: ["src/index.ts"],
-    esbuildOptions(options) {
-        options.banner = {
-            js: '"use client"',
-        }
-    },
     external: [
         "@phylopic/api-models",
         "@phylopic/utils",

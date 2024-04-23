@@ -1,5 +1,5 @@
+import { useAPIFetcher } from "@phylopic/client-components"
 import { UUID } from "@phylopic/utils"
-import { useAPIFetcher } from "@phylopic/utils-api"
 import { useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import isNotFoundError from "~/http/isNotFoundError"

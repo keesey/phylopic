@@ -1,4 +1,4 @@
-import { BuildContext } from "@phylopic/utils-api"
+import { BuildContext } from "@phylopic/client-components"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Image from "next/image"

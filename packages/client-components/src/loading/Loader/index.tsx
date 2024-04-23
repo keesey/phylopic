@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { PropagateLoader } from "react-spinners"
 import { LoaderContext } from "../LoaderContext"

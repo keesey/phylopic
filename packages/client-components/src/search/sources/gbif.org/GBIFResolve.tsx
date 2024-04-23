@@ -1,9 +1,9 @@
 "use client"
 import { NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
 import { URL, createSearch, isFiniteNumber } from "@phylopic/utils"
-import { BuildContext, fetchDataAndCheck } from "@phylopic/utils-api"
+import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
-import React, { useContext } from "react"
+import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
@@ -11,6 +11,7 @@ import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { GBIF_URL } from "./GBIF_URL"
 import { fetchNameUsage } from "./fetchNameUsage"
 import { GBIFNameUsage } from "./GBIFNameUsage"
+import { BuildContext } from "../../../builds"
 const GBIF_RANK_KEYS: ReadonlyArray<keyof GBIFNameUsage> = [
     "key",
     "speciesKey",
@@ -26,7 +27,7 @@ const fetchNode: Fetcher<NodeWithEmbedded, URL> = async url => {
     return response.data
 }
 const GBIFResolveObject: React.FC<{ id: number }> = ({ id }) => {
-    const [build] = useContext(BuildContext) ?? []
+    const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
     const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(

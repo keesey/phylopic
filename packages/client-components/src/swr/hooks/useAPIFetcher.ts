@@ -1,7 +1,7 @@
+import { createAPIFetcher } from "@phylopic/utils-api"
 import { useContext, useMemo } from "react"
 import type { BareFetcher } from "swr"
-import { BuildContext } from "../builds"
-import { createAPIFetcher } from "./createAPIFetcher"
+import { BuildContext } from "../../builds"
 export const useAPIFetcher = <
     T extends Readonly<{ build: number }> = Readonly<{ build: number }>,
 >(): BareFetcher<T> => {

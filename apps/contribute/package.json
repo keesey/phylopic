@@ -9,6 +9,7 @@
     "dependencies": {
         "@aws-sdk/client-ses": "^3.554.0",
         "@phylopic/api-models": "*",
+        "@phylopic/client-components": "*",
         "@phylopic/source-client": "*",
         "@phylopic/source-models": "*",
         "@phylopic/styles": "*",
