@@ -27,5 +27,5 @@
     overflow: hidden;
     text-align: center;
     text-overflow: ellipsis;
-    width: calc((100vw - 768px) * (64 / (1056 - 768)) + 64px);
+    width: calc((100dvw - 768px) * (64 / (1056 - 768)) + 64px);
 }

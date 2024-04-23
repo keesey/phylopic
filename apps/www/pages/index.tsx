@@ -132,7 +132,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 </Container>
             </section>
             {/*
-            <section style={{ minWidth: "100vw" }}>
+            <section style={{ minWidth: "100dvw" }}>
                 <Container>
                     <header>
                         <HeaderNav

@@ -1,35 +1,43 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/bullet.scss";
+
 .main {
     text-align: center;
 }
+
 .highlighted {
     font-size: larger;
     font-weight: bold;
     text-align: center;
 }
+
 .imageLink {
     transition: all 0.3s;
     vertical-align: baseline;
+
     &:hover,
     &:active {
         opacity: 0.5;
     }
+
     img {
         margin: 0 0.35rem -1pt;
-        max-width: calc(100vw - 64px);
+        max-width: calc(100dvw - 64px);
         min-width: 8rem;
     }
+
     .imageTextWithTail {
         margin-bottom: -6px;
     }
 }
+
 .list {
     align-items: baseline;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    > li {
+
+    >li {
         @include bullet.item(colors.$black);
     }
 }

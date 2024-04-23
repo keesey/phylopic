@@ -52,8 +52,8 @@
     font-size: 21px;
     font-weight: normal;
     flex-direction: column;
-    max-width: 100vw;
-    max-height: 100vh;
+    max-width: 100dvw;
+    max-height: 100dvh;
     min-width: 10em;
     overflow: auto;
     padding: 1em;
@@ -68,7 +68,7 @@
     }
 
     a {
-        color: colors.$cerulean  !important;
+        color: colors.$cerulean !important;
 
         &:hover {
             opacity: 0.5;

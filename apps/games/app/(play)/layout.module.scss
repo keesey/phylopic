@@ -4,20 +4,20 @@
     align-items: stretch;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     position: absolute;
-    width: 100vw;
+    width: 100dvw;
 }
 
 .mainContainer {
     @media screen and (min-height: 896px) {
         flex-grow: 1;
         display: flex;
-        height: calc(100vh - 48px);
+        height: calc(100dvh - 48px);
         place-items: center;
     }
 
-    width: 100vw;
+    width: 100dvw;
 }
 
 .controls {
@@ -34,14 +34,14 @@
 }
 
 .main {
-    height: calc(100vh - 48px);
+    height: calc(100dvh - 48px);
     margin-left: auto;
     margin-right: auto;
     min-width: 320px;
     min-height: 568px;
     max-height: 896px;
     max-width: 430px;
-    width: 100vw;
+    width: 100dvw;
 }
 
 .nav {
@@ -56,7 +56,7 @@
     max-height: 48px;
     overflow: hidden;
     padding: 2px 8px;
-    width: 100vw;
+    width: 100dvw;
 }
 
 .controls {
