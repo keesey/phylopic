@@ -1,5 +1,12 @@
 @use "@phylopic/styles/colors.scss";
 
+.populatedIndicator {
+    color: colors.$cerulean;
+    position: absolute;
+    right: 4px;
+    top: 0;
+}
+
 .calendar {
     width: 360px;
 
@@ -48,11 +55,14 @@
     border: 1px solid colors.$black;
     color: colors.$black;
     font-size: large;
+    height: 100%;
     margin-bottom: -1px;
     margin-left: -1px;
     margin-right: -1px;
     padding: 0.5em;
+    position: relative;
     transition: all 0.3s;
+    width: 100%;
 
     &:hover {
         background-color: colors.$wash;
@@ -67,4 +77,8 @@
 .tileCurrent {
     background-color: colors.$dandelion;
     font-weight: bold;
+
+    .populatedIndicator {
+        color: colors.$white;
+    }
 }

@@ -13,7 +13,7 @@ export const Player = async ({ game }: PlayerProps) => {
         "use server"
         return await adjudicate(game, submission)
     }
-        return (
+    return (
         <BoardContainer data={data} submit={handleSubmit}>
             <Board />
         </BoardContainer>

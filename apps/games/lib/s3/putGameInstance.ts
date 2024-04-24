@@ -25,6 +25,7 @@ export const putGameInstance = async <TContent = unknown>(
             instance,
         )
         revalidateTag(path)
+        revalidateTag(path.replace(/\/.+$/, ""))
     } finally {
         client.destroy()
     }
