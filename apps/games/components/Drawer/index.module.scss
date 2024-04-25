@@ -2,8 +2,8 @@
 
 .main {
     bottom: 0;
-    position: absolute;
     left: 0;
+    position: absolute;
     right: 0;
     top: 0;
     transition: all 0.3s;
@@ -17,28 +17,39 @@
 
 }
 
-.container {
+.layout {
     align-items: center;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.container {
+    align-items: stretch;
     background-color: colors.$vellum;
     border-top-left-radius: 2em;
     border-top-right-radius: 2em;
     color: colors.$ink;
     display: flex;
     flex-direction: column;
+    height: 80svh;
+    max-width: 430px;
     position: absolute;
-    height: 90svh;
     overflow: clip;
     transition: all 0.3s;
     width: 100svw;
 
     .closed & {
-        transition: all 0.3s;
         top: 100lvh;
     }
 
     .open & {
-        transition: all 0.3s;
-        top: 10svh;
+        top: 80svh;
     }
 }
 
@@ -65,8 +76,6 @@
 
 .content {
     flex-grow: 1;
-    max-width: 430px;
     padding: 1.5em;
     position: relative;
-    width: calc(100svw - 3em);
 }

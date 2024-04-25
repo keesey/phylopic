@@ -8,11 +8,13 @@ export type Props = PropsWithChildren<{
 export const Drawer: FC<Props> = ({ children, onClose, open }) => {
     return (
         <div className={clsx(styles.main, open ? styles.open : styles.closed)}>
-            <div className={styles.container}>
-                <button className={styles.close} onClick={() => onClose()}>
-                ▼
-                </button>
-                <div className={styles.content}>{children}</div>
+            <div className={styles.layout}>
+                <div className={styles.container}>
+                    <button className={styles.close} onClick={() => onClose()}>
+                        ▼
+                    </button>
+                    <div className={styles.content}>{children}</div>
+                </div>
             </div>
         </div>
     )

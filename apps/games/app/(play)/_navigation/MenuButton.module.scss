@@ -1,7 +1,7 @@
 @use "@phylopic/styles/colors.scss";
 
 .menuButton {
-    button {
+    .button {
         background: none;
         border: 1.5pt solid colors.$white;
         border-radius: 0.5em;
@@ -9,6 +9,10 @@
         font-size: larger;
         font-weight: bold;
         transition: all 0.3s;
+
+        &:active {
+            opacity: 0.67;
+        }
 
         &:hover {
             background-color: colors.$white;

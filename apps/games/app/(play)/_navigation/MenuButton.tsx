@@ -8,6 +8,7 @@ const MenuButton: FC = () => {
         <>
             <div className={styles.menuButton}>
                 <button
+                    className={styles.button}
                     onClick={() => {
                         //customEvents.toggleSiteMenu(!dropdownOpen)
                         setDropdownOpen(!dropdownOpen)

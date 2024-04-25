@@ -1,13 +1,16 @@
 import { PropsWithChildren, ReactNode } from "react"
-import styles from "./layout.module.scss"
+import InfoButton from "./_navigation/InfoButton"
 import MenuButton from "./_navigation/MenuButton"
-const PlayLayout = ({ children, controls, title }: PropsWithChildren<{ controls: ReactNode; title: ReactNode }>) => {
+import styles from "./layout.module.scss"
+const PlayLayout = ({ children, title }: PropsWithChildren<{ title: ReactNode }>) => {
     return (
         <div className={styles.container}>
             <nav className={styles.nav}>
                 <MenuButton />
                 <h1 className={styles.heading}>{title}</h1>
-                <div className={styles.controls}>{controls}</div>
+                <div className={styles.controls}>
+                    <InfoButton />
+                </div>
             </nav>
             <div className={styles.mainContainer}>
                 <main className={styles.main}>{children}</main>
