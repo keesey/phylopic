@@ -7,7 +7,7 @@ export async function GET(_req: Request, { params }: { params: { code: string } 
         notFound()
     }
     return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_GAMES_URL}/games/${encodeURIComponent(params.code)}${toPath(fromDate(new Date()))}`,
+        `${process.env.NEXT_PUBLIC_GAMES_URL}/games/${encodeURIComponent(params.code)}/dates${toPath(fromDate(new Date()))}`,
         { status: 307 },
     )
 }
