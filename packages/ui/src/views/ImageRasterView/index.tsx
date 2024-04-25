@@ -26,7 +26,7 @@ export const ImageRasterView: React.FC<ImageRasterViewProps> = ({ value }) => {
             loader={loader}
             priority
             src={value.uuid}
-            style={{ maxWidth: "calc(100dvw - 112px)", objectFit: "scale-down" }}
+            style={{ maxWidth: "calc(100svw - 112px)", objectFit: "scale-down" }}
             width={width}
         />
     )

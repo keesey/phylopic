@@ -1,0 +1,72 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    transition: all 0.3s;
+    z-index: -1;
+
+    &.open {
+        background-color: transparentize(colors.$ink, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+    }
+
+}
+
+.container {
+    align-items: center;
+    background-color: colors.$vellum;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+    color: colors.$ink;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    height: 90svh;
+    overflow: clip;
+    transition: all 0.3s;
+    width: 100svw;
+
+    .closed & {
+        transition: all 0.3s;
+        top: 100lvh;
+    }
+
+    .open & {
+        transition: all 0.3s;
+        top: 10svh;
+    }
+}
+
+.close {
+    background-color: colors.$dandelion;
+    border: none;
+    color: colors.$black;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: x-large;
+    transition: all 0.3s;
+    width: 100%;
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    &:hover {
+        background-color: colors.$sunshine;
+        color: colors.$black;
+    }
+
+}
+
+.content {
+    flex-grow: 1;
+    max-width: 430px;
+    padding: 1.5em;
+    position: relative;
+    width: calc(100svw - 3em);
+}

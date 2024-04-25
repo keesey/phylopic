@@ -11,8 +11,8 @@
     filter: drop-shadow(-10px 10px 10px colors.$shadow);
     font-weight: normal;
     flex-direction: column;
-    max-width: 100dvw;
-    max-height: 100dvh;
+    max-width: 100svw;
+    max-height: 100svh;
     min-width: 10rem;
     overflow: scroll;
     padding: 1rem;
@@ -24,7 +24,7 @@
 
     @media screen and (max-width: 500px) {
         border-bottom-left-radius: 0;
-        height: 100dvh;
+        height: 100svh;
     }
 
     a {
