@@ -22,7 +22,6 @@
     bottom: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     left: 0;
     position: absolute;
     right: 0;
@@ -37,7 +36,7 @@
     color: colors.$ink;
     display: flex;
     flex-direction: column;
-    height: 80svh;
+    height: 95lvh;
     max-width: 430px;
     position: absolute;
     overflow: clip;
@@ -49,7 +48,7 @@
     }
 
     .open & {
-        top: 80svh;
+        top: 5lvh;
     }
 }
 

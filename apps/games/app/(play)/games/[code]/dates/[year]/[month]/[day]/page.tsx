@@ -59,20 +59,26 @@ const GameDayPage = async ({ params }: { params: Params }) => {
         return (
             <>
                 <p className={styles.paragraph}>
-                    No game found for <time className={styles.time} dateTime={toISOString(date)}>
+                    No game found for{" "}
+                    <time className={styles.time} dateTime={toISOString(date)}>
                         {formatDate(date, "long")}
-                    </time>.
+                    </time>
+                    .
                 </p>
-                {toISOString(today) !== toISOString(date) &&  <p className={styles.paragraph}>
-                    <Link className={styles.link} href={`/games/${encodeURIComponent(params.code)}/dates`}>
-                        Play today&rsquo;s game.
-                    </Link>
-                </p>}
-                {toISOString(today) === toISOString(date) &&  <p className={styles.paragraph}>
-                    <Link className={styles.link} href={`/games/${encodeURIComponent(params.code)}/practice`}>
-                        Play a practice game.
-                    </Link>
-                </p>}
+                {toISOString(today) !== toISOString(date) && (
+                    <p className={styles.paragraph}>
+                        <Link className={styles.link} href={`/games/${encodeURIComponent(params.code)}/dates`}>
+                            Play today&rsquo;s game.
+                        </Link>
+                    </p>
+                )}
+                {toISOString(today) === toISOString(date) && (
+                    <p className={styles.paragraph}>
+                        <Link className={styles.link} href={`/games/${encodeURIComponent(params.code)}/practice`}>
+                            Play a practice game.
+                        </Link>
+                    </p>
+                )}
             </>
         )
     }

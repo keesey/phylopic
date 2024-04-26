@@ -2,6 +2,7 @@
 import { useParams } from "next/navigation"
 import { useState } from "react"
 import { Drawer } from "~/components/Drawer"
+import { GameRules } from "~/components/GameRules"
 import { GAMES } from "~/games/GAMES"
 import styles from "./InfoButton.module.scss"
 const InfoButton = () => {
@@ -9,11 +10,14 @@ const InfoButton = () => {
     const { code } = useParams<{ code?: string }>()
     return (
         <>
-            <button className={styles.button} onClick={() => setOpen(true)} disabled={open}>
+            <button className={styles.button} onClick={() => setOpen(true)} disabled={open} title="How to Play">
                 ⓘ
             </button>
             <Drawer open={open} onClose={() => setOpen(false)}>
-                <header>{code && <h2>Rules for {GAMES[code].title}</h2>}</header>
+                <header>
+                    <h2>How to Play</h2>
+                </header>
+                <GameRules code={code} />
             </Drawer>
         </>
     )
