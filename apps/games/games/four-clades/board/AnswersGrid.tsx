@@ -12,9 +12,6 @@ const AnswersGrid = () => {
     const over = Boolean(state && select.isOver(state))
     return (
         <section className={styles.main}>
-            {!state?.answers.length && (
-                <p className={styles.instructions}>Select four images and press &ldquo;Submit&rdquo;.</p>
-            )}
             {state?.answers.map(answer => (
                 <a
                     key={answer.uuid}

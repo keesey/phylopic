@@ -4,13 +4,13 @@ export const Rules = () => {
     return (
         <div className={styles.main}>
             <section>
-                <h3>Sort into Four Clades</h3>
+                <h3>Sort Images into Four Clades</h3>
                 <p>
                         These sixteen silhouettes represent four distinct <em>clades</em>.
                     </p>
                 <ul>
                     <li>
-                        A clade includes an ancestral species and <em>all</em> of its descendants.
+                        A clade is an ancestral species plus <em>all</em> of its descendants.
                     </li>
                     <li>
                         Examples of clades: <NomenView value={[{ class: "scientific", text: "Aves" }]} /> (birds),{" "}
@@ -29,7 +29,7 @@ export const Rules = () => {
                 <ul>
                     <li>Select four of the silhouettes and press the &ldquo;Submit&rdquo; button.</li>
                     <li>
-                        If those four represent a clade that does not include the other twelve, then they will be
+                        If those four represent a clade that does not include the other twelve, they will be
                         removed from the board and you will see the clade listed above.
                     </li>
                     <li>

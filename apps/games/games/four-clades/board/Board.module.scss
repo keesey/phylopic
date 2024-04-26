@@ -6,7 +6,7 @@
     flex-direction: column;
     gap: 4px;
     justify-content: space-between;
-    height: 100%;
+    height: calc(100svh - 48px);
     padding: 0 0 12px;
     width: 100%;
 }
