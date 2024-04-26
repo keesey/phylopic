@@ -1,0 +1,21 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$dandelion;
+    border: 2px solid colors.$black;
+    border-radius: 24px;
+    color: colors.$black;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    height: 48px;
+    line-height: 1;
+    min-width: 48px;
+    padding: 14px;
+    text-align: center;
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: colors.$sunshine;
+    }
+}

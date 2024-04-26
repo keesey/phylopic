@@ -4,6 +4,8 @@ import { useContext, useState } from "react"
 import { Drawer } from "~/components/Drawer"
 import { BoardContext, select } from "../play"
 import styles from "./GameOverDrawer.module.scss"
+import { ShareButton } from "~/components/ShareButton"
+import { PracticeButton } from "~/components/PracticeButton"
 export const GameOverDrawer = () => {
     const [closed, setClosed] = useState(false)
     const [state, _dispatch] = useContext(BoardContext) ?? []
@@ -51,7 +53,6 @@ export const GameOverDrawer = () => {
                             }}
                         />
                         <h3>You Won!</h3>
-                        <p>Great job!</p>
                     </>
                 )}
                 {!won && lost && (
@@ -98,6 +99,8 @@ export const GameOverDrawer = () => {
                     </>
                 )}
                 <p>Click on any of the clades to see more silhouettes and learn more.</p>
+                <PracticeButton />
+                <ShareButton />
             </div>
         </Drawer>
     )

@@ -11,7 +11,7 @@ export const Drawer: FC<Props> = ({ children, onClose, open }) => {
             <div className={styles.layout}>
                 <div className={styles.container}>
                     <button className={styles.close} onClick={() => onClose()}>
-                        ▼
+                        &times;
                     </button>
                     <div className={styles.content}>{children}</div>
                 </div>

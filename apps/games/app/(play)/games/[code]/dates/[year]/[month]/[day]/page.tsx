@@ -35,7 +35,6 @@ const GameDayPage = async ({ params }: { params: Params }) => {
     }
     const today = fromDate(new Date())
     const date = readDateParams(params, `/games/${encodeURIComponent(params.code)}/dates`)
-    console.debug(toISOString(today), toISOString(date))
     if (toISOString(today) < toISOString(date)) {
         return (
             <>

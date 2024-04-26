@@ -34,6 +34,7 @@ const AnswersGrid = () => {
                     </span>
                 </a>
             ))}
+            {over && <p className={styles.prompt}>Click on a clade to see more silhouettes.</p>}
         </section>
     )
     return null
