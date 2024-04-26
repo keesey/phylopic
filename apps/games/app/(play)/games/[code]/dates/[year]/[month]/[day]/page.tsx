@@ -82,6 +82,6 @@ const GameDayPage = async ({ params }: { params: Params }) => {
             </>
         )
     }
-    return <GamePlayer code={params.code} gameContent={game.content} />
+    return <GamePlayer code={params.code} date={date} gameContent={game.content} />
 }
 export default GameDayPage

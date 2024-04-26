@@ -35,6 +35,20 @@ const deselectOne = (images: BoardState["images"], uuid: UUID) => {
 }
 const reducer: Reducer<BoardState, Action> = (prevState, action) => {
     switch (action.type) {
+        case "AUTO_WIN": {
+            return {
+                ...prevState,
+                answers: {
+                    ...prevState.answers,
+                    ...action.payload.filter(
+                        node => !prevState.answers.some(prevAnswer => prevAnswer.uuid === node.uuid),
+                    ),
+                },
+                discrepancy: 0,
+                images: updateImageStates(prevState.images, imageState => ({ ...imageState, mode: "completed" })),
+                lastSubmission: [],
+            }
+        }
         case "DESELECT": {
             return {
                 ...prevState,
@@ -80,6 +94,9 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
                 images,
                 mistakes,
             }
+        }
+        case "RESTORE": {
+            return action.payload
         }
         case "SELECT": {
             if (select.countSelected(prevState) >= select.imagesPerAnswer(prevState)) {

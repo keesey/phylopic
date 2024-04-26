@@ -6,6 +6,7 @@ export type Props = {
     value: number
 }
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+// :TODO: Move to ui?
 const NumberAsWords: FC<Props> = ({ caps, max, value }) => {
     const words = useMemo(
         () => (max && value > max ? value.toLocaleString("en-us") : caps ? capitalize(toWords(value)) : toWords(value)),

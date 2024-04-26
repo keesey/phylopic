@@ -6,8 +6,8 @@ export const Rules = () => {
             <section>
                 <h3>Sort Images into Four Clades</h3>
                 <p>
-                        These sixteen silhouettes represent four distinct <em>clades</em>.
-                    </p>
+                    These sixteen silhouettes represent four distinct <em>clades</em>.
+                </p>
                 <ul>
                     <li>
                         A clade is an ancestral species plus <em>all</em> of its descendants.
@@ -29,8 +29,8 @@ export const Rules = () => {
                 <ul>
                     <li>Select four of the silhouettes and press the &ldquo;Submit&rdquo; button.</li>
                     <li>
-                        If those four represent a clade that does not include the other twelve, they will be
-                        removed from the board and you will see the clade listed above.
+                        If those four represent a clade that does not include the other twelve, they will be removed
+                        from the board and you will see the clade listed above.
                     </li>
                     <li>
                         Otherwise, this will be counted as a mistake. <em>You only get four mistakes!</em>

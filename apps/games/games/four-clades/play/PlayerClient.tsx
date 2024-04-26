@@ -24,7 +24,7 @@ export const PlayerClient: FC<PlayerClientProps> = ({ game }) => {
         return <Loader />
     }
     return (
-        <BoardContainer data={data} onError={e => alert(e)} submit={handleSubmit}>
+        <BoardContainer data={data} submit={handleSubmit}>
             <Board />
         </BoardContainer>
     )

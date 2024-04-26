@@ -1,0 +1,15 @@
+@use "@phylopic/styles/colors.scss";
+
+.content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: space-between;
+
+    p {
+        margin-block-start: 0;
+        margin-bottom: 0.5em;
+        width: 100%;
+    }
+}
