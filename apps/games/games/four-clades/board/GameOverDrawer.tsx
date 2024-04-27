@@ -1,19 +1,28 @@
 "use client"
 import { ImageThumbnailView, NumberView } from "@phylopic/ui"
-import { useContext, useState } from "react"
+import { FC, useContext, useEffect, useState } from "react"
 import { Drawer } from "~/components/Drawer"
 import { BoardContext, select } from "../play"
 import styles from "./GameOverDrawer.module.scss"
 import { ShareButton } from "~/components/ShareButton"
 import { PracticeButton } from "~/components/PracticeButton"
-export const GameOverDrawer = () => {
+import { NewGameButton } from "~/components/NewGameButton"
+export interface GameOverDrawerProps {
+    onNewGame?: () => void
+}
+export const GameOverDrawer: FC<GameOverDrawerProps> = ({ onNewGame }) => {
     const [closed, setClosed] = useState(false)
     const [state, _dispatch] = useContext(BoardContext) ?? []
+    const [delayedWon, setDelayedWon] = useState(() => (state ? select.isWon(state) : false))
     const won = Boolean(state && select.isWon(state))
     const lost = Boolean(state && select.isLost(state))
+    useEffect(() => {
+        const handle = setTimeout(won ? () => setDelayedWon(true) : () => setDelayedWon(false), 500)
+        return () => clearTimeout(handle)
+    }, [won])
     return (
         <Drawer
-            open={!closed && (won || lost)}
+            open={!closed && (delayedWon || lost)}
             onClose={() => {
                 // :TODO:
                 //dispatch?.({ type: "AUTO_WIN" }, nodes)
@@ -99,7 +108,8 @@ export const GameOverDrawer = () => {
                     </>
                 )}
                 <p>Click on any of the clades to see more silhouettes and learn more.</p>
-                <PracticeButton />
+                {!onNewGame && <PracticeButton />}
+                {onNewGame && <NewGameButton onClick={onNewGame} />}
                 <ShareButton />
             </div>
         </Drawer>

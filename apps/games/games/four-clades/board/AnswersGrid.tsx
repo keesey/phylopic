@@ -1,13 +1,17 @@
 "use client"
 import { ImageThumbnailView } from "@phylopic/ui"
 import clsx from "clsx"
-import { useContext } from "react"
+import { FC, useContext } from "react"
 import slugify from "slugify"
 import NomenView from "~/components/NomenView"
 import { BoardContext, select } from "../play"
 import styles from "./AnswersGrid.module.scss"
 import { extractPath } from "@phylopic/utils"
-const AnswersGrid = () => {
+import { NewGameButton } from "~/components/NewGameButton"
+export interface AnswersGridProps {
+    onNewGame?: () => void
+}
+const AnswersGrid: FC<AnswersGridProps> = ({ onNewGame }) => {
     const [state] = useContext(BoardContext) ?? []
     const over = Boolean(state && select.isOver(state))
     return (
@@ -35,8 +39,8 @@ const AnswersGrid = () => {
                 </a>
             ))}
             {over && <p className={styles.prompt}>Click on a clade to see more silhouettes.</p>}
+            {over && onNewGame && <NewGameButton onClick={onNewGame} />}
         </section>
     )
-    return null
 }
 export default AnswersGrid

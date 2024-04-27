@@ -9,8 +9,9 @@ import { adjudicate } from "./adjudicate"
 import { createInitial } from "./createInitial"
 export interface PlayerClientProps {
     game: Game
+    onNewGame?: () => void
 }
-export const PlayerClient: FC<PlayerClientProps> = ({ game }) => {
+export const PlayerClient: FC<PlayerClientProps> = ({ game, onNewGame }) => {
     const [data, setData] = useState<InitializeAction["payload"] | null>(null)
     useEffect(() => {
         ;(async () => {
@@ -25,7 +26,7 @@ export const PlayerClient: FC<PlayerClientProps> = ({ game }) => {
     }
     return (
         <BoardContainer data={data} submit={handleSubmit}>
-            <Board />
+            <Board onNewGame={onNewGame} />
         </BoardContainer>
     )
 }

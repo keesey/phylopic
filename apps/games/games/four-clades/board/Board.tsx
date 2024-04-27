@@ -5,18 +5,21 @@ import Controls from "./Controls"
 import ImageGrid from "./ImageGrid"
 import Mistakes from "./Mistakes"
 import { GameOverDrawer } from "./GameOverDrawer"
-const Board: FC = () => {
+export interface BoardProps {
+    onNewGame?: () => void
+}
+const Board: FC<BoardProps> = ({ onNewGame }) => {
     return (
         <>
             <section className={styles.main}>
-                <AnswersGrid />
+                <AnswersGrid onNewGame={onNewGame} />
                 <div className={styles.playArea}>
                     <ImageGrid />
                     <Mistakes />
                     <Controls />
                 </div>
             </section>
-            <GameOverDrawer />
+            <GameOverDrawer onNewGame={onNewGame} />
         </>
     )
 }

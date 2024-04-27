@@ -11,29 +11,38 @@ export interface Props {
 export const GameGenerator: FC<Props> = ({ code }) => {
     const [game, setGame] = useState<unknown | null>(null)
     const [error, setError] = useState<string | null>(null)
-    const generatePracticeGame = useMemo(() => () => {
-        setGame(null)
-        if (!GAMES[code]) {
-            return setError("Invalid game.")
-        }
-        setError(null)
-        ;(async () => {
-            try {
-                setGame(await generate(code))
-            } catch (e) {
-                setError(String(e))
+    const generatePracticeGame = useMemo(
+        () => () => {
+            setGame(null)
+            if (!GAMES[code]) {
+                return setError("Invalid game.")
             }
-        })()
-    }, [code])
+            setError(null)
+            ;(async () => {
+                try {
+                    setGame(await generate(code))
+                } catch (e) {
+                    setError(String(e))
+                }
+            })()
+        },
+        [code],
+    )
     useEffect(() => generatePracticeGame(), [generatePracticeGame])
     if (error) {
-        return <div className={styles.main}><p>{error}</p></div>
+        return (
+            <div className={styles.main}>
+                <p>{error}</p>
+            </div>
+        )
     }
     if (!game) {
-        return <div className={styles.main}>
-        <p>Creating practice game&hellip;</p>
-        <Loader />
-        </div>
+        return (
+            <div className={styles.main}>
+                <p>Creating practice game&hellip;</p>
+                <Loader />
+            </div>
+        )
     }
-    return <GamePlayerClient code={code} gameContent={game} />
+    return <GamePlayerClient code={code} gameContent={game} onNewGame={() => generatePracticeGame()} />
 }
