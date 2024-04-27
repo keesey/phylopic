@@ -1,6 +1,6 @@
 "use client"
 import { Loader } from "@phylopic/client-components"
-import { FC, useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { GamePlayerClient } from "~/components/GamePlayerClient"
 import { GAMES } from "~/games/GAMES"
 import { generate } from "~/lib/games/generate"
@@ -8,31 +8,46 @@ import styles from "./GameGenerator.module.scss"
 export interface Props {
     code: string
 }
+const LOCAL_STORAGE_KEY = "@phylopic/games/four-clades/practice/game"
 export const GameGenerator: FC<Props> = ({ code }) => {
+    const [generating, setGenerating] = useState(false)
     const [game, setGame] = useState<unknown | null>(null)
     const [error, setError] = useState<string | null>(null)
+    useEffect(() => {
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY)
+        if (saved) {
+            try {
+                setGame(JSON.parse(saved))
+                return
+            } catch {
+                // Must be corrupt.
+                localStorage.removeItem(LOCAL_STORAGE_KEY)
+            }
+        }
+    }, [])
+    useEffect(() => {
+        if (game) {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(game))
+        }
+    }, [game])
     const generatePracticeGame = useCallback(() => {
         setGame(null)
         if (!GAMES[code]) {
+            setGenerating(false)
             return setError("Invalid game.")
         }
+        setGenerating(true)
         setError(null)
         ;(async () => {
             try {
-                const game = await generate(code)
-                setGame(game)
+                setGame(await generate(code))
             } catch (e) {
                 setError(String(e))
+            } finally {
+                setGenerating(false)
             }
         })()
     }, [code])
-    const initial = useRef<boolean>(false)
-    useEffect(() => {
-        if (!initial.current) {
-            initial.current = true
-            generatePracticeGame()
-        }
-    }, [generatePracticeGame, initial])
     if (error) {
         return (
             <div className={styles.main}>
@@ -41,7 +56,7 @@ export const GameGenerator: FC<Props> = ({ code }) => {
             </div>
         )
     }
-    if (!game) {
+    if (generating) {
         return (
             <div className={styles.main}>
                 <p>Creating practice game&hellip;</p>

@@ -16,7 +16,7 @@ export const Player = async ({ date, game }: PlayerProps) => {
         return await adjudicate(game, submission)
     }
     return (
-        <BoardContainer data={data} gameDate={date} submit={handleSubmit}>
+        <BoardContainer data={data} gameDate={date} onSubmit={handleSubmit}>
             <Board />
         </BoardContainer>
     )

@@ -1,15 +1,13 @@
 "use client"
 import { ImageThumbnailView } from "@phylopic/ui"
+import { extractPath } from "@phylopic/utils"
 import clsx from "clsx"
+import Link from "next/link"
 import { FC, useContext } from "react"
 import slugify from "slugify"
 import NomenView from "~/components/NomenView"
 import { BoardContext, select } from "../play"
 import styles from "./AnswersGrid.module.scss"
-import { extractPath } from "@phylopic/utils"
-import { NewGameButton } from "~/components/NewGameButton"
-import { PracticeButton } from "~/components/PracticeButton"
-import Link from "next/link"
 export interface AnswersGridProps {
     onNewGame?: () => void
 }
@@ -18,7 +16,7 @@ const AnswersGrid: FC<AnswersGridProps> = ({ onNewGame }) => {
     const over = Boolean(state && select.isOver(state))
     return (
         <section className={styles.main}>
-            {state?.answers.map(answer => (
+            {state?.answers?.map(answer => (
                 <a
                     key={answer.uuid}
                     className={clsx(styles.row, over && styles.rowGameOver)}
