@@ -17,7 +17,7 @@ export const GameOverDrawer: FC<GameOverDrawerProps> = ({ onNewGame }) => {
     const won = Boolean(state && select.isWon(state))
     const lost = Boolean(state && select.isLost(state))
     useEffect(() => {
-        const handle = setTimeout(won ? () => setDelayedWon(true) : () => setDelayedWon(false), 500)
+        const handle = setTimeout(won ? () => setDelayedWon(true) : () => setDelayedWon(false), 700)
         return () => clearTimeout(handle)
     }, [won])
     return (

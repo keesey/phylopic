@@ -18,8 +18,7 @@ export const GAMES: Record<string, Game> = {
     },
     "four-clades": {
         author: MIKE_KEESEY,
-        summary:
-            'Sort sixteen silhouette images into four clades. (A clade is an ancestor plus all descendants, like "mammals" or "flowering plants".)',
+        summary: "Sort sixteen silhouette images into four clades. (A clade is an ancestor plus all descendants.)",
         title: "Four Clades",
     },
 }

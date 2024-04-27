@@ -9,7 +9,7 @@ export const Today = ({ code }: { code: string }) => {
     return (
         <>
             <Link href={`/games/${encodeURIComponent(code)}/dates${toPath(today)}`}>
-                <button className={styles.cta}>Play</button>
+                <button className={styles.cta}>Play Today&rsquo;s Game</button>
             </Link>
             <h3>
                 <time dateTime={toISOString(today)}>{formatDate(today, "long")}</time>

@@ -1,6 +1,10 @@
 @use "@phylopic/styles/colors.scss";
 
-.main {
+.link {
+    align-self: center;
+}
+
+.cta {
     background-color: colors.$dandelion;
     border: 2px solid colors.$black;
     border-radius: 24px;

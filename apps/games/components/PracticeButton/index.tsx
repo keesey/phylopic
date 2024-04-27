@@ -8,8 +8,8 @@ export const PracticeButton = () => {
     const game = params.code ? GAMES[params.code] : undefined
     const href = `/games${game ? `/${encodeURIComponent(params.code!)}/practice` : ""}`
     return (
-        <Link href={href}>
-            <button className={styles.main}>▶ {game ? "Practice Game" : "Play a Game"}</button>
+        <Link className={styles.link} href={href}>
+            <button className={styles.cta}>▶ {game ? "Practice Game" : "Play a Game"}</button>
         </Link>
     )
 }

@@ -8,6 +8,8 @@ import { BoardContext, select } from "../play"
 import styles from "./AnswersGrid.module.scss"
 import { extractPath } from "@phylopic/utils"
 import { NewGameButton } from "~/components/NewGameButton"
+import { PracticeButton } from "~/components/PracticeButton"
+import Link from "next/link"
 export interface AnswersGridProps {
     onNewGame?: () => void
 }
@@ -38,8 +40,16 @@ const AnswersGrid: FC<AnswersGridProps> = ({ onNewGame }) => {
                     </span>
                 </a>
             ))}
-            {over && <p className={styles.prompt}>Click on a clade to see more silhouettes.</p>}
-            {over && onNewGame && <NewGameButton onClick={onNewGame} />}
+            {over && onNewGame && (
+                <a className={styles.link} onClick={onNewGame}>
+                    Play a new game.
+                </a>
+            )}
+            {over && !onNewGame && (
+                <Link href="/games/four-clades/practice" className={styles.link} onClick={onNewGame}>
+                    Play a practice game.
+                </Link>
+            )}
         </section>
     )
 }

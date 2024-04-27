@@ -56,3 +56,13 @@
     margin: 1em;
     text-align: center;
 }
+
+.link {
+    align-self: center;
+    color: colors.$cerulean;
+    margin-top: 12px;
+
+    &:hover {
+        color: colors.$aquatic;
+    }
+}
