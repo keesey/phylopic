@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   Image Page nav looked awkward when there were no buttons (_Pan-Biota_).
+
 ### Removed
 
 ### Security
