@@ -51,13 +51,13 @@ yarn make
 
 ### Autolink externals
 
-These commands will pull data from external APIs and try to match themn to nodes in the `phylopic-source` database.
+These commands will pull data from external APIs and try to match them to nodes in the `phylopic-source` database.
 
 ```sh
 yarn autolink eol
 yarn autolink gbif
 yarn autolink otol
-yarn autolink pbdb
+yarn autolink pbdb  
 ```
 
 ### Normalize names
