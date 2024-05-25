@@ -1,13 +1,12 @@
-import { RedirectType, redirect } from "next/navigation"
-import { notFound } from "next/navigation"
+import { RedirectType, notFound, redirect } from "next/navigation"
 import { NextResponse } from "next/server"
 import { GAMES } from "~/games/GAMES"
-import { fromParams, toPath } from "~/lib/datetime"
+import { fromParams } from "~/lib/datetime"
 import { CalendarDateParams } from "~/lib/datetime/CalendarDateParams"
 import { normalizeDate } from "~/lib/datetime/normalizeDate"
 import { pad } from "~/lib/datetime/pad"
 import { getGameMonthList } from "~/lib/s3/getGameMonthList"
-export const readDateParams = (params: Omit<CalendarDateParams, "day">, code: string) => {
+const readDateParams = (params: Omit<CalendarDateParams, "day">, code: string) => {
     const raw = fromParams({ ...params, day: "01" })
     if (!raw) {
         notFound()
