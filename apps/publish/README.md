@@ -57,7 +57,7 @@ These commands will pull data from external APIs and try to match them to nodes 
 yarn autolink eol
 yarn autolink gbif
 yarn autolink otol
-yarn autolink pbdb  
+yarn autolink pbdb
 ```
 
 ### Normalize names
