@@ -11,17 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Revised collection attribution to include anonymous entries.
-
 ### Deprecated
 
 ### Fixed
 
--   Image Page nav looked awkward when there were no buttons (_Pan-Biota_).
-
 ### Removed
 
 ### Security
+
+## [2.12.0] - 2024-06-15
+
+### Changed
+
+-   Revised collection attribution to include anonymous entries.
+
+### Fixed
+
+-   Image Page nav looked awkward when there were no buttons (_Pan-Biota_).
 
 ## [2.11.0] - 2024-04-13
 
