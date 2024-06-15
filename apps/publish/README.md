@@ -2,7 +2,7 @@
 
 Publishing scripts for _[PhyloPic](https://www.phylopic.org)_ builds.
 
-## Setting Up
+## Setting up
 
 See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
 
@@ -17,7 +17,7 @@ Make sure you have the following installed on your system and reachable via the 
 -   [potrace](http://potrace.sourceforge.net/#downloading) (v1.16 or higher)
 -   [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
 
-### Environment Variables
+### Environment variables
 
 The following environment variables are required. They may be stored in `.env` in the root of this project.
 
@@ -39,9 +39,9 @@ The following environment variables are optional:
 | `EOL_API_KEY` | Encyclopedia of Life API key    |
 | `PGPORT`      | Postgres port (default: `5432`) |
 
-## Running Scripts
+## Running scripts
 
-### Release a New Build
+### Release a new build
 
 This will build and release a new build of the website, created from the files in the `source-images.phylopic.org` bucket and data in the `phylopic-source` database.
 
@@ -51,12 +51,21 @@ yarn make
 
 ### Autolink externals
 
-These commands will pull data from external APIs and try to match themn to nodes in the `phylopic-source` database.
+These commands will pull data from external APIs and try to match them to nodes in the `phylopic-source` database.
 
 ```sh
 yarn autolink eol
+yarn autolink gbif
 yarn autolink otol
 yarn autolink pbdb
+```
+
+### Normalize names
+
+Node names should be normalized already, but to ensure nothing got missed, they can all be normalized by running:
+
+```sh
+yarn normalize
 ```
 
 ### Report silhouette coverage

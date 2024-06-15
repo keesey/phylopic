@@ -3,6 +3,7 @@ import { getSortIndex } from "@phylopic/ui" // :TODO: move to utils
 import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import axios from "axios"
 import { NextApiHandler } from "next"
+import getString from "~/routes/getString"
 const index: NextApiHandler = async (req, res) => {
     try {
         const prefix = getString(req.query.q)
@@ -29,15 +30,6 @@ type Suggestion = Readonly<{
     term: string
     url: string
 }>
-const getString = (value: string | string[] | undefined) => {
-    if (typeof value === "string") {
-        return value
-    }
-    if (value === undefined) {
-        return ""
-    }
-    return value[0]
-}
 const getSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     const suggestionBatches: ReadonlyArray<readonly Suggestion[]> = await Promise.all([
         getPhyloPicSuggestions(prefix),
@@ -132,7 +124,7 @@ const getPBDBSuggestions = async (prefix: string): Promise<readonly Suggestion[]
     try {
         if (prefix.length >= 2) {
             const response = await axios.get<Readonly<{ records: ReadonlyArray<{ readonly nam: string }> }>>(
-                "https://training.paleobiodb.org/data1.2/taxa/auto.json" + createSearch({ name: prefix }),
+                "https://paleobiodb.org/data1.2/taxa/auto.json" + createSearch({ name: prefix }),
             )
             return response.data.records.map(({ nam }) => {
                 const term = normalizeQuery(nam)

@@ -1,6 +1,6 @@
 import { Node } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
-import { Arc, createAcyclicGraph, Digraph, sources } from "simple-digraph"
+import { Arc, createAcyclicGraph, CycleError, Digraph, sources } from "simple-digraph"
 export interface PhylogenySourceData {
     nodes: ReadonlyMap<UUID, Node>
 }
@@ -12,6 +12,20 @@ export interface PhylogenyResult {
     nodeUUIDsToVertices: ReadonlyMap<UUID, number>
     phylogeny: Digraph
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>
+}
+const createPhylogeny = (
+    verticesToNodeUUIDs: ReadonlyMap<number, UUID>,
+    arcs: Iterable<Arc>,
+    extraVertices?: Iterable<number>,
+) => {
+    try {
+        return createAcyclicGraph(arcs, extraVertices)
+    } catch (e) {
+        if (e instanceof CycleError) {
+            throw new Error(`Found a cycle involving this node: ${verticesToNodeUUIDs.get(e.vertex)}`)
+        }
+        throw e
+    }
 }
 const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): PhylogenyResult => {
     const nodeUUIDsToVertices = new Map<UUID, number>()
@@ -45,7 +59,7 @@ const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): Ph
             phylogenyArcs.push([parentVertex, vertex])
         }
     }
-    const phylogeny = createAcyclicGraph(phylogenyArcs, extraVertices)
+    const phylogeny = createPhylogeny(verticesToNodeUUIDs, phylogenyArcs, extraVertices)
     const sourceVertices = sources(phylogeny)
     if (rootVertex === undefined) {
         throw new Error("Root not found!")

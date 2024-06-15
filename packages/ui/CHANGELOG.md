@@ -19,6 +19,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.2] - 2024-04-13
+
+### Changed
+
+-   Upgraded all dependencies.
+
+## [1.7.1] - 2024-04-13
+
+### Changed
+
+-   Replaced `training.paleobiodb.org` with `paleobiodb.org`.
+
+## [1.7.0] - 2024-03-30
+
+### Changed
+
+-   Renamed `PBDBRecord` to `PBDBTaxonRecord`.
+
 ## [1.6.2] - 2023-05-17
 
 ### Changed

@@ -11,35 +11,38 @@
         "@phylopic/source-models": "*",
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
-        "axios": "^1.3.1",
-        "clsx": "^1.2.1",
-        "next": "^13.3.1",
-        "parse-nomen": "^2.1.2",
+        "axios": "^1.6.8",
+        "clsx": "^2.1.0",
+        "next": "^14.2.1",
+        "parse-nomen": "^2.1.3",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-spinners": "^0.13.8",
-        "simple-digraph": "^1.0.1",
-        "slugify": "^1.6.5",
-        "swr": "^2.0.3"
+        "simple-digraph": "^1.1.1",
+        "slugify": "^1.6.6",
+        "swr": "^2.2.5"
     },
     "description": "Web application (run locally) for editing *Phylopic* source data and image files.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/react": "^18.0.27",
-        "@types/react-dom": "^18.0.10",
+        "@types/react": "^18.2.78",
+        "@types/react-dom": "^18.2.25",
         "eslint-config-phylopic": "*",
         "next-unused": "^0.0.6",
-        "sass": "^1.58.0",
-        "typescript": "^5.0.4"
+        "sass": "^1.62.1",
+        "typescript": "^5.4.5"
     },
     "license": "MIT",
     "name": "@phylopic/edit",
     "private": true,
+    "resolutions": {
+        "@types/react": "^18.2.78"
+    },
     "scripts": {
-        "clean": "rm -rf .next && rm -rf .turbo && rm -rf node_modules",
+        "clean": "rm -rf .next && rm -rf .swc && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3001",
         "lint": "TIMING=1 next lint",
         "unused": "next-unused"
     },
-    "version": "1.3.1"
+    "version": "1.5.4"
 }

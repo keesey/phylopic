@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Upgraded `turborepo` to `2.0.3`.
+
 ### Deprecated
 
 ### Fixed
@@ -18,6 +20,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.0.12] - 2024-04-13
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
+
+## [2.0.11] - 2024-03-27
+
+### Changed
+
+-   Upgraded `turborepo` to `1.13.0`.
+
+## [2.0.10] - 2024-01-29
+
+### Changed
+
+-   Upgraded `turborepo` to `1.11.3`.
+-   Updated `caniuse-lite`.
 
 ## [2.0.9] - 2023-06-26
 

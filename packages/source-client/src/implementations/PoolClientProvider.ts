@@ -5,7 +5,10 @@ import { S3ClientProvider } from "../interfaces/S3ClientProvider"
 import { BaseClientProvider } from "./BaseClientProvider"
 export class PoolClientProvider extends BaseClientProvider implements PGClientProvider, S3ClientProvider {
     protected pg: pg.PoolClient | null = null
-    constructor(protected readonly pool: pg.Pool, s3Config: S3ClientConfig = {}) {
+    constructor(
+        protected readonly pool: pg.Pool,
+        s3Config: S3ClientConfig = {},
+    ) {
         super(s3Config)
     }
     public async destroy() {

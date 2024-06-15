@@ -8,7 +8,7 @@ The app is hosted at [https://www.phylopic.org](https://www.phylopic.org) and wi
 
 See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
 
-### Environment Variables
+### Environment variables
 
 The following environment variables are required. They may be stored in `.env.local` in the root of this project.
 
@@ -47,7 +47,7 @@ To run a development version on your local machine, on port `3000`:
 yarn dev
 ```
 
-The run the production version locally, on port `3000`:
+Then run the production version locally, on port `3000`:
 
 ```sh
 yarn build && yarn start

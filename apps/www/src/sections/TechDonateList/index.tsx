@@ -30,17 +30,6 @@ const TechDonateList: FC = () => (
                 ImageMagick
             </a>
         </li>
-        <li>
-            <a
-                href="//opencollective.com/mochajs#support"
-                onClick={() =>
-                    customEvents.clickLink("donate_mocha", "//opencollective.com/mochajs#support", "Mocha", "link")
-                }
-                rel="external"
-            >
-                Mocha
-            </a>
-        </li>
     </BulletList>
 )
 export default TechDonateList

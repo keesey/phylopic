@@ -3,8 +3,8 @@ import { compareStrings } from "@phylopic/utils"
 import { Reducer } from "react"
 import { Action } from "../context/actions"
 import { State } from "../context/State"
-import getSortIndex from "../utils/getSortIndex"
-const reducer: Reducer<State, Action> = (prevState, action) => {
+import { getSortIndex } from "../utils/getSortIndex"
+export const reducer: Reducer<State, Action> = (prevState, action) => {
     switch (action.type) {
         case "ADD_EXTERNAL_MATCHES": {
             if (action.meta.basis !== prevState.text) {
@@ -133,4 +133,3 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
         }
     }
 }
-export default reducer

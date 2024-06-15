@@ -9,4 +9,3 @@ export const objectExists = async (client: S3Client, input: HeadObjectCommandInp
     }
     return true
 }
-export default objectExists

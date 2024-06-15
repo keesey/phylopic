@@ -6,7 +6,8 @@
         "paths": {
             "~/*": ["src/*"]
         },
-        "rootDir": "."
+        "rootDir": ".",
+        "module": "esnext"
     },
     "exclude": ["node_modules"],
     "extends": "@phylopic/tsconfig/next.json",

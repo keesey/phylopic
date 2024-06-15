@@ -1,5 +1,4 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
+import { describe, expect, it } from "vitest"
 import { LEGACY_LICENSE_URLS } from "../constants/LEGACY_LICENSE_URLS"
 import { VALID_LICENSE_URLS } from "../constants/VALID_LICENSE_URLS"
 import { isLegacyLicenseURL } from "./isLegacyLicenseURL"

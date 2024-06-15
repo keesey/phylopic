@@ -30,8 +30,8 @@ const getQueryBuilder = (parameters: ContributorListParameters, results: "total"
         results === "total"
             ? 'COUNT(contributor."uuid") as total'
             : results === "href"
-            ? 'contributor.title AS title,contributor."uuid" AS "uuid"'
-            : 'contributor.json AS json,contributor.title AS title,contributor."uuid" AS "uuid"'
+              ? 'contributor.title AS title,contributor."uuid" AS "uuid"'
+              : 'contributor.json AS json,contributor.title AS title,contributor."uuid" AS "uuid"'
     if (parameters.filter_collection) {
         builder.add(
             `SELECT ${selection} FROM collection LEFT JOIN contributor ON contributor."uuid"=ANY(collection.uuids) WHERE collection.uuid=$::uuid AND contributor.build=$::bigint`,

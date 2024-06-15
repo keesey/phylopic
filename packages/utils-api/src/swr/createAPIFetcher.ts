@@ -3,7 +3,7 @@ import { URL } from "@phylopic/utils"
 import axios from "axios"
 import { Dispatch, SetStateAction } from "react"
 import { type Fetcher } from "swr"
-import APISWRError from "./APISWRError"
+import { APISWRError } from "./APISWRError"
 export const createAPIFetcher =
     <T extends Readonly<{ build: number }>>(
         build?: number,
@@ -32,4 +32,3 @@ export const createAPIFetcher =
             throw e
         }
     }
-export default createAPIFetcher

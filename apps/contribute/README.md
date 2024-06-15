@@ -8,7 +8,7 @@ The app is hosted at [https://contribute.phylopic.org](https://contribute.phylop
 
 See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [AWS Command Line Interface](https://aws.amazon.com/cli/).
 
-### Environment Variables
+### Environment variables
 
 The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
 
@@ -52,7 +52,7 @@ To run a development version on your local machine, on port `3002`:
 yarn dev
 ```
 
-The run the production version locally, on port `3000`:
+Then run the production version locally, on port `3000`:
 
 ```sh
 yarn build && yarn start

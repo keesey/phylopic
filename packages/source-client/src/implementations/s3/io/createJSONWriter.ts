@@ -1,6 +1,6 @@
 import { PutObjectCommandInput } from "@aws-sdk/client-s3"
 import { FaultDetector, stringifyNormalized, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
-const createJSONWriter =
+export const createJSONWriter =
     <T>(validator: FaultDetector<T>) =>
     async (value: T): Promise<Partial<PutObjectCommandInput>> => {
         const collector = new ValidationFaultCollector()
@@ -12,4 +12,3 @@ const createJSONWriter =
             ContentType: "application/json",
         }
     }
-export default createJSONWriter

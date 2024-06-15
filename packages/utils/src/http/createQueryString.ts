@@ -6,4 +6,3 @@ export const createQueryString = (params: Query) => {
         .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(String(params[key]))}`)
         .join("&")
 }
-export default createQueryString

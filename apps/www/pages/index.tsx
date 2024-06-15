@@ -1,12 +1,12 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
 import { CountView, PaginationContainer } from "@phylopic/ui"
 import { URL } from "@phylopic/utils"
-import { Compressed } from "compress-json"
+import { type Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import MailingListForm from "~/forms/MailingListForm"
-import PocketPhylogenies from "~/materials/PocketPhylogenies"
+// import PocketPhylogenies from "~/materials/PocketPhylogenies"
 import SchemaScript from "~/metadata/SchemaScript"
 import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -130,6 +130,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                     <QuickLinks />
                 </Container>
             </section>
+            {/*
             <section style={{ minWidth: "100vw" }}>
                 <Container>
                     <header>
@@ -157,6 +158,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 </Container>
                 <PocketPhylogenies />
             </section>
+                        */}
             <section>
                 <Container>
                     <h2>Mailing List</h2>

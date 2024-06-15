@@ -19,6 +19,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.5.4] - 2024-04-15
+
+### Changed
+
+-   Updates to name normalization.
+-   Normalizing name lists in _GBIF_ and _Open Tree of Life_ resolvers.
+
+## [1.5.3] - 2024-04-14
+
+### Changed
+
+-   Upgraded `simple-digraph` to `1.1.1`.
+
+## [1.5.2] - 2024-04-13
+
+### Changed
+
+-   Upgraded all dependencies.
+
+## [1.5.1] - 2024-04-13
+
+### Changed
+
+-   Replaced `training.paleobiodb.org` with `paleobiodb.org`.
+
+## [1.5.0] - 2024-03-27
+
+### Added
+
+-   Showing incomplete submissions as faded.
+
+## [1.4.1] - 2024-02-17
+
+### Fixed
+
+-   Linting issues.
+
+## [1.4.0] - 2024-02-17
+
+### Added
+
+-   Redirects for image and node links with slugs.
+
 ## [1.3.1] - 2023-11-05
 
 ### Fixed

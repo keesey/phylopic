@@ -47,7 +47,7 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
 export default PageComponent
 const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
     const imagesQuery = useMemo(
-        () => ({ filter_contributor: contributor.uuid } as ImageListParameters & Query),
+        () => ({ filter_contributor: contributor.uuid }) as ImageListParameters & Query,
         [contributor.uuid],
     )
     return (

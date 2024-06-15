@@ -26,4 +26,3 @@ export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): 
             isPublicDomainLicenseURL((x as Image).license) ||
             invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
     )
-export default isImage

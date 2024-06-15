@@ -11,13 +11,128 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Revised collection attribution to include anonymous entries.
+
 ### Deprecated
 
 ### Fixed
 
+-   Image Page nav looked awkward when there were no buttons (_Pan-Biota_).
+
 ### Removed
 
 ### Security
+
+## [2.11.0] - 2024-04-13
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
+
+### Removed
+
+-   Link for `mocha` on Donations Page.
+
+## [2.10.3] - 2024-04-13
+
+### Fixed
+
+-   Link to documentation for the _Paleobiology Database_ API.
+
+## [2.10.2] - 2024-04-13
+
+### Fixed
+
+-   URL for documentation for the _Paleobiology Database_ API.
+
+## [2.10.1] - 2024-04-13
+
+### Changed
+
+-   Replaced `training.paleobiodb.org` with `paleobiodb.org`.
+
+## [2.10.0] - 2024-04-07
+
+### Fixed
+
+-   Safari focus issue for search input.
+
+## [2.9.2] - 2024-04-05
+
+### Added
+
+-   Overriding age estimates for some more nodes.
+
+### Changed
+
+-   Showing "Recent" instead of "Recent – present".
+
+## [2.9.1] - 2024-03-30
+
+### Added
+
+-   Predefined age for _Praeanthropus garhi_.
+
+### Fixed
+
+-   Predefined ages were only showing up in `dev` mode.
+
+## [2.9.0] - 2024-03-30
+
+### Added
+
+-   Ages for Lineage Nodes, taken primarily from _Timetree of Life_ and _The Paleobiology Database_.
+
+### Changed
+
+-   Moved Lineage Pages to a subfolder of the full Node Page path.
+
+## [2.8.2] - 2024-03-18
+
+### Removed
+
+-   Temporarily removed Pocket Phylogenies section on Home Page to decrease bandwidth. (Will move images to alternate host and reinstate section later.)
+
+## [2.8.1] - 2024-02-17
+
+### Security
+
+-   Protecting API routes from external domains.
+
+## [2.8.0] - 2024-02-17
+
+### Added
+
+-   Support for `phylopic/nodes` identifiers to `/resolve/[authority]/[namespace]/[objectID]` path.
+
+### Changed
+
+-   Verbiage change for Search Input.
+
+## [2.7.0] - 2024-01-24
+
+### Added
+
+-   Paragraph about sponsors on Image Collection Pages.
+
+## [2.6.12] - 2024-01-04
+
+### Changed
+
+-   Description of `vectorFile` in API Recipes article.
+
+## [2.6.11] - 2023-12-18
+
+### Added
+
+-   Source file in Image Downloads.
+
+### Changed
+
+-   Verbiage for vector file in Image Downloads.
 
 ## [2.6.10] - 2023-12-18
 

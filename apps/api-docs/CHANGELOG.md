@@ -19,6 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.2] - 2024-04-13
+
+### Added
+
+-   Script: `clean`.
+
+### Changed
+
+-   Upgraded dependencies.
+
+## [2.6.1] - 2023-12-18
+
+### Changed
+
+-   Description of `vectorFile`.
+
 ## [2.6.0] - 2023-05-18
 
 ### Added

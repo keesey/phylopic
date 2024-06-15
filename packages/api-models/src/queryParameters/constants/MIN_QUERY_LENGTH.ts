@@ -1,2 +1,1 @@
-const MIN_QUERY_LENGTH = 2
-export default MIN_QUERY_LENGTH
+export const MIN_QUERY_LENGTH = 2
