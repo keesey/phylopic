@@ -15,11 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   Wrong separator was being used for attributions in some cases.
-
 ### Removed
 
 ### Security
+
+## [2.12.1] - 2024-06-18
+
+### Fixed
+
+-   Wrong separator was being used for attributions in some cases.
 
 ## [2.12.0] - 2024-06-15
 
