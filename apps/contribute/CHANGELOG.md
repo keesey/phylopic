@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Ability to edit taxonomic assignment, license, and attribution after submission.
+
 ### Changed
 
 ### Deprecated
 
 ### Fixed
+
+-   Fixed sizes for image logos.
 
 ### Removed
 
