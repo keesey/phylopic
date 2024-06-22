@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.3.0] - 2024-06-21
+
+### Added
+
 -   Ability to edit taxonomic assignment, license, and attribution after submission.
 
 ### Changed
@@ -16,15 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Image review now shows a single image at a time, not a two-up.
 - Upgraded Next.js to 14.2.4.
 
-### Deprecated
-
 ### Fixed
 
 -   Fixed sizes for image logos.
-
-### Removed
-
-### Security
 
 ## [2.2.9] - 2024-04-13
 
