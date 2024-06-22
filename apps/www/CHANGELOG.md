@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Upgraded Next.js to 14.2.4.
+
 ### Deprecated
 
 ### Fixed

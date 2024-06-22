@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 -   Image review now shows a single image at a time, not a two-up.
+- Upgraded Next.js to 14.2.4.
 
 ### Deprecated
 

@@ -45,7 +45,7 @@
     "peerDependencies": {
         "@aws-sdk/client-s3": "^3.554.0",
         "jsonwebtoken": "^9.0.2",
-        "next": "^14.2.1",
+        "next": "^14.2.4",
         "pg": "^8.11.5",
         "uuid": "^9.0.1"
     },
