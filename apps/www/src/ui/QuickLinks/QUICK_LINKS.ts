@@ -65,7 +65,7 @@ const QUICK_LINKS: QuickLinkNode = {
                                             children: [
                                                 {
                                                     slug: "spiralia",
-                                                    uuid: "0142f156-01f2-4912-9a54-c37614d5e6cb",
+                                                    uuid: "53d74173-c682-42a2-99d6-bd8278a32027",
                                                     children: [
                                                         {
                                                             label: "annelids",

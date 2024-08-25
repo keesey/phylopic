@@ -19,7 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [2.12.3] - 2024-08-24
+## [2.12.5] - 2024-08-24
+
+### Fixed
+
+-   Correct UUID for *Spiralia* in Quick Links.
+
+## [2.12.4] - 2024-08-24 [YANKED]
 
 ### Changed
 

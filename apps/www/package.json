@@ -56,5 +56,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.12.4"
+    "version": "2.12.5"
 }
