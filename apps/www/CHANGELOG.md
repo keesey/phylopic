@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgraded Next.js to 14.2.4.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.12.3] - 2024-08-24
+
+### Changed
+
+-   Upgraded Next.js to 14.2.4.
+
+### Fixed
+
+- Some data in `QUICK_LINKS` was outdated.
 
 ## [2.12.3] - 2024-08-07
 
