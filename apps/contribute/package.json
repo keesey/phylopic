@@ -7,7 +7,7 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
-        "@aws-sdk/client-ses": "^3.554.0",
+        "@aws-sdk/client-ses": "^3.675.0",
         "@phylopic/api-models": "*",
         "@phylopic/source-client": "*",
         "@phylopic/source-models": "*",

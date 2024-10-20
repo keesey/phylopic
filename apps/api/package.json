@@ -7,7 +7,7 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.554.0",
+        "@aws-sdk/client-s3": "^3.675.0",
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
         "jsonwebtoken": "^9.0.2",
@@ -34,7 +34,7 @@
     "license": "MIT",
     "name": "@phylopic/api",
     "peerDependencies": {
-        "@aws-sdk/signature-v4-crt": "^3.552.0"
+        "@aws-sdk/signature-v4-crt": "^3.674.0"
     },
     "private": true,
     "scripts": {
