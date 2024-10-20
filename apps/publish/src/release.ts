@@ -15,16 +15,16 @@ import updateParameters from "./make/updateParameters.js"
         await updateParameters(build /*, source.root*/)
         console.info("Build", build, "released.")
         await Promise.all([
-            async () => {
+            (async () => {
                 console.info("Invalidating API cache...")
                 await invalidateAPICache()
                 console.info("Invalidated API cache.")
-            },
-            async () => {
+            })(),
+            (async () => {
                 console.info("Cleaning up entities database...")
                 await cleanEntities(pgClient, build)
                 console.info("Cleaned up entities database.")
-            },
+            })(),
         ])
     } catch (e) {
         console.info("ERROR!")
