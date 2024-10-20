@@ -3,7 +3,7 @@ const invalidateAPICache = async () => {
     const client = new CloudFrontClient()
     try {
         if (!process.env.API_CLOUDFRONT_DISTRIBUTION_ID) {
-            console.error("API_CLOUDFRONT_DISTRIBUTION_ID is not set.")
+            throw new Error("API_CLOUDFRONT_DISTRIBUTION_ID is not set.")
         }
         await client.send(
             new CreateInvalidationCommand({
