@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   Correct UUID for *Spiralia* in Quick Links.
+-   Correct UUID for _Spiralia_ in Quick Links.
 
 ## [2.12.4] - 2024-08-24 [YANKED]
 
@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Some data in `QUICK_LINKS` was outdated.
+-   Some data in `QUICK_LINKS` was outdated.
 
 ## [2.12.3] - 2024-08-07
 
