@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.2] - 2024-04-13
+
+### Added
+
+-   Script: `clean`.
+
+### Changed
+
+-   Upgraded dependencies.
+
 ## [2.6.1] - 2023-12-18
 
 ### Changed

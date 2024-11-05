@@ -6,4 +6,3 @@ export const useLicenseText = (licenseURL: ExtendedLicenseURL | undefined, short
         [licenseURL, short],
     )
 }
-export default useLicenseText

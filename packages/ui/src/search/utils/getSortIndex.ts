@@ -8,4 +8,3 @@ export const getSortIndex = (value: string | undefined, query: string) => {
     }
     return index
 }
-export default getSortIndex

@@ -19,6 +19,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.12.5] - 2024-08-24
+
+### Fixed
+
+-   Correct UUID for _Spiralia_ in Quick Links.
+
+## [2.12.4] - 2024-08-24 [YANKED]
+
+### Changed
+
+-   Upgraded Next.js to 14.2.4.
+
+### Fixed
+
+-   Some data in `QUICK_LINKS` was outdated.
+
+## [2.12.3] - 2024-08-07
+
+### Added
+
+-   New taxa to Quick Links.
+
+## [2.12.2] - 2024-06-21
+
+### Changed
+
+-   Upgraded Next.js to 14.2.4.
+
+## [2.12.1] - 2024-06-18
+
+### Fixed
+
+-   Wrong separator was being used for attributions in some cases.
+
+## [2.12.0] - 2024-06-15
+
+### Changed
+
+-   Revised collection attribution to include anonymous entries.
+
+### Fixed
+
+-   Image Page nav looked awkward when there were no buttons (_Pan-Biota_).
+
+## [2.11.0] - 2024-04-13
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
+
+### Removed
+
+-   Link for `mocha` on Donations Page.
+
+## [2.10.3] - 2024-04-13
+
+### Fixed
+
+-   Link to documentation for the _Paleobiology Database_ API.
+
+## [2.10.2] - 2024-04-13
+
+### Fixed
+
+-   URL for documentation for the _Paleobiology Database_ API.
+
+## [2.10.1] - 2024-04-13
+
+### Changed
+
+-   Replaced `training.paleobiodb.org` with `paleobiodb.org`.
+
 ## [2.10.0] - 2024-04-07
 
 ### Fixed

@@ -4,9 +4,9 @@ import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import SearchContext from "../../context"
-import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
-import PBDB_URL from "./PBDB_URL"
+import { SearchContext } from "../../context"
+import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
+import { PBDB_URL } from "./PBDB_URL"
 export type PBDBAutocompleteProps = {
     limit?: number
 }

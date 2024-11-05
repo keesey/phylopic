@@ -10,7 +10,7 @@ provider:
     iam:
         role: arn:aws:iam::960039257217:role/phylopic-api-executor
     name: aws
-    runtime: nodejs18.x
+    runtime: nodejs20.x
     region: us-west-2
     stage: prod
     versionFunctions: false

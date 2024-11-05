@@ -1,2 +1,1 @@
-const NODE_TABLE = "node"
-export default NODE_TABLE
+export const NODE_TABLE = "node"

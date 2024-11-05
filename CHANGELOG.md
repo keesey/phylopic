@@ -19,6 +19,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.15] - 2024-07-05
+
+### Changed
+
+-   Upgraded `turborepo` to `2.0.6`.
+
+## [2.0.14] - 2024-06-21
+
+### Changed
+
+-   Upgraded `turborepo` to `2.0.4`.
+
+## [2.0.13] - 2024-06-15
+
+### Changed
+
+-   Upgraded `turborepo` to `2.0.3`.
+
+## [2.0.12] - 2024-04-13
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
+
 ## [2.0.11] - 2024-03-27
 
 ### Changed

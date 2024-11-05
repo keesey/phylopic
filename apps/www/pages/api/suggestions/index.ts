@@ -124,7 +124,7 @@ const getPBDBSuggestions = async (prefix: string): Promise<readonly Suggestion[]
     try {
         if (prefix.length >= 2) {
             const response = await axios.get<Readonly<{ records: ReadonlyArray<{ readonly nam: string }> }>>(
-                "https://training.paleobiodb.org/data1.2/taxa/auto.json" + createSearch({ name: prefix }),
+                "https://paleobiodb.org/data1.2/taxa/auto.json" + createSearch({ name: prefix }),
             )
             return response.data.records.map(({ nam }) => {
                 const term = normalizeQuery(nam)

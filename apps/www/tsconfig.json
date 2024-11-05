@@ -1,19 +1,18 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist",
-    "paths": {
-      "~/*": [
-        "src/*"
-      ]
-    },
-    "rootDir": ".",
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outDir": "dist",
+        "paths": {
+            "~/*": ["src/*"]
+        },
+        "module": "esnext",
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "rootDir": ".",
     "strictNullChecks": true
   },
   "exclude": [

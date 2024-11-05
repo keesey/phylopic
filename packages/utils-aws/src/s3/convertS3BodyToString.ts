@@ -25,4 +25,3 @@ export const convertS3BodyToString = async (
     }
     throw new Error("Unsupported body type.")
 }
-export default convertS3BodyToString

@@ -29,7 +29,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 | [tsconfig](./packages/tsconfig)                             | Typescript configurations used throughout the project                         |
 | [ui](./packages/ui)                                         | Commonly-used React components for user interfaces                            |
 | [utils](./packages/utils)                                   | Common code                                                                   |
-| [utils-api](./packages/utils-api)                           | Common code related for using the API in a webapp                             |
+| [utils-api](./packages/utils-api)                           | Common code related to using the API in a webapp                              |
 | [utils-aws](./packages/utils-aws)                           | Common code related to Amazon Web Services                                    |
 
 ### Database scripts
@@ -69,6 +69,8 @@ To run all apps locally:
 ```sh
 yarn dev
 ```
+
+Note that some apps require certain environment variables to be set, which are documented in that apps's `README` file.
 
 Apps will run on the following ports:
 

@@ -47,7 +47,7 @@ const convertResolutionToEntry = (resolution: ExternalResolution) =>
         name: parseNomen(resolution.title),
         namespace: resolution.namespace,
         objectID: resolution.objectID,
-    } as SearchEntry)
+    }) as SearchEntry
 const mapNodeResultsToEntries = (nodeResults: readonly NodeWithEmbedded[] | undefined): readonly SearchEntry[] => {
     return (nodeResults ?? []).map(
         node =>
@@ -57,7 +57,7 @@ const mapNodeResultsToEntries = (nodeResults: readonly NodeWithEmbedded[] | unde
                 name: node.names[0],
                 namespace: "nodes",
                 objectID: node.uuid,
-            } as SearchEntry),
+            }) as SearchEntry,
     )
 }
 const useUnresolved = (

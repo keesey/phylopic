@@ -1,6 +1,20 @@
-import { NOMEN_PART_CLASSES } from "parse-nomen"
-import normalizeText from "../../normalization/normalizeText"
+import { NOMEN_PART_CLASSES, NomenPart } from "parse-nomen"
+import { normalizeText } from "../../normalization/normalizeText"
 import { Nomen } from "../types/Nomen"
+const cleanCitation = (part: NomenPart) => {
+    if (part.class === "citation") {
+        return {
+            ...part,
+            text: part.text
+                .replace(/\.([A-Za-z])/g, ". $1")
+                .replace(/, (\d{4})/g, " $1")
+                .replace(/\bet al\./, "& al.")
+                .replace(" and ", " & ")
+                .replace(/, &/, " &"),
+        }
+    }
+    return part
+}
 export const normalizeNomen = (nomen: Nomen) =>
     nomen
         .map(part => ({
@@ -20,4 +34,4 @@ export const normalizeNomen = (nomen: Nomen) =>
             }
             return [...prev, name]
         }, [])
-export default normalizeNomen
+        .map(part => cleanCitation(part))

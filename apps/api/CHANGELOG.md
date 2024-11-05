@@ -19,6 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.2] - 2024-11-04
+
+### Changed
+
+-   Upgraded AWS SDKs.
+
+## [2.6.1] - 2024-04-13
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched to `vitest` from `mocha`.
+
 ## [2.6.0] - 2023-05-18
 
 ### Changed

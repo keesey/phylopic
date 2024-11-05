@@ -11,4 +11,3 @@ export const encodeTagValue = (value: string | null) => {
     }
     return value.split("").map(encodeCharacter).join("")
 }
-export default encodeTagValue

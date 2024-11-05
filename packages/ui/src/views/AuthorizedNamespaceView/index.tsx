@@ -44,4 +44,3 @@ export const AuthorizedNamespaceView: React.FC<Props> = ({ value, short }) => {
         <code>{value}</code>
     )
 }
-export default AuthorizedNamespaceView

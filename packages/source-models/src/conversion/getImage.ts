@@ -12,4 +12,3 @@ export const getImage = (submission: Submission & { submitted: true }, specific:
         sponsor: submission.sponsor ?? null,
     }
 }
-export default getImage

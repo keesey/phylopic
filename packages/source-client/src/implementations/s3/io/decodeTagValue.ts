@@ -25,4 +25,3 @@ export const decodeTagValue = (value: string | null) => {
     }
     return result
 }
-export default decodeTagValue

@@ -48,4 +48,3 @@ export const NomenView: React.FC<NomenViewProps> = ({ classes, defaultText = "",
         </span>
     )
 }
-export default NomenView

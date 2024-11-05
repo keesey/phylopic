@@ -19,6 +19,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.5.5] - 2024-06-21
+
+### Changed
+
+-   Upgraded Next.js to 14.2.4.
+
+## [1.5.4] - 2024-04-15
+
+### Changed
+
+-   Updates to name normalization.
+-   Normalizing name lists in _GBIF_ and _Open Tree of Life_ resolvers.
+
+## [1.5.3] - 2024-04-14
+
+### Changed
+
+-   Upgraded `simple-digraph` to `1.1.1`.
+
+## [1.5.2] - 2024-04-13
+
+### Changed
+
+-   Upgraded all dependencies.
+
+## [1.5.1] - 2024-04-13
+
+### Changed
+
+-   Replaced `training.paleobiodb.org` with `paleobiodb.org`.
+
 ## [1.5.0] - 2024-03-27
 
 ### Added

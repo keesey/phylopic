@@ -1,6 +1,9 @@
 import { ValidationFault } from "./ValidationFault"
 export class ValidationFaultCollector {
-    constructor(private fields: readonly string[] = [], private faults: ValidationFault[] = []) {}
+    constructor(
+        private fields: readonly string[] = [],
+        private faults: ValidationFault[] = [],
+    ) {}
     public add(message: string) {
         const field = this.fields.join(".")
         this.faults.push({ field, message })
@@ -15,4 +18,3 @@ export class ValidationFaultCollector {
         return new ValidationFaultCollector([...this.fields, ...fields], this.faults)
     }
 }
-export default ValidationFaultCollector

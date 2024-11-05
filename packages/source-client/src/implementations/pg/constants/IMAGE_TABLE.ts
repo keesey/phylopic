@@ -1,2 +1,1 @@
-const IMAGE_TABLE = "image"
-export default IMAGE_TABLE
+export const IMAGE_TABLE = "image"

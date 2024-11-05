@@ -19,6 +19,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.6.0] - 2024-11-04
+
+### Added
+
+-   A new step in the `release` script to invalidate the CloudFront distribution for the API.
+
+### Changed
+
+-   Upgraded AWS SDKs.
+
+## [1.5.0] - 2024-04-15
+
+### Added
+
+-   New script: `normalize`.
+
+### Changed
+
+-   Updates to name normalization.
+
+## [1.4.3] - 2024-04-14
+
+### Changed
+
+-   Upgraded `simple-digraph` to `1.1.0`.
+-   More informative error message on `insert` tasks when a cycle is encountered.
+
+## [1.4.2] - 2024-04-13
+
+### Fixed
+
+-   Working around an incompatibility between Node.js 20 and `ts-node`.
+
+## [1.4.1] - 2024-04-13 [YANKED]
+
+### Changed
+
+-   Upgrades:
+    -   Node.js 20.
+    -   All dependencies.
+-   Switched from `mocha` to `vitest`.
+
 ## [1.4.0] - 2023-12-18
 
 ### Added

@@ -72,4 +72,3 @@ export const fetchData = async <T>(
         throw e
     }
 }
-export default fetchData

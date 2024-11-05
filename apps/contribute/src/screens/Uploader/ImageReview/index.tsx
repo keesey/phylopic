@@ -1,18 +1,9 @@
 import { isImageMediaType } from "@phylopic/utils"
-import clsx from "clsx"
-import { FC, useCallback, useMemo } from "react"
+import { FC, useCallback, useMemo, useState } from "react"
 import MAX_FILE_SIZE from "~/filesizes/MAX_FILE_SIZE"
 import LoadingState from "~/screens/LoadingState"
 import Dialogue from "~/ui/Dialogue"
-import {
-    ICON_ARROW_DOWN,
-    ICON_ARROW_LEFT,
-    ICON_ARROW_RIGHT,
-    ICON_ARROW_UP,
-    ICON_CHECK,
-    ICON_EQUALITY,
-    ICON_PENCIL,
-} from "~/ui/ICON_SYMBOLS"
+import { ICON_ARROW_LEFT, ICON_CHECK, ICON_PENCIL, ICON_X } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
@@ -20,15 +11,12 @@ import useFileIsVector from "../hooks/useFileIsVector"
 import useVectorization from "../hooks/useVectorization"
 import useVectorizedImageSource from "../hooks/useVectorizedImageSource"
 import ImageBox from "./ImageBox"
-import styles from "./index.module.scss"
 import { ReviewResult } from "./ReviewResult"
-export interface Props {
-    buffer: Buffer
-    file: File
+import styles from "./index.module.scss"
+import { FileResult } from "../SelectFile/FileResult"
+export type Props = FileResult & {
     onCancel?: () => void
     onComplete?: (result: ReviewResult) => void
-    size: Readonly<[number, number]>
-    source: string
 }
 const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, source }) => {
     const isVector = useFileIsVector(file)
@@ -38,7 +26,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
         [vectorized.data],
     )
     const vectorizedSource = useVectorizedImageSource(vectorized.data)
-    const mode = useMemo(() => (size[0] >= size[1] ? "landscape" : "portrait"), [size])
+    const [vectorPreferred, setVectorPreferred] = useState(true)
     const selectOriginal = useCallback(() => {
         if (isImageMediaType(file.type)) {
             onComplete?.({ buffer, source, type: file.type })
@@ -56,34 +44,45 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     }
     const vectorizedTooLarge = Boolean(vectorizedBuffer && vectorizedBuffer.length > MAX_FILE_SIZE)
     if (vectorizedSource && !vectorizedTooLarge) {
+        if (vectorPreferred) {
+            return (
+                <section className={styles.main}>
+                    <ImageBox source={vectorizedSource} alt="vectorized image" size={size} />
+                    <Dialogue>
+                        <Speech mode="system">
+                            <p>Does that look right?</p>
+                        </Speech>
+                        <UserOptions>
+                            <UserButton icon={ICON_CHECK} onClick={selectVectorized}>
+                                Yes, looks good!
+                            </UserButton>
+                            <UserButton icon={ICON_X} onClick={() => setVectorPreferred(false)}>
+                                No, that looks wrong.
+                            </UserButton>
+                            <UserButton danger icon={ICON_PENCIL} onClick={onCancel}>
+                                Actually, let me upload a different file.
+                            </UserButton>
+                        </UserOptions>
+                    </Dialogue>
+                </section>
+            )
+        }
         return (
             <section className={styles.main}>
-                <div className={clsx(styles.imageContainer, styles.compare, styles[mode])}>
-                    <ImageBox source={source} alt={file.name} mode={mode} onClick={selectOriginal} />
-                    <ImageBox source={vectorizedSource} alt="vectorized image" mode={mode} onClick={selectVectorized} />
-                </div>
+                <ImageBox source={source} alt={file.name} size={size} />
                 <Dialogue>
                     <Speech mode="system">
-                        <p>Which one looks better?</p>
+                        <p>Is that better?</p>
                     </Speech>
                     <UserOptions>
-                        <UserButton
-                            icon={mode === "portrait" ? ICON_ARROW_LEFT : ICON_ARROW_UP}
-                            onClick={selectOriginal}
-                        >
-                            The {mode === "portrait" ? "left" : "top"} one.
+                        <UserButton icon={ICON_CHECK} onClick={selectOriginal}>
+                            Yes, thank you.
                         </UserButton>
-                        <UserButton
-                            icon={mode === "portrait" ? ICON_ARROW_RIGHT : ICON_ARROW_DOWN}
-                            onClick={selectVectorized}
-                        >
-                            The {mode === "portrait" ? "right" : "bottom"} one.
-                        </UserButton>
-                        <UserButton icon={ICON_EQUALITY} onClick={selectVectorized}>
-                            They&rsquo;re the same picture.
+                        <UserButton icon={ICON_ARROW_LEFT} onClick={() => setVectorPreferred(true)}>
+                            Let me see the other one again&hellip;
                         </UserButton>
                         <UserButton danger icon={ICON_PENCIL} onClick={onCancel}>
-                            Neither. I want to change it.
+                            Actually, let me upload a different file.
                         </UserButton>
                     </UserOptions>
                 </Dialogue>
@@ -92,9 +91,7 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
     }
     return (
         <section className={styles.main}>
-            <div className={clsx(styles.imageContainer, styles[mode])}>
-                <ImageBox source={source} alt={file.name} mode={mode} onClick={selectOriginal} />
-            </div>
+            <ImageBox source={source} alt={file.name} size={size} />
             <Dialogue>
                 <Speech mode="system">
                     <p>How&rsquo;s that?</p>
