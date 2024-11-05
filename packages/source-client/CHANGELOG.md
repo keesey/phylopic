@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Upgraded AWS SDK for S3.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.1.5] - 2024-11-04
+
+### Changed
+
+-   Upgraded AWS SDK for S3.
 
 ## [1.1.4] - 2024-04-15
 

@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   A new step in the `release` script to invalidate the CloudFront distribution for the API.
-
 ### Changed
-
--   Upgraded AWS SDKs.
 
 ### Deprecated
 
@@ -22,6 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.6.0] - 2024-11-04
+
+### Added
+
+-   A new step in the `release` script to invalidate the CloudFront distribution for the API.
+
+### Changed
+
+-   Upgraded AWS SDKs.
 
 ## [1.5.0] - 2024-04-15
 
