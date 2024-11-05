@@ -7,7 +7,7 @@ const invalidateAPICache = async () => {
         }
         await client.send(
             new CreateInvalidationCommand({
-                DistributionId: process.env.PHYLOPIC_API_CLOUDFRONT_DISTRIBUTION_ID,
+                DistributionId: process.env.API_CLOUDFRONT_DISTRIBUTION_ID,
                 InvalidationBatch: {
                     CallerReference: undefined,
                     Paths: {
