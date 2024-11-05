@@ -17,7 +17,7 @@ import updateParameters from "./make/updateParameters.js"
         await Promise.all([
             (async () => {
                 console.info("Invalidating API cache...")
-                await invalidateAPICache()
+                await invalidateAPICache(build)
                 console.info("Invalidated API cache.")
             })(),
             (async () => {

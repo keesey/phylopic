@@ -1,5 +1,5 @@
 import { CloudFrontClient, CreateInvalidationCommand } from "@aws-sdk/client-cloudfront"
-const invalidateAPICache = async () => {
+const invalidateAPICache = async (build: number) => {
     const client = new CloudFrontClient()
     try {
         if (!process.env.API_CLOUDFRONT_DISTRIBUTION_ID) {
@@ -9,10 +9,10 @@ const invalidateAPICache = async () => {
             new CreateInvalidationCommand({
                 DistributionId: process.env.API_CLOUDFRONT_DISTRIBUTION_ID,
                 InvalidationBatch: {
-                    CallerReference: undefined,
+                    CallerReference: `build:${build}`,
                     Paths: {
                         Items: ["/*"],
-                        Quantity: undefined,
+                        Quantity: 1,
                     },
                 },
             }),
