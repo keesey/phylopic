@@ -87,15 +87,21 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
         fetchJSON,
     )
     const router = useRouter()
+    const nodeUUID = node?.uuid
     const deleteExternal = useCallback(() => {
         if (confirm("Are you sure?")) {
             ;(async () => {
-                await axios.delete(key)
-                mutate(undefined, { revalidate: true })
-                router.push(`/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`)
+                try {
+                    const route = nodeUUID ? `/nodes/${encodeURIComponent(nodeUUID)}` : `/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`
+                    await axios.delete(key)
+                    mutate(undefined, { revalidate: true })
+                    await router.push(route)
+                } catch (e) {
+                    alert(String(e))
+                }
             })()
         }
-    }, [authority, key, mutate, namespace, router])
+    }, [authority, key, mutate, namespace, nodeUUID, router])
     const handleSelect = useCallback(
         (value: Entity<Node> | undefined) => {
             if (external && node && value && value.uuid !== node.uuid) {

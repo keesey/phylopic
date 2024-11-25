@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.6.0] - 2024-11-25
+
+### Changed
+
+- Redirecting to original target node when an external is deactivated, instead of the Nodes Page.
+
 ## [1.5.5] - 2024-06-21
 
 ### Changed
