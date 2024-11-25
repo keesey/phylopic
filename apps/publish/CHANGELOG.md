@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.6.1] - 2024-11-25
+
+### Changed
+
+-   More helpful console messages for `autolink`.
+
 ## [1.6.0] - 2024-11-04
 
 ### Added
