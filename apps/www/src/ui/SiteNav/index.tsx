@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { FC, Suspense, useCallback, useEffect, useState } from "react"
+import { FC, Suspense, useEffect, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import SearchBar from "../SearchBar"
 import SiteTitle from "../SiteTitle"
