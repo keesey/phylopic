@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.6.3] - 2024-12-03
+
+### Changed
+
+-   Updated architecture to AWS Graviton2 processor (arm64).
+
 ## [2.6.2] - 2024-11-04
 
 ### Changed
