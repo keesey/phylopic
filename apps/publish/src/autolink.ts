@@ -4,7 +4,7 @@ import SourceClient from "./source/SourceClient.js"
     const client = new SourceClient()
     try {
         console.info("PhyloPic AutoLink starting...")
-        if (process.argv.length < 2) {
+        if (process.argv.length <= 2) {
             console.info("Valid options: eol gbif otol pbdb")
         } else {
             for (const option of process.argv.slice(2)) {

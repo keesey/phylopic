@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.6.2] - 2025-01-02
+
+### Fixed
+
+-   Helpful console messages weren't showing up.
+
 ## [1.6.1] - 2024-11-25
 
 ### Changed
