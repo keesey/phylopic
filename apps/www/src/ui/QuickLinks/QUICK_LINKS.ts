@@ -173,7 +173,7 @@ const QUICK_LINKS: QuickLinkNode = {
                                                     children: [
                                                         {
                                                             label: "amphibians",
-                                                            slug: "amphibia",
+                                                            slug: "pan-lissamphibia",
                                                             uuid: "ab10018a-325b-4db8-b11c-2bfd346132c7",
                                                         },
                                                         {
