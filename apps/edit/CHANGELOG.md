@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Redirecting to original target node when an external is deactivated, instead of the Nodes Page.
+-   Redirecting to original target node when an external is deactivated, instead of the Nodes Page.
 
 ## [1.5.5] - 2024-06-21
 
