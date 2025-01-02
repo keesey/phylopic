@@ -92,7 +92,9 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
         if (confirm("Are you sure?")) {
             ;(async () => {
                 try {
-                    const route = nodeUUID ? `/nodes/${encodeURIComponent(nodeUUID)}` : `/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`
+                    const route = nodeUUID
+                        ? `/nodes/${encodeURIComponent(nodeUUID)}`
+                        : `/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`
                     await axios.delete(key)
                     mutate(undefined, { revalidate: true })
                     await router.push(route)

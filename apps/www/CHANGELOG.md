@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.12.6] - 2025-01-02
+
+### Fixed
+
+-   Correct slug for pan-Lissamphibia (=_Amphibia_) in Quick Links.
+
 ## [2.12.5] - 2024-08-24
 
 ### Fixed
