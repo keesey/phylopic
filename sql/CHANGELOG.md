@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.3.0] - 2025-01-02
+
+### Added
+
+-   New source column: `image.unlisted`.
+-   New entities columns: `contributor.unlisted`, `image.unlisted`.
+
 ## [2.2.0] - 2023-03-24
 
 ### Added
