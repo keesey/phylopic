@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.0] - 2025-01-02
+
+### Added
+
+-   Control for whether an image is listed or not.
+
 ## [1.6.0] - 2024-11-25
 
 ### Changed

@@ -4,7 +4,6 @@ import { normalizeEntity } from "./normalizeEntity"
 export const normalizeImage = <T extends Image>(value: T): T => {
     return {
         ...normalizeEntity(value),
-        accepted: normalizeBoolean(value.accepted),
-        submitted: normalizeBoolean(value.submitted),
+        unlisted: normalizeBoolean(value.unlisted),
     }
 }

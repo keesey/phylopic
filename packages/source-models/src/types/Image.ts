@@ -8,4 +8,5 @@ export type Image = Readonly<{
     general: UUID | null
     specific: UUID
     sponsor: string | null
+    unlisted: boolean
 }>

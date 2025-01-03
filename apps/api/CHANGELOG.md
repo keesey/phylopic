@@ -19,11 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.7.0] - 2025-01-02
+
+### Changed
+
+-   Filtering out unlisted images and contributors from lists.
+
 ## [2.6.3] - 2024-12-03
 
 ### Changed
 
--   Updated architecture to AWS Graviton2 processor (arm64).
+-   Updated architecture to AWS Graviton2 processor (`arm64`).
 
 ## [2.6.2] - 2024-11-04
 

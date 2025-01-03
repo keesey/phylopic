@@ -40,6 +40,7 @@ const getQueryBuilder = (parameters: ContributorListParameters, results: "total"
     } else {
         builder.add(`SELECT ${selection} FROM contributor WHERE build=$::bigint`, [BUILD])
     }
+    builder.add("AND contributor.unlisted=0::bit")
     if (results === "total") {
         // Add nothing
     } else {

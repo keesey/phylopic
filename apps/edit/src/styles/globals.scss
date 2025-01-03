@@ -49,6 +49,7 @@ textarea {
 
 input,
 textarea {
+    accent-color: black;
     width: 100%;
 }
 
@@ -57,7 +58,12 @@ textarea {
     padding: 1em;
 }
 
-input[type="submit"] {
+input[type=checkbox] {
+    cursor: pointer;
+    width: unset;
+}
+
+input[type=submit] {
     background-color: black;
     border-radius: 1em;
     color: white;
