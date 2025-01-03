@@ -11,6 +11,7 @@ body {
 
 a {
     color: inherit;
+
     &:hover {
         opacity: 0.75;
     }
@@ -45,20 +46,24 @@ textarea {
     font-family: Verdana, sans-serif;
     font-size: inherit;
 }
+
 input,
 textarea {
     width: 100%;
 }
+
 textarea {
     border-radius: 1em;
     padding: 1em;
 }
+
 input[type="submit"] {
     background-color: black;
     border-radius: 1em;
     color: white;
     cursor: pointer;
     padding: 1em;
+
     &:hover {
         opacity: 0.75;
     }
@@ -66,6 +71,7 @@ input[type="submit"] {
 
 .editable {
     cursor: text;
+
     &:hover {
         opacity: 0.75;
     }
@@ -73,6 +79,7 @@ input[type="submit"] {
 
 .changed {
     color: red;
+
     .dark {
         background-color: red;
     }
@@ -90,22 +97,27 @@ input[type="submit"] {
 
 .nomen {
     font-family: Georgia, serif;
+
     .citation,
     &.citation {
         font-variant: small-caps;
     }
+
     .comment,
     &.comment {
         opacity: 0.5;
     }
+
     .operator,
     &.operator {
         font-family: Verdana, sans-serif;
     }
+
     .scientific,
     &.scientific {
         font-style: italic;
     }
+
     .rank,
     &.rank {
         font-style: italic;
@@ -118,21 +130,24 @@ ul {
     list-style-type: none;
 }
 
-nav.pagination > ul {
+nav.pagination>ul {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 1em;
-    > li {
+
+    >li {
         display: inline-flex;
     }
 }
 
 a[role="button"] {
     text-decoration: underline;
+
     &::after {
         content: "]";
     }
+
     &::before {
         content: "[";
     }
@@ -145,6 +160,7 @@ code {
 dt {
     font-weight: bold;
 }
+
 main {
     margin: 0 auto;
     max-width: 11in;
