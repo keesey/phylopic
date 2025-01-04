@@ -5,6 +5,7 @@ import {
     isNormalizedText,
     isNullOr,
     isRasterMediaType,
+    isTrue,
     isUndefinedOr,
     isURL,
     isVectorMediaType,
@@ -40,4 +41,5 @@ export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): 
     isEntity(x, isImageLinks, faultCollector) &&
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&
     // :TODO: Add validation for modified and modifiedFile
-    isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor"))
+    isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor")) &&
+    isUndefinedOr(isTrue)((x as Image).unlisted, faultCollector?.sub("unlisted"))

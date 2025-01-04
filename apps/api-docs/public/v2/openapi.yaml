@@ -649,6 +649,10 @@ components:
               type: string
               example: "Patron Name"
               nullable: true
+            unlisted:
+              description: If true, this image will not appear in lists.
+              type: boolean
+              example: true
             _links:
               type: object
               required:
