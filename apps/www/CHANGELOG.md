@@ -19,6 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.0] - 2025-01-03
+
+### Added
+
+-   Warning to Image Pages when an image is unlisted.
+
+### Changed
+
+-   Disabled indexing for Image Pages when the image is unlisted.
+
+### Removed
+
+-   Any Contributor Page where the contributor has no listed images.
+-   Metadata keywords from Image Pages that are unlisted.
+
 ## [2.12.6] - 2025-01-02
 
 ### Fixed
