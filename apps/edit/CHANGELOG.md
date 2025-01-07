@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.1] - 2025-01-07
+
+### Fixed
+
+-   Could not approve submissions because `unlisted` was not being generated for new images.
+
 ## [1.7.0] - 2025-01-02
 
 ### Added
