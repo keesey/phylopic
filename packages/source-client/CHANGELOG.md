@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   New methods to Deletor clients: `isRestorable()`, `restore()`.
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.3.0] - 2025-01-12
+
+### Added
+
+-   New methods to Deletor clients: `isRestorable()`, `restore()`.
 
 ## [1.2.0] - 2025-01-02
 

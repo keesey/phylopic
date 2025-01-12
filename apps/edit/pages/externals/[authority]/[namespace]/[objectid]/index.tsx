@@ -89,7 +89,7 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
     const router = useRouter()
     const nodeUUID = node?.uuid
     const deleteExternal = useCallback(() => {
-        if (confirm("Are you sure?")) {
+        if (confirm("Are you sure you want to delete this?")) {
             ;(async () => {
                 try {
                     const route = nodeUUID
@@ -104,6 +104,18 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
             })()
         }
     }, [authority, key, mutate, namespace, nodeUUID, router])
+    const restore = useCallback(() => {
+        if (confirm("Are you sure you want to restore this node?")) {
+            ;(async () => {
+                try {
+                    await axios.post<Node & { uuid: UUID }>(`/api/nodes/_/${encodeURIComponent(objectID)}/restore`)
+                    await router.push(`/nodes/${encodeURIComponent(objectID)}`)
+                } catch (e) {
+                    alert(String(e))
+                }
+            })()
+        }
+    }, [objectID, router])
     const handleSelect = useCallback(
         (value: Entity<Node> | undefined) => {
             if (external && node && value && value.uuid !== node.uuid) {
@@ -137,6 +149,13 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
                         Change the node
                     </button>
                 </BubbleItem>
+                {external.authority === "phylopic.org" && external.namespace === "nodes" && (
+                    <BubbleItem light>
+                        <button className="link" onClick={() => restore()}>
+                            Restore
+                        </button>
+                    </BubbleItem>
+                )}
                 <BubbleItem>
                     <button className="link" onClick={deleteExternal}>
                         Delete

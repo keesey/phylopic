@@ -15,11 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   Links to contributors were incorrect in Contributors Index Page.
-
 ### Removed
 
 ### Security
+
+## [1.8.0] - 2025-01-12
+
+### Added
+
+-   Ability to restore nodes from externals.
+
+### Fixed
+
+-   Links to contributors were incorrect in Contributors Index Page.
 
 ## [1.7.1] - 2025-01-07
 
