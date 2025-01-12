@@ -23,7 +23,7 @@ const Page: NextPage = () => {
                             <ul>
                                 {(items as ReadonlyArray<Contributor & { uuid: UUID }>).map(contributor => (
                                     <li key={contributor.uuid}>
-                                        <Link href={`/contributor/${encodeURIComponent(contributor.uuid)}`}>
+                                        <Link href={`/contributors/${encodeURIComponent(contributor.uuid)}`}>
                                             <ContributorView contributor={contributor} />
                                         </Link>
                                     </li>

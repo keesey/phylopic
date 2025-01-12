@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   Links to contributors were incorrect in Contributors Index Page.
+
 ### Removed
 
 ### Security
