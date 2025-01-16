@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.3] - 2025-01-16
+
+### Fixed
+
+-   Spacing in error message when objects are invalid.
+
 ## [1.0.2] - 2024-04-13
 
 ### Changed
