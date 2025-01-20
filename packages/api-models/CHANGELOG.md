@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.4] - 2025-01-03
+
+### Added
+
+-   Optional `Image.unlisted` property.
+
 ## [1.3.3] - 2024-04-13
 
 ### Changed

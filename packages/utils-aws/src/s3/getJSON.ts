@@ -13,7 +13,7 @@ export const getJSON = async <T>(client: S3Client, input: GetObjectCommandInput,
                 `Error in file s3://${input.Bucket}/${input.Key}:` +
                     (faultCollector
                         ?.list()
-                        .map(fault => `${fault.message} ${fault.field ? `[${fault.field}]` : ""}`)
+                        .map(fault => `${fault.message}${fault.field ? ` [${fault.field}]` : ""}`)
                         .join("\n\n") || "Invalid object."),
             )
         }

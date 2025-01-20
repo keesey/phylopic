@@ -21,15 +21,16 @@ const Page: NextPage = () => {
                 <Paginator endpoint="/api/submissions">
                     {(items, invalidating) =>
                         items.length ? (
-                            <ul>
+                            <table style={{ tableLayout: "fixed", width: "100%" }}>
+                                <tr>
+                                    <th style={{ width: "33%" }}>Contributor</th>
+                                    <th style={{ width: "33%" }}>Taxon</th>
+                                    <th style={{ width: "33%" }}>Attribution</th>
+                                </tr>
                                 {(items as ReadonlyArray<S3Entry<Hash>>).map(item => (
-                                    <li key={item.Key}>
-                                        <Link href={`/submissions/${encodeURIComponent(item.Key)}`}>
-                                            <SubmissionView hash={item.Key} />
-                                        </Link>
-                                    </li>
+                                    <SubmissionView hash={item.Key} key={item.Key} />
                                 ))}
-                            </ul>
+                            </table>
                         ) : invalidating ? null : (
                             <p>No submissions found.</p>
                         )

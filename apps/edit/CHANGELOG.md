@@ -19,6 +19,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.9.0] - 2025-01-16
+
+### Changed
+
+-   Using a table to list submissions.
+
+## [1.8.0] - 2025-01-12
+
+### Added
+
+-   Ability to restore nodes from externals.
+
+### Fixed
+
+-   Links to contributors were incorrect in Contributors Index Page.
+
+## [1.7.1] - 2025-01-07
+
+### Fixed
+
+-   Could not approve submissions because `unlisted` was not being generated for new images.
+
+## [1.7.0] - 2025-01-02
+
+### Added
+
+-   Control for whether an image is listed or not.
+
+## [1.6.0] - 2024-11-25
+
+### Changed
+
+-   Redirecting to original target node when an external is deactivated, instead of the Nodes Page.
+
+## [1.5.5] - 2024-06-21
+
+### Changed
+
+-   Upgraded Next.js to 14.2.4.
+
 ## [1.5.4] - 2024-04-15
 
 ### Changed

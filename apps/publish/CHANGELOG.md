@@ -19,6 +19,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.2] - 2025-01-03
+
+### Added
+
+-   Optional `unlisted` property for API `Image` model.
+
+## [1.7.1] - 2025-01-02
+
+### Fixed
+
+-   Not using unlisted images as direct node images.
+
+## [1.7.0] - 2025-01-02
+
+### Added
+
+-   Handling for unlisted images and contributors.
+
+## [1.6.2] - 2025-01-02
+
+### Fixed
+
+-   Helpful console messages weren't showing up.
+
+## [1.6.1] - 2024-11-25
+
+### Changed
+
+-   More helpful console messages for `autolink`.
+
+## [1.6.0] - 2024-11-04
+
+### Added
+
+-   A new step in the `release` script to invalidate the CloudFront distribution for the API.
+
+### Changed
+
+-   Upgraded AWS SDKs.
+
 ## [1.5.0] - 2024-04-15
 
 ### Added

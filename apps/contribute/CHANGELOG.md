@@ -19,6 +19,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.3.1] - 2024-11-04
+
+### Changed
+
+-   Upgraded AWS SDK for SES.
+
+## [2.3.0] - 2024-06-21
+
+### Added
+
+-   Ability to edit taxonomic assignment, license, and attribution after submission.
+
+### Changed
+
+-   Image review now shows a single image at a time, not a two-up.
+-   Upgraded Next.js to 14.2.4.
+
+### Fixed
+
+-   Fixed sizes for image logos.
+
 ## [2.2.9] - 2024-04-13
 
 ### Changed

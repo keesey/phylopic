@@ -19,6 +19,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.0] - 2025-01-12
+
+### Added
+
+-   New methods to Deletor clients: `isRestorable()`, `restore()`.
+
+## [1.2.0] - 2025-01-02
+
+### Added
+
+-   New property: `Image.unlisted`.
+
+### Changed
+
+-   Made `normalizeBoolean()` more robust.
+
+### Fixed
+
+-   `normalizeImage()` included some nonexistent properties.
+
+## [1.1.5] - 2024-11-04
+
+### Changed
+
+-   Upgraded AWS SDK for S3.
+
 ## [1.1.4] - 2024-04-15
 
 ### Changed

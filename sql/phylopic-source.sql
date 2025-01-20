@@ -107,6 +107,7 @@ CREATE TABLE IF NOT EXISTS public.image
     modified timestamp without time zone NOT NULL DEFAULT now(),
     disabled bit(1) NOT NULL DEFAULT (0)::bit(1),
     tags character varying[] COLLATE pg_catalog."default",
+    unlisted bit(1) NOT NULL DEFAULT (0)::bit(1),
     CONSTRAINT image_pkey PRIMARY KEY (uuid),
     CONSTRAINT image_contributor_uuid_fkey FOREIGN KEY (contributor_uuid)
         REFERENCES public.contributor (uuid) MATCH SIMPLE

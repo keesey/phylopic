@@ -74,7 +74,7 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
                         ))}
                     {unattributed.length > 0 && (
                         <>
-                            {numAttributions >= 2 && ","} and others
+                            {numAttributions >= 2 && separator} and others
                             <Nomina nomina={unattributed} />
                         </>
                     )}

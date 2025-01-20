@@ -19,6 +19,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.7.1] - 2025-01-03
+
+### Added
+
+-   Image JSON includes an optional `unlisted` property.
+
+## [2.7.0] - 2025-01-02
+
+### Changed
+
+-   Filtering out unlisted images and contributors from lists.
+
+## [2.6.3] - 2024-12-03
+
+### Changed
+
+-   Updated architecture to AWS Graviton2 processor (`arm64`).
+
+## [2.6.2] - 2024-11-04
+
+### Changed
+
+-   Upgraded AWS SDKs.
+
 ## [2.6.1] - 2024-04-13
 
 ### Changed

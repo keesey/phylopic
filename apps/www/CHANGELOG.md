@@ -11,17 +11,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Revised collection attribution to include anonymous entries.
-
 ### Deprecated
 
 ### Fixed
 
--   Image Page nav looked awkward when there were no buttons (_Pan-Biota_).
-
 ### Removed
 
 ### Security
+
+## [2.13.0] - 2025-01-03
+
+### Added
+
+-   Warning to Image Pages when an image is unlisted.
+
+### Changed
+
+-   Disabled indexing for Image Pages when the image is unlisted.
+
+### Removed
+
+-   Any Contributor Page where the contributor has no listed images.
+-   Metadata keywords from Image Pages that are unlisted.
+
+## [2.12.6] - 2025-01-02
+
+### Fixed
+
+-   Correct slug for pan-Lissamphibia (=_Amphibia_) in Quick Links.
+
+## [2.12.5] - 2024-08-24
+
+### Fixed
+
+-   Correct UUID for _Spiralia_ in Quick Links.
+
+## [2.12.4] - 2024-08-24 [YANKED]
+
+### Changed
+
+-   Upgraded Next.js to 14.2.4.
+
+### Fixed
+
+-   Some data in `QUICK_LINKS` was outdated.
+
+## [2.12.3] - 2024-08-07
+
+### Added
+
+-   New taxa to Quick Links.
+
+## [2.12.2] - 2024-06-21
+
+### Changed
+
+-   Upgraded Next.js to 14.2.4.
+
+## [2.12.1] - 2024-06-18
+
+### Fixed
+
+-   Wrong separator was being used for attributions in some cases.
+
+## [2.12.0] - 2024-06-15
+
+### Changed
+
+-   Revised collection attribution to include anonymous entries.
+
+### Fixed
+
+-   Image Page nav looked awkward when there were no buttons (_Pan-Biota_).
 
 ## [2.11.0] - 2024-04-13
 

@@ -36,7 +36,7 @@ const getDirectImage = (uuid: UUID, data: SourceData): Entity<Image> | null => {
             const value = data.images.get(imageUUID)
             if (!value) {
                 console.warn(`Image not found! (UUID=${imageUUID})`)
-            } else {
+            } else if (!value.unlisted) {
                 return { uuid: imageUUID, value }
             }
         })

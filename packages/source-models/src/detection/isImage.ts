@@ -1,5 +1,6 @@
 import {
     invalidate,
+    isBoolean,
     isISOTimestamp,
     isLicenseURL,
     isNormalizedText,
@@ -20,6 +21,7 @@ export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): 
     isISOTimestamp((x as Image).modified, faultCollector?.sub("modified")) &&
     isUUIDv4((x as Image).specific, faultCollector?.sub("specific")) &&
     isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor")) &&
+    isBoolean((x as Image).unlisted) &&
     Boolean(
         (x as Image).attribution ||
             !(x as Image).license ||

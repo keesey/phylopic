@@ -5,6 +5,7 @@ import ContributorViewer from "./ContributorViewer"
 import Controls from "./Controls"
 import styles from "./index.module.scss"
 import LicenseEditor from "./LicenseEditor"
+import ListedEditor from "./ListedEditor"
 import NodesEditor from "./NodesEditor"
 import SponsorEditor from "./SponsorEditor"
 export type Props = {
@@ -29,6 +30,10 @@ const ImageEditor: FC<Props> = ({ uuid }) => {
                 <dt>License</dt>
                 <dd>
                     <LicenseEditor uuid={uuid} />
+                </dd>
+                <dt>Listed?</dt>
+                <dd>
+                    <ListedEditor uuid={uuid} />
                 </dd>
                 <dt>Nodes</dt>
                 <dd>

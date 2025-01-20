@@ -4,11 +4,11 @@ import SourceClient from "./source/SourceClient.js"
     const client = new SourceClient()
     try {
         console.info("PhyloPic AutoLink starting...")
-        if (process.argv.length < 2) {
-            console.info("Valid options: eol otol pbdb")
+        if (process.argv.length <= 2) {
+            console.info("Valid options: eol gbif otol pbdb")
         } else {
             for (const option of process.argv.slice(2)) {
-                switch (option) {
+                switch (option.toLowerCase()) {
                     case "eol": {
                         console.info("Auto-linking Encyclopedia of Life.")
                         const linker = await import("./autolink/eol.js")
@@ -32,6 +32,10 @@ import SourceClient from "./source/SourceClient.js"
                         const linker = await import("./autolink/pbdb.js")
                         await linker.default(client)
                         break
+                    }
+                    default: {
+                        console.warn(`Unrecognized option: ${JSON.stringify(option)}`)
+                        console.info("Valid options: eol gbif otol pbdb")
                     }
                 }
             }
