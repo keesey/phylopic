@@ -15,7 +15,9 @@ const loadImageTags = async (service: GetImageTagsService): Promise<string> => {
     const client = await service.createPgClient()
     let data = "["
     try {
-        const result = await client.query<{ tag: string }>("SELECT DISTINCT unnest(tags) AS tag FROM image ORDER BY tag")
+        const result = await client.query<{ tag: string }>(
+            "SELECT DISTINCT unnest(tags) AS tag FROM image ORDER BY tag",
+        )
         result.rows.forEach(({ tag }, index) => {
             if (index) {
                 data += ","
