@@ -161,6 +161,7 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
         modified: sourceImage.modified,
         modifiedFile,
         sponsor: sourceImage.sponsor || null,
+        tags: sourceImage.tags,
         ...(sourceImage.unlisted ? { unlisted: true } : null),
         uuid,
     }
