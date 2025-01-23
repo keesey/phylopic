@@ -2,12 +2,11 @@ import {
     DATA_MEDIA_TYPE,
     isNode,
     isNodeLineageParameters,
-    Link,
     Node,
+    NODE_EMBEDDED_PARAMETERS,
     NodeEmbedded,
     NodeLineageParameters,
     NodeLinks,
-    NODE_EMBEDDED_PARAMETERS,
     TitledLink,
 } from "@phylopic/api-models"
 import { normalizeUUID, UUID } from "@phylopic/utils"
@@ -25,8 +24,8 @@ import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-export type GetNodesParameters = DataRequestHeaders & NodeLineageParameters
-export type GetNodesService = PgClientService
+export type GetNodeLineageParameters = DataRequestHeaders & NodeLineageParameters
+export type GetNodeLineageService = PgClientService
 const DEFAULT_TITLE = "[Unnamed]"
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list taxonomic groups."
@@ -98,7 +97,7 @@ const getItemLinksAndJSON =
             }),
         )
     }
-export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = async (
+export const getNodeLineage: Operation<GetNodeLineageParameters, GetNodeLineageService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {

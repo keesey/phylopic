@@ -3,9 +3,6 @@ import { APIGatewayProxyEventPathParameters } from "aws-lambda"
 import getParameters from "./getParameters"
 export const getUUID = (pathParameters: APIGatewayProxyEventPathParameters | null) => {
     const { uuid } = getParameters<{ uuid: string }>(pathParameters, ["uuid"])
-    if (uuid) {
-        return { uuid: normalizeUUID(uuid) }
-    }
-    return {}
+    return { uuid: normalizeUUID(uuid) }
 }
 export default getUUID

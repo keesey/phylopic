@@ -380,9 +380,32 @@ functions:
                           paths:
                               uuid: true
                           querystrings:
+                              build: false
                               embed_childNodes: false
                               embed_parentNode: false
                               embed_primaryImage: false
+            - http:
+                  cors:
+                      allowCredentials: true
+                      origin: "*"
+                      headers:
+                          - Accept
+                          - Authorization
+                          - Content-Type
+                          - X-Amz-Date
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Api-Key
+                  path: "nodes/{uuid}/imagetags"
+                  method: get
+                  request:
+                      parameters:
+                          headers:
+                              accept: false
+                          paths:
+                              uuid: true
+                          querystrings:
+                              build: false
             - http:
                   cors:
                       allowCredentials: true
@@ -404,6 +427,7 @@ functions:
                           paths:
                               uuid: true
                           querystrings:
+                              build: false
                               embed_childNodes: false
                               embed_items: false
                               embed_parentNode: false
@@ -431,6 +455,7 @@ functions:
                               namespace: true
                               objectID: true
                           querystrings:
+                              build: false
                               embed_childNodes: false
                               embed_parentNode: false
                               embed_primaryImage: false
@@ -486,6 +511,7 @@ functions:
                               authority: true
                               namespace: true
                           querystrings:
+                              build: false
                               embed_childNodes: false
                               embed_parentNode: false
                               embed_primaryImage: false

@@ -21,6 +21,7 @@ import getImages from "../operations/getImages"
 import getImageTags from "../operations/getImageTags"
 import getNamespaces from "../operations/getNamespaces"
 import getNode from "../operations/getNode"
+import getNodeImageTags from "../operations/getNodeImageTags"
 import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
@@ -238,7 +239,23 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
         }
     }
     if (path.startsWith("/nodes/")) {
-        if (path.endsWith("/lineage") || path.endsWith("/lineage/")) {
+        if (path.endsWith("/imagetags") || path.endsWith("/imagetags/")) {
+            switch (event.httpMethod) {
+                case "GET": {
+                    return getNodeImageTags(
+                        {
+                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.queryStringParameters, ["build"]),
+                            ...getUUID(event.pathParameters),
+                        },
+                        SERVICE,
+                    )
+                }
+                default: {
+                    throw create405()
+                }
+            }
+        } else if (path.endsWith("/lineage") || path.endsWith("/lineage/")) {
             switch (event.httpMethod) {
                 case "GET": {
                     return getNodeLineage(
