@@ -7,9 +7,10 @@ import {
     isObject,
     isPublicDomainLicenseURL,
     isString,
+    isUndefinedOr,
     isUUIDv4,
     isValidLicenseURL,
-    ValidationFaultCollector
+    ValidationFaultCollector,
 } from "@phylopic/utils"
 import { Submission } from "../types"
 const isStatus = (x: unknown, faultCollector?: ValidationFaultCollector): x is "incomplete" | "submitted" => {
@@ -28,7 +29,7 @@ export const isSubmission = (x: unknown, faultCollector?: ValidationFaultCollect
     isNullOr(isValidLicenseURL)((x as Submission).license, faultCollector?.sub("license")) &&
     isNullOr(isNormalizedText)((x as Submission).newTaxonName, faultCollector?.sub("newTaxonName")) &&
     isNullOr(isNormalizedText)((x as Submission).sponsor, faultCollector?.sub("sponsor")) &&
-    isNullOr(isString)((x as Submission).tags, faultCollector?.sub("tags")) &&
+    isUndefinedOr(isNullOr(isString))((x as Submission).tags, faultCollector?.sub("tags")) &&
     isStatus((x as Submission).status, faultCollector?.sub("status")) &&
     ((x as Submission).status === "incomplete" ||
         Boolean(
