@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   The `build` query parameter was msissing in the Serverless configuration for several endpoints.
+-   The `build` query parameter was missing in the Serverless configuration for several endpoints.
 
 ### Removed
 
