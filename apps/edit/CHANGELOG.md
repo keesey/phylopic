@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+-   Phylogeny Tab and Editor.
+-   Node Split Editor.
+
 ### Security
 
 ## [1.9.0] - 2025-01-16
