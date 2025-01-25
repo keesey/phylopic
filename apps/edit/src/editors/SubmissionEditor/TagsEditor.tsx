@@ -1,28 +1,35 @@
 import { Tags } from "@phylopic/api-models"
-import { Image } from "@phylopic/source-models"
+import { Submission } from "@phylopic/source-models"
 import { fetchJSON } from "@phylopic/ui"
-import { Tag, UUID, isTag, normalizeTag } from "@phylopic/utils"
+import { Hash, Tag, isTag, normalizeTag } from "@phylopic/utils"
 import { useAPIFetcher, useAPISWRKey } from "@phylopic/utils-api"
 import Link from "next/link"
-import { FC, useCallback, useState } from "react"
+import { FC, useCallback, useMemo, useState } from "react"
 import useSWR from "swr"
 import useSWRImmutable from "swr/immutable"
-import useModifiedPatcher from "~/swr/useModifiedPatcher"
+import usePatcher from "~/swr/usePatcher"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 export type Props = {
-    uuid: UUID
+    hash: Hash
 }
-const TagsEditor: FC<Props> = ({ uuid }) => {
+const TagsEditor: FC<Props> = ({ hash }) => {
+    const [newTag, setNewTag] = useState("")
     const imageTagsKey = useAPISWRKey(`${process.env.NEXT_PUBLIC_API_URL}/imagetags`)
     const imageTagsFetcher = useAPIFetcher<Tags>()
     const imageTagsSWR = useSWRImmutable<Tags>(imageTagsKey, imageTagsFetcher)
-    const [newTag, setNewTag] = useState("")
-    const key = `/api/images/_/${encodeURIComponent(uuid)}`
-    const response = useSWR<Image & { uuid: UUID }>(key, fetchJSON)
-    const patcher = useModifiedPatcher(key, response)
+    const key = `/api/submissions/_/${encodeURIComponent(hash)}`
+    const response = useSWR<Submission & { hash: Hash }>(key, fetchJSON)
+    const patcher = usePatcher(key, response)
     const { data } = response
-    const { tags } = data ?? {}
+    const tags = useMemo(
+        () =>
+            data?.tags
+                ?.split(",")
+                .filter(tag => isTag(tag))
+                .sort() ?? [],
+        [data?.tags],
+    )
     const addTag = useCallback(
         (tag: Tag | null) => {
             if (tag) {
@@ -31,7 +38,7 @@ const TagsEditor: FC<Props> = ({ uuid }) => {
                     const newTags = new Set(tags)
                     if (!newTags.has(tag)) {
                         newTags.add(tag)
-                        patcher({ tags: Array.from(newTags).sort() })
+                        patcher({ tags: Array.from(newTags).sort().join(",") })
                         setNewTag("")
                     }
                 }
@@ -44,7 +51,7 @@ const TagsEditor: FC<Props> = ({ uuid }) => {
             const newTags = new Set(tags)
             if (newTags.has(tag)) {
                 newTags.delete(tag)
-                patcher({ tags: Array.from(newTags).sort() })
+                patcher({ tags: Array.from(newTags).sort().join(",") })
             }
         },
         [patcher, tags],
@@ -55,7 +62,7 @@ const TagsEditor: FC<Props> = ({ uuid }) => {
     return (
         <section>
             <BubbleList>
-                {data.tags?.map(tag => (
+                {tags.map(tag => (
                     <BubbleItem key={tag}>
                         <Link href={`/tags/${encodeURIComponent(tag)}`}>{tag}</Link>
                         <button onClick={() => removeTag(tag)} title="Remove Tag">
