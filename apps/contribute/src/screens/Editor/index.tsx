@@ -1,6 +1,6 @@
 import { isSubmission, Submission } from "@phylopic/source-models"
 import { Hash, LICENSE_NAMES } from "@phylopic/utils"
-import { FC, useCallback, useMemo, useState } from "react"
+import { FC, Fragment, useCallback, useMemo, useState } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Dialogue from "~/ui/Dialogue"
@@ -86,6 +86,19 @@ const Editor: FC<Props> = ({ hash }) => {
                                         </a>
                                     </strong>{" "}
                                     license.
+                                </p>
+                            )}
+                            {submission.tags && (
+                                <p>
+                                    It has been assigned{" "}
+                                    {submission.tags.includes(",") ? "the following tags" : "one tag"}:{" "}
+                                    {submission.tags.split(",").map((tag, index) => (
+                                        <Fragment key={tag}>
+                                            {index > 0 && ", "}
+                                            <strong>{tag}</strong>
+                                        </Fragment>
+                                    ))}
+                                    .
                                 </p>
                             )}
                         </figcaption>
@@ -190,6 +203,9 @@ const Editor: FC<Props> = ({ hash }) => {
                             <UserOptions>
                                 <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/nodes`} icon={ICON_PENCIL}>
                                     The taxonomic assignment.
+                                </UserLinkButton>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/tags`} icon={ICON_PENCIL}>
+                                    The tags.
                                 </UserLinkButton>
                                 <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/usage`} icon={ICON_PENCIL}>
                                     The license or attribution.
