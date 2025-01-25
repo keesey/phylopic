@@ -31,7 +31,6 @@ export class PGEditor<T> extends PGReader<T> implements Editable<T> {
     }
     public async put(value: T) {
         const client = await this.provider.getPG()
-        console.debug({ updates: this.updates(), updateValues: this.updateValues(value)})
         if (await this.exists()) {
             await client.query(
                 `UPDATE ${this.table} SET ${this.updates()} WHERE ${this.identification()} AND disabled=0::bit`,
@@ -75,7 +74,9 @@ export class PGEditor<T> extends PGReader<T> implements Editable<T> {
             .join(",")
     }
     protected insertValues(value: T) {
-        return this.fields.filter(field => field.insertable).map(field => prepareValue(value[field.property], field.type))
+        return this.fields
+            .filter(field => field.insertable)
+            .map(field => prepareValue(value[field.property], field.type))
     }
     protected updates() {
         return this.fields
@@ -84,6 +85,8 @@ export class PGEditor<T> extends PGReader<T> implements Editable<T> {
             .join(",")
     }
     protected updateValues(value: T) {
-        return this.fields.filter(field => field.updateable).map(field => prepareValue(value[field.property], field.type))
+        return this.fields
+            .filter(field => field.updateable)
+            .map(field => prepareValue(value[field.property], field.type))
     }
 }
