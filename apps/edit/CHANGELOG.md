@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Editing for image tags.
+-   Editing for image tags, both on Image Pages and Submission Pges.
 
 ### Changed
 
