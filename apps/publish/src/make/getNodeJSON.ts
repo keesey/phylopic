@@ -153,6 +153,7 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
             },
             external: getExternal(uuid, data),
             images: { href: `/images?build=${data.build}&filter_node=${uuid}` },
+            imageTags: { href: `/nodes/${uuid}/imagetags?build=${data.build}` },
             lineage: { href: `/nodes/${uuid}/lineage?build=${data.build}` },
             parentNode: sourceNode.parent
                 ? {
