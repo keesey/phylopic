@@ -173,7 +173,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
                     image.modified,
                     data.filesModified.get(uuid) ?? image.modified,
                     stringifyNormalized(await getImageJSON(uuid, data)),
-                    stringifyNormalized(image.tags).replace(/^\[/, "{").replace(/\]$/, "}"),
+                    image.tags?.length ? `{${image.tags.map(tag => stringifyNormalized(tag)).join(",")}}` : null,
                     titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
                     image.unlisted ? 1 : 0,
                 )
