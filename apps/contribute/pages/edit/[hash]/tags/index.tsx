@@ -1,3 +1,5 @@
+import { API } from "@phylopic/api-models"
+import { fetchJSON } from "@phylopic/ui"
 import { Hash, isHash } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
@@ -8,10 +10,12 @@ import LoadingState from "~/screens/LoadingState"
 import SourceClient from "~/source/SourceClient"
 const Tags = dynamic(() => import("~/screens/Tags"), { ssr: false })
 type Props = {
+    build: number
     hash: Hash
 }
-const Page: NextPage<Props> = ({ hash }) => (
+const Page: NextPage<Props> = ({ build, hash }) => (
     <PageLayout
+        build={build}
         seo={{
             noindex: true,
             title: "PhyloPic: Tagging Your Submission",
@@ -31,6 +35,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
     if (!isHash(hash)) {
         return { notFound: true }
     }
+    const buildPromise = fetchJSON<API>(process.env.NEXT_PUBLIC_API_URL + "/")
     let client: SourceClient | undefined
     let notFound = false
     try {
@@ -46,6 +51,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
         return { notFound }
     }
     return {
-        props: { hash },
+        props: {
+            build: (await buildPromise).build,
+            hash,
+        },
     }
 }

@@ -1,7 +1,7 @@
 import { type Tags as TagsModel } from "@phylopic/api-models"
-import { Hash, Tag } from "@phylopic/utils"
+import { Hash, isTag, normalizeTag, Tag } from "@phylopic/utils"
 import { useAPIFetcher, useAPISWRKey } from "@phylopic/utils-api"
-import { FC, useMemo } from "react"
+import { FC, useMemo, useState } from "react"
 import useSWRImmutable from "swr/immutable"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
@@ -13,10 +13,13 @@ import SpeechStack from "~/ui/SpeechStack"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 import LoadingState from "../LoadingState"
+import UserInput from "~/ui/UserInput"
+import UserTextForm from "~/ui/UserTextForm"
 export type Props = {
     hash: Hash
 }
 const Tags: FC<Props> = ({ hash }) => {
+    const [newTag, setNewTag] = useState("")
     const tagKey = useAPISWRKey(`${process.env.NEXT_PUBLIC_API_URL}/imagetags`)
     const fetcher = useAPIFetcher<TagsModel>()
     const tagsResponse = useSWRImmutable(tagKey, fetcher)
@@ -24,6 +27,23 @@ const Tags: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const submissionTags = useMemo(() => new Set<Tag>(submission?.tags?.split(",")), [submission?.tags])
     const mutate = useSubmissionMutator(hash)
+    if (!submission) {
+        return <LoadingState>One moment&hellip;</LoadingState>
+    }
+    const addNewTag = (tag: Tag) => {
+        console.debug({ tag })
+        tag = normalizeTag(tag) ?? ""
+        if (isTag(tag)) {
+            if (!submissionTags.has(tag)) {
+                const newTags = new Set(submissionTags)
+                newTags.add(tag)
+                void mutate({ tags: Array.from(newTags).sort().join(",") }).then(() => setNewTag(""))
+            }
+        } else {
+            setNewTag(tag)
+            alert("Please enter a tag of at least two characters.")
+        }
+    }
     const toggleTag = (tag: Tag) => {
         const newTags = new Set(submissionTags)
         if (submissionTags.has(tag)) {
@@ -31,42 +51,63 @@ const Tags: FC<Props> = ({ hash }) => {
         } else {
             newTags.add(tag)
         }
-        mutate({ tags: Array.from(newTags).sort().join(",") })
-    }
-    if (!submission) {
-        return <LoadingState>One moment&hellip;</LoadingState>
+        void mutate({ tags: Array.from(newTags).sort().join(",") })
     }
     return (
-        <Dialogue>
-            {!submission.tags && (
-                <>
-                    <Speech mode="system">
-                        <SpeechStack collapsible>
-                            <FileView
-                                src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/files/${encodeURIComponent(hash)}`}
-                                mode="light"
-                            />
-                            <p>
-                                <strong>Tags</strong> can be used to specify an aspect of your silhouette&rapos;s
-                                subject, such as life stage. You may use any of the tags below, or add new tags.
-                            </p>
-                        </SpeechStack>
-                    </Speech>
-                    <UserOptions>
-                        {existingTags?.map(tag => (
-                            <UserButton
-                                danger={submissionTags.has(tag)}
-                                icon={submissionTags.has(tag) ? ICON_X : ICON_PLUS}
-                                key={tag}
-                                onClick={() => toggleTag(tag)}
+        <>
+            <datalist id="tag-list">
+                {existingTags.map(tag => (
+                    <option value={tag} />
+                ))}
+            </datalist>
+            <Dialogue>
+                {!submission.tags && (
+                    <>
+                        <Speech mode="system">
+                            <SpeechStack collapsible>
+                                <FileView
+                                    src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/files/${encodeURIComponent(hash)}`}
+                                    mode="light"
+                                />
+                                <p>
+                                    <strong>Tags</strong> can be used to specify an aspect of your silhouette&rsquo;s
+                                    subject, such as life stage.
+                                    {existingTags.length > 0 && (
+                                        <> You may use any of the tags below, or add new tags.</>
+                                    )}
+                                </p>
+                            </SpeechStack>
+                        </Speech>
+                        {existingTags.length && (
+                            <UserOptions>
+                                {existingTags.map(tag => (
+                                    <UserButton
+                                        danger={submissionTags.has(tag)}
+                                        icon={submissionTags.has(tag) ? ICON_X : ICON_PLUS}
+                                        key={tag}
+                                        onClick={() => toggleTag(tag)}
+                                    >
+                                        {tag}
+                                    </UserButton>
+                                ))}
+                            </UserOptions>
+                        )}
+                        <UserOptions>
+                            <UserTextForm
+                                editable
+                                onSubmit={value => addNewTag(value)}
+                                value={newTag}
+                                prefix="I want to add a new tag:"
                             >
-                                {tag}
-                            </UserButton>
-                        ))}
-                    </UserOptions>
-                </>
-            )}
-        </Dialogue>
+                                {(value, setValue) => (
+                                    <UserInput list="tag-list" maxLength={32} onChange={setValue} value={value} />
+                                )}
+                            </UserTextForm>
+                        </UserOptions>
+                    </>
+                )}
+            </Dialogue>
+        </>
     )
 }
 export default Tags
