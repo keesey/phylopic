@@ -40,7 +40,7 @@
     "scripts": {
         "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf node_modules",
         "deploy": "sls deploy",
-        "dev": "sls offline --httpPort 3003",
+        "dev": "sls offline --httpPort 3003 --lambdaPort 3004",
         "lint": "eslint --fix ./**/*.[jt]s"
     },
     "version": "2.7.1"
