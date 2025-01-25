@@ -16,5 +16,5 @@ export interface ImageListParameters extends ListParameters<ImageEmbedded> {
     filter_modifiedFile_before?: ISOTimestamp
     filter_name?: string
     filter_node?: UUID
-    filter_tags?: string;
+    filter_tags?: string
 }
