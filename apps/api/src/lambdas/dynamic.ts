@@ -51,6 +51,7 @@ const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [
     "filter_modifiedFile_before",
     "filter_name",
     "filter_node",
+    "filter_tags",
 ]
 const getEntityParameters = (event: APIGatewayProxyEvent, embeddedParameters: readonly string[]) => ({
     ...getParameters(event.headers, ["accept"]),

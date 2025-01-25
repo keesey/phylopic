@@ -261,6 +261,7 @@ functions:
                               filter_modifiedFile_before: false
                               filter_name: false
                               filter_node: false
+                              filter_tags: false
                               embed_contributor: false
                               embed_generalNode: false
                               embed_items: false
