@@ -8,6 +8,7 @@ export interface NodeLinks extends Links<TitledLink> {
     readonly cladeImages: TitledLink | null
     readonly external: readonly TitledLink[]
     readonly images: Link | null
+    readonly imageTags: Link
     readonly lineage: Link
     readonly parentNode: TitledLink | null
     readonly primaryImage: TitledLink | null

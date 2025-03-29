@@ -28,9 +28,6 @@ const Home: NextPage = () => (
                         <Link href="nodes">Nodes</Link>
                     </li>
                     <li>
-                        <Link href="phylogeny">Phylogeny</Link>
-                    </li>
-                    <li>
                         <Link href="submissions">Submissions</Link>
                     </li>
                     <li>
