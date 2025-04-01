@@ -43,5 +43,6 @@ export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): 
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&
     // :TODO: Add validation for modified and modifiedFile
     isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor")) &&
-    isArray(isTag)((x as Image).tags, faultCollector?.sub("tags")) &&
+    // :TODO: Remove isNull, isUndefined below.
+    isNullOr(isUndefinedOr(isArray(isTag)))((x as Image).tags, faultCollector?.sub("tags")) &&
     isUndefinedOr(isTrue)((x as Image).unlisted, faultCollector?.sub("unlisted"))
