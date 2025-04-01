@@ -2,14 +2,13 @@ import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
 import {
     createSearch,
-    extractPath,
     isDefined,
     isUUIDv4,
     Nomen,
     Query,
     shortenNomen,
     stringifyNomen,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
