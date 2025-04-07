@@ -129,11 +129,11 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <ul>
                 <li>
                     <a
-                        href="//keesey.gumroad.com/l/pocketphylogenies"
+                        href="//www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic"
                         onClick={() =>
                             customEvents.clickLink(
                                 "menu_link",
-                                "//keesey.gumroad.com/l/pocketphylogenies",
+                                "//www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic",
                                 "Pocket Phylogenies",
                                 "link",
                             )
