@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.1] - 2025-04-07
+
+### Changed
+
+-   Store links now point to Patreon instead of Gumroad.
+
 ## [2.13.0] - 2025-01-03
 
 ### Added
