@@ -2,14 +2,13 @@ import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
 import {
     createSearch,
-    extractPath,
     isDefined,
     isUUIDv4,
     Nomen,
     Query,
     shortenNomen,
     stringifyNomen,
-    UUID,
+    UUID
 } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
@@ -46,6 +45,7 @@ import ImageRasterView from "~/views/ImageRasterView"
 import LicenseDetailsView from "~/views/LicenseDetailsView"
 import LicenseView from "~/views/LicenseView"
 import NomenView from "~/views/NomenView"
+import TagView from "~/views/TagView"
 const ContributorBanner = dynamic(() => import("~/contribute/ContributorBanner"), { ssr: false })
 const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
     embed_nodes: "true",
@@ -97,12 +97,13 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                 ),
                             ),
                         ),
+                        ...Array.from(image.tags),
                     ].map(s => s.toLowerCase()),
                 ),
             )
                 .sort()
                 .join(","),
-        [image._embedded.nodes, nameShort],
+        [image._embedded.nodes, image.tags, nameShort],
     )
     const title = useMemo(
         () => `${nameShort}${image.attribution ? ` by ${image.attribution}` : ""} (${licenseShort}) - PhyloPic`,
@@ -131,7 +132,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
             <NextSeo
                 additionalMetaTags={[
                     ...(image.attribution ? [{ content: image.attribution, name: "author" }] : []),
-                    ...(keywords && !image.unlisted ? [{ name: "keywords", content: keywords }] : []),
+                    ...(keywords.length > 0 && !image.unlisted ? [{ name: "keywords", content: keywords }] : []),
                 ]}
                 additionalLinkTags={[
                     { href: image._links.contributor.href, rel: "author" },
@@ -264,6 +265,20 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                         >
                                             <NomenView value={image._embedded.specificNode.names[0]} />
                                         </Link>
+                                    </td>
+                                </tr>
+                            )}
+                            {image.tags.length > 0 && (
+                                <tr>
+                                    <th>Tags</th>
+                                    <td>
+                                        <ul>
+                                            {image.tags.map(tag => (
+                                                <li key={tag}>
+                                                    <TagView tag={tag} />
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </td>
                                 </tr>
                             )}

@@ -1,0 +1,15 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$cerulean;
+    border-radius: 0.5rem;
+    color: colors.$white;
+    font-size: small;
+    font-weight: bold;
+    line-height: 1rem;
+    height: 1.25rem;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
+}

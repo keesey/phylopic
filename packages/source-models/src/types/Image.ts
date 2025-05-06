@@ -1,4 +1,4 @@
-import type { ISOTimestamp, LicenseURL, UUID } from "@phylopic/utils"
+import type { ISOTimestamp, LicenseURL, Tag, UUID } from "@phylopic/utils"
 export type Image = Readonly<{
     attribution: string | null
     created: ISOTimestamp
@@ -8,5 +8,6 @@ export type Image = Readonly<{
     general: UUID | null
     specific: UUID
     sponsor: string | null
+    tags: readonly Tag[]
     unlisted: boolean
 }>

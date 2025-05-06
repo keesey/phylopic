@@ -7,6 +7,7 @@ import styles from "./index.module.scss"
 import LicenseEditor from "./LicenseEditor"
 import IdentifierEditor from "../IdentifierEditor"
 import SponsorEditor from "./SponsorEditor"
+import TagsEditor from "./TagsEditor"
 export type Props = {
     hash: Hash
 }
@@ -33,6 +34,10 @@ const SubmissionEditor: FC<Props> = ({ hash }) => {
                 <dt>Identifier</dt>
                 <dd>
                     <IdentifierEditor hash={hash} />
+                </dd>
+                <dt>Tags</dt>
+                <dd>
+                    <TagsEditor hash={hash} />
                 </dd>
             </dl>
             <Controls hash={hash} />

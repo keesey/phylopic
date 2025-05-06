@@ -36,6 +36,6 @@ export class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
         const keys = Object.keys(value)
         return this.fields
             .filter(field => field.updateable && keys.includes(field.property))
-            .map(field => prepareValue(value[field.property]))
+            .map(field => prepareValue(value[field.property], field.type))
     }
 }
