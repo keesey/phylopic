@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.3] - 2025-05-10
+
+### Added
+
+-   Instead of just checking if an image needs to be updating by comparing the source image against the published source image, also checking if the raster, social, and thumbnail images exist.
+
+### Changed
+
+-   Dividing image processing into up to 216 tasks instead of 16.
+
 ## [1.7.2] - 2025-01-03
 
 ### Added

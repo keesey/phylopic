@@ -67,7 +67,8 @@ const nextConfig = {
             },
             {
                 source: "/materials",
-                destination: "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic",
+                destination:
+                    "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic",
                 permanent: true,
             },
             {
