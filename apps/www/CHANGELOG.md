@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.2] - 2025-07-21
+
+### Added
+
+-   Override for the age of _Mammalia_.
+
 ## [2.13.1] - 2025-04-07
 
 ### Changed

@@ -184,6 +184,11 @@ const TIMETREE_ERRATA: AgeSourceRecord = {
         ...TIMETREE,
         ages: [11900000, 11900000],
     },
+    // Mammalia
+    "1fccccf8-fbee-416c-9cd9-eb9c9cc88ae8": {
+        ...TIMETREE,
+        ages: [163700000, 185900000],
+    },
 }
 const PREDEFINED: AgeSourceRecord = {
     ...HOMININI,
