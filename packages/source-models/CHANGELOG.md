@@ -23,19 +23,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   New property: `Image.unlisted`.
+- New property: `Image.unlisted`.
 
 ## [1.0.2] - 2024-04-13
 
 ### Changed
 
--   Upgraded all dependencies.
--   Switched from `mocha` to `vitest`.
+- Upgraded all dependencies.
+- Switched from `mocha` to `vitest`.
 
 ## [1.0.1] - 2023-05-14
 
 ### Changed
 
--   Upgraded to TypeScript 5.0.4.
+- Upgraded to TypeScript 5.0.4.
 
 ## [1.0.0] - 2023-02-12

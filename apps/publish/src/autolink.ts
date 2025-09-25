@@ -5,7 +5,7 @@ import SourceClient from "./source/SourceClient.js"
     try {
         console.info("PhyloPic AutoLink starting...")
         if (process.argv.length <= 2) {
-            console.info("Valid options: eol gbif otol pbdb")
+            console.info("Valid options: eol gbif ncbi otol pbdb")
         } else {
             for (const option of process.argv.slice(2)) {
                 switch (option.toLowerCase()) {
@@ -18,6 +18,12 @@ import SourceClient from "./source/SourceClient.js"
                     case "gbif": {
                         console.info("Auto-linking Global Biodiversity Information Facility.")
                         const linker = await import("./autolink/gbif.js")
+                        await linker.default(client)
+                        break
+                    }
+                    case "ncbi": {
+                        console.info("Auto-linking National Center for Biotechnology Information.")
+                        const linker = await import("./autolink/ncbi.js")
                         await linker.default(client)
                         break
                     }
@@ -35,7 +41,7 @@ import SourceClient from "./source/SourceClient.js"
                     }
                     default: {
                         console.warn(`Unrecognized option: ${JSON.stringify(option)}`)
-                        console.info("Valid options: eol gbif otol pbdb")
+                        console.info("Valid options: eol gbif ncbi otol pbdb")
                     }
                 }
             }

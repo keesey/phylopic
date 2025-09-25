@@ -10,12 +10,12 @@ See instructions in the [_PhyloPic_ project `README`](../../README.md) for setti
 
 Make sure you have the following installed on your system and reachable via the system path:
 
--   [AWS CLI](https://aws.amazon.com/cli/) (v2.4.20 or higher)
--   [Image Magick](https://imagemagick.org/script/download.php) (v7.1 or higher)
--   [Inkscape](https://inkscape.org/release/inkscape-1.1.2/) (v1.1 or higher)
--   [Node.js](https://nodejs.org/en/download/) (v16 or higher)
--   [potrace](http://potrace.sourceforge.net/#downloading) (v1.16 or higher)
--   [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
+- [AWS CLI](https://aws.amazon.com/cli/) (v2.4.20 or higher)
+- [Image Magick](https://imagemagick.org/script/download.php) (v7.1 or higher)
+- [Inkscape](https://inkscape.org/release/inkscape-1.1.2/) (v1.1 or higher)
+- [Node.js](https://nodejs.org/en/download/) (v16 or higher)
+- [potrace](http://potrace.sourceforge.net/#downloading) (v1.16 or higher)
+- [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
 
 ### Environment variables
 
