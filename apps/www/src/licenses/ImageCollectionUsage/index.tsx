@@ -10,7 +10,7 @@ export interface Props {
     uuid?: UUIDish
 }
 const ImageCollectionUsage: FC<Props> = ({ items, total, uuid }) => {
-    const images = items?.length === total ? items ?? [] : []
+    const images = items?.length === total ? (items ?? []) : []
     if (!total) {
         // :TODO: Skeleton?
         return null

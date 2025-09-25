@@ -46,7 +46,7 @@ yarn dev
 
 ## Authors
 
--   **T. Michael Keesey** - [keesey](https://github.com/keesey)
+- **T. Michael Keesey** - [keesey](https://github.com/keesey)
 
 ## License
 
