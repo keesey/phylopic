@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.3] - 2025-09-25
+
+### Fixed
+
+-   Updated Quick Links to reflect name change from *Endopterygota* to *Holometabola*.
+
 ## [2.13.2] - 2025-07-21
 
 ### Added

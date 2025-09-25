@@ -115,7 +115,7 @@ const QUICK_LINKS: QuickLinkNode = {
                                                                             uuid: "5ffbd7d5-9e6c-407a-b0de-5e58b49c7dc7",
                                                                         },
                                                                         {
-                                                                            slug: "endopterygota",
+                                                                            slug: "holometabola",
                                                                             uuid: "da0feb47-f2dc-4ab8-b439-b974c0e4aa03",
                                                                             children: [
                                                                                 {
