@@ -52,7 +52,7 @@ To run a development version on your local machine, on port `3002`:
 yarn dev
 ```
 
-Then run the production version locally, on port `3000`:
+To run the production version locally, on port `3000`:
 
 ```sh
 yarn build && yarn start
@@ -70,7 +70,7 @@ The app will deploy through [Vercel](https://vercel.com/keesey/phylopic-contribu
 
 ## Authors
 
--   **T. Michael Keesey** - [keesey](https://github.com/keesey)
+- **T. Michael Keesey** - [keesey](https://github.com/keesey)
 
 ## License
 

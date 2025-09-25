@@ -84,7 +84,9 @@ const TagsEditor: FC<Props> = ({ hash }) => {
                     />
                 </form>
                 <datalist id="tag-list">
-                    {imageTagsSWR.data?.tags.map(tag => <option key={tag} value={tag} />)}
+                    {imageTagsSWR.data?.tags.map(tag => (
+                        <option key={tag} value={tag} />
+                    ))}
                 </datalist>
             </BubbleList>
         </section>

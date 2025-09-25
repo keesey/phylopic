@@ -41,7 +41,16 @@ for file in .s3/source-images.phylopic.org/images/**/source; do
             sed 's/^\.s3\/source-images\.phylopic\.org\//.s3\/images.phylopic.org\//' |
             sed 's/source$/source.svg/')
         changed=$(cmp --silent $file $comparison && echo 0 || echo 1)
-        if [[ $changed -eq 1 ]]; then
+        raster=$(echo $file |
+            sed 's/^\.s3\/source-images\.phylopic\.org\/images\//.s3\/images\.phylopic\.org\/images\//' |
+            sed 's/\/source$/\/raster/')
+        social=$(echo $file |
+            sed 's/^\.s3\/source-images\.phylopic\.org\/images\//.s3\/images\.phylopic\.org\/images\//' |
+            sed 's/\/source$/\/social/')
+        thumbnail=$(echo $file |
+            sed 's/^\.s3\/source-images\.phylopic\.org\/images\//.s3\/images\.phylopic\.org\/images\//' |
+            sed 's/\/source$/\/thumbnail/')
+        if [[ $changed -eq 1 ]] || [ ! -d $raster ] || [ ! -d $social ] || [ ! -d $thumbnail ]; then
             dest=$(echo $file |
                 sed 's/^\.s3\/source-images\.phylopic\.org\/images\//.scratch\/vector\//' |
                 sed 's/\/source$/.source.svg/')
@@ -50,6 +59,9 @@ for file in .s3/source-images.phylopic.org/images/**/source; do
     else
         extension=$(echo $type |
             sed 's/^image\///')
+        if [ "$extension" != "png" ] && [ "$extension" != "jpeg" ] && [ "$extension" != "gif" ]; then
+            echo >&2 "Unrecognized image type!" $file
+        fi
         comparison=$(echo $file |
             sed 's/^\.s3\/source-images\.phylopic\.org\//.s3\/images.phylopic.org\//' |
             sed 's/source$/source.'$extension'/')

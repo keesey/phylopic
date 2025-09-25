@@ -33,6 +33,7 @@ import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
 import getUUID from "./parameters/getUUID"
 import PG_CLIENT_SERVICE from "./services/PG_CLIENT_SERVICE"
+import { EMPTY_UUID } from "@phylopic/utils"
 const SERVICE: PgClientService = PG_CLIENT_SERVICE
 const CONTRIBUTOR_FILTER_PARAMETERS: ReadonlyArray<keyof ContributorListParameters> = ["filter_collection"]
 const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["filter_collection", "filter_name"]
@@ -261,6 +262,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 case "GET": {
                     return getNodeLineage(
                         {
+                            uuid: EMPTY_UUID,
                             ...getParameters(event.headers, ["accept"]),
                             ...getParameters(event.queryStringParameters, ["build", "page"]),
                             ...getEmbedParameters(event.queryStringParameters, [

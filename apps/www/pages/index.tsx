@@ -29,7 +29,7 @@ const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/articles/api-recipes`,
     "http://api-docs.phylopic.org/v2",
     `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}`,
-    "https://keesey.gumroad.com/l/pocketphylogenies",
+    "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988",
 ]
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
@@ -149,7 +149,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                         <p>
                             Free wallet-sized cards with common questions about evolution on one side, and diagrams for
                             explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
-                            <a href="//keesey.gumroad.com/l/pocketphylogenies">
+                            <a href="//www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic">
                                 click here to print out Pocket Phylogenies for yourself
                             </a>
                             .

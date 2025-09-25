@@ -9,11 +9,11 @@
     "dependencies": {},
     "description": "An open database of freely reusable silhouettes of life forms.",
     "devDependencies": {
-        "@changesets/cli": "^2.27.1",
+        "@changesets/cli": "^2.29.7",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "prettier": "^3.2.5",
-        "turbo": "^2.3.3"
+        "prettier": "^3.6.2",
+        "turbo": "^2.5.8"
     },
     "license": "MIT",
     "name": "phylopic",
@@ -23,7 +23,7 @@
         "build": "turbo run build",
         "changeset": "changeset",
         "clean": "turbo run clean && rm -rf node_modules",
-        "dev": "turbo run dev --no-cache --parallel --continue",
+        "dev": "turbo run dev --cache=local:r,remote:r --parallel --continue",
         "format": "prettier --write \"**/*.{js,json,md,ts,tsx}\"",
         "lint": "turbo run lint",
         "make": "turbo run make --filter=@phylopic/publish",
@@ -31,7 +31,7 @@
         "test": "turbo run test",
         "version-packages": "changeset version"
     },
-    "version": "2.0.16",
+    "version": "2.0.18",
     "workspaces": [
         "apps/*",
         "packages/*"

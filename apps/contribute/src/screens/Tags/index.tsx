@@ -24,7 +24,7 @@ const Tags: FC<Props> = ({ hash }) => {
     const tagKey = useAPISWRKey(`${process.env.NEXT_PUBLIC_API_URL}/imagetags`)
     const fetcher = useAPIFetcher<TagsModel>()
     const tagsResponse = useSWRImmutable(tagKey, fetcher)
-    const existingTags = tagsResponse?.data?.tags ?? []
+    const existingTags = useMemo(() => tagsResponse?.data?.tags ?? [], [tagsResponse])
     const submission = useSubmission(hash)
     const submissionTags = useMemo(
         () => new Set<Tag>(submission?.tags?.split(",").filter(tag => isTag(tag))),
@@ -65,7 +65,7 @@ const Tags: FC<Props> = ({ hash }) => {
         <>
             <datalist id="tag-list">
                 {allTags.map(tag => (
-                    <option value={tag} />
+                    <option key={tag} value={tag} />
                 ))}
             </datalist>
             <Dialogue>

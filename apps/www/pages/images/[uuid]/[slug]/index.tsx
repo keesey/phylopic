@@ -1,15 +1,6 @@
 import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageContainer, TimestampView, useLicenseText, useNomenText } from "@phylopic/ui"
-import {
-    createSearch,
-    isDefined,
-    isUUIDv4,
-    Nomen,
-    Query,
-    shortenNomen,
-    stringifyNomen,
-    UUID
-} from "@phylopic/utils"
+import { createSearch, isDefined, isUUIDv4, Nomen, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticProps, NextPage } from "next"
