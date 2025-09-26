@@ -64,13 +64,18 @@ yarn test
 
 ## Running locally
 
+Certain apps require environment variables to be set. See each app's documentation for details:
+
+- [contribute](./apps/contribute/README.md#environment-variables)
+- [edit](./apps/edit/README.md#environment-variables)
+- [publish](./apps/publish/README.md#environment-variables)
+- [www](./apps/www/README.md#environment-variables)
+
 To run all apps locally:
 
 ```sh
 yarn dev
 ```
-
-Note that some apps require certain environment variables to be set, which are documented in that apps's `README` file.
 
 Apps will run on the following ports:
 
