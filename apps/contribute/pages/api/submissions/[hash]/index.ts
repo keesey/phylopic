@@ -13,6 +13,7 @@ const SUBMISSION_KEYS: ReadonlyArray<keyof Submission> = [
     "newTaxonName",
     "sponsor",
     "status",
+    "tags",
 ]
 const index: NextApiHandler<Submission> = async (req, res) => {
     let client: SourceClient | undefined

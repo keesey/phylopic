@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Editing for image tags, both on Image Pages and Submission Pages.
+
 ### Changed
 
 ### Deprecated
@@ -16,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Removed
+
+- Phylogeny Tab and Editor.
+- Node Split Editor.
 
 ### Security
 

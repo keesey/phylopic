@@ -74,12 +74,12 @@ Note that some apps require certain environment variables to be set, which are d
 
 Apps will run on the following ports:
 
-| App Project                     | Port   |
-| ------------------------------- | ------ |
-| [api](./apps/api)               | `3003` |
-| [contribute](./apps/contribute) | `3002` |
-| [edit](./apps/edit)             | `3001` |
-| [www](./apps/www)               | `3000` |
+| App Project                     | Port                              |
+| ------------------------------- | --------------------------------- |
+| [api](./apps/api)               | `3003` (HTTP) and `3004` (Lambda) |
+| [contribute](./apps/contribute) | `3002`                            |
+| [edit](./apps/edit)             | `3001`                            |
+| [www](./apps/www)               | `3000`                            |
 
 ## Releasing versions
 

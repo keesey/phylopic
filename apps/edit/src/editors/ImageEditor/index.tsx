@@ -8,6 +8,7 @@ import LicenseEditor from "./LicenseEditor"
 import ListedEditor from "./ListedEditor"
 import NodesEditor from "./NodesEditor"
 import SponsorEditor from "./SponsorEditor"
+import TagsEditor from "./TagsEditor"
 export type Props = {
     uuid: UUID
 }
@@ -34,6 +35,10 @@ const ImageEditor: FC<Props> = ({ uuid }) => {
                 <dt>Listed?</dt>
                 <dd>
                     <ListedEditor uuid={uuid} />
+                </dd>
+                <dt>Tags</dt>
+                <dd>
+                    <TagsEditor uuid={uuid} />
                 </dd>
                 <dt>Nodes</dt>
                 <dd>

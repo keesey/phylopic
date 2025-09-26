@@ -1,4 +1,4 @@
-import { UUID } from "@phylopic/utils"
+import { isTag, UUID } from "@phylopic/utils"
 import { Image, Submission } from "../types"
 export const getImage = (submission: Submission & { submitted: true }, specific: UUID): Image => {
     return {
@@ -10,6 +10,7 @@ export const getImage = (submission: Submission & { submitted: true }, specific:
         modified: submission.created,
         specific,
         sponsor: submission.sponsor ?? null,
+        tags: submission.tags?.split(",").filter(x => isTag(x)) ?? [],
         unlisted: false,
     }
 }

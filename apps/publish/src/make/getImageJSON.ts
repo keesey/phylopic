@@ -60,8 +60,10 @@ const getSocialLink = async (uuid: UUID): Promise<MediaLink<string, RasterMediaT
 }
 const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
     const folder = join(".s3", "images.phylopic.org", "images", uuid)
-    const files = (await listDir(folder)).filter(file => /^source\.[^.]+$/.test(file))
-    if (files.length !== 1) {
+    const files = (await listDir(folder)).filter(file => /^source\.[^.]+$/.test(file)).sort()
+    if (files.length > 1) {
+        console.warn(`Too many source images for <${uuid}>.`)
+    } else if (files.length !== 1) {
         throw new Error(`Could not find source for image <${uuid}>.`)
     }
     const filename = files[0]
@@ -161,6 +163,7 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
         modified: sourceImage.modified,
         modifiedFile,
         sponsor: sourceImage.sponsor || null,
+        tags: sourceImage.tags,
         ...(sourceImage.unlisted ? { unlisted: true } : null),
         uuid,
     }
