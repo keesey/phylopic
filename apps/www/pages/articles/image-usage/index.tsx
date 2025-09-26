@@ -289,19 +289,23 @@ const Article: FC = () => {
                     </p>
                     {collections[currentCollection].size >= 2 ? (
                         <p>
-                            Now that your collection has multiple images, you should be able to{" "}
-                            {!open && (
-                                <>
-                                    <a onClick={() => dispatch({ type: "OPEN" })} href="#collection-pages">
-                                        open the drawer
-                                    </a>{" "}
-                                    and{" "}
-                                </>
-                            )}
-                            click on the link icon next to &ldquo;{currentCollection} (
-                            {collections[currentCollection].size} image
-                            {collections[currentCollection].size === 1 ? "" : "s"})&rdquo; to open a web page for your
-                            collection. Then come back here to learn about <a href="#permalinks">permalinks</a>.
+                            <em>
+                                Your collection has {collections[currentCollection].size} images! Now you should be able
+                                to{" "}
+                                {!open && (
+                                    <>
+                                        <a onClick={() => dispatch({ type: "OPEN" })} href="#collection-pages">
+                                            open the drawer
+                                        </a>{" "}
+                                        and{" "}
+                                    </>
+                                )}
+                                click on the link icon next to &ldquo;{currentCollection} (
+                                {collections[currentCollection].size} image
+                                {collections[currentCollection].size === 1 ? "" : "s"})&rdquo; to open a web page for
+                                your collection. Then come back here to learn about <a href="#permalinks">permalinks</a>
+                                .
+                            </em>
                         </p>
                     ) : (
                         <>
@@ -413,8 +417,7 @@ const Article: FC = () => {
                     {Object.keys(collections).length === 1 && collections[currentCollection].size === 0 && (
                         <p>
                             <em>
-                               You&rsquo;ve deleted everything!{" "}
-                                <Link href="#a-note-about-storage">Keep reading</Link>.
+                                You&rsquo;ve deleted everything! <Link href="#a-note-about-storage">Keep reading</Link>.
                             </em>
                         </p>
                     )}
