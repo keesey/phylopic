@@ -83,7 +83,7 @@ const Article: FC = () => {
                 </p>
                 <p>
                     Attributing images to <SiteTitle /> is never required. (But mentioning the site is always
-                    appreciated.)
+                    appreciated!)
                 </p>
             </section>
             <section id="licenses">
@@ -151,8 +151,8 @@ const Article: FC = () => {
                         ), you may not need to follow these requirements.
                     </p>
                     <p>
-                        If these requirements would prevent you from reusing images, you may want to select the "public
-                        domain" filter on <SiteTitle /> pages with multiple images.
+                        If these requirements would prevent you from reusing images, you may want to select the
+                        &ldquo;public domain&rdquo; filter on <SiteTitle /> pages with multiple images.
                     </p>
                 </section>
                 <section id="share-alike">
@@ -176,8 +176,8 @@ const Article: FC = () => {
                         make any derivative works available under the same license.
                     </p>
                     <p>
-                        If this requirement would prevent you from reusing images, you may want to select the "no
-                        ShareAlike requirement" filter on <SiteTitle /> pages with multiple images.
+                        If this requirement would prevent you from reusing images, you may want to select the &ldquo;no
+                        ShareAlike requirement&rdquo; filter on <SiteTitle /> pages with multiple images.
                     </p>
                 </section>
                 <section id="non-commercial">
@@ -202,7 +202,7 @@ const Article: FC = () => {
                     </p>
                     <p>
                         In some cases you may be able to contact the person who uploaded the image to waive the license
-                        requirements. Look for the "contact the contributor" link on Image Pages (
+                        requirements. Look for the &ldquo;contact the contributor&rdquo; link on Image Pages (
                         <Link href="/images/5db9222c-40b5-4c56-be94-2a113e2dd18c/huaxiagnathus-orientalis#download-files">
                             example
                         </Link>
@@ -210,8 +210,8 @@ const Article: FC = () => {
                         uploaded the image may not hold the rights to the image.
                     </p>
                     <p>
-                        If this requirement would prevent you from reusing images, you may want to select the "free for
-                        commercial use" filter on <SiteTitle /> pages with multiple images.
+                        If this requirement would prevent you from reusing images, you may want to select the
+                        &ldquo;free for commercial use&rdquo; filter on <SiteTitle /> pages with multiple images.
                     </p>
                 </section>
             </section>
@@ -226,8 +226,8 @@ const Article: FC = () => {
                     <h3>The Collections Drawer</h3>
                     <p>
                         Toward the bottom of this page, you should see a wide horizontal bar with an arrow icon pointing
-                        upward. Underneath it should say, "Drag and drop silhouette images here to start a collection."
-                        Click on the horizontal bar to open the Collections Drawer. Or,{" "}
+                        upward. Underneath it should say, &ldquo;Drag and drop silhouette images here to start a
+                        collection.&rdquo; Click on the horizontal bar to open the Collections Drawer. Or,{" "}
                         <a onClick={() => dispatch({ type: "OPEN" })} href="#adding-images" role="button">
                             click here
                         </a>
@@ -236,7 +236,7 @@ const Article: FC = () => {
                     {open && (
                         <p>
                             <em>
-                                Looks like you've got it open! <Link href="#adding-images">Keep reading</Link>.
+                                Looks like you&rsquo;ve got it open! <Link href="#adding-images">Keep reading</Link>.
                             </em>
                         </p>
                     )}
@@ -246,8 +246,8 @@ const Article: FC = () => {
                     <>
                         <p>
                             Any place you see an image on <SiteTitle />, you can drag and drop it into your collection.
-                            Image Pages also include an "Add to Collection" button. Drag and drop the image below into
-                            your collection, or{" "}
+                            Image Pages also include an &ldquo;Add to Collection&rdquo; button. Drag and drop the image
+                            below into your collection, or{" "}
                             <a
                                 onClick={() =>
                                     dispatch({
@@ -269,15 +269,16 @@ const Article: FC = () => {
                     {currentCollection && collections[currentCollection].size > 0 && (
                         <p>
                             <em>
-                                You've got {collections[currentCollection].size === 1 ? "an image" : "some images"}{" "}
-                                added! <Link href="#removing-images">Keep reading</Link>.
+                                You&rsquo;ve got{" "}
+                                {collections[currentCollection].size === 1 ? "an image" : "some images"} added!{" "}
+                                <Link href="#removing-images">Keep reading</Link>.
                             </em>
                         </p>
                     )}
                 </section>
                 <section id="removing-images">
                     <h3>Removing Images</h3>
-                    <p>To remove an image from a collection, simply click the "&times;" icon below it.</p>
+                    <p>To remove an image from a collection, simply click the &ldquo;&times;&rdquo; icon below it.</p>
                 </section>
                 <section id="collection-pages">
                     <h3>Collection Pages</h3>
@@ -297,9 +298,9 @@ const Article: FC = () => {
                                     and{" "}
                                 </>
                             )}
-                            click on the link icon next to "{currentCollection} ({collections[currentCollection].size}{" "}
-                            image
-                            {collections[currentCollection].size === 1 ? "" : "s"})" to open a web page for your
+                            click on the link icon next to &ldquo;{currentCollection} (
+                            {collections[currentCollection].size} image
+                            {collections[currentCollection].size === 1 ? "" : "s"})&rdquo; to open a web page for your
                             collection. Then come back here to learn about <a href="#permalinks">permalinks</a>.
                         </p>
                     ) : (
@@ -336,7 +337,7 @@ const Article: FC = () => {
                                 <Link href="/collections/78c8c857-33b8-073a-2819-022b63a005ca">example</Link>)
                             </>
                         )}{" "}
-                        has a link saying "click here to create a permalink for attribution". Permalinks (
+                        has a link saying &ldquo;click here to create a permalink for attribution&rdquo;. Permalinks (
                         <Link href="/permalinks/7c7705982f98cdec5b694ce302e25fee8525faeb90a10a8c9e309eb1b3e74e52">
                             example
                         </Link>
@@ -356,13 +357,14 @@ const Article: FC = () => {
                                 and{" "}
                             </>
                         )}
-                        click the pencil icon after "{currentCollection} ({collections[currentCollection].size} image
-                        {collections[currentCollection].size === 1 ? "" : "s"})".
+                        click the pencil icon after &ldquo;{currentCollection} ({collections[currentCollection].size}{" "}
+                        image
+                        {collections[currentCollection].size === 1 ? "" : "s"})&rdquo;.
                     </p>
                     {currentCollection !== "My Collection" && (
                         <p>
                             <em>
-                                Looks like you renamed it to "{currentCollection}"!{" "}
+                                Looks like you renamed it to &ldquo;{currentCollection}&rdquo;!{" "}
                                 <Link href="#creating-multiple-collections">Keep reading</Link>.
                             </em>
                         </p>
@@ -380,12 +382,12 @@ const Article: FC = () => {
                                 and{" "}
                             </>
                         )}
-                        click the plus icon ("+") in the Collections Drawer.
+                        click the plus icon (&ldquo;+&rdquo;) in the Collections Drawer.
                     </p>
                     {Object.keys(collections).length > 1 && (
                         <p>
                             <em>
-                                Looks like you've added{" "}
+                                Looks like you&rsquo;ve added{" "}
                                 {Object.keys(collections).length === 2 ? "a collection" : "some collections"}!{" "}
                                 <Link href="#deleting-collections">Keep reading</Link>.
                             </em>
@@ -404,8 +406,9 @@ const Article: FC = () => {
                                 and{" "}
                             </>
                         )}
-                        click the trash can icon after "{currentCollection} ({collections[currentCollection].size} image
-                        {collections[currentCollection].size === 1 ? "" : "s"})".
+                        click the trash can icon after &ldquo;{currentCollection} ({collections[currentCollection].size}{" "}
+                        image
+                        {collections[currentCollection].size === 1 ? "" : "s"})&rdquo;.
                     </p>
                 </section>
             </section>
