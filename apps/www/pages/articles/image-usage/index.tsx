@@ -410,6 +410,14 @@ const Article: FC = () => {
                         image
                         {collections[currentCollection].size === 1 ? "" : "s"})&rdquo;.
                     </p>
+                    {Object.keys(collections).length === 1 && collections[currentCollection].size === 0 && (
+                        <p>
+                            <em>
+                               You&rsquo;ve deleted everything!{" "}
+                                <Link href="#a-note-about-storage">Keep reading</Link>.
+                            </em>
+                        </p>
+                    )}
                 </section>
             </section>
             <section id="a-note-about-storage">
