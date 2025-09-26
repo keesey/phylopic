@@ -538,6 +538,5 @@ const IMAGE: ImageModel = {
     modified: "2025-09-10T21:16:14.400Z",
     modifiedFile: "2025-09-10T21:16:14.400Z",
     sponsor: null,
-    tags: [],
     uuid: "045279d5-24e5-4838-bec9-0bea86812e35",
 }
