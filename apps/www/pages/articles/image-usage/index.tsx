@@ -266,11 +266,11 @@ const Article: FC = () => {
                             <LinkedImageThumbnailView value={IMAGE} />
                         </div>
                     </>{" "}
-                    {currentCollection && collections[currentCollection].size > 0 && (
+                    {collections[currentCollection].size > 0 && (
                         <p>
                             <em>
-                                You&rsquo;ve got{" "}
-                                {collections[currentCollection].size === 1 ? "an image" : "some images"} added!{" "}
+                                You&rsquo;ve added{" "}
+                                {collections[currentCollection].size === 1 ? "an image" : "some images"}!{" "}
                                 <Link href="#removing-images">Keep reading</Link>.
                             </em>
                         </p>
@@ -278,7 +278,15 @@ const Article: FC = () => {
                 </section>
                 <section id="removing-images">
                     <h3>Removing Images</h3>
-                    <p>To remove an image from a collection, simply click the &ldquo;&times;&rdquo; icon below it.</p>
+                    <p>To remove an image from a collection, click the &ldquo;&times;&rdquo; icon below it.</p>
+                    {collections[currentCollection].size === 0 && (
+                        <p>
+                            <em>
+                                You&rsquo;ve removed all your images! Or maybe you never added any! Either way,{" "}
+                                <Link href="#collection-pages">keep reading</Link>.
+                            </em>
+                        </p>
+                    )}
                 </section>
                 <section id="collection-pages">
                     <h3>Collection Pages</h3>
@@ -352,7 +360,7 @@ const Article: FC = () => {
                 <section id="renaming-collections">
                     <h3>Renaming Collections</h3>
                     <p>
-                        To rename your collection, simply{" "}
+                        To rename your collection,{" "}
                         {!open && (
                             <>
                                 <a onClick={() => dispatch({ type: "OPEN" })} href="#renaming-collections">
@@ -363,7 +371,8 @@ const Article: FC = () => {
                         )}
                         click the pencil icon after &ldquo;{currentCollection} ({collections[currentCollection].size}{" "}
                         image
-                        {collections[currentCollection].size === 1 ? "" : "s"})&rdquo;.
+                        {collections[currentCollection].size === 1 ? "" : "s"})&rdquo;. You will be prompted for a new
+                        name.
                     </p>
                     {currentCollection !== "My Collection" && (
                         <p>
@@ -377,7 +386,7 @@ const Article: FC = () => {
                 <section id="creating-multiple-collections">
                     <h3>Creating Multiple Collections</h3>
                     <p>
-                        To add another collection, simply{" "}
+                        To add another collection,{" "}
                         {!open && (
                             <>
                                 <a onClick={() => dispatch({ type: "OPEN" })} href="#creating-multiple-collections">
@@ -386,7 +395,8 @@ const Article: FC = () => {
                                 and{" "}
                             </>
                         )}
-                        click the plus icon (&ldquo;+&rdquo;) in the Collections Drawer.
+                        click the plus icon (&ldquo;+&rdquo;) in the Collections Drawer. You will be asked to provide a
+                        name for it.
                     </p>
                     {Object.keys(collections).length > 1 && (
                         <p>
@@ -401,7 +411,7 @@ const Article: FC = () => {
                 <section id="deleting-collections">
                     <h3>Deleting Collections</h3>
                     <p>
-                        To delete your collection, simply{" "}
+                        To delete your collection,{" "}
                         {!open && (
                             <>
                                 <a onClick={() => dispatch({ type: "OPEN" })} href="#deleting-collections">
