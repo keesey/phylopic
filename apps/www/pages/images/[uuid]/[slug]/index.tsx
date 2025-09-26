@@ -88,7 +88,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                 ),
                             ),
                         ),
-                        ...Array.from(image.tags),
+                        ...(image.tags ?? []),
                     ].map(s => s.toLowerCase()),
                 ),
             )
@@ -259,7 +259,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                     </td>
                                 </tr>
                             )}
-                            {image.tags.length > 0 && (
+                            {image.tags && image.tags.length > 0 && (
                                 <tr>
                                     <th>Tags</th>
                                     <td>

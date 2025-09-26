@@ -80,13 +80,13 @@ const Tags: FC<Props> = ({ hash }) => {
                         {submission.tags ? (
                             <p>
                                 You may add or remove tags for your silhouette.
-                                {existingTags.length > 0 && <> Use any of the tags below, or add new tags.</>}
+                                {existingTags && existingTags.length > 0 && <> Use any of the tags below, or add new tags.</>}
                             </p>
                         ) : (
                             <p>
                                 <strong>Tags</strong> can be used to specify an aspect of your silhouette&rsquo;s
                                 subject, such as life stage.
-                                {existingTags.length > 0 && <> You may use any of the tags below, or add new tags.</>}
+                                {existingTags && existingTags.length > 0 && <> You may use any of the tags below, or add new tags.</>}
                             </p>
                         )}
                     </SpeechStack>
