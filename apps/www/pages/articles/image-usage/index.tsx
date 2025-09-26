@@ -73,9 +73,9 @@ const Article: FC = () => {
             <section id="introduction">
                 <p>
                     All silhouette images on <SiteTitle /> are free to reuse, but some have requirements about
-                    attribution, about the licenses for derived works, or about where they may be reused. Keeping track
-                    of these differing requirements, especially for multiple images, can be difficult, so <SiteTitle />{" "}
-                    offers a tool to make some tasks easier:{" "}
+                    attribution, about commerical use, or about the licenses for derived works. Keeping track of these
+                    differing requirements, especially for multiple images, can be difficult, so <SiteTitle /> offers a
+                    tool to make some tasks easier:{" "}
                     <a href="#the-collections-drawer">
                         the <strong>Collections Drawer</strong>
                     </a>
@@ -197,8 +197,8 @@ const Article: FC = () => {
                             </strong>
                         </a>
                         ) follow all the requirements of the{" "}
-                        <Link href="#attribution">Creative Commons Attribution Deed</Link> and prevent you from using
-                        the image for commercial purposes. (This includes most publications.)
+                        <Link href="#attribution">Creative Commons Attribution Deed</Link> <em>and</em> forbid you from
+                        using the image for commercial purposes. (This includes most publications.)
                     </p>
                     <p>
                         In some cases you may be able to contact the person who uploaded the image to waive the license
@@ -219,8 +219,8 @@ const Article: FC = () => {
                 <h2>Multiple Images</h2>
                 <p>
                     Many users of <SiteTitle /> wish to use multiple images, such as for a figure in a research article.
-                    Keeping track of the licensing requirements for multiple images can be an onerous task, so{" "}
-                    <SiteTitle /> provides a tool to make it easier:
+                    Keeping track of the licensing requirements can be an onerous task, so <SiteTitle /> provides a tool
+                    to make it easier:
                 </p>
                 <section id="the-collections-drawer">
                     <h3>The Collections Drawer</h3>
@@ -354,7 +354,8 @@ const Article: FC = () => {
                             example
                         </Link>
                         ) are pages with snapshots of image collection metadata. Instead of including lengthy
-                        attributions for derivative works, you can simply provide a permalink.
+                        attributions for derivative works, you can simply provide a permalink{" "}
+                        <abbr title="Uniform Resource Locator">URL</abbr>.
                     </p>
                 </section>
                 <section id="renaming-collections">
