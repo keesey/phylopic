@@ -46,7 +46,7 @@ const PageComponent: NextPage = () => (
                         <h2>
                             <Link href="/articles/image-usage">
                                 <cite>
-                                    Usage of <SiteTitle /> Images
+                                    Usage of Images
                                 </cite>
                             </Link>{" "}
                         </h2>
