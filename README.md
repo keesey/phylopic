@@ -38,7 +38,13 @@ The scripts for creating the project's Postgres databases are in [sql](./sql/REA
 
 ## Getting started
 
-Install [Yarn](https://classic.yarnpkg.com/), and then run `yarn` from the command root to install dependencies.
+[Yarn](https://classic.yarnpkg.com/) (v1.22 or higher) is required for this monorepo project. [Node.js](https://nodejs.org/en/download/) (v20 or higher) is also required for most apps.
+
+Run `yarn` from the project root to install dependencies.
+
+### Prerequisites
+
+Running the scripts in the [publish](./apps/publish) project requires additional prerequisites. See [the documentation](./apps/publish/README.md#prerequisites) for details.
 
 ## Formatting and linting
 
@@ -64,14 +70,17 @@ yarn test
 
 ## Running locally
 
-Certain apps require environment variables to be set. See each app's documentation for details:
+If you are running against your own databases, you will need to set those up. _PhyloPic_ uses [Postgres](https://www.postgresql.org/) databases. Scripts for creating them are listed in the [sql](./sql/README.md) documentation.
 
+Certain apps require environment variables to be set before they can be run locally. See each app's documentation for details:
+
+- [api](./apps/api/README.md#environment-variables)
 - [contribute](./apps/contribute/README.md#environment-variables)
 - [edit](./apps/edit/README.md#environment-variables)
 - [publish](./apps/publish/README.md#environment-variables)
 - [www](./apps/www/README.md#environment-variables)
 
-To run all apps locally:
+It may be easiest to focus on setting up a particular app and running it on its own. But, if you have them all set up, you can run them all locally at the same time with this command:
 
 ```sh
 yarn dev

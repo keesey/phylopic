@@ -15,7 +15,7 @@ The API is hosted at [https://api.phylopic.org](https://api.phylopic.org).
 
 ## Getting started
 
-See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [`serverless` CLI](https://www.serverless.com/framework/docs/getting-started).
+See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
 
 ### Environment variables
 
