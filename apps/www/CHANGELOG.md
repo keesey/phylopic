@@ -9,9 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- New article, "Usage of Images", with links in various places.
-- Articles Index Page.
-
 ### Changed
 
 ### Deprecated
@@ -21,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.14.0] - 2025-09-27
+
+### Added
+
+- New article, "Usage of Images", with links in various places.
+- Articles Index Page.
 
 ## [2.13.3] - 2025-09-25
 
