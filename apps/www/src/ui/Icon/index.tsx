@@ -2,7 +2,7 @@ import Image from "next/image"
 import { FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {
-    name: "link" | "pencil" | "plus" | "trash"
+    name: "info" | "link" | "pencil" | "plus" | "trash"
 }
 const Icon: FC<Props> = ({ name }) => {
     return (
