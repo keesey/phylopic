@@ -22,7 +22,7 @@ const PageComponent: NextPage = () => (
                 <Breadcrumbs
                     items={[
                         { children: "Home", href: "/" },
-                        { children: "Articles" },
+                        { children: "Articles", href: "/articles" },
                         { children: <strong>API Recipes</strong> },
                     ]}
                 />

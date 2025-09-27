@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New article, "Usage of Images", with links in various places.
+- Articles Index Page.
 
 ### Changed
 

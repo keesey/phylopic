@@ -2,7 +2,7 @@ import type { Collection, Image as ImageModel, ImageWithEmbedded } from "@phylop
 import { PaginationContainer } from "@phylopic/ui"
 import { isUUIDish } from "@phylopic/utils"
 import axios from "axios"
-import type { NextPage } from "next"
+import type { GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Image from "next/image"
 import Link from "next/link"
@@ -12,12 +12,26 @@ import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import PageLayout from "~/pages/PageLayout"
+import getImageSlug from "~/routes/getImageSlug"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
 import ImageRail from "~/views/ImageRail"
 import LinkedImageThumbnailView from "~/views/LinkedImageThumbnailView"
-const PageComponent: NextPage = () => (
+export interface Props {
+    image: ImageModel
+}
+const SAMPLE_IMAGE_UUID = "045279d5-24e5-4838-bec9-0bea86812e35"
+export const getStaticProps: GetStaticProps<Props> = async () => {
+    const { data } = await axios.get<ImageModel>(
+        `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(SAMPLE_IMAGE_UUID)}`,
+        {
+            maxRedirects: 1,
+        },
+    )
+    return { props: { image: data } }
+}
+const PageComponent: NextPage<Props> = ({ image }) => (
     <PageLayout>
         <NextSeo
             canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/articles/image-usage`}
@@ -29,7 +43,7 @@ const PageComponent: NextPage = () => (
                 <Breadcrumbs
                     items={[
                         { children: "Home", href: "/" },
-                        { children: "Articles" },
+                        { children: "Articles", href: "/articles" },
                         { children: <strong>Usage of Images</strong> },
                     ]}
                 />
@@ -43,19 +57,21 @@ const PageComponent: NextPage = () => (
                     </Link>
                 </div>
             </header>
-            <Article />
+            <Article image={image} />
         </Container>
     </PageLayout>
 )
-const Article: FC = () => {
+export default PageComponent
+const Article: FC<Props> = ({ image }: Props) => {
     const [{ currentCollection, collections, open }, dispatch] = useContext(CollectionsContext)
     const currentImages = useCurrentCollectionImages()
     const router = useRouter()
+    const imageSlug = getImageSlug(image._links.self.title)
     const handleLinkClick = () => {
         const uuids = currentImages.map(image => image.uuid)
         void (async () => {
             try {
-                const response = await axios.post<Collection>(process.env.NEXT_PUBLIC_API_URL + "/collections", uuids)
+                const response = await axios.post<Collection>(`${process.env.NEXT_PUBLIC_API_URL}/collections`, uuids)
                 if (isUUIDish(response?.data?.uuid)) {
                     customEvents.toggleCollectionDrawer(false)
                     dispatch({ type: "CLOSE" })
@@ -94,7 +110,9 @@ const Article: FC = () => {
                         Creative Commons
                     </a>{" "}
                     deed or mark. This is listed on the Image Pages (
-                    <Link href="/images/045279d5-24e5-4838-bec9-0bea86812e35/archaeopteryx-lithographica">example</Link>
+                    <Link href={`/images/${encodeURIComponent(image.uuid)}/${encodeURIComponent(imageSlug)}`}>
+                        example
+                    </Link>
                     ) above the image. General notes about the licensing requirements are listed below the image, along
                     with a link to the Creative Commons website for more information.
                 </p>
@@ -252,7 +270,7 @@ const Article: FC = () => {
                                 onClick={() =>
                                     dispatch({
                                         type: "ADD_TO_CURRENT_COLLECTION",
-                                        payload: { type: "image", entity: IMAGE },
+                                        payload: { type: "image", entity: image },
                                     })
                                 }
                                 href="#adding-images"
@@ -263,7 +281,7 @@ const Article: FC = () => {
                             .
                         </p>
                         <div style={{ textAlign: "center" }}>
-                            <LinkedImageThumbnailView value={IMAGE} />
+                            <LinkedImageThumbnailView value={image} />
                         </div>
                     </>{" "}
                     {collections[currentCollection].size > 0 && (
@@ -466,99 +484,4 @@ const Article: FC = () => {
             </div>
         </article>
     )
-}
-export default PageComponent
-
-const IMAGE: ImageModel = {
-    _links: {
-        contributor: {
-            href: "/contributors/060f03a9-fafd-4d08-81d1-b8f82080573f?build=518",
-            title: "T. Michael Keesey",
-        },
-        generalNode: {
-            href: "/nodes/176a9345-ffaa-4c04-a81e-fd6d485542c5?build=518",
-            title: "Avialae",
-        },
-        "http://ogp.me/ns#image": {
-            href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/social/1200x628.png",
-            sizes: "1200x628",
-            type: "image/png",
-        },
-        license: {
-            href: "https://creativecommons.org/publicdomain/zero/1.0/",
-        },
-        nodes: [
-            {
-                href: "/nodes/37040a3d-bf9c-4aa0-9ca4-d953caac1d1c?build=518",
-                title: "Archaeopteryx lithographica",
-            },
-            {
-                href: "/nodes/d48689c3-eead-4bc8-ad13-34271b37270f?build=518",
-                title: "Archaeopterygidae",
-            },
-            {
-                href: "/nodes/176a9345-ffaa-4c04-a81e-fd6d485542c5?build=518",
-                title: "Avialae",
-            },
-        ],
-        rasterFiles: [
-            {
-                href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/raster/750x448.png",
-                sizes: "750x448",
-                type: "image/png",
-            },
-            {
-                href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/raster/512x306.png",
-                sizes: "512x306",
-                type: "image/png",
-            },
-        ],
-        self: {
-            href: "/images/045279d5-24e5-4838-bec9-0bea86812e35?build=518",
-            title: "Archaeopteryx lithographica",
-        },
-        sourceFile: {
-            href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/source.png",
-            sizes: "750x448",
-            type: "image/png",
-        },
-        specificNode: {
-            href: "/nodes/37040a3d-bf9c-4aa0-9ca4-d953caac1d1c?build=518",
-            title: "Archaeopteryx lithographica",
-        },
-        thumbnailFiles: [
-            {
-                href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/thumbnail/192x192.png",
-                sizes: "192x192",
-                type: "image/png",
-            },
-            {
-                href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/thumbnail/128x128.png",
-                sizes: "128x128",
-                type: "image/png",
-            },
-            {
-                href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/thumbnail/64x64.png",
-                sizes: "64x64",
-                type: "image/png",
-            },
-        ],
-        "twitter:image": {
-            href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/social/1200x628.png",
-            sizes: "1200x628",
-            type: "image/png",
-        },
-        vectorFile: {
-            href: "https://images.phylopic.org/images/045279d5-24e5-4838-bec9-0bea86812e35/vector.svg",
-            sizes: "750x448",
-            type: "image/svg+xml",
-        },
-    },
-    attribution: "T. Michael Keesey",
-    build: 518,
-    created: "2011-02-03T10:19:15.572Z",
-    modified: "2025-09-10T21:16:14.400Z",
-    modifiedFile: "2025-09-10T21:16:14.400Z",
-    sponsor: null,
-    uuid: "045279d5-24e5-4838-bec9-0bea86812e35",
 }
