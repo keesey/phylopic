@@ -37,13 +37,13 @@ yarn lint
 
 ## Running locally
 
-To run a development version on your local machine, on port `3002`:
+To run a development version on your local machine, on port `3005`:
 
 ```sh
 yarn dev
 ```
 
-Then run the production version locally, on port `3000`:
+To run the production version locally, on port `3000`:
 
 ```sh
 yarn build && yarn start
