@@ -31,6 +31,7 @@ import Container from "~/ui/Container"
 import HeaderNav from "~/ui/HeaderNav"
 import NameList from "~/ui/NameList"
 import SiteTitle from "~/ui/SiteTitle"
+import Warning from "~/ui/Warning"
 import ImageFilesView from "~/views/ImageFilesView"
 import ImageRasterView from "~/views/ImageRasterView"
 import LicenseDetailsView from "~/views/LicenseDetailsView"
@@ -121,7 +122,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
             <NextSeo
                 additionalMetaTags={[
                     ...(image.attribution ? [{ content: image.attribution, name: "author" }] : []),
-                    { name: "keywords", content: keywords },
+                    ...(keywords && !image.unlisted ? [{ name: "keywords", content: keywords }] : []),
                 ]}
                 additionalLinkTags={[
                     { href: image._links.contributor.href, rel: "author" },
@@ -129,6 +130,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 ]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getImageHRef(image._links.self)}`}
                 description={description}
+                noindex={image.unlisted}
                 openGraph={openGraph}
                 title={title}
             />
@@ -204,6 +206,15 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             </>
                         }
                     />
+                    {image.unlisted && (
+                        <Warning>
+                            <h2>Warning</h2>
+                            <p>
+                                This image has been removed from the rest of the site. This page may be removed in the
+                                future.
+                            </p>
+                        </Warning>
+                    )}
                     <table>
                         <tbody>
                             <tr>
@@ -271,7 +282,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                         </p>
                     </section>
                 )}
-                <section>
+                <section id="download-files">
                     <h2>Download Files</h2>
                     <section>
                         <h3>General Notes on Usage</h3>

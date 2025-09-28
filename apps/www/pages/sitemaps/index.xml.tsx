@@ -8,7 +8,9 @@ const URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/nodes`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/thanks`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/articles`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/articles/api-recipes`,
+    `${process.env.NEXT_PUBLIC_WWW_URL}/articles/image-usage`,
 ]
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     const lastmod = new Date().toISOString()

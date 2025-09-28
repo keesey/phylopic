@@ -14,11 +14,17 @@ export class RootClient implements Patchable<Node & { uuid: UUID }> {
     async delete(): Promise<void> {
         return (await this.getNodeClient()).delete()
     }
+    async exists(): Promise<boolean> {
+        return (await this.getNodeClient()).exists()
+    }
     async get(): Promise<Node & { uuid: string }> {
         return (await this.getNodeClient()).get()
     }
-    async exists(): Promise<boolean> {
-        return (await this.getNodeClient()).exists()
+    async isRestorable(): Promise<boolean> {
+        return (await this.getNodeClient()).isRestorable()
+    }
+    async restore(): Promise<Node & { uuid: string }> {
+        return (await this.getNodeClient()).restore()
     }
     private nodeClient: NodeClient | null = null
     protected getNodeClient = async () => {

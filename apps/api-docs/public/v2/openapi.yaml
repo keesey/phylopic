@@ -12,7 +12,7 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.6.0
+  version: 2.7.1
 tags:
   - name: general
     description: General API information and status.
@@ -649,6 +649,10 @@ components:
               type: string
               example: "Patron Name"
               nullable: true
+            unlisted:
+              description: If true, this image will not appear in lists.
+              type: boolean
+              example: true
             _links:
               type: object
               required:

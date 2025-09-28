@@ -121,6 +121,9 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (contributorResult.status !== "success") {
         return getStaticPropsResult(contributorResult)
     }
+    if (!(contributorResult.data.count > 0)) {
+        return { notFound: true }
+    }
     if (getContributorSlug(contributorResult.data._links.self.title) !== slug || contributorResult.data.uuid !== uuid) {
         return {
             redirect: {

@@ -14,7 +14,7 @@ export type DataContainerProps<T extends Readonly<{ build: number }> = Readonly<
 export const DataContainer: React.FC<DataContainerProps> = ({ children, endpoint, hideLoader, onError, query }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const fetcher = useAPIFetcher()
-    const queryWithBuild = React.useMemo(() => (build ? { ...query, build } : query ?? {}), [build, query])
+    const queryWithBuild = React.useMemo(() => (build ? { ...query, build } : (query ?? {})), [build, query])
     const key = React.useMemo(() => endpoint + createSearch(queryWithBuild), [endpoint, queryWithBuild])
     const { data, error, isValidating } = useSWRImmutable(key, fetcher)
     React.useEffect(() => {

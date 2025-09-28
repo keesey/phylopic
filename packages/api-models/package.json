@@ -50,5 +50,5 @@
         "test": "vitest --watch=false"
     },
     "types": "./dist/index.d.ts",
-    "version": "1.3.3"
+    "version": "1.3.4"
 }

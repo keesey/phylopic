@@ -4,10 +4,10 @@ This is the implementation of the API (Application Programming Interface) for [_
 
 This implementation uses:
 
--   [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
--   [AWS Lambda](https://aws.amazon.com/lambda/)
--   [Serverless](https://www.serverless.com/)
--   [Node.js](https://nodejs.org/)
+- [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
+- [AWS Lambda](https://aws.amazon.com/lambda/)
+- [Serverless](https://www.serverless.com/)
+- [Node.js](https://nodejs.org/)
 
 Most methods retrieve data from a Postgres database. The structure of that database is detailed here: [create.sql](../../sql/create.sql)
 
@@ -15,7 +15,7 @@ The API is hosted at [https://api.phylopic.org](https://api.phylopic.org).
 
 ## Getting started
 
-See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [`serverless` CLI](https://www.serverless.com/framework/docs/getting-started).
+See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
 
 ### Environment variables
 
@@ -66,7 +66,7 @@ yarn deploy
 
 ## Authors
 
--   **T. Michael Keesey** - [keesey](https://github.com/keesey)
+- **T. Michael Keesey** - [keesey](https://github.com/keesey)
 
 ## License
 

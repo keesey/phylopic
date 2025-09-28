@@ -34,11 +34,6 @@ const nextConfig = {
                 permanent: true,
             },
             {
-                source: "/articles",
-                destination: "/articles/api-recipes",
-                permanent: false,
-            },
-            {
                 source: "/contact",
                 destination: `/contributors/${encodeURIComponent(
                     process.env.NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID,
@@ -67,7 +62,8 @@ const nextConfig = {
             },
             {
                 source: "/materials",
-                destination: "https://keesey.gumroad.com/l/pocketphylogenies",
+                destination:
+                    "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic",
                 permanent: true,
             },
             {

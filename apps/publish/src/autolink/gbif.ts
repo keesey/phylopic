@@ -1,9 +1,7 @@
 import { iterateList, SourceClient } from "@phylopic/source-client"
 import { Node } from "@phylopic/source-models"
-import { createSearch, getIdentifier, isFiniteNumber, isScientific, Nomen, stringifyNomen, UUID } from "@phylopic/utils"
-import axios, { AxiosResponse } from "axios"
-const MAX_PAGE_OFFSET = 64
-const PAGE_LIMIT = 16
+import { createSearch, getIdentifier, isScientific, Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import axios from "axios"
 type GBIFRank = "species" | "genus" | "family" | "order" | "class" | "phylum" | "kingdom"
 type GBIFNameUsage = Readonly<Partial<Record<GBIFRank, string>>> &
     Readonly<Partial<Record<`${GBIFRank}Key`, number>>> &

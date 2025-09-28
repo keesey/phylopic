@@ -83,6 +83,7 @@ SELECT ${selection} FROM node_name
     } else {
         builder.add(`SELECT ${selection} FROM image WHERE build=$::bigint`, [BUILD])
     }
+    builder.add("AND image.unlisted=0::bit")
     addFilterToQuery(parameters, builder)
     if (results === "total") {
         // Add nothing
