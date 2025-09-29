@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- New endpoints: `/imagetags`, `/nodes/{uuid}/imagetags`.
+- New property: `Image.tags`.
+- New query parameter for image list: `filter_tags`.
+
 ### Changed
 
 ### Deprecated

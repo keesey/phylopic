@@ -11,8 +11,8 @@ export type Props = {
 const LicenseEditor: FC<Props> = ({ uuid }) => {
     const key = `/api/images/_/${encodeURIComponent(uuid)}`
     const response = useSWR<Image & { uuid: UUID }>(key, fetchJSON)
-    const { data } = response
     const patcher = useModifiedPatcher(key, response)
+    const { data } = response
     if (!data) {
         return null
     }

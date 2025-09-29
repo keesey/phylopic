@@ -7,6 +7,7 @@ import {
     isUUIDv4,
     type ValidationFaultCollector,
 } from "@phylopic/utils"
+import { isTagList } from "../../detection/isTagList"
 import { type ImageEmbedded } from "../../types/ImageWithEmbedded"
 import { IMAGE_EMBEDDED_PARAMETERS } from "../constants/IMAGE_EMBEDDED_PARAMETERS"
 import { type ImageListParameters } from "../types/ImageListParameters"
@@ -56,6 +57,7 @@ export const isImageListParameters = (
     ) &&
     isUndefinedOr(isNormalizedText)((x as ImageListParameters).filter_name, faultCollector?.sub("filter_name")) &&
     isUndefinedOr(isUUIDv4)((x as ImageListParameters).filter_node, faultCollector?.sub("filter_node")) &&
+    isUndefinedOr(isTagList)((x as ImageListParameters).filter_tags, faultCollector?.sub("filter_tags")) &&
     hasOnlyOne<ImageListParameters>(
         x,
         [

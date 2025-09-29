@@ -22,6 +22,7 @@ export const IMAGE_FIELDS: ReadonlyArray<EditField<Image & { uuid: UUID }>> = [
     },
     { column: "specific_uuid", insertable: true, property: "specific", type: "uuid", updateable: true },
     { column: "sponsor", insertable: true, property: "sponsor", type: "character varying", updateable: true },
+    { column: "tags", insertable: true, property: "tags", type: "character varying[]", updateable: true },
     { column: "unlisted", insertable: true, property: "unlisted", type: "bit", updateable: true },
     { column: "uuid", insertable: true, property: "uuid", type: "uuid", updateable: false },
 ]

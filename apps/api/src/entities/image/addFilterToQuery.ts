@@ -31,5 +31,21 @@ const addFilterToQuery = (params: ImageListParameters, builder: QueryConfigBuild
     if (params.filter_modifiedFile_before !== undefined) {
         builder.add("AND modified_file<=$::timestamp without time zone", [params.filter_modifiedFile_before])
     }
+    if (params.filter_tags) {
+        builder.add("AND ")
+        const tags = params.filter_tags.split(",")
+        if (tags.length > 1) {
+            builder.add("(")
+        }
+        tags.forEach((tag, index) => {
+            if (index > 0) {
+                builder.add(" OR ")
+            }
+            builder.add("$::character varying=ANY(image.tags)", [tag])
+        })
+        if (tags.length > 1) {
+            builder.add(")")
+        }
+    }
 }
 export default addFilterToQuery

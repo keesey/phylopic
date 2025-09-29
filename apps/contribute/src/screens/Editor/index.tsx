@@ -1,18 +1,17 @@
 import { isSubmission, Submission } from "@phylopic/source-models"
 import { Hash, LICENSE_NAMES } from "@phylopic/utils"
-import { FC, useCallback, useMemo, useState } from "react"
+import { FC, Fragment, useCallback, useMemo, useState } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_CHECK, ICON_PENCIL, ICON_PLUS } from "~/ui/ICON_SYMBOLS"
+import { ICON_CHECK, ICON_PENCIL, ICON_PLUS, ICON_QUESTION } from "~/ui/ICON_SYMBOLS"
 import IdentifierView from "~/ui/IdentifierView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
 import UserButton from "~/ui/UserButton"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
-import UserVerification from "../../ui/UserVerification"
 import NameRenderer from "../Assignment/NodeForm/NameRenderer"
 import LoadingState from "../LoadingState"
 export type Props = {
@@ -89,6 +88,19 @@ const Editor: FC<Props> = ({ hash }) => {
                                     license.
                                 </p>
                             )}
+                            {submission.tags && (
+                                <p>
+                                    It has been assigned{" "}
+                                    {submission.tags.includes(",") ? "the following tags" : "one tag"}:{" "}
+                                    {submission.tags.split(",").map((tag, index) => (
+                                        <Fragment key={tag}>
+                                            {index > 0 && ", "}
+                                            <strong>{tag}</strong>
+                                        </Fragment>
+                                    ))}
+                                    .
+                                </p>
+                            )}
                         </figcaption>
                     </figure>
                 </SpeechStack>
@@ -97,16 +109,29 @@ const Editor: FC<Props> = ({ hash }) => {
                 <>
                     <Speech mode="system">
                         <p>
-                            <strong>Wonderful!</strong> Are you ready to submit it for review?
+                            <strong>Wonderful!</strong> Are you ready to submit it for review? Or do you want to change
+                            something?
+                            {submission.tags?.length ? null : <> Or maybe add a tag or two?</>}
                         </p>
                     </Speech>
-                    <UserVerification
-                        affirmed={unready === null ? null : !unready}
-                        affirmation={<>Let&rsquo;s do it.</>}
-                        denial={<>Not quite.</>}
-                        onAffirm={submit}
-                        onDeny={() => setUnready(true)}
-                    />
+                    {unready === null && (
+                        <UserOptions>
+                            <UserButton icon={ICON_CHECK} onClick={submit}>
+                                Let&rsquo;s do it!
+                            </UserButton>
+                            {!submission.tags && (
+                                <UserLinkButton icon={ICON_QUESTION} href={`/edit/${encodeURIComponent(hash)}/tags`}>
+                                    Tags?
+                                </UserLinkButton>
+                            )}
+                            <UserButton danger icon={ICON_PENCIL} onClick={() => setUnready(true)}>
+                                I want to change something.
+                            </UserButton>
+                        </UserOptions>
+                    )}
+                    {unready !== null && (
+                        <Speech mode="user">{unready ? "I want to change something." : <>Let&rsquo;s do it!</>}</Speech>
+                    )}
                     {unready && (
                         <>
                             <Speech mode="system">
@@ -119,6 +144,11 @@ const Editor: FC<Props> = ({ hash }) => {
                                 <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/usage`} icon={ICON_PENCIL}>
                                     Change the license or attribution.
                                 </UserLinkButton>
+                                {submission.tags && (
+                                    <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/tags`} icon={ICON_PENCIL}>
+                                        Change the tags.
+                                    </UserLinkButton>
+                                )}
                                 <UserButton icon={ICON_CHECK} onClick={submit}>
                                     You know what? I am ready to submit it.
                                 </UserButton>
@@ -173,6 +203,9 @@ const Editor: FC<Props> = ({ hash }) => {
                             <UserOptions>
                                 <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/nodes`} icon={ICON_PENCIL}>
                                     The taxonomic assignment.
+                                </UserLinkButton>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/tags`} icon={ICON_PENCIL}>
+                                    The tags.
                                 </UserLinkButton>
                                 <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/usage`} icon={ICON_PENCIL}>
                                     The license or attribution.
