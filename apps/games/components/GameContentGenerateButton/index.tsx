@@ -11,7 +11,7 @@ export const GameContentGenerateButton = ({ children, code, onGenerated, readOnl
     const [generating, setGenerating] = useState(false)
     const handleClick = () => {
         if (!readOnly) {
-            ;(async () => {
+            void (async () => {
                 setGenerating(true)
                 try {
                     const generated = await generate(code)
