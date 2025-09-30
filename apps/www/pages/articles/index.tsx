@@ -45,9 +45,7 @@ const PageComponent: NextPage = () => (
                     <li>
                         <h2>
                             <Link href="/articles/image-usage">
-                                <cite>
-                                    Usage of Images
-                                </cite>
+                                <cite>Usage of Images</cite>
                             </Link>{" "}
                         </h2>
                         <div style={{ textAlign: "right" }}>
