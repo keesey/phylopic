@@ -36,6 +36,11 @@ export class PGEditor<T> extends PGReader<T> implements Editable<T> {
                 `UPDATE ${this.table} SET ${this.updates()} WHERE ${this.identification()} AND disabled=0::bit`,
                 [...this.identificationValues(), ...this.updateValues(value)],
             )
+        } else if (await this.isRestorable()) {
+            await client.query(
+                `UPDATE ${this.table} SET ${this.updates()},disabled=0::bit WHERE ${this.identification()}`,
+                [...this.identificationValues(), ...this.updateValues(value)],
+            )
         } else {
             await client.query(
                 `INSERT INTO ${
@@ -69,7 +74,9 @@ export class PGEditor<T> extends PGReader<T> implements Editable<T> {
             .join(",")
     }
     protected insertValues(value: T) {
-        return this.fields.filter(field => field.insertable).map(field => prepareValue(value[field.property]))
+        return this.fields
+            .filter(field => field.insertable)
+            .map(field => prepareValue(value[field.property], field.type))
     }
     protected updates() {
         return this.fields
@@ -78,6 +85,8 @@ export class PGEditor<T> extends PGReader<T> implements Editable<T> {
             .join(",")
     }
     protected updateValues(value: T) {
-        return this.fields.filter(field => field.updateable).map(field => prepareValue(value[field.property]))
+        return this.fields
+            .filter(field => field.updateable)
+            .map(field => prepareValue(value[field.property], field.type))
     }
 }

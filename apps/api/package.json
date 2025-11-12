@@ -7,7 +7,7 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.675.0",
+        "@aws-sdk/client-s3": "^3.732.0",
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
         "jsonwebtoken": "^9.0.2",
@@ -34,13 +34,13 @@
     "license": "MIT",
     "name": "@phylopic/api",
     "peerDependencies": {
-        "@aws-sdk/signature-v4-crt": "^3.674.0"
+        "@aws-sdk/signature-v4-crt": "^3.731.0"
     },
     "private": true,
     "scripts": {
         "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf node_modules",
         "deploy": "sls deploy",
-        "dev": "sls offline --httpPort 3003",
+        "dev": "sls offline --httpPort 3003 --lambdaPort 3004",
         "lint": "eslint --fix ./**/*.[jt]s"
     },
     "version": "2.7.1"

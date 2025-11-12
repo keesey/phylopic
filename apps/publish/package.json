@@ -1,9 +1,9 @@
 {
     "dependencies": {
-        "@aws-sdk/client-cloudfront": "^3.675.0",
-        "@aws-sdk/client-lambda": "^3.675.0",
-        "@aws-sdk/client-s3": "^3.675.0",
-        "@aws-sdk/client-ssm": "^3.675.0",
+        "@aws-sdk/client-cloudfront": "^3.731.1",
+        "@aws-sdk/client-lambda": "^3.731.1",
+        "@aws-sdk/client-s3": "^3.732.0",
+        "@aws-sdk/client-ssm": "^3.731.1",
         "@phylopic/api-models": "*",
         "@phylopic/source-client": "*",
         "@phylopic/source-models": "*",

@@ -9,4 +9,5 @@ export const readSubmission = createTaggingReader<Submission>([
     "newTaxonName",
     "sponsor",
     "status",
+    "tags",
 ])

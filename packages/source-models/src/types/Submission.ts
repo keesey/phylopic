@@ -5,6 +5,7 @@ export type Submission = Readonly<{
     created: ISOTimestamp
     newTaxonName: string | null
     sponsor: string | null
+    tags: string | null
 }> &
     (
         | Readonly<{

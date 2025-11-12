@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Processing for `Image.tags`.
+
 ### Changed
+
+- Upgraded `@aws-sdk` dependencies.
 
 ### Deprecated
 

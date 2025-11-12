@@ -56,6 +56,8 @@ To run the API on your local machine, on port `3003`:
 yarn dev
 ```
 
+(This will run the lambda on port `3004`.)
+
 ## Deploying
 
 To deploy to `api.phylopic.org` (if you have [AWS Command Line Interface](https://aws.amazon.com/cli/) set up with proper credentials):

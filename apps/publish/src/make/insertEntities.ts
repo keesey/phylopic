@@ -150,7 +150,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
         const chunks = chunk(data.images.entries(), 1024)
         for (const c of chunks) {
             const config: QueryConfig = {
-                text: 'INSERT INTO image ("uuid",build,contributor_uuid,created,depth,license_by,license_nc,license_sa,modified,modified_file,json,title,unlisted) VALUES',
+                text: 'INSERT INTO image ("uuid",build,contributor_uuid,created,depth,license_by,license_nc,license_sa,modified,modified_file,json,tags,title,unlisted) VALUES',
                 values: [],
             }
             if (!config.values) {
@@ -160,7 +160,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
             for (const [uuid, image] of c) {
                 const titleNomen = data.nodes.get(image.specific)?.names[0]
                 config.text += index === 1 ? " " : ","
-                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::timestamp without time zone,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::character varying,$${index++}::bit)`
+                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::timestamp without time zone,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::character varying[],$${index++}::character varying,$${index++}::bit)`
                 config.values.push(
                     uuid,
                     data.build,
@@ -173,6 +173,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
                     image.modified,
                     data.filesModified.get(uuid) ?? image.modified,
                     stringifyNormalized(await getImageJSON(uuid, data)),
+                    image.tags?.length ? `{${image.tags.map(tag => stringifyNormalized(tag)).join(",")}}` : null,
                     titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
                     image.unlisted ? 1 : 0,
                 )

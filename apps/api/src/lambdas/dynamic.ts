@@ -18,8 +18,10 @@ import getContributor from "../operations/getContributor"
 import getContributors from "../operations/getContributors"
 import getImage from "../operations/getImage"
 import getImages from "../operations/getImages"
+import getImageTags from "../operations/getImageTags"
 import getNamespaces from "../operations/getNamespaces"
 import getNode from "../operations/getNode"
+import getNodeImageTags from "../operations/getNodeImageTags"
 import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
@@ -50,6 +52,7 @@ const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [
     "filter_modifiedFile_before",
     "filter_name",
     "filter_node",
+    "filter_tags",
 ]
 const getEntityParameters = (event: APIGatewayProxyEvent, embeddedParameters: readonly string[]) => ({
     ...getParameters(event.headers, ["accept"]),
@@ -145,6 +148,23 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 }
             }
         }
+        case "/imagetags":
+        case "/imagetags/": {
+            switch (event.httpMethod) {
+                case "GET": {
+                    return getImageTags(
+                        {
+                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.queryStringParameters, ["build"]),
+                        },
+                        SERVICE,
+                    )
+                }
+                default: {
+                    throw create405()
+                }
+            }
+        }
         case "/namespaces":
         case "/namespaces/": {
             switch (event.httpMethod) {
@@ -221,7 +241,23 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
         }
     }
     if (path.startsWith("/nodes/")) {
-        if (path.endsWith("/lineage") || path.endsWith("/lineage/")) {
+        if (path.endsWith("/imagetags") || path.endsWith("/imagetags/")) {
+            switch (event.httpMethod) {
+                case "GET": {
+                    return getNodeImageTags(
+                        {
+                            ...getParameters(event.headers, ["accept"]),
+                            ...getParameters(event.queryStringParameters, ["build"]),
+                            ...getUUID(event.pathParameters),
+                        },
+                        SERVICE,
+                    )
+                }
+                default: {
+                    throw create405()
+                }
+            }
+        } else if (path.endsWith("/lineage") || path.endsWith("/lineage/")) {
             switch (event.httpMethod) {
                 case "GET": {
                     return getNodeLineage(
