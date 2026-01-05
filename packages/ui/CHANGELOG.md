@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.3] - 2026-01-05
+
+### Security
+
+- Minor upgrade for `react`.
+- Patch upgrade for `next`.
+
 ## [1.7.2] - 2024-04-13
 
 ### Changed
