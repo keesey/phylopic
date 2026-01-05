@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.7.2] - 2026-01-05
+
+### Changed
+
+- Major upgrade for Serverless.
+- Minor upgrade for AWS clients.
+- Upgraded Node.js runtime to 22.
+
 ## [2.7.1] - 2025-01-03
 
 ### Added

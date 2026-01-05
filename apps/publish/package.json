@@ -1,9 +1,9 @@
 {
     "dependencies": {
-        "@aws-sdk/client-cloudfront": "^3.675.0",
-        "@aws-sdk/client-lambda": "^3.675.0",
-        "@aws-sdk/client-s3": "^3.675.0",
-        "@aws-sdk/client-ssm": "^3.675.0",
+        "@aws-sdk/client-cloudfront": "^3.962.0",
+        "@aws-sdk/client-lambda": "^3.962.0",
+        "@aws-sdk/client-s3": "^3.962.0",
+        "@aws-sdk/client-ssm": "^3.962.0",
         "@phylopic/api-models": "*",
         "@phylopic/source-client": "*",
         "@phylopic/source-models": "*",
@@ -52,5 +52,5 @@
         "upload:images": "aws s3 sync --acl public-read ./.s3/images.phylopic.org s3://images.phylopic.org/"
     },
     "type": "module",
-    "version": "1.9.0"
+    "version": "1.9.1"
 }

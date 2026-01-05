@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.3.3] - 2026-01-05
+
+### Changed
+
+- Minor upgrade for AWS SES Client.
+
 ## [2.3.2] - 2026-01-05
 
 ### Security
