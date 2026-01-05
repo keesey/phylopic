@@ -17,11 +17,12 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
         () => images.some(image => !isPublicDomainLicenseURL(image._links.license.href)),
         [images],
     )
-    const attributions = useMemo<Record<string, readonly Nomen[]>>(() => {
+    const [attributions, unattributed] = useMemo<[Record<string, readonly Nomen[]>, readonly Nomen[]]>(() => {
         const record: Record<string, Nomen[]> = {}
+        const unattributed: Nomen[] = []
         for (const image of images) {
+            const nomen = image._embedded.specificNode?.names[0]
             if (image.attribution) {
-                const nomen = image._embedded.specificNode?.names[0]
                 if (record[image.attribution]) {
                     if (nomen && !contains(record[image.attribution], nomen)) {
                         record[image.attribution] = [...record[image.attribution], nomen].sort((a, b) =>
@@ -31,9 +32,11 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
                 } else {
                     record[image.attribution] = nomen ? [nomen] : []
                 }
+            } else if (nomen) {
+                unattributed.push(nomen)
             }
         }
-        return record
+        return [record, unattributed.sort((a, b) => compareStrings(stringifyNomen(a), stringifyNomen(b)))]
     }, [images])
     const separator = useMemo(() => {
         return Object.keys(attributions).some(attribution => attribution.indexOf(",") >= 0) ? ";" : ","
@@ -45,7 +48,7 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
     const numAttributions = attributionEntries.length
     const hasAttributions = numAttributions > 0
     return (
-        <div className={styles.main}>
+        <div id="attribution" className={styles.main}>
             {!attributionRequired && !hasAttributions && "Attribution is not required."}
             {attributionRequired && !hasAttributions && (
                 <>
@@ -58,19 +61,23 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
                 } may be given as:`}
             {hasAttributions && (
                 <blockquote>
-                    Silhouette image{images.length === 1 ? "" : "s"}
-                    {numAttributions === 1 && <Nomina nomina={attributionEntries[0][1]} />}{" "}
-                    {images.length === 1 ? "is" : "are"} by{" "}
+                    Silhouette image{images.length === 1 ? "" : "s"} {images.length === 1 ? "is" : "are"} by{" "}
                     {Object.entries(attributions)
                         .sort((a, b) => compareStrings(a[0], b[0]))
                         .map(([attribution, nomina], index, array) => (
                             <Fragment key={attribution}>
-                                {index && array.length > 2 ? separator : null}
-                                {index && index === array.length - 1 ? " and " : " "}
+                                {index > 0 && array.length + (unattributed.length > 0 ? 1 : 0) > 2 ? separator : null}
+                                {index > 0 && unattributed.length === 0 && index === array.length - 1 ? " and " : " "}
                                 {attribution}
-                                {numAttributions > 1 && <Nomina nomina={nomina} />}
+                                {(numAttributions > 1 || unattributed.length > 0) && <Nomina nomina={nomina} />}
                             </Fragment>
                         ))}
+                    {unattributed.length > 0 && (
+                        <>
+                            {numAttributions >= 2 && separator} and others
+                            <Nomina nomina={unattributed} />
+                        </>
+                    )}
                     .
                 </blockquote>
             )}

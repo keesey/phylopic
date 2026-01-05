@@ -12,7 +12,7 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.6.0
+  version: 2.7.1
 tags:
   - name: general
     description: General API information and status.
@@ -666,6 +666,10 @@ components:
               type: string
               example: "Patron Name"
               nullable: true
+            unlisted:
+              description: If true, this image will not appear in lists.
+              type: boolean
+              example: true
             _links:
               type: object
               required:
@@ -726,8 +730,7 @@ components:
                 vectorFile:
                   allOf:
                     - $ref: "#/components/schemas/MediaLink"
-                    - description: A link to the vector image file as it was submitted. Always in SVG format.
-                      nullable: true
+                    - description: A link to a vector file generated from the largest raster file. This will always be black on a transparent backgounrd, cropped to the size of the silhouette. It may look different from the source file.
     ImageWithEmbedded:
       description: An image with related entities embedded.
       required:

@@ -1,5 +1,5 @@
-import type { ErrorType } from "../types/ErrorType"
-export const ERROR_TYPES: ReadonlySet<ErrorType> = new Set([
+import { type ErrorType } from "../types/ErrorType"
+export const ERROR_TYPES: ReadonlySet<ErrorType> = new Set<ErrorType>([
     "ACCESS_DENIED",
     "API_CONFIGURATION_ERROR",
     "AUTHORIZER_FAILURE",
@@ -21,4 +21,3 @@ export const ERROR_TYPES: ReadonlySet<ErrorType> = new Set([
     "UNAUTHORIZED",
     "UNSUPPORTED_MEDIA_TYPE",
 ])
-export default ERROR_TYPES

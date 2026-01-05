@@ -1,6 +1,6 @@
-import prepareBoolean from "./prepareBoolean"
-import prepareJSON from "./prepareJSON"
-const prepareValue = (x: any) => {
+import { prepareBoolean } from "./prepareBoolean"
+import { prepareJSON } from "./prepareJSON"
+export const prepareValue = (x: any) => {
     if (typeof x === "boolean") {
         return prepareBoolean(x)
     } else if (x && typeof x === "object") {
@@ -8,4 +8,3 @@ const prepareValue = (x: any) => {
     }
     return x
 }
-export default prepareValue

@@ -38,33 +38,44 @@ const SearchBar: FC = () => {
         dispatch?.({ type: "SET_ACTIVE", payload: true })
     }
     return (
-        <form action="/search" aria-label="Taxonomic" className={styles.main} onSubmit={handleFormSubmit} role="search">
-            <p id="search-description" style={{ display: "none" }}>
-                Search for a taxonomic group by typing in the name.
-            </p>
-            <input
-                aria-describedby="search-description"
-                aria-label="Enter the name of a group of organisms."
-                className={clsx(focused && styles.focused)}
-                id="q"
-                list="autocomplete"
-                maxLength={128}
-                minLength={2}
-                name="q"
-                onBlur={handleInputBlur}
-                onChange={handleInputChange}
-                onFocus={handleInputFocus}
-                placeholder="Enter the name of a group of organisms."
-                spellCheck={false}
-                type="search"
-                value={value}
-            />
-            <datalist id="autocomplete">
-                {matches.map(match => (
-                    <option key={match}>{match}</option>
-                ))}
-            </datalist>
-        </form>
+        <>
+            <form className={styles.focusStealer}>
+                <input type="search" />
+            </form>
+            <form
+                action="/search"
+                aria-label="Taxonomic"
+                className={styles.main}
+                onSubmit={handleFormSubmit}
+                role="search"
+            >
+                <p id="search-description" style={{ display: "none" }}>
+                    Search for a taxonomic group by typing in the name.
+                </p>
+                <input
+                    aria-describedby="search-description"
+                    aria-label="Search for a group of organisms."
+                    className={clsx(focused && styles.focused)}
+                    id="q"
+                    list="autocomplete"
+                    maxLength={128}
+                    minLength={2}
+                    name="q"
+                    onBlur={handleInputBlur}
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus}
+                    placeholder="Search for a group of organisms."
+                    spellCheck={false}
+                    type="search"
+                    value={value}
+                />
+                <datalist id="autocomplete">
+                    {matches.map(match => (
+                        <option key={match}>{match}</option>
+                    ))}
+                </datalist>
+            </form>
+        </>
     )
 }
 export default SearchBar

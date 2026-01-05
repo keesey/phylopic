@@ -1,7 +1,7 @@
 import { invalidate } from "../../validation"
-import type ValidationFaultCollector from "../../validation/ValidationFaultCollector"
+import { type ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
 import { ObjectIDs } from "../types/ObjectIDs"
-import isObjectID from "./isObjectID"
+import { isObjectID } from "./isObjectID"
 export const isObjectIDs = (x: unknown, faultCollector?: ValidationFaultCollector): x is ObjectIDs => {
     if (typeof x === "string") {
         const ids = x.split(",")
@@ -17,4 +17,3 @@ export const isObjectIDs = (x: unknown, faultCollector?: ValidationFaultCollecto
     }
     return invalidate(faultCollector, "Not a string.")
 }
-export default isObjectIDs

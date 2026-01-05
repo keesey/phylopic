@@ -22,7 +22,7 @@ const ValidLicenseURLEditor: FC<Props> = ({ onChange, value }) => {
         <div className={styles.main}>
             <div className={editing ? styles.labelEditing : styles.label}>
                 <button className="editable" onClick={() => setEditing(true)}>
-                    {value ? LICENSE_NAMES[value] ?? `INVALID LICENSE! ${value}` : "[Unlicensed]"}
+                    {value ? (LICENSE_NAMES[value] ?? `INVALID LICENSE! ${value}`) : "[Unlicensed]"}
                 </button>{" "}
                 {value && (
                     <a href={value} role="button" target="_blank" rel="noreferrer">

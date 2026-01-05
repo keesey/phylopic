@@ -1,7 +1,8 @@
+import { NomenPart } from "parse-nomen"
 import { stringifyNormalized } from "../../json/stringifyNormalized"
 import { stringifyNomen } from "../../nomina/stringifyNomen"
 import { Nomen } from "../types/Nomen"
-import normalizeNomen from "./normalizeNomen"
+import { normalizeNomen } from "./normalizeNomen"
 const compare = (a: Nomen, b: Nomen) => {
     if (a === b) {
         return 0
@@ -57,11 +58,28 @@ const createCanonicalNameComparator = (canonical: Nomen | undefined) => {
         return compare(a, b)
     }
 }
+const isUncited = (nomen: Nomen) => nomen.length === 1 && nomen[0].class === "scientific"
+const isCited = (nomen: Nomen) => nomen.length >= 2 && nomen[0].class === "scientific" && nomen[1].class === "citation"
+const isUncitedSynonymOfNomen = (scientificText: string, nomen: Nomen) => {
+    if (isCited(nomen)) {
+        return nomen[0].text === scientificText
+    }
+    return false
+}
+const isUncitedSynonym = (nomen: Nomen, nomina: readonly Nomen[]) => {
+    if (isUncited(nomen)) {
+        return nomina.some(otherNomen => isUncitedSynonymOfNomen(nomen[0].text, otherNomen))
+    }
+    return false
+}
+const findCitedSynonyms = (scientificText: string, nomina: readonly Nomen[]) => {
+    return nomina.filter(nomen => isCited(nomen) && nomen[0].text === scientificText)
+}
 export const normalizeNomina = (nomina: readonly Nomen[]) => {
     if (nomina.length <= 1) {
         return nomina
     }
-    return Array.from(
+    const normalized = Array.from(
         new Set<string>(
             nomina
                 .map(normalizeNomen)
@@ -71,5 +89,12 @@ export const normalizeNomina = (nomina: readonly Nomen[]) => {
     )
         .map(json => JSON.parse(json) as Nomen)
         .sort(createCanonicalNameComparator(nomina[0]))
+        .filter((nomen, index, nomina) => index === 0 || !isUncitedSynonym(nomen, nomina))
+    if (isUncited(normalized[0])) {
+        const cited = findCitedSynonyms(normalized[0][0].text, normalized)
+        if (cited.length === 1) {
+            return [cited[0], ...normalized.filter(n => n !== normalized[0] && n !== cited[0])]
+        }
+    }
+    return normalized
 }
-export default normalizeNomina

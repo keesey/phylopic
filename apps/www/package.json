@@ -14,43 +14,47 @@
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
         "@react-hook/debounce": "^4.0.0",
-        "@vercel/analytics": "^0.1.8",
-        "axios": "^1.3.1",
-        "clsx": "^1.2.1",
-        "compress-json": "^2.1.2",
-        "jsonwebtoken": "^9.0.0",
-        "next": "^13.3.1",
+        "@vercel/analytics": "^1.2.2",
+        "axios": "^1.6.8",
+        "clsx": "^2.1.0",
+        "compress-json": "3.0.0",
+        "jsonwebtoken": "^9.0.2",
+        "next": "^14.2.35",
         "next-pwa": "^5.6.0",
-        "next-seo": "^5.15.0",
-        "parse-nomen": "^2.1.2",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
+        "next-seo": "^6.5.0",
+        "parse-nomen": "^2.1.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "react-json-view": "^1.21.3",
-        "slugify": "^1.6.5"
+        "slugify": "^1.6.6",
+        "swr": "^2.2.5"
     },
     "description": "Primary public web application for *PhyloPic*.",
     "devDependencies": {
-        "@next/bundle-analyzer": "^13.1.6",
+        "@next/bundle-analyzer": "^14.2.35",
         "@phylopic/tsconfig": "*",
-        "@types/react": "^18.0.27",
-        "@types/react-dom": "^18.0.10",
+        "@types/react": "^18.2.78",
+        "@types/react-dom": "^18.2.25",
         "eslint-config-phylopic": "*",
         "next-unused": "^0.0.6",
-        "sass": "^1.58.0",
-        "schema-dts": "^1.1.0",
-        "typescript": "^5.0.4"
+        "sass": "^1.75.0",
+        "schema-dts": "^1.1.2",
+        "typescript": "^5.4.5"
     },
     "license": "MIT",
     "name": "@phylopic/www",
     "private": true,
+    "resolutions": {
+        "@types/react": "^18.2.78"
+    },
     "scripts": {
         "analyze": "ANALYZE=true yarn build",
         "build": "next build",
-        "clean": "rm -rf .next && rm -rf .turbo && rm -rf node_modules",
+        "clean": "rm -rf .next && rm -rf .swc && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3000",
         "lint": "TIMING=1 next lint",
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.6.10"
+    "version": "2.14.1"
 }

@@ -6,9 +6,9 @@ This app is only meant to be run locally. It is not hosted online.
 
 ## Getting started
 
-See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [AWS Command Line Interface](https://aws.amazon.com/cli/).
+See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
 
-### Environment Variables
+### Environment variables
 
 The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
 
@@ -24,9 +24,9 @@ The following environment variables are required. They may be stored in `.env.lo
 
 The following environment variables are optional:
 
-| Variable Name | Description   |
-| ------------- | ------------- |
-| `PGPORT`      | Postgres port |
+| Variable Name | Description                     |
+| ------------- | ------------------------------- |
+| `PGPORT`      | Postgres port (default: `5432`) |
 
 ## Linting
 
@@ -46,7 +46,7 @@ yarn dev
 
 ## Authors
 
--   **T. Michael Keesey** - [keesey](https://github.com/keesey)
+- **T. Michael Keesey** - [keesey](https://github.com/keesey)
 
 ## License
 

@@ -1,3 +1,3 @@
 # `@phylopic/ui`
 
-> TODO: description
+User interface code for _PhyloPic_ websites.

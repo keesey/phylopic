@@ -59,6 +59,17 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             </ul>
         </section>
         <section>
+            <h2>Usage</h2>
+            <Link
+                href="/articles/image-usage"
+                onClick={() =>
+                    customEvents.clickLink("menu_link", "/articles/image-usage", "How to Use Images", "link")
+                }
+            >
+                How to Use Images
+            </Link>
+        </section>
+        <section>
             <h2>Contribute</h2>
             <ul>
                 <li>
@@ -129,11 +140,11 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             <ul>
                 <li>
                     <a
-                        href="//keesey.gumroad.com/l/pocketphylogenies"
+                        href="//www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic"
                         onClick={() =>
                             customEvents.clickLink(
                                 "menu_link",
-                                "//keesey.gumroad.com/l/pocketphylogenies",
+                                "//www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic",
                                 "Pocket Phylogenies",
                                 "link",
                             )

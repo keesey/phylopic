@@ -21,40 +21,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.4] - 2025-01-03
+
+### Added
+
+- Optional `Image.unlisted` property.
+
+## [1.3.3] - 2024-04-13
+
+### Changed
+
+- Upgraded all dependencies.
+- Switched from `mocha` to `vitest`.
+
 ## [1.3.2] - 2023-05-14
 
 ### Changed
 
--   Upgraded to TypeScript 5.0.4.
+- Upgraded to TypeScript 5.0.4.
 
 ## [1.3.1] - 2023-04-30
 
 ### Fixed
 
--   Corrected type of `Error.documentation`.
+- Corrected type of `Error.documentation`.
 
 ## [1.3.0] - 2023-04-25
 
 ### Added
 
--   `ResolveObjectsParameters` and `isResolveObjectsParameters`.
+- `ResolveObjectsParameters` and `isResolveObjectsParameters`.
 
 ### Changed
 
--   Renamed `ResolveParameters` to `ResolveObjectParameters` and removed `uuid` property.
--   Renamed `isResolveParameters` to `isResolveObjectParameters`.
+- Renamed `ResolveParameters` to `ResolveObjectParameters` and removed `uuid` property.
+- Renamed `isResolveParameters` to `isResolveObjectParameters`.
 
 ## [1.2.0] - 2023-03-24
 
 ### Added
 
--   New properties for `Image`: `modified`, `modifiedFile`.
--   New optional properties for `ImageListParameters`: `filter_created_after`, `filter_created_before`, `filter_modified_after`, `filter_modified_before`, `filter_modifiedFile_after`, and `filter_modifiedFile_before`.
+- New properties for `Image`: `modified`, `modifiedFile`.
+- New optional properties for `ImageListParameters`: `filter_created_after`, `filter_created_before`, `filter_modified_after`, `filter_modified_before`, `filter_modifiedFile_after`, and `filter_modifiedFile_before`.
 
 ## [1.1.0] - 2023-03-21
 
 ### Changed
 
--   Changed many links to `TitledLink`.
+- Changed many links to `TitledLink`.
 
 ## [1.0.0] - 2023-02-12

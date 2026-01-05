@@ -79,6 +79,7 @@ const accept = async (client: SourceClient, hash: Hash): Promise<UUID> => {
             modified: submission.created,
             specific: node.uuid,
             sponsor: submission.sponsor,
+            unlisted: false,
             uuid,
         }),
         client.copySubmissionToSourceImage(hash, uuid),

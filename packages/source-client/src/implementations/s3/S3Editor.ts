@@ -1,8 +1,8 @@
 import { GetObjectOutput, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3"
 import { Editable } from "../../interfaces/Editable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
-import S3Deletor from "./S3Deletor"
-export default class S3Editor<T> extends S3Deletor<T> implements Editable<T> {
+import { S3Deletor } from "./S3Deletor"
+export class S3Editor<T> extends S3Deletor<T> implements Editable<T> {
     constructor(
         provider: S3ClientProvider,
         bucket: string,

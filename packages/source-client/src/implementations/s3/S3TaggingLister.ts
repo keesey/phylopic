@@ -2,7 +2,7 @@ import { GetObjectTaggingCommand, ListObjectsV2Command, ListObjectsV2Output, Tag
 import { FaultDetector, isString } from "@phylopic/utils"
 import { Listable } from "../../interfaces/Listable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
-export default class S3TaggingLister<TValue extends Readonly<Record<string, string | null>>>
+export class S3TaggingLister<TValue extends Readonly<Record<string, string | null>>>
     implements Listable<TValue & { Key: string }, string>
 {
     constructor(

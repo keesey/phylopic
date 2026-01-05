@@ -6,9 +6,9 @@ The app is hosted at [https://contribute.phylopic.org](https://contribute.phylop
 
 ## Getting started
 
-See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [AWS Command Line Interface](https://aws.amazon.com/cli/).
+See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
 
-### Environment Variables
+### Environment variables
 
 The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
 
@@ -34,7 +34,7 @@ The following environment variables are optional:
 | ----------------------------------- | ----------------------------------------------- |
 | `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key |
 | `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Measurement ID for Google Analytics             |
-| `PGPORT`                            | Postgres port                                   |
+| `PGPORT`                            | Postgres port (default: `5432`)                 |
 
 ## Linting
 
@@ -52,7 +52,7 @@ To run a development version on your local machine, on port `3002`:
 yarn dev
 ```
 
-The run the production version locally, on port `3000`:
+To run the production version locally, on port `3000`:
 
 ```sh
 yarn build && yarn start
@@ -70,7 +70,7 @@ The app will deploy through [Vercel](https://vercel.com/keesey/phylopic-contribu
 
 ## Authors
 
--   **T. Michael Keesey** - [keesey](https://github.com/keesey)
+- **T. Michael Keesey** - [keesey](https://github.com/keesey)
 
 ## License
 

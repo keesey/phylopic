@@ -22,7 +22,7 @@ const PageComponent: NextPage = () => (
                 <Breadcrumbs
                     items={[
                         { children: "Home", href: "/" },
-                        { children: "Articles" },
+                        { children: "Articles", href: "/articles" },
                         { children: <strong>API Recipes</strong> },
                     ]}
                 />
@@ -446,8 +446,8 @@ const Article: FC = () => {
                     <p>
                         The full documentation for the <cite>Paleobiology Database</cite> API version 1.2 is available
                         here:{" "}
-                        <a href="//paleobiodb.org/data1.2" rel="noreferrer">
-                            <code>https://paleobiodb.org/data1.2</code>
+                        <a href="//paleobiodb.org/data1.2/" rel="noreferrer">
+                            <code>https://paleobiodb.org/data1.2/</code>
                         </a>
                     </p>
                     <p>
@@ -455,7 +455,7 @@ const Article: FC = () => {
                     </p>
                     <CurlBox
                         id="pbdb_autocomplete"
-                        url="https://training.paleobiodb.org/data1.2/taxa/auto.json?limit=10&name=prim"
+                        url="https://paleobiodb.org/data1.2/taxa/auto.json?limit=10&name=prim"
                         title={
                             <>
                                 Autocomplete for <cite>Paleobiology Database</cite>
@@ -469,7 +469,7 @@ const Article: FC = () => {
                     </p>
                     <CurlBox
                         id="pbdb_lineage"
-                        url="https://training.paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents"
+                        url="https://paleobiodb.org/data1.2/taxa/list.json?id=txn:133360&rel=all_parents"
                         title={
                             <>
                                 Lineage for <cite>Paleobiology Database</cite>
@@ -610,10 +610,10 @@ const Article: FC = () => {
                     <dd>
                         A <a href="//wikipedia.org/wiki/Vector_graphics">vector</a> version of the image (
                         <a href="//www.w3.org/TR/SVG">
-                            <abbr title="Scalable Vector Graphics">SVG</abbr> format
-                        </a>
-                        ). Same as <code>sourceFile</code> if a vector file was submitted, or automatically generated
-                        from it otherwise.
+                            <abbr title="Scalable Vector Graphics">SVG</abbr>
+                        </a>{" "}
+                        format), automatically generated from <code>sourceFile</code>. This image is pure black on a
+                        transparent background, and may look different from the original file.
                     </dd>
                 </dl>
             </section>

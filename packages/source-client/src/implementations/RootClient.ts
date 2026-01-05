@@ -2,8 +2,8 @@ import { Node } from "@phylopic/source-models"
 import { UUID } from "@phylopic/utils"
 import { Patchable } from "../interfaces"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
-import NodeClient from "./NodeClient"
-export default class RootClient implements Patchable<Node & { uuid: UUID }> {
+import { NodeClient } from "./NodeClient"
+export class RootClient implements Patchable<Node & { uuid: UUID }> {
     constructor(protected provider: PGClientProvider) {}
     async patch(value: Partial<Node & { uuid: string }>): Promise<void> {
         return (await this.getNodeClient()).patch(value)
@@ -14,11 +14,17 @@ export default class RootClient implements Patchable<Node & { uuid: UUID }> {
     async delete(): Promise<void> {
         return (await this.getNodeClient()).delete()
     }
+    async exists(): Promise<boolean> {
+        return (await this.getNodeClient()).exists()
+    }
     async get(): Promise<Node & { uuid: string }> {
         return (await this.getNodeClient()).get()
     }
-    async exists(): Promise<boolean> {
-        return (await this.getNodeClient()).exists()
+    async isRestorable(): Promise<boolean> {
+        return (await this.getNodeClient()).isRestorable()
+    }
+    async restore(): Promise<Node & { uuid: string }> {
+        return (await this.getNodeClient()).restore()
     }
     private nodeClient: NodeClient | null = null
     protected getNodeClient = async () => {

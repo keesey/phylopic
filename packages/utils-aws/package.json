@@ -8,23 +8,19 @@
     },
     "dependencies": {
         "@phylopic/utils": "*",
-        "raw-body": "^2.5.1",
+        "raw-body": "^2.5.2",
         "stream": "^0.0.2"
     },
     "description": "Common utilities for using Amazon Web Services in *PhyloPic* project.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/chai": "^4.3.4",
-        "@types/mocha": "^10.0.1",
-        "chai": "^4.3.7",
-        "eslint": "^8.33.0",
+        "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "mocha": "^10.2.0",
-        "prettier": "^2.8.3",
-        "ts-node": "^10.9.1",
-        "tsup": "^6.5.0",
-        "typescript": "^5.0.4",
-        "yarn": "^1.22.19"
+        "prettier": "^3.2.5",
+        "ts-node": "10.9.2",
+        "tsup": "^8.0.2",
+        "typescript": "^5.4.5",
+        "yarn": "^1.22.22"
     },
     "exports": {
         "import": "./dist/index.mjs",
@@ -44,18 +40,11 @@
     ],
     "license": "MIT",
     "main": "./dist/index.js",
-    "mocha": {
-        "extension": [
-            "ts"
-        ],
-        "loader": "ts-node/esm",
-        "spec": "src/**/*.spec.ts"
-    },
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-aws",
     "peerDependencies": {
-        "@aws-sdk/client-s3": "^3.262.0",
-        "@aws-sdk/signature-v4-crt": "^3.257.0"
+        "@aws-sdk/client-s3": "^3.554.0",
+        "@aws-sdk/signature-v4-crt": "^3.552.0"
     },
     "publishConfig": {
         "access": "public"
@@ -68,10 +57,10 @@
         "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3",
-        "lint": "TIMING=1 eslint src/**/*.ts* --fix",
-        "test": "mocha"
+        "lint": "TIMING=1 eslint --fix src/**/*.ts*",
+        "test": "vitest --watch=false"
     },
     "sideEffects": false,
     "types": "./dist/index.d.ts",
-    "version": "1.0.1"
+    "version": "1.0.3"
 }

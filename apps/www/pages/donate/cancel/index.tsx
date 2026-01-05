@@ -51,7 +51,7 @@ const PageComponent: NextPage = () => (
                     <h2>Support Free Technologies</h2>
                     <p>
                         <SiteTitle /> relies on a number of free, open-source technologies. Support them instead! Here
-                        are a few:
+                        are a couple:
                     </p>
                     <TechDonateList />
                 </section>

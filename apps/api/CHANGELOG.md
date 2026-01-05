@@ -24,30 +24,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.7.1] - 2025-01-03
+
+### Added
+
+- Image JSON includes an optional `unlisted` property.
+
+## [2.7.0] - 2025-01-02
+
+### Changed
+
+- Filtering out unlisted images and contributors from lists.
+
+## [2.6.3] - 2024-12-03
+
+### Changed
+
+- Updated architecture to AWS Graviton2 processor (`arm64`).
+
+## [2.6.2] - 2024-11-04
+
+### Changed
+
+- Upgraded AWS SDKs.
+
+## [2.6.1] - 2024-04-13
+
+### Changed
+
+- Upgrades:
+    - Node.js 20.
+    - All dependencies.
+- Switched to `vitest` from `mocha`.
+
 ## [2.6.0] - 2023-05-18
 
 ### Changed
 
--   `getNodes` now returns `308` responses for UUIDs that have been sunk as synonyms of other nodes.
+- `getNodes` now returns `308` responses for UUIDs that have been sunk as synonyms of other nodes.
 
 ## [2.5.1] - 2023-05-14
 
 ### Changed
 
--   Upgrades:
-    -   Node.js 18.
-    -   TypeScript 5.0.4.
+- Upgrades:
+    - Node.js 18.
+    - TypeScript 5.0.4.
 
 ## [2.5.0] - 2023-05-03
 
 ### Changed
 
--   `postResolveObjects` returns a permanent redirect to `getResolveObjects`.
--   `getResolveObjects` does not include `POST` as an allowed method.
+- `postResolveObjects` returns a permanent redirect to `getResolveObjects`.
+- `getResolveObjects` does not include `POST` as an allowed method.
 
 ### Fixed
 
--   Validations were always of type `BAD_REQUEST_BODY` even when the field was in the parameters.
+- Validations were always of type `BAD_REQUEST_BODY` even when the field was in the parameters.
 
 ### Security
 
@@ -55,44 +88,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--   `getResolveObjects` was not forwarding when `build` was omitted.
+- `getResolveObjects` was not forwarding when `build` was omitted.
 
 ## [2.4.0] - 2023-04-25
 
 ### Added
 
--   `getResolveObjects` method.
+- `getResolveObjects` method.
 
 ### Deprecated
 
--   `postResolveObjects` method.
+- `postResolveObjects` method.
 
 ## [2.3.2] - 2023-04-01
 
 ### Fixed
 
--   API version number in response.
+- API version number in response.
 
 ## [2.3.1] - 2023-03-24
 
 ### Fixed
 
--   Sorting for images when filtering by modification times.
+- Sorting for images when filtering by modification times.
 
 ## [2.3.0] - 2023-03-24
 
 ### Added
 
--   Filtering by dates (`created`, `modified`, `modifiedFile`) for images.
+- Filtering by dates (`created`, `modified`, `modifiedFile`) for images.
 
 ## [2.2.0] - 2023-03-21
 
 ### Changed
 
--   Many links changed to `TitledLink`.
+- Many links changed to `TitledLink`.
 
 ### Fixed
 
--   Invalid `list` link in page response.
+- Invalid `list` link in page response.
 
 ## [2.1.1] - 2023-02-12

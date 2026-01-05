@@ -40,6 +40,7 @@ import Container from "~/ui/Container"
 import HeaderNav from "~/ui/HeaderNav"
 import NameList from "~/ui/NameList"
 import SiteTitle from "~/ui/SiteTitle"
+import Warning from "~/ui/Warning"
 import ImageFilesView from "~/views/ImageFilesView"
 import ImageRasterView from "~/views/ImageRasterView"
 import LicenseDetailsView from "~/views/LicenseDetailsView"
@@ -114,7 +115,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
             } (License: ${licenseLong}).`,
         [image.attribution, licenseLong, nameLong],
     )
-    const lineageNodeHRef = useMemo(() => {
+    const lineageHRef = useMemo(() => {
         if (!image._embedded.nodes?.length) {
             return null
         }
@@ -122,7 +123,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
         if (!node._links.parentNode) {
             return null
         }
-        return node._links.self.href
+        return getNodeHRef(node._links.self) + "/lineage"
     }, [image._embedded.nodes])
     const openGraph = useOpenGraphForImage(image)
     return (
@@ -130,7 +131,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
             <NextSeo
                 additionalMetaTags={[
                     ...(image.attribution ? [{ content: image.attribution, name: "author" }] : []),
-                    { name: "keywords", content: keywords },
+                    ...(keywords && !image.unlisted ? [{ name: "keywords", content: keywords }] : []),
                 ]}
                 additionalLinkTags={[
                     { href: image._links.contributor.href, rel: "author" },
@@ -138,6 +139,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                 ]}
                 canonical={`${process.env.NEXT_PUBLIC_WWW_URL}${getImageHRef(image._links.self)}`}
                 description={description}
+                noindex={image.unlisted}
                 openGraph={openGraph}
                 title={title}
             />
@@ -184,15 +186,15 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                                       },
                                       type: "button" as const,
                                   },
-                            lineageNodeHRef
+                            lineageHRef
                                 ? {
                                       children: "View Lineage →",
                                       key: "lineage",
-                                      href: extractPath(lineageNodeHRef) + "/lineage",
+                                      href: lineageHRef,
                                       onClick: () => {
                                           customEvents.clickLink(
                                               "view_lineage",
-                                              extractPath(lineageNodeHRef) + "/lineage",
+                                              lineageHRef,
                                               "View Lineage →",
                                               "button",
                                           )
@@ -213,6 +215,15 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                             </>
                         }
                     />
+                    {image.unlisted && (
+                        <Warning>
+                            <h2>Warning</h2>
+                            <p>
+                                This image has been removed from the rest of the site. This page may be removed in the
+                                future.
+                            </p>
+                        </Warning>
+                    )}
                     <table>
                         <tbody>
                             <tr>
@@ -280,7 +291,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                         </p>
                     </section>
                 )}
-                <section>
+                <section id="download-files">
                     <h2>Download Files</h2>
                     <section>
                         <h3>General Notes on Usage</h3>

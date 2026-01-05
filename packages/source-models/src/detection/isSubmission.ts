@@ -41,4 +41,3 @@ export const isSubmission = (x: unknown, faultCollector?: ValidationFaultCollect
         isIdentifier((x as Submission).identifier, faultCollector?.sub("identifier"))) &&
     ((x as Submission).status === "incomplete" ||
         isValidLicenseURL((x as Submission).license, faultCollector?.sub("license")))
-export default isSubmission

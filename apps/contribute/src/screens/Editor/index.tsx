@@ -27,6 +27,7 @@ const Editor: FC<Props> = ({ hash }) => {
         [submission],
     )
     const [unready, setUnready] = useState<boolean | null>(null)
+    const [changeDesired, setChangeDesired] = useState(false)
     const mutate = useSubmissionMutator(hash)
     const submit = useCallback(() => mutate({ status: "submitted" }), [mutate])
     const deletor = useAuthorizedSubmissionDeletor(hash)

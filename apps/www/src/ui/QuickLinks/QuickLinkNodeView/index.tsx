@@ -50,7 +50,7 @@ const compareChildren = (a: QuickLinkNode, b: QuickLinkNode) => {
     return (
         getLabelCount(a) - getLabelCount(b) ||
         getDepth(a) - getDepth(b) ||
-        (a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0)
+        ((a.label ?? a.slug) < (b.label ?? b.slug) ? -1 : (a.label ?? a.slug) > (b.label ?? b.slug) ? 1 : 0)
     )
 }
 const deslugify = (s: string) => capitalize(s.replaceAll("-", " "))

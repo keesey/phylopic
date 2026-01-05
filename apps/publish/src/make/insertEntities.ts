@@ -150,7 +150,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
         const chunks = chunk(data.images.entries(), 1024)
         for (const c of chunks) {
             const config: QueryConfig = {
-                text: 'INSERT INTO image ("uuid",build,contributor_uuid,created,depth,license_by,license_nc,license_sa,modified,modified_file,json,title) VALUES',
+                text: 'INSERT INTO image ("uuid",build,contributor_uuid,created,depth,license_by,license_nc,license_sa,modified,modified_file,json,title,unlisted) VALUES',
                 values: [],
             }
             if (!config.values) {
@@ -160,20 +160,21 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
             for (const [uuid, image] of c) {
                 const titleNomen = data.nodes.get(image.specific)?.names[0]
                 config.text += index === 1 ? " " : ","
-                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::timestamp without time zone,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::character varying)`
+                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::timestamp without time zone,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::character varying,$${index++}::bit)`
                 config.values.push(
                     uuid,
                     data.build,
                     image.contributor,
                     image.created,
                     data.depths.get(image.general ?? image.specific!) ?? 0,
-                    isBy(image.license!) ? 1 : 0,
-                    isNC(image.license!) ? 1 : 0,
-                    isSA(image.license!) ? 1 : 0,
+                    isBy(image.license) ? 1 : 0,
+                    isNC(image.license) ? 1 : 0,
+                    isSA(image.license) ? 1 : 0,
                     image.modified,
                     data.filesModified.get(uuid) ?? image.modified,
                     stringifyNormalized(await getImageJSON(uuid, data)),
                     titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
+                    image.unlisted ? 1 : 0,
                 )
             }
             await tryQuery(client, config)
@@ -182,7 +183,7 @@ const insertImages = async (client: ClientBase, data: SourceData) => {
     console.info("Added image data to entities database.")
 }
 const getContributorCount = (data: SourceData, uuid: UUID): number => {
-    return [...data.images.values()].filter(({ contributor }) => contributor === uuid).length
+    return [...data.images.values()].filter(({ contributor, unlisted }) => !unlisted && contributor === uuid).length
 }
 const compareContributorEntries = (
     a: Readonly<[UUID, Contributor, number]>,
@@ -195,14 +196,13 @@ const insertContributors = async (client: ClientBase, data: SourceData) => {
             ([uuid, contributor]) =>
                 [uuid, contributor, getContributorCount(data, uuid)] as Readonly<[UUID, Contributor, number]>,
         )
-        .filter(([, , count]) => count > 0)
         .sort(compareContributorEntries)
     if (contributors.length > 0) {
         const chunks = chunk(contributors, 1024)
         let sortIndex = 0
         for (const c of chunks) {
             const config: QueryConfig = {
-                text: 'INSERT INTO contributor ("uuid",build,created,json,sort_index,title) VALUES',
+                text: 'INSERT INTO contributor ("uuid",build,created,json,sort_index,title,unlisted) VALUES',
                 values: [],
             }
             if (!config.values) {
@@ -211,7 +211,7 @@ const insertContributors = async (client: ClientBase, data: SourceData) => {
             let index = 1
             for (const [uuid, contributor, count] of c) {
                 config.text += index === 1 ? " " : ","
-                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::bigint,$${index++}::character varying)`
+                config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::bigint,$${index++}::character varying,$${index++}::bit)`
                 config.values.push(
                     uuid,
                     data.build,
@@ -219,6 +219,7 @@ const insertContributors = async (client: ClientBase, data: SourceData) => {
                     stringifyNormalized(getContributorJSON(uuid, data, count)),
                     sortIndex++,
                     contributor.name || null,
+                    count > 0 ? 0 : 1,
                 )
             }
             await tryQuery(client, config)

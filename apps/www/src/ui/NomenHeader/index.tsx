@@ -5,6 +5,7 @@ import NodeDetailsView from "~/views/NodeDetailsView"
 import NomenView from "~/views/NomenView"
 import HeaderNav, { Props as HeaderNavProps } from "../HeaderNav"
 import { Props as HeaderNavButtonProps } from "../HeaderNav/HeaderNavButton"
+import getNodeHRef from "~/routes/getNodeHRef"
 export type Props = {
     value?: NodeWithEmbedded
 }
@@ -36,12 +37,12 @@ const NomenHeader: FC<Props> = ({ value }) => {
             })
         }
         if (value && hasParent) {
+            const href = getNodeHRef(value._links.self) + "/lineage"
             buttons.push({
                 children: "View Lineage →",
-                href: `/nodes/${value.uuid}/lineage`,
+                href,
                 key: "lineage",
-                onClick: () =>
-                    customEvents.clickLink("view_lineage", `/nodes/${value.uuid}/lineage`, "View Lineage →", "button"),
+                onClick: () => customEvents.clickLink("view_lineage", href, "View Lineage →", "button"),
                 type: "anchor",
             })
         }
