@@ -59,6 +59,17 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
             </ul>
         </section>
         <section>
+            <h2>Usage</h2>
+            <Link
+                href="/articles/image-usage"
+                onClick={() =>
+                    customEvents.clickLink("menu_link", "/articles/image-usage", "How to Use Images", "link")
+                }
+            >
+                How to Use Images
+            </Link>
+        </section>
+        <section>
             <h2>Contribute</h2>
             <ul>
                 <li>

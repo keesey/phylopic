@@ -19,6 +19,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.1] - 2026-01-05
+
+### Security
+
+- Minor upgrade for `react`.
+- Patch upgrade for `next`.
+
+## [2.14.0] - 2025-09-27
+
+### Added
+
+- New article, "Usage of Images", with links in various places.
+- Articles Index Page.
+
 ## [2.13.3] - 2025-09-25
 
 ### Fixed

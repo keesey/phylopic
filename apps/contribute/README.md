@@ -6,7 +6,7 @@ The app is hosted at [https://contribute.phylopic.org](https://contribute.phylop
 
 ## Getting started
 
-See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project. You will also need to install and configure [AWS Command Line Interface](https://aws.amazon.com/cli/).
+See instructions in the [_PhyloPic_ project `README`](../../README.md) for setting up the monorepo project.
 
 ### Environment variables
 
@@ -34,7 +34,7 @@ The following environment variables are optional:
 | ----------------------------------- | ----------------------------------------------- |
 | `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key |
 | `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Measurement ID for Google Analytics             |
-| `PGPORT`                            | Postgres port                                   |
+| `PGPORT`                            | Postgres port (default: `5432`)                 |
 
 ## Linting
 

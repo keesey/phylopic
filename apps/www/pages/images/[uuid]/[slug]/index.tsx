@@ -297,7 +297,7 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
                         </p>
                     </section>
                 )}
-                <section>
+                <section id="download-files">
                     <h2>Download Files</h2>
                     <section>
                         <h3>General Notes on Usage</h3>

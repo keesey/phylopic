@@ -12,24 +12,34 @@ See instructions in the [_PhyloPic_ project `README`](../../README.md) for setti
 
 The following environment variables are required. They may be stored in `.env.local` in the root of this project.
 
-| Variable Name                          | Description                                                                                                                                                        |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `NEXT_PUBLIC_API_URL`                  | Root URL of the _PhyloPic_ API (`https://api.phylopic.org`)                                                                                                        |
-| `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | UUID for the contributing user that is also the site's contact point (`060f03a9-fafd-4d08-81d1-b8f82080573f`)                                                      |
-| `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of the _PhyloPic: Contribute_ website (`https://contribute.phylopic.org`)                                                                                 |
-| `NEXT_PUBLIC_ROOT_UUID`                | ID for the root phylogenetic node (`8f901db5-84c1-4dc0-93ba-2300eeddf4ab`)                                                                                         |
-| `NEXT_PUBLIC_WWW_URL`                  | Root URL of the main _PhyloPic_ website (`https://www.phylopic.org`)                                                                                               |
-| `REVALIDATE_TOKEN`                     | Secret key for [Next.js on-demand revalidation](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration#using-on-demand-revalidation) |
-| `S3_ACCESS_KEY_ID`                     | Amazon Web Services S3 access key ID                                                                                                                               |
-| `S3_REGION`                            | Amazon Web Services S3 region                                                                                                                                      |
-| `S3_SECRET_ACCESS_KEY`                 | Amazon Web Services S3 secret access key                                                                                                                           |
+| Variable Name                          | Description                                                          |
+| -------------------------------------- | -------------------------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL`                  | Root URL of the _PhyloPic_ API                                       |
+| `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | UUID for the contributing user that is also the site's contact point |
+| `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of the _PhyloPic: Contribute_ website                       |
+| `NEXT_PUBLIC_ROOT_UUID`                | ID for the root phylogenetic node                                    |
+| `NEXT_PUBLIC_WWW_URL`                  | Root URL of the main _PhyloPic_ website                              |
+| `S3_ACCESS_KEY_ID`                     | Amazon Web Services S3 access key ID                                 |
+| `S3_REGION`                            | Amazon Web Services S3 region                                        |
+| `S3_SECRET_ACCESS_KEY`                 | Amazon Web Services S3 secret access key                             |
 
 The following environment variables are optional:
 
-| Variable Name                       | Description                                     |
-| ----------------------------------- | ----------------------------------------------- |
-| `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key |
-| `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Measurement ID for Google Analytics             |
+| Variable Name                       | Description                                                                                                                                                        |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key                                                                                                                    |
+| `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Measurement ID for Google Analytics                                                                                                                                |
+| `REVALIDATE_TOKEN`                  | Secret key for [Next.js on-demand revalidation](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration#using-on-demand-revalidation) |
+
+The S3 variables are only necessary for permalink functionality. To get everything else up and running quickly, you can use these values in your `.env.local` file:
+
+```sh
+NEXT_PUBLIC_API_URL=https://api.phylopic.org
+NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID=060f03a9-fafd-4d08-81d1-b8f82080573f
+NEXT_PUBLIC_CONTRIBUTE_URL=https://contribute.phylopic.org
+NEXT_PUBLIC_ROOT_UUID=8f901db5-84c1-4dc0-93ba-2300eeddf4ab
+NEXT_PUBLIC_WWW_URL=https://www.phylopic.org
+```
 
 ## Linting
 

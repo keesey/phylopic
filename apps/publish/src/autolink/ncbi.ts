@@ -10,8 +10,13 @@ import {
     stringifyNomen,
     type UUID,
 } from "@phylopic/utils"
-import axios from "axios"
+import axios, { InternalAxiosRequestConfig } from "axios"
+import Bottleneck from "bottleneck"
 type Identifier = Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>
+const limiter = new Bottleneck({
+    maxConcurrent: 10,
+    minTime: 100,
+})
 const AxiosInstance = axios.create({
     headers: {
         "api-key": process.env.NCBI_API_KEY,
@@ -52,12 +57,16 @@ const getTaxonomies = async (
     }
     const taxonomies: NCBITaxonomy[] = []
     do {
-        const response = await AxiosInstance.get<NCBITaxonomyNodes>(
-            `https://api.ncbi.nlm.nih.gov/datasets/v2/taxonomy/taxon/${encodeURIComponent(queries.slice(0, chunkSize).join(","))}`,
-        ).catch(e => {
-            console.warn(e)
-            return null
-        })
+        const response = await limiter.schedule(() =>
+            AxiosInstance.get<NCBITaxonomyNodes>(
+                `https://api.ncbi.nlm.nih.gov/datasets/v2/taxonomy/taxon/${encodeURIComponent(
+                    queries.slice(0, chunkSize).join(","),
+                )}`,
+            ).catch(e => {
+                console.warn(e)
+                return null
+            }),
+        )
         if (response) {
             taxonomies.push(...response.data.taxonomy_nodes.map(node => node.taxonomy).filter(Boolean))
         }
@@ -151,7 +160,11 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
             const externalClient = client.external("ncbi.nlm.nih.gov", "taxid", match.tax_id.toString())
             if (await externalClient.exists()) {
                 console.info(
-                    `${getIdentifier("ncbi.nlm.nih.gov", "taxid", match.tax_id.toString())} is already assigned to another node.`,
+                    `${getIdentifier(
+                        "ncbi.nlm.nih.gov",
+                        "taxid",
+                        match.tax_id.toString(),
+                    )} is already assigned to another node.`,
                 )
             } else {
                 if (!IGNORED.has(match.tax_id.toString())) {
@@ -169,12 +182,16 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
                     objectID: match.tax_id.toString(),
                     title: match.organism_name,
                 })
-                const response = await AxiosInstance.get<NCBITaxonLinks>(
-                    `https://api.ncbi.nlm.nih.gov/datasets/v2/taxonomy/taxon/${encodeURIComponent(match.tax_id)}/links`,
-                ).catch(e => {
-                    console.warn(e)
-                    return null
-                })
+                const response = await limiter.schedule(() =>
+                    AxiosInstance.get<NCBITaxonLinks>(
+                        `https://api.ncbi.nlm.nih.gov/datasets/v2/taxonomy/taxon/${encodeURIComponent(
+                            match.tax_id,
+                        )}/links`,
+                    ).catch(e => {
+                        console.warn(e)
+                        return null
+                    }),
+                )
                 if (response) {
                     for (const { authority, namespace, objectID } of getIdentifiers(response.data)) {
                         const externalClient = client.external(authority, namespace, objectID)
@@ -197,9 +214,11 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
             }
         }
     }
+    const childPromises: Array<Promise<void>> = []
     for await (const child of iterateList(client.node(node.uuid).children)) {
-        await processNode(client, child, ancestorIds)
+        childPromises.push(processNode(client, child, ancestorIds))
     }
+    await Promise.all(childPromises)
 }
 const autolinkNCBI = async (client: SourceClient): Promise<void> => {
     const node = await client.root.get()
