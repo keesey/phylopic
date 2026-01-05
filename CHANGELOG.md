@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.19] - 2026-01-05
+
+### Changed
+
+- Upgraded `turbo` to `2.7.2`.
+
 ## [2.0.18] - 2025-09-25
 
 ### Changed
@@ -29,38 +35,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `caniuse-lite`.
 - Upgraded `@changesets/cli` to `2.29.7`.
 - Upgraded `prettier` to `3.6.2`.
-- Upgraded `turborepo` to `2.5.8`.
+- Upgraded `turbo` to `2.5.8`.
 
 ## [2.0.17] - 2025-01-23
 
 ### Changed
 
-- Upgraded `turborepo` to `2.5.4`.
+- Upgraded `turbo` to `2.5.4`.
 
 ## [2.0.16] - 2025-01-02
 
 ### Changed
 
 - Updated `caniuse-lite`.
-- Upgraded `turborepo` to `2.3.3`.
+- Upgraded `turbo` to `2.3.3`.
 
 ## [2.0.15] - 2024-07-05
 
 ### Changed
 
-- Upgraded `turborepo` to `2.0.6`.
+- Upgraded `turbo` to `2.0.6`.
 
 ## [2.0.14] - 2024-06-21
 
 ### Changed
 
-- Upgraded `turborepo` to `2.0.4`.
+- Upgraded `turbo` to `2.0.4`.
 
 ## [2.0.13] - 2024-06-15
 
 ### Changed
 
-- Upgraded `turborepo` to `2.0.3`.
+- Upgraded `turbo` to `2.0.3`.
 
 ## [2.0.12] - 2024-04-13
 
@@ -75,27 +81,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Upgraded `turborepo` to `1.13.0`.
+- Upgraded `turbo` to `1.13.0`.
 
 ## [2.0.10] - 2024-01-29
 
 ### Changed
 
-- Upgraded `turborepo` to `1.11.3`.
+- Upgraded `turbo` to `1.11.3`.
 - Updated `caniuse-lite`.
 
 ## [2.0.9] - 2023-06-26
 
 ### Changed
 
-- Upgraded `turborepo` to `1.10.6`.
+- Upgraded `turbo` to `1.10.6`.
 - Updated `caniuse-lite`.
 
 ## [2.0.8] - 2023-05-17
 
 ### Changed
 
-- Upgraded `turborepo` to `1.9.7`.
+- Upgraded `turbo` to `1.9.7`.
 
 ## [2.0.7] - 2023-05-14
 
@@ -115,30 +121,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Upgraded `turborepo` to `1.9.3`.
+- Upgraded `turbo` to `1.9.3`.
 
 ## [2.0.4] - 2023-04-01
 
 ### Changed
 
-- Upgraded `turborepo` to `1.8.8`.
+- Upgraded `turbo` to `1.8.8`.
 
 ## [2.0.3] - 2023-03-24
 
 ### Changed
 
-- Upgraded `turborepo` to `1.8.5`.
+- Upgraded `turbo` to `1.8.5`.
 
 ## [2.0.2] - 2023-02-29
 
 ### Changed
 
-- Upgraded `turborepo` to `1.8.3`.
+- Upgraded `turbo` to `1.8.3`.
 
 ## [2.0.1] - 2023-02-21
 
 ### Changed
 
-- Upgraded `turborepo` to `1.8.1`.
+- Upgraded `turbo` to `1.8.1`.
 
 ## [2.0.0] - 2023-02-12
