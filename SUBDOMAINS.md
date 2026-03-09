@@ -12,10 +12,6 @@ The public API, served from Amazon API Gateway and delivered via Amazon Cloudfro
 
 Documentation for the public API, statically hosted on [Amazon S3](./S3.md#api-docsphylopicorg).
 
-## `beta.phylopic.org`
-
-Legacy beta release domain. Redirects to `www.phylopic.org`.
-
 ## `contribute.phylopic.org`
 
 Contribution website, hosted by Vercel.
