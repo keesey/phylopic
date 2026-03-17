@@ -12,7 +12,7 @@ info:
   license:
     name: CC0
     url: https://creativecommons.org/share-your-work/public-domain/cc0
-  version: 2.7.2
+  version: 2.7.3
 tags:
   - name: general
     description: General API information and status.
@@ -40,8 +40,8 @@ components:
       schema:
         type: string
     Content-Type:
-      description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json`.
-      example: application/vnd.phylopic.v2+json
+      description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json; charset=utf8`.
+      example: application/vnd.phylopic.v2+json; charset=utf8
       schema:
         format: mimetype
         type: string

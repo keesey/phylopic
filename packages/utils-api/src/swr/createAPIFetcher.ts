@@ -19,7 +19,7 @@ export const createAPIFetcher =
             return response.data
         } catch (e) {
             if (axios.isAxiosError(e) && e.response) {
-                if (e.response.headers["content-type"] === DATA_MEDIA_TYPE) {
+                if (e.response.headers["content-type"].split(";", 1)[0] === DATA_MEDIA_TYPE) {
                     const data = e.response.data as ErrorResponse | undefined
                     const dataBuild = data?.build
                     if (typeof dataBuild === "number" && (typeof build !== "number" || dataBuild > build)) {

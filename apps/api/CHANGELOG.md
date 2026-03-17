@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.7.3] - 2026-03-17
+
+### Added
+
+- Charset to `Content-Type` headers.
+
 ## [2.7.2] - 2026-01-05
 
 ### Changed
