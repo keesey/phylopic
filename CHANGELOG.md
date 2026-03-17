@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.20] - 2026-03-17
+
+### Changed
+
+- Upgraded `turbo` to `2.8.17`.
+
 ## [2.0.19] - 2026-01-05
 
 ### Changed

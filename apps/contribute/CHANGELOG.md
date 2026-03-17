@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.3.4] - 2026-03-17
+
+### Added
+
+- Splitting out charset from `Content-Type` header for data type checks in error handling.
+
 ## [2.3.3] - 2026-01-05
 
 ### Changed
