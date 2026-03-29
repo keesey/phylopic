@@ -5,6 +5,7 @@ import { randomUUID } from "crypto"
 import { parseNomen } from "parse-nomen"
 import SourceClient from "~/source/SourceClient"
 import { Resolver } from "../Resolver"
+import packageJson from "../../../package.json"
 interface PBDBRecord {
     // Abridged.
     readonly nam: string
@@ -38,8 +39,14 @@ const resolveItem = async (client: SourceClient, item: PBDBRecord, lineage: read
     return newNode
 }
 const resolvePBDB: Resolver = async (client, objectID) => {
+    const minorVersion = packageJson.version.split(".", 2).join(".")
     const result = await axios.get<{ records: readonly PBDBRecord[] }>(
         `https://paleobiodb.org/data1.2/taxa/list.json?id=txn:${encodeURIComponent(objectID)}&rel=all_parents`,
+        {
+            headers: {
+                "User-Agent": `PhyloPic Editor/${minorVersion}`,
+            },
+        },
     )
     const lineage = [...result.data.records]
     const item = lineage.pop()

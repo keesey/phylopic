@@ -59,7 +59,9 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
                     name,
                     strict: true,
                 }
-                const response = await axios.get<GBIFMatch>(`https://api.gbif.org/v1/species/match${createSearch(search)}`)
+                const response = await axios.get<GBIFMatch>(
+                    `https://api.gbif.org/v1/species/match${createSearch(search)}`,
+                )
                 if (response.data.matchType === "EXACT" && typeof response.data.usageKey === "number") {
                     if (!mainUsage) {
                         mainUsage = response.data
