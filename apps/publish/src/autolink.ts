@@ -1,6 +1,24 @@
 import "dotenv/config"
+import axios from "axios"
+import axiosRetry from "axios-retry"
 import SourceClient from "./source/SourceClient.js"
 ;(async () => {
+    axiosRetry(axios, {
+        onMaxRetryTimesExceeded: (error, retryCount) => {
+            console.warn(
+                `Maximum retry count (${retryCount}) exceeded for ${error.request?.url ?? "<unknown>"}: ${
+                error.message
+                }`,
+            )
+        },
+        onRetry: (count, error) => {
+            console.warn(`Retry #${count} for ${error.request?.url ?? "<unknown>"}: ${error.message}`)
+        },
+        retries: 5,
+        retryCondition: error => axiosRetry.isIdempotentRequestError(error) || error.response?.status === 429,
+        retryDelay: (count, error) =>
+            axiosRetry.exponentialDelay(count, error, error.response?.status === 429 ? 1000 : 0),
+    })
     const client = new SourceClient()
     try {
         console.info("PhyloPic AutoLink starting...")

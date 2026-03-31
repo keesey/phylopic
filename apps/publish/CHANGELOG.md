@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.10.0] - 2026-03-31
+
+### Added
+
+-   Exponential retries for autolink calls to external APIs (`429` and `5xx` errors).
+
+### Changed
+
+-   Adjusted NCBI autolink bottleneck to avoid `429` errors.
+
 ## [1.9.2] - 2026-02-01
 
 ### Fixed
