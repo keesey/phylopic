@@ -13,10 +13,7 @@ import { readImageFile } from "./s3/io/readImageFile"
 import { writeImageFile } from "./s3/io/writeImageFile"
 import { S3Editor } from "./s3/S3Editor"
 export class ImageClient extends PGPatcher<Image & { uuid: UUID }> implements ReturnType<SourceClient["image"]> {
-    constructor(
-        protected readonly provider: PGClientProvider & S3ClientProvider,
-        protected readonly uuid: UUID,
-    ) {
+    constructor(protected readonly provider: PGClientProvider & S3ClientProvider, protected readonly uuid: UUID) {
         if (!isUUIDv4(uuid)) {
             throw new Error("Invalid UUID.")
         }
