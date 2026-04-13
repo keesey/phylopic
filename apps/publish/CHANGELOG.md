@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.11.0] - 2026-04-13
+
+### Added
+
+-   Dry run option for `insert` script.
+
 ## [1.10.0] - 2026-03-31
 
 ### Added
