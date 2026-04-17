@@ -3,6 +3,8 @@ export type Submission = Readonly<{
     attribution: string | null
     contributor: UUID
     created: ISOTimestamp
+    // :TODO: Remove "?"
+    existingUUID?: UUID | null
     newTaxonName: string | null
     sponsor: string | null
 }> &

@@ -472,6 +472,13 @@ functions:
         handler: src/lambdas/uploader.onAPIGatewayProxy
         memorySize: 1024
         timeout: 30
+        environment:
+            PGDATABASE: "${ssm:PGDATABASE}"
+            PGHOST: "${ssm:PGHOST}"
+            PGPASSWORD: "${ssm:PGPASSWORD}"
+            PGPORT: "${ssm:PGPORT}"
+            PGUSER: "${ssm:PGUSER}"
+            PHYLOPIC_BUILD: "${ssm:PHYLOPIC_BUILD}"
         events:
             - http:
                   authorizer:
@@ -497,3 +504,5 @@ functions:
                               accept: false
                               authorization: true
                               content-type: true
+                          querystrings:
+                              existing_uuid: false

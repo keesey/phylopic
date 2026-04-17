@@ -1,4 +1,4 @@
-import { FC, FormEvent, ReactNode, useCallback, useEffect, useState } from "react"
+import { FC, FormEvent, ReactNode, useCallback, useState } from "react"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
 export type Props = {
