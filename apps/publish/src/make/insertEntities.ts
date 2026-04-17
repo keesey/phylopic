@@ -102,7 +102,7 @@ const tryQuery = async <T extends unknown[]>(client: ClientBase, config: QueryCo
         throw e
     }
 }
-const insertNodes = async (client: ClientBase, data: SourceData) => {
+const insertNodes = async (client: ClientBase, data: SourceData, isDryRun: boolean) => {
     console.info("Adding node data to entities database...")
     const sorted = [...data.nodes.keys()].sort(
         (a, b) => (data.depths.get(a) ?? 0) - (data.depths.get(b) ?? 0) || (a < b ? -1 : b < a ? 1 : 0),
@@ -123,14 +123,16 @@ const insertNodes = async (client: ClientBase, data: SourceData) => {
         }
         const configs = { externals, names, nodes }
         c.forEach(nodeUUID => processNode(data, nodeUUID, configs))
-        if (nodes.values?.length) {
-            await tryQuery(client, nodes)
-        }
-        if (names.values?.length) {
-            await tryQuery(client, names)
-        }
-        if (externals.values?.length) {
-            await tryQuery(client, externals)
+        if (!isDryRun) {
+            if (nodes.values?.length) {
+                await tryQuery(client, nodes)
+            }
+            if (names.values?.length) {
+                await tryQuery(client, names)
+            }
+            if (externals.values?.length) {
+                await tryQuery(client, externals)
+            }
         }
     }
     console.info("Added node data to entities database.")
@@ -144,9 +146,9 @@ const isNC = (license: LicenseURL) =>
 const isSA = (license: LicenseURL) =>
     license === "https://creativecommons.org/licenses/by-nc-sa/3.0/" ||
     license === "https://creativecommons.org/licenses/by-sa/3.0/"
-const insertImages = async (client: ClientBase, data: SourceData) => {
+const insertImages = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Adding image data to entities database...")
-    if (data.images.size > 0) {
+    if (!isDryRun && data.images.size > 0) {
         const chunks = chunk(data.images.entries(), 1024)
         for (const c of chunks) {
             const config: QueryConfig = {
@@ -189,7 +191,7 @@ const compareContributorEntries = (
     a: Readonly<[UUID, Contributor, number]>,
     b: Readonly<[UUID, Contributor, number]>,
 ) => b[2] - a[2] || compareStrings(a[1].created, b[1].created) || compareStrings(a[0], b[0])
-const insertContributors = async (client: ClientBase, data: SourceData) => {
+const insertContributors = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Adding contributor data to entities database...")
     const contributors = [...data.contributors.entries()]
         .map(
@@ -197,7 +199,7 @@ const insertContributors = async (client: ClientBase, data: SourceData) => {
                 [uuid, contributor, getContributorCount(data, uuid)] as Readonly<[UUID, Contributor, number]>,
         )
         .sort(compareContributorEntries)
-    if (contributors.length > 0) {
+    if (!isDryRun && contributors.length > 0) {
         const chunks = chunk(contributors, 1024)
         let sortIndex = 0
         for (const c of chunks) {
@@ -227,13 +229,13 @@ const insertContributors = async (client: ClientBase, data: SourceData) => {
     }
     console.info("Added contributor data to entities database.")
 }
-const insertContributorsAndImages = async (client: ClientBase, data: SourceData) => {
-    await insertContributors(client, data)
-    await insertImages(client, data)
+const insertContributorsAndImages = async (client: ClientBase, data: SourceData, isDryRun = false) => {
+    await insertContributors(client, data, isDryRun)
+    await insertImages(client, data, isDryRun)
 }
-const insertIllustrations = async (client: ClientBase, data: SourceData) => {
+const insertIllustrations = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Adding image-node assigments to entities database...")
-    if (data.illustration.size > 0) {
+    if (!isDryRun && data.illustration.size > 0) {
         const chunks = chunk(data.illustration.entries(), 1024)
         for (const c of chunks) {
             const config: QueryConfig = {
@@ -256,16 +258,18 @@ const insertIllustrations = async (client: ClientBase, data: SourceData) => {
     }
     console.info("Added image-node assigments to entities database...")
 }
-const insertEntities = async (client: ClientBase, data: SourceData) => {
+const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Updating entities database...")
     // Clean anything from an aborted build.
-    await cleanTables(client, data.build, "=")
+    if (!isDryRun) {
+        await cleanTables(client, data.build, "=")
+    }
     await client.query("BEGIN")
     // Insert entities and adjunct data
-    await Promise.all([insertContributorsAndImages(client, data), insertNodes(client, data)])
+    await Promise.all([insertContributorsAndImages(client, data, isDryRun), insertNodes(client, data, isDryRun)])
     // Insert node-image links
-    await insertIllustrations(client, data)
-    await client.query("COMMIT")
+    await insertIllustrations(client, data, isDryRun)
+    await client.query(isDryRun ? "ROLLBACK" : "COMMIT")
     console.info("Updated entities database.")
 }
 export default insertEntities

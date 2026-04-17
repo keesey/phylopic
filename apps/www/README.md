@@ -75,7 +75,7 @@ The app will deploy through [Vercel](https://vercel.com/keesey/phylopic-www).
 
 ## Authors
 
-- **T. Michael Keesey** - [keesey](https://github.com/keesey)
+-   **T. Michael Keesey** - [keesey](https://github.com/keesey)
 
 ## License
 

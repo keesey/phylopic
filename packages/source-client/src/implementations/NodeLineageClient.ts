@@ -7,10 +7,7 @@ import { getFields } from "./pg/fields/getFields"
 import { normalizeNode } from "./pg/normalization/normalizeNode"
 const LINEAGE_PAGE_SIZE = 64
 export class NodeLineageClient implements Listable<Node & { uuid: UUID }, number> {
-    constructor(
-        protected provider: PGClientProvider,
-        protected uuid: UUID,
-    ) {}
+    constructor(protected provider: PGClientProvider, protected uuid: UUID) {}
     async page(index = 0) {
         const client = await this.provider.getPG()
         const result = await client.query<Node & { uuid: UUID }>(
