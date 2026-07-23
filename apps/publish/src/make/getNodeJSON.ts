@@ -103,7 +103,7 @@ const getExternal = (uuid: UUID, data: SourceData) => {
                 ({
                     href: `/resolve/${path}?build=${data.build}`,
                     title: link.title,
-                } as TitledLink),
+                }) as TitledLink,
         )
 }
 const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData): UUID => {

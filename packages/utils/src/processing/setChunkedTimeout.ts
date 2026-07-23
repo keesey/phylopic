@@ -1,7 +1,10 @@
 const MAX_TIMEOUT = 2147483647
 class ChunkedTimeout {
     private handle: NodeJS.Timeout | undefined
-    constructor(private callback?: () => void, private msLeft: number = 0) {
+    constructor(
+        private callback?: () => void,
+        private msLeft: number = 0,
+    ) {
         this.next()
     }
     public clear() {

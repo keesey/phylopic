@@ -34,8 +34,8 @@ const getQueryBuilder = (parameters: NodeListParameters, results: "total" | "hre
         results === "total"
             ? 'COUNT(node."uuid") as total'
             : results === "href"
-            ? 'node.title AS title,node."uuid" AS "uuid"'
-            : 'node.json AS json,node.title AS title,node."uuid" AS "uuid"'
+              ? 'node.title AS title,node."uuid" AS "uuid"'
+              : 'node.json AS json,node.title AS title,node."uuid" AS "uuid"'
     if (parameters.filter_name) {
         builder.add(
             `

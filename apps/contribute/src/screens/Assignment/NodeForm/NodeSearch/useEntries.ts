@@ -14,8 +14,7 @@ export const useEntries = () => {
 export default useEntries
 const useExternalEntries = (
     externalResults:
-        | Readonly<Record<Authority, Readonly<Record<Namespace, Readonly<Record<ObjectID, string>>>>>>
-        | undefined,
+        Readonly<Record<Authority, Readonly<Record<Namespace, Readonly<Record<ObjectID, string>>>>>> | undefined,
 ): readonly SearchEntry[] => {
     return useMemo<readonly SearchEntry[]>(() => {
         if (!externalResults) {
@@ -47,7 +46,7 @@ const convertResolutionToEntry = (resolution: ExternalResolution) =>
         name: parseNomen(resolution.title),
         namespace: resolution.namespace,
         objectID: resolution.objectID,
-    } as SearchEntry)
+    }) as SearchEntry
 const mapNodeResultsToEntries = (nodeResults: readonly NodeWithEmbedded[] | undefined): readonly SearchEntry[] => {
     return (nodeResults ?? []).map(
         node =>
@@ -57,7 +56,7 @@ const mapNodeResultsToEntries = (nodeResults: readonly NodeWithEmbedded[] | unde
                 name: node.names[0],
                 namespace: "nodes",
                 objectID: node.uuid,
-            } as SearchEntry),
+            }) as SearchEntry,
     )
 }
 const useUnresolved = (

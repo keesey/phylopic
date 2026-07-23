@@ -23,24 +23,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Minor upgrade for `eslint-plugin-react`.
+- Minor upgrade for `eslint-plugin-react`.
 
 ## [1.0.3] - 2026-01-05
 
 ### Security
 
--   Patch upgrade for `eslint-config-next`.
+- Patch upgrade for `eslint-config-next`.
 
 ## [1.0.2] - 2024-06-21
 
 ### Changed
 
--   Upgraded `eslint-config-next` to 14.2.4.
+- Upgraded `eslint-config-next` to 14.2.4.
 
 ## [1.0.1] - 2024-04-13
 
 ### Changed
 
--   Upgraded all dependencies.
+- Upgraded all dependencies.
 
 ## [1.0.0] - 2023-02-12
