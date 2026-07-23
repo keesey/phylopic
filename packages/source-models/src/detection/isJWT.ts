@@ -4,6 +4,6 @@ import { JWT } from "../types/JWT"
 export const isJWT = (token: unknown, collector?: ValidationFaultCollector): token is JWT => {
     return Boolean(
         (typeof token === "string" && jsonwebtoken.decode(token, { json: true })) ||
-            invalidate(collector, "Expected a valid JSON Web Token."),
+        invalidate(collector, "Expected a valid JSON Web Token."),
     )
 }

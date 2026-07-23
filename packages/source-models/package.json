@@ -9,20 +9,20 @@
     "dependencies": {
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
-        "jsonwebtoken": "^9.0.2",
+        "jsonwebtoken": "^9.0.3",
         "parse-nomen": "^2.1.3",
         "uuid": "^9.0.1"
     },
     "description": "Types, validation, and normalization for *PhyloPic* source model objects.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/jsonwebtoken": "^9.0.6",
+        "@types/jsonwebtoken": "^9.0.10",
         "@types/uuid": "^9.0.8",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "prettier": "^3.2.5",
+        "prettier": "^3.9.6",
         "ts-node": "^10.9.2",
-        "tsup": "^8.0.2",
+        "tsup": "^8.5.1",
         "typescript": "^5.4.5",
         "vitest": "^1.5.0",
         "yarn": "^1.22.22"
@@ -62,5 +62,5 @@
         "test": "vitest --watch=false"
     },
     "types": "./dist/index.d.ts",
-    "version": "1.1.0"
+    "version": "1.1.1"
 }

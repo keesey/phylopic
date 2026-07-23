@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.3] - 2026-07-22
+
+### Changed
+
+- Minor upgrades for development dependencies (`@types/pg`, `prettier`, `tsup`).
+
 ## [1.3.2] - 2026-01-05
 
 ### Changed

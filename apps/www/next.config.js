@@ -1,5 +1,7 @@
+const path = require("path")
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    outputFileTracingRoot: path.join(__dirname, "../../"),
     async headers() {
         return [
             {
@@ -18,7 +20,7 @@ const nextConfig = {
         locales: ["en"],
     },
     images: {
-        domains: ["images.phylopic.org"],
+        remotePatterns: [{ protocol: "https", hostname: "images.phylopic.org" }],
     },
     reactStrictMode: true,
     async redirects() {
@@ -88,7 +90,6 @@ const nextConfig = {
             },
         ]
     },
-    swcMinify: true,
 }
 const runtimeCaching = require("next-pwa/cache")
 const withPWA = require("next-pwa")({
