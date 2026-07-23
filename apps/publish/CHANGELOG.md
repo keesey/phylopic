@@ -19,6 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.11.1] - 2026-07-22
+
+### Changed
+
+-   Minor upgrades for `pg` and `probe-image-size`.
+
+### Removed
+
+-   Extraneous `path` and `readline` packages (shims for Node.js built-in modules).
+
+### Security
+
+-   Minor upgrade for `axios`.
+-   Minor upgrade for AWS clients, fixing `fast-xml-parser` vulnerabilities.
+
 ## [1.11.0] - 2026-04-13
 
 ### Added
