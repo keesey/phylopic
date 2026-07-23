@@ -53,13 +53,13 @@ const QUICK_LINKS: QuickLinkNode = {
                             uuid: "a27a6bff-275a-4a95-98e5-4776f0da96f1",
                         },
                         {
-                            imageUUID: "933bae7e-0c5a-4d6d-84b3-cf3141a5cd36",
+                            imageUUID: "abf654f3-a516-42c6-ba72-ba2d7a0fda77",
                             label: "animals",
                             slug: "metazoa",
                             uuid: "68424967-5109-4f0d-a8e2-77e7edbe94ab",
                             children: [
                                 {
-                                    imageUUID: "8b28733a-9eab-4510-9dcf-9235aaf44d14",
+                                    imageUUID: "e3dfdfb1-6e2e-4f9b-99bc-7b3e9cb2dab0",
                                     label: "sponges",
                                     slug: "porifera",
                                     uuid: "d7324a9c-c170-4abc-b092-a5f5168f9365",
@@ -164,7 +164,7 @@ const QUICK_LINKS: QuickLinkNode = {
                                                                                     children: [
                                                                                         {
                                                                                             imageUUID:
-                                                                                                "3e3d81e3-0d9d-4e5f-bb98-b67f1aeaf57a",
+                                                                                                "802c2e12-aa46-40e7-9e6c-d7c5399e8aae",
                                                                                             label: "flies",
                                                                                             slug: "diptera",
                                                                                             uuid: "7ab0a659-1e87-43c5-9ae0-202dc3088590",
@@ -195,7 +195,7 @@ const QUICK_LINKS: QuickLinkNode = {
                                             uuid: "31a41bb7-fcf2-4624-8438-35d5f2b9ab7d",
                                             children: [
                                                 {
-                                                    imageUUID: "14c3dc5e-f4b8-4113-b2d9-0e069b740f34",
+                                                    imageUUID: "f2e8bfa2-ebea-40f9-9f88-03ae5b97c1a0",
                                                     label: "vertebrates",
                                                     slug: "vertebrata",
                                                     uuid: "d55ad9b6-fc6b-43c5-8ebf-8635a34dcfb3",
@@ -241,14 +241,14 @@ const QUICK_LINKS: QuickLinkNode = {
                                                                                     children: [
                                                                                         {
                                                                                             imageUUID:
-                                                                                                "ca1082e0-718c-48dc-a011-995511e48180",
+                                                                                                "6add767f-6ff7-486e-b4d5-ddce60fb8409",
                                                                                             label: "birds",
                                                                                             slug: "aves",
                                                                                             uuid: "667b8664-5dd7-487e-ba56-c6c5c95055a2",
                                                                                             children: [
                                                                                                 {
                                                                                                     imageUUID:
-                                                                                                        "919a6f91-cb0b-4646-9ec2-b6a8b5e4b024",
+                                                                                                        "b4f3d9fb-4b03-4cba-89ee-039256936b6a",
                                                                                                     label: "owls",
                                                                                                     slug: "strigiformes",
                                                                                                     uuid: "8665e368-650f-4e98-9bc2-8c83ee584d73",
@@ -333,14 +333,14 @@ const QUICK_LINKS: QuickLinkNode = {
                                                                                 },
                                                                                 {
                                                                                     imageUUID:
-                                                                                        "13ddd312-92ad-4873-9d65-4732b86cfbbd",
+                                                                                        "1701c916-c68a-4807-8666-c4b8b4bc6656",
                                                                                     label: "rodents",
                                                                                     slug: "rodentia",
                                                                                     uuid: "5e3f2d10-435d-49c3-80de-d14dba1eafd3",
                                                                                     children: [
                                                                                         {
                                                                                             imageUUID:
-                                                                                                "3b89954e-b28e-4062-89cd-1ad5df0eb431",
+                                                                                                "ba1d31e7-2679-418b-9df6-71dbbbac78d9",
                                                                                             label: "mice & rats",
                                                                                             slug: "muridae",
                                                                                             uuid: "3492cd03-e097-473a-a056-3199ed32ec64",
