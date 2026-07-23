@@ -5,12 +5,19 @@ export type QuickLinkNode = Readonly<
         uuid: UUID
     } & (
         | {
-              children: readonly QuickLinkNode[]
-              label?: string
+              children?: undefined
+              imageUUID: UUID
+              label: string
           }
         | {
-              children?: undefined
+              children: readonly QuickLinkNode[]
+              imageUUID: UUID
               label: string
+          }
+        | {
+              children: readonly QuickLinkNode[]
+              imageUUID?: undefined
+              label?: undefined
           }
     )
 >
