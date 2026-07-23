@@ -13,7 +13,7 @@
         "@phylopic/utils": "*",
         "axios": "^1.18.1",
         "clsx": "^2.1.1",
-        "next": "^14.2.35",
+        "next": "^15.5.21",
         "parse-nomen": "^2.1.3",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
@@ -44,5 +44,5 @@
         "lint": "TIMING=1 next lint",
         "unused": "next-unused"
     },
-    "version": "1.9.3"
+    "version": "1.9.4"
 }
