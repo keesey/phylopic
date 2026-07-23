@@ -9,9 +9,4 @@ export type AddNameAction = FSAWithPayload<"ADD_NAME", Nomen>
 export type RemoveNameAction = FSAWithPayload<"REMOVE_NAME", Nomen>
 export type SetCanonicalNameAction = FSAWithPayload<"SET_CANONICAL_NAME", Nomen>
 export type Action =
-    | InitializeAction
-    | ResetAction
-    | SaveAction
-    | AddNameAction
-    | RemoveNameAction
-    | SetCanonicalNameAction
+    InitializeAction | ResetAction | SaveAction | AddNameAction | RemoveNameAction | SetCanonicalNameAction

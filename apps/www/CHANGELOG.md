@@ -19,6 +19,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.4] - 2026-07-23
+
+### Changed
+
+- Major upgrade for `next`, to version 15.
+- Minor upgrade for `next-seo`.
+- Updated Next.js configuration for version 15: replaced deprecated `images.domains` with `images.remotePatterns`, removed `swcMinify`, and set `outputFileTracingRoot`.
+
+## [2.14.3] - 2026-07-22
+
+### Changed
+
+- Minor upgrades for `compress-json`, `sass`, and `swr`.
+- Patch upgrades for `clsx` and `slugify`.
+
+### Security
+
+- Minor upgrade for `axios`.
+- Patch upgrade for `jsonwebtoken`.
+
+## [2.14.2] - 2026-03-17
+
+### Added
+
+- Splitting out charset from `Content-Type` header for data type checks in error handling.
+
 ## [2.14.1] - 2026-01-05
 
 ### Security

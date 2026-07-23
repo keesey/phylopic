@@ -22,11 +22,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - The `build` query parameter was missing in the Serverless configuration for several endpoints.
-- In `dev` mode, the lambda process was using the same port as `contribute`.
+- Moved `serverless-offline`'s internal Lambda endpoint to port 3103 in the `dev` script, so it no longer shadows the `contribute` app on port 3002.
 
 ### Removed
 
 ### Security
+
+## [2.7.4] - 2026-07-22
+
+### Changed
+
+- Minor upgrades for `pg`, `serverless`, `serverless-offline`, `ts-loader`, and `webpack`.
+
+### Security
+
+- Minor upgrade for AWS clients, fixing `fast-xml-parser` vulnerabilities.
+- Patch upgrade for `jsonwebtoken`.
+
+## [2.7.3] - 2026-03-17
+
+### Added
+
+- Charset to `Content-Type` headers.
+
+## [2.7.2] - 2026-01-05
+
+### Changed
+
+- Major upgrade for Serverless.
+- Minor upgrade for AWS clients.
+- Upgraded Node.js runtime to 22.
 
 ## [2.7.1] - 2025-01-03
 

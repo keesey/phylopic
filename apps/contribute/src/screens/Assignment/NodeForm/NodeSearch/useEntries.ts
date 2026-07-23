@@ -14,8 +14,7 @@ export const useEntries = () => {
 export default useEntries
 const useExternalEntries = (
     externalResults:
-        | Readonly<Record<Authority, Readonly<Record<Namespace, Readonly<Record<ObjectID, string>>>>>>
-        | undefined,
+        Readonly<Record<Authority, Readonly<Record<Namespace, Readonly<Record<ObjectID, string>>>>>> | undefined,
 ): readonly SearchEntry[] => {
     return useMemo<readonly SearchEntry[]>(() => {
         if (!externalResults) {

@@ -19,6 +19,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.6] - 2026-07-23
+
+### Changed
+
+- Major upgrade for `next` dependency and peer dependency, to version 15.
+
+## [1.7.5] - 2026-07-22
+
+### Changed
+
+- Minor upgrade for `swr`.
+- Patch upgrade for `clsx`.
+
+### Security
+
+- Minor upgrade for `axios`.
+- Minor upgrade for `sharp`, fixing `libvips` vulnerabilities.
+
+## [1.7.4] - 2026-03-17
+
+### Added
+
+- Splitting out charset from `Content-Type` header for data type checks in error handling.
+
 ## [1.7.3] - 2026-01-05
 
 ### Security

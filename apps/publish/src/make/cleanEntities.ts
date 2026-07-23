@@ -9,10 +9,12 @@ export const cleanTables = async (client: ClientBase, build: number, operator: "
     await client.query(`DELETE FROM contributor WHERE build${operator}$1::bigint`, [build])
     await client.query("COMMIT")
 }
-const cleanEntities = async (client: ClientBase, build: number) => {
+const cleanEntities = async (client: ClientBase, build: number, isDryRun: boolean = false) => {
     console.info("Removing old database rows...")
-    await cleanTables(client, build, "<>")
-    await client.query("VACUUM")
+    if (!isDryRun) {
+        await cleanTables(client, build, "<>")
+        await client.query("VACUUM")
+    }
     console.info("Removed old database rows.")
 }
 export default cleanEntities
