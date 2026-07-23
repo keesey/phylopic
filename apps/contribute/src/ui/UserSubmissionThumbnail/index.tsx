@@ -35,8 +35,8 @@ const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
                         {submission?.status === "submitted"
                             ? "Awaiting Review"
                             : submittable
-                            ? "Ready to Submit"
-                            : "Incomplete"}
+                              ? "Ready to Submit"
+                              : "Incomplete"}
                     </strong>
                 </figcaption>
             </figure>

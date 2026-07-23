@@ -49,10 +49,10 @@ const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
                             value === "-nc-sa"
                                 ? "-sa"
                                 : value === "-sa"
-                                ? "-nc-sa"
-                                : value === "-nc"
-                                ? undefined
-                                : "-nc",
+                                  ? "-nc-sa"
+                                  : value === "-nc"
+                                    ? undefined
+                                    : "-nc",
                         )
                     }
                     readOnly
@@ -78,10 +78,10 @@ const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
                             value === "-nc-sa"
                                 ? "-nc"
                                 : value === "-nc"
-                                ? "-nc-sa"
-                                : value === "-sa"
-                                ? undefined
-                                : "-sa",
+                                  ? "-nc-sa"
+                                  : value === "-sa"
+                                    ? undefined
+                                    : "-sa",
                         )
                     }
                     readOnly

@@ -7,7 +7,7 @@ import SourceClient from "./source/SourceClient.js"
         onMaxRetryTimesExceeded: (error, retryCount) => {
             console.warn(
                 `Maximum retry count (${retryCount}) exceeded for ${error.request?.url ?? "<unknown>"}: ${
-                error.message
+                    error.message
                 }`,
             )
         },

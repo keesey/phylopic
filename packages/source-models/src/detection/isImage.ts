@@ -24,7 +24,7 @@ export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): 
     isBoolean((x as Image).unlisted) &&
     Boolean(
         (x as Image).attribution ||
-            !(x as Image).license ||
-            isPublicDomainLicenseURL((x as Image).license) ||
-            invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
+        !(x as Image).license ||
+        isPublicDomainLicenseURL((x as Image).license) ||
+        invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
     )
