@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation"
 import { NextResponse } from "next/server"
 import { GAMES } from "~/games/GAMES"
-export async function GET(_req: Request, { params }: { params: { code: string; year: string; month: string } }) {
+export async function GET(
+    _req: Request,
+    { params: paramsPromise }: { params: Promise<{ code: string; year: string; month: string }> },
+) {
+    const params = await paramsPromise
     if (!GAMES[params.code]) {
         notFound()
     }

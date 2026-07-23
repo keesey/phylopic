@@ -19,6 +19,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.11.1] - 2026-07-22
+
+### Changed
+
+- Minor upgrades for `pg` and `probe-image-size`.
+
+### Removed
+
+- Extraneous `path` and `readline` packages (shims for Node.js built-in modules).
+
+### Security
+
+- Minor upgrade for `axios`.
+- Minor upgrade for AWS clients, fixing `fast-xml-parser` vulnerabilities.
+
+## [1.11.0] - 2026-04-13
+
+### Added
+
+- Dry run option for `insert` script.
+
+## [1.10.0] - 2026-03-31
+
+### Added
+
+- Exponential retries for autolink calls to external APIs (`429` and `5xx` errors).
+
+### Changed
+
+- Adjusted NCBI autolink bottleneck to avoid `429` errors.
+
+## [1.9.2] - 2026-02-01
+
+### Fixed
+
+- Catching errors for GBIF autolinker so that entire process is not stopped for one failed request.
+
+## [1.9.1] - 2026-01-05
+
+### Changed
+
+- Minor upgrade for AWS clients.
+
 ## [1.9.0] - 2025-09-30
 
 ### Added

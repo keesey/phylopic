@@ -10,17 +10,31 @@ import {
     stringifyNomen,
     type UUID,
 } from "@phylopic/utils"
-import axios, { InternalAxiosRequestConfig } from "axios"
+import axios from "axios"
+import axiosRetry from "axios-retry"
 import Bottleneck from "bottleneck"
 type Identifier = Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>
 const limiter = new Bottleneck({
-    maxConcurrent: 10,
-    minTime: 100,
+    maxConcurrent: 5,
+    minTime: 250,
 })
 const AxiosInstance = axios.create({
     headers: {
         "api-key": process.env.NCBI_API_KEY,
     },
+})
+axiosRetry(AxiosInstance, {
+    onMaxRetryTimesExceeded: (error, retryCount) => {
+        console.warn(
+            `Maximum retry count (${retryCount}) exceeded for ${error.request?.url ?? "<unknown>"}: ${error.message}`,
+        )
+    },
+    onRetry: (count, error) => {
+        console.warn(`Retry #${count} for ${error.request?.url ?? "<unknown>"}: ${error.message}`)
+    },
+    retries: 5,
+    retryCondition: error => axiosRetry.isIdempotentRequestError(error) || error.response?.status === 429,
+    retryDelay: (count, error) => axiosRetry.exponentialDelay(count, error, error.response?.status === 429 ? 1000 : 0),
 })
 const IGNORED = new Set(["1", "131567"])
 type NCBITaxonomyNodes = Readonly<{

@@ -19,7 +19,7 @@
         "@vercel/analytics": "^1.2.2",
         "axios": "^1.6.8",
         "clsx": "^2.1.0",
-        "next": "^14.2.1",
+        "next": "^15.5.21",
         "react": "^18.2.0",
         "react-calendar": "^4.8.0",
         "react-dom": "^18.2.0",

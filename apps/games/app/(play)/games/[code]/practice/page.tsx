@@ -3,7 +3,8 @@ import { notFound } from "next/navigation"
 import { GAMES } from "~/games/GAMES"
 import { GameGenerator } from "./GameGenerator"
 export type Params = Readonly<{ code: string }>
-export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
+export const generateMetadata = async ({ params: paramsPromise }: { params: Promise<Params> }): Promise<Metadata> => {
+    const params = await paramsPromise
     return {
         authors: [
             {
@@ -15,7 +16,8 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
         description: GAMES[params.code].summary,
     }
 }
-const GameDayPage = async ({ params }: { params: Params }) => {
+const GameDayPage = async ({ params: paramsPromise }: { params: Promise<Params> }) => {
+    const params = await paramsPromise
     if (!GAMES[params.code]) {
         notFound()
     }

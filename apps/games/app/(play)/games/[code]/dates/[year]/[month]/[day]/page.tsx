@@ -7,7 +7,8 @@ import { formatDate, fromDate, fromParams, readDateParams, toISOString } from "~
 import { getGameInstance } from "~/lib/s3"
 export type Params = Readonly<{ code: string; year: string; month: string; day: string }>
 import styles from "./page.module.scss"
-export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
+export const generateMetadata = async ({ params: paramsPromise }: { params: Promise<Params> }): Promise<Metadata> => {
+    const params = await paramsPromise
     const date = fromParams(params)
     const gameInstance = date ? await getGameInstance(params.code, date) : null
     return {
@@ -29,7 +30,8 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
         description: `${date ? `The ${GAMES[params.code].title} game for ${formatDate(date, "long")}. ` : ""}${GAMES[params.code].summary}`,
     }
 }
-const GameDayPage = async ({ params }: { params: Params }) => {
+const GameDayPage = async ({ params: paramsPromise }: { params: Promise<Params> }) => {
+    const params = await paramsPromise
     if (!GAMES[params.code]) {
         notFound()
     }

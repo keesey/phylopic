@@ -45,9 +45,10 @@ export class NodeExternalsClient implements INodeExternalsClient {
         return Math.ceil((await this.totalItems()) / EXTERNALS_PAGE_SIZE)
     }
 }
-class NodeExternalsNamespaceClient
-    implements Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
-{
+class NodeExternalsNamespaceClient implements Listable<
+    External & { authority: Authority; namespace: Namespace; objectID: ObjectID },
+    number
+> {
     constructor(
         protected provider: PGClientProvider,
         protected uuid: UUID,

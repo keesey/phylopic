@@ -22,7 +22,11 @@ const readDateParams = (params: Omit<CalendarDateParams, "day">, code: string) =
     }
     return normalized
 }
-export async function GET(_req: Request, { params }: { params: { code: string; year: string; month: string } }) {
+export async function GET(
+    _req: Request,
+    { params: paramsPromise }: { params: Promise<{ code: string; year: string; month: string }> },
+) {
+    const params = await paramsPromise
     if (!GAMES[params.code]) {
         notFound()
     }

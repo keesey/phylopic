@@ -5,7 +5,14 @@ import { GAMES } from "~/games/GAMES"
 import styles from "./layout.module.scss"
 import { CalendarNav } from "./CalendarNav"
 export type Params = { code: string }
-const EditGameLayout = ({ children, params }: { children: ReactNode; params: Params }) => {
+const EditGameLayout = async ({
+    children,
+    params: paramsPromise,
+}: {
+    children: ReactNode
+    params: Promise<Params>
+}) => {
+    const params = await paramsPromise
     const game = GAMES[params.code]
     return (
         <div className={styles.container}>

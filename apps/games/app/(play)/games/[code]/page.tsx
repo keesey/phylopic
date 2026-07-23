@@ -13,7 +13,8 @@ export const metadata: Metadata = {
     title: "PhyloPic Games",
 }
 export const generateStaticParams = () => GAME_CODES.map(code => ({ code }))
-const Page = ({ params }: { params: { code: string } }) => {
+const Page = async ({ params: paramsPromise }: { params: Promise<{ code: string }> }) => {
+    const params = await paramsPromise
     const game = GAMES[params.code]
     if (!game) {
         notFound()

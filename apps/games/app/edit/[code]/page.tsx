@@ -2,7 +2,8 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { GAMES } from "~/games/GAMES"
 export type Params = { code: string }
-export const generateMetadata = ({ params }: { params: Params }): Metadata => {
+export const generateMetadata = async ({ params: paramsPromise }: { params: Promise<Params> }): Promise<Metadata> => {
+    const params = await paramsPromise
     const game = GAMES[params.code]
     return {
         title: `${game ? `${game.title} | ` : ""}PhyloPic Games Editor`,
@@ -12,7 +13,8 @@ export const generateMetadata = ({ params }: { params: Params }): Metadata => {
         },
     }
 }
-const EditGamePage = ({ params }: { params: Params }) => {
+const EditGamePage = async ({ params: paramsPromise }: { params: Promise<Params> }) => {
+    const params = await paramsPromise
     const game = GAMES[params.code]
     if (!game) {
         notFound()

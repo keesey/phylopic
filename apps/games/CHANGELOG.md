@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Major upgrade for `next`, to version 15.
+-   Migrated App Router `params` to the asynchronous form required by Next.js 15.
+-   Updated Next.js configuration for version 15: replaced deprecated `images.domains` with `images.remotePatterns` and set `outputFileTracingRoot`.
+
 ### Deprecated
 
 ### Fixed

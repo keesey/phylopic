@@ -9,7 +9,8 @@ import { getGameInstance } from "~/lib/s3"
 import styles from "./page.module.scss"
 import { toDate } from "~/lib/datetime/toDate"
 export type Params = { code: string; year: string; month: string; day: string }
-export const generateMetadata = ({ params }: { params: Params }): Metadata => {
+export const generateMetadata = async ({ params: paramsPromise }: { params: Promise<Params> }): Promise<Metadata> => {
+    const params = await paramsPromise
     const game = GAMES[params.code]
     const date = fromParams(params)
     return {
@@ -20,7 +21,8 @@ export const generateMetadata = ({ params }: { params: Params }): Metadata => {
         },
     }
 }
-const EditGameDayPage = async ({ params }: { params: Params }) => {
+const EditGameDayPage = async ({ params: paramsPromise }: { params: Promise<Params> }) => {
+    const params = await paramsPromise
     const game = GAMES[params.code]
     if (!game) {
         notFound()
