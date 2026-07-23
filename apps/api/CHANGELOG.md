@@ -9,13 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   `existing_uuid` parameter for `postUpload` operation.
+-   `409` response for `postUpload` operation.
+
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
-- Moved `serverless-offline`'s internal Lambda endpoint to port 3103 in the `dev` script, so it no longer shadows the `contribute` app on port 3002.
+-   No more empty strings for `Error.field`. (Should be `undefined` instead.)
+-   Moved `serverless-offline`'s internal Lambda endpoint to port 3103 in the `dev` script, so it no longer shadows the `contribute` app on port 3002.
 
 ### Removed
 

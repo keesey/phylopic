@@ -28,7 +28,7 @@ const Page: NextPage = () => (
                                 submission{total === 1 ? "" : "s"} awaiting completion or review.
                             </p>
                         ) : (
-                            <p>You do not currently have any submissions.</p>
+                            <p>You do not currently have any submissions awaiting completion or review.</p>
                         )
                     }
                 </Submissions>

@@ -1,5 +1,4 @@
 import { NumberView } from "@phylopic/ui"
-import { Hash } from "@phylopic/utils"
 import clsx from "clsx"
 import { ChangeEvent, FC, FormEvent, useCallback, useEffect, useMemo } from "react"
 import MAX_FILE_SIZE from "~/filesizes/MAX_FILE_SIZE"
@@ -29,11 +28,11 @@ const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 }
 export interface Props {
+    isReplacement: boolean
     onCancel: () => void
     onComplete: (result?: FileResult) => void
-    value?: Hash
 }
-const SelectFile: FC<Props> = ({ onCancel, onComplete, value }) => {
+const SelectFile: FC<Props> = ({ isReplacement, onCancel, onComplete }) => {
     const [file, setFile] = useFileState()
     const highlightDrag = useWindowDragHighlight(true)
     useWindowDrop(setFile)
@@ -72,7 +71,7 @@ const SelectFile: FC<Props> = ({ onCancel, onComplete, value }) => {
                 <Speech mode="system">
                     <p>
                         Drag and drop a silhouette image file here to{" "}
-                        {value ? "replace the one you uploaded earlier" : "get started"}.
+                        {isReplacement ? "replace the one you uploaded earlier" : "get started"}.
                     </p>
                     <p>
                         <small>

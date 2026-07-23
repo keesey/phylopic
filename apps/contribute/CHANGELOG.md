@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   Pages for approved images, with ability for user to replace or delete them.
+
 ### Changed
+
+-   Made upload error reporting more user-friendly.
 
 ### Deprecated
 

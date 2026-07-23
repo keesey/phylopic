@@ -63,10 +63,12 @@ const accept = async (client: SourceClient, hash: Hash): Promise<UUID> => {
     } else {
         node = identifiedNode
     }
-    let uuid: UUID
-    do {
-        uuid = normalizeUUID(randomUUID())
-    } while (await client.image(uuid).exists())
+    let uuid = submission.existingUUID ?? undefined
+    if (!uuid) {
+        do {
+            uuid = normalizeUUID(randomUUID())
+        } while (await client.image(uuid).exists())
+    }
     await Promise.all([
         client.image(uuid).put({
             attribution: submission.attribution,

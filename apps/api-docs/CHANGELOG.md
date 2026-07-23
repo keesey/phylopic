@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-   `existing_uuid` parameter for `postUpload` operation.
+-   `409` response for `postUpload` operation.
+
 ### Changed
 
 ### Deprecated

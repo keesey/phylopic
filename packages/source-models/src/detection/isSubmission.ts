@@ -6,6 +6,7 @@ import {
     isNullOr,
     isObject,
     isPublicDomainLicenseURL,
+    isUndefinedOr,
     isUUIDv4,
     isValidLicenseURL,
     ValidationFaultCollector,
@@ -23,6 +24,7 @@ export const isSubmission = (x: unknown, faultCollector?: ValidationFaultCollect
     isNullOr(isNormalizedText)((x as Submission).attribution, faultCollector?.sub("attribution")) &&
     isUUIDv4((x as Submission).contributor, faultCollector?.sub("contributor")) &&
     isISOTimestamp((x as Submission).created, faultCollector?.sub("created")) &&
+    isNullOr(isUndefinedOr(isUUIDv4))((x as Submission).existingUUID, faultCollector?.sub("existingUUID")) &&
     isNullOr(isIdentifier)((x as Submission).identifier, faultCollector?.sub("identifier")) &&
     isNullOr(isValidLicenseURL)((x as Submission).license, faultCollector?.sub("license")) &&
     isNullOr(isNormalizedText)((x as Submission).newTaxonName, faultCollector?.sub("newTaxonName")) &&

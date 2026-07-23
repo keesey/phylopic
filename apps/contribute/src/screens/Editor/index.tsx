@@ -3,9 +3,10 @@ import { Hash, LICENSE_NAMES } from "@phylopic/utils"
 import { FC, useCallback, useMemo, useState } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
+import DeletionConfirmation from "~/ui/DeletionConfirmation"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
-import { ICON_CHECK, ICON_PENCIL, ICON_PLUS } from "~/ui/ICON_SYMBOLS"
+import { ICON_CHECK, ICON_DANGER, ICON_PENCIL, ICON_PLUS } from "~/ui/ICON_SYMBOLS"
 import IdentifierView from "~/ui/IdentifierView"
 import Speech from "~/ui/Speech"
 import SpeechStack from "~/ui/SpeechStack"
@@ -15,6 +16,7 @@ import UserOptions from "~/ui/UserOptions"
 import UserVerification from "../../ui/UserVerification"
 import NameRenderer from "../Assignment/NodeForm/NameRenderer"
 import LoadingState from "../LoadingState"
+import useAuthorizedSubmissionDeletor from "./useAuthorizedSubmissionDeletor"
 export type Props = {
     hash: Hash
 }
@@ -28,6 +30,8 @@ const Editor: FC<Props> = ({ hash }) => {
     const [changeDesired, setChangeDesired] = useState(false)
     const mutate = useSubmissionMutator(hash)
     const submit = useCallback(() => mutate({ status: "submitted" }), [mutate])
+    const deletor = useAuthorizedSubmissionDeletor(hash)
+    const [deletionRequested, setDeletionRequested] = useState(false)
     if (!submission) {
         return <LoadingState>Checking submission status&hellip;</LoadingState>
     }
@@ -149,7 +153,7 @@ const Editor: FC<Props> = ({ hash }) => {
                             <strong>Sweet.</strong> This image has been submitted for review.
                         </p>
                     </Speech>
-                    {!changeDesired && (
+                    {!deletionRequested && (
                         <UserOptions>
                             <UserLinkButton href="/" icon={ICON_CHECK}>
                                 Cool.
@@ -157,30 +161,21 @@ const Editor: FC<Props> = ({ hash }) => {
                             <UserLinkButton href="/upload" icon={ICON_PLUS}>
                                 Let&rsquo;s upload another!
                             </UserLinkButton>
-                            <UserButton onClick={() => setChangeDesired(true)} icon={ICON_PENCIL}>
-                                Wait, I want to change something.
+                            <UserButton icon={ICON_DANGER} danger onClick={() => setDeletionRequested(true)}>
+                                Delete this submission.
                             </UserButton>
                         </UserOptions>
                     )}
-                    {changeDesired && (
+                    {deletionRequested && (
                         <>
                             <Speech mode="user">
-                                <p>Wait, I want to change something.</p>
+                                <p>Delete this submission.</p>
                             </Speech>
-                            <Speech mode="system">
-                                <p>What do you want to change?</p>
-                            </Speech>
-                            <UserOptions>
-                                <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/nodes`} icon={ICON_PENCIL}>
-                                    The taxonomic assignment.
-                                </UserLinkButton>
-                                <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/usage`} icon={ICON_PENCIL}>
-                                    The license or attribution.
-                                </UserLinkButton>
-                                <UserLinkButton href="/" icon={ICON_CHECK}>
-                                    Never mind, it&rsquo;s fine.
-                                </UserLinkButton>
-                            </UserOptions>
+                            <DeletionConfirmation
+                                {...deletor}
+                                onCancel={() => setDeletionRequested(false)}
+                                onConfirm={deletor.mutate}
+                            />
                         </>
                     )}
                 </>
