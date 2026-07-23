@@ -8,17 +8,16 @@
     },
     "dependencies": {
         "@phylopic/utils": "*",
-        "raw-body": "^2.5.2",
-        "stream": "^0.0.2"
+        "raw-body": "^2.5.2"
     },
     "description": "Common utilities for using Amazon Web Services in *PhyloPic* project.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "prettier": "^3.2.5",
+        "prettier": "^3.9.6",
         "ts-node": "10.9.2",
-        "tsup": "^8.0.2",
+        "tsup": "^8.5.1",
         "typescript": "^5.4.5",
         "yarn": "^1.22.22"
     },

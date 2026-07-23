@@ -14,13 +14,13 @@
     "description": "Client for accessing the source data for *PhyloPic* (AWS S3 buckets).",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
-        "@types/pg": "^8.11.5",
+        "@types/pg": "^8.20.0",
         "@types/uuid": "^9.0.8",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
-        "prettier": "^3.2.5",
+        "prettier": "^3.9.6",
         "ts-node": "^10.9.2",
-        "tsup": "^8.0.2",
+        "tsup": "^8.5.1",
         "typescript": "^5.4.5",
         "vitest": "^1.5.0",
         "yarn": "^1.22.22"
