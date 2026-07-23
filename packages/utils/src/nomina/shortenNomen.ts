@@ -7,4 +7,3 @@ export const shortenNomen = (nomen: Nomen) =>
             part.class === "operator" ||
             (part.class === "rank" && index < array.length - 1),
     )
-export default shortenNomen

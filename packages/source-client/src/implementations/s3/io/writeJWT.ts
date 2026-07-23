@@ -2,7 +2,7 @@ import { PutObjectCommandInput } from "@aws-sdk/client-s3"
 import { isJWT, JWT } from "@phylopic/source-models"
 import jsonwebtoken from "jsonwebtoken"
 import { ValidationError, ValidationFaultCollector } from "@phylopic/utils"
-const writeJWT = async (value: JWT): Promise<Partial<PutObjectCommandInput>> => {
+export const writeJWT = async (value: JWT): Promise<Partial<PutObjectCommandInput>> => {
     const collector = new ValidationFaultCollector()
     if (!isJWT(value, collector)) {
         throw new ValidationError(collector.list(), "Invalid payload.")
@@ -15,4 +15,3 @@ const writeJWT = async (value: JWT): Promise<Partial<PutObjectCommandInput>> => 
         Expires,
     }
 }
-export default writeJWT

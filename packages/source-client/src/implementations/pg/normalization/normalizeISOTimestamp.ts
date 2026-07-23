@@ -1,2 +1,1 @@
-const normalizeISOTimestamp = (value: string) => new Date(value).toISOString()
-export default normalizeISOTimestamp
+export const normalizeISOTimestamp = (value: string) => new Date(value).toISOString()

@@ -34,4 +34,3 @@ export const iterateList = <TValue, TPageSpecifier>(list: Listable<TValue, TPage
         },
     }
 }
-export default iterateList

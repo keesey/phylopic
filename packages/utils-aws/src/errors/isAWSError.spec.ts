@@ -1,6 +1,5 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
-import isAWSError from "./isAWSError"
+import { describe, expect, it } from "vitest"
+import { isAWSError } from "./isAWSError"
 describe("isAwSError", () => {
     it("should detect a valid error", () => {
         expect(isAWSError({ $metadata: { httpStatusCode: 200 } })).to.equal(true)

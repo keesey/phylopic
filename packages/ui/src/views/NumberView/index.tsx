@@ -9,4 +9,3 @@ export const NumberView: React.FC<NumberViewProps> = ({ value }) => {
     )
     return text.length ? <>{text}</> : null
 }
-export default NumberView

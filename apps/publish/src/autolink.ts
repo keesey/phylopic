@@ -1,14 +1,32 @@
 import "dotenv/config"
+import axios from "axios"
+import axiosRetry from "axios-retry"
 import SourceClient from "./source/SourceClient.js"
 ;(async () => {
+    axiosRetry(axios, {
+        onMaxRetryTimesExceeded: (error, retryCount) => {
+            console.warn(
+                `Maximum retry count (${retryCount}) exceeded for ${error.request?.url ?? "<unknown>"}: ${
+                    error.message
+                }`,
+            )
+        },
+        onRetry: (count, error) => {
+            console.warn(`Retry #${count} for ${error.request?.url ?? "<unknown>"}: ${error.message}`)
+        },
+        retries: 5,
+        retryCondition: error => axiosRetry.isIdempotentRequestError(error) || error.response?.status === 429,
+        retryDelay: (count, error) =>
+            axiosRetry.exponentialDelay(count, error, error.response?.status === 429 ? 1000 : 0),
+    })
     const client = new SourceClient()
     try {
         console.info("PhyloPic AutoLink starting...")
-        if (process.argv.length < 2) {
-            console.info("Valid options: eol otol pbdb")
+        if (process.argv.length <= 2) {
+            console.info("Valid options: eol gbif ncbi otol pbdb")
         } else {
             for (const option of process.argv.slice(2)) {
-                switch (option) {
+                switch (option.toLowerCase()) {
                     case "eol": {
                         console.info("Auto-linking Encyclopedia of Life.")
                         const linker = await import("./autolink/eol.js")
@@ -18,6 +36,12 @@ import SourceClient from "./source/SourceClient.js"
                     case "gbif": {
                         console.info("Auto-linking Global Biodiversity Information Facility.")
                         const linker = await import("./autolink/gbif.js")
+                        await linker.default(client)
+                        break
+                    }
+                    case "ncbi": {
+                        console.info("Auto-linking National Center for Biotechnology Information.")
+                        const linker = await import("./autolink/ncbi.js")
                         await linker.default(client)
                         break
                     }
@@ -32,6 +56,10 @@ import SourceClient from "./source/SourceClient.js"
                         const linker = await import("./autolink/pbdb.js")
                         await linker.default(client)
                         break
+                    }
+                    default: {
+                        console.warn(`Unrecognized option: ${JSON.stringify(option)}`)
+                        console.info("Valid options: eol gbif ncbi otol pbdb")
                     }
                 }
             }

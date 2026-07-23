@@ -18,4 +18,3 @@ export const useImageLoader = (links: readonly MediaLink<URL, RasterMediaType>[]
         [links, modified],
     )
 }
-export default useImageLoader

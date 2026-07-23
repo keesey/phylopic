@@ -32,4 +32,3 @@ export const handleWithLister = async <T, TPageSpecifier>(
         }
     }
 }
-export default handleWithLister

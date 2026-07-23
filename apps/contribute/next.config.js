@@ -1,7 +1,9 @@
+const path = require("path")
 /** @type {import('next').NextConfig} */
 module.exports = {
+    outputFileTracingRoot: path.join(__dirname, "../../"),
     images: {
-        domains: ["images.phylopic.org"],
+        remotePatterns: [{ protocol: "https", hostname: "images.phylopic.org" }],
     },
     reactStrictMode: true,
     async redirects() {
@@ -13,5 +15,4 @@ module.exports = {
             },
         ]
     },
-    swcMinify: true,
 }

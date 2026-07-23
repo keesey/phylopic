@@ -1,11 +1,26 @@
+const path = require("path")
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    outputFileTracingRoot: path.join(__dirname, "../../"),
+    async headers() {
+        return [
+            {
+                source: "/api/:path*",
+                headers: [
+                    { key: "Access-Control-Allow-Credentials", value: "false" },
+                    { key: "Access-Control-Allow-Origin", value: "https://www.phylopic.org" },
+                    { key: "Access-Control-Allow-Methods", value: "GET,HEAD" },
+                    { key: "Access-Control-Allow-Headers", value: "Accept,Content-Type" },
+                ],
+            },
+        ]
+    },
     i18n: {
         defaultLocale: "en",
         locales: ["en"],
     },
     images: {
-        domains: ["images.phylopic.org"],
+        remotePatterns: [{ protocol: "https", hostname: "images.phylopic.org" }],
     },
     reactStrictMode: true,
     async redirects() {
@@ -19,11 +34,6 @@ const nextConfig = {
                 source: "/account/:path*",
                 destination: process.env.NEXT_PUBLIC_CONTRIBUTE_URL,
                 permanent: true,
-            },
-            {
-                source: "/articles",
-                destination: "/articles/api-recipes",
-                permanent: false,
             },
             {
                 source: "/contact",
@@ -54,7 +64,8 @@ const nextConfig = {
             },
             {
                 source: "/materials",
-                destination: "https://keesey.gumroad.com/l/pocketphylogenies",
+                destination:
+                    "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic",
                 permanent: true,
             },
             {
@@ -79,7 +90,6 @@ const nextConfig = {
             },
         ]
     },
-    swcMinify: true,
 }
 const runtimeCaching = require("next-pwa/cache")
 const withPWA = require("next-pwa")({

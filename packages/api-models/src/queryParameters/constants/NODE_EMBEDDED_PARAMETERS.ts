@@ -5,4 +5,3 @@ export const NODE_EMBEDDED_PARAMETERS: ReadonlyArray<string & keyof EmbeddablePa
     "embed_parentNode",
     "embed_primaryImage",
 ]
-export default NODE_EMBEDDED_PARAMETERS

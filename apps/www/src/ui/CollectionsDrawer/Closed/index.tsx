@@ -3,6 +3,8 @@ import useCurrentCollection from "~/collections/hooks/useCurrentCollection"
 import useCurrentCollectionName from "~/collections/hooks/useCurrentCollectionName"
 import styles from "./index.module.scss"
 import clsx from "clsx"
+import Link from "next/link"
+import Icon from "~/ui/Icon"
 const Closed: FC = () => {
     const collection = useCurrentCollection()
     const name = useCurrentCollectionName()
@@ -19,6 +21,19 @@ const Closed: FC = () => {
             ) : (
                 <>
                     <strong>{name}</strong> ({collection.size} image{collection.size === 1 ? "" : "s"})
+                </>
+            )}
+            {collection.size === 0 && (
+                <>
+                    {" "}
+                    <Link
+                        href="/articles/image-usage"
+                        className={clsx(styles.icon)}
+                        role="button"
+                        title="More Information"
+                    >
+                        <Icon name="info" />
+                    </Link>
                 </>
             )}
         </div>

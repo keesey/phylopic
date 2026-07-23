@@ -31,12 +31,11 @@ export const isSubmission = (x: unknown, faultCollector?: ValidationFaultCollect
     ((x as Submission).status === "incomplete" ||
         Boolean(
             (x as Submission).attribution ||
-                !(x as Submission).license ||
-                isPublicDomainLicenseURL((x as Submission).license) ||
-                invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
+            !(x as Submission).license ||
+            isPublicDomainLicenseURL((x as Submission).license) ||
+            invalidate(faultCollector?.sub("attribution"), "The specified license requires attribution."),
         )) &&
     ((x as Submission).status === "incomplete" ||
         isIdentifier((x as Submission).identifier, faultCollector?.sub("identifier"))) &&
     ((x as Submission).status === "incomplete" ||
         isValidLicenseURL((x as Submission).license, faultCollector?.sub("license")))
-export default isSubmission

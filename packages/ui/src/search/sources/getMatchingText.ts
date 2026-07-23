@@ -13,4 +13,3 @@ export const getMatchingText = (matches?: readonly string[], normalizedText?: st
         ""
     )
 }
-export default getMatchingText

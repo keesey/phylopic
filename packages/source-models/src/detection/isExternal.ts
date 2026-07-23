@@ -4,4 +4,3 @@ export const isExternal = (x: unknown, faultCollector?: ValidationFaultCollector
     isObject(x, faultCollector) &&
     isUUIDv4((x as External).node, faultCollector?.sub("node")) &&
     isNormalizedText((x as External).title, faultCollector?.sub("title"))
-export default isExternal

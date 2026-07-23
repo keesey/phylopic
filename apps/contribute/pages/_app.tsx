@@ -31,6 +31,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                     url: process.env.NEXT_PUBLIC_CONTRIBUTE_URL + "/",
                 }}
                 themeColor="#305860"
+                title="PhyloPic: Image Uploader"
             />
             <GTagAnalytics gaMeasurementId={process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID} />
             <Component {...pageProps} />

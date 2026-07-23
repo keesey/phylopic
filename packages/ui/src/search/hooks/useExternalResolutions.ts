@@ -1,8 +1,8 @@
 import { compareStrings, isUUID, stringifyNomen, UUID } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
-import SearchContext from "../context"
+import { SearchContext } from "../context"
 import { ExternalResolution } from "../models/ExternalResolution"
-import getSortIndex from "../utils/getSortIndex"
+import { getSortIndex } from "../utils/getSortIndex"
 const createResolutionComparator = (text: string) => (a: ExternalResolution, b: ExternalResolution) => {
     if (a === b) {
         return 0
@@ -46,4 +46,3 @@ export const useExternalResolutions = (maxResults = Infinity) => {
         return results.sort(createResolutionComparator(state?.text ?? "")).slice(0, maxResults - nodeResultUUIDs.size)
     }, [maxResults, nodeResultUUIDs, state?.externalResults, state?.resolutions, state?.resolvedNodes, state?.text])
 }
-export default useExternalResolutions

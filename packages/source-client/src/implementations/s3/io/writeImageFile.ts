@@ -7,7 +7,7 @@ const validate = (x: unknown, collector?: ValidationFaultCollector): x is ImageF
     isObject(x, collector) &&
     isImageMediaType((x as ImageFile).type, collector?.sub("type")) &&
     isBuffer((x as ImageFile).data, collector)
-const writeImageFile = async (value: ImageFile): Promise<Partial<PutObjectCommandInput>> => {
+export const writeImageFile = async (value: ImageFile): Promise<Partial<PutObjectCommandInput>> => {
     const collector = new ValidationFaultCollector()
     if (!validate(value, collector)) {
         throw new ValidationError(collector.list(), "Invalid payload.")
@@ -17,4 +17,3 @@ const writeImageFile = async (value: ImageFile): Promise<Partial<PutObjectComman
         ContentType: value.type,
     }
 }
-export default writeImageFile

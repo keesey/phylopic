@@ -4,13 +4,13 @@ import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import SearchContext from "../../context"
-import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
-import PBDB_URL from "./PBDB_URL"
+import { SearchContext } from "../../context"
+import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
+import { PBDB_URL } from "./PBDB_URL"
 export type PBDBAutocompleteProps = {
     limit?: number
 }
-type PBDBRecord = Readonly<{
+type PBDBTaxonRecord = Readonly<{
     nam: string
     noc: string
     oid: string
@@ -19,9 +19,9 @@ type PBDBRecord = Readonly<{
 }>
 type PBDBResponse = Readonly<{
     elapsed_time: number
-    records: readonly PBDBRecord[]
+    records: readonly PBDBTaxonRecord[]
 }>
-const fetcher: Fetcher<Readonly<[readonly PBDBRecord[], string]>, [string, string]> = async ([url, name]) => {
+const fetcher: Fetcher<Readonly<[readonly PBDBTaxonRecord[], string]>, [string, string]> = async ([url, name]) => {
     if (name.length < 2) {
         return [[], name]
     }

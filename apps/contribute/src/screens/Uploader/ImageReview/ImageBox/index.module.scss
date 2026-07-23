@@ -2,32 +2,14 @@
 
 .main {
     background-image: url(/assets/grid.png);
-    display: flex;
     border: 4px solid colors.$dandelion;
-    height: min-content;
-    cursor: pointer;
+    max-width: calc(100vw - 2em);
+    margin-top: 1em;
     transition: border-color 0.3s;
-    width: min-content;
-
-    &:hover,
-    &:active {
-        border-color: colors.$sunshine;
-    }
+    position: relative;
 
     img {
-        height: auto;
-        max-height: 67vh;
-        max-width: calc(100vw - 4em);
-        min-height: 256px;
-        min-width: 256px;
         mix-blend-mode: darken;
         object-fit: contain;
-        width: auto;
-    }
-}
-
-.landscape {
-    img {
-        max-height: 40vh;
     }
 }

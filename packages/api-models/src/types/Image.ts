@@ -23,4 +23,5 @@ export interface Image extends Entity<ImageLinks> {
     readonly modified: ISOTimestamp
     readonly modifiedFile: ISOTimestamp
     readonly sponsor: string | null
+    readonly unlisted?: true
 }

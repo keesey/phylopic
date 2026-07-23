@@ -1,7 +1,7 @@
-import { isUndefinedOr, isUUID, isUUIDish, ValidationFaultCollector } from "@phylopic/utils"
+import { isUndefinedOr, isUUIDish, type ValidationFaultCollector } from "@phylopic/utils"
 import { CONTRIBUTOR_EMBEDDED_PARAMETERS } from "../constants/CONTRIBUTOR_EMBEDDED_PARAMETERS"
-import { ContributorListParameters } from "../types/ContributorListParameters"
-import isListParameters from "./isListParameters"
+import { type ContributorListParameters } from "../types/ContributorListParameters"
+import { isListParameters } from "./isListParameters"
 export const isContributorListParameters = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,
@@ -11,4 +11,3 @@ export const isContributorListParameters = (
         (x as ContributorListParameters).filter_collection,
         faultCollector?.sub("filter_collection"),
     )
-export default isContributorListParameters

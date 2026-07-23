@@ -22,4 +22,3 @@ export const handleWithDeletor = async <T>(req: NextApiRequest, res: NextApiResp
         }
     }
 }
-export default handleWithDeletor

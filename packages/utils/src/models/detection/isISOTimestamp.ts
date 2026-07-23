@@ -1,5 +1,5 @@
-import invalidate from "../../validation/invalidate"
-import type ValidationFaultCollector from "../../validation/ValidationFaultCollector"
+import { invalidate } from "../../validation/invalidate"
+import { type ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
 import { ISOTimestamp } from "../types/ISOTimestamp"
 export const isISOTimestamp = (value: unknown, faultCollector?: ValidationFaultCollector): value is ISOTimestamp => {
     if (typeof value !== "string") {
@@ -12,4 +12,3 @@ export const isISOTimestamp = (value: unknown, faultCollector?: ValidationFaultC
     const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5], parts[6]))
     return date.toISOString() === value || invalidate(faultCollector, "Not a valid datetime.")
 }
-export default isISOTimestamp

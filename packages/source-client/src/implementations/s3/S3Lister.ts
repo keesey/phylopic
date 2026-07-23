@@ -3,7 +3,7 @@ import { FaultDetector } from "@phylopic/utils"
 import { S3Entry } from "../../interfaces"
 import { Listable } from "../../interfaces/Listable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
-export default class S3Lister<TKey extends string = string> implements Listable<S3Entry<TKey>, string> {
+export class S3Lister<TKey extends string = string> implements Listable<S3Entry<TKey>, string> {
     constructor(
         protected readonly provider: S3ClientProvider,
         protected readonly bucket: string,
@@ -56,7 +56,7 @@ export default class S3Lister<TKey extends string = string> implements Listable<
                         ({
                             Key: content.Key?.slice(this.prefix.length),
                             LastModified: content.LastModified,
-                        } as S3Entry<TKey>),
+                        }) as S3Entry<TKey>,
                 ).filter<S3Entry<TKey>>((value): value is S3Entry<TKey> => this.validateKey(value.Key)) ?? []
             )
         }
@@ -67,7 +67,7 @@ export default class S3Lister<TKey extends string = string> implements Listable<
                         Key: decodeURIComponent(
                             commonPrefix.Prefix?.slice(this.prefix.length).replace(/\/$/, "") ?? "",
                         ),
-                    } as S3Entry<TKey>),
+                    }) as S3Entry<TKey>,
             ).filter<S3Entry<TKey>>((value): value is S3Entry<TKey> => this.validateKey(value.Key)) ?? []
         )
     }

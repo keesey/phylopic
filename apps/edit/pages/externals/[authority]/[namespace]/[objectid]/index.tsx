@@ -87,15 +87,35 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
         fetchJSON,
     )
     const router = useRouter()
+    const nodeUUID = node?.uuid
     const deleteExternal = useCallback(() => {
-        if (confirm("Are you sure?")) {
+        if (confirm("Are you sure you want to delete this?")) {
             ;(async () => {
-                await axios.delete(key)
-                mutate(undefined, { revalidate: true })
-                router.push(`/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`)
+                try {
+                    const route = nodeUUID
+                        ? `/nodes/${encodeURIComponent(nodeUUID)}`
+                        : `/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`
+                    await axios.delete(key)
+                    mutate(undefined, { revalidate: true })
+                    await router.push(route)
+                } catch (e) {
+                    alert(String(e))
+                }
             })()
         }
-    }, [authority, key, mutate, namespace, router])
+    }, [authority, key, mutate, namespace, nodeUUID, router])
+    const restore = useCallback(() => {
+        if (confirm("Are you sure you want to restore this node?")) {
+            ;(async () => {
+                try {
+                    await axios.post<Node & { uuid: UUID }>(`/api/nodes/_/${encodeURIComponent(objectID)}/restore`)
+                    await router.push(`/nodes/${encodeURIComponent(objectID)}`)
+                } catch (e) {
+                    alert(String(e))
+                }
+            })()
+        }
+    }, [objectID, router])
     const handleSelect = useCallback(
         (value: Entity<Node> | undefined) => {
             if (external && node && value && value.uuid !== node.uuid) {
@@ -129,6 +149,13 @@ const Content: FC<Props> = ({ authority, namespace, objectID }) => {
                         Change the node
                     </button>
                 </BubbleItem>
+                {external.authority === "phylopic.org" && external.namespace === "nodes" && (
+                    <BubbleItem light>
+                        <button className="link" onClick={() => restore()}>
+                            Restore
+                        </button>
+                    </BubbleItem>
+                )}
                 <BubbleItem>
                     <button className="link" onClick={deleteExternal}>
                         Delete

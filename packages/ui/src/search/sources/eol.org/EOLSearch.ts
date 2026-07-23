@@ -3,7 +3,7 @@ import { fetchDataAndCheck } from "@phylopic/utils-api"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import SearchContext from "../../context"
+import { SearchContext } from "../../context"
 const URL = "https://eol.org/api/search/1.0.json"
 interface EOLSearch {
     readonly itemsPerPage: number

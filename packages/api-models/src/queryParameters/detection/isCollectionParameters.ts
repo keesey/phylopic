@@ -4,4 +4,3 @@ export const isCollectionParameters = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,
 ): x is CollectionParameters => isUUIDish((x as CollectionParameters).uuid, faultCollector?.sub("uuid"))
-export default isCollectionParameters

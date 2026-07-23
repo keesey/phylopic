@@ -35,8 +35,8 @@ const getQueryBuilder = (parameters: ImageListParameters, results: "total" | "hr
         results === "total"
             ? 'COUNT(DISTINCT image."uuid") as total'
             : results === "href"
-            ? 'image.title AS title,image."uuid" AS "uuid"'
-            : 'image."json" AS "json",image.title AS title,image."uuid" AS "uuid"'
+              ? 'image.title AS title,image."uuid" AS "uuid"'
+              : 'image."json" AS "json",image.title AS title,image."uuid" AS "uuid"'
     if (parameters.filter_node) {
         builder.add(
             `
@@ -83,6 +83,7 @@ SELECT ${selection} FROM node_name
     } else {
         builder.add(`SELECT ${selection} FROM image WHERE build=$::bigint`, [BUILD])
     }
+    builder.add("AND image.unlisted=0::bit")
     addFilterToQuery(parameters, builder)
     if (results === "total") {
         // Add nothing
@@ -103,8 +104,8 @@ SELECT ${selection} FROM node_name
             parameters.filter_modified_after || parameters.filter_modified_before
                 ? `modified`
                 : parameters.filter_modifiedFile_after || parameters.filter_modifiedFile_before
-                ? "modified_file"
-                : "created"
+                  ? "modified_file"
+                  : "created"
         builder.add(`ORDER BY image.${sortField} DESC,image."uuid"`)
     }
     return builder
@@ -157,7 +158,7 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryParameters, isImageListParameters, USER_MESSAGE)
-    if (checkListRedirect(queryParameters, IMAGE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
+    if (checkListRedirect<ImageEmbedded>(queryParameters, IMAGE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
         return createBuildRedirect("/images", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)

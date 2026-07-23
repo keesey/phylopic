@@ -1,7 +1,7 @@
 {
     "files": [
         "base.json",
-        "node18.json",
+        "node20.json",
         "next.json",
         "react-lib.json"
     ],
@@ -10,5 +10,5 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.1"
+    "version": "1.1.0"
 }

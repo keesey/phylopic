@@ -16,4 +16,3 @@ export const convertS3BodyToBuffer = async (body: unknown): Promise<Buffer> => {
     }
     throw new Error("Unsupported body type.")
 }
-export default convertS3BodyToBuffer

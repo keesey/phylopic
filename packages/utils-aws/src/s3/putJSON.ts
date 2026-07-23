@@ -17,4 +17,3 @@ export const putJSON = async (
     }
     return output
 }
-export default putJSON

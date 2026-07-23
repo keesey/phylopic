@@ -1,4 +1,4 @@
-import type { ValidationFaultCollector } from "@phylopic/utils"
+import { type ValidationFaultCollector } from "@phylopic/utils"
 import { invalidate, isEmailAddress, isISOTimestamp, isNormalizedText, isNullOr, isObject } from "@phylopic/utils"
 import { Contributor } from "../types/Contributor"
 export const isContributor = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contributor =>
@@ -9,4 +9,3 @@ export const isContributor = (x: unknown, faultCollector?: ValidationFaultCollec
     isNormalizedText((x as Contributor).name, faultCollector?.sub("name")) &&
     (typeof (x as Contributor).showEmailAddress === "boolean" ||
         invalidate(faultCollector?.sub("showEmailAddress"), "Expected true or false."))
-export default isContributor

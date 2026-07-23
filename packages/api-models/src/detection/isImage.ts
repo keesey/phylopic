@@ -5,17 +5,18 @@ import {
     isNormalizedText,
     isNullOr,
     isRasterMediaType,
+    isTrue,
     isUndefinedOr,
     isURL,
     isVectorMediaType,
     ValidationFaultCollector,
 } from "@phylopic/utils"
 import { Image } from "../types/Image"
-import isEntity from "./isEntity"
-import isLink from "./isLink"
-import isLinks from "./isLinks"
-import isMediaLink from "./isMediaLink"
-import isTitledLink from "./isTitledLink"
+import { isEntity } from "./isEntity"
+import { isLink } from "./isLink"
+import { isLinks } from "./isLinks"
+import { isMediaLink } from "./isMediaLink"
+import { isTitledLink } from "./isTitledLink"
 const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image["_links"] =>
     isLinks(x, isTitledLink(isNormalizedText), faultCollector) &&
     isTitledLink(isNormalizedText)((x as Image["_links"]).contributor, faultCollector?.sub("contributor")) &&
@@ -40,5 +41,5 @@ export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): 
     isEntity(x, isImageLinks, faultCollector) &&
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&
     // :TODO: Add validation for modified and modifiedFile
-    isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor"))
-export default isImage
+    isNullOr(isNormalizedText)((x as Image).sponsor, faultCollector?.sub("sponsor")) &&
+    isUndefinedOr(isTrue)((x as Image).unlisted, faultCollector?.sub("unlisted"))

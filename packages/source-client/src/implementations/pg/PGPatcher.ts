@@ -2,9 +2,9 @@ import { Patchable } from "../../interfaces/Patchable"
 import { PGClientProvider } from "../../interfaces/PGClientProvider"
 import { EditField } from "./fields/EditField"
 import { IDField } from "./fields/IDField"
-import PGEditor from "./PGEditor"
-import prepareValue from "./preparation/prepareValue"
-export default class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
+import { PGEditor } from "./PGEditor"
+import { prepareValue } from "./preparation/prepareValue"
+export class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
     constructor(
         provider: PGClientProvider,
         table: string,

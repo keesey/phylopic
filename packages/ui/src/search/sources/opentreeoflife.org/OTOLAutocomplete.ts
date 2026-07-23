@@ -2,8 +2,8 @@ import { fetchDataAndCheck } from "@phylopic/utils-api"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import SearchContext from "../../context"
-import OTOL_URL from "./OTOL_URL"
+import { SearchContext } from "../../context"
+import { OTOL_URL } from "./OTOL_URL"
 interface OTOLAutocompleteName {
     readonly is_higher: boolean
     readonly is_suppressed: boolean

@@ -4,4 +4,3 @@ export const extractQueryString = (url: URL) => {
     const [queryString] = (queryAndFragment ?? "").split("#", 2)
     return queryString
 }
-export default extractQueryString

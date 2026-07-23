@@ -7,16 +7,16 @@ provider:
             - "image/gif"
             - "image/jpeg"
             - "image/png"
+    architecture: arm64
     iam:
         role: arn:aws:iam::960039257217:role/phylopic-api-executor
     name: aws
-    runtime: nodejs18.x
+    runtime: nodejs22.x
     region: us-west-2
     stage: prod
     versionFunctions: false
 plugins:
     - serverless-offline
-    - serverless-webpack
 functions:
     auth:
         handler: src/lambdas/auth.onAPIGatewayRequestAuthorizer

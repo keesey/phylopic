@@ -30,4 +30,3 @@ export const useStoredState = <T>(key: string): Readonly<[T | null, (value: T | 
     }, [json, key])
     return useMemo(() => [value, setValue], [setValue, value])
 }
-export default useStoredState

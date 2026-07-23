@@ -43,4 +43,3 @@ export const TimestampView: React.FC<TimestampViewProps> = ({ format = "date", v
         </time>
     )
 }
-export default TimestampView

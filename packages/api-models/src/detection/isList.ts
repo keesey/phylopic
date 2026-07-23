@@ -1,9 +1,14 @@
-import type { ValidationFaultCollector } from "@phylopic/utils"
-import { isNonnegativeInteger, isNormalizedText, isNullOr, isPositiveInteger } from "@phylopic/utils"
+import {
+    isNonnegativeInteger,
+    isNormalizedText,
+    isNullOr,
+    isPositiveInteger,
+    type ValidationFaultCollector,
+} from "@phylopic/utils"
 import { List } from "../types/List"
-import isData from "./isData"
-import isLink from "./isLink"
-import isLinks from "./isLinks"
+import { isData } from "./isData"
+import { isLink } from "./isLink"
+import { isLinks } from "./isLinks"
 const isListLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is List["_links"] =>
     isLinks(x, isLink(isNormalizedText), faultCollector) &&
     isNullOr(isLink(isNormalizedText))((x as List["_links"]).firstPage, faultCollector?.sub("firstPage")) &&
@@ -14,4 +19,3 @@ export const isList = (x: unknown, faultCollector?: ValidationFaultCollector): x
     isPositiveInteger((x as List).itemsPerPage, faultCollector?.sub("itemsPerPage")) &&
     isNonnegativeInteger((x as List).totalItems, faultCollector?.sub("totalItems")) &&
     isNonnegativeInteger((x as List).totalPages, faultCollector?.sub("totalPages"))
-export default isList

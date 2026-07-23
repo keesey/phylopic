@@ -1,9 +1,9 @@
 import { BuildContext } from "@phylopic/utils-api"
 import { useRouter } from "next/router"
 import React, { ReactNode } from "react"
-import SearchContext from "../context"
+import { SearchContext } from "../context"
 import { State } from "../context/State"
-import reducer from "./reducer"
+import { reducer } from "./reducer"
 const createInitialState = (text: string): State => ({
     externalMatches: [],
     externalResults: {},
@@ -38,4 +38,3 @@ export const SearchContainer: React.FC<SearchContainerProps> = ({ children, init
     }, [build, dispatch, prevBuild])
     return <SearchContext.Provider value={contextValue}>{children}</SearchContext.Provider>
 }
-export default SearchContainer

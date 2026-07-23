@@ -25,6 +25,7 @@ const Editor: FC<Props> = ({ hash }) => {
         [submission],
     )
     const [unready, setUnready] = useState<boolean | null>(null)
+    const [changeDesired, setChangeDesired] = useState(false)
     const mutate = useSubmissionMutator(hash)
     const submit = useCallback(() => mutate({ status: "submitted" }), [mutate])
     if (!submission) {
@@ -148,14 +149,40 @@ const Editor: FC<Props> = ({ hash }) => {
                             <strong>Sweet.</strong> This image has been submitted for review.
                         </p>
                     </Speech>
-                    <UserOptions>
-                        <UserLinkButton href="/" icon={ICON_CHECK}>
-                            Cool.
-                        </UserLinkButton>
-                        <UserLinkButton href="/upload" icon={ICON_PLUS}>
-                            Let&rsquo;s upload another!
-                        </UserLinkButton>
-                    </UserOptions>
+                    {!changeDesired && (
+                        <UserOptions>
+                            <UserLinkButton href="/" icon={ICON_CHECK}>
+                                Cool.
+                            </UserLinkButton>
+                            <UserLinkButton href="/upload" icon={ICON_PLUS}>
+                                Let&rsquo;s upload another!
+                            </UserLinkButton>
+                            <UserButton onClick={() => setChangeDesired(true)} icon={ICON_PENCIL}>
+                                Wait, I want to change something.
+                            </UserButton>
+                        </UserOptions>
+                    )}
+                    {changeDesired && (
+                        <>
+                            <Speech mode="user">
+                                <p>Wait, I want to change something.</p>
+                            </Speech>
+                            <Speech mode="system">
+                                <p>What do you want to change?</p>
+                            </Speech>
+                            <UserOptions>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/nodes`} icon={ICON_PENCIL}>
+                                    The taxonomic assignment.
+                                </UserLinkButton>
+                                <UserLinkButton href={`/edit/${encodeURIComponent(hash)}/usage`} icon={ICON_PENCIL}>
+                                    The license or attribution.
+                                </UserLinkButton>
+                                <UserLinkButton href="/" icon={ICON_CHECK}>
+                                    Never mind, it&rsquo;s fine.
+                                </UserLinkButton>
+                            </UserOptions>
+                        </>
+                    )}
                 </>
             )}
         </Dialogue>

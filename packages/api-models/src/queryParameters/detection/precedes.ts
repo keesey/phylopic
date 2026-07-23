@@ -1,5 +1,5 @@
 import { invalidate, isDefined, ValidationFaultCollector } from "@phylopic/utils"
-const precedes = <T>(
+export const precedes = <T>(
     x: T,
     predecessorField: keyof T,
     successorField: keyof T,
@@ -17,4 +17,3 @@ const precedes = <T>(
     }
     return true
 }
-export default precedes

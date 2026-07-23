@@ -1,4 +1,4 @@
-import type { ValidationFaultCollector } from "@phylopic/utils"
+import { type ValidationFaultCollector } from "@phylopic/utils"
 import { isObject, isUUID } from "@phylopic/utils"
 import { Entity } from "../types/Entity"
 export const isEntity = <T>(
@@ -9,4 +9,3 @@ export const isEntity = <T>(
     isObject(x, faultCollector) &&
     isUUID((x as Entity<T>).uuid, faultCollector?.sub("uuid")) &&
     isValue((x as Entity<T>).value, faultCollector?.sub("value"))
-export default isEntity

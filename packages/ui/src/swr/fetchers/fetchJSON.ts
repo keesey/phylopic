@@ -8,4 +8,3 @@ export const fetchJSON = async <T>(key: string | JSONFetcherConfig) => {
     })
     return response.data as T
 }
-export default fetchJSON

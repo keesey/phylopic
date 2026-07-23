@@ -27,4 +27,3 @@ export const handleWithEditor = async <T>(req: NextApiRequest, res: NextApiRespo
         }
     }
 }
-export default handleWithEditor

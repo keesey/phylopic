@@ -2,9 +2,12 @@ import { Authority } from "@phylopic/utils"
 import { Listable } from "../interfaces/Listable"
 import { Page } from "../interfaces/Page"
 import { PGClientProvider } from "../interfaces/PGClientProvider"
-import EXTERNAL_TABLE from "./pg/constants/EXTERNAL_TABLE"
-export default class ExternalAuthorityLister implements Listable<Authority, number> {
-    constructor(protected readonly provider: PGClientProvider, protected readonly pageSize: number) {}
+import { EXTERNAL_TABLE } from "./pg/constants/EXTERNAL_TABLE"
+export class ExternalAuthorityLister implements Listable<Authority, number> {
+    constructor(
+        protected readonly provider: PGClientProvider,
+        protected readonly pageSize: number,
+    ) {}
     async page(index = 0): Promise<Page<string, number>> {
         const client = await this.provider.getPG()
         const output = await client.query<{ authority: Authority }>(

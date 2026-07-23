@@ -10,6 +10,6 @@ export const getImage = (submission: Submission & { submitted: true }, specific:
         modified: submission.created,
         specific,
         sponsor: submission.sponsor ?? null,
+        unlisted: false,
     }
 }
-export default getImage

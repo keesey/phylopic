@@ -16,4 +16,3 @@ export const handleAPIError = (res: NextApiResponse, e: unknown) => {
         res.json({ message: String(e) })
     }
 }
-export default handleAPIError

@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/source-models"
-import { normalizeUUID, UUID } from "@phylopic/utils"
+import { normalizeNomina, normalizeUUID, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { randomUUID } from "crypto"
 import { parseNomen } from "parse-nomen"
@@ -31,7 +31,7 @@ const resolveItem = async (client: SourceClient, item: OTOLLineageItem, lineage:
     const newNode: Node & { uuid: UUID } = {
         created: now,
         modified: now,
-        names: [item.name, ...(item.synonyms ?? [])].map(name => parseNomen(name)),
+        names: normalizeNomina([item.name, ...(item.synonyms ?? [])].map(name => parseNomen(name))),
         parent: (await resolveItem(client, lineage[0], lineage.slice(1))).uuid,
         uuid: normalizeUUID(randomUUID()),
     }

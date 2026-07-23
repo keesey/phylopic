@@ -29,3 +29,9 @@
     background-color: colors.$white;
     color: colors.$black;
 }
+
+.focusStealer {
+    position: absolute;
+    opacity: 0;
+    top: -9999px;
+}

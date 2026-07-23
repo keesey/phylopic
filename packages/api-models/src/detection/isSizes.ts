@@ -1,6 +1,5 @@
-import type { ValidationFaultCollector } from "@phylopic/utils"
-import { invalidate } from "@phylopic/utils"
-import { Sizes } from "../types/Sizes"
+import { invalidate, type ValidationFaultCollector } from "@phylopic/utils"
+import { type Sizes } from "../types/Sizes"
 export const isSizes = (x: unknown, faultCollector?: ValidationFaultCollector): x is Sizes => {
     if (typeof x === "string") {
         const parts = x.split(/x/g)
@@ -11,4 +10,3 @@ export const isSizes = (x: unknown, faultCollector?: ValidationFaultCollector): 
     }
     return invalidate(faultCollector, "Expected a sizes string.")
 }
-export default isSizes

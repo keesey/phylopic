@@ -1,10 +1,10 @@
 import { QueryResultRow } from "pg"
 import { PGClientProvider } from "../../interfaces/PGClientProvider"
 import { Readable } from "../../interfaces/Readable"
-import getFields from "./fields/getFields"
+import { getFields } from "./fields/getFields"
 import { IDField } from "./fields/IDField"
 import { ReadField } from "./fields/ReadField"
-export default class PGReader<T> implements Readable<T> {
+export class PGReader<T> implements Readable<T> {
     constructor(
         protected provider: PGClientProvider,
         protected table: string,
@@ -34,7 +34,7 @@ export default class PGReader<T> implements Readable<T> {
             } WHERE ${this.identification()} AND disabled=0::bit`,
             this.identificationValues(),
         )
-        return output.rowCount >= 1
+        return (output.rowCount ?? 0) >= 1
     }
     protected identification() {
         return this.identifiers.map((field, index) => `${field.column}=$${index + 1}::${field.type}`).join(" AND ")

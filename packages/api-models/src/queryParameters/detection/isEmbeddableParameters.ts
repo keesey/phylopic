@@ -18,4 +18,3 @@ export const isEmbeddableParameters =
         }
         return true
     }
-export default isEmbeddableParameters

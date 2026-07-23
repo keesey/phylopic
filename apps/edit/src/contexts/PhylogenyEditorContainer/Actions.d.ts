@@ -10,10 +10,4 @@ export type DeleteNodeAction = FSAWithPayload<"DELETE_NODE", Readonly<{ uuid: UU
 export type MergeNodesAction = FSAWithPayload<"MERGE_NODES", Readonly<{ destination: UUID; source: UUID }>>
 export type SetNodeParentAction = FSAWithPayload<"SET_NODE_PARENT", Readonly<{ child: UUID; parent: UUID }>>
 export type Action =
-    | SaveAction
-    | LoadAction
-    | ResetAction
-    | InitializeAction
-    | DeleteNodeAction
-    | MergeNodesAction
-    | SetNodeParentAction
+    SaveAction | LoadAction | ResetAction | InitializeAction | DeleteNodeAction | MergeNodesAction | SetNodeParentAction

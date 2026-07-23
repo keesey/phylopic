@@ -10,4 +10,3 @@ export const parseQueryString = <TQuery extends ParsedQuery = ParsedQuery>(query
             }),
             {},
         )
-export default parseQueryString

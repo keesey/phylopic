@@ -6,4 +6,3 @@ export const chunk = <T>(values: Iterable<T>, chunkSize: number): ReadonlyArray<
     }
     return chunks
 }
-export default chunk

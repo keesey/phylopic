@@ -1,2 +1,1 @@
 export const CONTRIBUTOR_EMBEDDED_PARAMETERS: ReadonlyArray<never> = []
-export default CONTRIBUTOR_EMBEDDED_PARAMETERS

@@ -8,16 +8,16 @@ import {
 } from "@phylopic/api-models"
 import { Loader, NodeContainer, useNomenText } from "@phylopic/ui"
 import {
+    Query,
+    UUID,
     createSearch,
     extractPath,
     extractQueryString,
     isDefined,
     isUUIDv4,
     parseQueryString,
-    Query,
     shortenNomen,
     stringifyNomen,
-    UUID,
 } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
@@ -252,6 +252,14 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     const nodeResult = await nodeResultPromise
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
+    }
+    if (slug === "lineage") {
+        return {
+            redirect: {
+                destination: `${process.env.NEXT_PUBLIC_WWW_URL}${getNodeHRef(nodeResult.data._links.self)}/lineage`,
+                permanent: true,
+            },
+        }
     }
     if (nodeResult.data.uuid !== uuid || getNodeSlug(nodeResult.data._links.self.title) !== slug) {
         return {

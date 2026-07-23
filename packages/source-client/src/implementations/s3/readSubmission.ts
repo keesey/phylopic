@@ -1,6 +1,6 @@
 import { type Submission } from "@phylopic/source-models"
-import createTaggingReader from "./io/createTaggingReader"
-const readSubmission = createTaggingReader<Submission>([
+import { createTaggingReader } from "./io/createTaggingReader"
+export const readSubmission = createTaggingReader<Submission>([
     "attribution",
     "contributor",
     "created",
@@ -10,4 +10,3 @@ const readSubmission = createTaggingReader<Submission>([
     "sponsor",
     "status",
 ])
-export default readSubmission

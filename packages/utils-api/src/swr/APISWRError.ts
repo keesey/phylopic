@@ -14,4 +14,3 @@ export class APISWRError extends Error {
         )
     }
 }
-export default APISWRError

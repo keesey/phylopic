@@ -5,14 +5,14 @@ import {
     isUndefinedOr,
     isUUIDish,
     isUUIDv4,
-    ValidationFaultCollector,
+    type ValidationFaultCollector,
 } from "@phylopic/utils"
-import { ImageEmbedded } from "../../types/ImageWithEmbedded"
+import { type ImageEmbedded } from "../../types/ImageWithEmbedded"
 import { IMAGE_EMBEDDED_PARAMETERS } from "../constants/IMAGE_EMBEDDED_PARAMETERS"
-import { ImageListParameters } from "../types/ImageListParameters"
-import hasOnlyOne from "./hasOnlyOne"
-import isListParameters from "./isListParameters"
-import precedes from "./precedes"
+import { type ImageListParameters } from "../types/ImageListParameters"
+import { hasOnlyOne } from "./hasOnlyOne"
+import { isListParameters } from "./isListParameters"
+import { precedes } from "./precedes"
 const isBoolean = (x: unknown, collector?: ValidationFaultCollector): x is "true" | "false" => {
     if (x !== "true" && x !== "false") {
         return invalidate(collector, 'Expected a value of "true" or "false".')
@@ -72,4 +72,3 @@ export const isImageListParameters = (
     precedes(x as ImageListParameters, "filter_created_after", "filter_created_before", faultCollector) &&
     precedes(x as ImageListParameters, "filter_modified_after", "filter_modified_before", faultCollector) &&
     precedes(x as ImageListParameters, "filter_modifiedFile_after", "filter_modifiedFile_before", faultCollector)
-export default isImageListParameters

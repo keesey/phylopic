@@ -24,9 +24,7 @@ export type HTTPErrorFetchDataResponse = HTTPRelatedDataResponse & {
     ok: false
 }
 export type FetchDataResponse<T> =
-    | SuccessfulFetchDataResponse<T>
-    | DetectionErrorFetchDataResponse
-    | HTTPErrorFetchDataResponse
+    SuccessfulFetchDataResponse<T> | DetectionErrorFetchDataResponse | HTTPErrorFetchDataResponse
 export const fetchData = async <T>(
     url: string,
     config?: AxiosRequestConfig<T>,
@@ -72,4 +70,3 @@ export const fetchData = async <T>(
         throw e
     }
 }
-export default fetchData

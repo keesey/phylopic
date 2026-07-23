@@ -1,3 +1,5 @@
+@use "@phylopic/styles/colors.scss";
+
 .main {
     padding: 0.5em;
 
@@ -6,6 +8,11 @@
             display: none
         }
     }
+}
+
+.icon {
+    color: colors.$white;
+    font-weight: bold;
 }
 
 .optional {

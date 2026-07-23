@@ -4,8 +4,8 @@ import { useAPIFetcher, useAPISWRKey } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import useSWRImmutable from "swr/immutable"
-import SearchContext from "../../context"
-import DEBOUNCE_WAIT from "../DEBOUNCE_WAIT"
+import { SearchContext } from "../../context"
+import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 export const PhyloPicAutocomplete: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const { text } = state ?? {}

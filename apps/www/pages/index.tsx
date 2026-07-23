@@ -1,12 +1,12 @@
 import { ImageWithEmbedded } from "@phylopic/api-models"
 import { CountView, PaginationContainer } from "@phylopic/ui"
 import { URL } from "@phylopic/utils"
-import { Compressed } from "compress-json"
+import { type Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import MailingListForm from "~/forms/MailingListForm"
-import PocketPhylogenies from "~/materials/PocketPhylogenies"
+// import PocketPhylogenies from "~/materials/PocketPhylogenies"
 import SchemaScript from "~/metadata/SchemaScript"
 import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -29,7 +29,7 @@ const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/articles/api-recipes`,
     "http://api-docs.phylopic.org/v2",
     `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}`,
-    "https://keesey.gumroad.com/l/pocketphylogenies",
+    "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988",
 ]
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
@@ -80,7 +80,10 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
             <header>
                 <Container>
                     <strong>Free silhouette images</strong> of animals, plants, and other life forms,{" "}
-                    <strong>available for reuse</strong> under{" "}
+                    <Link href="/articles/image-usage">
+                        <strong>available for reuse</strong>
+                    </Link>{" "}
+                    under{" "}
                     <a href="//creativecommons.org" rel="external">
                         Creative Commons
                     </a>{" "}
@@ -130,6 +133,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                     <QuickLinks />
                 </Container>
             </section>
+            {/*
             <section style={{ minWidth: "100vw" }}>
                 <Container>
                     <header>
@@ -148,7 +152,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                         <p>
                             Free wallet-sized cards with common questions about evolution on one side, and diagrams for
                             explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
-                            <a href="//keesey.gumroad.com/l/pocketphylogenies">
+                            <a href="//www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic">
                                 click here to print out Pocket Phylogenies for yourself
                             </a>
                             .
@@ -157,6 +161,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                 </Container>
                 <PocketPhylogenies />
             </section>
+                        */}
             <section>
                 <Container>
                     <h2>Mailing List</h2>

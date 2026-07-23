@@ -1,5 +1,4 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
+import { describe, expect, it } from "vitest"
 import { EMPTY_UUID } from "../constants"
 import { isUUIDish } from "./isUUIDish"
 describe("isUUIDish", () => {

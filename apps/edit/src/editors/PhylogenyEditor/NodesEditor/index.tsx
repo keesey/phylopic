@@ -70,7 +70,7 @@ const setColumns = (map: VertexMap, arcs: readonly Readonly<[UUID, UUID]>[]): Ve
         }
     }
     const rootVertex =
-        digraphArcs.length === 0 ? 0 : [...graph[0]].find(v => digraphArcs.every(([, tail]) => tail !== v)) ?? 0
+        digraphArcs.length === 0 ? 0 : ([...graph[0]].find(v => digraphArcs.every(([, tail]) => tail !== v)) ?? 0)
     setRatiosForClade(rootVertex, 0, 1)
     const sinksSorted = [...sinks(graph)].sort((a, b) => ratios[a] - ratios[b])
     const columns = sinksSorted.reduce<Record<number, number>>(

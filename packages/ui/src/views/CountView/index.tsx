@@ -1,5 +1,5 @@
 import React from "react"
-import NumberView from "../NumberView"
+import { NumberView } from "../NumberView"
 export type CountViewProps = {
     value?: number
 }
@@ -17,4 +17,3 @@ export const CountView: React.FC<CountViewProps> = ({ value }) => {
         </strong>
     )
 }
-export default CountView

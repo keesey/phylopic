@@ -5,6 +5,10 @@ import getSourceData from "./make/getSourceData.js"
 import insertEntities from "./make/insertEntities.js"
 ;(async () => {
     try {
+        const isDryRun = process.argv.includes("--dry-run")
+        if (isDryRun) {
+            console.info("DRY RUN: No changes will be made to the database.")
+        }
         const build = (await getBuild()) + 1
         console.info("Inserting entities for build:", build)
         console.info("Loading source data...")
@@ -16,7 +20,7 @@ import insertEntities from "./make/insertEntities.js"
             })
             try {
                 await client.connect()
-                await insertEntities(client, sourceData)
+                await insertEntities(client, sourceData, isDryRun)
             } finally {
                 client.end()
             }

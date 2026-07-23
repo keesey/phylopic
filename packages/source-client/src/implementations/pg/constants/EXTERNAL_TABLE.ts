@@ -1,2 +1,1 @@
-const EXTERNAL_TABLE = '"external"'
-export default EXTERNAL_TABLE
+export const EXTERNAL_TABLE = '"external"'

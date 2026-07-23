@@ -1,10 +1,10 @@
 import { FaultDetector } from "../../detection/FaultDetector"
-import invalidate from "../../validation/invalidate"
-import type ValidationFaultCollector from "../../validation/ValidationFaultCollector"
+import { invalidate } from "../../validation/invalidate"
+import { type ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
 import { Identifier } from "../types/Identifier"
-import isAuthority from "./isAuthority"
-import isNamespace from "./isNamespace"
-import isObjectID from "./isObjectID"
+import { isAuthority } from "./isAuthority"
+import { isNamespace } from "./isNamespace"
+import { isObjectID } from "./isObjectID"
 export const isIdentifier: FaultDetector<Identifier> = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,
@@ -21,4 +21,3 @@ export const isIdentifier: FaultDetector<Identifier> = (
     }
     return invalidate(faultCollector, "Expected identifier with format `authority/namespace/objectID`.")
 }
-export default isIdentifier

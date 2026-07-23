@@ -1,5 +1,5 @@
 import { Node } from "@phylopic/source-models"
-import { isDefined, isFiniteNumber, normalizeUUID, UUID } from "@phylopic/utils"
+import { isDefined, isFiniteNumber, normalizeNomina, normalizeUUID, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { randomUUID } from "crypto"
 import { parseNomen } from "parse-nomen"
@@ -48,7 +48,9 @@ const resolveItem = async (client: SourceClient, item: GBIFNameUsage, lineage: r
     const newNode: Node & { uuid: UUID } = {
         created: now,
         modified: now,
-        names: [item.scientificName, item.canonicalName].filter(isDefined).map(name => parseNomen(name)),
+        names: normalizeNomina(
+            [item.scientificName, item.canonicalName].filter(isDefined).map(name => parseNomen(name)),
+        ),
         parent: parent ? parent.uuid : null,
         uuid: normalizeUUID(randomUUID()),
     }

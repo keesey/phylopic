@@ -107,7 +107,7 @@ export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = as
     const { uuid, ...queryParameters } = queryAndPathParameters
     const normalizedUUID = normalizeUUID(uuid)
     const path = `/nodes/${encodeURIComponent(normalizedUUID)}/lineage`
-    if (checkListRedirect(queryParameters, NODE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
+    if (checkListRedirect<NodeEmbedded>(queryParameters, NODE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
         return createBuildRedirect(path, { ...queryParameters, uuid: normalizedUUID })
     }
     if (uuid !== normalizedUUID) {

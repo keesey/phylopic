@@ -1,7 +1,6 @@
-import { expect } from "chai"
-import { describe, it } from "mocha"
+import { describe, expect, it } from "vitest"
 import { Arc } from "../types/Arc"
-import normalizeArcs from "./normalizeArcs"
+import { normalizeArcs } from "./normalizeArcs"
 describe("normalizeArcs", () => {
     const test = (value: readonly Arc[], expected: readonly Arc[]) => {
         it(`should convert ${JSON.stringify(value)} to ${JSON.stringify(expected)}`, () => {

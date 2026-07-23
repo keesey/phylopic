@@ -20,4 +20,3 @@ export const useNomenText = (name: Nomen = EMPTY, short = false, defaultText = "
     )
     return text || defaultText
 }
-export default useNomenText

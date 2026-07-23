@@ -1,4 +1,4 @@
-import { isAuthority, isNamespace, isObjectID, isUUID } from "@phylopic/utils"
+import { isAuthority, isNamespace, isObjectID, isUUIDv4, normalizeUUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetServerSideProps, NextPage } from "next"
 import { ParsedUrlQuery } from "querystring"
@@ -14,10 +14,10 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
     if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {
         return { notFound: true }
     }
-    if (authority === "phylopic.org" && namespace === "nodes" && isUUID(objectID)) {
+    if (authority === "phylopic.org" && namespace === "nodes" && isUUIDv4(objectID)) {
         return {
             redirect: {
-                destination: `/nodes/${encodeURIComponent(objectID)}`,
+                destination: `/nodes/${encodeURIComponent(normalizeUUID(objectID))}`,
                 permanent: true,
             },
         }
@@ -36,16 +36,14 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
             },
         )
     } catch (e) {
-        if (axios.isAxiosError(e)) {
-            if (e.response?.status === 307 || e.response?.status === 308) {
-                const destination = e.response?.headers.location
-                if (destination) {
-                    return {
-                        redirect: {
-                            destination,
-                            permanent: e.response?.status === 308,
-                        },
-                    }
+        if (axios.isAxiosError(e) && e.response && (e.response.status === 307 || e.response.status === 308)) {
+            const destination = e.response.headers.location
+            if (destination) {
+                return {
+                    redirect: {
+                        destination,
+                        permanent: e.response.status === 308,
+                    },
                 }
             }
         }

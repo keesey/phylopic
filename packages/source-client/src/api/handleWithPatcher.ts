@@ -32,4 +32,3 @@ export const handleWithPatcher = async <T>(req: NextApiRequest, res: NextApiResp
         }
     }
 }
-export default handleWithPatcher

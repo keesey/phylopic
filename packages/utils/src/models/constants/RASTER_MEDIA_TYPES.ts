@@ -5,4 +5,3 @@ export const RASTER_MEDIA_TYPES: ReadonlySet<RasterMediaType> = new Set<RasterMe
     "image/jpeg",
     "image/png",
 ])
-export default RASTER_MEDIA_TYPES

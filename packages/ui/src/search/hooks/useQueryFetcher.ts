@@ -14,4 +14,3 @@ export const useQueryFetcher = <T extends Readonly<{ build: number }>>(): QueryF
         [apiFetcher],
     )
 }
-export default useQueryFetcher
