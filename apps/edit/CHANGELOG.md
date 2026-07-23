@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.9.3] - 2026-07-22
+
+### Changed
+
+-   Minor upgrades for `sass` and `swr`.
+-   Patch upgrades for `clsx` and `slugify`.
+
+### Security
+
+-   Minor upgrade for `axios`.
+
 ## [1.9.2] - 2026-03-17
 
 ### Added

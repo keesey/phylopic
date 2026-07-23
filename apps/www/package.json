@@ -15,10 +15,10 @@
         "@phylopic/utils-api": "*",
         "@react-hook/debounce": "^4.0.0",
         "@vercel/analytics": "^1.2.2",
-        "axios": "^1.6.8",
-        "clsx": "^2.1.0",
-        "compress-json": "3.0.0",
-        "jsonwebtoken": "^9.0.2",
+        "axios": "^1.18.1",
+        "clsx": "^2.1.1",
+        "compress-json": "3.4.0",
+        "jsonwebtoken": "^9.0.3",
         "next": "^14.2.35",
         "next-pwa": "^5.6.0",
         "next-seo": "^6.5.0",
@@ -26,8 +26,8 @@
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-json-view": "^1.21.3",
-        "slugify": "^1.6.6",
-        "swr": "^2.2.5"
+        "slugify": "^1.6.9",
+        "swr": "^2.4.2"
     },
     "description": "Primary public web application for *PhyloPic*.",
     "devDependencies": {
@@ -37,7 +37,7 @@
         "@types/react-dom": "^18.2.25",
         "eslint-config-phylopic": "*",
         "next-unused": "^0.0.6",
-        "sass": "^1.75.0",
+        "sass": "^1.101.6",
         "schema-dts": "^1.1.2",
         "typescript": "^5.4.5"
     },
@@ -56,5 +56,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.14.2"
+    "version": "2.14.3"
 }

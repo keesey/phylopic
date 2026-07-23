@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.5] - 2026-07-22
+
+### Changed
+
+-   Minor upgrade for `swr`.
+-   Patch upgrade for `clsx`.
+
+### Security
+
+-   Minor upgrade for `axios`.
+-   Minor upgrade for `sharp`, fixing `libvips` vulnerabilities.
+
 ## [1.7.4] - 2026-03-17
 
 ### Added

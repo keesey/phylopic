@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.3] - 2026-07-22
+
+### Changed
+
+-   Minor upgrades for `compress-json`, `sass`, and `swr`.
+-   Patch upgrades for `clsx` and `slugify`.
+
+### Security
+
+-   Minor upgrade for `axios`.
+-   Patch upgrade for `jsonwebtoken`.
+
 ## [2.14.2] - 2026-03-17
 
 ### Added

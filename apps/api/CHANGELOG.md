@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.7.4] - 2026-07-22
+
+### Changed
+
+-   Minor upgrades for `pg`, `serverless`, `serverless-offline`, `ts-loader`, and `webpack`.
+
+### Security
+
+-   Minor upgrade for AWS clients, fixing `fast-xml-parser` vulnerabilities.
+-   Patch upgrade for `jsonwebtoken`.
+
 ## [2.7.3] - 2026-03-17
 
 ### Added
