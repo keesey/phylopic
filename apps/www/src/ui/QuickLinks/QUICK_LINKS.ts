@@ -47,7 +47,7 @@ const QUICK_LINKS: QuickLinkNode = {
                     uuid: "6ed7f321-091f-43c0-8db3-fa36bde54558",
                     children: [
                         {
-                            imageUUID: "c6066aa4-fadd-45e0-b897-b16b37977e8e",
+                            imageUUID: "f722ba34-03d4-4b90-8409-e02829a3c5d4",
                             label: "fungi",
                             slug: "fungi",
                             uuid: "a27a6bff-275a-4a95-98e5-4776f0da96f1",
