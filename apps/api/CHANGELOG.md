@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Moved `serverless-offline`'s internal Lambda endpoint to port 3103 in the `dev` script, so it no longer shadows the `contribute` app on port 3002.
+
 ### Removed
 
 ### Security

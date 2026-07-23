@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.6] - 2026-07-23
+
+### Changed
+
+- Major upgrade for `next` dependency and peer dependency, to version 15.
+
 ## [1.7.5] - 2026-07-22
 
 ### Changed

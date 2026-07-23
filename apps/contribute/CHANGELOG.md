@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.3.6] - 2026-07-23
+
+### Changed
+
+- Major upgrade for `next`, to version 15.
+- Minor upgrade for `next-seo`.
+- Updated Next.js configuration for version 15: replaced deprecated `images.domains` with `images.remotePatterns`, removed `swcMinify`, and set `outputFileTracingRoot`.
+
 ## [2.3.5] - 2026-07-22
 
 ### Changed
