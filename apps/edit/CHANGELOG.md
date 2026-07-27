@@ -9,19 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `User-Agent` header identifying *PhyloPic* in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
-
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
-- Upgraded `@phylopic/ui` to fix `Suspense` errors.
-
 ### Removed
 
 ### Security
+
+## [1.9.5] - 2026-07-26
+
+### Added
+
+- `User-Agent` header identifying *PhyloPic* in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
+
+### Fixed
+
+- Upgraded `@phylopic/ui` to fix `Suspense` errors.
 
 ## [1.9.4] - 2026-07-23
 

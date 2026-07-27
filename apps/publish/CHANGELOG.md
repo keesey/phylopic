@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `User-Agent` header identifying PhyloPic in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.11.2] - 2026-07-26
+
+### Added
+
+- `User-Agent` header identifying PhyloPic in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
 
 ## [1.11.1] - 2026-07-22
 
