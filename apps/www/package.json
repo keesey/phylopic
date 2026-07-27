@@ -19,6 +19,7 @@
         "clsx": "^2.1.1",
         "compress-json": "3.4.0",
         "jsonwebtoken": "^9.0.3",
+        "newick-js": "^1.2.1",
         "next": "^15.5.21",
         "next-pwa": "^5.6.0",
         "next-seo": "^6.8.0",
