@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Upgraded `@phylopic/utils-api` to fix `Suspense` errors.
+
 ### Removed
 
 ### Security
