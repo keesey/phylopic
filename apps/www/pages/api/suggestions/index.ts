@@ -4,6 +4,7 @@ import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import axios from "axios"
 import { NextApiHandler } from "next"
 import getString from "~/routes/getString"
+import packageJson from "../../../package.json"
 const index: NextApiHandler = async (req, res) => {
     try {
         const prefix = getString(req.query.q)
@@ -125,6 +126,11 @@ const getPBDBSuggestions = async (prefix: string): Promise<readonly Suggestion[]
         if (prefix.length >= 2) {
             const response = await axios.get<Readonly<{ records: ReadonlyArray<{ readonly nam: string }> }>>(
                 "https://paleobiodb.org/data1.2/taxa/auto.json" + createSearch({ name: prefix }),
+                {
+                    headers: {
+                        "User-Agent": `PhyloPic Website/${packageJson.version.split(".", 2).join(".")}`,
+                    },
+                },
             )
             return response.data.records.map(({ nam }) => {
                 const term = normalizeQuery(nam)

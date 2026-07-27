@@ -1,13 +1,14 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
+import { createSearch } from "@phylopic/utils"
 import { BuildContext, fetchDataAndCheck } from "@phylopic/utils-api"
+import { useDebounce } from "@react-hook/debounce"
 import React, { useContext, useMemo } from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
+import packageJson from "../../../../package.json"
 import { SearchContext } from "../../context"
-import { PBDB_URL } from "./PBDB_URL"
-import { useDebounce } from "@react-hook/debounce"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
-import { createSearch } from "@phylopic/utils"
+import { PBDB_URL } from "./PBDB_URL"
 type PBDBRecord = Readonly<{
     ext: string
     nam: string
@@ -23,7 +24,11 @@ type PBDBResponse = Readonly<{
     records: readonly PBDBRecord[]
 }>
 const fetchLineage: Fetcher<PBDBResponse, string> = async url => {
-    const response = await fetchDataAndCheck<PBDBResponse>(url)
+    const response = await fetchDataAndCheck<PBDBResponse>(url, {
+        headers: {
+            "User-Agent": `PhyloPic User Interface/${packageJson.version.split(".", 2).join(".")}`,
+        },
+    })
     return response.data
 }
 const fetchNode: Fetcher<NodeWithEmbedded, string> = async url => {

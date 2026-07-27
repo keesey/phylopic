@@ -13,8 +13,16 @@ import { type PBDBTaxonResponse } from "./paleobiodb.org/PBDBTaxonResponse"
 import getStrataUrl from "./paleobiodb.org/getStrataUrl"
 import getTaxonUrl from "./paleobiodb.org/getTaxonUrl"
 import getMrcaUrl from "./timetree.org/getAgeUrl"
+import packageJson from "../../package.json"
 const MILLION = 1000000
-const fetcher = <T>(key: string) => axios.get<T>(key).then(({ data }) => data)
+const fetcher = <T>(key: string) =>
+    axios
+        .get<T>(key, {
+            headers: {
+                "User-Agent": `PhyloPic Website/${packageJson.version.split(".", 2).join(".")}`,
+            },
+        })
+        .then(({ data }) => data)
 const getAgeResult = (
     pbdbStrataData: PBDBStrataResponse | undefined,
     pbdbTaxonData: readonly PBDBTaxonResponse[] | undefined,
