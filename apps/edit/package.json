@@ -40,7 +40,7 @@
     },
     "scripts": {
         "clean": "rm -rf .next && rm -rf .swc && rm -rf .turbo && rm -rf node_modules",
-        "dev": "next dev -p 3001",
+        "dev": "next dev -p 3001 -H 127.0.0.1",
         "lint": "TIMING=1 next lint",
         "unused": "next-unused"
     },
