@@ -17,7 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- `src/auth/jwt/decodeJWT.ts`, which no longer had any callers.
+
 ### Security
+
+- The upload endpoint now takes the contributor's identity from the request authorizer, via `event.requestContext.authorizer.uuid`, instead of decoding the `Authorization` header itself.
 
 ## [2.7.6] - 2026-08-07
 

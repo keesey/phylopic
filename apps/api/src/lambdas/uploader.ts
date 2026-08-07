@@ -1,3 +1,4 @@
+import { isUUIDv4 } from "@phylopic/utils"
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
 import APIError from "../errors/APIError"
 import create405 from "../errors/create405"
@@ -15,11 +16,13 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
         case "/uploads": {
             switch (event.httpMethod) {
                 case "POST": {
+                    const authorizerUUID = event.requestContext.authorizer?.uuid
                     return postUpload(
                         {
                             body: event.body ?? undefined,
+                            contributorUUID: isUUIDv4(authorizerUUID) ? authorizerUUID : undefined,
                             encoding: event.isBase64Encoded ? "base64" : "utf8",
-                            ...getParameters(event.headers, ["accept", "authorization", "content-type"]),
+                            ...getParameters(event.headers, ["accept", "content-type"]),
                         },
                         SERVICE,
                     )
