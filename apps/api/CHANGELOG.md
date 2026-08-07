@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+### Security
+
+## [2.7.7] - 2026-08-07
+
+### Removed
+
 - `src/auth/jwt/decodeJWT.ts`, which no longer had any callers.
 
 ### Security
