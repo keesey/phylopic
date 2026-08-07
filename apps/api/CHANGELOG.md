@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.7.6] - 2026-08-07
+
+### Security
+
+- Removed key value from log.
+
 ## [2.7.5] - 2026-07-26
 
 ### Fixed
