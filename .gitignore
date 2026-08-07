@@ -20,3 +20,4 @@ public/dist
 **/.vscode
 **/.webpack
 **/node_modules
+*-AUDIT.md
