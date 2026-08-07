@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.9.6] - 2026-08-07
+
+### Security
+
+- The development server now binds to `127.0.0.1` instead of all interfaces. This application has no authentication and holds credentials for the source data, so binding to `0.0.0.0` (the `next dev` default) made every mutating route reachable by any other device on the network while it was running.
+
 ## [1.9.5] - 2026-07-26
 
 ### Added
