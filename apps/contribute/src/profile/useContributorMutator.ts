@@ -1,41 +1,39 @@
-import { Contributor, isContributor, JWT } from "@phylopic/source-models"
-import axios from "axios"
+import { Contributor, isContributor } from "@phylopic/source-models"
 import { useCallback } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
+import useAuthorizedRequest from "~/auth/hooks/useAuthorizedRequest"
 import useContributorSWR from "./useContributorSWR"
 import useContributorUUID from "./useContributorUUID"
-const put = async (key: string, token: JWT, newValue: Contributor) => {
-    await axios.put(key, newValue, {
-        headers: { authorization: `Bearer ${token}` },
-    })
-    return newValue
-}
-const patch = async (key: string, token: JWT, newValue: Partial<Contributor>, newData: Contributor) => {
-    await axios.patch(key, newValue, {
-        headers: { authorization: `Bearer ${token}` },
-    })
-    return newData
-}
 const useContributorMutator = () => {
     const { data, mutate } = useContributorSWR()
+    const request = useAuthorizedRequest()
     const token = useAuthToken()
     const uuid = useContributorUUID()
     return useCallback(
         (newValue: Partial<Contributor>) => {
             if (uuid && token) {
-                const key = `/api/contributors/${encodeURIComponent(uuid)}`
+                const url = `/api/contributors/${encodeURIComponent(uuid)}`
                 if (isContributor(newValue)) {
-                    mutate(put(key, token, newValue), { optimisticData: newValue, rollbackOnError: true })
+                    mutate(
+                        request({ data: newValue, method: "PUT", url }).then(() => newValue),
+                        {
+                            optimisticData: newValue,
+                            rollbackOnError: true,
+                        },
+                    )
                 } else if (data) {
                     const newData = { ...data, ...newValue }
-                    mutate(patch(key, token, newValue, newData), {
-                        optimisticData: newData,
-                        rollbackOnError: true,
-                    })
+                    mutate(
+                        request({ data: newValue, method: "PATCH", url }).then(() => newData),
+                        {
+                            optimisticData: newData,
+                            rollbackOnError: true,
+                        },
+                    )
                 }
             }
         },
-        [data, mutate, token, uuid],
+        [data, mutate, request, token, uuid],
     )
 }
 export default useContributorMutator

@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `User-Agent` header identifying *PhyloPic* in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
+- `User-Agent` header identifying _PhyloPic_ in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
 
 ### Fixed
 

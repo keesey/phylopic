@@ -19,11 +19,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.3.8] - 2026-08-07
+
+### Changed
+
+- Authorized requests now go through a single request function, rather than each caller attaching its own `Authorization` header.
+
+### Fixed
+
+- Authorization tokens that fail verification, such as those signed with a retired key, are now discarded, and the user is prompted to re-authorize. Previously such tokens persisted indefinitely, leaving the interface in an apparently authorized state while every request failed.
+- Failed authorization now responds with `401` instead of `500`.
+
+### Security
+
+- Responses to failed authorization no longer include internal error details.
+
 ## [2.3.7] - 2026-07-26
 
 ### Added
 
-- `User-Agent` header identifying *PhyloPic* in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
+- `User-Agent` header identifying _PhyloPic_ in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
 
 ### Fixed
 

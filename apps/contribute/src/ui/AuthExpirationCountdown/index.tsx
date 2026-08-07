@@ -2,6 +2,7 @@ import axios from "axios"
 import clsx from "clsx"
 import { FC, useCallback, useContext, useEffect, useState } from "react"
 import AuthContext from "~/auth/AuthContext"
+import useAuthorizedRequest from "~/auth/hooks/useAuthorizedRequest"
 import usePayload from "~/auth/hooks/usePayload"
 import decodeJWT from "~/auth/jwt/decodeJWT"
 import { TTLPayload } from "~/auth/ttl/TTLPayload"
@@ -28,25 +29,30 @@ const AuthExpirationCountdown: FC = () => {
             setNewTTL(Object.entries(TTL_VALUES).sort(([, a], [, b]) => diff(a) - diff(b))[0][0] as TTL)
         }
     }, [payload?.exp, payload?.iat])
+    const request = useAuthorizedRequest()
     const reauthorize = useCallback(async () => {
         setPending(true)
         try {
-            const response = await axios.post<string>(`/api/reauthorize`, { ttl: TTL_VALUES[newTTL] } as TTLPayload, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
+            const response = await request({
+                data: { ttl: TTL_VALUES[newTTL] } as TTLPayload,
+                method: "POST",
+                url: "/api/reauthorize",
             })
-            if (!decodeJWT(response.data)) {
+            const newToken = response.data as string
+            if (!decodeJWT(newToken)) {
                 throw new Error("Invalid response from server.")
             }
-            setToken?.(response.data)
+            setToken?.(newToken)
             setDismissed(true)
         } catch (e) {
-            alert(e)
+            // A 401 has already cleared the stored token and notified the user.
+            if (!(axios.isAxiosError(e) && e.response?.status === 401)) {
+                alert(e)
+            }
         } finally {
             setPending(false)
         }
-    }, [newTTL, setToken, token])
+    }, [newTTL, request, setToken])
     if (dismissed || !token || typeof payload?.exp !== "number" || !isFinite(payload.exp)) {
         return null
     }

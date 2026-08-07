@@ -7,7 +7,15 @@ const verifyAuthorization = async (
     expectedFields?: Partial<JwtPayload>,
 ) => {
     const token = getBearerJWT(headers.authorization)
-    const payload = await verifyJWT(token)
+    let payload: JwtPayload | null
+    try {
+        payload = await verifyJWT(token)
+    } catch (e) {
+        // A token that fails verification is an authorization failure, not a server error.
+        // Clients rely on the 401 to discard the stored token; see useAuthorizedRequest.
+        console.warn(e)
+        throw 401
+    }
     if (payload && expectedFields) {
         for (const field of Object.keys(expectedFields)) {
             if (payload[field] !== expectedFields[field]) {

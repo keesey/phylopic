@@ -3,6 +3,8 @@ import { getImageFileExtension, Hash, ImageMediaType, isHash } from "@phylopic/u
 import axios, { AxiosProgressEvent } from "axios"
 import { FC, useEffect, useMemo, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
+import useDeauthorize from "~/auth/hooks/useDeauthorize"
+import isUnauthorizedAPIResponse from "~/auth/http/isUnauthorizedAPIResponse"
 import useContributorUUID from "~/profile/useContributorUUID"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_ARROW_LEFT } from "~/ui/ICON_SYMBOLS"
@@ -19,6 +21,7 @@ export interface Props {
 }
 const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, type }) => {
     const token = useAuthToken()
+    const deauthorize = useDeauthorize()
     const contributorUUID = useContributorUUID()
     const [loaded, setLoaded] = useState(0)
     const [total, setTotal] = useState(NaN)
@@ -57,6 +60,8 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
                     if (e instanceof Error) {
                         if (axios.isCancel(e)) {
                             console.warn("Upload canceled.")
+                        } else if (axios.isAxiosError(e) && isUnauthorizedAPIResponse(e)) {
+                            await deauthorize()
                         } else {
                             setError(e)
                         }
@@ -67,7 +72,7 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
             })()
             return () => controller.abort()
         }
-    }, [buffer, contributorUUID, onComplete, token, type])
+    }, [buffer, contributorUUID, deauthorize, onComplete, token, type])
     if (error) {
         return (
             <Dialogue>
