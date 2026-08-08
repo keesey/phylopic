@@ -44,7 +44,7 @@ functions:
         memorySize: 128
         events:
             - httpApi:
-                  path: /ping
+                  path: /_ping
                   method: get
     static:
         handler: src/lambdas/static.onAPIGatewayProxy
