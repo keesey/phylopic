@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.8.1] - 2026-08-08
+
+### Changed
+
+- Reduced `dynamic` and `uploader` Lambda memory from 1024 MB to 512 MB.
+
 ## [2.8.0] - 2026-08-08
 
 ### Changed

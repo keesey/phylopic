@@ -65,7 +65,7 @@ functions:
                   method: get
     dynamic:
         handler: src/lambdas/dynamic.onAPIGatewayProxy
-        memorySize: 1024
+        memorySize: 512
         timeout: 30
         environment:
             PGDATABASE: "${ssm:PGDATABASE}"
@@ -119,7 +119,7 @@ functions:
                   method: post
     uploader:
         handler: src/lambdas/uploader.onAPIGatewayProxy
-        memorySize: 1024
+        memorySize: 512
         timeout: 30
         events:
             - httpApi:
