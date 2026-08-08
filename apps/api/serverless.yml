@@ -5,7 +5,6 @@ provider:
     httpApi:
         payload: "1.0"
         cors:
-            allowCredentials: true
             allowedOrigins:
                 - "*"
             allowedHeaders:
