@@ -9,10 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `GET /api/images/{uuid}/file/link`, which responds with a short-lived link to an image's file, as `{ "href": … }`.
-  Thumbnails of unpublished images load from that link. Requires authorization, and is restricted to the contributor who
-  owns the image.
-
 ### Changed
 
 ### Deprecated
@@ -21,17 +17,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+### Security
+
+## [2.4.0] - 2026-08-07
+
+### Added
+
+- `GET /api/images/{uuid}/file/link`, which responds with a short-lived link to an image's file, as `{ "href": <URL> }`. Thumbnails of unpublished images load from that link. Requires authorization for the image's contributor.
+
+### Removed
+
 - `GET /api/images/{uuid}/file`, which responded with the contents of an image's file. Replaced by
   `GET /api/images/{uuid}/file/link`.
 
 ### Security
 
-- Uploaded files are no longer served from this application's origin. An uploaded SVG could previously be opened as a
-  document on the same origin as the editing interface, where a script inside it could read the authorization token out
-  of `localStorage`.
-- The route serving an image's file was the only one under `/api` without an authorization check, because the `<img>`
-  element that consumed it could not send an `Authorization` header. Returning a link rather than the file removes that
-  constraint, so all routes are now authorized.
+- Uploaded files are no longer served from this application's origin.
+- All API routes are now authorized.
 
 ## [2.3.8] - 2026-08-07
 
