@@ -5,6 +5,7 @@ import { UUID } from "@phylopic/utils"
 import { useAPIFetcher } from "@phylopic/utils-api"
 import clsx from "clsx"
 import { FC } from "react"
+import useSWR from "swr"
 import useSWRImmutable from "swr/immutable"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import useImage from "~/editing/useImage"
@@ -50,9 +51,12 @@ const Unpublished: FC<Props> = ({ uuid }) => {
         image?.specific ? `/api/nodes/${encodeURIComponent(image?.specific)}` : null,
         fetcher,
     )
+    const linkFetcher = useAuthorizedJSONFetcher<{ href: string }>()
+    // Not immutable: unlike the node above, this link expires.
+    const { data: link } = useSWR<{ href: string }>(`/api/images/${encodeURIComponent(uuid)}/file/link`, linkFetcher)
     return (
         <figure className={clsx(styles.main, styles.unpublished)}>
-            <FileThumbnailView src={`/api/images/${encodeURIComponent(uuid)}/file`} small />
+            <FileThumbnailView src={link?.href} small />
             <figcaption className={styles.caption}>
                 {specific ? <NameView value={specific.names[0]} short /> : null}
             </figcaption>
