@@ -15,11 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Revalidation script now reads `REVALIDATE_TOKEN`, matching `apps/www` and this project's `.env`. It previously read the unset name `REVALIDATE_KEY` and sent an empty secret.
-
 ### Removed
 
 ### Security
+
+## [1.11.3] - 2026-08-08
+
+### Fixed
+
+- Revalidation script now reads `REVALIDATE_TOKEN`, matching `apps/www` and this project's `.env`. It previously read the unset name `REVALIDATE_KEY` and sent an empty secret.
 
 ## [1.11.2] - 2026-07-26
 
