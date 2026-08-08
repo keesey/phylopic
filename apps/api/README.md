@@ -4,7 +4,7 @@ This is the implementation of the API (Application Programming Interface) for [_
 
 This implementation uses:
 
-- [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
+- [Amazon API Gateway HTTP API (v2)](https://aws.amazon.com/api-gateway/)
 - [AWS Lambda](https://aws.amazon.com/lambda/)
 - [Serverless](https://www.serverless.com/)
 - [Node.js](https://nodejs.org/)

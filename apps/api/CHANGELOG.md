@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.8.0] - 2026-08-08
+
+### Changed
+
+- Migrated from API Gateway REST API to HTTP API (v2) in `serverless.yml`, using payload format 1.0 so existing Lambda handlers are unchanged.
+
 ## [2.7.7] - 2026-08-07
 
 ### Removed
