@@ -1,0 +1,16 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "SendMagicLinkMail",
+            "Effect": "Allow",
+            "Action": "ses:SendEmail",
+            "Resource": "arn:aws:ses:us-east-1:960039257217:identity/keesey+phylopic@gmail.com",
+            "Condition": {
+                "StringEquals": {
+                    "ses:FromAddress": "keesey+phylopic@gmail.com"
+                }
+            }
+        }
+    ]
+}

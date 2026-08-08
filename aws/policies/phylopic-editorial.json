@@ -1,0 +1,51 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "SubmissionList",
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": "arn:aws:s3:::uploads.phylopic.org",
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": ["files/", "files/*"]
+                }
+            }
+        },
+        {
+            "Sid": "SubmissionManage",
+            "Effect": "Allow",
+            "Action": ["s3:GetObject", "s3:GetObjectTagging", "s3:PutObjectTagging", "s3:DeleteObject"],
+            "Resource": "arn:aws:s3:::uploads.phylopic.org/files/*"
+        },
+        {
+            "Sid": "SubmissionTrash",
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::uploads.phylopic.org/trash/files/*"
+        },
+        {
+            "Sid": "SourceImageList",
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": "arn:aws:s3:::source-images.phylopic.org",
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": ["images/", "images/*"]
+                }
+            }
+        },
+        {
+            "Sid": "SourceImageManage",
+            "Effect": "Allow",
+            "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
+            "Resource": "arn:aws:s3:::source-images.phylopic.org/images/*"
+        },
+        {
+            "Sid": "SourceImageTrash",
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::source-images.phylopic.org/trash/images/*"
+        }
+    ]
+}
