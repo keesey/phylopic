@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Migrated from API Gateway REST API to HTTP API (v2) in `serverless.yml`, using payload format 1.0 so existing Lambda handlers are unchanged.
+- HTTP API reserves `/ping` for its own health check; the Lambda route is now `/_ping`, with CloudFront rewriting public `/ping` requests to that path.
 
 ## [2.7.7] - 2026-08-07
 

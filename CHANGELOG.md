@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `@phylopic/api`: migrated from API Gateway REST API to HTTP API (v2).
-
 ### Deprecated
 
 ### Fixed
