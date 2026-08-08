@@ -10,28 +10,24 @@ See instructions in the [_PhyloPic_ project `README`](../../README.md) for setti
 
 ### Environment variables
 
-The following environment variables are required. They may be stored in `.env.local` in the root of this project.
+Locally these live in `.env.local` in the root of this project. In deployment they are Vercel
+project environment variables.
 
-| Variable Name                          | Description                                                          |
-| -------------------------------------- | -------------------------------------------------------------------- |
-| `NEXT_PUBLIC_API_URL`                  | Root URL of the _PhyloPic_ API                                       |
-| `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | UUID for the contributing user that is also the site's contact point |
-| `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of the _PhyloPic: Contribute_ website                       |
-| `NEXT_PUBLIC_ROOT_UUID`                | ID for the root phylogenetic node                                    |
-| `NEXT_PUBLIC_WWW_URL`                  | Root URL of the main _PhyloPic_ website                              |
-| `S3_ACCESS_KEY_ID`                     | Amazon Web Services S3 access key ID                                 |
-| `S3_REGION`                            | Amazon Web Services S3 region                                        |
-| `S3_SECRET_ACCESS_KEY`                 | Amazon Web Services S3 secret access key                             |
+#### Required
 
-The following environment variables are optional:
+| Variable                               | Purpose                                          | How it is read                         |
+| -------------------------------------- | ------------------------------------------------ | -------------------------------------- |
+| `NEXT_PUBLIC_API_URL`                  | Root URL of the _PhyloPic_ API                   | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | Contributor who is also the site's contact point | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of _PhyloPic: Contribute_               | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_ROOT_UUID`                | UUID of the root phylogenetic node               | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_WWW_URL`                  | Root URL of this site                            | `process.env`, inlined into the bundle |
+| `S3_ACCESS_KEY_ID`                     | Access key for the permalinks bucket             | `process.env`, server-side only        |
+| `S3_REGION`                            | Region of the permalinks bucket                  | `process.env`, server-side only        |
+| `S3_SECRET_ACCESS_KEY`                 | Secret key for the permalinks bucket             | `process.env`, server-side only        |
 
-| Variable Name                       | Description                                                                                                                                                        |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key                                                                                                                    |
-| `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Measurement ID for Google Analytics                                                                                                                                |
-| `REVALIDATE_TOKEN`                  | Secret key for [Next.js on-demand revalidation](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration#using-on-demand-revalidation) |
-
-The S3 variables are only necessary for permalink functionality. To get everything else up and running quickly, you can use these values in your `.env.local` file:
+The `S3_*` trio is only needed for permalinks; everything else in the site runs without it. To get
+everything else up and running quickly, you can use these values in your `.env.local` file:
 
 ```sh
 NEXT_PUBLIC_API_URL=https://api.phylopic.org
@@ -40,6 +36,37 @@ NEXT_PUBLIC_CONTRIBUTE_URL=https://contribute.phylopic.org
 NEXT_PUBLIC_ROOT_UUID=8f901db5-84c1-4dc0-93ba-2300eeddf4ab
 NEXT_PUBLIC_WWW_URL=https://www.phylopic.org
 ```
+
+#### Optional
+
+| Variable                            | Purpose                                          | How it is read                         |
+| ----------------------------------- | ------------------------------------------------ | -------------------------------------- |
+| `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key  | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Google Analytics measurement ID                  | `process.env`, inlined into the bundle |
+| `REVALIDATE_TOKEN`                  | Shared secret accepted by `POST /api/revalidate` | `process.env`, server-side only        |
+
+Required for on-demand revalidation (including the call from `apps/publish`). If unset, that
+endpoint rejects every request rather than failing open.
+
+#### Set automatically
+
+| Variable                 | Purpose                                                          | How it is read                         |
+| ------------------------ | ---------------------------------------------------------------- | -------------------------------------- |
+| `NODE_ENV`               | Disables the PWA service worker when `development`               | Set by Next.js                         |
+| `ANALYZE`                | `yarn analyze` sets this to `true` to enable the bundle analyzer | Set by the `analyze` script            |
+| `NEXT_PUBLIC_VERCEL_ENV` | Gates analytics events to `production` (used in `@phylopic/ui`)  | Provided by Vercel                     |
+| `VERCEL_OIDC_TOKEN`      | Short-lived OIDC token; written by `vercel env pull`             | Provided by Vercel; unused by our code |
+
+#### Notes
+
+**Anything prefixed `NEXT_PUBLIC_` is not a secret.** Next.js substitutes these into the
+JavaScript sent to browsers at build time, so their values are public regardless of how they are
+marked in Vercel. That applies to `NEXT_PUBLIC_EOL_API_KEY`: it is a third-party key visible to
+anyone who reads the bundle, so the exposure is quota abuse. `pages/api/suggestions` already
+proxies EOL server-side, which is the pattern to prefer.
+
+**Which S3 principal to use** is documented in [`aws/`](../../aws/README.md). This app needs only
+read and write on `permalinks.phylopic.org/data/*`.
 
 ## Linting
 

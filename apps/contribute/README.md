@@ -10,31 +10,60 @@ See instructions in the [_PhyloPic_ project `README`](../../README.md) for setti
 
 ### Environment variables
 
-The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
+Locally these live in `.env.local` in the root of this project. In deployment they are Vercel
+project environment variables.
 
-| Variable Name                | Description                                                                        |
-| ---------------------------- | ---------------------------------------------------------------------------------- |
-| `AUTH_SECRET_KEY`            | Secret key used for authentication                                                 |
-| `NEXT_PUBLIC_API_URL`        | Root URL of the _PhyloPic_ API (`https://api.phylopic.org`)                        |
-| `NEXT_PUBLIC_CONTRIBUTE_URL` | Root URL of the _PhyloPic: Contribute_ website (`https://contribute.phylopic.org`) |
-| `NEXT_PUBLIC_WWW_URL`        | Root URL of the main _PhyloPic_ website (`https://www.phylopic.org`)               |
-| `PGHOST`                     | Postgres host                                                                      |
-| `PGPASSWORD`                 | Postgres password                                                                  |
-| `PGUSER`                     | Postgres user                                                                      |
-| `S3_ACCESS_KEY_ID`           | Amazon Web Services S3 access key ID                                               |
-| `S3_REGION`                  | Amazon Web Services S3 region                                                      |
-| `S3_SECRET_ACCESS_KEY`       | Amazon Web Services S3 secret access key                                           |
-| `SES_ACCESS_KEY_ID`          | AWS SES access key ID                                                              |
-| `SES_REGION`                 | AWS SES region                                                                     |
-| `SES_SECRET_ACCESS_KEY`      | AWS SES secret access key                                                          |
+#### Required
 
-The following environment variables are optional:
+| Variable                     | Purpose                                                    | How it is read                         |
+| ---------------------------- | ---------------------------------------------------------- | -------------------------------------- |
+| `AUTH_SECRET_KEY`            | HMAC key for signing and verifying contributor JWTs        | `process.env`, server-side only        |
+| `NEXT_PUBLIC_API_URL`        | Root URL of the _PhyloPic_ API                             | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_CONTRIBUTE_URL` | Root URL of this site; also used to build magic-link URLs  | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_UPLOADS_URL`    | Root URL from which uploaded submission files are served   | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_WWW_URL`        | Root URL of the main _PhyloPic_ website                    | `process.env`, inlined into the bundle |
+| `PGHOST`                     | Postgres host for `phylopic-source`                        | `pg`, implicitly                       |
+| `PGPASSWORD`                 | Postgres password                                          | `pg`, implicitly                       |
+| `PGUSER`                     | Postgres login role (`phylopic_source`)                    | `pg`, implicitly                       |
+| `S3_ACCESS_KEY_ID`           | Access key for the auth, uploads, and source-image buckets | `process.env`, server-side only        |
+| `S3_REGION`                  | Region of those buckets                                    | `process.env`, server-side only        |
+| `S3_SECRET_ACCESS_KEY`       | Secret key for those buckets                               | `process.env`, server-side only        |
+| `SES_ACCESS_KEY_ID`          | Access key used to send the magic-link email               | `process.env`, server-side only        |
+| `SES_REGION`                 | Region of the verified SES identity                        | `process.env`, server-side only        |
+| `SES_SECRET_ACCESS_KEY`      | Secret key used to send the magic-link email               | `process.env`, server-side only        |
 
-| Variable Name                       | Description                                     |
-| ----------------------------------- | ----------------------------------------------- |
-| `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key |
-| `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Measurement ID for Google Analytics             |
-| `PGPORT`                            | Postgres port (default: `5432`)                 |
+#### Optional
+
+| Variable                            | Purpose                         | How it is read                         |
+| ----------------------------------- | ------------------------------- | -------------------------------------- |
+| `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Google Analytics measurement ID | `process.env`, inlined into the bundle |
+| `PGPORT`                            | Postgres port (default `5432`)  | `pg`, implicitly                       |
+
+#### Set automatically
+
+| Variable                 | Purpose                                                         | How it is read                         |
+| ------------------------ | --------------------------------------------------------------- | -------------------------------------- |
+| `NEXT_PUBLIC_VERCEL_ENV` | Gates analytics events to `production` (used in `@phylopic/ui`) | Provided by Vercel                     |
+| `VERCEL_OIDC_TOKEN`      | Short-lived OIDC token; written by `vercel env pull`            | Provided by Vercel; unused by our code |
+
+#### Notes
+
+**The `PG*` variables are read implicitly.** `src/source/SourceClient.ts` constructs
+`new Pool({ database: "phylopic-source" })`, supplying only the database name, so `pg` resolves
+host, port, user, and password from the environment itself. They therefore never appear as
+`process.env.PGHOST` in this codebase. Setting `PGDATABASE` has no effect here, because the
+explicit `database` option takes precedence over it.
+
+**`SES_*` and `S3_*` are two different credentials.** See
+[`aws/`](../../aws/README.md) for which one belongs where and what it may do.
+
+**Rotating `AUTH_SECRET_KEY` invalidates every outstanding session.** Tokens are held in
+`localStorage`, so clients discover this as a `401` on their next authorized request and clear
+the stored token then.
+
+**Anything prefixed `NEXT_PUBLIC_` is not a secret.** Next.js substitutes these into the
+JavaScript sent to browsers at build time, so their values are public regardless of how they are
+marked in Vercel.
 
 ## Linting
 

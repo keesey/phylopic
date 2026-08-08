@@ -19,26 +19,60 @@ See instructions in the [_PhyloPic_ project `README`](../../README.md) for setti
 
 ### Environment variables
 
-The following environment variables are required.
+This app has no `.env` file. Values are injected per-Lambda at deploy time by
+[`serverless.yml`](./serverless.yml), each one read from AWS Systems Manager Parameter Store
+with `${ssm:NAME}`.
 
-| Variable Name              | Description                                                |
-| -------------------------- | ---------------------------------------------------------- |
-| `AUTH_SECRET_KEY`          | Secret key used for authentication                         |
-| `AWS_ACCESS_KEY_ID`        | Amazon Web Services access key ID                          |
-| `AWS_REGION`               | Amazon Web Services region                                 |
-| `AWS_SECRET_ACCESS_KEY`    | Amazon Web Services access key                             |
-| `PGHOST`                   | Postgres host                                              |
-| `PGPASSWORD`               | Postgres password                                          |
-| `PGUSER`                   | Postgres user                                              |
-| `PHYLOPIC_BUILD`           | The number of the current _PhyloPic_ build                 |
-| `PHYLOPIC_BUILD_TIMESTAMP` | The timestamp associated with the current _PhyloPic_ build |
-| `PHYLOPIC_ROOT_UUID`       | The UUID of the root node for _PhyloPic_                   |
+Variables are scoped to individual functions rather than the whole service, so the table below
+names the functions that receive each one. That scoping is deliberate — see
+[Notes](#notes).
 
-The following environment variables are optional:
+#### Required
 
-| Variable Name | Description                     |
-| ------------- | ------------------------------- |
-| `PGPORT`      | Postgres port (default: `5432`) |
+| Variable                   | Function(s)         | Purpose                                                    | How it is read   |
+| -------------------------- | ------------------- | ---------------------------------------------------------- | ---------------- |
+| `AUTH_SECRET_KEY`          | `auth`              | HMAC key for verifying contributor JWTs                    | `process.env`    |
+| `PGDATABASE`               | `dynamic`           | Postgres database name (`phylopic-entities`)               | `pg`, implicitly |
+| `PGHOST`                   | `dynamic`           | Postgres host                                              | `pg`, implicitly |
+| `PGPASSWORD`               | `dynamic`           | Postgres password                                          | `pg`, implicitly |
+| `PGUSER`                   | `dynamic`           | Postgres login role (`phylopic_api`)                       | `pg`, implicitly |
+| `PHYLOPIC_BUILD`           | `static`, `dynamic` | Number of the current build, used for cache keys and paths | `process.env`    |
+| `PHYLOPIC_BUILD_TIMESTAMP` | `static`            | Timestamp of the current build                             | `process.env`    |
+| `PHYLOPIC_ROOT_UUID`       | `static`            | UUID of the root phylogenetic node                         | `process.env`    |
+
+#### Optional
+
+| Variable     | Function(s) | Purpose                                                         | How it is read   |
+| ------------ | ----------- | --------------------------------------------------------------- | ---------------- |
+| `PGPORT`     | `dynamic`   | Postgres port (default `5432`)                                  | `pg`, implicitly |
+| `IS_OFFLINE` | all         | `"true"` under `serverless-offline`; prefixes redirects `/prod` | `process.env`    |
+
+#### Set automatically
+
+| Variable                                                                        | Purpose                       | How it is read                                         |
+| ------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------ |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`, `AWS_REGION` | S3 access for `POST /uploads` | Injected by the Lambda runtime from the execution role |
+
+#### Notes
+
+**Per-function scoping is a security boundary, not an accident.** `AUTH_SECRET_KEY` is present
+only in the `auth` function, which is the sole place a token signature is checked. The
+`uploader` function has no environment of its own; it takes the caller's identity from
+`event.requestContext.authorizer.uuid`, populated by the authorizer, so it never needs the
+signing key. Adding the key to another function would widen that boundary.
+
+**The `PG*` variables are read implicitly.** `PG_CLIENT_SERVICE` constructs
+`new Client({ connectionTimeoutMillis: 10000 })` with no connection parameters, so `pg` falls
+back to its own environment lookup for host, port, user, password, and database. Nothing in this
+app references `process.env.PGHOST` and friends, which means they will not appear in a search of
+the source.
+
+**No AWS keys are required.** The service assumes `role/phylopic-api-executor`
+(`provider.iam.role`), and the runtime supplies short-lived credentials from that role through
+the `AWS_*` variables above. Do not set static AWS keys here.
+
+**`useDotenv: true`** means Serverless will load a `.env` file from this directory at deploy time
+for any `${env:...}` reference. None are currently used; all deploy-time values come from SSM.
 
 ## Linting
 

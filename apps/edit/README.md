@@ -10,23 +10,45 @@ See instructions in the [_PhyloPic_ project `README`](../../README.md) for setti
 
 ### Environment variables
 
-The following environment variables are required. They may be stored in `.env.local` in the root of this project, when running the project locally.
+These live in `.env.local` in the root of this project. This app is local-only: it has no `build`
+or `start` script, and its dev server binds to `127.0.0.1`, so there is no deployed environment
+to configure.
 
-| Variable Name          | Description                                                 |
-| ---------------------- | ----------------------------------------------------------- |
-| `NEXT_PUBLIC_API_URL`  | Root URL of the _PhyloPic_ API (`https://api.phylopic.org`) |
-| `PGHOST`               | Postgres host                                               |
-| `PGPASSWORD`           | Postgres password                                           |
-| `PGUSER`               | Postgres user                                               |
-| `S3_ACCESS_KEY_ID`     | Amazon Web Services S3 access key ID                        |
-| `S3_REGION`            | Amazon Web Services S3 region                               |
-| `S3_SECRET_ACCESS_KEY` | Amazon Web Services S3 secret access key                    |
+#### Required
 
-The following environment variables are optional:
+| Variable               | Purpose                                             | How it is read                         |
+| ---------------------- | --------------------------------------------------- | -------------------------------------- |
+| `NEXT_PUBLIC_API_URL`  | Root URL of the _PhyloPic_ API                      | `process.env`, inlined into the bundle |
+| `PGHOST`               | Postgres host for `phylopic-source`                 | `pg`, implicitly                       |
+| `PGPASSWORD`           | Postgres password                                   | `pg`, implicitly                       |
+| `PGUSER`               | Postgres login role (`phylopic_source`)             | `pg`, implicitly                       |
+| `S3_ACCESS_KEY_ID`     | Access key for the uploads and source-image buckets | `process.env`, server-side only        |
+| `S3_REGION`            | Region of those buckets                             | `process.env`, server-side only        |
+| `S3_SECRET_ACCESS_KEY` | Secret key for those buckets                        | `process.env`, server-side only        |
 
-| Variable Name | Description                     |
-| ------------- | ------------------------------- |
-| `PGPORT`      | Postgres port (default: `5432`) |
+#### Optional
+
+| Variable | Purpose                        | How it is read   |
+| -------- | ------------------------------ | ---------------- |
+| `PGPORT` | Postgres port (default `5432`) | `pg`, implicitly |
+
+#### Notes
+
+**The `PG*` variables are read implicitly.** `src/source/SourceClient.ts` constructs
+`new Pool({ database: "phylopic-source" })`, supplying only the database name, so `pg` resolves
+host, port, user, and password from the environment itself. They therefore never appear as
+`process.env.PGHOST` in this codebase. Setting `PGDATABASE` has no effect here, because the
+explicit `database` option takes precedence over it.
+
+**There is no `AUTH_SECRET_KEY`, because this app has no authentication.** None of its API routes
+verify a caller, and several of them mutate state — publishing submissions, merging taxonomy
+nodes. What keeps that safe is that the app is never deployed and never listens beyond localhost.
+If it is ever given a `build` or `start` script, it needs authentication on every mutating route
+first, and this section will need an entry for whatever that mechanism uses.
+
+**Which S3 principal to use** is documented in [`aws/`](../../aws/README.md). This app needs the
+broadest storage access of the web apps, because it performs the cross-bucket copy that accepts a
+submission into the source-image corpus.
 
 ## Linting
 

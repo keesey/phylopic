@@ -21,3 +21,5 @@ public/dist
 **/.webpack
 **/node_modules
 *-AUDIT.md
+.vercel
+.env*

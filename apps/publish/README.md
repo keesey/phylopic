@@ -19,26 +19,61 @@ Make sure you have the following installed on your system and reachable via the 
 
 ### Environment variables
 
-The following environment variables are required. They may be stored in `.env` in the root of this project.
+These live in `.env` in the root of this project, loaded by `import "dotenv/config"` at the top of
+each entry script (`insert.ts`, `release.ts`, `revalidate.ts`, `autolink.ts`, `normalize.ts`,
+`coverage.ts`).
 
-| Variable Name                    | Description                                                                                         |
-| -------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution ID of the Amazon Web Services CloudFront distribution that serves as a CDN for the API |
-| `PGHOST`                         | Postgres host                                                                                       |
-| `PGPASSWORD`                     | Postgres password                                                                                   |
-| `PGUSER`                         | Postgres user                                                                                       |
-| `REVALIDATE_KEY`                 | Key for revalidating the main website pages                                                         |
-| `S3_ACCESS_KEY_ID`               | Amazon Web Services S3 access key ID                                                                |
-| `S3_REGION`                      | Amazon Web Services S3 region                                                                       |
-| `S3_SECRET_ACCESS_KEY`           | Amazon Web Services S3 secret access key                                                            |
-| `WWW_URL`                        | Root URL of the main website (`https://www.phylopic.org`)                                           |
+This project draws on **two** separate credentials, which is easy to miss: the `S3_*` variables
+below, and whatever the AWS credential chain resolves for the parts that use it. See
+[Notes](#notes).
 
-The following environment variables are optional:
+#### Required
 
-| Variable Name | Description                     |
-| ------------- | ------------------------------- |
-| `EOL_API_KEY` | Encyclopedia of Life API key    |
-| `PGPORT`      | Postgres port (default: `5432`) |
+| Variable                         | Purpose                                                                | How it is read |
+| -------------------------------- | ---------------------------------------------------------------------- | -------------- |
+| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data | `process.env`  |
+| `PGHOST`                         | Postgres host                                                          | `process.env`  |
+| `PGPASSWORD`                     | Postgres password                                                      | `process.env`  |
+| `PGUSER`                         | Postgres login role (`phylopic_publish`)                               | `process.env`  |
+| `S3_ACCESS_KEY_ID`               | Access key for listing source images through `@phylopic/source-client` | `process.env`  |
+| `S3_REGION`                      | Region for that client                                                 | `process.env`  |
+| `REVALIDATE_TOKEN`               | Shared secret sent to `apps/www`'s `/api/revalidate`                   | `process.env`  |
+| `S3_SECRET_ACCESS_KEY`           | Secret key for that client                                             | `process.env`  |
+| `WWW_URL`                        | Root URL of the main website, called to trigger revalidation           | `process.env`  |
+
+#### Optional
+
+| Variable       | Purpose                                                 | How it is read |
+| -------------- | ------------------------------------------------------- | -------------- |
+| `EOL_API_KEY`  | [Encyclopedia of Life](https://eol.org) API key         | `process.env`  |
+| `NCBI_API_KEY` | NCBI API key, for higher rate limits during autolinking | `process.env`  |
+| `PGPORT`       | Postgres port (default `5432`)                          | `process.env`  |
+
+#### Resolved from the AWS credential chain
+
+These are never referenced in the source. They are read implicitly by the AWS CLI and by SDK
+clients that are constructed with no explicit credentials, and are normally supplied by
+`~/.aws/credentials` rather than by this project's `.env`.
+
+| Variable                                                          | Used by                                                                    | Purpose                          |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------- |
+| `AWS_PROFILE`                                                     | `aws s3 sync` in `download:*`, `upload:images`, `sync:images`              | Selects a named profile          |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` | the same scripts, plus `SSMClient`, `CloudFrontClient`, and `LambdaClient` | Credentials, if not from profile |
+| `AWS_REGION`, `AWS_DEFAULT_REGION`                                | the same                                                                   | Region, if not from profile      |
+
+#### Notes
+
+**The second credential is a full administrator.** `aws s3 sync` and the SSM, CloudFront, and
+Lambda clients are all constructed without explicit credentials, so they run as whatever profile
+the operator has configured. Among those calls is Lambda `UpdateFunctionConfiguration` against
+the API's functions, which can rewrite their environment — a permission no scoped application key
+should hold, and the reason this pipeline is properly an operator tool rather than a service. The
+consequence is that a `yarn make` runs with administrative authority; scoping that to a dedicated
+profile is tracked in [`aws/`](../../aws/README.md) under "Known gaps."
+
+**`PG*` here is explicit, unlike in `contribute` and `edit`.** `src/source/SourceClient.ts` passes
+host, port, user, and password to `ClientProvider` directly, and hardcodes the database name, so
+`PGDATABASE` is not consulted.
 
 ## Running scripts
 

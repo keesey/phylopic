@@ -36,6 +36,10 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 
 The scripts for creating the project's Postgres databases are in [sql](./sql/README.md).
 
+### AWS principals
+
+The IAM policies for the apps that authenticate to AWS with access keys are in [aws](./aws/README.md), along with the rollout order for changing them.
+
 ## Getting started
 
 [Yarn](https://classic.yarnpkg.com/) (v1.22 or higher) is required for this monorepo project. [Node.js](https://nodejs.org/en/download/) (v20 or higher) is also required for most apps.

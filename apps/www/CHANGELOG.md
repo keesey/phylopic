@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- `POST /api/revalidate` now fails closed when `REVALIDATE_TOKEN` is unset. Previously a missing token compared equal to a missing `secret` query parameter and left on-demand revalidation public.
+
 ## [2.14.5] - 2026-07-26
 
 ### Added

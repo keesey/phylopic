@@ -1,6 +1,8 @@
 import { NextApiHandler } from "next"
 const index: NextApiHandler = async (req, res) => {
-    if (req.query.secret !== process.env.REVALIDATE_TOKEN) {
+    const token = process.env.REVALIDATE_TOKEN
+    // Fail closed when unset: otherwise `undefined !== undefined` would authorize anyone.
+    if (!token || req.query.secret !== token) {
         return res.status(401).json({ message: "Invalid secret token." })
     }
     if (typeof req.query.path !== "string") {
