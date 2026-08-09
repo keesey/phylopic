@@ -47,5 +47,5 @@
         "lint": "TIMING=1 next lint",
         "unused": "next-unused"
     },
-    "version": "1.9.9"
+    "version": "1.9.10"
 }

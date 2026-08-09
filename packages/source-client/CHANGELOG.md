@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.5] - 2026-08-09
+
+### Fixed
+
+- `writeJWT` imports `invalidate` from `@phylopic/utils` instead of `@phylopic/source-models`.
+
 ## [1.3.4] - 2026-08-09
 
 ### Security

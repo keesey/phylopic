@@ -1,6 +1,6 @@
 import { PutObjectCommandInput } from "@aws-sdk/client-s3"
-import { decodeJWT, invalidate, isJWT, JWT, verifyJWT } from "@phylopic/source-models"
-import { ValidationError, ValidationFaultCollector } from "@phylopic/utils"
+import { decodeJWT, isJWT, JWT, verifyJWT } from "@phylopic/source-models"
+import { invalidate, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
 
 export const writeJWT = async (value: JWT): Promise<Partial<PutObjectCommandInput>> => {
     const collector = new ValidationFaultCollector()

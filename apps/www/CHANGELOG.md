@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.11] - 2026-08-09
+
+### Fixed
+
+- `getStaticPropsResult` handles forbidden API responses during static generation.
+
 ## [2.14.10] - 2026-08-09
 
 ### Changed

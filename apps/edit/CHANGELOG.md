@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.9.10] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.3.5`.
+
 ## [1.9.9] - 2026-08-09
 
 ### Security
