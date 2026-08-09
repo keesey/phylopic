@@ -32,6 +32,7 @@ below, and whatever the AWS credential chain resolves for the parts that use it.
 | Variable                         | Purpose                                                                | How it is read |
 | -------------------------------- | ---------------------------------------------------------------------- | -------------- |
 | `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data | `process.env`  |
+| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)  | `process.env`  |
 | `PGHOST`                         | Postgres host                                                          | `process.env`  |
 | `PGPASSWORD`                     | Postgres password                                                      | `process.env`  |
 | `PGUSER`                         | Postgres login role (`phylopic_publish`)                               | `process.env`  |
@@ -84,6 +85,16 @@ This will build and release a new build of the website, created from the files i
 ```sh
 yarn make
 ```
+
+### Verify entity JSON on S3
+
+After `yarn insert`, spot-check that Postgres `json` columns match S3 objects for a build:
+
+```sh
+yarn verify:entities 547
+```
+
+Optional: set `VERIFY_SAMPLE_SIZE` (default `20`) to control how many random entities per table are checked.
 
 ### Autolink externals
 

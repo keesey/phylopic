@@ -11,13 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-### Deprecated
-
 ### Fixed
 
 ### Removed
 
 ### Security
+
+## [1.12.0] - 2026-08-08
+
+### Added
+
+- Entity JSON dual-write to S3 (`entities.phylopic.org`) during `yarn insert`, mirroring Postgres `json` columns for contributors, images, and nodes.
+- S3 build cleanup on insert (abort recovery) and release (drop old builds).
+- `yarn verify:entities <build>` to spot-check Postgres vs. S3 parity.
 
 ## [1.11.3] - 2026-08-08
 

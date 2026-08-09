@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg"
+import { cleanEntitiesS3 } from "../entities/cleanEntitiesS3.js"
 export const cleanTables = async (client: ClientBase, build: number, operator: "=" | "<>") => {
     await client.query("BEGIN")
     await client.query(`DELETE FROM image_node WHERE build${operator}$1::bigint`, [build])
@@ -12,7 +13,7 @@ export const cleanTables = async (client: ClientBase, build: number, operator: "
 const cleanEntities = async (client: ClientBase, build: number, isDryRun: boolean = false) => {
     console.info("Removing old database rows...")
     if (!isDryRun) {
-        await cleanTables(client, build, "<>")
+        await Promise.all([cleanTables(client, build, "<>"), cleanEntitiesS3(build, "<>")])
         await client.query("VACUUM")
     }
     console.info("Removed old database rows.")
