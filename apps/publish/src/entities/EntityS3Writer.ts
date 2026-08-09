@@ -2,7 +2,7 @@ import { S3Client } from "@aws-sdk/client-s3"
 import { putJSONString } from "@phylopic/utils-aws"
 import { UUID } from "@phylopic/utils"
 import Bottleneck from "bottleneck"
-import { ENTITIES_CACHE_CONTROL, getEntitiesBucket } from "./constants.js"
+import { ENTITIES_CACHE_CONTROL, ENTITIES_BUCKET } from "./constants.js"
 import { EntityFolder, getEntityJSONKey } from "./getEntityJSONKey.js"
 const UPLOAD_CONCURRENCY = 50
 interface PendingUpload {
@@ -11,7 +11,6 @@ interface PendingUpload {
     uuid: UUID
 }
 export class EntityS3Writer {
-    private readonly bucket = getEntitiesBucket()
     private readonly build: number
     private readonly client = new S3Client({})
     private readonly limiter = new Bottleneck({ maxConcurrent: UPLOAD_CONCURRENCY })
@@ -29,7 +28,7 @@ export class EntityS3Writer {
                     putJSONString(
                         this.client,
                         {
-                            Bucket: this.bucket,
+                            Bucket: ENTITIES_BUCKET,
                             CacheControl: ENTITIES_CACHE_CONTROL,
                             Key: getEntityJSONKey(this.build, folder, uuid),
                         },

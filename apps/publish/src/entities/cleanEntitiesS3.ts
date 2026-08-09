@@ -1,13 +1,12 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
 import { deletePrefix } from "@phylopic/utils-aws"
-import { getEntitiesBucket } from "./constants.js"
+import { ENTITIES_BUCKET } from "./constants.js"
 import { getBuildPrefix } from "./getEntityJSONKey.js"
 const client = new S3Client({})
 export const cleanEntitiesS3 = async (build: number, operator: "=" | "<>") => {
-    const bucket = getEntitiesBucket()
     if (operator === "=") {
         console.info(`Removing S3 objects for build ${build}...`)
-        await deletePrefix(client, bucket, getBuildPrefix(build))
+        await deletePrefix(client, ENTITIES_BUCKET, getBuildPrefix(build))
         console.info(`Removed S3 objects for build ${build}.`)
         return
     }
@@ -16,7 +15,7 @@ export const cleanEntitiesS3 = async (build: number, operator: "=" | "<>") => {
     do {
         const list = await client.send(
             new ListObjectsV2Command({
-                Bucket: bucket,
+                Bucket: ENTITIES_BUCKET,
                 ContinuationToken: continuationToken,
                 Delimiter: "/",
             }),
@@ -29,7 +28,7 @@ export const cleanEntitiesS3 = async (build: number, operator: "=" | "<>") => {
             if (Number.isNaN(prefixBuild) || prefixBuild === build) {
                 continue
             }
-            await deletePrefix(client, bucket, Prefix)
+            await deletePrefix(client, ENTITIES_BUCKET, Prefix)
         }
         continuationToken = list.NextContinuationToken
     } while (continuationToken)
