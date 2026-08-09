@@ -17,10 +17,9 @@
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
-        "@phylopic/utils-aws": "*",
         "@vercel/analytics": "^1.2.2",
         "clsx": "^2.1.1",
-        "form-data": "^4.0.6",
+        "flux-standard-action": "^2.1.2",
         "jsonwebtoken": "^9.0.3",
         "next": "^15.5.21",
         "next-seo": "^6.8.0",
@@ -28,7 +27,6 @@
         "potrace": "^2.1.8",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "sharp": "^0.35.3",
         "swr": "^2.4.2"
     },
     "description": "Image contribution application for *PhyloPic*.",
@@ -43,7 +41,6 @@
         "@types/react": "^18.2.78",
         "@types/react-dom": "^18.2.25",
         "eslint-config-phylopic": "*",
-        "flux-standard-action": "^2.1.2",
         "next-unused": "^0.0.6",
         "sass": "^1.101.6",
         "typescript": "^5.4.5"

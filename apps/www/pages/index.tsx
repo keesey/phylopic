@@ -6,7 +6,6 @@ import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import MailingListForm from "~/forms/MailingListForm"
-// import PocketPhylogenies from "~/materials/PocketPhylogenies"
 import SchemaScript from "~/metadata/SchemaScript"
 import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -133,35 +132,6 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                     <QuickLinks />
                 </Container>
             </section>
-            {/*
-            <section style={{ minWidth: "100vw" }}>
-                <Container>
-                    <header>
-                        <HeaderNav
-                            buttons={[
-                                {
-                                    children: "Download →",
-                                    href: "/materials",
-                                    key: "materials",
-                                    type: "anchor",
-                                },
-                            ]}
-                            header="Pocket Phylogenies"
-                            headerLevel={2}
-                        />
-                        <p>
-                            Free wallet-sized cards with common questions about evolution on one side, and diagrams for
-                            explaining the answers on the other. Click on the cards below to see the diagrams, and{" "}
-                            <a href="//www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988?source=phylopic">
-                                click here to print out Pocket Phylogenies for yourself
-                            </a>
-                            .
-                        </p>
-                    </header>
-                </Container>
-                <PocketPhylogenies />
-            </section>
-                        */}
             <section>
                 <Container>
                     <h2>Mailing List</h2>

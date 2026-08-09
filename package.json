@@ -15,6 +15,7 @@
         "@changesets/cli": "^2.31.1",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
+        "knip": "^5.80.0",
         "prettier": "^3.9.6",
         "turbo": "^2.10.9"
     },
@@ -29,6 +30,7 @@
         "dev": "turbo run dev --cache=local:r,remote:r --parallel --continue",
         "format": "prettier --write \"**/*.{js,json,md,ts,tsx}\"",
         "lint": "turbo run lint",
+        "knip": "knip",
         "make": "turbo run make --filter=@phylopic/publish",
         "release": "turbo run build --filter=docs^... && changeset publish",
         "test": "turbo run test",

@@ -12,6 +12,7 @@
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
         "jsonwebtoken": "^9.0.3",
+        "lodash": "^4.17.21",
         "pg": "^8.22.0"
     },
     "description": "Application Programming Interface for PhyloPic",

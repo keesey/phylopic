@@ -15,7 +15,6 @@
     "devDependencies": {
         "@phylopic/tsconfig": "*",
         "@types/pg": "^8.20.0",
-        "@types/uuid": "^9.0.8",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
         "prettier": "^3.9.6",
