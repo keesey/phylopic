@@ -1,5 +1,6 @@
 import type { Image as ImageModel, ImageWithEmbedded } from "@phylopic/api-models"
 import { PaginationContainer } from "@phylopic/ui"
+import axios from "axios"
 import type { GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Image from "next/image"
@@ -8,8 +9,8 @@ import { useRouter } from "next/router"
 import { FC, useContext } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
-import postCollectionPage from "~/collections/postCollectionPage"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
+import postCollectionPage from "~/collections/postCollectionPage"
 import PageLayout from "~/pages/PageLayout"
 import getImageSlug from "~/routes/getImageSlug"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -24,9 +25,7 @@ const SAMPLE_IMAGE_UUID = "045279d5-24e5-4838-bec9-0bea86812e35"
 export const getStaticProps: GetStaticProps<Props> = async () => {
     const { data } = await axios.get<ImageModel>(
         `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(SAMPLE_IMAGE_UUID)}`,
-        {
-            maxRedirects: 1,
-        },
+        { maxRedirects: 1 },
     )
     return { props: { image: data } }
 }
