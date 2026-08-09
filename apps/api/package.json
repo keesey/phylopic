@@ -20,7 +20,9 @@
         "@types/aws-lambda": "^8.10.162",
         "@types/jsonwebtoken": "^9.0.10",
         "@types/pg": "^8.20.0",
+        "@aws-sdk/client-cloudfront": "^3.1093.0",
         "aws-lambda": "^1.0.7",
+        "dotenv": "^16.4.5",
         "eslint-config-phylopic": "*",
         "fork-ts-checker-webpack-plugin": "^9.1.0",
         "serverless": "^4.40.0",
@@ -39,9 +41,10 @@
     "private": true,
     "scripts": {
         "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf node_modules",
-        "deploy": "sls deploy && rm -rf .serverless",
+        "deploy": "sls deploy && node ./scripts/invalidate-cloudfront-cache.mjs && rm -rf .serverless",
         "dev": "sls offline --httpPort 3003 --lambdaPort 3103 && rm -rf .serverless",
+        "invalidate-cache": "node ./scripts/invalidate-cloudfront-cache.mjs",
         "lint": "eslint --fix ./**/*.[jt]s"
     },
-    "version": "2.9.2"
+    "version": "2.9.3"
 }

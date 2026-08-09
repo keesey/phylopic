@@ -1,7 +1,5 @@
-import type { Collection, Image as ImageModel, ImageWithEmbedded } from "@phylopic/api-models"
+import type { Image as ImageModel, ImageWithEmbedded } from "@phylopic/api-models"
 import { PaginationContainer } from "@phylopic/ui"
-import { isUUIDish } from "@phylopic/utils"
-import axios from "axios"
 import type { GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Image from "next/image"
@@ -10,6 +8,7 @@ import { useRouter } from "next/router"
 import { FC, useContext } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
+import postCollectionPage from "~/collections/postCollectionPage"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import PageLayout from "~/pages/PageLayout"
 import getImageSlug from "~/routes/getImageSlug"
@@ -71,12 +70,12 @@ const Article: FC<Props> = ({ image }: Props) => {
         const uuids = currentImages.map(image => image.uuid)
         void (async () => {
             try {
-                const response = await axios.post<Collection>(`${process.env.NEXT_PUBLIC_API_URL}/collections`, uuids)
-                if (isUUIDish(response?.data?.uuid)) {
+                const uuid = await postCollectionPage(uuids)
+                if (uuid) {
                     customEvents.toggleCollectionDrawer(false)
                     dispatch({ type: "CLOSE" })
-                    customEvents.openCollectionPage(response.data.uuid, currentCollection)
-                    await router.push(`/collections/${encodeURIComponent(response.data.uuid)}`)
+                    customEvents.openCollectionPage(uuid, currentCollection)
+                    await router.push(`/collections/${encodeURIComponent(uuid)}`)
                 }
             } catch (e) {
                 customEvents.exception(String(e))

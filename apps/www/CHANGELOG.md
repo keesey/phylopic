@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.7] - 2026-08-09
+
+### Fixed
+
+- Creating a Collection Page from the Collections Drawer no longer follows the API’s `303` redirect in the browser. The client reads the collection UUID from the redirect response body instead, avoiding cross-origin redirect failures when posting to `POST /collections`.
+
 ## [2.14.6] - 2026-08-08
 
 ### Security

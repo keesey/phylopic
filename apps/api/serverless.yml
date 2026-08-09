@@ -17,6 +17,13 @@ provider:
                 - X-Amz-Security-Token
                 - X-Amz-User-Agent
                 - X-Api-Key
+            allowedMethods:
+                - GET
+                - HEAD
+                - POST
+                - OPTIONS
+            allowCredentials: false
+            maxAge: 7200
         authorizers:
             auth:
                 type: request
@@ -90,6 +97,9 @@ functions:
                   path: /collections
                   method: post
             - httpApi:
+                  path: /collections
+                  method: options
+            - httpApi:
                   path: /collections/{uuid}
                   method: get
             - httpApi:
@@ -125,6 +135,9 @@ functions:
             - httpApi:
                   path: /resolve/{authority}/{namespace}
                   method: post
+            - httpApi:
+                  path: /resolve/{authority}/{namespace}
+                  method: options
     uploader:
         handler: src/lambdas/uploader.onAPIGatewayProxy
         memorySize: 512

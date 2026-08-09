@@ -1,13 +1,12 @@
-import { isUUIDish, normalizeText } from "@phylopic/utils"
+import { normalizeText } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import { FC, useContext } from "react"
+import postCollectionPage from "~/collections/postCollectionPage"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import useCurrentCollectionName from "~/collections/hooks/useCurrentCollectionName"
 import styles from "./index.module.scss"
-import axios from "axios"
-import { Collection, Link } from "@phylopic/api-models"
 import { NumberView } from "@phylopic/ui"
 import Icon from "~/ui/Icon"
 import customEvents from "~/analytics/customEvents"
@@ -29,12 +28,12 @@ const Tab: FC<Props> = ({ name }) => {
         const uuids = currentImages.map(image => image.uuid)
         void (async () => {
             try {
-                const response = await axios.post<Collection>(process.env.NEXT_PUBLIC_API_URL + "/collections", uuids)
-                if (isUUIDish(response?.data?.uuid)) {
+                const uuid = await postCollectionPage(uuids)
+                if (uuid) {
                     customEvents.toggleCollectionDrawer(false)
                     dispatch({ type: "CLOSE" })
-                    customEvents.openCollectionPage(response.data.uuid, currentName)
-                    await router.push(`/collections/${encodeURIComponent(response.data.uuid)}`)
+                    customEvents.openCollectionPage(uuid, currentName)
+                    await router.push(`/collections/${encodeURIComponent(uuid)}`)
                 }
             } catch (e) {
                 customEvents.exception(String(e))

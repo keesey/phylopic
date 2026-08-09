@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.9.3] - 2026-08-09
+
+### Changed
+
+- `yarn deploy` now invalidates the API CloudFront distribution (`/*`) after `sls deploy`. Requires `API_CLOUDFRONT_DISTRIBUTION_ID` in `apps/api/.env` (same value as `apps/publish/.env`). Use `yarn invalidate-cache` on its own when needed.
+
+### Fixed
+
+- CORS for `POST /collections` (and other cross-origin POSTs): HTTP API now declares `POST` in `allowedMethods`, and Lambda CORS headers include `content-type`, `POST`, and `location` (for 303 redirects). `allow-credentials` is false so it is compatible with `allow-origin: *`. Automatic API Gateway preflight responses did not include CORS headers through CloudFront, so `OPTIONS` for `POST` routes is handled by the `dynamic` Lambda instead.
+
 ## [2.9.2] - 2026-08-09
 
 ### Fixed

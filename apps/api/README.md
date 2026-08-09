@@ -100,6 +100,20 @@ To deploy to `api.phylopic.org` (if you have [AWS Command Line Interface](https:
 yarn deploy
 ```
 
+Create `apps/api/.env` with the CloudFront distribution ID (same value as in `apps/publish/.env`):
+
+```sh
+API_CLOUDFRONT_DISTRIBUTION_ID=E1234567890ABC
+```
+
+Deploy runs `sls deploy`, then invalidates `/*` on that distribution. Without invalidation, CloudFront can keep serving cached API responses for up to a year (`immutable` cache on build-scoped routes like `GET /?build=547`), including stale version metadata and preflight (`OPTIONS`) answers.
+
+To invalidate without redeploying:
+
+```sh
+yarn invalidate-cache
+```
+
 ## Logging
 
 All Lambda functions write to CloudWatch log groups named `/aws/lambda/phylopic-api-prod-*`.
