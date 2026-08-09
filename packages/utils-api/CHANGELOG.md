@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.11] - 2026-08-09
+
+### Added
+
+- `DEFAULT_API_HEADERS` with `Accept: application/vnd.phylopic.v2+json`.
+- `APISWRError.isForbidden` and `fetchResult` `{ status: "forbidden" }` for HTTP 403 responses.
+
+### Changed
+
+- `fetchData` and `createAPIFetcher` send the default API `Accept` header.
+
 ## [1.0.10] - 2026-07-26
 
 ### Fixed

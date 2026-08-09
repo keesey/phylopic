@@ -10,12 +10,16 @@ export type NotFoundFetchResult = {
     ok: false
     status: "notFound"
 }
+export type ForbiddenFetchResult = {
+    ok: false
+    status: "forbidden"
+}
 export type ErrorFetchResult = {
     error: unknown
     ok: false
     status: "error"
 }
-export type FetchResult<T> = SuccessfulFetchResult<T> | NotFoundFetchResult | ErrorFetchResult
+export type FetchResult<T> = SuccessfulFetchResult<T> | NotFoundFetchResult | ForbiddenFetchResult | ErrorFetchResult
 export const fetchResult = async <T>(
     url: string,
     config?: AxiosRequestConfig,
@@ -42,6 +46,12 @@ export const fetchResult = async <T>(
                 return {
                     ok: false,
                     status: "notFound",
+                }
+            }
+            if (response.status === 403) {
+                return {
+                    ok: false,
+                    status: "forbidden",
                 }
             }
             return {

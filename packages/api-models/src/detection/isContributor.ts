@@ -1,4 +1,11 @@
-import { invalidate, isEmailAddress, isNormalizedText, isNullOr, ValidationFaultCollector } from "@phylopic/utils"
+import {
+    invalidate,
+    isEmailAddress,
+    isNonnegativeInteger,
+    isNormalizedText,
+    isNullOr,
+    ValidationFaultCollector,
+} from "@phylopic/utils"
 import { type Contributor } from "../types/Contributor"
 import { isEntity } from "./isEntity"
 import { isLink } from "./isLink"
@@ -13,4 +20,5 @@ const isContributorLinks = (x: unknown, faultCollector?: ValidationFaultCollecto
     isLink(isNormalizedText)((x as Contributor["_links"]).images, faultCollector?.sub("images"))
 export const isContributor = (x: unknown, faultCollector?: ValidationFaultCollector): x is Contributor =>
     isEntity(x, isContributorLinks, faultCollector) &&
+    isNonnegativeInteger((x as Contributor).count, faultCollector?.sub("count")) &&
     isNormalizedText((x as Contributor).name, faultCollector?.sub("name"))

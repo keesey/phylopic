@@ -3,6 +3,7 @@ import { URL } from "@phylopic/utils"
 import axios from "axios"
 import { Dispatch, SetStateAction, startTransition } from "react"
 import { type Fetcher } from "swr"
+import { DEFAULT_API_HEADERS } from "../fetch/DEFAULT_API_HEADERS"
 import { APISWRError } from "./APISWRError"
 export const createAPIFetcher =
     <T extends Readonly<{ build: number }>>(
@@ -11,7 +12,10 @@ export const createAPIFetcher =
     ): Fetcher<T, URL> =>
     async key => {
         try {
-            const response = await axios.get<T>(key, { responseType: "json" })
+            const response = await axios.get<T>(key, {
+                headers: DEFAULT_API_HEADERS,
+                responseType: "json",
+            })
             const dataBuild = response.data?.build
             if (typeof dataBuild === "number" && (typeof build !== "number" || isNaN(build) || dataBuild > build)) {
                 build = dataBuild

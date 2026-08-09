@@ -19,6 +19,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.6] - 2026-08-09
+
+### Added
+
+- `AuthorizedNamespaces`, `Licenses` types and `isAuthorizedNamespaces`, `isErrorResponse` validators.
+
+### Changed
+
+- Aligned `Node` link types and validators with the API and OpenAPI spec.
+
+### Deprecated
+
+- `Image._links["twitter:image"]` in favor of `http://ogp.me/ns#image`.
+
+### Removed
+
+- Unused `ErrorResponse.stack` property.
+
 ## [1.3.5] - 2026-07-22
 
 ### Changed

@@ -40,8 +40,8 @@ components:
       schema:
         type: string
     Content-Type:
-      description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json; charset=utf8`.
-      example: application/vnd.phylopic.v2+json; charset=utf8
+      description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json; charset=utf-8`.
+      example: application/vnd.phylopic.v2+json; charset=utf-8
       schema:
         format: mimetype
         type: string
@@ -744,6 +744,11 @@ components:
                   description: A list of links to raster thumbnail image files (PNG format) of various square sizes.
                   items:
                     $ref: "#/components/schemas/MediaLink"
+                "twitter:image":
+                  deprecated: true
+                  allOf:
+                    - $ref: "#/components/schemas/MediaLink"
+                    - description: Deprecated alias for `http://ogp.me/ns#image`. Use that link instead.
                 vectorFile:
                   allOf:
                     - $ref: "#/components/schemas/MediaLink"
@@ -872,7 +877,7 @@ components:
                       - $ref: "#/components/schemas/TitledLink"
                 cladeImages:
                   allOf:
-                    - $ref: "#/components/schemas/Link"
+                    - $ref: "#/components/schemas/TitledLink"
                     - description: |
                         A link to a list of all images illustrating this node or any descendant node.
 
@@ -884,7 +889,7 @@ components:
                     $ref: "#/components/schemas/TitledLink"
                 images:
                   allOf:
-                    - $ref: "#/components/schemas/TitledLink"
+                    - $ref: "#/components/schemas/Link"
                     - description: A link to a list of all images illustrating this node.
                 lineage:
                   allOf:

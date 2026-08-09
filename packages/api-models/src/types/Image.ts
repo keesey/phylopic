@@ -14,7 +14,7 @@ export interface ImageLinks extends Links<TitledLink> {
     readonly sourceFile: MediaLink<URL>
     readonly specificNode: TitledLink
     readonly thumbnailFiles: readonly MediaLink<URL, RasterMediaType>[]
-    // :TODO: Remove this line
+    /** @deprecated Use `http://ogp.me/ns#image` instead. */
     readonly "twitter:image"?: MediaLink<URL, RasterMediaType>
     readonly vectorFile: MediaLink<URL, VectorMediaType>
 }
