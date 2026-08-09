@@ -1,31 +1,30 @@
 import { UUID } from "@phylopic/utils"
 import { ClientBase } from "pg"
-import BUILD from "../build/BUILD"
-import APIError from "../errors/APIError"
+import ENTITY_JSON_SOURCE from "./ENTITY_JSON_SOURCE"
 import { TableName } from "./TableName"
+import selectEntityJSONFromPostgres from "./selectEntityJSONFromPostgres"
+import selectEntityJSONFromS3 from "./selectEntityJSONFromS3"
 const selectEntityJSON = async (
     client: ClientBase,
     tableName: TableName,
     uuid: UUID,
     userMessage = "There was an error retrieving data.",
 ): Promise<string> => {
-    try {
-        const result = await client.query<{ json: string }>({
-            text: `SELECT json FROM ${tableName} WHERE build=$1::bigint AND uuid=$2::uuid LIMIT 1`,
-            values: [BUILD, uuid],
-        })
-        if (result.rows.length === 1) {
-            return result.rows[0].json
-        }
-        return "null"
-    } catch (e) {
-        throw new APIError(500, [
-            {
-                developerMessage: `Error retrieving entity (UUID: ${uuid}) from table "${tableName}": ${e}`,
-                type: "DEFAULT_5XX",
-                userMessage,
-            },
-        ])
+    if (ENTITY_JSON_SOURCE === "postgres") {
+        return selectEntityJSONFromPostgres(client, tableName, uuid, userMessage)
     }
+    if (ENTITY_JSON_SOURCE === "s3") {
+        const json = await selectEntityJSONFromS3(tableName, uuid)
+        return json ?? "null"
+    }
+    try {
+        const json = await selectEntityJSONFromS3(tableName, uuid)
+        if (json !== null) {
+            return json
+        }
+    } catch (e) {
+        console.warn(`S3 entity read failed for ${tableName}/${uuid}, falling back to Postgres.`, e)
+    }
+    return selectEntityJSONFromPostgres(client, tableName, uuid, userMessage)
 }
 export default selectEntityJSON

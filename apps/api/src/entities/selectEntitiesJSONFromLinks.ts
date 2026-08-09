@@ -3,7 +3,9 @@ import { isDefined, UUID } from "@phylopic/utils"
 import { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
+import ENTITY_JSON_SOURCE from "./ENTITY_JSON_SOURCE"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
+import selectEntityJSON from "./selectEntityJSON"
 const selectEntitiesJSONFromLinks = async (client: ClientBase, links: readonly Link[]): Promise<string> => {
     if (!links.length) {
         return "[]"
@@ -18,6 +20,10 @@ const selectEntitiesJSONFromLinks = async (client: ClientBase, links: readonly L
         throw new Error("All links must have the same entity type.")
     }
     const uuids = tablesAndUUIDs.map(([, uuid]) => uuid)
+    if (ENTITY_JSON_SOURCE !== "postgres") {
+        const jsonList = await Promise.all(uuids.map(uuid => selectEntityJSON(client, table, uuid)))
+        return `[${jsonList.join(",")}]`
+    }
     const builder = new QueryConfigBuilder(`SELECT json,uuid FROM ${table} WHERE build=$::bigint AND (`, [BUILD])
     uuids.forEach((uuid, index) => {
         if (index > 0) {

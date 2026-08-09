@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.6] - 2026-08-08
+
+### Added
+
+- `deletePrefix` for deleting all objects under an S3 key prefix (used for entity build cleanup).
+- `putJSONString` for uploading a pre-serialized JSON string to S3 (same bytes as stored in Postgres).
+
 ## [1.0.5] - 2026-07-22
 
 ### Changed

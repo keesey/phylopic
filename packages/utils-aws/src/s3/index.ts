@@ -1,5 +1,7 @@
 export * from "./convertS3BodyToBuffer"
 export * from "./convertS3BodyToString"
+export * from "./deletePrefix"
 export * from "./getJSON"
 export * from "./objectExists"
 export * from "./putJSON"
+export * from "./putJSONString"

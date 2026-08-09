@@ -16,6 +16,10 @@ Documentation for the public API, statically hosted on [Amazon S3](./S3.md#api-d
 
 Contribution website, hosted by Vercel.
 
+## `entities.phylopic.org`
+
+Precomputed entity JSON for the public API, served from [Amazon S3](./S3.md#entitiesphylopicorg). Written during publish builds alongside the `phylopic-entities` database.
+
 ## `images.phylopic.org`
 
 Image files for the main website, served from [Amazon S3](./S3.md#imagesphylopicorg) and delivered via Amazon Cloudfront.

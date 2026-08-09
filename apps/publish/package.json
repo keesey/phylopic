@@ -48,8 +48,9 @@
         "sync": "yarn sync:images",
         "sync:images": "aws s3 sync --acl public-read --delete ./.s3/images.phylopic.org s3://images.phylopic.org/",
         "upload": "yarn upload:images",
-        "upload:images": "aws s3 sync --acl public-read ./.s3/images.phylopic.org s3://images.phylopic.org/"
+        "upload:images": "aws s3 sync --acl public-read ./.s3/images.phylopic.org s3://images.phylopic.org/",
+        "verify:entities": "node --loader ts-node/esm ./src/verifyEntitiesS3.ts"
     },
     "type": "module",
-    "version": "1.11.3"
+    "version": "1.12.0"
 }

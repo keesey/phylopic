@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.9.0] - 2026-08-08
+
+### Changed
+
+- Single-entity JSON reads (`GET /contributors/{uuid}`, `/images/{uuid}`, `/nodes/{uuid}`, and embeds) now load from S3 (`entities.phylopic.org`) when `ENTITY_JSON_SOURCE` is `s3` or `s3-fallback`. (List, search, resolve, and collection endpoints still use Postgres.)
+
 ## [2.8.1] - 2026-08-08
 
 ### Changed
