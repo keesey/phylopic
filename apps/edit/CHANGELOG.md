@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.9.9] - 2026-08-09
+
+### Security
+
+- Global security headers (`Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Strict-Transport-Security`, and others) on all routes.
+
 ## [1.9.8] - 2026-08-09
 
 ### Changed

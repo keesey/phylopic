@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.3] - 2026-08-09
+
+### Security
+
+- Magic-link sender is rate-limited per IP and email address; over-limit requests still return `204` without sending mail.
+- Magic links are single-use: redeeming a link deletes the stored auth token.
+- Auth token writes and verification use `verifyJWT` from `@phylopic/source-models` instead of decode-only checks.
+
 ## [2.4.2] - 2026-08-09
 
 ### Changed

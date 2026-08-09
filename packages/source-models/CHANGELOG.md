@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.2] - 2026-08-09
+
+### Added
+
+- `decodeJWT`, `verifyJWT`, and JWT issuer/audience constants for signed contributor tokens.
+
+### Changed
+
+- `isJWT` now checks token structure only; signature verification belongs in `verifyJWT`.
+
 ## [1.1.1] - 2026-07-22
 
 ### Changed

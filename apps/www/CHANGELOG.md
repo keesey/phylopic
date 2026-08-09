@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.10] - 2026-08-09
+
+### Changed
+
+- No longer generating static paths for Node Pages fromn Quick Links.
+
+### Security
+
+- Global security headers (`Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Strict-Transport-Security`, and others) on all routes.
+
 ## [2.14.9] - 2026-08-09
 
 ### Changed

@@ -1,4 +1,4 @@
-import decodeJWT from "./decodeJWT"
+import { decodeJWT } from "@phylopic/source-models"
 const isJWTExpired = (token: string | null, now = NaN) => {
     if (!token) {
         return false

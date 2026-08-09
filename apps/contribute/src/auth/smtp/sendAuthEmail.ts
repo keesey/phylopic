@@ -1,7 +1,6 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses"
-import { JWT } from "@phylopic/source-models"
+import { JWT, decodeJWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4 } from "@phylopic/utils"
-import decodeJWT from "../jwt/decodeJWT"
 const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
     if (!isEmailAddress(email)) {
         throw new Error("Tried to use an invalid email address.")

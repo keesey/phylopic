@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.9] - 2026-08-09
+
+### Added
+
+- Shared `securityHeaders` module for Next.js `headers()` configuration.
+
 ## [1.7.8] - 2026-08-09
 
 ### Changed

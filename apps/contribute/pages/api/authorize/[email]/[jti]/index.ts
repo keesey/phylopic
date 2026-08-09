@@ -1,9 +1,9 @@
 import { handleAPIError } from "@phylopic/source-client"
-import { INCOMPLETE_STRING, JWT } from "@phylopic/source-models"
+import { INCOMPLETE_STRING, JWT, verifyJWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
-import decodeJWT from "~/auth/jwt/decodeJWT"
 import SourceClient from "~/source/SourceClient"
+
 const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, emailAddress: EmailAddress) => {
     const contributor = client.contributor(uuid)
     const existing = (await contributor.exists()) ? await contributor.get() : null
@@ -35,23 +35,26 @@ const index: NextApiHandler<JWT> = async (req, res) => {
                 console.warn(faultCollector.list())
                 throw 404
             }
+            const secret = process.env.AUTH_SECRET_KEY
+            if (!secret) {
+                throw 500
+            }
             client = new SourceClient()
-            let token: JWT | undefined
-            let expires: Date | null
             const authTokenClient = client.authToken(email)
             if (!(await authTokenClient.exists())) {
                 throw 404
             }
-            token = await authTokenClient.get()
-            const payload = decodeJWT(token)
+            const token = await authTokenClient.get()
+            const payload = verifyJWT(token, secret)
             if (payload?.jti !== jti || !isUUIDv4(payload.sub)) {
                 throw 404
             }
             if (typeof payload.exp !== "number" || payload.exp * 1000 <= now.valueOf()) {
                 throw 410
             }
-            expires = new Date(payload.exp * 1000)
+            const expires = new Date(payload.exp * 1000)
             await updateContributorEmailAddress(client, payload.sub, email)
+            await authTokenClient.delete()
             res.setHeader("expires", expires.toString())
             res.setHeader("content-type", "application/jwt")
             res.status(200)

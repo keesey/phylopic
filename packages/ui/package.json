@@ -28,10 +28,18 @@
         "typescript": "^5.4.5"
     },
     "exports": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.cjs",
-        "default": "./dist/index.js"
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js",
+            "default": "./dist/index.js"
+        },
+        "./securityHeaders": {
+            "types": "./dist/securityHeaders.d.ts",
+            "import": "./dist/securityHeaders.mjs",
+            "require": "./dist/securityHeaders.js",
+            "default": "./dist/securityHeaders.js"
+        }
     },
     "files": [
         "dist/**"
@@ -75,7 +83,8 @@
         "clean": true,
         "dts": true,
         "entry": [
-            "src/index.ts"
+            "src/index.ts",
+            "src/securityHeaders.ts"
         ],
         "external": [
             "@phylopic/api-models",
@@ -108,5 +117,5 @@
         "target": "ESNext"
     },
     "types": "./dist/index.d.ts",
-    "version": "1.7.8"
+    "version": "1.7.9"
 }
