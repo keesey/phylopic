@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.9.2] - 2026-08-09
+
+### Fixed
+
+- Restored Postgres connection pooling in `dynamic`.
+
 ## [2.9.1] - 2026-08-08
 
 ### Changed

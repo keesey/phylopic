@@ -43,5 +43,5 @@
         "dev": "sls offline --httpPort 3003 --lambdaPort 3103 && rm -rf .serverless",
         "lint": "eslint --fix ./**/*.[jt]s"
     },
-    "version": "2.9.1"
+    "version": "2.9.2"
 }
