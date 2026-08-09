@@ -4,26 +4,6 @@ provider:
     architecture: arm64
     httpApi:
         payload: "1.0"
-        cors:
-            allowedOrigins:
-                - "*"
-            allowedHeaders:
-                - Accept
-                - Authorization
-                - Content-Type
-                - Deprecation
-                - Link
-                - X-Amz-Date
-                - X-Amz-Security-Token
-                - X-Amz-User-Agent
-                - X-Api-Key
-            allowedMethods:
-                - GET
-                - HEAD
-                - POST
-                - OPTIONS
-            allowCredentials: false
-            maxAge: 7200
         authorizers:
             auth:
                 type: request

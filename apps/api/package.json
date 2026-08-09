@@ -49,5 +49,5 @@
         "invalidate-cache": "node ./scripts/invalidate-cloudfront-cache.mjs",
         "lint": "eslint --fix ./**/*.[jt]s"
     },
-    "version": "2.9.4"
+    "version": "2.9.5"
 }
