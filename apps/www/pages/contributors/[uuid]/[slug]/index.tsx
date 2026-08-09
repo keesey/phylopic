@@ -3,7 +3,7 @@ import { ContributorContainer, Loader } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
-import type { GetStaticProps, NextPage } from "next"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import { FC, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
@@ -105,7 +105,12 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
         </>
     )
 }
-export const getStaticPaths = createStaticPathsGetter("/contributors")
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        fallback: "blocking",
+        paths: [],
+    }
+}
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

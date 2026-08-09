@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.12] - 2026-08-09
+
+### Changed
+
+- No longer generating static paths for Contributor or Image Pages.
+
 ## [2.14.11] - 2026-08-09
 
 ### Fixed
