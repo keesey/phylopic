@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.1] - 2026-08-09
+
+### Changed
+
+- `phylopic-contribute` policy: grant `s3:DeleteObject` on `auth.phylopic.org/emails/*` so single-use magic-link redemption can remove the stored token after `S3Deletor.delete()` copies it to `trash/emails/*`.
+- `README.md`: document auth-token delete on the `[jti]` redeem route; update verification steps to confirm a link works once and fails on reuse.
+
+### Security
+
+- Closes the gap where single-use magic links could not actually consume tokens under the scoped contribute principal.
+
 ## [1.0.0] - 2026-08-08
 
 ### Added

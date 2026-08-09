@@ -10,7 +10,7 @@
         {
             "Sid": "AuthTokenWrite",
             "Effect": "Allow",
-            "Action": "s3:PutObject",
+            "Action": ["s3:PutObject", "s3:DeleteObject"],
             "Resource": ["arn:aws:s3:::auth.phylopic.org/emails/*", "arn:aws:s3:::auth.phylopic.org/trash/emails/*"]
         },
         {

@@ -37,14 +37,14 @@ the thing this exercise exists to remove.
 
 `Client.authToken()` reads and writes `emails/{email}/token.jwt` through `S3Editor`.
 `apps/contribute/pages/api/authorize/[email]/index.ts` calls `exists()`, `get()`, and `put()`;
-the `[jti]` route calls `exists()` and `get()`.
+the `[jti]` route calls `exists()`, `get()`, and `delete()` after a successful redemption.
 
 `S3Editor.put` is exists-then-copy-then-put, so a write touches two prefixes: it copies the
-current object to `trash/emails/...` before overwriting. Hence `PutObject` on both `emails/*`
-and `trash/emails/*`, but `GetObject` only on `emails/*` — nothing ever reads out of the trash,
-because no route calls `restore()`.
+current object to `trash/emails/...` before overwriting. `S3Deletor.delete()` (used on redeem)
+does the same copy-then-delete. Hence `PutObject` on both `emails/*` and `trash/emails/*`,
+`DeleteObject` on `emails/*`, and `GetObject` only on `emails/*` — nothing ever reads out of
+the trash, because no route calls `restore()`.
 
-No `DeleteObject`: redeeming a magic link does not consume the token (see **M4** in the audit).
 No `ListBucket`: `Client.authEmails` has no callers.
 
 ### `uploads.phylopic.org` — submissions
@@ -156,7 +156,7 @@ Then exercise each path for real, because of the silent-failure mode described a
 | Principal             | Exercise                                                                                                                                   |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `phylopic-ses-sender` | Request a magic link; confirm the mail arrives                                                                                             |
-| `phylopic-contribute` | Redeem the link, list your submissions, patch one, delete one, and view an unpublished thumbnail (this presigns)                           |
+| `phylopic-contribute` | Request a magic link, redeem it (token should be consumed), request another link, list your submissions, patch one, delete one, and view an unpublished thumbnail (this presigns) |
 | `phylopic-www`        | Create a collection permalink, then load it                                                                                                |
 | `phylopic-editorial`  | In `edit`, accept a submission (cross-bucket copy) and delete an image file; run `yarn make` in `publish` far enough to list source images |
 
