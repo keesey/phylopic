@@ -106,13 +106,31 @@ Create `apps/api/.env` with the CloudFront distribution ID (same value as in `ap
 API_CLOUDFRONT_DISTRIBUTION_ID=E1234567890ABC
 ```
 
-Deploy runs `sls deploy`, then invalidates `/*` on that distribution. Without invalidation, CloudFront can keep serving cached API responses for up to a year (`immutable` cache on build-scoped routes like `GET /?build=547`), including stale version metadata and preflight (`OPTIONS`) answers.
+Deploy runs `yarn build:docs`, then publishes the API (`sls deploy`) and documentation (`aws s3 sync`) in parallel. After the API deploy finishes, it invalidates `/*` on the API CloudFront distribution. Without invalidation, CloudFront can keep serving cached API responses for up to a year (`immutable` cache on build-scoped routes like `GET /?build=547`), including stale version metadata and preflight (`OPTIONS`) answers.
 
-To invalidate without redeploying:
+To deploy documentation only:
+
+```sh
+yarn deploy:docs
+```
+
+To invalidate the API cache without redeploying:
 
 ```sh
 yarn invalidate-cache
 ```
+
+## API documentation
+
+OpenAPI documentation for this API lives in [`docs/`](./docs/). Source files use a `__VERSION__` placeholder that [`scripts/build-docs.mjs`](./scripts/build-docs.mjs) replaces with the `version` field from [`package.json`](./package.json) when building into `docs/dist/`. That version appears in the docs page title, the OpenAPI spec, and the cache-busting query parameter on the spec URL.
+
+To validate the OpenAPI spec:
+
+```sh
+yarn test
+```
+
+Documentation is hosted at [http://api-docs.phylopic.org](http://api-docs.phylopic.org). Publishing requires AWS credentials with write access to the `api-docs.phylopic.org` S3 bucket (including `s3:PutObjectAcl` for `--acl public-read` and `s3:DeleteObject` for `--delete`).
 
 ## Logging
 

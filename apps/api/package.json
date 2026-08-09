@@ -28,6 +28,7 @@
         "dotenv": "^16.4.5",
         "eslint-config-phylopic": "*",
         "fork-ts-checker-webpack-plugin": "^9.1.0",
+        "swagger-cli": "^4.0.4",
         "serverless": "^4.40.0",
         "serverless-offline": "^14.7.4",
         "ts-loader": "^9.6.2",
@@ -43,11 +44,15 @@
     },
     "private": true,
     "scripts": {
-        "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf node_modules",
-        "deploy": "sls deploy && node ./scripts/invalidate-cloudfront-cache.mjs && rm -rf .serverless",
+        "build:docs": "node ./scripts/build-docs.mjs",
+        "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf docs/dist && rm -rf node_modules",
+        "deploy": "yarn build:docs && node ./scripts/deploy.mjs",
+        "deploy:docs": "yarn build:docs && aws s3 sync --acl public-read --delete ./docs/dist s3://api-docs.phylopic.org",
         "dev": "sls offline --httpPort 3003 --lambdaPort 3103 && rm -rf .serverless",
         "invalidate-cache": "node ./scripts/invalidate-cloudfront-cache.mjs",
-        "lint": "eslint --fix ./**/*.[jt]s"
+        "lint": "eslint --fix ./**/*.[jt]s",
+        "predeploy": "yarn test",
+        "test": "yarn build:docs && swagger-cli validate ./docs/dist/v2/openapi.yaml"
     },
-    "version": "2.9.5"
+    "version": "2.10.0"
 }

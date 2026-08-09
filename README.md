@@ -10,8 +10,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 
 | Project Path                    | Description                                                                                          |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [api](./apps/api)               | Serverless API for accessing _PhyloPic_ data                                                         |
-| [api-docs](./apps/api-docs)     | Documentation for the _PhyloPic_ API                                                                 |
+| [api](./apps/api)               | Serverless API for accessing _PhyloPic_ data (includes API documentation)                            |
 | [contribute](./apps/contribute) | Public webapp for contributing silhouette images                                                     |
 | [edit](./apps/edit)             | Private webapp (run locally) for managing _PhyloPic_, including contribution review and data editing |
 | [publish](./apps/publish)       | Code for administrating _PhyloPic_, including publishing releases and managing source files          |
@@ -117,7 +116,7 @@ Each subproject (app or package) has its own [semantic versioning](https://semve
 - Commit the changes.
 - Tag the commit with `@phylopic/[subproject]/v[M].[m].[p]`, where `[subproject]` is the name of the project (for example, `www`) and `[M]`, `[m]`, and `[p]` are integers denoting the major version, minor version, and patch version, respectively. Example: `@phylopic/www/v2.6.12`. Push the tag to `origin`.
 - For apps, publish the new version:
-    - For `api` or `api-docs`, run `yarn deploy`.
+    - For `api`, run `yarn deploy` (publishes the API and its documentation).
     - For `contribute`, reset the `@phylopic/contribute/prod` branch to the release's commit and push to `origin`. Deployment can be monitored in Vercel.
     - For `www`, reset the `@phylopic/www/prod` branch to the release's commit and push to `origin`. Deployment can be monitored in Vercel.
     - No action is necessary for `edit` or `publish`, which are only run locally.

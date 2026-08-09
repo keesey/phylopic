@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.10.0] - 2026-08-09
+
+### Changed
+
+- Folded `apps/api-docs` into this project. API documentation lives under `docs/` and is built from `package.json` version before deploy.
+- `yarn deploy` now publishes the API and documentation in parallel.
+
+### Removed
+
+- Separate `apps/api-docs` workspace (documentation is now part of `apps/api`).
+
 ## [2.9.5] - 2026-08-09
 
 ### Fixed
