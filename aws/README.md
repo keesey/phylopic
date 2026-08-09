@@ -4,7 +4,7 @@ Least-privilege IAM users for the applications that authenticate to AWS with sta
 keys, replacing the single `Administrator` credential that every one of them shared.
 
 That shared credential was a member of the `Administrators` group, so it carried
-`AdministratorAccess` — unrestricted control of the account — and copies of it lived in five
+`AdministratorAccess` — unrestricted control of the account — and copies of it lived in local
 `.env` files and in the environment variables of two Vercel projects. Rotating it (2026-08-08)
 invalidated the old key but changed nothing about its scope: the replacement is just as
 privileged. These policies are what actually reduces the blast radius.
@@ -110,10 +110,7 @@ why verification below is functional rather than a matter of watching for except
 The old credential keeps working throughout, so this can go one app at a time with no downtime.
 
 1. **Create the users and policies:** `./create-principals.sh`.
-2. **Delete `apps/games/.env.local`.** That app has no `package.json`, no code, and no
-   reference to `process.env` anywhere — its three S3 variables are dead. This is the one step
-   with no risk at all.
-3. **Roll out in increasing order of blast radius,** creating each user's key immediately
+2. **Roll out in increasing order of blast radius,** creating each user's key immediately
    before you use it:
 
     ```sh
@@ -131,9 +128,9 @@ The old credential keeps working throughout, so this can go one app at a time wi
     3. `phylopic-contribute` and `phylopic-ses-sender` → Vercel (`phylopic-contribute`, all
        targets) and `apps/contribute/.env.local`. Most moving parts, so go last.
 
-4. **Redeploy each Vercel project after changing its variables.** Values are injected at build
+3. **Redeploy each Vercel project after changing its variables.** Values are injected at build
    time; an existing deployment keeps the old ones until rebuilt.
-5. **Verify** (below), then remove the `Administrator` key from any remaining environment.
+4. **Verify** (below), then remove the `Administrator` key from any remaining environment.
 
 Set the Vercel variables on **every** target that project deploys — Production, Preview, and
 Development are separate stores, and a stale Preview value leaves live preview URLs holding
