@@ -1,14 +1,14 @@
 interface SecurityHeader {
-    key: string
-    value: string
+    readonly key: string
+    readonly value: string
 }
 
 interface SecurityHeaderRoute {
-    source: string
-    headers: SecurityHeader[]
+    readonly source: string
+    readonly headers: readonly SecurityHeader[]
 }
 
-const BASE_SECURITY_HEADERS: SecurityHeader[] = [
+const BASE_SECURITY_HEADERS: readonly SecurityHeader[] = [
     { key: "X-Content-Type-Options", value: "nosniff" },
     { key: "X-Frame-Options", value: "SAMEORIGIN" },
     { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -30,9 +30,9 @@ const BASE_SECURITY_HEADERS: SecurityHeader[] = [
     { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ]
 
-export const createSecurityHeaderRoutes = (): SecurityHeaderRoute[] => [
+export const createSecurityHeaderRoutes = (): readonly SecurityHeaderRoute[] => [
     {
         source: "/:path*",
-        headers: BASE_SECURITY_HEADERS,
+        headers: [...BASE_SECURITY_HEADERS],
     },
 ]
