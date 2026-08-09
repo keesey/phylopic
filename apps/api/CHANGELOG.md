@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Folded `apps/api-docs` into this project. API documentation lives under `docs/` and is built from `package.json` version before deploy.
 - `yarn deploy` now publishes the API and documentation in parallel.
+- Corrected OpenAPI documentation to match the API implementation (`GET /namespaces` response shape, Node links, lineage parameters, resolve/upload responses, and error schema).
 
 ### Removed
 

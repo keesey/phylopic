@@ -464,6 +464,15 @@ components:
         application/vnd.phylopic.v2+json:
           schema:
             $ref: "#/components/schemas/Errors"
+    "403":
+      description: The request is not allowed.
+      headers:
+        Content-Type:
+          $ref: "#/components/headers/Content-Type"
+      content:
+        application/vnd.phylopic.v2+json:
+          schema:
+            $ref: "#/components/schemas/Errors"
     "404":
       description: The resource cannot be found.
       headers:
@@ -536,7 +545,7 @@ components:
                       nullable: true
                 images:
                   allOf:
-                    - $ref: "#/components/schemas/TitledLink"
+                    - $ref: "#/components/schemas/Link"
                     - description: A link to a list of all images uploaded by this user.
                 self:
                   $ref: "#/components/schemas/TitledLink"
@@ -546,6 +555,27 @@ components:
             name:
               type: string
               description: This user's full name, or alias.
+    AuthorizedNamespace:
+      type: object
+      required:
+        - authority
+        - namespace
+      properties:
+        authority:
+          type: string
+        namespace:
+          type: string
+    AuthorizedNamespaces:
+      allOf:
+        - $ref: "#/components/schemas/Data"
+        - type: object
+          required:
+            - namespaces
+          properties:
+            namespaces:
+              type: array
+              items:
+                $ref: "#/components/schemas/AuthorizedNamespace"
     Data:
       description: Any object corresponding to a data build.
       required:
@@ -584,11 +614,15 @@ components:
               type: string
               example: 123e4567-e89b-12d3-a456-426655440000
     Errors:
-      description: List of errors.
+      description: Error response for a data build.
       type: object
       required:
+        - build
         - errors
       properties:
+        build:
+          description: Index number of the current data build.
+          type: integer
         errors:
           type: array
           items:
@@ -821,7 +855,6 @@ components:
               required:
                 - childNodes
                 - cladeImages
-                - contributor
                 - external
                 - images
                 - lineage
@@ -844,10 +877,6 @@ components:
                         A link to a list of all images illustrating this node or any descendant node.
 
                         (For unillustrated nodes, this will be the same as the `cladeImages` link of a descendant node.)
-                contributor:
-                  allOf:
-                    - $ref: "#/components/schemas/TitledLink"
-                    - description: A link to data about the user who uploaded the image.
                 external:
                   type: array
                   description: Links to the same node under other domains (for example, *Encyclopedia of Life*).
@@ -1446,24 +1475,14 @@ paths:
         - $ref: "#/components/parameters/build"
       responses:
         "200":
-          description: List of objects storing information for an authorized namespace.
+          description: Authorized namespaces for the current build.
           headers:
             Content-Type:
               $ref: "#/components/headers/Content-Type"
           content:
             application/vnd.phylopic.v2+json:
               schema:
-                type: array
-                items:
-                  type: object
-                  required:
-                    - authority
-                    - namespace
-                  properties:
-                    authority:
-                      type: string
-                    namespace:
-                      type: string
+                $ref: "#/components/schemas/AuthorizedNamespaces"
         "307":
           $ref: "#/components/responses/307"
         "400":
@@ -1567,7 +1586,6 @@ paths:
         - $ref: "#/components/parameters/embed_childNodes"
         - $ref: "#/components/parameters/embed_primaryImage"
         - $ref: "#/components/parameters/embed_parentNode"
-        - $ref: "#/components/parameters/filter_name"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/uuid"
       responses:
@@ -1639,8 +1657,6 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
-        "415":
-          $ref: "#/components/responses/415"
     post:
       deprecated: true
       operationId: postResolveObjects
@@ -1697,6 +1713,15 @@ paths:
         - $ref: "#/components/parameters/namespace"
         - $ref: "#/components/parameters/objectid"
       responses:
+        "307":
+          description: The node was found, but the request did not specify the current `build` value.
+          headers:
+            Location:
+              $ref: "#/components/headers/Location"
+          content:
+            application/vnd.phylopic.v2+json:
+              schema:
+                $ref: "#/components/schemas/TitledLink"
         "308":
           description: The node was found.
           headers:
@@ -1740,11 +1765,12 @@ paths:
       security:
         - bearerAuth: []
       summary: Uploads a file
-      description: On success, redirects to a location where the file can be downloaded from.
+      description: On success, returns a link to the uploaded file.
       tags:
         - images
         - uploads
       parameters:
+        - $ref: "#/components/parameters/Accept"
         - $ref: "#/components/parameters/Content-Type-image"
       requestBody:
         description: File to upload.
@@ -1782,6 +1808,10 @@ paths:
                 $ref: "#/components/schemas/Link"
         "401":
           $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "406":
+          $ref: "#/components/responses/406"
         "413":
           $ref: "#/components/responses/413"
         "415":
