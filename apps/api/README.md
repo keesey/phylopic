@@ -100,6 +100,15 @@ To deploy to `api.phylopic.org` (if you have [AWS Command Line Interface](https:
 yarn deploy
 ```
 
+## Logging
+
+All Lambda functions write to CloudWatch log groups named `/aws/lambda/phylopic-api-prod-*`.
+[`serverless.yml`](./serverless.yml) configures:
+
+- **14-day retention** — older log events are deleted automatically.
+- **JSON log format** with **`systemLogLevel: WARN`** — suppresses per-request `START`, `END`, and `REPORT` lines on successful invocations.
+- **`applicationLogLevel: WARN`** — keeps `console.warn` and `console.error`; drops lower-severity application output.
+
 ## Authors
 
 - **T. Michael Keesey** - [keesey](https://github.com/keesey)

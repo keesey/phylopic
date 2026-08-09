@@ -27,6 +27,12 @@ provider:
                 resultTtlInSeconds: 0
     iam:
         role: arn:aws:iam::960039257217:role/phylopic-api-executor
+    logRetentionInDays: 14
+    logs:
+        lambda:
+            applicationLogLevel: WARN
+            logFormat: JSON
+            systemLogLevel: WARN
     name: aws
     runtime: nodejs22.x
     region: us-west-2

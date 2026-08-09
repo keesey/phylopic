@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.9.1] - 2026-08-08
+
+### Changed
+
+- CloudWatch log groups for all Lambda functions now retain logs for 14 days (`logRetentionInDays` in `serverless.yml`).
+- Lambda platform `START` / `END` / `REPORT` lines are suppressed on successful invocations (`systemLogLevel: WARN`); application warnings and errors still log.
+
 ## [2.9.0] - 2026-08-08
 
 ### Changed
