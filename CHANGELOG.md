@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.22] - 2026-08-09
+
+### Changed
+
+- Upgraded to Node.js 24.
+
 ## [2.0.21] - 2026-07-22
 
 ### Changed

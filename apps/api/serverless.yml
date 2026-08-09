@@ -41,7 +41,7 @@ provider:
             logFormat: JSON
             systemLogLevel: WARN
     name: aws
-    runtime: nodejs22.x
+    runtime: nodejs24.x
     region: us-west-2
     stage: prod
     versionFunctions: false

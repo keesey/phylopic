@@ -32,6 +32,9 @@
         "swr": "^2.4.2"
     },
     "description": "Image contribution application for *PhyloPic*.",
+    "engines": {
+        "node": "24.x"
+    },
     "devDependencies": {
         "@phylopic/tsconfig": "*",
         "@types/jsonwebtoken": "^9.0.10",
@@ -70,5 +73,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.4.0"
+    "version": "2.4.1"
 }

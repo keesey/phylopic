@@ -8,6 +8,9 @@
     },
     "dependencies": {},
     "description": "An open database of freely reusable silhouettes of life forms.",
+    "engines": {
+        "node": ">=24"
+    },
     "devDependencies": {
         "@changesets/cli": "^2.31.1",
         "eslint": "^8.57.0",
@@ -31,7 +34,7 @@
         "test": "turbo run test",
         "version-packages": "changeset version"
     },
-    "version": "2.0.21",
+    "version": "2.0.22",
     "workspaces": [
         "apps/*",
         "packages/*"

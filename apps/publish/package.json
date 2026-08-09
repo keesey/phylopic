@@ -29,6 +29,9 @@
         "typescript": "^5.4.5"
     },
     "name": "@phylopic/publish",
+    "engines": {
+        "node": "24.x"
+    },
     "private": true,
     "scripts": {
         "autolink": "node --loader ts-node/esm ./src/autolink.ts",
@@ -52,5 +55,5 @@
         "verify:entities": "node --loader ts-node/esm ./src/verifyEntitiesS3.ts"
     },
     "type": "module",
-    "version": "1.12.0"
+    "version": "1.12.1"
 }

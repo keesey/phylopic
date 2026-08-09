@@ -7,6 +7,9 @@
         "url": "https://github.com/keesey/@phylopic/api-docs/issues"
     },
     "description": "Documentation for PhyloPic's Application Programming Interface",
+    "engines": {
+        "node": "24.x"
+    },
     "devDependencies": {
         "swagger-cli": "^4.0.4",
         "yarn": "^1.22.22"
@@ -32,5 +35,5 @@
         "predeploy": "yarn test",
         "test": "swagger-cli validate ./public/v2/openapi.yaml"
     },
-    "version": "2.9.3"
+    "version": "2.9.4"
 }

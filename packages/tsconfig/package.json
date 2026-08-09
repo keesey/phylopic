@@ -2,6 +2,7 @@
     "files": [
         "base.json",
         "node20.json",
+        "node24.json",
         "next.json",
         "react-lib.json"
     ],
@@ -10,5 +11,5 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.1.0"
+    "version": "1.1.1"
 }

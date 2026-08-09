@@ -23,6 +23,9 @@
         "swr": "^2.4.2"
     },
     "description": "Web application (run locally) for editing *PhyloPic* source data and image files.",
+    "engines": {
+        "node": "24.x"
+    },
     "devDependencies": {
         "@phylopic/tsconfig": "*",
         "@types/react": "^18.2.78",
@@ -44,5 +47,5 @@
         "lint": "TIMING=1 next lint",
         "unused": "next-unused"
     },
-    "version": "1.9.6"
+    "version": "1.9.7"
 }

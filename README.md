@@ -42,7 +42,7 @@ The IAM policies for the apps that authenticate to AWS with access keys are in [
 
 ## Getting started
 
-[Yarn](https://classic.yarnpkg.com/) (v1.22 or higher) is required for this monorepo project. [Node.js](https://nodejs.org/en/download/) (v20 or higher) is also required for most apps.
+[Yarn](https://classic.yarnpkg.com/) (v1.22 or higher) is required for this monorepo project. [Node.js](https://nodejs.org/en/download/) (v24 or higher) is also required for most apps.
 
 Run `yarn` from the project root to install dependencies.
 

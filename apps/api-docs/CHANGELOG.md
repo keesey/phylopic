@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.9.4] - 2026-08-09
+
+### Changed
+
+- Upgraded to Node.js 24.
+- Updated version for parity with `@phylopic/api` 2.9.4.
+
 ## [2.9.3] - 2026-08-09
 
 ### Changed
