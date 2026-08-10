@@ -6,9 +6,11 @@ import {
     ImageMediaType,
     isImageMediaType,
     isUUIDv4,
+    isVectorMediaType,
     stringifyNormalized,
     UUID,
 } from "@phylopic/utils"
+import { sanitizeSVG } from "@phylopic/utils/svg"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { createHash } from "crypto"
 import APIError from "../errors/APIError"
@@ -46,9 +48,13 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
         throw createMissingBodyError()
     }
     const contributor = getContributor(contributorUUID)
-    const hash = getHash(body)
+    let fileBody = Buffer.from(body, encoding)
+    if (isVectorMediaType(contentType)) {
+        fileBody = sanitizeSVG(fileBody)
+    }
+    const hash = getHash(fileBody)
     const key = `files/${encodeURIComponent(hash)}`
-    await uploadBody(service, key, contributor, Buffer.from(body, encoding), contentType)
+    await uploadBody(service, key, contributor, fileBody, contentType)
     const link: Link = {
         href: "https://uploads.phylopic.org/" + key,
     }
@@ -59,7 +65,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     } as APIGatewayProxyResult
 }
 export default postUpload
-const getHash = (body: string) => {
+const getHash = (body: Buffer) => {
     const hashSum = createHash("sha256")
     hashSum.update(body)
     return hashSum.digest("hex")

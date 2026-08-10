@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.0] - 2026-08-09
+
+### Added
+
+- `@phylopic/utils/svg` subpath with DOMPurify-based SVG sanitization (`sanitizeSVG`, `svgNeedsSanitization`, `isLikelySVG`).
+
 ## [1.1.2] - 2026-07-22
 
 ### Changed

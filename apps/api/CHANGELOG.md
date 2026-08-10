@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.11.0] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/utils` to `1.2.0`.
+
+### Security
+
+- SVG uploads are sanitized on ingest before storage (`POST /uploads`).
+
 ## [2.10.1] - 2026-08-09
 
 ### Changed
