@@ -43,9 +43,7 @@ const listKeys = async (client: S3Client, bucketName: string, prefix: string): P
     const rekeyedHashes: string[] = []
     let stoppedEarly = false
 
-    console.info(
-        dryRun ? "Scanning S3 buckets for SVG objects (dry run)..." : "Scanning S3 buckets for SVG objects...",
-    )
+    console.info(dryRun ? "Scanning S3 buckets for SVG objects (dry run)..." : "Scanning S3 buckets for SVG objects...")
     if (uuidPrefix) {
         console.info(`UUID prefix filter: ${uuidPrefix}`)
     }

@@ -59,10 +59,7 @@ export const createSummary = (): SanitizeSummary => ({
     updated: 0,
 })
 
-export const recordResult = (
-    summary: SanitizeSummary,
-    result: "skipped" | "unchanged" | "updated" | "conflict",
-) => {
+export const recordResult = (summary: SanitizeSummary, result: "skipped" | "unchanged" | "updated" | "conflict") => {
     summary.examined++
     if (result === "conflict") {
         summary.conflicts++

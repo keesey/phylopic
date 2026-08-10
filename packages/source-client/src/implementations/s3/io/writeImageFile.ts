@@ -1,5 +1,12 @@
 import { PutObjectCommandInput } from "@aws-sdk/client-s3"
-import { invalidate, isImageMediaType, isObject, isVectorMediaType, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
+import {
+    invalidate,
+    isImageMediaType,
+    isObject,
+    isVectorMediaType,
+    ValidationError,
+    ValidationFaultCollector,
+} from "@phylopic/utils"
 import { sanitizeSVG } from "@phylopic/utils/svg"
 import { ImageFile } from "../../../interfaces/ImageFile"
 const isBuffer = (x: unknown, collector?: ValidationFaultCollector): x is Buffer =>

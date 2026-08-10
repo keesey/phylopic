@@ -151,13 +151,7 @@ const embedListPageRows =
             rows.map(async ({ json, title, uuid }) => {
                 return [
                     { href: `/images/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
-                    await parseEntityJSONAndEmbed<Image, ImageLinks>(
-                        client,
-                        json,
-                        embeds,
-                        isImage,
-                        "silhouette image",
-                    ),
+                    await parseEntityJSONAndEmbed<Image, ImageLinks>(client, json, embeds, isImage, "silhouette image"),
                 ]
             }),
         )

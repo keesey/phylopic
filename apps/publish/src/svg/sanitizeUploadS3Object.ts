@@ -107,9 +107,7 @@ export const sanitizeUploadS3Object = async (
     const rekey: UploadRekey = { newHash, oldHash }
 
     if (await objectExists(client, target.bucketName, newKey)) {
-        const existingTags = await client.send(
-            new GetObjectTaggingCommand({ Bucket: target.bucketName, Key: newKey }),
-        )
+        const existingTags = await client.send(new GetObjectTaggingCommand({ Bucket: target.bucketName, Key: newKey }))
         const existingContributor = getContributorFromTagSet(existingTags.TagSet)
         const oldContributor = getContributorFromTagSet(tagSet)
         if (existingContributor && oldContributor && existingContributor !== oldContributor) {

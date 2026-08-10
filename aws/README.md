@@ -153,12 +153,12 @@ Also confirm the negative cases, which are the entire point — `phylopic-www` s
 
 Then exercise each path for real, because of the silent-failure mode described above:
 
-| Principal             | Exercise                                                                                                                                   |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `phylopic-ses-sender` | Request a magic link; confirm the mail arrives                                                                                             |
+| Principal             | Exercise                                                                                                                                                                          |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `phylopic-ses-sender` | Request a magic link; confirm the mail arrives                                                                                                                                    |
 | `phylopic-contribute` | Request a magic link, redeem it (token should be consumed), request another link, list your submissions, patch one, delete one, and view an unpublished thumbnail (this presigns) |
-| `phylopic-www`        | Create a collection permalink, then load it                                                                                                |
-| `phylopic-editorial`  | In `edit`, accept a submission (cross-bucket copy) and delete an image file; run `yarn make` in `publish` far enough to list source images |
+| `phylopic-www`        | Create a collection permalink, then load it                                                                                                                                       |
+| `phylopic-editorial`  | In `edit`, accept a submission (cross-bucket copy) and delete an image file; run `yarn make` in `publish` far enough to list source images                                        |
 
 ## Known gaps
 

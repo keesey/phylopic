@@ -6,10 +6,7 @@ import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import ENTITY_JSON_SOURCE from "./ENTITY_JSON_SOURCE"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 import selectEntityJSON from "./selectEntityJSON"
-const selectEntitiesJSONFromLinks = async (
-    client: ClientBase | undefined,
-    links: readonly Link[],
-): Promise<string> => {
+const selectEntitiesJSONFromLinks = async (client: ClientBase | undefined, links: readonly Link[]): Promise<string> => {
     if (!links.length) {
         return "[]"
     }
