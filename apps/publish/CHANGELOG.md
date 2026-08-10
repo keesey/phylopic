@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.12.5] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/utils/svg` to `1.2.1`.
+
 ## [1.12.4] - 2026-08-09
 
 ### Changed

@@ -55,5 +55,5 @@
         "predeploy": "yarn test",
         "test": "yarn build:docs && swagger-cli validate ./docs/dist/v2/openapi.yaml"
     },
-    "version": "2.11.0"
+    "version": "2.11.1"
 }

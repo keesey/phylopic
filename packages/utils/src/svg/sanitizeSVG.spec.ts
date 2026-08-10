@@ -25,6 +25,22 @@ describe("sanitizeSVGString", () => {
             '<svg xmlns="http://www.w3.org/2000/svg"><script type="application/json">{}</script><path d="M0 0"/></svg>'
         expect(svgNeedsSanitization(svg)).toBe(true)
     })
+
+    it("removes Adobe Illustrator PGF metadata and dangling encoded text", () => {
+        const dirty =
+            '<svg xmlns="http://www.w3.org/2000/svg"><switch></switch>\n\t\t\t\n\t\t\t\teJztfXlfGz3S4H4BfwcTAoGATUstqdVAABvb3DfhCCFgbGMcfOEjzzB/7GffqpLU3eZKZubdd5/d\n5Te/yZNWl6SqUt2qdibG9o8yuWrnppbxs146NTGx2quVB53efJpG0xvN5rA/6OHQ1OF0mrGsB0C5\n\t\t\t\n\t\t\n\t</svg>'
+        const clean = sanitizeSVGString(dirty)
+        expect(clean).not.toContain("eJztfXlf")
+        expect(svgNeedsSanitization(dirty)).toBe(true)
+    })
+
+    it("removes i:pgf blocks before purification", () => {
+        const dirty =
+            '<svg xmlns="http://www.w3.org/2000/svg"><i:pgf id="adobe_illustrator_pgf">eJztfXlfGz3S4H4BfwcTAoGATUstqdVAABvb3DfhCCFgbGMcfOEjzzB/7GffqpLU3eZKZubdd5/d</i:pgf></svg>'
+        const clean = sanitizeSVGString(dirty)
+        expect(clean).not.toContain("eJztfXlf")
+        expect(clean).not.toContain("i:pgf")
+    })
 })
 
 describe("isLikelySVG", () => {
