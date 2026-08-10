@@ -4,7 +4,7 @@ import { ClientBase } from "pg"
 import parseEntityJSON from "./parseEntityJSON"
 import selectEntityEmbeds from "./selectEntityEmbeds"
 const parseEntityJSONAndEmbed = async <TEntity extends Entity<TLinks>, TLinks extends Links>(
-    client: ClientBase,
+    client: ClientBase | undefined,
     json: string,
     embeds: ReadonlyArray<string & keyof TLinks>,
     detector: FaultDetector<TEntity>,

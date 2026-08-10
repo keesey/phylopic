@@ -19,7 +19,7 @@ import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
-import getListResult from "../pagination/getListResult"
+import getListResult, { ListPageRow } from "../pagination/getListResult"
 import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
@@ -126,28 +126,38 @@ const getItemLinks =
             title: title || DEFAULT_TITLE,
         }))
     }
-const getItemLinksAndJSON =
+const fetchListPageRows =
     (parameters: ImageListParameters) =>
-    async (
-        client: ClientBase,
-        offset: number,
-        limit: number,
-        embeds: ReadonlyArray<string & keyof ImageEmbedded>,
-    ): Promise<ReadonlyArray<Readonly<[TitledLink, string]>>> => {
+    async (client: ClientBase, offset: number, limit: number): Promise<readonly ListPageRow[]> => {
         const queryBuilder = getQueryBuilder(parameters, "json")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
         const queryResult = await client.query<{ json: string; title: string | null; uuid: UUID }>(queryBuilder.build())
+        return queryResult.rows
+    }
+const embedListPageRows =
+    (_parameters: ImageListParameters) =>
+    async (
+        rows: readonly ListPageRow[],
+        embeds: ReadonlyArray<string & keyof ImageEmbedded>,
+        client?: ClientBase,
+    ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
-            return queryResult.rows.map(({ json, title, uuid }) => [
+            return rows.map(({ json, title, uuid }) => [
                 { href: `/images/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
                 json,
             ])
         }
         return await Promise.all(
-            queryResult.rows.map(async ({ json, title, uuid }) => {
+            rows.map(async ({ json, title, uuid }) => {
                 return [
                     { href: `/images/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
-                    await parseEntityJSONAndEmbed<Image, ImageLinks>(client, json, embeds, isImage, "silhouette image"),
+                    await parseEntityJSONAndEmbed<Image, ImageLinks>(
+                        client,
+                        json,
+                        embeds,
+                        isImage,
+                        "silhouette image",
+                    ),
                 ]
             }),
         )
@@ -163,8 +173,9 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
     return await getListResult({
+        embedListPageRows: embedListPageRows(queryParameters),
+        fetchListPageRows: fetchListPageRows(queryParameters),
         getItemLinks: getItemLinks(queryParameters),
-        getItemLinksAndJSON: getItemLinksAndJSON(queryParameters),
         getTotalItems: getTotalItems(queryParameters),
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/images",

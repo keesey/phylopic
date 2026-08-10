@@ -6,7 +6,10 @@ import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import ENTITY_JSON_SOURCE from "./ENTITY_JSON_SOURCE"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 import selectEntityJSON from "./selectEntityJSON"
-const selectEntitiesJSONFromLinks = async (client: ClientBase, links: readonly Link[]): Promise<string> => {
+const selectEntitiesJSONFromLinks = async (
+    client: ClientBase | undefined,
+    links: readonly Link[],
+): Promise<string> => {
     if (!links.length) {
         return "[]"
     }
@@ -32,7 +35,7 @@ const selectEntitiesJSONFromLinks = async (client: ClientBase, links: readonly L
         builder.add("uuid=$::uuid", [uuid])
     })
     builder.add(") LIMIT $::bigint", [limit])
-    const response = await client.query<{ json: string; uuid: UUID }>(builder.build())
+    const response = await client!.query<{ json: string; uuid: UUID }>(builder.build())
     const jsonList = uuids.map(uuid => response.rows.find(row => row.uuid === uuid)?.json ?? "null")
     return `[${jsonList.join(",")}]`
 }

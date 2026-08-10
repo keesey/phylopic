@@ -69,6 +69,14 @@ back to its own environment lookup for host, port, user, password, and database.
 app references `process.env.PGHOST` and friends, which means they will not appear in a search of
 the source.
 
+**Postgres connection limits.** RDS `phylopic` (`db.t3.micro`) has roughly 80 usable connection
+slots. Each warm `dynamic` Lambda container holds one pooled connection (`max: 1`). The `dynamic`
+function sets `reservedConcurrency: 50` in [`serverless.yml`](./serverless.yml) so peak Lambda
+concurrency stays below that limit (leaving headroom for Vercel, publish, and admin tools). List
+routes with `embed_items=true` release the Postgres client after the list query and before S3
+embed fan-out. Under heavy spikes, throttling (503) is preferable to connection exhaustion (500).
+Tune the cap in the 40–60 range if you see sustained throttles or connection errors.
+
 **No AWS keys are required.** The service assumes `role/phylopic-api-executor`
 (`provider.iam.role`), and the runtime supplies short-lived credentials from that role through
 the `AWS_*` variables above. Do not set static AWS keys here.

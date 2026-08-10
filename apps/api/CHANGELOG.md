@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.11.3] - 2026-08-10
+
+### Changed
+
+- List routes with `embed_items=true` release the Postgres client after the list query and before S3 embed fan-out, so connections are not held idle during embed work.
+- `dynamic` Lambda `reservedConcurrency` capped at 50 to stay within RDS connection limits on `db.t3.micro`.
+
 ## [2.11.2] - 2026-08-09
 
 ### Security

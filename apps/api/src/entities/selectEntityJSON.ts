@@ -5,13 +5,13 @@ import { TableName } from "./TableName"
 import selectEntityJSONFromPostgres from "./selectEntityJSONFromPostgres"
 import selectEntityJSONFromS3 from "./selectEntityJSONFromS3"
 const selectEntityJSON = async (
-    client: ClientBase,
+    client: ClientBase | undefined,
     tableName: TableName,
     uuid: UUID,
     userMessage = "There was an error retrieving data.",
 ): Promise<string> => {
     if (ENTITY_JSON_SOURCE === "postgres") {
-        return selectEntityJSONFromPostgres(client, tableName, uuid, userMessage)
+        return selectEntityJSONFromPostgres(client!, tableName, uuid, userMessage)
     }
     if (ENTITY_JSON_SOURCE === "s3") {
         const json = await selectEntityJSONFromS3(tableName, uuid)
@@ -25,6 +25,6 @@ const selectEntityJSON = async (
     } catch (e) {
         console.warn(`S3 entity read failed for ${tableName}/${uuid}, falling back to Postgres.`, e)
     }
-    return selectEntityJSONFromPostgres(client, tableName, uuid, userMessage)
+    return selectEntityJSONFromPostgres(client!, tableName, uuid, userMessage)
 }
 export default selectEntityJSON

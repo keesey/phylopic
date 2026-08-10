@@ -1,7 +1,8 @@
-import { Link, TitledLink } from "@phylopic/api-models"
-import { stringifyNormalized } from "@phylopic/utils"
+import { TitledLink } from "@phylopic/api-models"
+import { stringifyNormalized, UUID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { ClientBase } from "pg"
+import ENTITY_JSON_SOURCE from "../entities/ENTITY_JSON_SOURCE"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
@@ -10,14 +11,19 @@ import getListObject from "./getListObject"
 import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
+export type ListPageRow = Readonly<{
+    json: string
+    title: string | null
+    uuid: UUID
+}>
 export interface Parameters<TEmbedded = Record<string, never>> {
+    embedListPageRows: (
+        rows: readonly ListPageRow[],
+        embed: ReadonlyArray<string & keyof TEmbedded>,
+        client?: ClientBase,
+    ) => Promise<readonly Readonly<[TitledLink, string]>[]>
+    fetchListPageRows: (client: ClientBase, offset: number, limit: number) => Promise<readonly ListPageRow[]>
     getItemLinks: (client: ClientBase, offset: number, limit: number) => Promise<readonly TitledLink[]>
-    getItemLinksAndJSON: (
-        client: ClientBase,
-        offset: number,
-        limit: number,
-        embed: ReadonlyArray<keyof TEmbedded>,
-    ) => Promise<ReadonlyArray<Readonly<[TitledLink, string]>>>
     getTotalItems: (client: ClientBase) => Promise<number>
     itemsPerPage: number
     listPath: string
@@ -32,8 +38,9 @@ const OK_RESULT: Pick<APIGatewayProxyResult, "headers" | "statusCode"> = {
     statusCode: 200,
 }
 const getListResult = async <TEmbedded = Record<string, never>>({
+    embedListPageRows,
+    fetchListPageRows,
     getItemLinks,
-    getItemLinksAndJSON,
     getTotalItems,
     itemsPerPage,
     listPath,
@@ -78,8 +85,14 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 .map(key => key.slice("embed_".length))
                 .filter(isValidEmbed)
             const client = await service.createPgClient()
+            let pgReleased = false
             try {
-                const rawItems = await getItemLinksAndJSON(client, pageIndex * itemsPerPage, itemsPerPage + 1, embeds)
+                const rows = await fetchListPageRows(client, pageIndex * itemsPerPage, itemsPerPage + 1)
+                if (ENTITY_JSON_SOURCE === "s3") {
+                    await service.deletePgClient(client)
+                    pgReleased = true
+                }
+                const rawItems = await embedListPageRows(rows, embeds, pgReleased ? undefined : client)
                 if (rawItems.length === 0) {
                     throw create404()
                 }
@@ -99,7 +112,9 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                     ),
                 }
             } finally {
-                await service.deletePgClient(client)
+                if (!pgReleased) {
+                    await service.deletePgClient(client)
+                }
             }
         } else {
             const client = await service.createPgClient()

@@ -1,7 +1,7 @@
 import { ClientBase } from "pg"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 import selectEntityJSON from "./selectEntityJSON"
-const selectEntityJSONFromHRef = async (client: ClientBase, href: string): Promise<string> => {
+const selectEntityJSONFromHRef = async (client: ClientBase | undefined, href: string): Promise<string> => {
     const tableAndUUID = getTableAndUUIDFromHRef(href)
     if (!tableAndUUID) {
         return "null"

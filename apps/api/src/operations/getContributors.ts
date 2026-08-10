@@ -3,7 +3,6 @@ import {
     CONTRIBUTOR_EMBEDDED_PARAMETERS,
     DATA_MEDIA_TYPE,
     isContributorListParameters,
-    Link,
     TitledLink,
 } from "@phylopic/api-models"
 import { UUID } from "@phylopic/utils"
@@ -14,7 +13,7 @@ import createBuildRedirect from "../build/createBuildRedirect"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
-import getListResult from "../pagination/getListResult"
+import getListResult, { ListPageRow } from "../pagination/getListResult"
 import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
@@ -64,19 +63,22 @@ const getItemLinks =
             title: title || DEFAULT_TITLE,
         }))
     }
-const getItemLinksAndJSON =
+const fetchListPageRows =
     (parameters: ContributorListParameters) =>
-    async (
-        client: ClientBase,
-        offset: number,
-        limit: number,
-        // :TODO: embed_latestImage
-        // embeds: ReadonlyArray<string & keyof {}>,
-    ): Promise<ReadonlyArray<Readonly<[TitledLink, string]>>> => {
+    async (client: ClientBase, offset: number, limit: number): Promise<readonly ListPageRow[]> => {
         const queryBuilder = getQueryBuilder(parameters, "json")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
         const queryResult = await client.query<{ json: string; title: string; uuid: UUID }>(queryBuilder.build())
-        return queryResult.rows.map(({ json, title, uuid }) => [
+        return queryResult.rows
+    }
+const embedListPageRows =
+    (_parameters: ContributorListParameters) =>
+    async (
+        rows: readonly ListPageRow[],
+        _embeds: readonly string[],
+        _client?: ClientBase,
+    ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
+        return rows.map(({ json, title, uuid }) => [
             { href: `/contributors/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
             json,
         ])
@@ -92,9 +94,10 @@ export const getContributors: Operation<GetContributorsParameters, GetContributo
         return createBuildRedirect("/contributors", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    return await getListResult({
+    return await getListResult<Record<string, never>>({
+        embedListPageRows: embedListPageRows(queryParameters),
+        fetchListPageRows: fetchListPageRows(queryParameters),
         getItemLinks: getItemLinks(queryParameters),
-        getItemLinksAndJSON: getItemLinksAndJSON(queryParameters),
         getTotalItems: getTotalItems(queryParameters),
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/contributors",
