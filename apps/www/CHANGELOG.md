@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.24] - 2026-08-10
+
+### Fixed
+
+- Removed invalid direct dependency on `@aws-sdk/credential-provider-web-identity@^3.1093.0`
+  (that version was never published; the package is already provided transitively by
+  `@aws-sdk/client-s3`).
+
 ## [2.14.23] - 2026-08-10
 
 ### Fixed

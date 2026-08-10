@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.28] - 2026-08-10
+
+### Fixed
+
+- `@phylopic/www` `2.14.24`: Remove unpublished `@aws-sdk/credential-provider-web-identity` version pin.
+- `@phylopic/contribute` `2.4.11`: Same dependency fix.
+
 ## [2.0.27] - 2026-08-10
 
 ### Fixed
