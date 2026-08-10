@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.16] - 2026-08-09
+
+### Fixed
+
+- Footer no longer sits above a large empty margin in production builds, where a BOM in concatenated CSS chunks prevented the footer's `position: fixed` rule from matching.
+
 ## [2.14.15] - 2026-08-09
 
 ### Changed
