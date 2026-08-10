@@ -22,12 +22,14 @@ project environment variables.
 | `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of _PhyloPic: Contribute_               | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_ROOT_UUID`                | UUID of the root phylogenetic node               | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_WWW_URL`                  | Root URL of this site                            | `process.env`, inlined into the bundle |
-| `S3_ACCESS_KEY_ID`                     | Access key for the permalinks bucket             | `process.env`, server-side only        |
+| `S3_ACCESS_KEY_ID`                     | Access key for the permalinks bucket (local dev) | `process.env`, server-side only        |
 | `S3_REGION`                            | Region of the permalinks bucket                  | `process.env`, server-side only        |
-| `S3_SECRET_ACCESS_KEY`                 | Secret key for the permalinks bucket             | `process.env`, server-side only        |
+| `S3_SECRET_ACCESS_KEY`                 | Secret key for the permalinks bucket (local dev) | `process.env`, server-side only        |
+| `AWS_ROLE_ARN`                         | IAM role for Vercel OIDC (production deploy)     | `process.env`, server-side only        |
 
-The `S3_*` trio is only needed for permalinks; everything else in the site runs without it. To get
-everything else up and running quickly, you can use these values in your `.env.local` file:
+The `S3_*` trio is only needed for permalinks locally; on Vercel use `AWS_ROLE_ARN` instead
+(see [`aws/README.md`](../../aws/README.md)). Everything else in the site runs without S3 access.
+To get everything else up and running quickly, you can use these values in your `.env.local` file:
 
 ```sh
 NEXT_PUBLIC_API_URL=https://api.phylopic.org

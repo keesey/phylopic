@@ -1,5 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { isUUIDish, normalizeUUID } from "@phylopic/utils"
+import { createAwsClientConfig } from "@phylopic/utils-aws"
 import { NextApiHandler } from "next"
 import loadCollection from "~/permalinks/utils/loadCollection"
 import save from "~/permalinks/utils/save"
@@ -12,13 +13,13 @@ const index: NextApiHandler = async (req, res) => {
         }
         const normalizedUUID = normalizeUUID(uuid)
         const collection = await loadCollection(normalizedUUID)
-        s3Client = new S3Client({
-            credentials: {
-                accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
-                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
-            },
-            region: process.env.S3_REGION,
-        })
+        s3Client = new S3Client(
+            createAwsClientConfig({
+                region: process.env.S3_REGION!,
+                accessKeyIdEnv: "S3_ACCESS_KEY_ID",
+                secretAccessKeyEnv: "S3_SECRET_ACCESS_KEY",
+            }),
+        )
         const hash = await save(s3Client, collection)
         res.setHeader("content-type", "application/json")
         res.send(JSON.stringify(hash))

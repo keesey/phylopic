@@ -15,22 +15,23 @@ project environment variables.
 
 #### Required
 
-| Variable                     | Purpose                                                    | How it is read                         |
-| ---------------------------- | ---------------------------------------------------------- | -------------------------------------- |
-| `AUTH_SECRET_KEY`            | HMAC key for signing and verifying contributor JWTs        | `process.env`, server-side only        |
-| `NEXT_PUBLIC_API_URL`        | Root URL of the _PhyloPic_ API                             | `process.env`, inlined into the bundle |
-| `NEXT_PUBLIC_CONTRIBUTE_URL` | Root URL of this site; also used to build magic-link URLs  | `process.env`, inlined into the bundle |
-| `NEXT_PUBLIC_UPLOADS_URL`    | Root URL from which uploaded submission files are served   | `process.env`, inlined into the bundle |
-| `NEXT_PUBLIC_WWW_URL`        | Root URL of the main _PhyloPic_ website                    | `process.env`, inlined into the bundle |
-| `PGHOST`                     | Postgres host for `phylopic-source`                        | `pg`, implicitly                       |
-| `PGPASSWORD`                 | Postgres password                                          | `pg`, implicitly                       |
-| `PGUSER`                     | Postgres login role (`phylopic_source`)                    | `pg`, implicitly                       |
-| `S3_ACCESS_KEY_ID`           | Access key for the auth, uploads, and source-image buckets | `process.env`, server-side only        |
-| `S3_REGION`                  | Region of those buckets                                    | `process.env`, server-side only        |
-| `S3_SECRET_ACCESS_KEY`       | Secret key for those buckets                               | `process.env`, server-side only        |
-| `SES_ACCESS_KEY_ID`          | Access key used to send the magic-link email               | `process.env`, server-side only        |
-| `SES_REGION`                 | Region of the verified SES identity                        | `process.env`, server-side only        |
-| `SES_SECRET_ACCESS_KEY`      | Secret key used to send the magic-link email               | `process.env`, server-side only        |
+| Variable                     | Purpose                                                   | How it is read                         |
+| ---------------------------- | --------------------------------------------------------- | -------------------------------------- |
+| `AUTH_SECRET_KEY`            | HMAC key for signing and verifying contributor JWTs       | `process.env`, server-side only        |
+| `NEXT_PUBLIC_API_URL`        | Root URL of the _PhyloPic_ API                            | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_CONTRIBUTE_URL` | Root URL of this site; also used to build magic-link URLs | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_UPLOADS_URL`    | Root URL from which uploaded submission files are served  | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_WWW_URL`        | Root URL of the main _PhyloPic_ website                   | `process.env`, inlined into the bundle |
+| `PGHOST`                     | Postgres host for `phylopic-source`                       | `pg`, implicitly                       |
+| `PGPASSWORD`                 | Postgres password                                         | `pg`, implicitly                       |
+| `PGUSER`                     | Postgres login role (`phylopic_source`)                   | `pg`, implicitly                       |
+| `S3_ACCESS_KEY_ID`           | Access key for S3 buckets (local dev)                     | `process.env`, server-side only        |
+| `S3_REGION`                  | Region of those buckets                                   | `process.env`, server-side only        |
+| `S3_SECRET_ACCESS_KEY`       | Secret key for S3 buckets (local dev)                     | `process.env`, server-side only        |
+| `SES_ACCESS_KEY_ID`          | Access key for magic-link email (local dev)               | `process.env`, server-side only        |
+| `SES_REGION`                 | Region of the verified SES identity                       | `process.env`, server-side only        |
+| `SES_SECRET_ACCESS_KEY`      | Secret key for magic-link email (local dev)               | `process.env`, server-side only        |
+| `AWS_ROLE_ARN`               | IAM role for Vercel OIDC (covers S3 + SES on deploy)      | `process.env`, server-side only        |
 
 #### Optional
 
@@ -41,10 +42,9 @@ project environment variables.
 
 #### Set automatically
 
-| Variable                 | Purpose                                                         | How it is read                         |
-| ------------------------ | --------------------------------------------------------------- | -------------------------------------- |
-| `NEXT_PUBLIC_VERCEL_ENV` | Gates analytics events to `production` (used in `@phylopic/ui`) | Provided by Vercel                     |
-| `VERCEL_OIDC_TOKEN`      | Short-lived OIDC token; written by `vercel env pull`            | Provided by Vercel; unused by our code |
+| Variable                 | Purpose                                                         | How it is read     |
+| ------------------------ | --------------------------------------------------------------- | ------------------ |
+| `NEXT_PUBLIC_VERCEL_ENV` | Gates analytics events to `production` (used in `@phylopic/ui`) | Provided by Vercel |
 
 #### Notes
 

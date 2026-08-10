@@ -16,6 +16,7 @@
         "@phylopic/utils-api": "*",
         "@phylopic/utils-aws": "*",
         "@vercel/analytics": "^1.2.2",
+        "@vercel/functions": "^3.0.0",
         "axios": "^1.18.1",
         "clsx": "^2.1.1",
         "compress-json": "3.4.0",
@@ -60,5 +61,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.14.20"
+    "version": "2.14.21"
 }

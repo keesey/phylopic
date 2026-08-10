@@ -17,7 +17,9 @@
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
+        "@phylopic/utils-aws": "*",
         "@vercel/analytics": "^1.2.2",
+        "@vercel/functions": "^3.0.0",
         "clsx": "^2.1.1",
         "flux-standard-action": "^2.1.2",
         "jsonwebtoken": "^9.0.3",
@@ -70,5 +72,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.4.8"
+    "version": "2.4.9"
 }

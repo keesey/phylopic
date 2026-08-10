@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.25] - 2026-08-10
+
+### Security
+
+- Vercel OIDC federation for `@phylopic/www` and `@phylopic/contribute` (`@phylopic/utils-aws`
+  `1.1.0`).
+
 ## [2.0.24] - 2026-08-09
 
 ### Security

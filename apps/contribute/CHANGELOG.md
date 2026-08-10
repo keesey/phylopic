@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.9] - 2026-08-10
+
+### Security
+
+- S3 and SES clients use Vercel OIDC (`AWS_ROLE_ARN`) when configured, falling back to static
+  keys for local development. Upgraded `@phylopic/utils-aws` to `1.1.0`; added
+  `@vercel/functions`.
+
 ## [2.4.8] - 2026-08-10
 
 ### Fixed

@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.0] - 2026-08-10
+
+### Changed
+
+- `README.md`: note that Vercel can use `AWS_ROLE_ARN` (OIDC) instead of static access keys.
+
+### Security
+
+- Application code (via `@phylopic/utils-aws`) supports `AWS_ROLE_ARN` so Vercel deployments
+  can drop static access keys after operator IAM role setup (documented in the private audit).
+
 ## [1.0.1] - 2026-08-09
 
 ### Changed

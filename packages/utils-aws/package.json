@@ -43,7 +43,13 @@
     "name": "@phylopic/utils-aws",
     "peerDependencies": {
         "@aws-sdk/client-s3": "^3.962.0",
-        "@aws-sdk/signature-v4-crt": "^3.957.0"
+        "@aws-sdk/signature-v4-crt": "^3.957.0",
+        "@vercel/functions": "^3.0.0"
+    },
+    "peerDependenciesMeta": {
+        "@vercel/functions": {
+            "optional": true
+        }
     },
     "publishConfig": {
         "access": "public"
@@ -53,13 +59,13 @@
         "url": "git+https://github.com/keesey/phylopic.git"
     },
     "scripts": {
-        "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3",
+        "build": "tsup src/index.ts --format esm,cjs --dts --external @aws-sdk/client-s3 --external @vercel/functions",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @aws-sdk/client-s3 --external @vercel/functions",
         "lint": "TIMING=1 eslint --fix src/**/*.ts*",
         "test": "vitest --watch=false"
     },
     "sideEffects": false,
     "types": "./dist/index.d.ts",
-    "version": "1.0.7"
+    "version": "1.1.0"
 }

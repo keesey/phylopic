@@ -165,3 +165,6 @@ Then exercise each path for real, because of the silent-failure mode described a
   workstation.
 - **`apps/api`** already uses an IAM role (`phylopic-api-executor`) with no static keys. That
   is the preferred model wherever the runtime supports it.
+- **Vercel deployments** can use `AWS_ROLE_ARN` with OIDC instead of `S3_*` / `SES_*` access
+  keys. App code supports both via `@phylopic/utils-aws`; IAM role setup is operator-only and
+  not checked into this repository.

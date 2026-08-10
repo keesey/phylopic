@@ -1,6 +1,7 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses"
 import { JWT, decodeJWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4 } from "@phylopic/utils"
+import { createAwsClientConfig } from "@phylopic/utils-aws"
 const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
     if (!isEmailAddress(email)) {
         throw new Error("Tried to use an invalid email address.")
@@ -18,13 +19,13 @@ const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
     const url = `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}/authorize/${encodeURIComponent(email)}/${encodeURIComponent(
         jti,
     )}`
-    const client = new SESClient({
-        credentials: {
-            accessKeyId: process.env.SES_ACCESS_KEY_ID!,
-            secretAccessKey: process.env.SES_SECRET_ACCESS_KEY!,
-        },
-        region: process.env.SES_REGION!,
-    })
+    const client = new SESClient(
+        createAwsClientConfig({
+            region: process.env.SES_REGION!,
+            accessKeyIdEnv: "SES_ACCESS_KEY_ID",
+            secretAccessKeyEnv: "SES_SECRET_ACCESS_KEY",
+        }),
+    )
     const expiration = formatDate(expirationDate)
     try {
         const response = await client.send(

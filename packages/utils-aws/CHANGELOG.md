@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.0] - 2026-08-10
+
+### Added
+
+- `createAwsClientConfig`: builds AWS SDK client config from `AWS_ROLE_ARN` (Vercel OIDC via
+  `@vercel/functions/oidc`) or static access-key env vars for local development.
+
+### Security
+
+- Enables Vercel deployments to authenticate with short-lived credentials instead of long-lived
+  access keys when `AWS_ROLE_ARN` is set.
+
 ## [1.0.7] - 2026-08-09
 
 ### Security
