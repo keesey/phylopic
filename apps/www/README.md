@@ -39,11 +39,11 @@ NEXT_PUBLIC_WWW_URL=https://www.phylopic.org
 
 #### Optional
 
-| Variable                            | Purpose                                          | How it is read                         |
-| ----------------------------------- | ------------------------------------------------ | -------------------------------------- |
-| `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key  | `process.env`, inlined into the bundle |
-| `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Google Analytics measurement ID                  | `process.env`, inlined into the bundle |
-| `REVALIDATE_TOKEN`                  | Shared secret accepted by `POST /api/revalidate` | `process.env`, server-side only        |
+| Variable                            | Purpose                                                              | How it is read                         |
+| ----------------------------------- | -------------------------------------------------------------------- | -------------------------------------- |
+| `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key                      | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Google Analytics measurement ID                                      | `process.env`, inlined into the bundle |
+| `REVALIDATE_TOKEN`                  | Shared secret for `POST /api/revalidate` (`Authorization: Bearer …`) | `process.env`, server-side only        |
 
 Required for on-demand revalidation (including the call from `apps/publish`). If unset, that
 endpoint rejects every request rather than failing open.

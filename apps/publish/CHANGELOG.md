@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.12.7] - 2026-08-10
+
+### Security
+
+- Revalidation script sends `POST /api/revalidate` with an `Authorization: Bearer` header and requires `REVALIDATE_TOKEN` at startup.
+
 ## [1.12.6] - 2026-08-09
 
 ### Security

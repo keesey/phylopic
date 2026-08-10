@@ -29,18 +29,18 @@ below, and whatever the AWS credential chain resolves for the parts that use it.
 
 #### Required
 
-| Variable                         | Purpose                                                                | How it is read |
-| -------------------------------- | ---------------------------------------------------------------------- | -------------- |
-| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data | `process.env`  |
-| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)  | `process.env`  |
-| `PGHOST`                         | Postgres host                                                          | `process.env`  |
-| `PGPASSWORD`                     | Postgres password                                                      | `process.env`  |
-| `PGUSER`                         | Postgres login role (`phylopic_publish`)                               | `process.env`  |
-| `S3_ACCESS_KEY_ID`               | Access key for listing source images through `@phylopic/source-client` | `process.env`  |
-| `S3_REGION`                      | Region for that client                                                 | `process.env`  |
-| `REVALIDATE_TOKEN`               | Shared secret sent to `apps/www`'s `/api/revalidate`                   | `process.env`  |
-| `S3_SECRET_ACCESS_KEY`           | Secret key for that client                                             | `process.env`  |
-| `WWW_URL`                        | Root URL of the main website, called to trigger revalidation           | `process.env`  |
+| Variable                         | Purpose                                                                   | How it is read |
+| -------------------------------- | ------------------------------------------------------------------------- | -------------- |
+| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data    | `process.env`  |
+| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)     | `process.env`  |
+| `PGHOST`                         | Postgres host                                                             | `process.env`  |
+| `PGPASSWORD`                     | Postgres password                                                         | `process.env`  |
+| `PGUSER`                         | Postgres login role (`phylopic_publish`)                                  | `process.env`  |
+| `S3_ACCESS_KEY_ID`               | Access key for listing source images through `@phylopic/source-client`    | `process.env`  |
+| `S3_REGION`                      | Region for that client                                                    | `process.env`  |
+| `REVALIDATE_TOKEN`               | Shared secret sent as `Authorization: Bearer …` on `POST /api/revalidate` | `process.env`  |
+| `S3_SECRET_ACCESS_KEY`           | Secret key for that client                                                | `process.env`  |
+| `WWW_URL`                        | Root URL of the main website, called to trigger revalidation              | `process.env`  |
 
 #### Optional
 

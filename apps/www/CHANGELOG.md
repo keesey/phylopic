@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.19] - 2026-08-10
+
+### Security
+
+- `POST /api/revalidate` accepts only `Authorization: Bearer` (no query-string secret), compares tokens with a timing-safe check, and revalidates only allowlisted paths.
+
 ## [2.14.18] - 2026-08-10
 
 ### Fixed
