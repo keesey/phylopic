@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.30] - 2026-08-10
+
+### Fixed
+
+- Root `resolutions` pin `jsdom@26.1.0` and `cssstyle@4.2.1` after `jsdom@27` still pulled an
+  ESM-only `@csstools/css-calc` chain on serverless.
+
 ## [2.0.29] - 2026-08-10
 
 ### Fixed

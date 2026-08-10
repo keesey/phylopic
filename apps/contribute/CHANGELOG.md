@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.13] - 2026-08-10
+
+### Fixed
+
+- Pin `jsdom@26.1.0` and `cssstyle@4.2.1` (root `resolutions`) to avoid a second serverless
+  `ERR_REQUIRE_ESM` crash from `@csstools/css-calc` via `cssstyle` 5.
+
 ## [2.4.12] - 2026-08-10
 
 ### Fixed

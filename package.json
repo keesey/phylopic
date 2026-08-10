@@ -25,10 +25,11 @@
     "resolutions": {
         "brace-expansion": "2.1.4",
         "core-js-compat": "3.46.0",
+        "cssstyle": "4.2.1",
         "fast-uri": "3.1.5",
         "html-encoding-sniffer": "4.0.0",
         "js-yaml": "4.3.1",
-        "jsdom": "27.0.0",
+        "jsdom": "26.1.0",
         "nanoid": "3.3.17",
         "phin": "3.7.1",
         "postcss": "8.5.26",
@@ -50,7 +51,7 @@
         "test": "turbo run test",
         "version-packages": "changeset version"
     },
-    "version": "2.0.29",
+    "version": "2.0.30",
     "workspaces": [
         "apps/*",
         "packages/*"
