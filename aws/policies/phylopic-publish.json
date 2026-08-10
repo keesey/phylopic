@@ -1,0 +1,50 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "SourceImagesSync",
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket", "s3:GetObject"],
+            "Resource": [
+                "arn:aws:s3:::source-images.phylopic.org",
+                "arn:aws:s3:::source-images.phylopic.org/*"
+            ]
+        },
+        {
+            "Sid": "PublicImagesSync",
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket", "s3:GetObject", "s3:PutObject", "s3:DeleteObject", "s3:PutObjectAcl"],
+            "Resource": ["arn:aws:s3:::images.phylopic.org", "arn:aws:s3:::images.phylopic.org/*"]
+        },
+        {
+            "Sid": "EntitiesBuild",
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket", "s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
+            "Resource": ["arn:aws:s3:::entities.phylopic.org", "arn:aws:s3:::entities.phylopic.org/*"]
+        },
+        {
+            "Sid": "BuildParameters",
+            "Effect": "Allow",
+            "Action": ["ssm:GetParameter", "ssm:PutParameter"],
+            "Resource": [
+                "arn:aws:ssm:us-west-2:960039257217:parameter/PHYLOPIC_BUILD",
+                "arn:aws:ssm:us-west-2:960039257217:parameter/PHYLOPIC_BUILD_TIMESTAMP"
+            ]
+        },
+        {
+            "Sid": "ApiLambdaBuildEnv",
+            "Effect": "Allow",
+            "Action": ["lambda:GetFunctionConfiguration", "lambda:UpdateFunctionConfiguration"],
+            "Resource": [
+                "arn:aws:lambda:us-west-2:960039257217:function:phylopic-api-prod-static",
+                "arn:aws:lambda:us-west-2:960039257217:function:phylopic-api-prod-dynamic"
+            ]
+        },
+        {
+            "Sid": "ApiCacheInvalidation",
+            "Effect": "Allow",
+            "Action": "cloudfront:CreateInvalidation",
+            "Resource": "arn:aws:cloudfront::960039257217:distribution/*"
+        }
+    ]
+}

@@ -57,5 +57,5 @@
         "verify:entities": "node --loader ts-node/esm ./src/verifyEntitiesS3.ts"
     },
     "type": "module",
-    "version": "1.12.7"
+    "version": "1.12.8"
 }

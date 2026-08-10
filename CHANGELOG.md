@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.32] - 2026-08-10
+
+### Security
+
+- `aws` `1.2.0`: scoped `phylopic-publish` IAM policy for the publication pipeline.
+- `@phylopic/publish` `1.12.8`: credential chain fallback for unified operator profile.
+
 ## [2.0.31] - 2026-08-10
 
 ### Fixed

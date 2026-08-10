@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #
-# Creates the four least-privilege IAM users that replace the shared `Administrator`
-# credential in the applications' environment variables.
+# Creates the scoped IAM users for application and operator AWS access.
 #
 # Safe to re-run: users are created only if absent, and `put-user-policy` overwrites
 # the inline policy in place rather than accumulating versions.
@@ -19,7 +18,7 @@ cd "$(dirname "$0")"
 # Inline rather than managed policies: there is exactly one consumer of each, so the
 # indirection of a standalone policy ARN buys nothing, and an inline policy cannot be
 # left attached to something else by accident after the user is deleted.
-for user in phylopic-ses-sender phylopic-contribute phylopic-www phylopic-editorial; do
+for user in phylopic-ses-sender phylopic-contribute phylopic-www phylopic-editorial phylopic-publish; do
     if aws iam get-user --user-name "$user" >/dev/null 2>&1; then
         echo "user $user: exists"
     else

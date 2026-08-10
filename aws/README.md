@@ -17,7 +17,8 @@ policies in [`policies/`](./policies). It does not create access keys; see
 | `phylopic-ses-sender` | `SES_*` in `apps/contribute` (local; Vercel uses OIDC) | Send mail as `keesey+phylopic@gmail.com`, nothing else |
 | `phylopic-contribute` | `S3_*` in `apps/contribute` (local; Vercel uses OIDC)    | Auth tokens, submission metadata, read source images   |
 | `phylopic-www`        | `S3_*` in `apps/www` (local; Vercel uses OIDC)           | Read and write `permalinks.phylopic.org/data/*`        |
-| `phylopic-editorial`  | `apps/edit` and `apps/publish` (local only) | Full read/write on submissions and source images       |
+| `phylopic-editorial`  | `apps/edit` (local only)                              | Full read/write on submissions and source images       |
+| `phylopic-publish`    | `AWS_PROFILE` for `apps/publish` `yarn make` (local)  | Release pipeline: S3 sync, entities build, SSM, Lambda env, CloudFront invalidation |
 
 Splitting `SES_*` from `S3_*` makes the existing variable names honest: until now both name
 pairs held the same credential, so the apparent separation of mail from storage did not exist.
@@ -67,14 +68,25 @@ the cross-bucket copy performed when a submission is accepted
 That copy needs read on the source bucket and write on the destination, both of which
 `phylopic-editorial` already has.
 
-`apps/publish` needs only `ListBucket` here, for `getSourceData.ts`. It shares the editorial
-key for operational simplicity, so it currently holds more than it needs; splitting out a
-list-and-read-only `phylopic-publish` user is a reasonable later refinement.
+`apps/publish` lists `source-images.phylopic.org/images/` during `yarn insert` (see
+[`phylopic-publish.json`](./policies/phylopic-publish.json) — no longer via `phylopic-editorial`).
 
 `apps/contribute` needs `GetObject` on `images/*` — not to serve bytes, but because
 `getSourceImageFileURL.ts` presigns a link for the unpublished-image thumbnail. **A presigned
 URL carries the signer's authority**, so the permission has to exist on the signing principal
 even though the browser performs the fetch.
+
+### `images.phylopic.org`, `entities.phylopic.org` — publication pipeline
+
+`apps/publish` `yarn make` syncs public silhouettes to `images.phylopic.org` (CLI `aws s3 sync`
+with `public-read` ACL), writes entity JSON under `{build}/` on `entities.phylopic.org`, reads
+and deletes old build prefixes, updates SSM build parameters, patches Lambda env on
+`phylopic-api-prod-static` and `phylopic-api-prod-dynamic`, and invalidates the API CloudFront
+distribution. All of that runs through **`AWS_PROFILE=phylopic-publish`** (default credential
+chain), not `phylopic-editorial`. Policy: [`phylopic-publish.json`](./policies/phylopic-publish.json).
+
+`Lambda UpdateFunctionConfiguration` remains high-impact (can rewrite function environment
+variables) but is limited to the two API functions and is far narrower than `AdministratorAccess`.
 
 ### SES
 
@@ -118,13 +130,10 @@ The old credential keeps working throughout, so this can go one app at a time wi
     The secret is displayed once and is not retrievable afterwards, so paste it straight into
     its destination and into a password manager. Order:
 
-    1. `phylopic-editorial` → `apps/edit/.env.local`, `apps/publish/.env`. Local only, so a
-       mistake costs nothing but your own time — which makes it the right place to discover a
-       policy that is too narrow.
-    2. `phylopic-www` → Vercel (`phylopic-www`, all targets) and `apps/www/.env.local`.
-       Smallest surface: one bucket prefix.
-    3. `phylopic-contribute` and `phylopic-ses-sender` → Vercel (`phylopic-contribute`, all
-       targets) and `apps/contribute/.env.local`. Most moving parts, so go last.
+    1. `phylopic-editorial` → `apps/edit/.env.local`. Local only.
+    2. `phylopic-publish` → operator `~/.aws/credentials` profile for `apps/publish` (see below).
+    3. `phylopic-www` → `apps/www/.env.local` (Vercel uses OIDC).
+    4. `phylopic-contribute` and `phylopic-ses-sender` → `apps/contribute/.env.local` (Vercel uses OIDC).
 
 3. **Redeploy each Vercel project after changing its variables.** Values are injected at build
    time; an existing deployment keeps the old ones until rebuilt.
@@ -157,13 +166,17 @@ Then exercise each path for real, because of the silent-failure mode described a
 | `phylopic-ses-sender` | Request a magic link; confirm the mail arrives                                                                                                                                    |
 | `phylopic-contribute` | Request a magic link, redeem it (token should be consumed), request another link, list your submissions, patch one, delete one, and view an unpublished thumbnail (this presigns) |
 | `phylopic-www`        | Create a collection permalink, then load it                                                                                                                                       |
-| `phylopic-editorial`  | In `edit`, accept a submission (cross-bucket copy) and delete an image file; run `yarn make` in `publish` far enough to list source images                                        |
+| `phylopic-editorial`  | In `edit`, accept a submission (cross-bucket copy) and delete an image file                                                                                                       |
+| `phylopic-publish`    | From `apps/publish`, run `yarn make:data` on a test build (or full `yarn make` when ready): entities S3 write, SSM update, Lambda env patch, CloudFront invalidation, image sync |
 
 ## Operator notes
 
-- **`apps/publish`** uses the ambient AWS CLI profile for S3 sync, SSM, CloudFront, and Lambda
-  — not the `S3_*` variables in `.env`. Treat it as an operator-only tool run from a trusted
-  workstation.
+- **`apps/publish`** uses **`AWS_PROFILE=phylopic-publish`** (or the same keys in
+  `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`) for all AWS work in `yarn make`: CLI
+  `aws s3 sync`, entities JSON, SSM, Lambda, and CloudFront. `SourceClient` uses the same
+  credential chain when `S3_*` is omitted from `apps/publish/.env`. Do not run `yarn make`
+  with the administrator profile once this principal is configured.
+- **`apps/edit`** uses `phylopic-editorial` only.
 - **`apps/api`** already uses an IAM role (`phylopic-api-executor`) with no static keys. That
   is the preferred model wherever the runtime supports it.
 - **Vercel deployments** use `AWS_ROLE_ARN` with OIDC (`@vercel/functions/oidc` in app code).
@@ -204,3 +217,30 @@ After OIDC is live and smoke-tested, remove deployment keys in this order:
 
 [`retire-vercel-scoped-keys.sh`](./retire-vercel-scoped-keys.sh) lists last-used times to help
 pick which key id to retire.
+
+## `phylopic-publish` operator profile
+
+1. Apply the user and policy: `./create-principals.sh` (includes `phylopic-publish`).
+2. Create an access key (once): `aws iam create-access-key --user-name phylopic-publish`
+3. Add to `~/.aws/credentials`:
+
+    ```ini
+    [phylopic-publish]
+    aws_access_key_id = AKIA...
+    aws_secret_access_key = ...
+    region = us-west-2
+    ```
+
+4. Run publish with that profile:
+
+    ```sh
+    export AWS_PROFILE=phylopic-publish
+    cd apps/publish
+    yarn make
+    ```
+
+5. Optional: remove `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` from
+   `apps/publish/.env` — `SourceClient` falls back to the same profile.
+
+Tighten CloudFront if desired: replace `distribution/*` in [`phylopic-publish.json`](./policies/phylopic-publish.json)
+with `distribution/YOUR_API_CLOUDFRONT_DISTRIBUTION_ID` (same value as `API_CLOUDFRONT_DISTRIBUTION_ID` in `.env`).

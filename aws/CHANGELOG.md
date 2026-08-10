@@ -19,6 +19,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.0] - 2026-08-10
+
+### Added
+
+- `phylopic-publish` IAM user policy for the publication pipeline (`yarn make`): S3 sync on
+  `source-images`, `images`, and `entities` buckets; SSM build parameters; Lambda env on the two
+  API functions; CloudFront invalidation.
+
+### Changed
+
+- `create-principals.sh` includes `phylopic-publish`.
+- `README.md`: operator profile setup; `phylopic-editorial` is edit-only (publish uses
+  `phylopic-publish`).
+
 ## [1.1.2] - 2026-08-10
 
 ### Added

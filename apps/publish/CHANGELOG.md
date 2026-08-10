@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.12.8] - 2026-08-10
+
+### Changed
+
+- `SourceClient` uses the default AWS credential chain when `S3_*` is omitted, so
+  `AWS_PROFILE=phylopic-publish` covers the full `yarn make` pipeline.
+
+### Security
+
+- Documented scoped `phylopic-publish` IAM profile (`aws/policies/phylopic-publish.json`) in
+  place of the administrator CLI profile for release.
+
 ## [1.12.7] - 2026-08-10
 
 ### Security
