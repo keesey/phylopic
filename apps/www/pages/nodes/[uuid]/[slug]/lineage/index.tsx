@@ -3,7 +3,7 @@ import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
-import type { GetStaticProps, NextPage } from "next"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { FC, useMemo } from "react"
@@ -15,7 +15,6 @@ import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getNodeHRef from "~/routes/getNodeHRef"
 import getNodeSlug from "~/routes/getNodeSlug"
-import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
@@ -105,7 +104,10 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     )
 }
 export default PageComponent
-export const getStaticPaths = createStaticPathsGetter("/nodes")
+export const getStaticPaths: GetStaticPaths<{ uuid: UUID; slug: string }> = () => ({
+    fallback: "blocking",
+    paths: [],
+})
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

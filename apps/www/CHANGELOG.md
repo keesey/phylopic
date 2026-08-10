@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.15] - 2026-08-09
+
+### Changed
+
+- No longer generating static paths for Lineage Pages.
+
 ## [2.14.14] - 2026-08-09
 
 ### Fixed
@@ -53,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- No longer generating static paths for Node Pages fromn Quick Links.
+- No longer generating static paths for Node Pages from Quick Links.
 
 ### Security
 
