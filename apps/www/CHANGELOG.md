@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.20] - 2026-08-10
+
+### Security
+
+- External identifier resolve redirects accept only relative `Location` paths from the API, blocking open redirects to third-party sites.
+
 ## [2.14.19] - 2026-08-10
 
 ### Security

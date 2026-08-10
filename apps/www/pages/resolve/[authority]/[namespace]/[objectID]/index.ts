@@ -2,6 +2,14 @@ import { isAuthority, isNamespace, isObjectID, isUUIDv4, normalizeUUID } from "@
 import axios from "axios"
 import { GetServerSideProps, NextPage } from "next"
 import { ParsedUrlQuery } from "querystring"
+
+const toSafeRelativeRedirect = (location: string): string | null => {
+    if (!location.startsWith("/") || location.startsWith("//") || location.includes("..")) {
+        return null
+    }
+    return location
+}
+
 const PageComponent: NextPage = () => null
 export default PageComponent
 interface PageQuery extends ParsedUrlQuery {
@@ -37,7 +45,8 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
         )
     } catch (e) {
         if (axios.isAxiosError(e) && e.response && (e.response.status === 307 || e.response.status === 308)) {
-            const destination = e.response.headers.location
+            const location = e.response.headers.location
+            const destination = typeof location === "string" ? toSafeRelativeRedirect(location) : null
             if (destination) {
                 return {
                     redirect: {
