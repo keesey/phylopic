@@ -1,5 +1,13 @@
 {
     "extends": "@phylopic/tsconfig/node24.json",
+    "compilerOptions": {
+        "paths": {
+            "@phylopic/utils/svg": ["../../packages/utils/src/svg/index.ts"]
+        }
+    },
     "include": ["."],
-    "exclude": ["dist", "build", "node_modules"]
+    "exclude": ["dist", "build", "node_modules"],
+    "ts-node": {
+        "experimentalResolver": true
+    }
 }
