@@ -1,10 +1,10 @@
 import { handleAPIError } from "@phylopic/source-client"
 import { verifyJWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
-import { randomUUID } from "crypto"
 import { NextApiHandler } from "next"
 import issueJWT from "~/auth/jwt/issueJWT"
 import { checkAuthorizeRateLimit, getClientIp } from "~/auth/rateLimit/checkAuthorizeRateLimit"
+import { resolveContributorUuidForEmail } from "~/auth/contributor/resolveContributorForEmail"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
 import getTTLFromBody from "~/auth/ttl/getTTLFromBody"
 import SourceClient from "~/source/SourceClient"
@@ -27,7 +27,7 @@ const index: NextApiHandler<void> = async (req, res) => {
                 client = new SourceClient()
                 const ttl = getTTLFromBody(req.body)
                 const authTokenClient = client.authToken(email)
-                let uuid: UUID
+                let preferredUuid: UUID | undefined
                 if (await authTokenClient.exists()) {
                     const secret = process.env.AUTH_SECRET_KEY
                     const existingToken = await authTokenClient.get()
@@ -35,10 +35,9 @@ const index: NextApiHandler<void> = async (req, res) => {
                     if (!isUUIDv4(payload?.sub)) {
                         throw 403
                     }
-                    uuid = payload.sub
-                } else {
-                    uuid = randomUUID()
+                    preferredUuid = payload.sub
                 }
+                const uuid = await resolveContributorUuidForEmail(client, email, preferredUuid)
                 const token = await issueJWT(uuid, ttl, now)
                 await authTokenClient.put(token)
                 await sendAuthEmail(email, token, now)

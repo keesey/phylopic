@@ -1,25 +1,11 @@
 import { handleAPIError } from "@phylopic/source-client"
-import { INCOMPLETE_STRING, JWT, verifyJWT } from "@phylopic/source-models"
+import { JWT, verifyJWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
 import { NextApiHandler } from "next"
+import issueJWT from "~/auth/jwt/issueJWT"
+import { ensureContributorForEmail } from "~/auth/contributor/resolveContributorForEmail"
 import SourceClient from "~/source/SourceClient"
 
-const updateContributorEmailAddress = async (client: SourceClient, uuid: UUID, emailAddress: EmailAddress) => {
-    const contributor = client.contributor(uuid)
-    const existing = (await contributor.exists()) ? await contributor.get() : null
-    if (existing?.emailAddress === emailAddress) {
-        return null
-    }
-    await contributor.put({
-        created: new Date().toISOString(),
-        name: INCOMPLETE_STRING,
-        showEmailAddress: true,
-        ...existing,
-        emailAddress,
-        modified: new Date().toISOString(),
-        uuid,
-    })
-}
 const index: NextApiHandler<JWT> = async (req, res) => {
     let client: SourceClient | undefined
     const now = new Date()
@@ -53,12 +39,17 @@ const index: NextApiHandler<JWT> = async (req, res) => {
                 throw 410
             }
             const expires = new Date(payload.exp * 1000)
-            await updateContributorEmailAddress(client, payload.sub, email)
+            const contributorUuid = await ensureContributorForEmail(client, payload.sub, email)
+            let sessionToken = token
+            if (contributorUuid !== payload.sub) {
+                const remainingMs = payload.exp * 1000 - now.valueOf()
+                sessionToken = await issueJWT(contributorUuid, remainingMs, now)
+            }
             await authTokenClient.delete()
             res.setHeader("expires", expires.toString())
             res.setHeader("content-type", "application/jwt")
             res.status(200)
-            res.send(token)
+            res.send(sessionToken)
         } else {
             throw 405
         }

@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.14] - 2026-08-10
+
+### Fixed
+
+- Magic-link redemption reuses an existing contributor row for the email instead of inserting a
+  duplicate (`contributor_email_key` violation).
+
 ## [2.4.13] - 2026-08-10
 
 ### Fixed

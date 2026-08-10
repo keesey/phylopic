@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.31] - 2026-08-10
+
+### Fixed
+
+- `@phylopic/contribute` `2.4.14`: Magic-link redemption for emails that already have a contributor row.
+
 ## [2.0.30] - 2026-08-10
 
 ### Fixed
