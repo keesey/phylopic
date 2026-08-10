@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.12] - 2026-08-10
+
+### Fixed
+
+- Pin `jsdom` and `html-encoding-sniffer` (root `resolutions`) to avoid a serverless
+  `ERR_REQUIRE_ESM` crash from `@exodus/bytes` on Node 24.
+
 ## [2.4.11] - 2026-08-10
 
 ### Fixed

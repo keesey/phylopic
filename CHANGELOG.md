@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.29] - 2026-08-10
+
+### Fixed
+
+- Root `resolutions` pin `jsdom@27.0.0` and `html-encoding-sniffer@4.0.0` to fix serverless
+  `ERR_REQUIRE_ESM` from the `jsdom` 28 / `@exodus/bytes` dependency chain (`@phylopic/contribute`).
+
 ## [2.0.28] - 2026-08-10
 
 ### Fixed
