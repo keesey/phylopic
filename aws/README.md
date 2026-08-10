@@ -3,11 +3,8 @@
 Least-privilege IAM users for the applications that authenticate to AWS with static access
 keys, replacing the single `Administrator` credential that every one of them shared.
 
-That shared credential was a member of the `Administrators` group, so it carried
-`AdministratorAccess` — unrestricted control of the account — and copies of it lived in local
-`.env` files and in the environment variables of two Vercel projects. Rotating it (2026-08-08)
-invalidated the old key but changed nothing about its scope: the replacement is just as
-privileged. These policies are what actually reduces the blast radius.
+That shared credential carried `AdministratorAccess`. These policies scope each application to
+what its code actually calls, so a compromised key cannot take over the whole account.
 
 [`create-principals.sh`](./create-principals.sh) creates the four users and attaches the
 policies in [`policies/`](./policies). It does not create access keys; see
@@ -130,11 +127,12 @@ The old credential keeps working throughout, so this can go one app at a time wi
 
 3. **Redeploy each Vercel project after changing its variables.** Values are injected at build
    time; an existing deployment keeps the old ones until rebuilt.
-4. **Verify** (below), then remove the `Administrator` key from any remaining environment.
+4. **Verify** (below), then retire any superseded credentials from environments that no longer
+   need them.
 
 Set the Vercel variables on **every** target that project deploys — Production, Preview, and
-Development are separate stores, and a stale Preview value leaves live preview URLs holding
-the old credential.
+Development are separate stores, and a stale value in one target will not propagate to the
+others.
 
 ## Verification
 
@@ -160,19 +158,10 @@ Then exercise each path for real, because of the silent-failure mode described a
 | `phylopic-www`        | Create a collection permalink, then load it                                                                                                                                       |
 | `phylopic-editorial`  | In `edit`, accept a submission (cross-bucket copy) and delete an image file; run `yarn make` in `publish` far enough to list source images                                        |
 
-## Known gaps
+## Operator notes
 
-- **The `publish` pipeline still runs as `Administrator`.** Its `aws s3 sync` scripts and its
-  SSM, CloudFront, and Lambda clients are all constructed without explicit credentials, so they
-  use the ambient CLI profile rather than `S3_*`. One of those calls is
-  `UpdateFunctionConfiguration` against the API's Lambdas, which can rewrite their environment
-  and is therefore close to code execution under the API's own role. That is not a permission
-  any scoped application key should hold, so `publish` is properly an operator tool — but it
-  means the pipeline is a full administrator while it runs. Giving it a dedicated
-  `phylopic-publish` profile scoped to those four services is deferred, not resolved.
-- **`Administrator` is still both a human and a machine identity.** It remains the operator CLI
-  credential. It should have MFA, and it should never again be written into a deployment
-  environment.
-- **Static keys remain.** These policies bound the damage; they do not eliminate the class of
-  problem. OIDC federation from Vercel to an IAM role removes long-lived keys entirely and is
-  the durable fix, tracked as **C3** step 6 in the audit.
+- **`apps/publish`** uses the ambient AWS CLI profile for S3 sync, SSM, CloudFront, and Lambda
+  — not the `S3_*` variables in `.env`. Treat it as an operator-only tool run from a trusted
+  workstation.
+- **`apps/api`** already uses an IAM role (`phylopic-api-executor`) with no static keys. That
+  is the preferred model wherever the runtime supports it.
