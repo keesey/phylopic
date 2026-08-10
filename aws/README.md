@@ -79,9 +79,10 @@ even though the browser performs the fetch.
 ### SES
 
 One call site: `apps/contribute/src/auth/smtp/sendAuthEmail.ts` sends a `SendEmail` with
-`Source: keesey+phylopic@gmail.com`. The policy allows that one action against that one
-identity, with a `ses:FromAddress` condition so the credential cannot send as any other
-verified identity that may exist now or later.
+`Source: keesey+phylopic@gmail.com`. IAM must grant `ses:SendEmail` on the **verified SES
+identity** (`keesey@gmail.com` — Gmail treats the plus-address as that identity for
+authorization). The `ses:FromAddress` condition still restricts the sender to
+`keesey+phylopic@gmail.com` so the credential cannot send as any other verified address.
 
 ## Two IAM details worth knowing before editing these
 

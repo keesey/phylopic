@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.1] - 2026-08-10
+
+### Fixed
+
+- `phylopic-ses-sender.json`: grant `ses:SendEmail` on identity `keesey@gmail.com` (SES IAM
+  resource for Gmail plus-address senders), keeping `ses:FromAddress` limited to
+  `keesey+phylopic@gmail.com`.
+
 ## [1.1.0] - 2026-08-10
 
 ### Changed
