@@ -70,14 +70,13 @@ const Article: FC<Props> = ({ image }: Props) => {
         void (async () => {
             try {
                 const uuid = await postCollectionPage(uuids)
-                if (uuid) {
-                    customEvents.toggleCollectionDrawer(false)
-                    dispatch({ type: "CLOSE" })
-                    customEvents.openCollectionPage(uuid, currentCollection)
-                    await router.push(`/collections/${encodeURIComponent(uuid)}`)
-                }
+                customEvents.toggleCollectionDrawer(false)
+                dispatch({ type: "CLOSE" })
+                customEvents.openCollectionPage(uuid, currentCollection)
+                await router.push(`/collections/${encodeURIComponent(uuid)}`)
             } catch (e) {
                 customEvents.exception(String(e))
+                console.error(e)
                 alert("There was an error creating the Collection Page.")
             }
         })()

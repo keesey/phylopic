@@ -29,14 +29,13 @@ const Tab: FC<Props> = ({ name }) => {
         void (async () => {
             try {
                 const uuid = await postCollectionPage(uuids)
-                if (uuid) {
-                    customEvents.toggleCollectionDrawer(false)
-                    dispatch({ type: "CLOSE" })
-                    customEvents.openCollectionPage(uuid, currentName)
-                    await router.push(`/collections/${encodeURIComponent(uuid)}`)
-                }
+                customEvents.toggleCollectionDrawer(false)
+                dispatch({ type: "CLOSE" })
+                customEvents.openCollectionPage(uuid, currentName)
+                await router.push(`/collections/${encodeURIComponent(uuid)}`)
             } catch (e) {
                 customEvents.exception(String(e))
+                console.error(e)
                 alert("There was an error creating the Collection Page.")
             }
         })()

@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.26] - 2026-08-10
+
+### Fixed
+
+- `@phylopic/www` `2.14.22`: Collection Page creation via same-origin API proxy.
+
 ## [2.0.25] - 2026-08-10
 
 ### Security

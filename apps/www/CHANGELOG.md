@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.22] - 2026-08-10
+
+### Fixed
+
+- Collection Pages are created through same-origin `POST /api/collections` instead of a
+  cross-origin `POST` to the API’s `303` response, which could fail in the browser.
+
 ## [2.14.21] - 2026-08-10
 
 ### Security
