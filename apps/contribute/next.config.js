@@ -3,11 +3,7 @@ const { createSecurityHeaderRoutes } = require("@phylopic/ui/securityHeaders")
 /** @type {import('next').NextConfig} */
 module.exports = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
-    serverExternalPackages: [
-        "@aws-sdk/credential-provider-web-identity",
-        "@vercel/functions",
-        "@vercel/oidc",
-    ],
+    serverExternalPackages: ["@aws-sdk/credential-provider-web-identity", "@vercel/functions", "@vercel/oidc"],
     async headers() {
         return createSecurityHeaderRoutes()
     },

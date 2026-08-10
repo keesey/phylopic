@@ -12,13 +12,13 @@ policies in [`policies/`](./policies). It does not create access keys; see
 
 ## The principals
 
-| User                  | Key goes in                                           | Can do                                                 |
-| --------------------- | ----------------------------------------------------- | ------------------------------------------------------ |
-| `phylopic-ses-sender` | `SES_*` in `apps/contribute` (local; Vercel uses OIDC) | Send mail as `keesey+phylopic@gmail.com`, nothing else |
-| `phylopic-contribute` | `S3_*` in `apps/contribute` (local; Vercel uses OIDC)    | Auth tokens, submission metadata, read source images   |
-| `phylopic-www`        | `S3_*` in `apps/www` (local; Vercel uses OIDC)           | Read and write `permalinks.phylopic.org/data/*`        |
-| `phylopic-editorial`  | `apps/edit` (local only)                              | Full read/write on submissions and source images       |
-| `phylopic-publish`    | `AWS_PROFILE` for `apps/publish` `yarn make` (local)  | Release pipeline: S3 sync, entities build, SSM, Lambda env, CloudFront invalidation |
+| User                  | Key goes in                                            | Can do                                                                              |
+| --------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `phylopic-ses-sender` | `SES_*` in `apps/contribute` (local; Vercel uses OIDC) | Send mail as `keesey+phylopic@gmail.com`, nothing else                              |
+| `phylopic-contribute` | `S3_*` in `apps/contribute` (local; Vercel uses OIDC)  | Auth tokens, submission metadata, read source images                                |
+| `phylopic-www`        | `S3_*` in `apps/www` (local; Vercel uses OIDC)         | Read and write `permalinks.phylopic.org/data/*`                                     |
+| `phylopic-editorial`  | `apps/edit` (local only)                               | Full read/write on submissions and source images                                    |
+| `phylopic-publish`    | `AWS_PROFILE` for `apps/publish` `yarn make` (local)   | Release pipeline: S3 sync, entities build, SSM, Lambda env, CloudFront invalidation |
 
 Splitting `SES_*` from `S3_*` makes the existing variable names honest: until now both name
 pairs held the same credential, so the apparent separation of mail from storage did not exist.
@@ -167,7 +167,7 @@ Then exercise each path for real, because of the silent-failure mode described a
 | `phylopic-contribute` | Request a magic link, redeem it (token should be consumed), request another link, list your submissions, patch one, delete one, and view an unpublished thumbnail (this presigns) |
 | `phylopic-www`        | Create a collection permalink, then load it                                                                                                                                       |
 | `phylopic-editorial`  | In `edit`, accept a submission (cross-bucket copy) and delete an image file                                                                                                       |
-| `phylopic-publish`    | From `apps/publish`, run `yarn make:data` on a test build (or full `yarn make` when ready): entities S3 write, SSM update, Lambda env patch, CloudFront invalidation, image sync |
+| `phylopic-publish`    | From `apps/publish`, run `yarn make:data` on a test build (or full `yarn make` when ready): entities S3 write, SSM update, Lambda env patch, CloudFront invalidation, image sync  |
 
 ## Operator notes
 

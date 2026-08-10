@@ -2,7 +2,9 @@ import type { S3ClientConfig } from "@aws-sdk/client-s3"
 import type { SESClientConfig } from "@aws-sdk/client-ses"
 import { awsCredentialsProvider } from "@vercel/functions/oidc"
 
-const createContributeAwsClientConfig = (region: string): { region: string; credentials?: S3ClientConfig["credentials"] } => {
+const createContributeAwsClientConfig = (
+    region: string,
+): { region: string; credentials?: S3ClientConfig["credentials"] } => {
     const roleArn = process.env.AWS_ROLE_ARN
     if (roleArn) {
         return {

@@ -44,11 +44,11 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 
 #### Optional (legacy S3 keys)
 
-| Variable               | Purpose                                                        | How it is read |
-| ---------------------- | -------------------------------------------------------------- | -------------- |
+| Variable               | Purpose                                                          | How it is read |
+| ---------------------- | ---------------------------------------------------------------- | -------------- |
 | `S3_ACCESS_KEY_ID`     | Explicit keys for `@phylopic/source-client` (else `AWS_PROFILE`) | `process.env`  |
-| `S3_SECRET_ACCESS_KEY` | Same                                                           | `process.env`  |
-| `S3_REGION`            | Region for that client (else `AWS_REGION`)                     | `process.env`  |
+| `S3_SECRET_ACCESS_KEY` | Same                                                             | `process.env`  |
+| `S3_REGION`            | Region for that client (else `AWS_REGION`)                       | `process.env`  |
 
 #### Optional
 
@@ -63,11 +63,11 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 These are read by the AWS CLI and SDK clients. Configure the **`phylopic-publish`** profile
 in `~/.aws/credentials` — see [`aws/README.md`](../../aws/README.md).
 
-| Variable                                                          | Used by                                                                    | Purpose                          |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------- |
+| Variable                                                          | Used by                                                                        | Purpose                          |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------- |
 | `AWS_PROFILE`                                                     | `aws s3 sync`, SSM, Lambda, CloudFront, and `SourceClient` when `S3_*` omitted | Selects `phylopic-publish`       |
-| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` | the same                                                                   | Credentials, if not from profile |
-| `AWS_REGION`, `AWS_DEFAULT_REGION`                                | the same                                                                   | Region (`us-west-2`)             |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` | the same                                                                       | Credentials, if not from profile |
+| `AWS_REGION`, `AWS_DEFAULT_REGION`                                | the same                                                                       | Region (`us-west-2`)             |
 
 #### Notes
 
