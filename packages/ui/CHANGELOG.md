@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.11] - 2026-08-10
+
+### Fixed
+
+- Content Security Policy allows Google Fonts and Google Tag Manager used by the apps.
+
 ## [1.7.10] - 2026-08-09
 
 ### Security

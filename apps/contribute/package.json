@@ -70,5 +70,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.4.6"
+    "version": "2.4.7"
 }
