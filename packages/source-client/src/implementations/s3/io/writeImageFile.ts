@@ -1,5 +1,6 @@
 import { PutObjectCommandInput } from "@aws-sdk/client-s3"
-import { invalidate, isImageMediaType, isObject, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
+import { invalidate, isImageMediaType, isObject, isVectorMediaType, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
+import { sanitizeSVG } from "@phylopic/utils/svg"
 import { ImageFile } from "../../../interfaces/ImageFile"
 const isBuffer = (x: unknown, collector?: ValidationFaultCollector): x is Buffer =>
     x instanceof Buffer || invalidate(collector, "Expected a buffer.")
@@ -12,8 +13,9 @@ export const writeImageFile = async (value: ImageFile): Promise<Partial<PutObjec
     if (!validate(value, collector)) {
         throw new ValidationError(collector.list(), "Invalid payload.")
     }
+    const data = isVectorMediaType(value.type) ? sanitizeSVG(value.data) : value.data
     return {
-        Body: value.data,
+        Body: data,
         ContentType: value.type,
     }
 }

@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.0] - 2026-08-09
+
+### Security
+
+- SVG source images are sanitized with DOMPurify before being written to S3 (`writeImageFile`).
+
 ## [1.3.5] - 2026-08-09
 
 ### Fixed
