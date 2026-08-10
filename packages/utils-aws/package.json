@@ -13,6 +13,7 @@
     "description": "Common utilities for using Amazon Web Services in *PhyloPic* project.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
+        "@vercel/functions": "^3.0.0",
         "eslint": "^8.57.0",
         "eslint-config-phylopic": "*",
         "prettier": "^3.9.6",
@@ -67,5 +68,5 @@
     },
     "sideEffects": false,
     "types": "./dist/index.d.ts",
-    "version": "1.1.0"
+    "version": "1.1.1"
 }

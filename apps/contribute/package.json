@@ -9,6 +9,7 @@
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1093.0",
         "@aws-sdk/client-ses": "^3.1093.0",
+        "@aws-sdk/credential-provider-web-identity": "^3.1093.0",
         "@aws-sdk/s3-request-presigner": "3.1093.0",
         "@phylopic/api-models": "*",
         "@phylopic/source-client": "*",
@@ -72,5 +73,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.4.9"
+    "version": "2.4.10"
 }

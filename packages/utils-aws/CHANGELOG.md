@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.1] - 2026-08-10
+
+### Fixed
+
+- `createAwsClientConfig` statically imports `@vercel/functions/oidc` instead of using a dynamic
+  `require`, which Next.js bundling could break at runtime.
+
 ## [1.1.0] - 2026-08-10
 
 ### Added

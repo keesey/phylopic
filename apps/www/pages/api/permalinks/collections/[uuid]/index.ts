@@ -1,37 +1,31 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { isUUIDish, normalizeUUID } from "@phylopic/utils"
-import { createAwsClientConfig } from "@phylopic/utils-aws"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
+import createS3ClientConfig from "~/aws/createS3ClientConfig"
 import loadCollection from "~/permalinks/utils/loadCollection"
 import save from "~/permalinks/utils/save"
+
 const index: NextApiHandler = async (req, res) => {
     let s3Client: S3Client | undefined
     try {
         const uuid = req.query.uuid
         if (!isUUIDish(uuid)) {
-            throw 404
+            res.status(404).end()
+            return
         }
         const normalizedUUID = normalizeUUID(uuid)
         const collection = await loadCollection(normalizedUUID)
-        s3Client = new S3Client(
-            createAwsClientConfig({
-                region: process.env.S3_REGION!,
-                accessKeyIdEnv: "S3_ACCESS_KEY_ID",
-                secretAccessKeyEnv: "S3_SECRET_ACCESS_KEY",
-            }),
-        )
+        s3Client = new S3Client(createS3ClientConfig())
         const hash = await save(s3Client, collection)
         res.setHeader("content-type", "application/json")
-        res.send(JSON.stringify(hash))
-        res.status(200)
-        res.end()
+        res.status(200).send(JSON.stringify(hash))
     } catch (e) {
         if (typeof e === "number") {
-            res.status(e)
-            res.end()
-        } else {
-            throw e
+            res.status(e).end()
+            return
         }
+        console.error("[GET /api/permalinks/collections/[uuid]]", e)
+        res.status(502).json({ error: "Could not create a permalink." })
     } finally {
         s3Client?.destroy()
     }

@@ -1,4 +1,5 @@
 import type { AwsCredentialIdentityProvider } from "@smithy/types"
+import { awsCredentialsProvider } from "@vercel/functions/oidc"
 
 export type CreateAwsClientConfigOptions = {
     region: string
@@ -30,9 +31,6 @@ const createAwsClientConfig = ({
     forcePathStyle,
 }: CreateAwsClientConfigOptions): AwsClientConfig => {
     if (roleArn) {
-        // Loaded at runtime so `@vercel/functions` is only required on Vercel deployments.
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { awsCredentialsProvider } = require("@vercel/functions/oidc") as typeof import("@vercel/functions/oidc")
         return {
             region,
             credentials: awsCredentialsProvider({

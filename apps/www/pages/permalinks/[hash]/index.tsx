@@ -1,7 +1,8 @@
 import { GetObjectCommandOutput, S3Client } from "@aws-sdk/client-s3"
 import { TimestampView } from "@phylopic/ui"
 import { Hash, isHash } from "@phylopic/utils"
-import { createAwsClientConfig, getJSON } from "@phylopic/utils-aws"
+import { getJSON } from "@phylopic/utils-aws"
+import createS3ClientConfig from "~/aws/createS3ClientConfig"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -60,13 +61,7 @@ export const getStaticProps: GetStaticProps<Props, { hash: Hash }> = async conte
     if (!isHash(hash)) {
         return { notFound: true }
     }
-    const client = new S3Client(
-        createAwsClientConfig({
-            region: process.env.S3_REGION!,
-            accessKeyIdEnv: "S3_ACCESS_KEY_ID",
-            secretAccessKeyEnv: "S3_SECRET_ACCESS_KEY",
-        }),
-    )
+    const client = new S3Client(createS3ClientConfig())
     let data: PermalinkData
     let output: GetObjectCommandOutput
     try {

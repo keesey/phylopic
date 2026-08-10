@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.10] - 2026-08-10
+
+### Fixed
+
+- S3 and SES OIDC credentials use statically imported `@vercel/functions/oidc` (same bundling fix as
+  `@phylopic/www`).
+
 ## [2.4.9] - 2026-08-10
 
 ### Security

@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.27] - 2026-08-10
+
+### Fixed
+
+- `@phylopic/www` `2.14.23`: Permalink creation OIDC/S3 bundling fix.
+- `@phylopic/contribute` `2.4.10`: Same OIDC static-import fix for S3/SES.
+- `@phylopic/utils-aws` `1.1.1`: Static import of `@vercel/functions/oidc`.
+
 ## [2.0.26] - 2026-08-10
 
 ### Fixed

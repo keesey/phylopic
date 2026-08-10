@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.23] - 2026-08-10
+
+### Fixed
+
+- Permalink creation uses a statically imported Vercel OIDC credential provider so S3 writes work
+  on Vercel (avoids a bundled `require("@vercel/functions/oidc")` runtime failure).
+
 ## [2.14.22] - 2026-08-10
 
 ### Fixed
