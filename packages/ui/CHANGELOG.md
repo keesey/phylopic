@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.12] - 2026-08-10
+
+### Fixed
+
+- No longer setting a `User-Agent` header on client-side requests to the _Paleobiology Database_ API.
+
 ## [1.7.11] - 2026-08-10
 
 ### Fixed

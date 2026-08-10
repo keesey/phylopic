@@ -93,23 +93,7 @@ const nextConfig = {
         ]
     },
 }
-const runtimeCaching = require("next-pwa/cache")
-const withPWA = require("next-pwa")({
-    dest: "public",
-    disable: process.env.NODE_ENV === "development",
-    register: true,
-})
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
     enabled: process.env.ANALYZE === "true",
 })
-const config = withBundleAnalyzer(
-    withPWA({
-        ...nextConfig,
-        pwa: {
-            dest: "public",
-            runtimeCaching,
-        },
-    }),
-)
-delete config.pwa
-module.exports = config
+module.exports = withBundleAnalyzer(nextConfig)

@@ -5,7 +5,6 @@ import { useDebounce } from "@react-hook/debounce"
 import React, { useContext, useMemo } from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
-import packageJson from "../../../../package.json"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { PBDB_URL } from "./PBDB_URL"
@@ -24,11 +23,7 @@ type PBDBResponse = Readonly<{
     records: readonly PBDBRecord[]
 }>
 const fetchLineage: Fetcher<PBDBResponse, string> = async url => {
-    const response = await fetchDataAndCheck<PBDBResponse>(url, {
-        headers: {
-            "User-Agent": `PhyloPic User Interface/${packageJson.version.split(".", 2).join(".")}`,
-        },
-    })
+    const response = await fetchDataAndCheck<PBDBResponse>(url)
     return response.data
 }
 const fetchNode: Fetcher<NodeWithEmbedded, string> = async url => {

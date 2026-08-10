@@ -52,7 +52,6 @@ endpoint rejects every request rather than failing open.
 
 | Variable                 | Purpose                                                          | How it is read                         |
 | ------------------------ | ---------------------------------------------------------------- | -------------------------------------- |
-| `NODE_ENV`               | Disables the PWA service worker when `development`               | Set by Next.js                         |
 | `ANALYZE`                | `yarn analyze` sets this to `true` to enable the bundle analyzer | Set by the `analyze` script            |
 | `NEXT_PUBLIC_VERCEL_ENV` | Gates analytics events to `production` (used in `@phylopic/ui`)  | Provided by Vercel                     |
 | `VERCEL_OIDC_TOKEN`      | Short-lived OIDC token; written by `vercel env pull`             | Provided by Vercel; unused by our code |

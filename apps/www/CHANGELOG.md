@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.18] - 2026-08-10
+
+### Fixed
+
+- No longer setting a `User-Agent` header on client-side requests to the _Paleobiology Database_ API.
+- Upgraded `@phylopic/ui` to `1.7.12`.
+
+### Removed
+
+- Progressive Web App service worker (`next-pwa`).
+
 ## [2.14.17] - 2026-08-10
 
 ### Fixed

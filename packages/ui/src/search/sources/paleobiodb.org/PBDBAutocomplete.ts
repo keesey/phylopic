@@ -7,7 +7,6 @@ import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { PBDB_URL } from "./PBDB_URL"
-import packageJson from "../../../../package.json"
 export type PBDBAutocompleteProps = {
     limit?: number
 }
@@ -26,11 +25,7 @@ const fetcher: Fetcher<Readonly<[readonly PBDBTaxonRecord[], string]>, [string, 
     if (name.length < 2) {
         return [[], name]
     }
-    const response = await fetchDataAndCheck<PBDBResponse>(url, {
-        headers: {
-            "User-Agent": `PhyloPic User Interface/${packageJson.version.split(".", 2).join(".")}`,
-        },
-    })
+    const response = await fetchDataAndCheck<PBDBResponse>(url)
     return [response.data.records, name]
 }
 export const PBDBAutocomplete: React.FC<PBDBAutocompleteProps> = ({ limit = 10 }) => {
