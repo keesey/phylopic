@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.2] - 2026-08-10
+
+### Added
+
+- `retire-vercel-scoped-keys.sh`: operator script to list, rotate (for local dev), deactivate,
+  and delete IAM access keys on `phylopic-www`, `phylopic-contribute`, and `phylopic-ses-sender`
+  after Vercel OIDC rollout.
+
+### Changed
+
+- `README.md`: document retiring Vercel static keys; principals table notes Vercel uses OIDC.
+
 ## [1.1.1] - 2026-08-10
 
 ### Fixed

@@ -14,10 +14,10 @@ policies in [`policies/`](./policies). It does not create access keys; see
 
 | User                  | Key goes in                                           | Can do                                                 |
 | --------------------- | ----------------------------------------------------- | ------------------------------------------------------ |
-| `phylopic-ses-sender` | `SES_*` in `apps/contribute` (Vercel + local)         | Send mail as `keesey+phylopic@gmail.com`, nothing else |
-| `phylopic-contribute` | `S3_*` in `apps/contribute` (Vercel + local)          | Auth tokens, submission metadata, read source images   |
-| `phylopic-www`        | `S3_*` in `apps/www` (Vercel + local)                 | Read and write `permalinks.phylopic.org/data/*`        |
-| `phylopic-editorial`  | `S3_*` in `apps/edit` and `apps/publish` (local only) | Full read/write on submissions and source images       |
+| `phylopic-ses-sender` | `SES_*` in `apps/contribute` (local; Vercel uses OIDC) | Send mail as `keesey+phylopic@gmail.com`, nothing else |
+| `phylopic-contribute` | `S3_*` in `apps/contribute` (local; Vercel uses OIDC)    | Auth tokens, submission metadata, read source images   |
+| `phylopic-www`        | `S3_*` in `apps/www` (local; Vercel uses OIDC)           | Read and write `permalinks.phylopic.org/data/*`        |
+| `phylopic-editorial`  | `apps/edit` and `apps/publish` (local only) | Full read/write on submissions and source images       |
 
 Splitting `SES_*` from `S3_*` makes the existing variable names honest: until now both name
 pairs held the same credential, so the apparent separation of mail from storage did not exist.
@@ -166,6 +166,41 @@ Then exercise each path for real, because of the silent-failure mode described a
   workstation.
 - **`apps/api`** already uses an IAM role (`phylopic-api-executor`) with no static keys. That
   is the preferred model wherever the runtime supports it.
-- **Vercel deployments** can use `AWS_ROLE_ARN` with OIDC instead of `S3_*` / `SES_*` access
-  keys. App code supports both via `@phylopic/utils-aws`; IAM role setup is operator-only and
-  not checked into this repository.
+- **Vercel deployments** use `AWS_ROLE_ARN` with OIDC (`@vercel/functions/oidc` in app code).
+  Static `S3_*` / `SES_*` keys are for **local** `.env.local` only after OIDC rollout.
+
+## Retiring Vercel static keys
+
+After OIDC is live and smoke-tested, remove deployment keys in this order:
+
+1. **Vercel:** delete `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `SES_*` from both projects.
+   Redeploy; confirm permalinks (`www`) and magic links (`contribute`).
+2. **Soak:** leave production on OIDC only for at least a few days.
+3. **Local rotation (if needed):** if the same access key id was pasted into Vercel _and_
+   `.env.local`, create a fresh local-only key before retiring the old one:
+
+    ```sh
+    ./retire-vercel-scoped-keys.sh rotate-local phylopic-www
+    ./retire-vercel-scoped-keys.sh rotate-local phylopic-contribute
+    ./retire-vercel-scoped-keys.sh rotate-local phylopic-ses-sender
+    ```
+
+    Update `apps/www/.env.local` and `apps/contribute/.env.local`; verify local dev.
+
+4. **Retire IAM keys** used only by Vercel (does not touch `phylopic-editorial`):
+
+    ```sh
+    ./retire-vercel-scoped-keys.sh status
+    ./retire-vercel-scoped-keys.sh deactivate phylopic-www AKIA...
+    ./retire-vercel-scoped-keys.sh deactivate phylopic-contribute AKIA...
+    ./retire-vercel-scoped-keys.sh deactivate phylopic-ses-sender AKIA...
+    ```
+
+    Deactivation is reversible. After another soak with inactive keys, delete each:
+
+    ```sh
+    ./retire-vercel-scoped-keys.sh delete phylopic-www AKIA...
+    ```
+
+[`retire-vercel-scoped-keys.sh`](./retire-vercel-scoped-keys.sh) lists last-used times to help
+pick which key id to retire.
