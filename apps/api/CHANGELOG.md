@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.11.4] - 2026-08-10
+
+### Changed
+
+- Replaced unmaintained `swagger-cli` with `@apidevtools/swagger-parser` for OpenAPI validation (compatible with js-yaml 4).
+
 ## [2.11.3] - 2026-08-10
 
 ### Changed
