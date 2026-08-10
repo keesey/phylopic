@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.2] - 2026-08-09
+
+### Security
+
+- Upgraded `uuid` to 11.x.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
 ## [1.2.1] - 2026-08-09
 
 ### Security

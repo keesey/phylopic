@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.2] - 2026-08-09
+
+### Security
+
+- Upgraded `@phylopic/source-models` to `1.1.3`.
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `@phylopic/utils-aws` to `1.0.7`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
 ## [1.4.1] - 2026-08-09
 
 ### Changed

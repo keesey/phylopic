@@ -21,7 +21,7 @@
         "clsx": "^2.1.1",
         "flux-standard-action": "^2.1.2",
         "jsonwebtoken": "^9.0.3",
-        "next": "^15.5.21",
+        "next": "^15.5.23",
         "next-seo": "^6.8.0",
         "number-to-words": "^1.2.4",
         "potrace": "^2.1.8",
@@ -70,5 +70,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.4.5"
+    "version": "2.4.6"
 }

@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.24] - 2026-08-09
+
+### Security
+
+- Yarn resolutions pin transitive dependencies with known vulnerabilities (`postcss`, `sharp`, `serialize-javascript`, `brace-expansion`, `js-yaml`, `nanoid`, `phin`, `xml2js`, `fast-uri`, `core-js-compat`).
+
 ## [2.0.23] - 2026-08-09
 
 ### Changed

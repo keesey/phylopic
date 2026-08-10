@@ -65,5 +65,5 @@
         "lint": "TIMING=1 eslint --fix src/**/*.ts*"
     },
     "types": "./dist/index.d.ts",
-    "version": "1.4.1"
+    "version": "1.4.2"
 }

@@ -22,6 +22,18 @@
     "license": "MIT",
     "name": "phylopic",
     "private": true,
+    "resolutions": {
+        "brace-expansion": "2.1.4",
+        "core-js-compat": "3.46.0",
+        "fast-uri": "3.1.5",
+        "js-yaml": "4.3.1",
+        "nanoid": "3.3.17",
+        "phin": "3.7.1",
+        "postcss": "8.5.26",
+        "serialize-javascript": "7.0.5",
+        "sharp": "0.35.3",
+        "xml2js": "0.6.2"
+    },
     "repository": "https://github.com/keesey/phylopic",
     "scripts": {
         "build": "turbo run build",
@@ -36,7 +48,7 @@
         "test": "turbo run test",
         "version-packages": "changeset version"
     },
-    "version": "2.0.23",
+    "version": "2.0.24",
     "workspaces": [
         "apps/*",
         "packages/*"
