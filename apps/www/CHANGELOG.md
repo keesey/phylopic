@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.14] - 2026-08-09
+
+### Fixed
+
+- Added missing `@phylopic/utils-aws` dependency so Vercel production builds resolve permalink S3 imports.
+
 ## [2.14.13] - 2026-08-09
 
 ### Security
