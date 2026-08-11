@@ -19,8 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+<<<<<<< HEAD
 - `@phylopic/api`, `@phylopic/source-client`: omit internal error details from client responses.
 - `@phylopic/api`: rate-limit unauthenticated `POST /collections` by source IP.
+=======
+- `@phylopic/api`: rate-limit unauthenticated `POST /collections` by source IP.
+- `@phylopic/api`, `@phylopic/source-client`: omit internal error details from client responses.
+>>>>>>> 26a377bc93bee6c034aea888fe0878bdc883f1f6
 - `@phylopic/www`: escape `<` in JSON-LD script payloads.
 
 ## [2.0.32] - 2026-08-10
