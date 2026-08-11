@@ -55,5 +55,5 @@
         "predeploy": "yarn test",
         "test": "yarn build:docs && node ./scripts/validate-openapi.mjs"
     },
-    "version": "2.12.0"
+    "version": "2.13.0"
 }

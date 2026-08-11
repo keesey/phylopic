@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.13] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
 ## [1.0.12] - 2026-08-09
 
 ### Security

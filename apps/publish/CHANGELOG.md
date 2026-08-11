@@ -17,6 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.12.12] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+### Removed
+
+- `Image._links["twitter:image"]` from published image JSON (use `http://ogp.me/ns#image` instead).
+
 ## [1.12.11] - 2026-08-10
 
 ### Added

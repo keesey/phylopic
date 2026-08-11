@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.0] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+### Removed
+
+- `postResolveObjects` method (`POST /resolve/{authority}/{namespace}`).
+- `Image._links["twitter:image"]` (use `http://ogp.me/ns#image` instead).
+
 ## [2.12.0] - 2026-08-11
 
 ### Changed

@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.35] - 2026-08-11
+
+### Changed
+
+- `@phylopic/api` `2.13.0`: removed deprecated `postResolveObjects` and `twitter:image`; upgraded `@phylopic/api-models` to `1.4.0`.
+- `@phylopic/api-models` `1.4.0`: removed deprecated `Image._links["twitter:image"]`.
+- `@phylopic/publish` `1.12.12`: stopped emitting `twitter:image` in image JSON; upgraded `@phylopic/api-models` to `1.4.0`.
+- `@phylopic/contribute` `2.4.16`, `@phylopic/ui` `1.7.13`, `@phylopic/utils-api` `1.0.13`, `@phylopic/www` `2.14.27`: upgraded `@phylopic/api-models` to `1.4.0`.
+
 ## [2.0.34] - 2026-08-11
 
 ### Changed
