@@ -23,8 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Cap the shared Postgres pool at one connection per serverless instance, so API routes do not
-  exhaust RDS connection slots (`53300`).
+- Cap the shared Postgres pool at one connection per serverless instance, so API routes do not exhaust RDS connection slots (`53300`).
 
 ## [2.4.17] - 2026-08-11
 
