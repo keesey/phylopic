@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.12.11] - 2026-08-10
+
+### Added
+
+- `AWS_PROFILE=phylopic-publish` on publish `package.json` scripts that call AWS.
+
 ## [1.12.10] - 2026-08-10
 
 ### Security
