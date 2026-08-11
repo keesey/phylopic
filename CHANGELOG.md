@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- `@phylopic/utils-aws`, `@phylopic/source-client`: explicit AES256 SSE on S3 puts.
+
 ## [2.0.32] - 2026-08-10
 
 ### Security
