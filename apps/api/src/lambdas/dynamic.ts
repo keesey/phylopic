@@ -85,6 +85,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             body: event.body ?? undefined,
                             encoding: event.isBase64Encoded ? "base64" : "utf8",
+                            sourceIp: event.requestContext.identity.sourceIp,
                             ...getParameters(event.headers, ["accept", "content-type"]),
                         },
                         SERVICE,
