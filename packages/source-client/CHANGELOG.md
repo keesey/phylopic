@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.3] - 2026-08-10
+
+### Security
+
 - Return generic messages from `handleAPIError` for AWS and unexpected failures.
 
 ## [1.4.2] - 2026-08-09

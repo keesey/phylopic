@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.25] - 2026-08-10
+
+### Security
+
 - Escape `<` in JSON-LD script payloads.
 
 ## [2.14.24] - 2026-08-10
