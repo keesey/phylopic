@@ -10,6 +10,7 @@ import {
     stringifyNormalized,
     UUID,
 } from "@phylopic/utils"
+import { sanitizeSVGLite } from "@phylopic/utils/svg/lite"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { createHash } from "crypto"
 import APIError from "../errors/APIError"
@@ -49,8 +50,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     const contributor = getContributor(contributorUUID)
     let fileBody = Buffer.from(body, encoding)
     if (isVectorMediaType(contentType)) {
-        const { sanitizeSVG } = await import("@phylopic/utils/svg")
-        fileBody = sanitizeSVG(fileBody)
+        fileBody = sanitizeSVGLite(fileBody)
     }
     const hash = getHash(fileBody)
     const key = `files/${encodeURIComponent(hash)}`

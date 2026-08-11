@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.40] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/utils` `1.2.3`: `@phylopic/utils/svg/lite` (regex SVG sanitization without jsdom).
+- `@phylopic/api` `2.13.4`: use svg/lite on `POST /uploads` to avoid `ERR_REQUIRE_ESM` in the uploader Lambda.
+
 ## [2.0.39] - 2026-08-11
 
 ### Fixed

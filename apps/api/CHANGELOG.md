@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.4] - 2026-08-11
+
+### Fixed
+
+- `POST /uploads` SVG sanitization uses `@phylopic/utils/svg/lite` (no jsdom), avoiding
+  `ERR_REQUIRE_ESM` from `@exodus/bytes` in the uploader Lambda.
+
 ## [2.13.3] - 2026-08-11
 
 ### Fixed
