@@ -19,9 +19,10 @@ const selectEntityJSONFromPostgres = async (
         }
         return "null"
     } catch (e) {
+        console.error(e)
         throw new APIError(500, [
             {
-                developerMessage: `Error retrieving entity (UUID: ${uuid}) from table "${tableName}": ${e}`,
+                developerMessage: "Error retrieving entity from Postgres.",
                 type: "DEFAULT_5XX",
                 userMessage,
             },

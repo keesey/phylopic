@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Rate-limit unauthenticated `POST /collections` by source IP.
+- Return generic messages for unexpected API errors instead of internal details.
 
 ## [2.11.4] - 2026-08-10
 
