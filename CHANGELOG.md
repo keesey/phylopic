@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- `@phylopic/api`: Swagger UI SRI pins and HTTPS API docs URLs.
+
 ## [2.0.32] - 2026-08-10
 
 ### Security
