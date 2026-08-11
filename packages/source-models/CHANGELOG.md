@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Read JWT issuer and audience from `JWT_ISSUER` and `JWT_AUDIENCE`.
+
 ## [1.1.3] - 2026-08-09
 
 ### Security
