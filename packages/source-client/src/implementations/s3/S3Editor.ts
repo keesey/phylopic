@@ -1,4 +1,5 @@
 import { GetObjectOutput, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3"
+import { S3_SERVER_SIDE_ENCRYPTION_AES256 } from "@phylopic/utils-aws"
 import { Editable } from "../../interfaces/Editable"
 import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { S3Deletor } from "./S3Deletor"
@@ -19,6 +20,7 @@ export class S3Editor<T> extends S3Deletor<T> implements Editable<T> {
         await this.provider.getS3().send(
             new PutObjectCommand({
                 ...(await this.writeOutput(value)),
+                ...S3_SERVER_SIDE_ENCRYPTION_AES256,
                 Bucket: this.bucket,
                 Key: this.key,
             }),
