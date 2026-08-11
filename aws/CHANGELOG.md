@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.1] - 2026-08-11
+
+### Fixed
+
+- `phylopic-editorial` and `phylopic-contribute`: grant `s3:PutObjectTagging` on submission trash
+  keys so `CopyObject` can copy contributor tags when deleting submissions.
+
 ## [1.2.0] - 2026-08-10
 
 ### Added
