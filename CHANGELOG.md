@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.39] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/source-client` `1.4.4`: `createSourcePool()` (one Postgres connection per serverless instance).
+- `@phylopic/contribute` `2.4.18`: use capped pool so API routes do not exhaust RDS connections (`53300`).
+- `@phylopic/edit` `1.9.16`: same pool cap.
+
 ## [2.0.38] - 2026-08-11
 
 ### Fixed

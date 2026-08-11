@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.4] - 2026-08-11
+
+### Added
+
+- `createSourcePool()` for serverless apps: one Postgres connection per instance (`max: 1`), matching
+  `@phylopic/api` pool settings.
+
 ## [1.4.3] - 2026-08-10
 
 ### Security
