@@ -129,3 +129,6 @@ functions:
                       name: auth
                   path: /uploads
                   method: post
+            - httpApi:
+                  path: /uploads
+                  method: options

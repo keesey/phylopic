@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.36] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/api` `2.13.1`: CORS preflight for cross-origin `POST /uploads`.
+- `@phylopic/contribute` `2.4.17`: replace invalid stored magic-link token instead of returning
+  `403` on authorize.
+
 ## [2.0.35] - 2026-08-11
 
 ### Changed
