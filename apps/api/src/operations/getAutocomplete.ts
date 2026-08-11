@@ -9,6 +9,7 @@ import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import MAX_AUTOCOMPLETE_RESULTS from "../search/MAX_AUTOCOMPLETE_RESULTS"
+import { escapeLikePattern } from "../search/escapeLikePattern"
 import normalizeSearchQuery from "../search/normalizeSearchQuery"
 import { PgClientService } from "../services/PgClientService"
 import { Operation } from "./Operation"
@@ -21,9 +22,10 @@ const findMatches = async (service: PgClientService, query: string): Promise<rea
     let result: readonly string[]
     const client = await service.createPgClient()
     try {
+        const escapedQuery = escapeLikePattern(query)
         const queryResult = await client.query<{ normalized: string; from_start: boolean }>(
-            `SELECT normalized,normalized LIKE $1::character varying AS from_start FROM node_name WHERE build=$2::bigint AND normalized LIKE $3::character varying GROUP BY normalized,from_start ORDER BY from_start DESC,normalized LIMIT ${MAX_AUTOCOMPLETE_RESULTS}`,
-            [`${query}%`, BUILD, `%${query}%`],
+            `SELECT normalized,normalized LIKE $1::character varying AS from_start FROM node_name WHERE build=$2::bigint AND normalized LIKE $3::character varying ESCAPE '\\' GROUP BY normalized,from_start ORDER BY from_start DESC,normalized LIMIT ${MAX_AUTOCOMPLETE_RESULTS}`,
+            [`${escapedQuery}%`, BUILD, `%${escapedQuery}%`],
         )
         result = queryResult.rows.map(({ normalized }) => normalized)
     } finally {
