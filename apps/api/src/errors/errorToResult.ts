@@ -18,9 +18,10 @@ const errorToResult = (e: unknown): APIGatewayProxyResult => {
     if (e instanceof APIError) {
         return fromAPIError(e)
     }
+    console.error(e)
     const errors: readonly ErrorModel[] = [
         {
-            developerMessage: String(e) || "Unknown error.",
+            developerMessage: "An unexpected error occurred.",
             type: "DEFAULT_5XX",
             userMessage: "An unexpected error occurred.",
         },
