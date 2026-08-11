@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.2] - 2026-08-11
+
+### Fixed
+
+- CORS preflight for cross-origin `POST /uploads`: route `OPTIONS /uploads` through the `dynamic` Lambda (same pattern as `OPTIONS /collections`), not the `uploader` Lambda.
+
 ## [2.13.1] - 2026-08-11
 
 ### Fixed

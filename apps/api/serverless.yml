@@ -81,6 +81,9 @@ functions:
                   path: /collections
                   method: options
             - httpApi:
+                  path: /uploads
+                  method: options
+            - httpApi:
                   path: /collections/{uuid}
                   method: get
             - httpApi:
@@ -129,6 +132,3 @@ functions:
                       name: auth
                   path: /uploads
                   method: post
-            - httpApi:
-                  path: /uploads
-                  method: options

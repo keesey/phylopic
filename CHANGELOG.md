@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.37] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/api` `2.13.2`: CORS preflight for cross-origin `POST /uploads` (route `OPTIONS /uploads`
+  through the `dynamic` Lambda).
+
 ## [2.0.36] - 2026-08-11
 
 ### Fixed
