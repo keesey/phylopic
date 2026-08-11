@@ -23,30 +23,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `phylopic-editorial` and `phylopic-contribute`: grant `s3:PutObjectTagging` on submission trash
-  keys so `CopyObject` can copy contributor tags when deleting submissions.
+- `phylopic-editorial` and `phylopic-contribute`: grant `s3:PutObjectTagging` on submission trash keys so `CopyObject` can copy contributor tags when deleting submissions.
 
 ## [1.2.0] - 2026-08-10
 
 ### Added
 
-- `phylopic-publish` IAM user policy for the publication pipeline (`yarn make`): S3 sync on
-  `source-images`, `images`, and `entities` buckets; SSM build parameters; Lambda env on the two
-  API functions; CloudFront invalidation.
+- `phylopic-publish` IAM user policy for the publication pipeline (`yarn make`): S3 sync on `source-images`, `images`, and `entities` buckets; SSM build parameters; Lambda env on the two API functions; CloudFront invalidation.
 
 ### Changed
 
 - `create-principals.sh` includes `phylopic-publish`.
-- `README.md`: operator profile setup; `phylopic-editorial` is edit-only (publish uses
-  `phylopic-publish`).
+- `README.md`: operator profile setup; `phylopic-editorial` is edit-only (publish uses `phylopic-publish`).
 
 ## [1.1.2] - 2026-08-10
 
 ### Added
 
-- `retire-vercel-scoped-keys.sh`: operator script to list, rotate (for local dev), deactivate,
-  and delete IAM access keys on `phylopic-www`, `phylopic-contribute`, and `phylopic-ses-sender`
-  after Vercel OIDC rollout.
+- `retire-vercel-scoped-keys.sh`: operator script to list, rotate (for local dev), deactivate, and delete IAM access keys on `phylopic-www`, `phylopic-contribute`, and `phylopic-ses-sender` after Vercel OIDC rollout.
 
 ### Changed
 
@@ -56,9 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `phylopic-ses-sender.json`: grant `ses:SendEmail` on identity `keesey@gmail.com` (SES IAM
-  resource for Gmail plus-address senders), keeping `ses:FromAddress` limited to
-  `keesey+phylopic@gmail.com`.
+- `phylopic-ses-sender.json`: grant `ses:SendEmail` on sender identity (SES IAM resource for Gmail plus-address senders).
 
 ## [1.1.0] - 2026-08-10
 
@@ -68,8 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- Application code (via `@phylopic/utils-aws`) supports `AWS_ROLE_ARN` so Vercel deployments
-  can drop static access keys after operator IAM role setup (documented in the private audit).
+- Application code (via `@phylopic/utils-aws`) supports `AWS_ROLE_ARN` so Vercel deployments can drop static access keys after operator IAM role setup (documented in the private audit).
 
 ## [1.0.1] - 2026-08-09
 
