@@ -1,5 +1,13 @@
 service: phylopic-api
 useDotenv: true
+build:
+    esbuild:
+        external:
+            - dompurify
+            - isomorphic-dompurify
+            - jsdom
+        exclude:
+            - "!@aws-sdk/client-s3"
 provider:
     architecture: arm64
     httpApi:

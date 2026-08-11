@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.3] - 2026-08-11
+
+### Fixed
+
+- `POST /uploads` no longer crashes on Lambda init: keep `jsdom` / `isomorphic-dompurify` out of the
+  bundled `uploader` artifact (Serverless `build.esbuild.external`) and load SVG sanitization on demand.
+  Include `@aws-sdk/client-s3` in the deployment package for the externalized uploader bundle.
+
 ## [2.13.2] - 2026-08-11
 
 ### Fixed
