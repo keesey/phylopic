@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.41] - 2026-08-11
+
+### Fixed
+
+- `aws` `1.2.1`: grant `s3:PutObjectTagging` on submission trash keys for editorial and contribute
+  deletes.
+
 ## [2.0.40] - 2026-08-11
 
 ### Fixed
