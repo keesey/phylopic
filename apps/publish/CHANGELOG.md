@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.12.9] - 2026-08-10
+
+### Fixed
+
+- Preprocess SVG sanitization strips corrupted Adobe Illustrator CDATA prefixes (`]&gt;`, etc.)
+  that caused `yarn make` insert failures on a small set of legacy source files.
+
 ## [1.12.8] - 2026-08-10
 
 ### Changed

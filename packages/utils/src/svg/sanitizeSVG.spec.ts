@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest"
-import { containsRemovableThreats, isLikelySVG, sanitizeSVGString, svgNeedsSanitization } from "./sanitizeSVG"
+import {
+    containsRemovableThreats,
+    hasLeadingSvgCorruption,
+    isLikelySVG,
+    sanitizeSVGString,
+    svgNeedsSanitization,
+} from "./sanitizeSVG"
 
 describe("sanitizeSVGString", () => {
     it("removes script elements", () => {
@@ -41,6 +47,17 @@ describe("sanitizeSVGString", () => {
         expect(clean).not.toContain("eJztfXlf")
         expect(clean).not.toContain("i:pgf")
     })
+
+    it("removes leading CDATA fragments from broken Illustrator exports", () => {
+        const dirty =
+            ']&gt;\n<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0 0"/></svg>'
+        expect(hasLeadingSvgCorruption(dirty)).toBe(true)
+        expect(svgNeedsSanitization(dirty)).toBe(true)
+        const clean = sanitizeSVGString(dirty)
+        expect(clean.startsWith("<svg")).toBe(true)
+        expect(clean).not.toContain("]&gt;")
+        expect(clean).toContain('<path d="M0 0"')
+    })
 })
 
 describe("isLikelySVG", () => {
@@ -50,6 +67,13 @@ describe("isLikelySVG", () => {
 
     it("detects svg by content", () => {
         expect(isLikelySVG(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>'))).toBe(true)
+        expect(
+            isLikelySVG(
+                Buffer.from(
+                    ']&gt;\n<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"></svg>',
+                ),
+            ),
+        ).toBe(true)
         expect(isLikelySVG(Buffer.from("not svg"))).toBe(false)
     })
 })
