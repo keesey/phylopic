@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.34] - 2026-08-11
+
+### Changed
+
+- `@phylopic/api` `2.12.0`: HTTPS API documentation on `api-docs.phylopic.org`.
+- `@phylopic/www` `2.14.26`: `https://` links to API documentation.
+
 ## [2.0.33] - 2026-08-10
 
 ### Security

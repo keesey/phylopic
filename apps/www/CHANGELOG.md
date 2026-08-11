@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.26] - 2026-08-11
+
+### Changed
+
+- Links and the `/api` redirect target use `https://api-docs.phylopic.org`.
+
 ## [2.14.25] - 2026-08-10
 
 ### Security
