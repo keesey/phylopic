@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- `@phylopic/www`: escape `<` in JSON-LD script payloads.
+
 ## [2.0.32] - 2026-08-10
 
 ### Security
