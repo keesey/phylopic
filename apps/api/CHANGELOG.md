@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Upgraded `@hapi/wreck` to `18.1.2` (via `serverless-offline`), fixing credential header leak
+  on cross-port/cross-scheme redirects (CVE-2026-48022).
+
 ## [2.13.4] - 2026-08-11
 
 ### Fixed
