@@ -11,9 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Upgraded `@phylopic/utils-aws`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+
 ### Deprecated
 
 ### Fixed
+
+- Permalink page: TypeScript error when passing `S3Client` to `@phylopic/utils-aws` `getJSON` from
+  duplicate `@aws-sdk/client-s3` installs.
 
 ### Removed
 

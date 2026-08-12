@@ -11,11 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Upgraded `@phylopic/utils-aws`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+
 ### Fixed
 
 ### Removed
 
 ### Security
+
+- Confine publish filesystem helpers to the app root.
 
 ## [1.12.13] - 2026-08-11
 
