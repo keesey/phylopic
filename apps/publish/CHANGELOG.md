@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Upgraded `@phylopic/utils-aws`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+
 ### Fixed
 
 ### Removed

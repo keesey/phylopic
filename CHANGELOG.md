@@ -11,15 +11,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Root `resolutions` pin `@aws-sdk/client-s3@3.1093.0`; `@phylopic/utils-aws` peer/dev dependency
+  aligned to `^3.1093.0` for `@phylopic/api`, `@phylopic/contribute`, `@phylopic/publish`,
+  `@phylopic/source-client`, and `@phylopic/www`.
+- Root `resolutions` pin `sharp@0.34.5` (was `0.35.3`) to stay within Next.js optional dependency
+  range.
+
 ### Deprecated
 
 ### Fixed
 
+- `@phylopic/www`: permalink page TypeScript error from duplicate `@aws-sdk/client-s3` installs when
+  calling `@phylopic/utils-aws` `getJSON`.
+
 ### Removed
+
+- `@changesets/cli` and root scripts `changeset`, `release`, and `version-packages`.
 
 ### Security
 
 - `@phylopic/publish`: path containment checks in filesystem helpers.
+- `@phylopic/utils`: require 64-character SHA-256 digests in `isHash`.
 - `@phylopic/www`: upgraded `ws` to `7.5.13` (CVE-2026-48779).
 - Upgraded `vite` to `5.4.21` (CVE-2025-62522) for packages that use `vitest`
   (`@phylopic/api`, `@phylopic/api-models`, `@phylopic/source-client`, `@phylopic/source-models`,
