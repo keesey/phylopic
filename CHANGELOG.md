@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- `@phylopic/www`: redirect `/api` to HTTPS API docs.
 - `@phylopic/publish`: path containment checks in filesystem helpers.
 - `@phylopic/utils`: require 64-character SHA-256 digests in `isHash`.
 - `@phylopic/www`: upgraded `ws` to `7.5.13` (CVE-2026-48779).
