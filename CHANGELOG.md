@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.42] - 2026-08-11
+
+### Fixed
+
+- `aws` `1.2.2`: grant `s3:PutObjectTagging` on source-image keys so `edit` can accept submissions.
+
 ## [2.0.41] - 2026-08-11
 
 ### Fixed

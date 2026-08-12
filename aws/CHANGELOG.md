@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.2] - 2026-08-11
+
+### Fixed
+
+- `phylopic-editorial`: grant `s3:PutObjectTagging` (and `s3:GetObjectTagging`) on source-image
+  keys so accepting a submission can `CopyObject` contributor tags from uploads.
+
 ## [1.2.1] - 2026-08-11
 
 ### Fixed
