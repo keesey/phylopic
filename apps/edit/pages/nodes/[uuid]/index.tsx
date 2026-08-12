@@ -88,11 +88,7 @@ const Content: FC<Props> = ({ uuid }) => {
                                 { href: "/nodes", children: "Nodes" },
                                 {
                                     href: node ? `/nodes/${node.parent}` : undefined,
-                                    children: parent ? (
-                                        <NameView name={parent?.names[0]} short />
-                                    ) : (
-                                        INCOMPLETE_STRING
-                                    ),
+                                    children: parent ? <NameView name={parent?.names[0]} short /> : INCOMPLETE_STRING,
                                 },
                                 {
                                     children: node ? <NameView name={node.names[0]} /> : INCOMPLETE_STRING,
