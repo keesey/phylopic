@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Peer and dev dependency `@aws-sdk/client-s3` upgraded to `^3.1093.0` to match consuming apps.
+
 ### Deprecated
 
 ### Fixed

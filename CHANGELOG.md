@@ -11,9 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Root `resolutions` pin `@aws-sdk/client-s3@3.1093.0`; `@phylopic/utils-aws` peer/dev dependency
+  aligned to `^3.1093.0` for `@phylopic/api`, `@phylopic/contribute`, `@phylopic/publish`,
+  `@phylopic/source-client`, and `@phylopic/www`.
+
 ### Deprecated
 
 ### Fixed
+
+- `@phylopic/www`: permalink page TypeScript error from duplicate `@aws-sdk/client-s3` installs when
+  calling `@phylopic/utils-aws` `getJSON`.
 
 ### Removed
 

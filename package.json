@@ -23,6 +23,7 @@
     "name": "phylopic",
     "private": true,
     "resolutions": {
+        "@aws-sdk/client-s3": "3.1093.0",
         "brace-expansion": "2.1.4",
         "core-js-compat": "3.46.0",
         "cssstyle": "4.2.1",
