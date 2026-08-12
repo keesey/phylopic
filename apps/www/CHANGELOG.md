@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.30] - 2026-08-12
+
+### Fixed
+
+- Node page: restored bullet separators between subgroup links in breadcrumbs and details.
+
 ## [2.14.29] - 2026-08-12
 
 ### Changed
