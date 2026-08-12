@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Upgraded `ws` to `7.5.13` (via `@next/bundle-analyzer`), fixing memory-exhaustion DoS from
+  tiny WebSocket fragments (CVE-2026-48779).
+
 ## [2.14.28] - 2026-08-11
 
 ### Fixed
