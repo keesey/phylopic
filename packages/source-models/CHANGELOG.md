@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Upgraded `vitest` from `1.5.0` to `3.2.6`.
+
 ### Deprecated
 
 ### Fixed

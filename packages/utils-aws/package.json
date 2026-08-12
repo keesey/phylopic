@@ -12,6 +12,7 @@
     },
     "description": "Common utilities for using Amazon Web Services in *PhyloPic* project.",
     "devDependencies": {
+        "@aws-sdk/client-s3": "^3.1093.0",
         "@phylopic/tsconfig": "*",
         "@vercel/functions": "^3.0.0",
         "eslint": "^8.57.0",
@@ -20,6 +21,7 @@
         "ts-node": "10.9.2",
         "tsup": "^8.5.1",
         "typescript": "^5.4.5",
+        "vitest": "^3.2.6",
         "yarn": "^1.22.22"
     },
     "exports": {
@@ -43,7 +45,7 @@
     "module": "./dist/index.mjs",
     "name": "@phylopic/utils-aws",
     "peerDependencies": {
-        "@aws-sdk/client-s3": "^3.962.0",
+        "@aws-sdk/client-s3": "^3.1093.0",
         "@aws-sdk/signature-v4-crt": "^3.957.0",
         "@vercel/functions": "^3.0.0"
     },
