@@ -58,11 +58,11 @@ const ContributionCTAView: FC = () => {
                             </li>
                             <li>
                                 <a
-                                    href="http://api-docs.phylopic.org/v2"
+                                    href="https://api-docs.phylopic.org/v2/index.html"
                                     onClick={() =>
                                         customEvents.clickLink(
                                             "contribution_cta_link",
-                                            "http://api-docs.phylopic.org/v2",
+                                            "https://api-docs.phylopic.org/v2/index.html",
                                             "API Documentation",
                                             "link",
                                         )
@@ -78,7 +78,7 @@ const ContributionCTAView: FC = () => {
                                     onClick={() =>
                                         customEvents.clickLink(
                                             "//github.com/keesey/phylopic",
-                                            "http://api-docs.phylopic.org/v2",
+                                            "https://api-docs.phylopic.org/v2/index.html",
                                             "Codebase",
                                             "link",
                                         )

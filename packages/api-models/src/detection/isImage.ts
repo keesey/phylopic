@@ -34,10 +34,6 @@ const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x 
         (x as Image["_links"]).thumbnailFiles,
         faultCollector?.sub("thumbnailFiles"),
     ) &&
-    isUndefinedOr(isMediaLink(isURL, isRasterMediaType))(
-        (x as Image["_links"])["twitter:image"],
-        faultCollector?.sub("twitter:image"),
-    ) &&
     isMediaLink(isURL, isVectorMediaType)((x as Image["_links"]).vectorFile, faultCollector?.sub("vectorFile"))
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isEntity(x, isImageLinks, faultCollector) &&

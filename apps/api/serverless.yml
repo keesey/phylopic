@@ -1,5 +1,9 @@
 service: phylopic-api
 useDotenv: true
+build:
+    esbuild:
+        exclude:
+            - "!@aws-sdk/client-s3"
 provider:
     architecture: arm64
     httpApi:
@@ -79,6 +83,9 @@ functions:
                   method: post
             - httpApi:
                   path: /collections
+                  method: options
+            - httpApi:
+                  path: /uploads
                   method: options
             - httpApi:
                   path: /collections/{uuid}

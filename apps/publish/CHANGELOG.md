@@ -17,6 +17,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.12.13] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.5`.
+
+## [1.12.12] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+### Removed
+
+- `Image._links["twitter:image"]` from published image JSON (use `http://ogp.me/ns#image` instead).
+
+## [1.12.11] - 2026-08-10
+
+### Added
+
+- `AWS_PROFILE=phylopic-publish` on publish `package.json` scripts that call AWS.
+
+## [1.12.10] - 2026-08-10
+
+### Security
+
+- Upgraded `@phylopic/source-client` to `1.4.3`.
+
 ## [1.12.9] - 2026-08-10
 
 ### Fixed
