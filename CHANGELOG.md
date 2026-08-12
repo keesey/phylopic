@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Upgraded `vite` to `5.4.21` (CVE-2025-62522) for packages that use `vitest`
+  (`@phylopic/api`, `@phylopic/api-models`, `@phylopic/source-client`, `@phylopic/source-models`,
+  `@phylopic/utils`).
 - `@phylopic/api`: upgraded `@hapi/wreck` to `18.1.2` (CVE-2026-48022).
 
 ## [2.0.43] - 2026-08-11
