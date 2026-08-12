@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Upgraded `vitest` from `1.5.0` to `3.2.6`.
+- Upgraded `vitest` from `1.5.0` to `4.1.10`.
+- Pin `isomorphic-dompurify` to `~2.22.0` so root `jsdom@26.1.0` resolution stays compatible.
 
 ### Deprecated
 
