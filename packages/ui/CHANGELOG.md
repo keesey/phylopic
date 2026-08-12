@@ -19,6 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.14] - 2026-08-11
+
+### Fixed
+
+- External autocomplete fetchers send `Accept: application/json` so GBIF and similar APIs do not
+  return `406`.
+- Development Content Security Policy allows `localhost` and `127.0.0.1` WebSocket and HTTP
+  connections (Next.js dev server binding mismatch).
+
+### Changed
+
+- Upgraded `@phylopic/utils-api` to `1.0.14`.
+
 ## [1.7.13] - 2026-08-11
 
 ### Changed

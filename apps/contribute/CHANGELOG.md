@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.19] - 2026-08-11
+
+### Fixed
+
+- Development Content Security Policy allows localhost WebSocket and HTTP connections.
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.5`.
+- Upgraded `@phylopic/ui` to `1.7.14`.
+- Upgraded `@phylopic/utils-api` to `1.0.14`.
+
 ## [2.4.18] - 2026-08-11
 
 ### Fixed

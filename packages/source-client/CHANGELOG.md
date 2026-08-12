@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.5] - 2026-08-11
+
+### Fixed
+
+- Serialize the initial Postgres pool connection in `PoolClientProvider.getPG()` so parallel callers
+  no longer race on a `max: 1` pool (fixes node absorb/merge timeouts).
+
 ## [1.4.4] - 2026-08-11
 
 ### Added

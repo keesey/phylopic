@@ -17,7 +17,7 @@ const Page: NextPage = () => {
             </Head>
             <main>
                 <header>
-                    <Breadcrumbs items={[{ href: "/", children: <a>Home</a> }, { children: "Images" }]} />
+                    <Breadcrumbs items={[{ href: "/", children: "Home" }, { children: "Images" }]} />
                     <h1>Images</h1>
                 </header>
                 <Paginator endpoint="/api/images">

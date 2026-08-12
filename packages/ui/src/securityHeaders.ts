@@ -8,7 +8,16 @@ interface SecurityHeaderRoute {
     readonly headers: readonly SecurityHeader[]
 }
 
-const BASE_SECURITY_HEADERS: readonly SecurityHeader[] = [
+export interface SecurityHeaderOptions {
+    readonly development?: boolean
+}
+
+const createConnectSrc = (development?: boolean) =>
+    development
+        ? "connect-src 'self' https: ws://127.0.0.1:* ws://localhost:* http://127.0.0.1:* http://localhost:*"
+        : "connect-src 'self' https:"
+
+const createBaseSecurityHeaders = (development?: boolean): readonly SecurityHeader[] => [
     { key: "X-Content-Type-Options", value: "nosniff" },
     { key: "X-Frame-Options", value: "SAMEORIGIN" },
     { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -21,7 +30,7 @@ const BASE_SECURITY_HEADERS: readonly SecurityHeader[] = [
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "img-src 'self' data: blob: https:",
             "font-src 'self' data: https://fonts.gstatic.com",
-            "connect-src 'self' https:",
+            createConnectSrc(development),
             "frame-ancestors 'self'",
             "base-uri 'self'",
             "form-action 'self'",
@@ -30,9 +39,11 @@ const BASE_SECURITY_HEADERS: readonly SecurityHeader[] = [
     { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ]
 
-export const createSecurityHeaderRoutes = (): readonly SecurityHeaderRoute[] => [
+export const createSecurityHeaderRoutes = (
+    options: SecurityHeaderOptions = {},
+): readonly SecurityHeaderRoute[] => [
     {
         source: "/:path*",
-        headers: [...BASE_SECURITY_HEADERS],
+        headers: [...createBaseSecurityHeaders(options.development)],
     },
 ]

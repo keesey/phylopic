@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.43] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/utils-api` `1.0.14`: `JSON_API_HEADERS` for third-party JSON APIs.
+- `@phylopic/source-client` `1.4.5`: fix Postgres pool connection race on parallel `getPG()` calls.
+- `@phylopic/ui` `1.7.14`: external autocomplete `Accept` headers; dev CSP for localhost/127.0.0.1.
+- `@phylopic/edit` `1.9.17`: Next.js 15 breadcrumb links; merge error handling.
+- `@phylopic/contribute` `2.4.19`, `@phylopic/www` `2.14.28`: dev CSP headers.
+
 ## [2.0.42] - 2026-08-11
 
 ### Fixed

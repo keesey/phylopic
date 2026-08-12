@@ -17,8 +17,8 @@ const Page: NextPage<Props> = ({ authority }) => (
             <header>
                 <Breadcrumbs
                     items={[
-                        { href: "/", children: <a>Home</a> },
-                        { href: "/externals", children: <a>External Authorities</a> },
+                        { href: "/", children: "Home" },
+                        { href: "/externals", children: "External Authorities" },
                         { children: <code>{authority}</code> },
                     ]}
                 />

@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.14] - 2026-08-11
+
+### Added
+
+- `JSON_API_HEADERS` with `Accept: application/json` for third-party JSON APIs.
+
 ## [1.0.13] - 2026-08-11
 
 ### Changed
