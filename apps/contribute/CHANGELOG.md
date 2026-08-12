@@ -19,26 +19,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.19] - 2026-08-11
+
+### Fixed
+
+- Development Content Security Policy allows localhost WebSocket and HTTP connections.
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.5`.
+- Upgraded `@phylopic/ui` to `1.7.14`.
+- Upgraded `@phylopic/utils-api` to `1.0.14`.
+
+## [2.4.18] - 2026-08-11
+
+### Fixed
+
+- Cap the shared Postgres pool at one connection per serverless instance, so API routes do not exhaust RDS connection slots (`53300`).
+
+## [2.4.17] - 2026-08-11
+
+### Fixed
+
+- Replace an invalid stored magic-link token on `POST /api/authorize/{email}` instead of returning `403`, so users can request a new link after `AUTH_SECRET_KEY` rotation or other token corruption.
+
+## [2.4.16] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+## [2.4.15] - 2026-08-10
+
+### Security
+
+- Upgraded `@phylopic/source-client` to `1.4.3`.
+
 ## [2.4.14] - 2026-08-10
 
 ### Fixed
 
-- Magic-link redemption reuses an existing contributor row for the email instead of inserting a
-  duplicate (`contributor_email_key` violation).
+- Magic-link redemption reuses an existing contributor row for the email instead of inserting a duplicate (`contributor_email_key` violation).
 
 ## [2.4.13] - 2026-08-10
 
 ### Fixed
 
-- Pin `jsdom@26.1.0` and `cssstyle@4.2.1` (root `resolutions`) to avoid a second serverless
-  `ERR_REQUIRE_ESM` crash from `@csstools/css-calc` via `cssstyle` 5.
+- Pin `jsdom@26.1.0` and `cssstyle@4.2.1` (root `resolutions`) to avoid a second serverless `ERR_REQUIRE_ESM` crash from `@csstools/css-calc` via `cssstyle` 5.
 
 ## [2.4.12] - 2026-08-10
 
 ### Fixed
 
-- Pin `jsdom` and `html-encoding-sniffer` (root `resolutions`) to avoid a serverless
-  `ERR_REQUIRE_ESM` crash from `@exodus/bytes` on Node 24.
+- Pin `jsdom` and `html-encoding-sniffer` (root `resolutions`) to avoid a serverless `ERR_REQUIRE_ESM` crash from `@exodus/bytes` on Node 24.
 
 ## [2.4.11] - 2026-08-10
 
@@ -50,16 +83,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- S3 and SES OIDC credentials use statically imported `@vercel/functions/oidc` (same bundling fix as
-  `@phylopic/www`).
+- S3 and SES OIDC credentials use statically imported `@vercel/functions/oidc` (same bundling fix as `@phylopic/www`).
 
 ## [2.4.9] - 2026-08-10
 
 ### Security
 
-- S3 and SES clients use Vercel OIDC (`AWS_ROLE_ARN`) when configured, falling back to static
-  keys for local development. Upgraded `@phylopic/utils-aws` to `1.1.0`; added
-  `@vercel/functions`.
+- S3 and SES clients use Vercel OIDC (`AWS_ROLE_ARN`) when configured, falling back to static keys for local development. Upgraded `@phylopic/utils-aws` to `1.1.0`; added `@vercel/functions`.
 
 ## [2.4.8] - 2026-08-10
 

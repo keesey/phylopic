@@ -231,10 +231,9 @@ pick which key id to retire.
     region = us-west-2
     ```
 
-4. Run publish with that profile:
+4. Run publish — set `AWS_PROFILE=phylopic-publish` on the relevant scripts in `apps/publish/package.json`:
 
     ```sh
-    export AWS_PROFILE=phylopic-publish
     cd apps/publish
     yarn make
     ```

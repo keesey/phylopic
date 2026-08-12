@@ -51,19 +51,23 @@ const Content: FC<Props> = ({ uuid }) => {
     const handleMergeSelect = useCallback(
         async (suppressed: Entity<Node> | undefined) => {
             if (suppressed && node && parent) {
-                const promise = axios.post<undefined>("/api/nodes/merge", {
-                    conserved: uuid,
-                    suppressed: suppressed.uuid,
-                })
-                mutateNode(
-                    promise.then(() => node),
-                    { revalidate: true },
-                )
-                mutateParent(
-                    promise.then(() => parent),
-                    { revalidate: true },
-                )
-                await promise
+                try {
+                    const promise = axios.post<undefined>("/api/nodes/merge", {
+                        conserved: uuid,
+                        suppressed: suppressed.uuid,
+                    })
+                    mutateNode(
+                        promise.then(() => node),
+                        { revalidate: true },
+                    )
+                    mutateParent(
+                        promise.then(() => parent),
+                        { revalidate: true },
+                    )
+                    await promise
+                } catch (error) {
+                    console.error(error)
+                }
             }
             setMerging(false)
         },
@@ -84,13 +88,7 @@ const Content: FC<Props> = ({ uuid }) => {
                                 { href: "/nodes", children: "Nodes" },
                                 {
                                     href: node ? `/nodes/${node.parent}` : undefined,
-                                    children: parent ? (
-                                        <a>
-                                            <NameView name={parent?.names[0]} short />
-                                        </a>
-                                    ) : (
-                                        INCOMPLETE_STRING
-                                    ),
+                                    children: parent ? <NameView name={parent?.names[0]} short /> : INCOMPLETE_STRING,
                                 },
                                 {
                                     children: node ? <NameView name={node.names[0]} /> : INCOMPLETE_STRING,

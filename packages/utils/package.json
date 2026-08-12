@@ -36,6 +36,12 @@
             "import": "./dist/svg/index.mjs",
             "require": "./dist/svg/index.js",
             "default": "./dist/svg/index.js"
+        },
+        "./svg/lite": {
+            "types": "./dist/svg/lite.d.ts",
+            "import": "./dist/svg/lite.mjs",
+            "require": "./dist/svg/lite.js",
+            "default": "./dist/svg/lite.js"
         }
     },
     "files": [
@@ -69,7 +75,8 @@
         "dts": true,
         "entry": [
             "src/index.ts",
-            "src/svg/index.ts"
+            "src/svg/index.ts",
+            "src/svg/lite.ts"
         ],
         "format": [
             "cjs",
@@ -80,5 +87,5 @@
         "target": "ESNext"
     },
     "types": "dist/index.d.ts",
-    "version": "1.2.2"
+    "version": "1.2.3"
 }

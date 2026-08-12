@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.3] - 2026-08-11
+
+### Added
+
+- `@phylopic/utils/svg/lite`: regex-based SVG sanitization without DOMPurify/jsdom, for serverless
+  runtimes that cannot load the full `@phylopic/utils/svg` stack.
+
 ## [1.2.2] - 2026-08-09
 
 ### Security

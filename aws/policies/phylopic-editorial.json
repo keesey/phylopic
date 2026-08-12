@@ -21,7 +21,7 @@
         {
             "Sid": "SubmissionTrash",
             "Effect": "Allow",
-            "Action": "s3:PutObject",
+            "Action": ["s3:PutObject", "s3:PutObjectTagging"],
             "Resource": "arn:aws:s3:::uploads.phylopic.org/trash/files/*"
         },
         {
@@ -38,13 +38,13 @@
         {
             "Sid": "SourceImageManage",
             "Effect": "Allow",
-            "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
+            "Action": ["s3:GetObject", "s3:GetObjectTagging", "s3:PutObject", "s3:PutObjectTagging", "s3:DeleteObject"],
             "Resource": "arn:aws:s3:::source-images.phylopic.org/images/*"
         },
         {
             "Sid": "SourceImageTrash",
             "Effect": "Allow",
-            "Action": "s3:PutObject",
+            "Action": ["s3:PutObject", "s3:PutObjectTagging"],
             "Resource": "arn:aws:s3:::source-images.phylopic.org/trash/images/*"
         }
     ]
