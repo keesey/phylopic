@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Unused `aws-lambda` dev dependency (legacy `aws-sdk` v2, `js-yaml` 3.x, and `xml2js` 0.4.x).
+
 ### Security
 
 - Upgraded `vite` to `5.4.21` (via `vitest`), fixing path traversal via trailing backslash on
