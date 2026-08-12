@@ -9,12 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Unit tests for all exported functions (`createAwsClientConfig`, `isAWSError`, and S3 helpers).
-
 ### Changed
-
-- Peer and dev dependency `@aws-sdk/client-s3` upgraded to `^3.1093.0` to match consuming apps.
-- Upgraded `vitest` from `3.2.6` to `4.1.10`.
 
 ### Deprecated
 
@@ -23,6 +18,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.1.2] - 2026-08-12
+
+### Added
+
+- Unit tests for all exported functions (`createAwsClientConfig`, `isAWSError`, and S3 helpers).
+
+### Changed
+
+- Peer and dev dependency `@aws-sdk/client-s3` upgraded to `^3.1093.0` to match consuming apps.
+- Upgraded `vitest` from `3.2.6` to `4.1.10`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
 
 ## [1.1.1] - 2026-08-10
 

@@ -11,13 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Upgraded `vitest` from `1.5.0` to `4.1.10`.
-
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+### Security
+
+## [1.4.1] - 2026-08-12
+
+### Changed
+
+- Upgraded `vitest` from `1.5.0` to `4.1.10`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
 
 ### Security
 

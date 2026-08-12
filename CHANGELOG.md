@@ -11,13 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.0.44] - 2026-08-12
+
+### Changed
+
 - Root `resolutions` pin `@aws-sdk/client-s3@3.1093.0`; `@phylopic/utils-aws` peer/dev dependency
   aligned to `^3.1093.0` for `@phylopic/api`, `@phylopic/contribute`, `@phylopic/publish`,
   `@phylopic/source-client`, and `@phylopic/www`.
 - Root `resolutions` pin `sharp@0.34.5` (was `0.35.3`) to stay within Next.js optional dependency
   range.
-
-### Deprecated
 
 ### Fixed
 

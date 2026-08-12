@@ -11,16 +11,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Upgraded `@phylopic/utils-aws`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
-
 ### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.14.29] - 2026-08-12
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.2`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+- Upgraded `@phylopic/api-models` to `1.4.1`.
+- Upgraded `@phylopic/source-models` to `1.1.4`.
+- Upgraded `@phylopic/styles` to `1.0.1`.
+- Upgraded `@phylopic/ui` to `1.7.15`.
+- Upgraded `@phylopic/utils-api` to `1.0.15`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
 
 ### Fixed
 
 - Permalink page: TypeScript error when passing `S3Client` to `@phylopic/utils-aws` `getJSON` from
   duplicate `@aws-sdk/client-s3` installs.
-
-### Removed
 
 ### Security
 

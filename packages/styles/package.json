@@ -33,5 +33,5 @@
         "clean": "rm -rf .turbo && rm -rf node_modules",
         "lint": "stylelint \"**/*.scss\""
     },
-    "version": "1.0.0"
+    "version": "1.0.1"
 }
