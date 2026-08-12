@@ -16,11 +16,11 @@ const EngineeringSection: FC = () => (
             </a>{" "}
             and/or the{" "}
             <a
-                href="http://api-docs.phylopic.org/v2"
+                href="https://api-docs.phylopic.org/v2/index.html"
                 onClick={() =>
                     customEvents.clickLink(
                         "donate_api_docs",
-                        "http://api-docs.phylopic.org/v2",
+                        "https://api-docs.phylopic.org/v2/index.html",
                         "API Documentation",
                         "link",
                     )

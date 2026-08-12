@@ -48,6 +48,13 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
     }
 }
 export const onAPIGatewayProxy: APIGatewayProxyHandler = async (event, _context) => {
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 204,
+            headers: CORS_HEADERS,
+            body: "",
+        }
+    }
     let result: APIGatewayProxyResult
     try {
         result = await route(event)

@@ -1,4 +1,4 @@
-import { fetchDataAndCheck } from "@phylopic/utils-api"
+import { fetchDataAndCheck, JSON_API_HEADERS } from "@phylopic/utils-api"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
@@ -16,7 +16,7 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
     }
     const response = await fetchDataAndCheck<readonly OTOLAutocompleteName[]>(url, {
         data: { name },
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/json", ...JSON_API_HEADERS },
         method: "POST",
     })
     return [response.data, name]

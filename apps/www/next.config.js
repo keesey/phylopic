@@ -6,7 +6,7 @@ const nextConfig = {
     serverExternalPackages: ["@aws-sdk/credential-provider-web-identity", "@vercel/functions", "@vercel/oidc"],
     async headers() {
         return [
-            ...createSecurityHeaderRoutes(),
+            ...createSecurityHeaderRoutes({ development: process.env.NODE_ENV === "development" }),
             {
                 source: "/api/:path*",
                 headers: [

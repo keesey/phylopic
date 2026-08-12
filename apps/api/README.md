@@ -1,6 +1,6 @@
 # _PhyloPic_ API Implementation
 
-This is the implementation of the API (Application Programming Interface) for [_PhyloPic_](https://www.phylopic.org. The documentation for using this API is here: http://api-docs.phylopic.org
+This is the implementation of the API (Application Programming Interface) for [_PhyloPic_](https://www.phylopic.org. The documentation for using this API is here: https://api-docs.phylopic.org
 
 This implementation uses:
 
@@ -138,7 +138,7 @@ To validate the OpenAPI spec:
 yarn test
 ```
 
-Documentation is hosted at [http://api-docs.phylopic.org](http://api-docs.phylopic.org). Publishing requires AWS credentials with write access to the `api-docs.phylopic.org` S3 bucket (including `s3:PutObjectAcl` for `--acl public-read` and `s3:DeleteObject` for `--delete`).
+Documentation is hosted at [https://api-docs.phylopic.org](https://api-docs.phylopic.org). Publishing requires AWS credentials with write access to the `api-docs.phylopic.org` S3 bucket (including `s3:PutObjectAcl` for `--acl public-read` and `s3:DeleteObject` for `--delete`).
 
 ## Logging
 

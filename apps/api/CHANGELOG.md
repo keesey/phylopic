@@ -21,6 +21,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Escape SQL `LIKE` wildcards in autocomplete queries.
 
+## [2.13.4] - 2026-08-11
+
+### Fixed
+
+- `POST /uploads` SVG sanitization uses `@phylopic/utils/svg/lite` (no jsdom), avoiding
+  `ERR_REQUIRE_ESM` from `@exodus/bytes` in the uploader Lambda.
+
+## [2.13.3] - 2026-08-11
+
+### Fixed
+
+- `POST /uploads` no longer crashes on Lambda init: keep `jsdom` / `isomorphic-dompurify` out of the
+  bundled `uploader` artifact (Serverless `build.esbuild.external`) and load SVG sanitization on demand.
+  Include `@aws-sdk/client-s3` in the deployment package for the externalized uploader bundle.
+
+## [2.13.2] - 2026-08-11
+
+### Fixed
+
+- CORS preflight for cross-origin `POST /uploads`: route `OPTIONS /uploads` through the `dynamic` Lambda (same pattern as `OPTIONS /collections`), not the `uploader` Lambda.
+
+## [2.13.1] - 2026-08-11
+
+### Fixed
+
+- CORS preflight for cross-origin `POST /uploads` (`OPTIONS /uploads` on the `uploader` Lambda, without the auth authorizer).
+
+## [2.13.0] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+### Removed
+
+- `postResolveObjects` method (`POST /resolve/{authority}/{namespace}`).
+- `Image._links["twitter:image"]` (use `http://ogp.me/ns#image` instead).
+
+## [2.12.0] - 2026-08-11
+
+### Changed
+
+- Serve API documentation over HTTPS on `api-docs.phylopic.org`.
+
+### Security
+
+- Documentation site URLs and the API index `_links.documentation` href use `https://`.
+
+## [2.11.5] - 2026-08-10
+
+### Security
+
+- Rate-limit unauthenticated `POST /collections` by source IP.
+- Return generic messages for unexpected API errors instead of internal details.
+
 ## [2.11.4] - 2026-08-10
 
 ### Changed

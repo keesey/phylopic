@@ -26,7 +26,7 @@ const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/thanks`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/mailinglist`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/articles/api-recipes`,
-    "http://api-docs.phylopic.org/v2",
+    "https://api-docs.phylopic.org/v2/index.html",
     `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}`,
     "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988",
 ]

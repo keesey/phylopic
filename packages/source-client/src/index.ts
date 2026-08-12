@@ -1,4 +1,5 @@
 export * from "./api"
+export * from "./createSourcePool"
 export * from "./implementations/ClientProvider"
 export * from "./implementations/PoolClientProvider"
 export * from "./interfaces"
