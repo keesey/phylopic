@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- `@phylopic/www`: upgraded `ws` to `7.5.13` (CVE-2026-48779).
+
 ## [2.0.43] - 2026-08-11
 
 ### Fixed
