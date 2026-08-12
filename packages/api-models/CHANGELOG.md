@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Upgraded `vitest` from `1.5.0` to `4.1.10`.
+
 ### Deprecated
 
 ### Fixed
@@ -18,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+- Upgraded `vite` to `5.4.21` (via `vitest`), fixing path traversal via trailing backslash on
+  Windows when the Vite dev server is exposed to the network (CVE-2025-62522).
 
 ## [1.4.0] - 2026-08-11
 
