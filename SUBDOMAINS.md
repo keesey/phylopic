@@ -10,7 +10,7 @@ The public API, served from Amazon API Gateway and delivered via Amazon Cloudfro
 
 ## `api-docs.phylopic.org`
 
-Documentation for the public API, statically hosted on [Amazon S3](./S3.md#api-docsphylopicorg).
+Documentation for the public API, statically hosted on [Amazon S3](./S3.md#api-docsphylopicorg) and delivered via Amazon CloudFront at `https://api-docs.phylopic.org`.
 
 ## `contribute.phylopic.org`
 

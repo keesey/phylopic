@@ -19,6 +19,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.9.17] - 2026-08-11
+
+### Fixed
+
+- Breadcrumb links no longer nest `<a>` inside Next.js `<Link>` (Next.js 15).
+- Catch merge/absorb API failures instead of surfacing uncaught promise rejections.
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.5`.
+- Upgraded `@phylopic/ui` to `1.7.14`.
+
+## [1.9.16] - 2026-08-11
+
+### Fixed
+
+- Cap the shared Postgres pool at one connection per serverless instance (`createSourcePool`).
+
+## [1.9.15] - 2026-08-10
+
+### Security
+
+- Upgraded `@phylopic/source-client` to `1.4.3`.
+
 ## [1.9.14] - 2026-08-10
 
 ### Fixed

@@ -30,12 +30,16 @@ const index: NextApiHandler<void> = async (req, res) => {
                 let preferredUuid: UUID | undefined
                 if (await authTokenClient.exists()) {
                     const secret = process.env.AUTH_SECRET_KEY
-                    const existingToken = await authTokenClient.get()
-                    const payload = secret ? verifyJWT(existingToken, secret) : null
-                    if (!isUUIDv4(payload?.sub)) {
-                        throw 403
+                    if (!secret) {
+                        throw 500
                     }
-                    preferredUuid = payload.sub
+                    const existingToken = await authTokenClient.get()
+                    const payload = verifyJWT(existingToken, secret)
+                    if (isUUIDv4(payload?.sub)) {
+                        preferredUuid = payload.sub
+                    } else {
+                        await authTokenClient.delete()
+                    }
                 }
                 const uuid = await resolveContributorUuidForEmail(client, email, preferredUuid)
                 const token = await issueJWT(uuid, ttl, now)

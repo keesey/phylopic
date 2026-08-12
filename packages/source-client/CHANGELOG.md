@@ -21,6 +21,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Set `ServerSideEncryption: AES256` on `S3Editor` puts.
 
+## [1.4.5] - 2026-08-11
+
+### Fixed
+
+- Serialize the initial Postgres pool connection in `PoolClientProvider.getPG()` so parallel callers
+  no longer race on a `max: 1` pool (fixes node absorb/merge timeouts).
+
+## [1.4.4] - 2026-08-11
+
+### Added
+
+- `createSourcePool()` for serverless apps: one Postgres connection per instance (`max: 1`), matching
+  `@phylopic/api` pool settings.
+
+## [1.4.3] - 2026-08-10
+
+### Security
+
+- Return generic messages from `handleAPIError` for AWS and unexpected failures.
+
 ## [1.4.2] - 2026-08-09
 
 ### Security

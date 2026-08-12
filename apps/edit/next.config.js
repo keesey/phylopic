@@ -4,7 +4,7 @@ const { createSecurityHeaderRoutes } = require("@phylopic/ui/securityHeaders")
 module.exports = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
     async headers() {
-        return createSecurityHeaderRoutes()
+        return createSecurityHeaderRoutes({ development: process.env.NODE_ENV === "development" })
     },
     reactStrictMode: true,
 }

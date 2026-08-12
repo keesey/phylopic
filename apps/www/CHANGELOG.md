@@ -19,6 +19,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.28] - 2026-08-11
+
+### Fixed
+
+- Development Content Security Policy allows localhost WebSocket and HTTP connections.
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.14`.
+- Upgraded `@phylopic/utils-api` to `1.0.14`.
+
+## [2.14.27] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+## [2.14.26] - 2026-08-11
+
+### Changed
+
+- Links and the `/api` redirect target use `https://api-docs.phylopic.org`.
+
+## [2.14.25] - 2026-08-10
+
+### Security
+
+- Escape `<` in JSON-LD script payloads.
+
 ## [2.14.24] - 2026-08-10
 
 ### Fixed
