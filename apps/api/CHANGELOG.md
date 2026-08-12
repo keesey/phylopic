@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Pin Swagger UI CDN assets with SRI and use HTTPS for API docs URLs.
+- Upgraded `vite` to `5.4.21` (via `vitest`), fixing path traversal via trailing backslash on
+  Windows when the Vite dev server is exposed to the network (CVE-2025-62522).
+- Upgraded `@hapi/wreck` to `18.1.2` (via `serverless-offline`), fixing credential header leak
+  on cross-port/cross-scheme redirects (CVE-2026-48022).
 
 ## [2.13.4] - 2026-08-11
 
