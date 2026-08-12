@@ -8,7 +8,8 @@
     },
     "description": "Stylesheet tools for *PhyloPic*.",
     "devDependencies": {
-        "sass-lint": "^1.13.1"
+        "stylelint": "^16.26.1",
+        "stylelint-config-standard-scss": "^14.0.0"
     },
     "files": [
         "**/*.scss"
@@ -30,7 +31,7 @@
     },
     "scripts": {
         "clean": "rm -rf .turbo && rm -rf node_modules",
-        "lint": "TIMING=1 sass-lint src/**/*.scss"
+        "lint": "stylelint \"**/*.scss\""
     },
     "version": "1.0.0"
 }
