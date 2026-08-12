@@ -744,11 +744,6 @@ components:
                   description: A list of links to raster thumbnail image files (PNG format) of various square sizes.
                   items:
                     $ref: "#/components/schemas/MediaLink"
-                "twitter:image":
-                  deprecated: true
-                  allOf:
-                    - $ref: "#/components/schemas/MediaLink"
-                    - description: Deprecated alias for `http://ogp.me/ns#image`. Use that link instead.
                 vectorFile:
                   allOf:
                     - $ref: "#/components/schemas/MediaLink"
@@ -1662,43 +1657,6 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
-    post:
-      deprecated: true
-      operationId: postResolveObjects
-      summary: This method is deprecated. Use `getResolveObjects` instead.
-      tags:
-        - external identifiers
-        - nodes
-        - search
-      parameters:
-        - $ref: "#/components/parameters/Accept"
-        - $ref: "#/components/parameters/Content-Type"
-        - $ref: "#/components/parameters/authority"
-        - $ref: "#/components/parameters/build"
-        - $ref: "#/components/parameters/embed_childNodes"
-        - $ref: "#/components/parameters/embed_parentNode"
-        - $ref: "#/components/parameters/embed_primaryImage"
-        - $ref: "#/components/parameters/namespace"
-      requestBody:
-        description: A list of object IDs.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
-      responses:
-        "301":
-          $ref: "#/components/responses/301"
-        "400":
-          $ref: "#/components/responses/400"
-        "406":
-          $ref: "#/components/responses/406"
-        "410":
-          $ref: "#/components/responses/410"
-        "415":
-          $ref: "#/components/responses/415"
   /resolve/{authority}/{namespace}/{objectid}:
     get:
       operationId: getResolveObject

@@ -1,5 +1,5 @@
 import { createSearch } from "@phylopic/utils"
-import { fetchDataAndCheck } from "@phylopic/utils-api"
+import { fetchDataAndCheck, JSON_API_HEADERS } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import { Fetcher } from "swr"
@@ -25,7 +25,7 @@ const fetcher: Fetcher<Readonly<[readonly PBDBTaxonRecord[], string]>, [string, 
     if (name.length < 2) {
         return [[], name]
     }
-    const response = await fetchDataAndCheck<PBDBResponse>(url)
+    const response = await fetchDataAndCheck<PBDBResponse>(url, { headers: JSON_API_HEADERS })
     return [response.data.records, name]
 }
 export const PBDBAutocomplete: React.FC<PBDBAutocompleteProps> = ({ limit = 10 }) => {
