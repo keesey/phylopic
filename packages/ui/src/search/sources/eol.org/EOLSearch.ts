@@ -1,5 +1,5 @@
 import { createSearch } from "@phylopic/utils"
-import { fetchDataAndCheck } from "@phylopic/utils-api"
+import { fetchDataAndCheck, JSON_API_HEADERS } from "@phylopic/utils-api"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
@@ -27,6 +27,7 @@ const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, 
                 key: process.env.NEXT_PUBLIC_EOL_API_KEY,
                 q: query,
             }),
+        { headers: JSON_API_HEADERS },
     )
     return [response.data.results, query]
 }

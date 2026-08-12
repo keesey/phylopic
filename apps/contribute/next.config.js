@@ -5,7 +5,7 @@ module.exports = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
     serverExternalPackages: ["@aws-sdk/credential-provider-web-identity", "@vercel/functions", "@vercel/oidc"],
     async headers() {
-        return createSecurityHeaderRoutes()
+        return createSecurityHeaderRoutes({ development: process.env.NODE_ENV === "development" })
     },
     images: {
         remotePatterns: [{ protocol: "https", hostname: "images.phylopic.org" }],
