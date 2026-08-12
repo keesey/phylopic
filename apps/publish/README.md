@@ -23,9 +23,9 @@ These live in `.env` in the root of this project, loaded by `import "dotenv/conf
 each entry script (`insert.ts`, `release.ts`, `revalidate.ts`, `autolink.ts`, `normalize.ts`,
 `coverage.ts`).
 
-This project uses **one operator credential** for all AWS calls in `yarn make`: set
-`AWS_PROFILE=phylopic-publish` (see [`aws/README.md`](../../aws/README.md)). The SDK clients
-and `aws s3 sync` scripts all use the default credential chain.
+This project uses **one operator credential** for all AWS calls in `yarn make`. **`AWS_PROFILE`
+is set to `phylopic-publish`** on the relevant `package.json` scripts (see
+[`aws/README.md`](../../aws/README.md)).
 
 Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` still work for
 `SourceClient` if set; omit them when using `AWS_PROFILE` only.
@@ -63,19 +63,19 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 These are read by the AWS CLI and SDK clients. Configure the **`phylopic-publish`** profile
 in `~/.aws/credentials` — see [`aws/README.md`](../../aws/README.md).
 
-| Variable                                                          | Used by                                                                        | Purpose                          |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------- |
-| `AWS_PROFILE`                                                     | `aws s3 sync`, SSM, Lambda, CloudFront, and `SourceClient` when `S3_*` omitted | Selects `phylopic-publish`       |
-| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` | the same                                                                       | Credentials, if not from profile |
-| `AWS_REGION`, `AWS_DEFAULT_REGION`                                | the same                                                                       | Region (`us-west-2`)             |
+| Variable                                                          | Used by                                                                        | Purpose                                             |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------- |
+| `AWS_PROFILE`                                                     | `aws s3 sync`, SSM, Lambda, CloudFront, and `SourceClient` when `S3_*` omitted | Set to `phylopic-publish` in `package.json` scripts |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` | the same                                                                       | Credentials, if not from profile                    |
+| `AWS_REGION`, `AWS_DEFAULT_REGION`                                | the same                                                                       | Region (`us-west-2`)                                |
 
 #### Notes
 
-**Use `AWS_PROFILE=phylopic-publish`, not the administrator profile.** The scoped IAM user
-[`phylopic-publish`](../../aws/policies/phylopic-publish.json) replaces `AdministratorAccess`
-for the release pipeline. `Lambda UpdateFunctionConfiguration` on the two API functions remains
-the highest-risk grant in that policy; it is operator-only, same as before, but no longer
-account-wide.
+**`AWS_PROFILE=phylopic-publish` on publish scripts.** Do not override with the administrator profile.
+The scoped IAM user [`phylopic-publish`](../../aws/policies/phylopic-publish.json) replaces
+`AdministratorAccess` for the release pipeline. `Lambda UpdateFunctionConfiguration` on the two
+API functions remains the highest-risk grant in that policy; it is operator-only, same as before,
+but no longer account-wide.
 
 **`PG*` here is explicit, unlike in `contribute` and `edit`.** `src/source/SourceClient.ts` passes
 host, port, user, and password to `ClientProvider` directly, and hardcodes the database name, so

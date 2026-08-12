@@ -48,9 +48,10 @@ project environment variables.
 
 #### Notes
 
-**The `PG*` variables are read implicitly.** `src/source/SourceClient.ts` constructs
-`new Pool({ database: "phylopic-source" })`, supplying only the database name, so `pg` resolves
-host, port, user, and password from the environment itself. They therefore never appear as
+**The `PG*` variables are read implicitly.** `src/source/SourceClient.ts` uses
+`createSourcePool()` from `@phylopic/source-client` (one Postgres connection per serverless
+instance), supplying only the database name `phylopic-source`, so `pg` resolves host, port, user,
+and password from the environment itself. They therefore never appear as
 `process.env.PGHOST` in this codebase. Setting `PGDATABASE` has no effect here, because the
 explicit `database` option takes precedence over it.
 

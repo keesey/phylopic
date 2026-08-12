@@ -9,10 +9,10 @@ export const handleAPIError = (res: NextApiResponse, e: unknown) => {
         res.status(400)
         res.json({ message: e.message, faults: e.faults })
     } else if (isAWSError(e)) {
-        res.status(e.$metadata.httpStatusCode)
-        res.json({ message: String(e) })
+        res.status(e.$metadata.httpStatusCode ?? 500)
+        res.json({ message: "An unexpected error occurred." })
     } else {
         res.status(500)
-        res.json({ message: String(e) })
+        res.json({ message: "An unexpected error occurred." })
     }
 }

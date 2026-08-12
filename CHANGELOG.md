@@ -21,6 +21,91 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `@phylopic/source-models`: configurable JWT issuer and audience.
 
+## [2.0.43] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/utils-api` `1.0.14`: `JSON_API_HEADERS` for third-party JSON APIs.
+- `@phylopic/source-client` `1.4.5`: fix Postgres pool connection race on parallel `getPG()` calls.
+- `@phylopic/ui` `1.7.14`: external autocomplete `Accept` headers; dev CSP for localhost/127.0.0.1.
+- `@phylopic/edit` `1.9.17`: Next.js 15 breadcrumb links; merge error handling.
+- `@phylopic/contribute` `2.4.19`, `@phylopic/www` `2.14.28`: dev CSP headers.
+
+## [2.0.42] - 2026-08-11
+
+### Fixed
+
+- `aws` `1.2.2`: grant `s3:PutObjectTagging` on source-image keys so `edit` can accept submissions.
+
+## [2.0.41] - 2026-08-11
+
+### Fixed
+
+- `aws` `1.2.1`: grant `s3:PutObjectTagging` on submission trash keys for editorial and contribute
+  deletes.
+
+## [2.0.40] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/utils` `1.2.3`: `@phylopic/utils/svg/lite` (regex SVG sanitization without jsdom).
+- `@phylopic/api` `2.13.4`: use svg/lite on `POST /uploads` to avoid `ERR_REQUIRE_ESM` in the uploader Lambda.
+
+## [2.0.39] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/source-client` `1.4.4`: `createSourcePool()` (one Postgres connection per serverless instance).
+- `@phylopic/contribute` `2.4.18`: use capped pool so API routes do not exhaust RDS connections (`53300`).
+- `@phylopic/edit` `1.9.16`: same pool cap.
+
+## [2.0.38] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/api` `2.13.3`: fix `POST /uploads` Lambda init crash (`jsdom` bundled incorrectly by esbuild).
+
+## [2.0.37] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/api` `2.13.2`: CORS preflight for cross-origin `POST /uploads` (route `OPTIONS /uploads`
+  through the `dynamic` Lambda).
+
+## [2.0.36] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/api` `2.13.1`: CORS preflight for cross-origin `POST /uploads`.
+- `@phylopic/contribute` `2.4.17`: replace invalid stored magic-link token instead of returning
+  `403` on authorize.
+
+## [2.0.35] - 2026-08-11
+
+### Changed
+
+- `@phylopic/api` `2.13.0`: removed deprecated `postResolveObjects` and `twitter:image`; upgraded `@phylopic/api-models` to `1.4.0`.
+- `@phylopic/api-models` `1.4.0`: removed deprecated `Image._links["twitter:image"]`.
+- `@phylopic/publish` `1.12.12`: stopped emitting `twitter:image` in image JSON; upgraded `@phylopic/api-models` to `1.4.0`.
+- `@phylopic/contribute` `2.4.16`, `@phylopic/ui` `1.7.13`, `@phylopic/utils-api` `1.0.13`, `@phylopic/www` `2.14.27`: upgraded `@phylopic/api-models` to `1.4.0`.
+
+## [2.0.34] - 2026-08-11
+
+### Changed
+
+- `@phylopic/api` `2.12.0`: HTTPS API documentation on `api-docs.phylopic.org`.
+- `@phylopic/www` `2.14.26`: `https://` links to API documentation.
+
+## [2.0.33] - 2026-08-10
+
+### Security
+
+- `@phylopic/api` `2.11.5`: rate-limit unauthenticated `POST /collections`; generic unexpected error messages.
+- `@phylopic/source-client` `1.4.3`: generic error messages from `handleAPIError`.
+- `@phylopic/contribute` `2.4.15`, `@phylopic/edit` `1.9.15`, `@phylopic/publish` `1.12.10`: upgraded
+  `@phylopic/source-client` to `1.4.3`.
+- `@phylopic/www` `2.14.25`: escape `<` in JSON-LD script payloads.
+
 ## [2.0.32] - 2026-08-10
 
 ### Security

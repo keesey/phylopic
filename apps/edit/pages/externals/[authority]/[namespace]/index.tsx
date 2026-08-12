@@ -19,15 +19,11 @@ const Page: NextPage<Props> = ({ authority, namespace }) => (
             <header>
                 <Breadcrumbs
                     items={[
-                        { href: "/", children: <a>Home</a> },
-                        { href: "/externals", children: <a>External Authorities</a> },
+                        { href: "/", children: "Home" },
+                        { href: "/externals", children: "External Authorities" },
                         {
                             href: `/externals/${encodeURIComponent(authority)}`,
-                            children: (
-                                <a>
-                                    <code>{authority}</code>
-                                </a>
-                            ),
+                            children: <code>{authority}</code>,
                         },
                         { children: <code>{namespace}</code> },
                     ]}
