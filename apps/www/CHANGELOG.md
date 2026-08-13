@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Rate-limit OpenSearch suggestions and TimeTree proxy routes; require numeric NCBI taxon IDs.
+
 ## [2.14.31] - 2026-08-13
 
 ### Added

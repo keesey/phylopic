@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- `@phylopic/www`: rate-limit external proxy API routes.
+
 ## [2.0.45] - 2026-08-13
 
 ### Security

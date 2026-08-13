@@ -2,11 +2,15 @@ import axios from "axios"
 import { NextApiHandler } from "next"
 import TIMETREE_API_URL from "~/external/timetree.org/TIMETREE_API_URL"
 import fetchField from "~/external/timetree.org/fetchField"
+import { checkProxyRateLimit, getClientIp } from "~/rateLimit/checkProxyRateLimit"
 import getString from "~/routes/getString"
 const index: NextApiHandler = async (req, res) => {
-    // :TODO: CORS protection
+    if (!checkProxyRateLimit(getClientIp(req.headers["x-forwarded-for"]))) {
+        res.status(429).end()
+        return
+    }
     const ncbiTaxId = getString(req.query.ncbiTaxId)
-    if (!ncbiTaxId) {
+    if (!ncbiTaxId || !/^\d+$/.test(ncbiTaxId)) {
         return res.status(404).end()
     }
     try {

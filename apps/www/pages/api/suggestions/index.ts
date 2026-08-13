@@ -3,9 +3,14 @@ import { getSortIndex } from "@phylopic/ui" // :TODO: move to utils
 import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import axios from "axios"
 import { NextApiHandler } from "next"
+import { checkProxyRateLimit, getClientIp } from "~/rateLimit/checkProxyRateLimit"
 import getString from "~/routes/getString"
 import packageJson from "../../../package.json"
 const index: NextApiHandler = async (req, res) => {
+    if (!checkProxyRateLimit(getClientIp(req.headers["x-forwarded-for"]))) {
+        res.status(429).setHeader("Content-Type", "text/plain").send("Too many requests.")
+        return
+    }
     try {
         const prefix = getString(req.query.q)
         const suggestions = await getSuggestions(prefix)
@@ -21,7 +26,7 @@ const index: NextApiHandler = async (req, res) => {
     } catch (err) {
         console.error(err)
         res.setHeader("Content-Type", "text/plain")
-        res.status(500).send(String(err))
+        res.status(500).send("An unexpected error occurred.")
     }
     res.end()
 }
