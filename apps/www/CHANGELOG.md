@@ -19,6 +19,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.30] - 2026-08-12
+
+### Fixed
+
+- Node page: restored bullet separators between subgroup links in breadcrumbs and details.
+
+## [2.14.29] - 2026-08-12
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.2`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+- Upgraded `@phylopic/api-models` to `1.4.1`.
+- Upgraded `@phylopic/source-models` to `1.1.4`.
+- Upgraded `@phylopic/styles` to `1.0.1`.
+- Upgraded `@phylopic/ui` to `1.7.15`.
+- Upgraded `@phylopic/utils-api` to `1.0.15`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+### Fixed
+
+- Permalink page: TypeScript error when passing `S3Client` to `@phylopic/utils-aws` `getJSON` from
+  duplicate `@aws-sdk/client-s3` installs.
+
+### Security
+
+- Redirect `/api` to HTTPS API docs.
+- Upgraded `ws` to `7.5.13` (via `@next/bundle-analyzer`), fixing memory-exhaustion DoS from
+  tiny WebSocket fragments (CVE-2026-48779).
+
 ## [2.14.28] - 2026-08-11
 
 ### Fixed

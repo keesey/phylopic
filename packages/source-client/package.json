@@ -21,7 +21,7 @@
         "ts-node": "^10.9.2",
         "tsup": "^8.5.1",
         "typescript": "^5.4.5",
-        "vitest": "^1.5.0",
+        "vitest": "^4.1.10",
         "yarn": "^1.22.22"
     },
     "exports": {
@@ -65,5 +65,5 @@
         "lint": "TIMING=1 eslint --fix src/**/*.ts*"
     },
     "types": "./dist/index.d.ts",
-    "version": "1.4.5"
+    "version": "1.4.6"
 }

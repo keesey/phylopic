@@ -17,3 +17,7 @@
     display: flex;
     justify-content: center;
 }
+
+.item {
+    @include bullet.item(colors.$black);
+}

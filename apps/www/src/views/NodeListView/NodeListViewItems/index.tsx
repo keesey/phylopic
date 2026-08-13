@@ -5,7 +5,7 @@ import customEvents from "~/analytics/customEvents"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import getNodeHRef from "~/routes/getNodeHRef"
 import NomenView from "~/views/NomenView"
-import styles from "./index.module.scss"
+import styles from "../index.module.scss"
 export interface Props {
     short?: boolean
     value: readonly Node[]
