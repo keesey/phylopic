@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.0.45] - 2026-08-13
+
 ### Security
 
 - `@phylopic/www`: rate-limit and cache collection permalink creation (security audit M9).
