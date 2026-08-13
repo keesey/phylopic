@@ -9,15 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Rate limiting on `GET /api/permalinks/collections/{uuid}` (30 requests/hour per IP, 10/hour per
+  collection) and an in-memory hash cache keyed by collection UUID and build index.
+
 ### Changed
 
-### Deprecated
-
-### Fixed
-
-### Removed
+- `GET /api/permalinks/collections/{uuid}` accepts only `GET`, `HEAD`, and `OPTIONS`; successful
+  responses include `Cache-Control` for repeat requests.
 
 ### Security
+
+- Address security audit finding M9 (unauthenticated permalink creation abuse).
 
 ## [2.14.29] - 2026-08-12
 
