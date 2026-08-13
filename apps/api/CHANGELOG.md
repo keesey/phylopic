@@ -19,6 +19,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.5] - 2026-08-12
+
+### Changed
+
+- Upgraded `vitest` from `1.5.0` to `4.1.10`.
+- Upgraded `@phylopic/utils-aws` to `1.1.2`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+- Upgraded `@phylopic/api-models` to `1.4.1`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+### Removed
+
+- Unused `aws-lambda` dev dependency (legacy `aws-sdk` v2, `js-yaml` 3.x, and `xml2js` 0.4.x).
+
+### Security
+
+- Pin Swagger UI CDN assets with SRI and use HTTPS for API docs URLs.
+- Upgraded `vite` to `5.4.21` (via `vitest`), fixing path traversal via trailing backslash on
+  Windows when the Vite dev server is exposed to the network (CVE-2025-62522).
+- Upgraded `@hapi/wreck` to `18.1.2` (via `serverless-offline`), fixing credential header leak
+  on cross-port/cross-scheme redirects (CVE-2026-48022).
+
 ## [2.13.4] - 2026-08-11
 
 ### Fixed

@@ -19,6 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.2.4] - 2026-08-12
+
+### Changed
+
+- Upgraded `vitest` from `1.5.0` to `4.1.10`.
+- Pin `isomorphic-dompurify` to `~2.22.0` so root `jsdom@26.1.0` resolution stays compatible.
+
+### Security
+
+- Require 64-character SHA-256 digests in `isHash`.
+- Upgraded `vite` to `5.4.21` (via `vitest`), fixing path traversal via trailing backslash on
+  Windows when the Vite dev server is exposed to the network (CVE-2025-62522).
+
 ## [1.2.3] - 2026-08-11
 
 ### Added

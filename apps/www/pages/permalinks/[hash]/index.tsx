@@ -1,4 +1,4 @@
-import { GetObjectCommandOutput, S3Client } from "@aws-sdk/client-s3"
+import { S3Client } from "@aws-sdk/client-s3"
 import { TimestampView } from "@phylopic/ui"
 import { Hash, isHash } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
@@ -62,28 +62,26 @@ export const getStaticProps: GetStaticProps<Props, { hash: Hash }> = async conte
         return { notFound: true }
     }
     const client = new S3Client(createS3ClientConfig())
-    let data: PermalinkData
-    let output: GetObjectCommandOutput
     try {
-        ;[data, output] = await getJSON<PermalinkData>(client, {
+        const [data, output] = await getJSON<PermalinkData>(client, {
             Bucket: PERMALINKS_BUCKET_NAME,
             Key: `data/${encodeURIComponent(hash)}.json`,
         })
+        if (
+            typeof output.$metadata.httpStatusCode === "number" &&
+            output.$metadata.httpStatusCode >= 400 &&
+            output.$metadata.httpStatusCode < 500
+        ) {
+            return { notFound: true }
+        }
+        return {
+            props: {
+                data,
+                date: output.LastModified?.toISOString(),
+                hash,
+            },
+        }
     } finally {
         client.destroy()
-    }
-    if (
-        typeof output.$metadata.httpStatusCode === "number" &&
-        output.$metadata.httpStatusCode >= 400 &&
-        output.$metadata.httpStatusCode < 500
-    ) {
-        return { notFound: true }
-    }
-    return {
-        props: {
-            data,
-            date: output.LastModified?.toISOString(),
-            hash,
-        },
     }
 }

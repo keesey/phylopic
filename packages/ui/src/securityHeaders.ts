@@ -39,9 +39,7 @@ const createBaseSecurityHeaders = (development?: boolean): readonly SecurityHead
     { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ]
 
-export const createSecurityHeaderRoutes = (
-    options: SecurityHeaderOptions = {},
-): readonly SecurityHeaderRoute[] => [
+export const createSecurityHeaderRoutes = (options: SecurityHeaderOptions = {}): readonly SecurityHeaderRoute[] => [
     {
         source: "/:path*",
         headers: [...createBaseSecurityHeaders(options.development)],
