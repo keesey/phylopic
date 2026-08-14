@@ -11,13 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `@phylopic/contribute`: magic-link authorization page shows status-specific error messages for invalid or used links (`404`), expired links (`410`), and server errors (`500`).
-
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+### Security
+
+## [2.0.46] - 2026-08-13
+
+### Changed
+
+- `@phylopic/contribute`: magic-link authorization page shows status-specific error messages for invalid or used links (`404`), expired links (`410`), and server errors (`500`).
 
 ### Security
 
