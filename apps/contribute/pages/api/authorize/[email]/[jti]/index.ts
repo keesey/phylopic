@@ -13,7 +13,9 @@ const index: NextApiHandler<JWT> = async (req, res) => {
         if (req.method === "OPTIONS") {
             res.setHeader("allow", "GET, HEAD, OPTIONS")
             res.status(204)
-        } else if (req.method === "GET" || req.method === "HEAD") {
+        } else if (req.method !== "GET" && req.method !== "HEAD") {
+            throw 405
+        } else {
             const email = req.query.email as EmailAddress
             const jti = req.query.jti as UUID
             const faultCollector = new ValidationFaultCollector()
@@ -50,8 +52,6 @@ const index: NextApiHandler<JWT> = async (req, res) => {
             res.setHeader("content-type", "application/jwt")
             res.status(200)
             res.send(sessionToken)
-        } else {
-            throw 405
         }
     } catch (e) {
         handleAPIError(res, e)
