@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.21] - 2026-08-13
+
+### Changed
+
+- Magic-link authorization page shows status-specific error messages for invalid or used links (`404`), expired links (`410`), and server errors (`500`), with links to request another authorization email.
+
 ## [2.4.20] - 2026-08-12
 
 ### Changed
