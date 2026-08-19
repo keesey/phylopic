@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.13.6] - 2026-08-19
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.3`.
+
 ## [2.13.5] - 2026-08-12
 
 ### Changed

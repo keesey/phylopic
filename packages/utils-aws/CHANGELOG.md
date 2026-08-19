@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.3] - 2026-08-19
+
+### Security
+
 - Set `ServerSideEncryption: AES256` on S3 `PutObject` helpers.
 
 ## [1.1.2] - 2026-08-12

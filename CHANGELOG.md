@@ -15,11 +15,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `@phylopic/utils-aws`, `@phylopic/source-client`: explicit AES256 SSE on S3 puts.
-
 ### Removed
 
 ### Security
+
+## [2.0.48] - 2026-08-19
+
+### Changed
+
+- `@phylopic/api`, `@phylopic/contribute`, `@phylopic/edit`, `@phylopic/publish`, and `@phylopic/www`:
+  dependency bumps for `@phylopic/utils-aws` `1.1.3` and `@phylopic/source-client` `1.4.7`.
+
+### Security
+
+- `@phylopic/utils-aws`, `@phylopic/source-client`: explicit AES256 SSE on S3 puts (security audit L6).
 
 ## [2.0.47] - 2026-08-19
 

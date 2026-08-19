@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.22] - 2026-08-19
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.7`.
+- Upgraded `@phylopic/utils-aws` to `1.1.3`.
+
 ## [2.4.21] - 2026-08-13
 
 ### Changed

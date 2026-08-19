@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.7] - 2026-08-19
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.3`.
+
+### Security
+
 - Set `ServerSideEncryption: AES256` on `S3Editor` puts.
 
 ## [1.4.6] - 2026-08-12
