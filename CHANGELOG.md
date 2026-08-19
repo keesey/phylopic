@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.47] - 2026-08-19
+
+### Fixed
+
+- `@phylopic/www`: restored horizontal wrapping layout for synonym lists in details.
+
 ## [2.0.46] - 2026-08-13
 
 ### Changed
