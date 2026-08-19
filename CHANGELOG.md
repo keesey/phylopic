@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.49] - 2026-08-19
+
+### Fixed
+
+- `@phylopic/www`: keep `flex-wrap: wrap` on the same `BulletList` class as `inline-flex` so production minification does not drop wrapping.
+
 ## [2.0.48] - 2026-08-19
 
 ### Changed

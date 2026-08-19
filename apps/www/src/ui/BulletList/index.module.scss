@@ -1,7 +1,7 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/bullet.scss";
-.main {
-    display: flex;
+
+@mixin list {
     flex-wrap: wrap;
 
     > li {
@@ -9,6 +9,12 @@
     }
 }
 
+.main {
+    @include list;
+    display: flex;
+}
+
 .inline {
+    @include list;
     display: inline-flex;
 }
