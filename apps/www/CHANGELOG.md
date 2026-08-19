@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-### Removed
+- Node page: restored horizontal wrapping layout for synonym lists in details.
 
 ### Security
 

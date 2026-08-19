@@ -50,7 +50,9 @@ const getAuthorizeErrorContent = (error: unknown): ReactNode => {
             return (
                 <>
                     <p>This authorization link has expired.</p>
-                    <p>Please <Link href="/">request another authorization email</Link>.</p>
+                    <p>
+                        Please <Link href="/">request another authorization email</Link>.
+                    </p>
                 </>
             )
         case 500:
