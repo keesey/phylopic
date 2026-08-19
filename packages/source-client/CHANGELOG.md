@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Set `ServerSideEncryption: AES256` on `S3Editor` puts.
+
 ## [1.4.6] - 2026-08-12
 
 ### Changed
