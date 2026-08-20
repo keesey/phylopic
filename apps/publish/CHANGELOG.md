@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.12.16] - 2026-08-20
+
+### Changed
+
+- Publish writes `{build}/namespaces.json` to S3 during `yarn insert` (Tier 3 static-first).
+- `yarn verify:entities` checks `namespaces.json` against Postgres.
+
 ## [1.12.15] - 2026-08-19
 
 ### Changed

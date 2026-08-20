@@ -57,5 +57,5 @@
         "verify:entities": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/verifyEntitiesS3.ts"
     },
     "type": "module",
-    "version": "1.12.15"
+    "version": "1.12.16"
 }
