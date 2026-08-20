@@ -1,20 +1,33 @@
-.main {
+@mixin serif {
     font-family: Georgia, serif;
 }
+
+.main {
+    @include serif;
+}
+
 .scientific {
+    @include serif;
     font-style: italic;
 }
+
 .citation {
+    @include serif;
     font-size: smaller;
     font-variant: small-caps;
 }
+
 .comment {
+    @include serif;
     font-size: smaller;
 }
+
 .operator {
     font-family: Roboto, sans-serif;
 }
+
 .rank {
+    @include serif;
     font-size: smaller;
     font-style: italic;
     font-variant: small-caps;

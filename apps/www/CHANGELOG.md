@@ -15,9 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-### Removed
-
 ### Security
+
+## [2.14.36] - 2026-08-20
+
+### Fixed
+
+- `NodeListView`: use one variant class per list so production CSS keeps `flex-wrap: wrap`.
+- `NomenView`: include serif `font-family` on part classes used alongside `.main`.
 
 ## [2.14.35] - 2026-08-19
 

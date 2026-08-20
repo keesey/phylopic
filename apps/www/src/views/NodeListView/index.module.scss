@@ -2,22 +2,30 @@
 @use "@phylopic/styles/mixins/bullet.scss";
 @use "@phylopic/styles/mixins/hierarchy.scss";
 
-.main {
-    display: inline-flex;
+@mixin bullet-items {
     flex-wrap: wrap;
-}
 
-.lineage {
     .item {
-        @include hierarchy.item;
+        @include bullet.item(colors.$black);
     }
 }
 
+.inline {
+    @include bullet-items;
+    display: inline-flex;
+}
+
 .list {
+    @include bullet-items;
     display: flex;
     justify-content: center;
 }
 
-.item {
-    @include bullet.item(colors.$black);
+.lineage {
+    @include bullet-items;
+    display: inline-flex;
+
+    .item {
+        @include hierarchy.item;
+    }
 }

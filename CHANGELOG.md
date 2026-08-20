@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.50] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: use one `NodeListView` variant class per list so production CSS keeps `flex-wrap: wrap`.
+- `@phylopic/www`: include serif `font-family` on `NomenView` part classes used alongside `.main`.
+
 ## [2.0.49] - 2026-08-19
 
 ### Fixed
