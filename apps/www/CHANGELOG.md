@@ -17,6 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.38] - 2026-08-20
+
+### Fixed
+
+- Production CSS: strip UTF-8 BOMs inserted when CSS modules are concatenated, which prevented the first rule in each module from matching in production.
+
+### Changed
+
+- `yarn build` fails when minified CSS still contains BOMs or split flex-list rules.
+
 ## [2.14.37] - 2026-08-20
 
 ### Fixed

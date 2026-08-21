@@ -24,12 +24,17 @@ const hasFlexDisplay = body => /\bdisplay\s*:\s*(?:inline-)?flex\b/.test(body)
 const errors = []
 
 if (!fs.existsSync(cssDir)) {
-    console.error("verify-flex-list-css: missing build output at .next/static/css (run yarn build first)")
+    console.error("verify-production-css: missing build output at .next/static/css (run yarn build first)")
     process.exit(1)
 }
 
 for (const file of fs.readdirSync(cssDir).filter(name => name.endsWith(".css"))) {
     const css = fs.readFileSync(path.join(cssDir, file), "utf8")
+
+    for (const match of css.matchAll(/\ufeff(\.[A-Za-z][\w-]*)/g)) {
+        errors.push(`${file}: BOM breaks selector ${match[1]}`)
+    }
+
     for (const [selector, bodies] of parseRules(css)) {
         const flexWrapWithoutDisplay = bodies.some(body => hasFlexWrap(body) && !hasFlexDisplay(body))
         const displayWithoutFlexWrap = bodies.some(body => hasFlexDisplay(body) && !hasFlexWrap(body))
@@ -40,11 +45,11 @@ for (const file of fs.readdirSync(cssDir).filter(name => name.endsWith(".css")))
 }
 
 if (errors.length) {
-    console.error("verify-flex-list-css: production CSS would break flex list wrapping:\n")
+    console.error("verify-production-css: minified CSS would break production styling:\n")
     for (const error of errors) {
         console.error(`  - ${error}`)
     }
     process.exit(1)
 }
 
-console.log("verify-flex-list-css: ok")
+console.log("verify-production-css: ok")

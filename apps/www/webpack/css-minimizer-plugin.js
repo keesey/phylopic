@@ -29,10 +29,13 @@ class CssMinimizerPlugin {
                 postcss,
             ),
         ]).process(input, postcssOptions).then((res) => {
+            // Next.js concatenates CSS modules with a UTF-8 BOM before each module's
+            // first rule, which breaks selector matching in production (see v2.14.16).
+            const css = res.css.replace(/\ufeff/g, "")
             if (res.map) {
-                return new sources.SourceMapSource(res.css, file, res.map.toJSON())
+                return new sources.SourceMapSource(css, file, res.map.toJSON())
             }
-            return new sources.RawSource(res.css)
+            return new sources.RawSource(css)
         })
     }
 

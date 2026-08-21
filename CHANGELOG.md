@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.52] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: strip UTF-8 BOMs from minified CSS so the first rule in each module matches in production.
+
+### Changed
+
+- `@phylopic/www`: production build fails when minified CSS still contains BOMs or split flex-list rules.
+
 ## [2.0.51] - 2026-08-20
 
 ### Fixed

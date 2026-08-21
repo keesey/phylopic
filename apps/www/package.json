@@ -54,12 +54,12 @@
     },
     "scripts": {
         "analyze": "ANALYZE=true yarn build",
-        "build": "next build && node scripts/verify-flex-list-css.mjs",
+        "build": "next build && node scripts/verify-production-css.mjs",
         "clean": "rm -rf .next && rm -rf .swc && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3000",
         "lint": "TIMING=1 next lint",
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.14.37"
+    "version": "2.14.38"
 }
