@@ -4,6 +4,27 @@ const { createSecurityHeaderRoutes } = require("@phylopic/ui/securityHeaders")
 const nextConfig = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
     serverExternalPackages: ["@aws-sdk/credential-provider-web-identity", "@vercel/functions", "@vercel/oidc"],
+    webpack: (config, { dev, isServer }) => {
+        if (!dev && !isServer) {
+            config.optimization.minimizer = config.optimization.minimizer.map((item) => {
+                if (typeof item !== "function" || !item.toString().includes("CssMinimizerPlugin")) {
+                    return item
+                }
+                return (compiler) => {
+                    const { CssMinimizerPlugin } = require("./webpack/css-minimizer-plugin")
+                    new CssMinimizerPlugin({
+                        postcssOptions: {
+                            map: {
+                                inline: false,
+                                annotation: false,
+                            },
+                        },
+                    }).apply(compiler)
+                }
+            })
+        }
+        return config
+    },
     async headers() {
         return [
             ...createSecurityHeaderRoutes({ development: process.env.NODE_ENV === "development" }),

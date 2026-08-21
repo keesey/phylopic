@@ -19,6 +19,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.52] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: strip UTF-8 BOMs from minified CSS so the first rule in each module matches in production.
+
+### Changed
+
+- `@phylopic/www`: production build fails when minified CSS still contains BOMs or split flex-list rules.
+
+## [2.0.51] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: disable cssnano `mergeRules` so production minification does not reset `flex-wrap` on flex lists.
+
+### Changed
+
+- `@phylopic/www`: production build verifies minified CSS keeps `display:flex` and `flex-wrap:wrap` on the same rule per selector.
+
+## [2.0.50] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: use one `NodeListView` variant class per list so production CSS keeps `flex-wrap: wrap`.
+- `@phylopic/www`: include serif `font-family` on `NomenView` part classes used alongside `.main`.
+
 ## [2.0.49] - 2026-08-19
 
 ### Fixed

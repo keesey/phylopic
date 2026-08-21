@@ -15,9 +15,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-### Removed
-
 ### Security
+
+## [2.14.38] - 2026-08-20
+
+### Fixed
+
+- Production CSS: strip UTF-8 BOMs inserted when CSS modules are concatenated, which prevented the first rule in each module from matching in production.
+
+### Changed
+
+- `yarn build` fails when minified CSS still contains BOMs or split flex-list rules.
+
+## [2.14.37] - 2026-08-20
+
+### Fixed
+
+- Production CSS: disable cssnano `mergeRules`, which split `flex-wrap` into a shared rule emitted before `display: inline-flex` and reset wrapping on flex lists.
+
+### Changed
+
+- `yarn build` verifies minified CSS does not split `display:flex` and `flex-wrap:wrap` across rules for the same selector.
+
+## [2.14.36] - 2026-08-20
+
+### Fixed
+
+- `NodeListView`: use one variant class per list so production CSS keeps `flex-wrap: wrap`.
+- `NomenView`: include serif `font-family` on part classes used alongside `.main`.
 
 ## [2.14.35] - 2026-08-19
 

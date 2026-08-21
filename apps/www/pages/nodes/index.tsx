@@ -40,7 +40,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
                                     <CountView value={totalNodes} /> taxonomic groups in the database.
                                 </p>
                             </header>
-                            <NodeListView short value={nodes as readonly Node[]} />
+                            <NodeListView short value={nodes as readonly Node[]} variant="list" />
                         </>
                     )}
                 </PaginationContainer>
