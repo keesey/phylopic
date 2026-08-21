@@ -3,6 +3,8 @@ import { Authority, Namespace, ObjectID, stringifyNormalized } from "@phylopic/u
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
+import ENTITY_JSON_SOURCE from "../entities/ENTITY_JSON_SOURCE"
+import selectResolveObjectJSON from "../entities/selectResolveObjectJSON"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
@@ -12,16 +14,13 @@ import getExternalLink from "../search/getExternalLink"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+
 export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
 export type GetResolveObjectsService = PgClientService
+
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
-const getRedirectLink = async (
-    service: PgClientService,
-    authority: Authority | undefined,
-    namespace: Namespace | undefined,
-    objectID: ObjectID | undefined,
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<TitledLink> => {
+
+const assertResolvable = (authority: Authority | undefined, namespace: Namespace | undefined, objectID: ObjectID | undefined) => {
     if (!authority || !namespace || !objectID) {
         throw new APIError(400, [
             {
@@ -42,15 +41,43 @@ const getRedirectLink = async (
             },
         ])
     }
+}
+
+const selectResolveLinkJSONFromPostgres = async (
+    service: PgClientService,
+    authority: Authority,
+    namespace: Namespace,
+    objectID: ObjectID,
+    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
+): Promise<string> => {
     const client = await service.createPgClient()
-    let result: TitledLink
     try {
-        result = await getExternalLink(client, authority, namespace, objectID, queryParameters)
+        const link = await getExternalLink(client, authority, namespace, objectID, queryParameters)
+        return stringifyNormalized(link)
     } finally {
         await service.deletePgClient(client)
     }
-    return result
 }
+
+const selectResolveLinkJSON = async (
+    service: PgClientService,
+    authority: Authority,
+    namespace: Namespace,
+    objectID: ObjectID,
+    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
+): Promise<string> => {
+    if (ENTITY_JSON_SOURCE !== "postgres") {
+        const body = await selectResolveObjectJSON(authority, namespace, objectID)
+        if (body !== null) {
+            return body
+        }
+        if (ENTITY_JSON_SOURCE === "s3") {
+            console.warn("Resolve JSON is missing from S3; falling back to Postgres.", { authority, namespace, objectID })
+        }
+    }
+    return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectID, queryParameters)
+}
+
 export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectsService> = async (
     { accept, ...queryAndPathParameters },
     service,
@@ -61,10 +88,12 @@ export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveO
     if (queryParameters.build) {
         checkBuild(queryParameters.build, USER_MESSAGE)
     }
-    const link = await getRedirectLink(service, authority, namespace, objectID, { ...queryParameters, build: BUILD })
+    assertResolvable(authority, namespace, objectID)
+    const body = await selectResolveLinkJSON(service, authority, namespace, objectID, { ...queryParameters, build: BUILD })
+    const link = JSON.parse(body) as TitledLink
     const permanent = queryParameters.build === BUILD.toString(10)
     return {
-        body: stringifyNormalized(link),
+        body,
         headers: {
             ...DATA_HEADERS,
             ...createRedirectHeaders(link.href, permanent),
@@ -72,4 +101,5 @@ export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveO
         statusCode: permanent ? 308 : 307,
     } as APIGatewayProxyResult
 }
+
 export default getResolveObject

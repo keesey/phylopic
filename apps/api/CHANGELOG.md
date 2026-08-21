@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `GET /namespaces` reads precomputed `{build}/namespaces.json` from S3 when `ENTITY_JSON_SOURCE` is `s3` or `s3-fallback`, with Postgres fallback until the object exists for the current build.
+- `GET /resolve/...` reads precomputed `{build}/resolve/{authority}/{namespace}/{objectID}.json` from S3 when `ENTITY_JSON_SOURCE` is `s3` or `s3-fallback`, with Postgres fallback until objects exist for the current build.
 
 ### Deprecated
 

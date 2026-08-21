@@ -16,6 +16,7 @@ import { cleanEntitiesS3 } from "../entities/cleanEntitiesS3.js"
 import { cleanTables } from "./cleanEntities.js"
 import getContributorJSON from "./getContributorJSON.js"
 import getAuthorizedNamespaces from "./getAuthorizedNamespaces.js"
+import getResolveObjectJSONEntries from "./getResolveObjectJSONEntries.js"
 import getImageJSON from "./getImageJSON.js"
 import getNodeJSON from "./getNodeJSON.js"
 import type { SourceData } from "./getSourceData.js"
@@ -301,6 +302,9 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
                 namespaces: getAuthorizedNamespaces(data),
             }),
         )
+        for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
+            s3Writer.putResolve(authority, namespace, objectID, body)
+        }
         console.info("Uploading entity JSON to S3...")
         await s3Writer.flush()
         console.info("Uploaded entity JSON to S3.")

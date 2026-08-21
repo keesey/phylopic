@@ -3,6 +3,9 @@ import { Authority, createSearch, Namespace, ObjectID, stringifyNormalized, UUID
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
+import createBuildRedirect from "../build/createBuildRedirect"
+import ENTITY_JSON_SOURCE from "../entities/ENTITY_JSON_SOURCE"
+import selectResolveObjectJSON from "../entities/selectResolveObjectJSON"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
@@ -11,17 +14,51 @@ import checkAccept from "../mediaTypes/checkAccept"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-import createBuildRedirect from "../build/createBuildRedirect"
-const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
+
 export type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
 export type GetResolveObjectsService = PgClientService
-const getRedirect = async (
+
+const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
+
+const selectResolveLinkJSONFromPostgres = async (
     service: PgClientService,
-    authority: Authority | undefined,
-    namespace: Namespace | undefined,
-    objectIDs: ObjectID[],
+    authority: Authority,
+    namespace: Namespace,
+    objectIDs: readonly ObjectID[],
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<TitledLink> => {
+): Promise<string> => {
+    const client = await service.createPgClient()
+    try {
+        const result = await client.query<{ node_uuid: UUID; title: string | null }>(
+            'SELECT node_uuid,title FROM node_external WHERE authority=$1::character varying AND "namespace"=$2::character varying AND objectid=ANY($3::character varying[]) AND build=$4::bigint ORDER BY array_position($3::character varying[],objectid) LIMIT 1',
+            [authority, namespace, objectIDs, BUILD],
+        )
+        if (result.rowCount !== 1) {
+            throw new APIError(404, [
+                {
+                    developerMessage: "Object could not be found. None of the IDs matched.",
+                    field: "objectIDs",
+                    type: "RESOURCE_NOT_FOUND",
+                    userMessage: USER_MESSAGE,
+                },
+            ])
+        }
+        return stringifyNormalized({
+            href: `/nodes/${encodeURIComponent(result.rows[0].node_uuid)}${createSearch(queryParameters)}`,
+            title: result.rows[0].title ?? "",
+        })
+    } finally {
+        await service.deletePgClient(client)
+    }
+}
+
+const selectResolveLinkJSON = async (
+    service: PgClientService,
+    authority: Authority,
+    namespace: Namespace,
+    objectIDs: readonly ObjectID[],
+    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
+): Promise<string> => {
     if (!authority || !namespace) {
         throw new APIError(400, [
             {
@@ -42,32 +79,20 @@ const getRedirect = async (
             },
         ])
     }
-    const client = await service.createPgClient()
-    let link: TitledLink
-    try {
-        const result = await client.query<{ node_uuid: UUID; title: string | null }>(
-            'SELECT node_uuid,title FROM node_external WHERE authority=$1::character varying AND "namespace"=$2::character varying AND objectid=ANY($3::character varying[]) AND build=$4::bigint ORDER BY array_position($3::character varying[],objectid) LIMIT 1',
-            [authority, namespace, objectIDs, BUILD],
-        )
-        if (result.rowCount !== 1) {
-            throw new APIError(404, [
-                {
-                    developerMessage: "Object could not be found. None of the IDs matched.",
-                    field: "objectIDs",
-                    type: "RESOURCE_NOT_FOUND",
-                    userMessage: USER_MESSAGE,
-                },
-            ])
+    if (ENTITY_JSON_SOURCE !== "postgres") {
+        for (const objectID of objectIDs) {
+            const body = await selectResolveObjectJSON(authority, namespace, objectID)
+            if (body !== null) {
+                return body
+            }
         }
-        link = {
-            href: `/nodes/` + encodeURIComponent(result.rows[0].node_uuid) + createSearch(queryParameters),
-            title: result.rows[0].title ?? "",
+        if (ENTITY_JSON_SOURCE === "s3") {
+            console.warn("Resolve JSON is missing from S3; falling back to Postgres.", { authority, namespace })
         }
-    } finally {
-        await service.deletePgClient(client)
     }
-    return link
+    return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectIDs, queryParameters)
 }
+
 export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
     { accept, body, ...queryAndPathParameters },
     service,
@@ -80,9 +105,16 @@ export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolv
         return createBuildRedirect(path, { ...queryParameters, objectIDs })
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const link = await getRedirect(service, authority, namespace, objectIDs.split(","), queryParameters)
+    const body = await selectResolveLinkJSON(
+        service,
+        authority,
+        namespace,
+        objectIDs.split(","),
+        queryParameters,
+    )
+    const link = JSON.parse(body) as TitledLink
     return {
-        body: stringifyNormalized(link),
+        body,
         headers: {
             ...DATA_HEADERS,
             ...createRedirectHeaders(link.href, true),
@@ -91,4 +123,5 @@ export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolv
         statusCode: 308,
     } as APIGatewayProxyResult
 }
+
 export default GetResolveObjects
