@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `GET /namespaces` reads precomputed `{build}/namespaces.json` from S3 when `ENTITY_JSON_SOURCE` is `s3` or `s3-fallback`, with Postgres fallback until the object exists for the current build.
+
 ### Deprecated
 
 ### Fixed
@@ -18,12 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
-
-## [2.13.7] - 2026-08-20
-
-### Changed
-
-- `GET /namespaces` reads precomputed `{build}/namespaces.json` from S3 when `ENTITY_JSON_SOURCE` is `s3` or `s3-fallback`, with Postgres fallback until the object exists for the current build.
 
 ## [2.13.6] - 2026-08-19
 
