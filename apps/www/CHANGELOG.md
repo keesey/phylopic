@@ -17,6 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.37] - 2026-08-20
+
+### Fixed
+
+- Production CSS: disable cssnano `mergeRules`, which split `flex-wrap` into a shared rule emitted before `display: inline-flex` and reset wrapping on flex lists.
+
+### Changed
+
+- `yarn build` verifies minified CSS does not split `display:flex` and `flex-wrap:wrap` across rules for the same selector.
+
 ## [2.14.36] - 2026-08-20
 
 ### Fixed

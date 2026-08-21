@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.51] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: disable cssnano `mergeRules` so production minification does not reset `flex-wrap` on flex lists.
+
+### Changed
+
+- `@phylopic/www`: production build verifies minified CSS keeps `display:flex` and `flex-wrap:wrap` on the same rule per selector.
+
 ## [2.0.50] - 2026-08-20
 
 ### Fixed

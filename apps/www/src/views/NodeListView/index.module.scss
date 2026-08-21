@@ -1,29 +1,27 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/bullet.scss";
+@use "@phylopic/styles/mixins/flex-list.scss";
 @use "@phylopic/styles/mixins/hierarchy.scss";
 
 @mixin bullet-items {
-    flex-wrap: wrap;
-
     .item {
         @include bullet.item(colors.$black);
     }
 }
 
 .inline {
+    @include flex-list.inline-container;
     @include bullet-items;
-    display: inline-flex;
 }
 
 .list {
-    @include bullet-items;
-    display: flex;
+    @include flex-list.block-container;
     justify-content: center;
+    @include bullet-items;
 }
 
 .lineage {
-    @include bullet-items;
-    display: inline-flex;
+    @include flex-list.inline-container;
 
     .item {
         @include hierarchy.item;

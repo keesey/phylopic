@@ -1,0 +1,11 @@
+// Keep display and flex-wrap in the same rule block. Production cssnano mergeRules
+// hoists shared flex-wrap ahead of per-selector display rules, which resets wrapping.
+@mixin inline-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+}
+
+@mixin block-container {
+    display: flex;
+    flex-wrap: wrap;
+}
