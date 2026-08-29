@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.53] - 2026-08-29
+
+### Fixed
+
+- `@phylopic/contribute` `2.4.23`: avoid client-side crash when assigning PBDB search results for
+  taxa not linked in PhyloPic.
+- `@phylopic/ui` `1.7.16`: validate PBDB and OTOL resolve responses before storing them in search
+  state.
+
 ## [2.0.52] - 2026-08-20
 
 ### Fixed

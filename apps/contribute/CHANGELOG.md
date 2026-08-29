@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.23] - 2026-08-29
+
+### Fixed
+
+- Avoid a client-side crash when assigning PBDB search results for taxa not linked in PhyloPic
+  (resolve `404` left `_embedded` undefined on stored nodes).
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.16`.
+
 ## [2.4.22] - 2026-08-19
 
 ### Changed

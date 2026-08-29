@@ -1,4 +1,4 @@
-import { NodeWithEmbedded } from "@phylopic/api-models"
+import { NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import { BuildContext, fetchDataAndCheck } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
@@ -25,7 +25,7 @@ const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async ([
     return response.data
 }
 const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
-    const response = await fetchDataAndCheck<NodeWithEmbedded>(url)
+    const response = await fetchDataAndCheck<NodeWithEmbedded>(url, undefined, isNodeWithEmbedded)
     return response.data
 }
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {

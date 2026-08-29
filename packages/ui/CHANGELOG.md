@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.16] - 2026-08-29
+
+### Fixed
+
+- PBDB and OTOL external resolve fetchers validate resolved nodes with `isNodeWithEmbedded`
+  before storing them in search state.
+- `useExternalResolutions` skips resolved nodes that fail validation.
+
 ## [1.7.15] - 2026-08-12
 
 ### Changed
