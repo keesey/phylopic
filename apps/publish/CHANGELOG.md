@@ -11,15 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Publish writes `{build}/namespaces.json` to S3 during `yarn insert` (Tier 3 static-first).
-- Publish writes `{build}/resolve/{authority}/{namespace}/{objectID}.json` for each external ID during `yarn insert`.
-- `yarn verify:entities` checks `namespaces.json` and sampled resolve objects against Postgres.
-
 ### Fixed
 
 ### Removed
 
 ### Security
+
+## [1.13.0] - 2026-08-28
+
+### Changed
+
+- Publish writes `{build}/namespaces.json` to S3 during `yarn insert`.
+- Publish writes `{build}/resolve/{authority}/{namespace}/{objectID}.json` for each external ID during `yarn insert`.
+- `yarn verify:entities` checks `namespaces.json` and sampled resolve objects against Postgres.
 
 ## [1.12.15] - 2026-08-19
 
