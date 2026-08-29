@@ -94,7 +94,7 @@ const selectResolveLinkJSON = async (
 }
 
 export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
-    { accept, body, ...queryAndPathParameters },
+    { accept, body: _body, ...queryAndPathParameters },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
