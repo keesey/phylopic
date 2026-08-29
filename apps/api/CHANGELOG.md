@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.1] - 2026-08-29
+
+### Fixed
+
+- S3 resolve redirects merge request query parameters (such as `embed_primaryImage`) into the
+  precomputed link `href`, matching Postgres resolve behavior.
+
 ## [2.14.0] - 2026-08-28
 
 ### Changed

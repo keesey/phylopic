@@ -11,6 +11,7 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
+import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
@@ -83,7 +84,7 @@ const selectResolveLinkJSON = async (
         for (const objectID of objectIDs) {
             const body = await selectResolveObjectJSON(authority, namespace, objectID)
             if (body !== null) {
-                return body
+                return mergeResolveLinkQuery(body, queryParameters)
             }
         }
         if (ENTITY_JSON_SOURCE === "s3") {

@@ -11,6 +11,7 @@ import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import getExternalLink from "../search/getExternalLink"
+import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
@@ -69,7 +70,7 @@ const selectResolveLinkJSON = async (
     if (ENTITY_JSON_SOURCE !== "postgres") {
         const body = await selectResolveObjectJSON(authority, namespace, objectID)
         if (body !== null) {
-            return body
+            return mergeResolveLinkQuery(body, queryParameters)
         }
         if (ENTITY_JSON_SOURCE === "s3") {
             console.warn("Resolve JSON is missing from S3; falling back to Postgres.", { authority, namespace, objectID })

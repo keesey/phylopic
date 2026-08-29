@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.54] - 2026-08-29
+
+### Fixed
+
+- `@phylopic/api` `2.14.1`: S3 resolve redirects preserve request embed query parameters in the
+  redirect `href`.
+
 ## [2.0.53] - 2026-08-29
 
 ### Fixed
