@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.39] - 2026-08-29
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.16`.
+
 ## [2.14.38] - 2026-08-20
 
 ### Fixed

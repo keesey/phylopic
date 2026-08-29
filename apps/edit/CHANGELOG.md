@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.9.20] - 2026-08-29
+
+### Fixed
+
+- Avoid a client-side crash when external search resolves return nodes without `_embedded`.
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.16`.
+
 ## [1.9.19] - 2026-08-19
 
 ### Changed
