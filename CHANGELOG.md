@@ -19,12 +19,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.55] - 2026-08-29
+
+- `@phylopic/edit` `1.9.20`: avoid client-side crash when external search resolves return nodes
+  without `_embedded`.
+- `@phylopic/www` 2.14.39`: avoid client-side crash when external search resolves return nodes
+  without `_embedded`.
+
 ## [2.0.54] - 2026-08-29
 
 ### Fixed
 
 - `@phylopic/api` `2.14.1`: S3 resolve redirects preserve request embed query parameters in the
   redirect `href`.
+
+### Changed
+
+- `@phylopic/edit` `1.9.20`, `@phylopic/www` `2.14.39`: upgraded `@phylopic/ui` to `1.7.16`.
 
 ## [2.0.53] - 2026-08-29
 
