@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.57] - 2026-08-30
+
+### Added
+
+- Backups for `permalinks.phylopic.org` (us-east-1 replica via `seed-replica`, no live versioning).
+
 ## [2.0.56] - 2026-08-30
 
 ### Added
@@ -44,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `@phylopic/contribute` `2.4.23`: avoid client-side crash when assigning PBDB search results for taxa not linked in *PhyloPic*.
+- `@phylopic/contribute` `2.4.23`: avoid client-side crash when assigning PBDB search results for taxa not linked in _PhyloPic_.
 - `@phylopic/ui` `1.7.16`: validate PBDB and OTOL resolve responses before storing them in search state.
 
 ## [2.0.52] - 2026-08-20

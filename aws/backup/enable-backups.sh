@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# Enables same-account backups for phylopic-source (RDS instance phylopic) and
-# source-images.phylopic.org. Safe to re-run: existing resources are updated in
-# place rather than duplicated.
+# Enables same-account backups for phylopic-source (RDS instance phylopic),
+# source-images.phylopic.org, and permalinks.phylopic.org. Safe to re-run:
+# existing resources are updated in place rather than duplicated.
 #
 # Does not set PreferredBackupWindow. Raises BackupRetentionPeriod to 14 only
 # when the current value is lower, so a longer window already chosen is kept.
@@ -24,15 +24,18 @@ EXPECTED_ACCOUNT=960039257217
 LIVE_REGION=us-west-2
 REPLICA_REGION=us-east-1
 DB_INSTANCE=phylopic
-LIVE_BUCKET=source-images.phylopic.org
-REPLICA_BUCKET=source-images-backup.phylopic.org
+IMAGES_LIVE=source-images.phylopic.org
+IMAGES_REPLICA=source-images-backup.phylopic.org
+PERMALINKS_LIVE=permalinks.phylopic.org
+PERMALINKS_REPLICA=permalinks-backup.phylopic.org
 VAULT_NAME=phylopic-source
 PLAN_NAME=phylopic-source
 SELECTION_NAME=phylopic-rds
 BACKUP_ROLE=phylopic-backup
 REPLICATION_ROLE=phylopic-s3-replication
 SNS_TOPIC=phylopic-backup
-ALARM_NAME=phylopic-source-images-object-count-drop
+IMAGES_ALARM=phylopic-source-images-object-count-drop
+PERMALINKS_ALARM=phylopic-permalinks-object-count-drop
 NOTIFY_EMAIL=${BACKUP_NOTIFY_EMAIL:-keesey+phylopic@gmail.com}
 MIN_RETENTION=14
 
@@ -55,8 +58,8 @@ usage() {
 Usage: ./enable-backups.sh [inspect|enable|seed-replica]
 
   inspect        Print live RDS, S3, AWS Backup, SNS, and alarm settings (default).
-  enable         Apply PITR, AWS Backup, S3 versioning/CRR/lifecycle, SNS, alarm.
-  seed-replica   Sync current source-images objects to the us-east-1 replica.
+  enable         Apply PITR, AWS Backup, S3 image CRR, permalink replica bucket, SNS, alarms.
+  seed-replica   Sync current source-images and permalinks objects to us-east-1.
 
 See ../BACKUP.md.
 EOF
@@ -155,15 +158,18 @@ inspect_sns_alarm() {
             --output table
     fi
     echo
-    echo "== CloudWatch alarm $ALARM_NAME =="
-    if aws cloudwatch describe-alarms --alarm-names "$ALARM_NAME" --region "$LIVE_REGION" \
-        --query 'MetricAlarms[0].AlarmName' --output text 2>/dev/null | grep -qx "$ALARM_NAME"; then
-        aws cloudwatch describe-alarms --alarm-names "$ALARM_NAME" --region "$LIVE_REGION" \
-            --query 'MetricAlarms[0].{State:StateValue,Updated:StateUpdatedTimestamp}' \
-            --output table
-    else
-        echo "  (alarm not found)"
-    fi
+    echo "== CloudWatch alarms =="
+    for alarm in "$IMAGES_ALARM" "$PERMALINKS_ALARM"; do
+        echo "  $alarm"
+        if aws cloudwatch describe-alarms --alarm-names "$alarm" --region "$LIVE_REGION" \
+            --query 'MetricAlarms[0].AlarmName' --output text 2>/dev/null | grep -qx "$alarm"; then
+            aws cloudwatch describe-alarms --alarm-names "$alarm" --region "$LIVE_REGION" \
+                --query 'MetricAlarms[0].{State:StateValue,Updated:StateUpdatedTimestamp}' \
+                --output table
+        else
+            echo "  (alarm not found)"
+        fi
+    done
     echo
 }
 
@@ -172,8 +178,10 @@ cmd_inspect() {
     echo "account $ACCOUNT_ID"
     echo
     inspect_rds
-    inspect_s3_bucket "$LIVE_BUCKET" "$LIVE_REGION"
-    inspect_s3_bucket "$REPLICA_BUCKET" "$REPLICA_REGION"
+    inspect_s3_bucket "$IMAGES_LIVE" "$LIVE_REGION"
+    inspect_s3_bucket "$IMAGES_REPLICA" "$REPLICA_REGION"
+    inspect_s3_bucket "$PERMALINKS_LIVE" "$LIVE_REGION"
+    inspect_s3_bucket "$PERMALINKS_REPLICA" "$REPLICA_REGION"
     inspect_backup
     inspect_sns_alarm
 }
@@ -332,7 +340,7 @@ enable_sns() {
     echo "SNS topic: $topic_arn"
 
     local policy
-    policy=$(jq -n --arg topic "$topic_arn" --arg account "$ACCOUNT_ID" --arg alarm "$ALARM_NAME" --arg region "$LIVE_REGION" '{
+    policy=$(jq -n --arg topic "$topic_arn" --arg account "$ACCOUNT_ID" --arg region "$LIVE_REGION" '{
         Version: "2012-10-17",
         Statement: [
             {
@@ -350,7 +358,7 @@ enable_sns() {
                 Resource: $topic,
                 Condition: {
                     ArnLike: {
-                        "aws:SourceArn": ("arn:aws:cloudwatch:" + $region + ":" + $account + ":alarm:" + $alarm)
+                        "aws:SourceArn": ("arn:aws:cloudwatch:" + $region + ":" + $account + ":alarm:phylopic-*-object-count-drop")
                     }
                 }
             }
@@ -385,38 +393,34 @@ enable_sns() {
     TOPIC_ARN=$topic_arn
 }
 
-enable_s3() {
-    aws s3api put-bucket-versioning \
-        --bucket "$LIVE_BUCKET" \
-        --region "$LIVE_REGION" \
-        --versioning-configuration Status=Enabled
-    echo "S3 $LIVE_BUCKET: versioning Enabled"
+ensure_replica_bucket() {
+    local replica=$1
 
-    if aws s3api head-bucket --bucket "$REPLICA_BUCKET" --region "$REPLICA_REGION" >/dev/null 2>&1; then
-        echo "S3 $REPLICA_BUCKET: exists"
+    if aws s3api head-bucket --bucket "$replica" --region "$REPLICA_REGION" >/dev/null 2>&1; then
+        echo "S3 $replica: exists"
     else
         aws s3api create-bucket \
-            --bucket "$REPLICA_BUCKET" \
+            --bucket "$replica" \
             --region "$REPLICA_REGION" \
             >/dev/null
-        echo "S3 $REPLICA_BUCKET: created"
+        echo "S3 $replica: created"
     fi
 
     aws s3api put-public-access-block \
-        --bucket "$REPLICA_BUCKET" \
+        --bucket "$replica" \
         --region "$REPLICA_REGION" \
         --public-access-block-configuration \
         BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
     aws s3api put-bucket-ownership-controls \
-        --bucket "$REPLICA_BUCKET" \
+        --bucket "$replica" \
         --region "$REPLICA_REGION" \
         --ownership-controls 'Rules=[{ObjectOwnership=BucketOwnerEnforced}]'
     aws s3api put-bucket-versioning \
-        --bucket "$REPLICA_BUCKET" \
+        --bucket "$replica" \
         --region "$REPLICA_REGION" \
         --versioning-configuration Status=Enabled
     aws s3api put-bucket-encryption \
-        --bucket "$REPLICA_BUCKET" \
+        --bucket "$replica" \
         --region "$REPLICA_REGION" \
         --server-side-encryption-configuration '{
             "Rules": [{
@@ -425,13 +429,13 @@ enable_s3() {
             }]
         }'
     aws s3api put-bucket-tagging \
-        --bucket "$REPLICA_BUCKET" \
+        --bucket "$replica" \
         --region "$REPLICA_REGION" \
         --tagging 'TagSet=[{Key=Project,Value=PhyloPic},{Key=ManagedBy,Value=aws/backup/enable-backups.sh}]'
-    echo "S3 $REPLICA_BUCKET: private, versioned, AES256"
+    echo "S3 $replica: private, versioned, AES256"
 
     local deny
-    deny=$(jq -n --arg account "$ACCOUNT_ID" --arg bucket "$REPLICA_BUCKET" '{
+    deny=$(jq -n --arg account "$ACCOUNT_ID" --arg bucket "$replica" '{
         Version: "2012-10-17",
         Statement: [{
             Sid: "DenyAppPrincipals",
@@ -452,46 +456,79 @@ enable_s3() {
         }]
     }')
     aws s3api put-bucket-policy \
-        --bucket "$REPLICA_BUCKET" \
+        --bucket "$replica" \
         --region "$REPLICA_REGION" \
         --policy "$deny"
-    echo "S3 $REPLICA_BUCKET: app principals denied"
+    echo "S3 $replica: app principals denied"
 
+    aws s3api put-bucket-lifecycle-configuration \
+        --bucket "$replica" \
+        --region "$REPLICA_REGION" \
+        --lifecycle-configuration file://lifecycle.json
+    echo "S3 $replica: lifecycle applied"
+}
+
+enable_s3_pair() {
+    local live=$1
+    local replica=$2
+    local rule_id=$3
+
+    aws s3api put-bucket-versioning \
+        --bucket "$live" \
+        --region "$LIVE_REGION" \
+        --versioning-configuration Status=Enabled
+    echo "S3 $live: versioning Enabled"
+
+    ensure_replica_bucket "$replica"
+
+    local repl
+    repl=$(jq \
+        --arg arn "arn:aws:iam::${ACCOUNT_ID}:role/${REPLICATION_ROLE}" \
+        --arg dest "arn:aws:s3:::${replica}" \
+        --arg id "$rule_id" \
+        '.Role = $arn | .Rules[0].ID = $id | .Rules[0].Destination.Bucket = $dest' \
+        replication.json)
+    aws s3api put-bucket-replication \
+        --bucket "$live" \
+        --region "$LIVE_REGION" \
+        --replication-configuration "$repl"
+    echo "S3 $live: replication to $replica"
+
+    aws s3api put-bucket-lifecycle-configuration \
+        --bucket "$live" \
+        --region "$LIVE_REGION" \
+        --lifecycle-configuration file://lifecycle.json
+    echo "S3 $live: lifecycle applied"
+}
+
+enable_s3() {
     # IAM role updates are not instantly visible to S3 replication.
     echo "waiting 10s for IAM role propagation"
     sleep 10
-
-    local repl
-    repl=$(jq --arg arn "arn:aws:iam::${ACCOUNT_ID}:role/${REPLICATION_ROLE}" '.Role = $arn' replication.json)
-    aws s3api put-bucket-replication \
-        --bucket "$LIVE_BUCKET" \
-        --region "$LIVE_REGION" \
-        --replication-configuration "$repl"
-    echo "S3 $LIVE_BUCKET: replication to $REPLICA_BUCKET"
-
-    aws s3api put-bucket-lifecycle-configuration \
-        --bucket "$LIVE_BUCKET" \
-        --region "$LIVE_REGION" \
-        --lifecycle-configuration file://lifecycle.json
-    aws s3api put-bucket-lifecycle-configuration \
-        --bucket "$REPLICA_BUCKET" \
-        --region "$REPLICA_REGION" \
-        --lifecycle-configuration file://lifecycle.json
-    echo "S3: lifecycle applied on live and replica"
+    enable_s3_pair "$IMAGES_LIVE" "$IMAGES_REPLICA" "source-images-to-backup"
+    # Permalinks: no live versioning (CRR requires it). Replica is filled by seed-replica.
+    echo "S3 $PERMALINKS_LIVE: versioning left unchanged"
+    ensure_replica_bucket "$PERMALINKS_REPLICA"
 }
 
 enable_alarm() {
+    local bucket=$1
+    local alarm=$2
+    local metrics
+    metrics=$(jq --arg bucket "$bucket" '
+        .[0].MetricStat.Metric.Dimensions[0].Value = $bucket
+    ' object-count-alarm-metrics.json)
     aws cloudwatch put-metric-alarm \
         --region "$LIVE_REGION" \
-        --alarm-name "$ALARM_NAME" \
-        --alarm-description "Daily object count on source-images.phylopic.org fell outside the anomaly band (possible mass delete)." \
+        --alarm-name "$alarm" \
+        --alarm-description "Daily object count on ${bucket} fell outside the anomaly band (possible mass delete)." \
         --comparison-operator LessThanLowerThreshold \
         --evaluation-periods 1 \
         --threshold-metric-id ad \
         --treat-missing-data notBreaching \
-        --metrics file://object-count-alarm-metrics.json \
+        --metrics "$metrics" \
         --alarm-actions "$TOPIC_ARN"
-    echo "alarm $ALARM_NAME: applied (S3 NumberOfObjects is daily; often INSUFFICIENT_DATA for 24-48h)"
+    echo "alarm $alarm: applied (S3 NumberOfObjects is daily; often INSUFFICIENT_DATA for 24-48h)"
 }
 
 cmd_enable() {
@@ -499,8 +536,10 @@ cmd_enable() {
     echo "account $ACCOUNT_ID — inspect before apply:"
     echo
     inspect_rds
-    inspect_s3_bucket "$LIVE_BUCKET" "$LIVE_REGION"
-    inspect_s3_bucket "$REPLICA_BUCKET" "$REPLICA_REGION"
+    inspect_s3_bucket "$IMAGES_LIVE" "$LIVE_REGION"
+    inspect_s3_bucket "$IMAGES_REPLICA" "$REPLICA_REGION"
+    inspect_s3_bucket "$PERMALINKS_LIVE" "$LIVE_REGION"
+    inspect_s3_bucket "$PERMALINKS_REPLICA" "$REPLICA_REGION"
     echo "applying..."
     echo
     ensure_backup_role
@@ -513,24 +552,31 @@ cmd_enable() {
     enable_backup_plan
     enable_sns
     enable_s3
-    enable_alarm
+    enable_alarm "$IMAGES_LIVE" "$IMAGES_ALARM"
+    enable_alarm "$PERMALINKS_LIVE" "$PERMALINKS_ALARM"
     echo
-    echo "Done. Confirm the SNS email. Seed current images with: ./enable-backups.sh seed-replica"
+    echo "Done. Confirm the SNS email. Seed current objects with: ./enable-backups.sh seed-replica"
+    echo "Permalinks have no live versioning or CRR; re-run seed-replica to refresh that replica."
     echo "See ../BACKUP.md for restore and verification."
 }
 
 cmd_seed_replica() {
     require_account
-    if ! aws s3api head-bucket --bucket "$REPLICA_BUCKET" --region "$REPLICA_REGION" >/dev/null 2>&1; then
-        echo "error: $REPLICA_BUCKET does not exist; run ./enable-backups.sh enable first" >&2
-        exit 1
-    fi
-    echo "syncing s3://$LIVE_BUCKET -> s3://$REPLICA_BUCKET (current objects only; no --delete)"
-    aws s3 sync \
-        "s3://$LIVE_BUCKET" \
-        "s3://$REPLICA_BUCKET" \
-        --source-region "$LIVE_REGION" \
-        --region "$REPLICA_REGION"
+    local live replica
+    for pair in "$IMAGES_LIVE:$IMAGES_REPLICA" "$PERMALINKS_LIVE:$PERMALINKS_REPLICA"; do
+        live=${pair%%:*}
+        replica=${pair##*:}
+        if ! aws s3api head-bucket --bucket "$replica" --region "$REPLICA_REGION" >/dev/null 2>&1; then
+            echo "error: $replica does not exist; run ./enable-backups.sh enable first" >&2
+            exit 1
+        fi
+        echo "syncing s3://$live -> s3://$replica (current objects only; no --delete)"
+        aws s3 sync \
+            "s3://$live" \
+            "s3://$replica" \
+            --source-region "$LIVE_REGION" \
+            --region "$REPLICA_REGION"
+    done
     echo "Done."
 }
 

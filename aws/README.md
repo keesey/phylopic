@@ -246,7 +246,7 @@ with `distribution/YOUR_API_CLOUDFRONT_DISTRIBUTION_ID` (same value as `API_CLOU
 
 ## Source-data backups
 
-Routine backups of Postgres `phylopic-source` (RDS instance `phylopic`) and
-`source-images.phylopic.org` are documented in [`BACKUP.md`](./BACKUP.md). Apply
-with [`backup/enable-backups.sh`](./backup/enable-backups.sh). App principals in
-this folder are not granted the replica bucket.
+Routine backups of Postgres `phylopic-source` (RDS instance `phylopic`),
+`source-images.phylopic.org`, and `permalinks.phylopic.org` are documented in
+[`BACKUP.md`](./BACKUP.md). Apply with [`backup/enable-backups.sh`](./backup/enable-backups.sh).
+App principals in this folder are not granted the replica buckets.

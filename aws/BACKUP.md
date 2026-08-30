@@ -1,13 +1,14 @@
 # Source-data backups
 
-Routine backups of the system of record: Postgres `phylopic-source` on RDS instance
-`phylopic` (`db.t3.micro`, `us-west-2`) and accepted files in
-[`source-images.phylopic.org`](../S3.md). Published derivatives (`images.phylopic.org`,
+Routine backups of irreplaceable stores: Postgres `phylopic-source` on RDS instance
+`phylopic` (`db.t3.micro`, `us-west-2`), accepted files in
+[`source-images.phylopic.org`](../S3.md), and collection permalinks in
+[`permalinks.phylopic.org`](../S3.md). Published derivatives (`images.phylopic.org`,
 `entities.phylopic.org`, `phylopic-entities`) are rebuilt by `yarn make` and are not
 backed up separately. Pending uploads in `uploads.phylopic.org` are out of scope.
 
-Same AWS account (`960039257217`). Protection is versioning, snapshots, and a replica
-bucket — not a second account.
+Same AWS account (`960039257217`). Protection is versioning, snapshots, and replica
+buckets — not a second account.
 
 Apply with [`backup/enable-backups.sh`](./backup/enable-backups.sh). Run with a
 credential that can manage RDS, IAM, S3, AWS Backup, SNS, and CloudWatch (the
@@ -15,25 +16,26 @@ credential that can manage RDS, IAM, S3, AWS Backup, SNS, and CloudWatch (the
 
 ## What gets enabled
 
-| Layer                              | What                                                       | Retention                                                            |
-| ---------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
-| RDS automated backups + PITR       | Instance `phylopic` (both databases)                       | 14 days, or keep a longer value already set                          |
-| AWS Backup vault `phylopic-source` | Weekly snapshot                                            | 90 days, copied to `us-east-1`                                       |
-| Same vault                         | Monthly snapshot                                           | 365 days, copied to `us-east-1`                                      |
-| S3 versioning                      | `source-images.phylopic.org`                               | Noncurrent versions: Glacier IR after 90 days, expire after 365 days |
-| S3 CRR                             | Replica `source-images-backup.phylopic.org` in `us-east-1` | Same lifecycle                                                       |
+| Layer                              | What                                                                                      | Retention                                                            |
+| ---------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| RDS automated backups + PITR       | Instance `phylopic` (both databases)                                                      | 14 days, or keep a longer value already set                          |
+| AWS Backup vault `phylopic-source` | Weekly snapshot                                                                           | 90 days, copied to `us-east-1`                                       |
+| Same vault                         | Monthly snapshot                                                                          | 365 days, copied to `us-east-1`                                      |
+| S3 versioning                      | `source-images.phylopic.org` only                                                         | Noncurrent versions: Glacier IR after 90 days, expire after 365 days |
+| S3 CRR                             | Replica `source-images-backup.phylopic.org` in `us-east-1`                                | Same lifecycle                                                       |
+| S3 replica (sync)                  | `permalinks-backup.phylopic.org` in `us-east-1` (live permalinks bucket is not versioned) | Replica versioning + same noncurrent lifecycle                       |
 
 RDS cannot snapshot one database. A restore always brings up a throwaway instance, then
 `pg_dump` of `phylopic-source` only. `phylopic-entities` on that instance can be ignored
 or rebuilt later.
 
 The script never writes `PreferredBackupWindow`. App IAM users
-([`policies/`](./policies)) are not granted the replica bucket; the replica policy
+([`policies/`](./policies)) are not granted the replica buckets; each replica policy
 explicitly denies them.
 
 SNS topic `phylopic-backup` emails `keesey+phylopic@gmail.com` (override with
 `BACKUP_NOTIFY_EMAIL`) on AWS Backup job failures and on a sharp drop in source-image
-object count. Confirm the subscription email after the first `enable`.
+or permalink object count. Confirm the subscription email after the first `enable`.
 
 ## Inspect first
 
@@ -54,9 +56,13 @@ Confirm:
 2. **`source-images.phylopic.org`:** versioning, replication, lifecycle. Enabling
    versioning cannot be fully undone (only suspended). Replacing lifecycle overwrites
    any existing rules on that bucket.
-3. **Replica bucket** `source-images-backup.phylopic.org` — whether it already exists
-   in `us-east-1`.
-4. **AWS Backup** vaults and plan named `phylopic-source`.
+3. **`permalinks.phylopic.org`:** leave versioning off. S3 cross-region replication
+   requires source versioning, so this bucket is copied with `seed-replica` instead.
+   If a previous enable turned versioning on, suspend it:
+   `aws s3api put-bucket-versioning --bucket permalinks.phylopic.org --versioning-configuration Status=Suspended`
+4. **Replica buckets** `source-images-backup.phylopic.org` and
+   `permalinks-backup.phylopic.org` — whether they already exist in `us-east-1`.
+5. **AWS Backup** vaults and plan named `phylopic-source`.
 
 Then apply (idempotent):
 
@@ -64,14 +70,18 @@ Then apply (idempotent):
 ./enable-backups.sh enable
 ```
 
-Cross-region replication copies **new** writes. Seed current objects once:
+Cross-region replication copies **new** source-image writes. Permalinks have no live
+versioning and no CRR. Seed both replicas (and re-run after new permalinks you care
+about):
 
 ```sh
 ./enable-backups.sh seed-replica
 ```
 
-Existing objects are synced as current versions only; later overwrites and deletes
-replicate with version history.
+Source-image objects already in the live bucket are synced as current versions; later
+overwrites and deletes replicate with version history. Permalinks on the replica keep
+prior copies as noncurrent versions when a later `seed-replica` overwrites them. Do not
+pass `--delete` on that sync, or live deletes would drop the replica copy.
 
 ## Restore
 
@@ -205,18 +215,57 @@ Do not pass `--delete` unless you intend to drop live keys that are absent from 
 replica. After a source-only restore, run `yarn make` only if the public site and API
 must match the restored source.
 
+### One permalink
+
+Collection permalinks live at `data/{hash}.json` (SHA-512). The live bucket is not
+versioned and has no `trash/` prefix. Copy from the replica (versioned, so overwrites
+from later seeds still leave prior versions):
+
+```sh
+HASH=...
+
+aws s3api list-object-versions \
+  --bucket permalinks-backup.phylopic.org \
+  --region us-east-1 \
+  --prefix "data/${HASH}.json"
+
+aws s3api copy-object \
+  --bucket permalinks.phylopic.org \
+  --copy-source "permalinks-backup.phylopic.org/data/${HASH}.json" \
+  --key "data/${HASH}.json" \
+  --server-side-encryption AES256
+```
+
+Add `?versionId=VERSION_ID` on `CopySource` to restore a noncurrent replica version.
+
+### Many permalinks / emptied bucket
+
+```sh
+aws s3 sync \
+  s3://permalinks-backup.phylopic.org \
+  s3://permalinks.phylopic.org \
+  --source-region us-east-1 \
+  --region us-west-2
+```
+
+Do not pass `--delete` unless you intend to drop live keys that are absent from the
+replica. Permalinks do not require `yarn make`.
+
 ## Quarterly drill
 
 Do not load into live.
 
 1. `./enable-backups.sh inspect` — latest restorable time is recent; last AWS Backup
-   job is `COMPLETED`; replication status is `Enabled`.
+   job is `COMPLETED`; source-images replication is `Enabled`; permalinks live
+   versioning is not `Enabled`.
 2. Restore the newest weekly recovery point to a throwaway instance. `pg_dump`
    `phylopic-source` only; confirm the dump restores into a local or throwaway
    database. Drop the throwaway RDS instance.
-3. Put a tiny object at `backup-probe/drill.txt` on the live bucket, wait for it on
-   the replica, delete it on live, confirm the prior version remains, then delete the
-   probe prefix (including versions) on both buckets.
+3. Put a tiny object at `backup-probe/drill.txt` on `source-images.phylopic.org`, wait
+   for CRR, delete on live, confirm the prior version remains. Put another at
+   `backup-probe/drill.txt` on `permalinks.phylopic.org`, run `seed-replica`, delete on
+   live, confirm the replica still has it, then delete the probe prefix on live buckets
+   and both replicas (including versions).
 4. Confirm the SNS subscription is `Confirmed`.
 
 Record the date outside this repo (password manager or calendar). The probe prefix is
@@ -232,13 +281,23 @@ aws backup list-backup-jobs --by-resource-type RDS --max-results 5
 
 aws s3api get-bucket-versioning --bucket source-images.phylopic.org
 aws s3api get-bucket-replication --bucket source-images.phylopic.org
+aws s3api get-bucket-versioning --bucket permalinks.phylopic.org
+aws s3api get-bucket-versioning --bucket permalinks-backup.phylopic.org --region us-east-1
 
 aws iam simulate-principal-policy \
   --policy-source-arn arn:aws:iam::960039257217:user/phylopic-editorial \
   --action-names s3:PutObject \
   --resource-arns arn:aws:s3:::source-images-backup.phylopic.org/images/probe/source
+
+aws iam simulate-principal-policy \
+  --policy-source-arn arn:aws:iam::960039257217:user/phylopic-www \
+  --action-names s3:PutObject \
+  --resource-arns arn:aws:s3:::permalinks-backup.phylopic.org/data/probe.json
 ```
 
 `phylopic-editorial` and `phylopic-publish` must be `implicitDeny` or `explicitDeny` on
-the replica. Confirm the SNS email and, once S3 daily metrics exist (often 24–48 hours),
-that alarm `phylopic-source-images-object-count-drop` is `OK` or `INSUFFICIENT_DATA`.
+`source-images-backup.phylopic.org`. `phylopic-www` must be denied on
+`permalinks-backup.phylopic.org`. Live `permalinks.phylopic.org` versioning should be
+empty or `Suspended`, not `Enabled`. Confirm the SNS email and, once S3 daily metrics
+exist (often 24–48 hours), that alarms `phylopic-source-images-object-count-drop` and
+`phylopic-permalinks-object-count-drop` are `OK` or `INSUFFICIENT_DATA`.

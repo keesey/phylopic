@@ -2,7 +2,7 @@
     "Role": "ROLE_ARN",
     "Rules": [
         {
-            "ID": "source-images-to-backup",
+            "ID": "RULE_ID",
             "Status": "Enabled",
             "Priority": 1,
             "Filter": {
@@ -12,7 +12,7 @@
                 "Status": "Enabled"
             },
             "Destination": {
-                "Bucket": "arn:aws:s3:::source-images-backup.phylopic.org",
+                "Bucket": "DEST_BUCKET_ARN",
                 "StorageClass": "STANDARD"
             }
         }

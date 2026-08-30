@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.0] - 2026-08-30
+
+### Added
+
+- Backups for `permalinks.phylopic.org`: replica `permalinks-backup.phylopic.org` in `us-east-1` (no live versioning or CRR; `seed-replica` copies current objects), object-count alarm, and restore steps in `BACKUP.md`.
+
 ## [1.3.0] - 2026-08-30
 
 ### Added
