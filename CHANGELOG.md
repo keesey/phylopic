@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Routine backups for `phylopic-source` (RDS) and `source-images.phylopic.org`: enable script, AWS Backup plan, S3 versioning and cross-region replica, restore runbook in `aws/BACKUP.md`.
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.0.56] - 2026-08-30
+
+### Added
+
+- Routine backups for `phylopic-source` (RDS) and `source-images.phylopic.org`: enable script, AWS Backup plan, S3 versioning and cross-region replica, restore runbook in `aws/BACKUP.md`.
 
 ## [2.0.55] - 2026-08-29
 
