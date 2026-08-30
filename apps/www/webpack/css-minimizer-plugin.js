@@ -28,34 +28,36 @@ class CssMinimizerPlugin {
                 },
                 postcss,
             ),
-        ]).process(input, postcssOptions).then((res) => {
-            // Next.js concatenates CSS modules with a UTF-8 BOM before each module's
-            // first rule, which breaks selector matching in production (see v2.14.16).
-            const css = res.css.replace(/\ufeff/g, "")
-            if (res.map) {
-                return new sources.SourceMapSource(css, file, res.map.toJSON())
-            }
-            return new sources.RawSource(css)
-        })
+        ])
+            .process(input, postcssOptions)
+            .then(res => {
+                // Next.js concatenates CSS modules with a UTF-8 BOM before each module's
+                // first rule, which breaks selector matching in production (see v2.14.16).
+                const css = res.css.replace(/\ufeff/g, "")
+                if (res.map) {
+                    return new sources.SourceMapSource(css, file, res.map.toJSON())
+                }
+                return new sources.RawSource(css)
+            })
     }
 
     apply(compiler) {
-        compiler.hooks.compilation.tap("CssMinimizerPlugin", (compilation) => {
+        compiler.hooks.compilation.tap("CssMinimizerPlugin", compilation => {
             const cache = compilation.getCache("CssMinimizerPlugin")
             compilation.hooks.processAssets.tapPromise(
                 {
                     name: "CssMinimizerPlugin",
                     stage: webpack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE,
                 },
-                async (assets) => {
+                async assets => {
                     const compilationSpan = getCompilationSpan(compilation) || getCompilationSpan(compiler)
                     const cssMinimizerSpan = compilationSpan.traceChild("css-minimizer-plugin")
                     return cssMinimizerSpan.traceAsyncFn(async () => {
                         const files = Object.keys(assets)
                         await Promise.all(
                             files
-                                .filter((file) => CSS_REGEX.test(file))
-                                .map(async (file) => {
+                                .filter(file => CSS_REGEX.test(file))
+                                .map(async file => {
                                     const assetSpan = cssMinimizerSpan.traceChild("minify-css")
                                     assetSpan.setAttribute("file", file)
                                     return assetSpan.traceAsyncFn(async () => {

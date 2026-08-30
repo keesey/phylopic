@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Routine backups for `phylopic-source` (RDS) and `source-images.phylopic.org`: enable script, AWS Backup plan, S3 versioning and cross-region replica, restore runbook in `aws/BACKUP.md`.
+
 ### Changed
 
 ### Deprecated
@@ -21,17 +23,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.55] - 2026-08-29
 
-- `@phylopic/edit` `1.9.20`: avoid client-side crash when external search resolves return nodes
-  without `_embedded`.
-- `@phylopic/www` 2.14.39`: avoid client-side crash when external search resolves return nodes
-  without `_embedded`.
+- `@phylopic/edit` `1.9.20`: avoid client-side crash when external search resolves return nodes without `_embedded`.
+- `@phylopic/www` `2.14.39`: avoid client-side crash when external search resolves return nodes without `_embedded`.
 
 ## [2.0.54] - 2026-08-29
 
 ### Fixed
 
-- `@phylopic/api` `2.14.1`: S3 resolve redirects preserve request embed query parameters in the
-  redirect `href`.
+- `@phylopic/api` `2.14.1`: S3 resolve redirects preserve request embed query parameters in the redirect `href`.
 
 ### Changed
 
@@ -41,10 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `@phylopic/contribute` `2.4.23`: avoid client-side crash when assigning PBDB search results for
-  taxa not linked in PhyloPic.
-- `@phylopic/ui` `1.7.16`: validate PBDB and OTOL resolve responses before storing them in search
-  state.
+- `@phylopic/contribute` `2.4.23`: avoid client-side crash when assigning PBDB search results for taxa not linked in *PhyloPic*.
+- `@phylopic/ui` `1.7.16`: validate PBDB and OTOL resolve responses before storing them in search state.
 
 ## [2.0.52] - 2026-08-20
 
@@ -83,8 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `@phylopic/api`, `@phylopic/contribute`, `@phylopic/edit`, `@phylopic/publish`, and `@phylopic/www`:
-  dependency bumps for `@phylopic/utils-aws` `1.1.3` and `@phylopic/source-client` `1.4.7`.
+- `@phylopic/api`, `@phylopic/contribute`, `@phylopic/edit`, `@phylopic/publish`, and `@phylopic/www`: dependency bumps for `@phylopic/utils-aws` `1.1.3` and `@phylopic/source-client` `1.4.7`.
 
 ### Security
 
@@ -116,16 +112,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Root `resolutions` pin `@aws-sdk/client-s3@3.1093.0`; `@phylopic/utils-aws` peer/dev dependency
-  aligned to `^3.1093.0` for `@phylopic/api`, `@phylopic/contribute`, `@phylopic/publish`,
+- Root `resolutions` pin `@aws-sdk/client-s3@3.1093.0`; `@phylopic/utils-aws` peer/dev dependency aligned to `^3.1093.0` for `@phylopic/api`, `@phylopic/contribute`, `@phylopic/publish`,
   `@phylopic/source-client`, and `@phylopic/www`.
-- Root `resolutions` pin `sharp@0.34.5` (was `0.35.3`) to stay within Next.js optional dependency
-  range.
+- Root `resolutions` pin `sharp@0.34.5` (was `0.35.3`) to stay within Next.js optional dependency range.
 
 ### Fixed
 
-- `@phylopic/www`: permalink page TypeScript error from duplicate `@aws-sdk/client-s3` installs when
-  calling `@phylopic/utils-aws` `getJSON`.
+- `@phylopic/www`: permalink page TypeScript error from duplicate `@aws-sdk/client-s3` installs when calling `@phylopic/utils-aws` `getJSON`.
 
 ### Removed
 
@@ -164,8 +157,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `aws` `1.2.1`: grant `s3:PutObjectTagging` on submission trash keys for editorial and contribute
-  deletes.
+- `aws` `1.2.1`: grant `s3:PutObjectTagging` on submission trash keys for editorial and contribute deletes.
 
 ## [2.0.40] - 2026-08-11
 
@@ -192,16 +184,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `@phylopic/api` `2.13.2`: CORS preflight for cross-origin `POST /uploads` (route `OPTIONS /uploads`
-  through the `dynamic` Lambda).
+- `@phylopic/api` `2.13.2`: CORS preflight for cross-origin `POST /uploads` (route `OPTIONS /uploads` through the `dynamic` Lambda).
 
 ## [2.0.36] - 2026-08-11
 
 ### Fixed
 
 - `@phylopic/api` `2.13.1`: CORS preflight for cross-origin `POST /uploads`.
-- `@phylopic/contribute` `2.4.17`: replace invalid stored magic-link token instead of returning
-  `403` on authorize.
+- `@phylopic/contribute` `2.4.17`: replace invalid stored magic-link token instead of returning `403` on authorize.
 
 ## [2.0.35] - 2026-08-11
 

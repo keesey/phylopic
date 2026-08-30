@@ -106,13 +106,7 @@ export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolv
         return createBuildRedirect(path, { ...queryParameters, objectIDs })
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const body = await selectResolveLinkJSON(
-        service,
-        authority,
-        namespace,
-        objectIDs.split(","),
-        queryParameters,
-    )
+    const body = await selectResolveLinkJSON(service, authority, namespace, objectIDs.split(","), queryParameters)
     const link = JSON.parse(body) as TitledLink
     return {
         body,

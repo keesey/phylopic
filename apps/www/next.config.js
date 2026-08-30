@@ -6,11 +6,11 @@ const nextConfig = {
     serverExternalPackages: ["@aws-sdk/credential-provider-web-identity", "@vercel/functions", "@vercel/oidc"],
     webpack: (config, { dev, isServer }) => {
         if (!dev && !isServer) {
-            config.optimization.minimizer = config.optimization.minimizer.map((item) => {
+            config.optimization.minimizer = config.optimization.minimizer.map(item => {
                 if (typeof item !== "function" || !item.toString().includes("CssMinimizerPlugin")) {
                     return item
                 }
-                return (compiler) => {
+                return compiler => {
                     const { CssMinimizerPlugin } = require("./webpack/css-minimizer-plugin")
                     new CssMinimizerPlugin({
                         postcssOptions: {

@@ -21,7 +21,11 @@ export type GetResolveObjectsService = PgClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 
-const assertResolvable = (authority: Authority | undefined, namespace: Namespace | undefined, objectID: ObjectID | undefined) => {
+const assertResolvable = (
+    authority: Authority | undefined,
+    namespace: Namespace | undefined,
+    objectID: ObjectID | undefined,
+) => {
     if (!authority || !namespace || !objectID) {
         throw new APIError(400, [
             {
@@ -73,7 +77,11 @@ const selectResolveLinkJSON = async (
             return mergeResolveLinkQuery(body, queryParameters)
         }
         if (ENTITY_JSON_SOURCE === "s3") {
-            console.warn("Resolve JSON is missing from S3; falling back to Postgres.", { authority, namespace, objectID })
+            console.warn("Resolve JSON is missing from S3; falling back to Postgres.", {
+                authority,
+                namespace,
+                objectID,
+            })
         }
     }
     return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectID, queryParameters)
@@ -90,7 +98,10 @@ export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveO
         checkBuild(queryParameters.build, USER_MESSAGE)
     }
     assertResolvable(authority, namespace, objectID)
-    const body = await selectResolveLinkJSON(service, authority, namespace, objectID, { ...queryParameters, build: BUILD })
+    const body = await selectResolveLinkJSON(service, authority, namespace, objectID, {
+        ...queryParameters,
+        build: BUILD,
+    })
     const link = JSON.parse(body) as TitledLink
     const permanent = queryParameters.build === BUILD.toString(10)
     return {

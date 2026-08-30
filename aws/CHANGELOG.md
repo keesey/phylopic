@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `BACKUP.md`: inspect-first checklist, restore procedures (PITR, AWS Backup snapshot, single image, replica sync), and a quarterly drill for `phylopic-source` and `source-images.phylopic.org`.
+- `backup/enable-backups.sh`: idempotent RDS PITR (14-day retention, deletion protection), AWS Backup vault/plan with weekly and monthly snapshots copied to `us-east-1`, S3 versioning plus CRR to `source-images-backup.phylopic.org`, lifecycle, SNS failure mail, and a source-image object-count alarm.
+
 ### Changed
 
 ### Deprecated

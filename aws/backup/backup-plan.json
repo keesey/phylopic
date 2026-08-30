@@ -1,0 +1,41 @@
+{
+    "BackupPlanName": "phylopic-source",
+    "Rules": [
+        {
+            "RuleName": "weekly",
+            "TargetBackupVaultName": "phylopic-source",
+            "ScheduleExpression": "cron(0 8 ? * SUN *)",
+            "StartWindowMinutes": 60,
+            "CompletionWindowMinutes": 180,
+            "Lifecycle": {
+                "DeleteAfterDays": 90
+            },
+            "CopyActions": [
+                {
+                    "DestinationBackupVaultArn": "DEST_VAULT_ARN",
+                    "Lifecycle": {
+                        "DeleteAfterDays": 90
+                    }
+                }
+            ]
+        },
+        {
+            "RuleName": "monthly",
+            "TargetBackupVaultName": "phylopic-source",
+            "ScheduleExpression": "cron(0 8 1 * ? *)",
+            "StartWindowMinutes": 60,
+            "CompletionWindowMinutes": 180,
+            "Lifecycle": {
+                "DeleteAfterDays": 365
+            },
+            "CopyActions": [
+                {
+                    "DestinationBackupVaultArn": "DEST_VAULT_ARN",
+                    "Lifecycle": {
+                        "DeleteAfterDays": 365
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "Rules": [
+        {
+            "ID": "abort-incomplete-mpu",
+            "Status": "Enabled",
+            "Filter": { "Prefix": "" },
+            "AbortIncompleteMultipartUpload": {
+                "DaysAfterInitiation": 7
+            }
+        },
+        {
+            "ID": "noncurrent-versions",
+            "Status": "Enabled",
+            "Filter": { "Prefix": "" },
+            "NoncurrentVersionTransitions": [
+                {
+                    "NoncurrentDays": 90,
+                    "StorageClass": "GLACIER_IR"
+                }
+            ],
+            "NoncurrentVersionExpiration": {
+                "NoncurrentDays": 365
+            }
+        }
+    ]
+}

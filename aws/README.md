@@ -243,3 +243,10 @@ pick which key id to retire.
 
 Tighten CloudFront if desired: replace `distribution/*` in [`phylopic-publish.json`](./policies/phylopic-publish.json)
 with `distribution/YOUR_API_CLOUDFRONT_DISTRIBUTION_ID` (same value as `API_CLOUDFRONT_DISTRIBUTION_ID` in `.env`).
+
+## Source-data backups
+
+Routine backups of Postgres `phylopic-source` (RDS instance `phylopic`) and
+`source-images.phylopic.org` are documented in [`BACKUP.md`](./BACKUP.md). Apply
+with [`backup/enable-backups.sh`](./backup/enable-backups.sh). App principals in
+this folder are not granted the replica bucket.

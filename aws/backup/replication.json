@@ -1,0 +1,20 @@
+{
+    "Role": "ROLE_ARN",
+    "Rules": [
+        {
+            "ID": "source-images-to-backup",
+            "Status": "Enabled",
+            "Priority": 1,
+            "Filter": {
+                "Prefix": ""
+            },
+            "DeleteMarkerReplication": {
+                "Status": "Enabled"
+            },
+            "Destination": {
+                "Bucket": "arn:aws:s3:::source-images-backup.phylopic.org",
+                "StorageClass": "STANDARD"
+            }
+        }
+    ]
+}
