@@ -9,6 +9,7 @@
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1093.0",
         "@phylopic/api-models": "*",
+        "@phylopic/fundraiser": "*",
         "@phylopic/source-models": "*",
         "@phylopic/styles": "*",
         "@phylopic/ui": "*",
@@ -16,6 +17,7 @@
         "@phylopic/utils-api": "*",
         "@phylopic/utils-aws": "*",
         "@vercel/analytics": "^1.2.2",
+        "@vercel/kv": "^3.0.0",
         "@vercel/functions": "^3.0.0",
         "axios": "^1.18.1",
         "clsx": "^2.1.1",

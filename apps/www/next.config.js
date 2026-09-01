@@ -1,5 +1,7 @@
 const path = require("path")
 const { createSecurityHeaderRoutes } = require("@phylopic/ui/securityHeaders")
+/** Keep in sync with `src/donate/PAYPAL_DONATE_URL.ts`. */
+const PAYPAL_DONATE_URL = "https://www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
@@ -73,7 +75,7 @@ const nextConfig = {
             },
             {
                 source: "/donate",
-                destination: "https://www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
+                destination: PAYPAL_DONATE_URL,
                 permanent: true,
             },
             {

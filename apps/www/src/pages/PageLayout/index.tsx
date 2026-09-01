@@ -9,6 +9,7 @@ import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import styles from "./index.module.scss"
 const BuildChecker = dynamic(() => import("./BuildChecker"), { ssr: false })
+const FundraiserBanner = dynamic(() => import("~/fundraiser/FundraiserBanner"), { ssr: false })
 const Search = dynamic(() => import("./Search"), { ssr: false })
 export type Props = {
     aside?: ReactNode
@@ -24,6 +25,7 @@ const PageLayout: FC<Props> = ({ aside, build, children, initialText }) => {
             </Suspense>
             <PageLoader />
             {aside && <aside key="aside">{aside}</aside>}
+            <FundraiserBanner />
             <SearchContainer initialText={initialText}>
                 <Suspense>
                     <Search />

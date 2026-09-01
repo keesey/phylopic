@@ -7,10 +7,12 @@
         "url": "https://github.com/keesey/phylopic/issues"
     },
     "dependencies": {
+        "@phylopic/fundraiser": "*",
         "@phylopic/source-client": "*",
         "@phylopic/source-models": "*",
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
+        "@vercel/kv": "^3.0.0",
         "axios": "^1.18.1",
         "clsx": "^2.1.1",
         "flux-standard-action": "^2.1.2",

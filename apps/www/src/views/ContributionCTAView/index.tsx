@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { FC } from "react"
 import customEvents from "~/analytics/customEvents"
+import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
 import Container from "~/ui/Container"
@@ -98,11 +99,11 @@ const ContributionCTAView: FC = () => {
                         <ul className={styles.ctaList}>
                             <li>
                                 <a
-                                    href="//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW"
+                                    href={PAYPAL_DONATE_URL}
                                     onClick={() =>
                                         customEvents.clickLink(
                                             "//github.com/keesey/phylopic",
-                                            "//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
+                                            PAYPAL_DONATE_URL,
                                             "Make a donation",
                                             "link",
                                         )
