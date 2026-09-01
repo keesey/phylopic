@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Security
+
+## [2.15.0] - 2026-09-01
+
+### Added
+
 - Semiannual hosting fundraiser banner (May and October, UTC) with progress toward a goal and PayPal donate link.
 - `GET /api/fundraiser` public status endpoint and `POST /api/fundraiser/paypal` PayPal IPN handler.
 - Shared `@phylopic/fundraiser` package (Upstash Redis campaign state).
@@ -17,12 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Donate links across the site now use the shared PayPal donate URL constant.
-
-### Deprecated
-
-### Fixed
-
-### Security
 
 ## [2.14.39] - 2026-08-29
 

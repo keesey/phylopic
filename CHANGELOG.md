@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.58] - 2026-09-01
+
+### Added
+
+- `@phylopic/fundraiser` `1.0.0`: semiannual fundraiser campaign state (Upstash Redis), PayPal IPN
+  helpers, and public/editor status types.
+- `@phylopic/www` `2.15.0`: semiannual hosting fundraiser banner, public fundraiser API routes, and
+  shared PayPal donate URL.
+- `@phylopic/edit` `1.10.0`: `FundraiserSection` on the home page to set campaign goal and manual
+  offset.
+
 ## [2.0.57] - 2026-08-30
 
 ### Added

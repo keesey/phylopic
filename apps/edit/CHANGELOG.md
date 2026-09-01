@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `FundraiserSection` on the home page to set campaign goal and manual offset via `GET`/`PATCH /api/fundraiser`.
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.10.0] - 2026-09-01
+
+### Added
+
+- `FundraiserSection` on the home page to set campaign goal and manual offset via `GET`/`PATCH /api/fundraiser`.
 
 ## [1.9.21] - 2026-09-01
 
