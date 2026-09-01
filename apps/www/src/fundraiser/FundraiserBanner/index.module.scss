@@ -3,41 +3,47 @@
 .main {
     background-color: colors.$dandelion;
     color: colors.$black;
-    font-size: smaller;
-    padding: 0.5em 1em;
+    display: block;
+    padding: 0.75em 1em;
     position: sticky;
+    text-align: center;
+    text-decoration: none;
     top: 0;
     z-index: 6;
-}
-
-.content {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35em 0.75em;
-    justify-content: center;
-    margin: 0;
-    text-align: center;
-}
-
-.progress {
-    accent-color: colors.$ink;
-    block-size: 0.75rem;
-    inline-size: 6rem;
-    max-inline-size: 30vw;
-    vertical-align: middle;
-}
-
-.amounts {
-    white-space: nowrap;
-}
-
-.link {
-    color: colors.$ink;
-    font-weight: bold;
-    white-space: nowrap;
 
     &:hover {
         color: colors.$black;
     }
+}
+
+.title {
+    font-size: larger;
+    font-weight: bold;
+    margin: 0 0 0.35em;
+}
+
+.cta {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.message {
+    margin: 0.35em 0 0;
+}
+
+.progressTrack {
+    background-color: rgb(0 0 0 / 15%);
+    block-size: 1em;
+    border-radius: 0.125em;
+    display: block;
+    font-size: 1rem;
+    inline-size: calc(100% - 4em);
+    margin: 0.35em auto;
+    max-inline-size: 1020px;
+    overflow: hidden;
+}
+
+.progressFill {
+    background-color: colors.$ink;
+    block-size: 100%;
 }
