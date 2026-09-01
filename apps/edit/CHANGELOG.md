@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.9.21] - 2026-09-01
+
+### Removed
+
+- "Phylogeny" link on Home Page.
+
 ## [1.9.20] - 2026-08-29
 
 ### Fixed
