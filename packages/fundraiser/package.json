@@ -1,0 +1,45 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "dependencies": {
+        "@vercel/kv": "^3.0.0"
+    },
+    "description": "Semiannual fundraiser campaign state for *PhyloPic*.",
+    "devDependencies": {
+        "@phylopic/tsconfig": "*",
+        "@types/node": "*",
+        "eslint-config-phylopic": "*",
+        "tsup": "^8.5.1",
+        "typescript": "^5.4.5",
+        "vitest": "^4.1.10"
+    },
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.cjs",
+        "default": "./dist/index.js"
+    },
+    "files": [
+        "dist/**"
+    ],
+    "license": "MIT",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "name": "@phylopic/fundraiser",
+    "private": true,
+    "scripts": {
+        "build": "tsup src/index.ts --format esm,cjs --dts",
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+        "lint": "TIMING=1 eslint --fix src/**/*.ts",
+        "test": "vitest --watch=false"
+    },
+    "sideEffects": false,
+    "types": "./dist/index.d.ts",
+    "version": "1.0.0"
+}

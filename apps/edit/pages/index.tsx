@@ -2,6 +2,7 @@ import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import React from "react"
+import FundraiserSection from "~/sections/FundraiserSection"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 
 const Home: NextPage = () => (
@@ -16,6 +17,7 @@ const Home: NextPage = () => (
                     <cite>PhyloPic</cite> Editor
                 </h1>
             </header>
+            <hr />
             <nav>
                 <ul>
                     <li>
@@ -35,6 +37,8 @@ const Home: NextPage = () => (
                     </li>
                 </ul>
             </nav>
+            <hr />
+            <FundraiserSection />
         </main>
     </>
 )

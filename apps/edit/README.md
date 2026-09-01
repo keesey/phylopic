@@ -25,6 +25,8 @@ to configure.
 | `S3_ACCESS_KEY_ID`     | Access key for the uploads and source-image buckets | `process.env`, server-side only        |
 | `S3_REGION`            | Region of those buckets                             | `process.env`, server-side only        |
 | `S3_SECRET_ACCESS_KEY` | Secret key for those buckets                        | `process.env`, server-side only        |
+| `KV_REST_API_URL`      | Upstash Redis REST URL (same instance as `www`)     | `process.env`, server-side only        |
+| `KV_REST_API_TOKEN`    | Upstash Redis REST token (same instance as `www`)   | `process.env`, server-side only        |
 
 #### Optional
 
@@ -49,6 +51,10 @@ first, and this section will need an entry for whatever that mechanism uses.
 **Which S3 principal to use** is documented in [`aws/`](../../aws/README.md). This app needs the
 broadest storage access of the web apps, because it performs the cross-bucket copy that accepts a
 submission into the source-image corpus.
+
+**Fundraiser admin** reads and writes the same Upstash Redis instance as [`www`](../www). Copy
+`KV_REST_API_URL` and `KV_REST_API_TOKEN` from `apps/www/.env.local` into this app's `.env.local`
+to use the home-page fundraiser form.
 
 ## Linting
 

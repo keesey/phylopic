@@ -17,6 +17,10 @@ project environment variables.
 
 | Variable                               | Purpose                                          | How it is read                         |
 | -------------------------------------- | ------------------------------------------------ | -------------------------------------- |
+| `AWS_ROLE_ARN`                         | IAM role for Vercel OIDC (production deploy)     | `process.env`, server-side only        |
+| `KV_REST_API_URL`                      | Upstash Redis REST URL for fundraiser state           | `process.env`, server-side only        |
+| `KV_REST_API_READ_ONLY_TOKEN`          | Read-only token for `GET /api/fundraiser`             | `process.env`, server-side only        |
+| `KV_REST_API_TOKEN`                    | Read-write token for `POST /api/fundraiser/paypal`    | `process.env`, server-side only        |
 | `NEXT_PUBLIC_API_URL`                  | Root URL of the _PhyloPic_ API                   | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | Contributor who is also the site's contact point | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of _PhyloPic: Contribute_               | `process.env`, inlined into the bundle |
@@ -25,7 +29,6 @@ project environment variables.
 | `S3_ACCESS_KEY_ID`                     | Access key for the permalinks bucket (local dev) | `process.env`, server-side only        |
 | `S3_REGION`                            | Region of the permalinks bucket                  | `process.env`, server-side only        |
 | `S3_SECRET_ACCESS_KEY`                 | Secret key for the permalinks bucket (local dev) | `process.env`, server-side only        |
-| `AWS_ROLE_ARN`                         | IAM role for Vercel OIDC (production deploy)     | `process.env`, server-side only        |
 
 The `S3_*` trio is only needed for permalinks locally; on Vercel use `AWS_ROLE_ARN` instead
 (see [`aws/README.md`](../../aws/README.md)). Everything else in the site runs without S3 access.
@@ -44,6 +47,7 @@ NEXT_PUBLIC_WWW_URL=https://www.phylopic.org
 | Variable                            | Purpose                                                              | How it is read                         |
 | ----------------------------------- | -------------------------------------------------------------------- | -------------------------------------- |
 | `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key                      | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_FUNDRAISER_PREVIEW`    | Set to `true` to show the fundraiser banner outside May/October      | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Google Analytics measurement ID                                      | `process.env`, inlined into the bundle |
 | `REVALIDATE_TOKEN`                  | Shared secret for `POST /api/revalidate` (`Authorization: Bearer …`) | `process.env`, server-side only        |
 
@@ -68,6 +72,11 @@ proxies EOL server-side, which is the pattern to prefer.
 
 **Which S3 principal to use** is documented in [`aws/`](../../aws/README.md). This app needs only
 read and write on `permalinks.phylopic.org/data/*`.
+
+**Fundraiser storage** uses the Vercel Marketplace Upstash integration (`upstash-kv-phylopic-fundraiser`).
+Campaign totals are updated via PayPal IPN at `POST /api/fundraiser/paypal`. In the PayPal dashboard,
+set the IPN notification URL to `https://www.phylopic.org/api/fundraiser/paypal`. Set campaign goals
+from the local [`edit`](../edit) app (`FundraiserSection` on its home page).
 
 ## Linting
 

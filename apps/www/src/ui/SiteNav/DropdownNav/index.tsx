@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { FC } from "react"
 import customEvents from "~/analytics/customEvents"
+import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
 export type Props = {
@@ -89,14 +90,9 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
                 </li>
                 <li>
                     <a
-                        href="//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW"
+                        href={PAYPAL_DONATE_URL}
                         onClick={() =>
-                            customEvents.clickLink(
-                                "menu_link",
-                                "//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
-                                "Make a Donation",
-                                "link",
-                            )
+                            customEvents.clickLink("menu_link", PAYPAL_DONATE_URL, "Make a Donation", "link")
                         }
                     >
                         Make a Donation
