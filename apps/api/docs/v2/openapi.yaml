@@ -70,7 +70,7 @@ components:
       name: Content-Type
       in: header
       required: true
-      description: The media type for the payload, including API version. Always `application/vnd.phylopic.v2+json`.
+      description: The media type for the payload, including API version. Must be `application/vnd.phylopic.v2+json` or `application/json`.
       schema:
         example: application/vnd.phylopic.v2+json
         format: mimetype

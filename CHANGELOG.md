@@ -32,6 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.59] - 2026-09-02
+
+### Fixed
+
+- `@phylopic/api` `2.14.2`: `POST /collections` with `Content-Type: application/vnd.phylopic.v2+json` returned `400` after the HTTP API migration; decode base64-encoded request bodies when API Gateway sets `isBase64Encoded`.
+
 ## [2.0.58] - 2026-09-01
 
 ### Added
