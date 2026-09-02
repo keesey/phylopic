@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.2] - 2026-09-02
+
+### Fixed
+
+- `POST /collections` with `Content-Type: application/vnd.phylopic.v2+json` returned `400` after the HTTP API migration because API Gateway base64-encodes non-text request bodies; the handler now decodes the body when `isBase64Encoded` is set.
+
 ## [2.14.1] - 2026-08-29
 
 ### Fixed
