@@ -15,11 +15,13 @@ import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import addFilterToQuery from "../entities/image/addFilterToQuery"
+import { getDefaultListIndexKey, getDefaultListPageKey } from "../entities/getListJSONKey"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
+import { isUnfilteredImagesList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
@@ -175,6 +177,11 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
         listPath: "/images",
         listQuery: queryParameters,
         service,
+        s3List: {
+            getIndexKey: () => getDefaultListIndexKey(BUILD, "images"),
+            getPageKey: (pageIndex, variant) => getDefaultListPageKey(BUILD, "images", pageIndex, variant),
+            isEligible: listQuery => isUnfilteredImagesList(listQuery as ImageListParameters),
+        },
         page: queryParameters.page,
         userMessage: USER_MESSAGE,
         validEmbeds: ["contributor", "generalNode", "nodes", "specificNode"],

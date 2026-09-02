@@ -14,11 +14,13 @@ import { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
+import { getDefaultListIndexKey, getDefaultListPageKey } from "../entities/getListJSONKey"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
+import { isUnfilteredNodesList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
@@ -130,6 +132,11 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/nodes",
         service,
+        s3List: {
+            getIndexKey: () => getDefaultListIndexKey(BUILD, "nodes"),
+            getPageKey: (pageIndex, variant) => getDefaultListPageKey(BUILD, "nodes", pageIndex, variant),
+            isEligible: listQuery => isUnfilteredNodesList(listQuery as NodeListParameters),
+        },
         listQuery: queryParameters,
         page: queryParameters.page,
         userMessage: USER_MESSAGE,

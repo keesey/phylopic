@@ -22,6 +22,10 @@ interface PendingStaticUpload {
     body: string
     name: StaticJSONName
 }
+interface PendingKeyUpload {
+    body: string
+    key: string
+}
 export class EntityS3Writer {
     private readonly build: number
     private readonly client = new S3Client({})
@@ -29,6 +33,7 @@ export class EntityS3Writer {
     private readonly pending: PendingUpload[] = []
     private readonly resolvePending: PendingResolveUpload[] = []
     private readonly staticPending: PendingStaticUpload[] = []
+    private readonly keyPending: PendingKeyUpload[] = []
     constructor(build: number) {
         this.build = build
     }
@@ -40,6 +45,9 @@ export class EntityS3Writer {
     }
     putResolve(authority: string, namespace: string, objectID: string, body: string) {
         this.resolvePending.push({ authority, body, namespace, objectID })
+    }
+    putKey(key: string, body: string) {
+        this.keyPending.push({ body, key })
     }
     async flush() {
         await Promise.all([
@@ -77,6 +85,19 @@ export class EntityS3Writer {
                             Bucket: ENTITIES_BUCKET,
                             CacheControl: ENTITIES_CACHE_CONTROL,
                             Key: getStaticJSONKey(this.build, name),
+                        },
+                        body,
+                    ),
+                ),
+            ),
+            ...this.keyPending.map(({ body, key }) =>
+                this.limiter.schedule(() =>
+                    putJSONString(
+                        this.client,
+                        {
+                            Bucket: ENTITIES_BUCKET,
+                            CacheControl: ENTITIES_CACHE_CONTROL,
+                            Key: key,
                         },
                         body,
                     ),

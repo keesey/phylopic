@@ -3,6 +3,7 @@ import { stringifyNormalized, UUID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { ClientBase } from "pg"
 import ENTITY_JSON_SOURCE from "../entities/ENTITY_JSON_SOURCE"
+import selectJSONFromS3 from "../entities/selectJSONFromS3"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
@@ -11,6 +12,8 @@ import getListObject from "./getListObject"
 import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
+import { hasExtraListEmbeds } from "./isS3ListEligible"
+import type { S3ListSource } from "./S3ListSource"
 export type ListPageRow = Readonly<{
     json: string
     title: string | null
@@ -30,6 +33,7 @@ export interface Parameters<TEmbedded = Record<string, never>> {
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>
     page?: string
     service: PgClientService
+    s3List?: S3ListSource
     userMessage?: string
     validEmbeds: ReadonlyArray<string & keyof TEmbedded>
 }
@@ -46,12 +50,29 @@ const getListResult = async <TEmbedded = Record<string, never>>({
     listPath,
     listQuery,
     page,
+    s3List,
     service,
     userMessage = "There was an error in a request for data.",
     validEmbeds,
 }: Parameters<TEmbedded>) => {
     let result: APIGatewayProxyResult
+    const tryS3List =
+        ENTITY_JSON_SOURCE !== "postgres" && s3List?.isEligible(listQuery)
+            ? s3List
+            : undefined
     if (!page) {
+        if (tryS3List) {
+            const body = await selectJSONFromS3(tryS3List.getIndexKey())
+            if (body !== null) {
+                return {
+                    ...OK_RESULT,
+                    body,
+                }
+            }
+            if (ENTITY_JSON_SOURCE === "s3") {
+                console.warn("List index JSON is missing from S3; falling back to Postgres.", { listPath })
+            }
+        }
         const client = await service.createPgClient()
         try {
             const totalItems = await getTotalItems(client)
@@ -84,6 +105,21 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 .filter(key => key.startsWith("embed_"))
                 .map(key => key.slice("embed_".length))
                 .filter(isValidEmbed)
+            if (tryS3List && !hasExtraListEmbeds(listQuery, validEmbeds) && embeds.length === 0) {
+                const body = await selectJSONFromS3(tryS3List.getPageKey(pageIndex, "items"))
+                if (body !== null) {
+                    return {
+                        ...OK_RESULT,
+                        body,
+                    }
+                }
+                if (ENTITY_JSON_SOURCE === "s3") {
+                    console.warn("List page items JSON is missing from S3; falling back to Postgres.", {
+                        listPath,
+                        page: pageIndex,
+                    })
+                }
+            }
             const client = await service.createPgClient()
             let pgReleased = false
             try {
@@ -117,6 +153,21 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 }
             }
         } else {
+            if (tryS3List) {
+                const body = await selectJSONFromS3(tryS3List.getPageKey(pageIndex, "links"))
+                if (body !== null) {
+                    return {
+                        ...OK_RESULT,
+                        body,
+                    }
+                }
+                if (ENTITY_JSON_SOURCE === "s3") {
+                    console.warn("List page links JSON is missing from S3; falling back to Postgres.", {
+                        listPath,
+                        page: pageIndex,
+                    })
+                }
+            }
             const client = await service.createPgClient()
             try {
                 const rawItemLinks = await getItemLinks(client, pageIndex * itemsPerPage, itemsPerPage + 1)

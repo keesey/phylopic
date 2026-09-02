@@ -9,7 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Precomputed S3 reads for unfiltered `GET /contributors`, `GET /nodes`, and `GET /images` when
+  `ENTITY_JSON_SOURCE` is `s3` or `s3-fallback`.
+- Precomputed S3 reads for `GET /nodes/{uuid}/lineage` when `ENTITY_JSON_SOURCE` is `s3` or
+  `s3-fallback`.
+
 ### Changed
+
+- List pagination serves `{build}/lists/{name}/index.json`, `{page}.links.json`, and
+  `{page}.items.json` from S3 when eligible; filtered lists, extra embed parameters, and missing
+  objects fall back to Postgres.
+- Lineage pagination serves `{build}/lineage/{uuid}/index.json` and page JSON from S3 when
+  eligible; extra embed parameters and missing objects fall back to Postgres.
+- `GET /autocomplete` remains on Postgres.
 
 ### Deprecated
 

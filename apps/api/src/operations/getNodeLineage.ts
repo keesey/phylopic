@@ -14,6 +14,7 @@ import { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
+import { getLineageIndexKey, getLineagePageKey } from "../entities/getListJSONKey"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
@@ -125,6 +126,11 @@ export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = as
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: path,
         service,
+        s3List: {
+            getIndexKey: () => getLineageIndexKey(BUILD, normalizedUUID),
+            getPageKey: (pageIndex, variant) => getLineagePageKey(BUILD, normalizedUUID, pageIndex, variant),
+            isEligible: () => true,
+        },
         listQuery: queryParameters,
         page: queryParameters.page,
         userMessage: USER_MESSAGE,

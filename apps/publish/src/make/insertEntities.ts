@@ -17,6 +17,12 @@ import { cleanTables } from "./cleanEntities.js"
 import getContributorJSON from "./getContributorJSON.js"
 import getAuthorizedNamespaces from "./getAuthorizedNamespaces.js"
 import getResolveObjectJSONEntries from "./getResolveObjectJSONEntries.js"
+import {
+    getAllLineageJSONUploads,
+    getContributorListJSONUploads,
+    getImageListJSONUploads,
+    getNodeListJSONUploads,
+} from "./getListJSONUploads.js"
 import getImageJSON from "./getImageJSON.js"
 import getNodeJSON from "./getNodeJSON.js"
 import type { SourceData } from "./getSourceData.js"
@@ -304,6 +310,18 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
         )
         for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
             s3Writer.putResolve(authority, namespace, objectID, body)
+        }
+        for (const upload of getContributorListJSONUploads(data)) {
+            s3Writer.putKey(upload.key, upload.body)
+        }
+        for (const upload of getNodeListJSONUploads(data)) {
+            s3Writer.putKey(upload.key, upload.body)
+        }
+        for (const upload of await getImageListJSONUploads(data)) {
+            s3Writer.putKey(upload.key, upload.body)
+        }
+        for (const upload of getAllLineageJSONUploads(data)) {
+            s3Writer.putKey(upload.key, upload.body)
         }
         console.info("Uploading entity JSON to S3...")
         await s3Writer.flush()

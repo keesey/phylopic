@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Changed
+- Publish writes default list JSON to `{build}/lists/{contributors|nodes|images}/` during
+  `yarn insert`.
+- Publish writes per-node lineage JSON to `{build}/lineage/{uuid}/` during `yarn insert`.
+- `EntityS3Writer.putKey()` for arbitrary S3 object uploads.
+- `yarn verify:entities` checks default list index totals and a sampled lineage index against
+  Postgres.
 
 ### Fixed
 
