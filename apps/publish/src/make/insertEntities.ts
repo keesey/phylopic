@@ -299,8 +299,12 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
     ])
     // Insert node-image links
     await insertIllustrations(client, data, isDryRun)
+    // Finalize the transaction.
     await client.query(isDryRun ? "ROLLBACK" : "COMMIT")
+    console.info("Updated entities database.")
+    // Upload entity JSON to S3
     if (s3Writer) {
+        console.info("Uploading entity JSON to S3...")
         s3Writer.putStatic(
             "namespaces",
             stringifyNormalized({
@@ -308,25 +312,34 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
                 namespaces: getAuthorizedNamespaces(data),
             }),
         )
+        console.info("Queueing resolve object JSON to S3...")
         for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
             s3Writer.putResolve(authority, namespace, objectID, body)
         }
+        console.info("Queued resolve object JSON to S3.")
+        console.info("Queueing contributor list JSON to S3...")
         for (const upload of getContributorListJSONUploads(data)) {
             s3Writer.putKey(upload.key, upload.body)
         }
+        console.info("Queued contributor list JSON to S3.")
+        console.info("Queueing node list JSON to S3...")
         for (const upload of getNodeListJSONUploads(data)) {
             s3Writer.putKey(upload.key, upload.body)
         }
+        console.info("Queued node list JSON to S3.")
+        console.info("Queueing image list JSON to S3...")
         for (const upload of await getImageListJSONUploads(data)) {
             s3Writer.putKey(upload.key, upload.body)
         }
+        console.info("Queued image list JSON to S3.")
+        console.info("Queueing node lineage JSON to S3...")
         for (const upload of getAllLineageJSONUploads(data)) {
             s3Writer.putKey(upload.key, upload.body)
         }
+        console.info("Queued node lineage JSON to S3.")
         console.info("Uploading entity JSON to S3...")
         await s3Writer.flush()
         console.info("Uploaded entity JSON to S3.")
     }
-    console.info("Updated entities database.")
 }
 export default insertEntities
