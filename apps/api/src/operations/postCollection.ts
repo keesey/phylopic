@@ -16,6 +16,7 @@ const EMPTY_DIGITS: readonly number[] = new Array(32).fill(0)
 const USER_MESSAGE = "There was a problem with an attempt to find a collection."
 export type PostCollectionParameters = DataRequestHeaders & {
     "content-type"?: string
+    encoding?: "base64" | "utf8"
     sourceIp?: string
 }
 export type PostCollectionService = PgClientService
@@ -84,7 +85,7 @@ const ensureExistence = async (service: PgClientService, uuid: string, uuids: Re
     }
 }
 export const postCollection: Operation<PostCollectionParameters, PostCollectionService> = async (
-    { accept, body, "content-type": contentType, sourceIp = "unknown" },
+    { accept, body, "content-type": contentType, encoding = "utf8", sourceIp = "unknown" },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
@@ -108,7 +109,8 @@ export const postCollection: Operation<PostCollectionParameters, PostCollectionS
             },
         ])
     }
-    if (body.length > MAX_BODY_SIZE) {
+    const textBody = encoding === "base64" ? Buffer.from(body, "base64").toString("utf8") : body
+    if (textBody.length > MAX_BODY_SIZE) {
         throw new APIError(413, [
             {
                 developerMessage: "Payload too large.",
@@ -118,7 +120,7 @@ export const postCollection: Operation<PostCollectionParameters, PostCollectionS
             },
         ])
     }
-    const uuids = getUUIDsFromBody(body)
+    const uuids = getUUIDsFromBody(textBody)
     const uuid = getCollectionUUID(uuids)
     await ensureExistence(service, uuid, uuids)
     const link: Link = { href: `/collections/${encodeURIComponent(uuid)}` }
