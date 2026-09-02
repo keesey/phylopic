@@ -9,12 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Publish writes default list JSON to `{build}/lists/{contributors|nodes|images}/` during
-  `yarn insert`.
-- Publish writes per-node lineage JSON to `{build}/lineage/{uuid}/` during `yarn insert`.
-- `EntityS3Writer.putKey()` for arbitrary S3 object uploads.
+- Publish writes default list and per-node lineage **links** JSON to `{build}/lists/` and
+  `{build}/lineage/` during `yarn insert`.
+- Entity JSON is staged under `.s3/entities.phylopic.org/{build}/` during insert and uploaded with
+  `aws s3 sync` (`yarn upload:entities`).
 - `yarn verify:entities` checks default list index totals and a sampled lineage index against
   Postgres.
+
+### Changed
+
+- `EntityS3Writer` writes entity, list, lineage, resolve, and static JSON to local staging instead
+  of uploading via the SDK during insert.
 
 ### Fixed
 

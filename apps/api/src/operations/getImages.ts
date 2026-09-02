@@ -179,7 +179,7 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
         service,
         s3List: {
             getIndexKey: () => getDefaultListIndexKey(BUILD, "images"),
-            getPageKey: (pageIndex, variant) => getDefaultListPageKey(BUILD, "images", pageIndex, variant),
+            getPageKey: pageIndex => getDefaultListPageKey(BUILD, "images", pageIndex),
             isEligible: listQuery => isUnfilteredImagesList(listQuery as ImageListParameters),
         },
         page: queryParameters.page,

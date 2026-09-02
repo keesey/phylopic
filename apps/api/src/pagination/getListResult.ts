@@ -12,6 +12,7 @@ import getListObject from "./getListObject"
 import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
+import hydrateListPageFromS3 from "./hydrateListPageFromS3"
 import { hasExtraListEmbeds } from "./isS3ListEligible"
 import type { S3ListSource } from "./S3ListSource"
 export type ListPageRow = Readonly<{
@@ -106,15 +107,21 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 .map(key => key.slice("embed_".length))
                 .filter(isValidEmbed)
             if (tryS3List && !hasExtraListEmbeds(listQuery, validEmbeds) && embeds.length === 0) {
-                const body = await selectJSONFromS3(tryS3List.getPageKey(pageIndex, "items"))
-                if (body !== null) {
+                const hydrated = await hydrateListPageFromS3(
+                    tryS3List.getPageKey,
+                    listPath,
+                    listQuery,
+                    pageIndex,
+                    page,
+                )
+                if (hydrated !== null) {
                     return {
                         ...OK_RESULT,
-                        body,
+                        body: hydrated.body,
                     }
                 }
                 if (ENTITY_JSON_SOURCE === "s3") {
-                    console.warn("List page items JSON is missing from S3; falling back to Postgres.", {
+                    console.warn("List page JSON is missing from S3; falling back to Postgres.", {
                         listPath,
                         page: pageIndex,
                     })
@@ -154,7 +161,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
             }
         } else {
             if (tryS3List) {
-                const body = await selectJSONFromS3(tryS3List.getPageKey(pageIndex, "links"))
+                const body = await selectJSONFromS3(tryS3List.getPageKey(pageIndex))
                 if (body !== null) {
                     return {
                         ...OK_RESULT,
@@ -162,7 +169,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                     }
                 }
                 if (ENTITY_JSON_SOURCE === "s3") {
-                    console.warn("List page links JSON is missing from S3; falling back to Postgres.", {
+                    console.warn("List page JSON is missing from S3; falling back to Postgres.", {
                         listPath,
                         page: pageIndex,
                     })

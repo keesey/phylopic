@@ -1,14 +1,10 @@
-import { createSearch, compareStrings, shortenNomen, stringifyNomen, stringifyNormalized, UUID } from "@phylopic/utils"
+import { createSearch, compareStrings, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import {
     buildListIndexJSON,
-    buildListPageItemsJSON,
     buildListPageLinksJSON,
-    ListItem,
+    ListLinkItem,
     paginateListItems,
 } from "./buildListJSON.js"
-import getContributorJSON from "./getContributorJSON.js"
-import getImageJSON from "./getImageJSON.js"
-import getNodeJSON from "./getNodeJSON.js"
 import type { SourceData } from "./getSourceData.js"
 import {
     DefaultListName,
@@ -18,6 +14,8 @@ import {
     getLineagePageKey,
 } from "../entities/getListJSONKey.js"
 
+const LINEAGE_LOG_INTERVAL = 500
+
 const getContributorCount = (data: SourceData, uuid: UUID): number =>
     [...data.images.values()].filter(({ contributor, unlisted }) => !unlisted && contributor === uuid).length
 
@@ -26,51 +24,39 @@ const compareContributorEntries = (
     b: Readonly<[UUID, number, string]>,
 ) => b[1] - a[1] || compareStrings(a[2], b[2]) || compareStrings(a[0], b[0])
 
-const getContributorItems = (data: SourceData): readonly ListItem[] =>
+const getContributorItems = (data: SourceData): readonly ListLinkItem[] =>
     [...data.contributors.entries()]
         .map(([uuid, contributor]) => [uuid, getContributorCount(data, uuid), contributor.created] as const)
         .filter(([, count]) => count > 0)
         .sort(compareContributorEntries)
-        .map(([uuid, count]) => {
-            const contributor = data.contributors.get(uuid)!
-            return {
-                json: stringifyNormalized(getContributorJSON(uuid, data, count)),
-                title: contributor.name || null,
-                uuid,
-            }
-        })
+        .map(([uuid]) => ({
+            title: data.contributors.get(uuid)?.name || null,
+            uuid,
+        }))
 
-const getNodeItems = (data: SourceData): readonly ListItem[] =>
+const getNodeItems = (data: SourceData): readonly ListLinkItem[] =>
     [...data.nodes.keys()]
         .sort((a, b) => (data.sortIndices.get(a) ?? 0) - (data.sortIndices.get(b) ?? 0) || compareStrings(a, b))
         .map(uuid => {
             const node = data.nodes.get(uuid)!
             const titleNomen = node.names[0]
             return {
-                json: stringifyNormalized(getNodeJSON(uuid, data)),
                 title: titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
                 uuid,
             }
         })
 
-const getImageItems = async (data: SourceData): Promise<readonly ListItem[]> => {
-    const entries = [...data.images.entries()]
+const getImageItems = (data: SourceData): readonly ListLinkItem[] =>
+    [...data.images.entries()]
         .filter(([, image]) => !image.unlisted)
-        .sort(
-            (a, b) =>
-                compareStrings(b[1].created, a[1].created) || compareStrings(a[0], b[0]),
-        )
-    return Promise.all(
-        entries.map(async ([uuid, image]) => {
+        .sort((a, b) => compareStrings(b[1].created, a[1].created) || compareStrings(a[0], b[0]))
+        .map(([uuid, image]) => {
             const titleNomen = data.nodes.get(image.specific)?.names[0]
             return {
-                json: stringifyNormalized(await getImageJSON(uuid, data)),
                 title: titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
                 uuid,
             }
-        }),
-    )
-}
+        })
 
 export type DefaultListJSONUpload = Readonly<{
     body: string
@@ -87,7 +73,7 @@ export type DefaultListConfig = Readonly<{
 
 const buildDefaultListUploads = (
     data: SourceData,
-    items: readonly ListItem[],
+    items: readonly ListLinkItem[],
     { defaultTitle, itemsPerPage, linkHref, listName, listPath }: DefaultListConfig,
 ): readonly DefaultListJSONUpload[] => {
     const build = data.build
@@ -102,24 +88,11 @@ const buildDefaultListUploads = (
     pages.forEach((pageItems, pageIndex) => {
         const lastPage = pageIndex === pages.length - 1
         uploads.push({
-            key: getDefaultListPageKey(build, listName, pageIndex, "links"),
+            key: getDefaultListPageKey(build, listName, pageIndex),
             body: buildListPageLinksJSON(
                 build,
                 listPath,
                 { ...listQuery, page: pageIndex },
-                pageIndex,
-                lastPage,
-                pageItems,
-                linkHref,
-                defaultTitle,
-            ),
-        })
-        uploads.push({
-            key: getDefaultListPageKey(build, listName, pageIndex, "items"),
-            body: buildListPageItemsJSON(
-                build,
-                listPath,
-                { ...listQuery, page: pageIndex, embed_items: true },
                 pageIndex,
                 lastPage,
                 pageItems,
@@ -149,8 +122,8 @@ export const getNodeListJSONUploads = (data: SourceData): readonly DefaultListJS
         listPath: "/nodes",
     })
 
-export const getImageListJSONUploads = async (data: SourceData): Promise<readonly DefaultListJSONUpload[]> =>
-    buildDefaultListUploads(data, await getImageItems(data), {
+export const getImageListJSONUploads = (data: SourceData): readonly DefaultListJSONUpload[] =>
+    buildDefaultListUploads(data, getImageItems(data), {
         defaultTitle: "[Untitled]",
         itemsPerPage: 48,
         linkHref: uuid => `/images/${uuid}${createSearch({ build: data.build })}`,
@@ -159,7 +132,7 @@ export const getImageListJSONUploads = async (data: SourceData): Promise<readonl
     })
 
 export const getLineageJSONUploads = (data: SourceData, uuid: UUID): readonly DefaultListJSONUpload[] => {
-    const items: ListItem[] = []
+    const items: ListLinkItem[] = []
     let current: UUID | undefined = uuid
     while (current) {
         const node = data.nodes.get(current)
@@ -168,7 +141,6 @@ export const getLineageJSONUploads = (data: SourceData, uuid: UUID): readonly De
         }
         const titleNomen = node.names[0]
         items.push({
-            json: stringifyNormalized(getNodeJSON(current, data)),
             title: titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
             uuid: current,
         })
@@ -189,7 +161,7 @@ export const getLineageJSONUploads = (data: SourceData, uuid: UUID): readonly De
     pages.forEach((pageItems, pageIndex) => {
         const lastPage = pageIndex === pages.length - 1
         uploads.push({
-            key: getLineagePageKey(build, uuid, pageIndex, "links"),
+            key: getLineagePageKey(build, uuid, pageIndex),
             body: buildListPageLinksJSON(
                 build,
                 listPath,
@@ -201,22 +173,21 @@ export const getLineageJSONUploads = (data: SourceData, uuid: UUID): readonly De
                 "[Unnamed]",
             ),
         })
-        uploads.push({
-            key: getLineagePageKey(build, uuid, pageIndex, "items"),
-            body: buildListPageItemsJSON(
-                build,
-                listPath,
-                { ...listQuery, page: pageIndex, embed_items: true },
-                pageIndex,
-                lastPage,
-                pageItems,
-                linkHref,
-                "[Unnamed]",
-            ),
-        })
     })
     return uploads
 }
 
-export const getAllLineageJSONUploads = (data: SourceData): readonly DefaultListJSONUpload[] =>
-    [...data.nodes.keys()].flatMap(uuid => getLineageJSONUploads(data, uuid))
+export const queueAllLineageJSONUploads = (
+    data: SourceData,
+    putUpload: (upload: DefaultListJSONUpload) => void,
+) => {
+    const nodeUUIDs = [...data.nodes.keys()]
+    nodeUUIDs.forEach((uuid, index) => {
+        if (index % LINEAGE_LOG_INTERVAL === 0) {
+            console.info(`Building lineage JSON ${index}/${nodeUUIDs.length}...`)
+        }
+        for (const upload of getLineageJSONUploads(data, uuid)) {
+            putUpload(upload)
+        }
+    })
+}

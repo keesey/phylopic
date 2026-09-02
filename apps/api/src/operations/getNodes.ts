@@ -134,7 +134,7 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
         service,
         s3List: {
             getIndexKey: () => getDefaultListIndexKey(BUILD, "nodes"),
-            getPageKey: (pageIndex, variant) => getDefaultListPageKey(BUILD, "nodes", pageIndex, variant),
+            getPageKey: pageIndex => getDefaultListPageKey(BUILD, "nodes", pageIndex),
             isEligible: listQuery => isUnfilteredNodesList(listQuery as NodeListParameters),
         },
         listQuery: queryParameters,

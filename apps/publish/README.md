@@ -101,6 +101,13 @@ yarn verify:entities 547
 
 Optional: set `VERIFY_SAMPLE_SIZE` (default `20`) to control how many random entities per table are checked.
 
+Entity JSON is staged locally under `.s3/entities.phylopic.org/{build}/` during `yarn insert`
+(roughly **250–350 MB** for a full build at current scale) and uploaded with `aws s3 sync`. Re-run
+`yarn upload:entities [build]` if upload fails without re-running insert.
+
+Optional: raise CLI upload concurrency, e.g.
+`aws configure set default.s3.max_concurrent_requests 100`.
+
 ### Autolink externals
 
 These commands will pull data from external APIs and try to match them to nodes in the `phylopic-source` database.

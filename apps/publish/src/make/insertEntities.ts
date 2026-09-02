@@ -11,6 +11,7 @@ import {
 } from "@phylopic/utils"
 import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
+import { cleanEntitiesStaging } from "../entities/cleanEntitiesStaging.js"
 import { EntityS3Writer } from "../entities/EntityS3Writer.js"
 import { cleanEntitiesS3 } from "../entities/cleanEntitiesS3.js"
 import { cleanTables } from "./cleanEntities.js"
@@ -18,10 +19,10 @@ import getContributorJSON from "./getContributorJSON.js"
 import getAuthorizedNamespaces from "./getAuthorizedNamespaces.js"
 import getResolveObjectJSONEntries from "./getResolveObjectJSONEntries.js"
 import {
-    getAllLineageJSONUploads,
     getContributorListJSONUploads,
     getImageListJSONUploads,
     getNodeListJSONUploads,
+    queueAllLineageJSONUploads,
 } from "./getListJSONUploads.js"
 import getImageJSON from "./getImageJSON.js"
 import getNodeJSON from "./getNodeJSON.js"
@@ -289,7 +290,11 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
     const s3Writer = isDryRun ? undefined : new EntityS3Writer(data.build)
     // Clean anything from an aborted build.
     if (!isDryRun) {
-        await Promise.all([cleanTables(client, data.build, "="), cleanEntitiesS3(data.build, "=")])
+        await Promise.all([
+            cleanTables(client, data.build, "="),
+            cleanEntitiesS3(data.build, "="),
+            Promise.resolve(cleanEntitiesStaging(data.build)),
+        ])
     }
     await client.query("BEGIN")
     // Insert entities and adjunct data
@@ -304,7 +309,7 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
     console.info("Updated entities database.")
     // Upload entity JSON to S3
     if (s3Writer) {
-        console.info("Uploading entity JSON to S3...")
+        console.info("Staging entity JSON locally...")
         s3Writer.putStatic(
             "namespaces",
             stringifyNormalized({
@@ -328,18 +333,15 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
         }
         console.info("Queued node list JSON to S3.")
         console.info("Queueing image list JSON to S3...")
-        for (const upload of await getImageListJSONUploads(data)) {
+        for (const upload of getImageListJSONUploads(data)) {
             s3Writer.putKey(upload.key, upload.body)
         }
         console.info("Queued image list JSON to S3.")
         console.info("Queueing node lineage JSON to S3...")
-        for (const upload of getAllLineageJSONUploads(data)) {
-            s3Writer.putKey(upload.key, upload.body)
-        }
+        queueAllLineageJSONUploads(data, upload => s3Writer.putKey(upload.key, upload.body))
         console.info("Queued node lineage JSON to S3.")
-        console.info("Uploading entity JSON to S3...")
         await s3Writer.flush()
-        console.info("Uploaded entity JSON to S3.")
+        console.info("Staged entity JSON locally.")
     }
 }
 export default insertEntities

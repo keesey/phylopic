@@ -3,6 +3,7 @@ import pg from "pg"
 import getBuild from "./make/getBuild.js"
 import getSourceData from "./make/getSourceData.js"
 import insertEntities from "./make/insertEntities.js"
+import uploadEntities from "./uploadEntities.js"
 ;(async () => {
     try {
         const isDryRun = process.argv.includes("--dry-run")
@@ -25,6 +26,9 @@ import insertEntities from "./make/insertEntities.js"
                 client.end()
             }
         })()
+        if (!isDryRun) {
+            await uploadEntities(build)
+        }
         console.info("Inserted all entities for build:", build)
         process.exit(0)
     } catch (e) {

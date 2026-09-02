@@ -106,8 +106,7 @@ export const getContributors: Operation<GetContributorsParameters, GetContributo
         service,
         s3List: {
             getIndexKey: () => getDefaultListIndexKey(BUILD, "contributors"),
-            getPageKey: (pageIndex, variant) =>
-                getDefaultListPageKey(BUILD, "contributors", pageIndex, variant),
+            getPageKey: pageIndex => getDefaultListPageKey(BUILD, "contributors", pageIndex),
             isEligible: listQuery => isUnfilteredContributorsList(listQuery as ContributorListParameters),
         },
         listQuery: queryParameters,

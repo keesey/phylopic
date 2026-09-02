@@ -128,7 +128,7 @@ export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = as
         service,
         s3List: {
             getIndexKey: () => getLineageIndexKey(BUILD, normalizedUUID),
-            getPageKey: (pageIndex, variant) => getLineagePageKey(BUILD, normalizedUUID, pageIndex, variant),
+            getPageKey: pageIndex => getLineagePageKey(BUILD, normalizedUUID, pageIndex),
             isEligible: () => true,
         },
         listQuery: queryParameters,

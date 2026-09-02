@@ -50,6 +50,7 @@
         "sync": "yarn sync:images",
         "sync:images": "AWS_PROFILE=phylopic-publish aws s3 sync --acl public-read --delete ./.s3/images.phylopic.org s3://images.phylopic.org/",
         "upload": "yarn upload:images",
+        "upload:entities": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/uploadEntitiesCli.ts",
         "upload:images": "AWS_PROFILE=phylopic-publish aws s3 sync --acl public-read ./.s3/images.phylopic.org s3://images.phylopic.org/",
         "sanitize:local-svgs": "node --loader ts-node/esm ./src/svg/sanitizeLocalSVGs.ts",
         "sanitize:svgs": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/svg/sanitizeS3SVGs.ts",

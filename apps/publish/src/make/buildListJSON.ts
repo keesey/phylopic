@@ -1,8 +1,7 @@
-import { List, Page, PageWithEmbedded, TitledLink } from "@phylopic/api-models"
+import { List, Page, TitledLink } from "@phylopic/api-models"
 import { createSearch, stringifyNormalized, UUID } from "@phylopic/utils"
 
-export type ListItem = Readonly<{
-    json: string
+export type ListLinkItem = Readonly<{
     title: string | null
     uuid: UUID
 }>
@@ -42,7 +41,7 @@ export const buildListPageLinksJSON = (
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
     pageIndex: number,
     lastPage: boolean,
-    items: readonly ListItem[],
+    items: readonly ListLinkItem[],
     linkHref: (uuid: UUID) => string,
     defaultTitle: string,
 ): string => {
@@ -63,31 +62,6 @@ export const buildListPageLinksJSON = (
         build,
         index: pageIndex,
     } satisfies Page)
-}
-
-export const buildListPageItemsJSON = (
-    build: number,
-    listPath: string,
-    listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
-    pageIndex: number,
-    lastPage: boolean,
-    items: readonly ListItem[],
-    linkHref: (uuid: UUID) => string,
-    defaultTitle: string,
-): string => {
-    const itemLinks: TitledLink[] = items.map(({ title, uuid }) => ({
-        href: linkHref(uuid),
-        title: title || defaultTitle,
-    }))
-    const itemsJSON = items.map(({ json }) => json)
-    const o: PageWithEmbedded<unknown> = {
-        _embedded: {},
-        ...JSON.parse(
-            buildListPageLinksJSON(build, listPath, listQuery, pageIndex, lastPage, items, linkHref, defaultTitle),
-        ),
-    }
-    const json = stringifyNormalized(o)
-    return json.replace('"_embedded":{}', `"_embedded":{"items":[${itemsJSON.join(",")}]}`)
 }
 
 export const paginateListItems = <T>(items: readonly T[], itemsPerPage: number): readonly (readonly T[])[] => {
