@@ -32,7 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.60] - 2026-09-02
+
+### Security
+
 - Root `resolutions` pin `sharp@0.35.0` (was `0.34.5`) and `nanoid@3.3.18` (was `3.3.17`) to address high-severity audit findings (libvips CVEs; nanoid infinite loop when size is zero).
+- `@phylopic/ui` `1.7.17`, `@phylopic/contribute` `2.4.24`, `@phylopic/www` `2.15.1`, and `@phylopic/edit` `1.10.1`: patch bumps for transitive `sharp` and `nanoid` upgrades via Next.js.
 
 ## [2.0.59] - 2026-09-02
 
