@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Minor upgrade for `sharp`, fixing `libvips` vulnerabilities.
+- Patch upgrade for `nanoid`.
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.17`.
+
 ## [1.10.0] - 2026-09-01
 
 ### Added
