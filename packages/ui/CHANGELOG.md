@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.7.17] - 2026-09-02
+
+### Security
+
 - Minor upgrade for `sharp`, fixing `libvips` vulnerabilities.
 - Patch upgrade for `nanoid`.
 
