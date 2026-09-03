@@ -30,11 +30,11 @@
         "html-encoding-sniffer": "4.0.0",
         "js-yaml": "4.3.1",
         "jsdom": "26.1.0",
-        "nanoid": "3.3.17",
+        "nanoid": "3.3.18",
         "phin": "3.7.1",
         "postcss": "8.5.26",
         "serialize-javascript": "7.0.5",
-        "sharp": "0.34.5",
+        "sharp": "0.35.0",
         "xml2js": "0.6.2"
     },
     "repository": "https://github.com/keesey/phylopic",
@@ -48,7 +48,7 @@
         "make": "turbo run make --filter=@phylopic/publish",
         "test": "turbo run test"
     },
-    "version": "2.0.59",
+    "version": "2.0.60",
     "workspaces": [
         "apps/*",
         "packages/*"

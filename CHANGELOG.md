@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Root `resolutions` pin `sharp@0.35.0` (was `0.34.5`) and `nanoid@3.3.18` (was `3.3.17`) to address high-severity audit findings (libvips CVEs; nanoid infinite loop when size is zero).
+
 ## [2.0.59] - 2026-09-02
 
 ### Fixed
