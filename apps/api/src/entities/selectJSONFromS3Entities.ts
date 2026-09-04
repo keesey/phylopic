@@ -1,22 +1,14 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import { convertS3BodyToString, isAWSError } from "@phylopic/utils-aws"
-import BUILD from "../build/BUILD"
-import { getResolveJSONKey } from "./getResolveJSONKey"
 
 const ENTITIES_BUCKET = process.env.ENTITIES_BUCKET ?? "entities.phylopic.org"
 
-const selectResolveObjectJSONFromS3 = async (
-    client: S3Client,
-    authority: Authority,
-    namespace: Namespace,
-    objectID: ObjectID,
-): Promise<string | null> => {
+const selectJSONFromS3Entities = async (client: S3Client, key: string): Promise<string | null> => {
     try {
         const output = await client.send(
             new GetObjectCommand({
                 Bucket: ENTITIES_BUCKET,
-                Key: getResolveJSONKey(BUILD, authority, namespace, objectID),
+                Key: key,
             }),
         )
         return await convertS3BodyToString(output.Body)
@@ -31,4 +23,4 @@ const selectResolveObjectJSONFromS3 = async (
     }
 }
 
-export default selectResolveObjectJSONFromS3
+export default selectJSONFromS3Entities

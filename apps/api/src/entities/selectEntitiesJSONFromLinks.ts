@@ -1,5 +1,5 @@
-import { Link } from "@phylopic/api-models"
-import { S3Client } from "@aws-sdk/client-s3"
+import type { Link } from "@phylopic/api-models"
+import type { S3Client } from "@aws-sdk/client-s3"
 import { isDefined } from "@phylopic/utils"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 import selectEntityJSON from "./selectEntityJSON"
