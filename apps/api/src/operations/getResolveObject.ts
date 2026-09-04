@@ -13,6 +13,7 @@ import getExternalLink from "../search/getExternalLink"
 import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
+import withPgClient from "../services/withPgClient"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
@@ -54,15 +55,11 @@ const selectResolveLinkJSONFromPostgres = async (
     namespace: Namespace,
     objectID: ObjectID,
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<string> => {
-    const client = await service.createPgClient()
-    try {
+): Promise<string> =>
+    withPgClient(service, async client => {
         const link = await getExternalLink(client, authority, namespace, objectID, queryParameters)
         return stringifyNormalized(link)
-    } finally {
-        await service.deletePgClient(client)
-    }
-}
+    })
 
 const selectResolveLinkJSON = async (
     service: PgClientService & S3ClientService,

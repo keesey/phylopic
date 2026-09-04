@@ -9,6 +9,7 @@ import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
+import withPgClient from "../services/withPgClient"
 import { Operation } from "./Operation"
 
 export type GetNamespaceParameters = DataRequestHeaders & DataParameters
@@ -16,17 +17,13 @@ export type GetNamespacesService = PgClientService & S3ClientService
 
 const USER_MESSAGE = "There was a problem with a request for namespace data."
 
-const selectNamespacesFromPostgres = async (service: PgClientService): Promise<readonly AuthorizedNamespace[]> => {
-    const client = await service.createPgClient()
-    try {
+const selectNamespacesFromPostgres = async (service: PgClientService): Promise<readonly AuthorizedNamespace[]> =>
+    withPgClient(service, async client => {
         const queryResult = await client.query<AuthorizedNamespace>(
             'SELECT authority,"namespace" FROM node_external GROUP BY authority,"namespace" ORDER BY authority,"namespace"',
         )
         return queryResult.rows
-    } finally {
-        await service.deletePgClient(client)
-    }
-}
+    })
 
 export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesService> = async (
     { accept, ...queryParameters },

@@ -13,6 +13,7 @@ import checkAccept from "../mediaTypes/checkAccept"
 import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
+import withPgClient from "../services/withPgClient"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
@@ -27,9 +28,8 @@ const selectResolveLinkJSONFromPostgres = async (
     namespace: Namespace,
     objectIDs: readonly ObjectID[],
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<string> => {
-    const client = await service.createPgClient()
-    try {
+): Promise<string> =>
+    withPgClient(service, async client => {
         const result = await client.query<{ node_uuid: UUID; title: string | null }>(
             'SELECT node_uuid,title FROM node_external WHERE authority=$1::character varying AND "namespace"=$2::character varying AND objectid=ANY($3::character varying[]) AND build=$4::bigint ORDER BY array_position($3::character varying[],objectid) LIMIT 1',
             [authority, namespace, objectIDs, BUILD],
@@ -48,10 +48,7 @@ const selectResolveLinkJSONFromPostgres = async (
             href: `/nodes/${encodeURIComponent(result.rows[0].node_uuid)}${createSearch(queryParameters)}`,
             title: result.rows[0].title ?? "",
         })
-    } finally {
-        await service.deletePgClient(client)
-    }
-}
+    })
 
 const selectResolveLinkJSON = async (
     service: PgClientService & S3ClientService,

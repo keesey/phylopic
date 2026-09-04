@@ -9,6 +9,7 @@ import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
 import { checkPostCollectionRateLimit } from "../rateLimit/checkPostCollectionRateLimit"
 import { PgClientService } from "../services/PgClientService"
+import withPgClient from "../services/withPgClient"
 import { Operation } from "./Operation"
 const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
 const MAX_BODY_SIZE = 24576
@@ -67,8 +68,7 @@ const getCollectionUUID = (uuids: ReadonlySet<string>): string => {
 }
 const ensureExistence = async (service: PgClientService, uuid: string, uuids: ReadonlySet<string>) => {
     if (uuids.size > 0) {
-        const client = await service.createPgClient()
-        try {
+        await withPgClient(service, async client => {
             const result = await client.query<{ uuid: UUID }>(
                 "SELECT uuid FROM collection WHERE uuid=$1::uuid LIMIT 1",
                 [uuid],
@@ -79,9 +79,7 @@ const ensureExistence = async (service: PgClientService, uuid: string, uuids: Re
                     [...uuids].sort(),
                 ])
             }
-        } finally {
-            await service.deletePgClient(client)
-        }
+        })
     }
 }
 export const postCollection: Operation<PostCollectionParameters, PostCollectionService> = async (

@@ -6,6 +6,7 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import { PgClientService } from "../services/PgClientService"
+import withPgClient from "../services/withPgClient"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 const USER_MESSAGE = "There was a problem with an attempt to load a collection."
@@ -13,8 +14,7 @@ export type GetCollectionParameters = DataRequestHeaders & Partial<CollectionPar
 export type GetCollectionService = PgClientService
 const ensureExistence = async (service: PgClientService, uuid: string) => {
     if (uuid !== EMPTY_UUID) {
-        const client = await service.createPgClient()
-        try {
+        await withPgClient(service, async client => {
             const result = await client.query<{ uuid: UUID }>(
                 "SELECT uuid FROM collection WHERE uuid=$1::uuid LIMIT 1",
                 [uuid],
@@ -29,9 +29,7 @@ const ensureExistence = async (service: PgClientService, uuid: string) => {
                     },
                 ])
             }
-        } finally {
-            await service.deletePgClient(client)
-        }
+        })
     }
 }
 export const getCollection: Operation<GetCollectionParameters, GetCollectionService> = async (

@@ -22,9 +22,9 @@ import createPermanentRedirect from "../results/createPermanentRedirect"
 import getExternalLink from "../search/getExternalLink"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
+import withPgClient from "../services/withPgClient"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-import type { APIGatewayProxyResult } from "aws-lambda"
 export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
 export type GetNodeService = PgClientService & S3ClientService
 const USER_MESSAGE = "There was a problem with an attempt to load taxonomic data."
@@ -49,21 +49,18 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
     const embeds = Object.keys(queryParameters)
         .filter(isEmbeddedParameter)
         .map(key => key.slice("embed_".length) as string & keyof NodeEmbedded)
-    const client = await service.createPgClient()
-    let body: string
-    let result: APIGatewayProxyResult
-    try {
-        body = await selectEntityJSONWithEmbedded<Node, NodeLinks>(
-            service,
-            "node",
-            normalizedUUID,
-            embeds,
-            isNode,
-            "taxonomic group",
-        )
-        if (body === "null") {
+    const body = await selectEntityJSONWithEmbedded<Node, NodeLinks>(
+        service,
+        "node",
+        normalizedUUID,
+        embeds,
+        isNode,
+        "taxonomic group",
+    )
+    if (body === "null") {
+        return await withPgClient(service, async client => {
             const link = await getExternalLink(client, "phylopic.org", "nodes", normalizedUUID, queryParameters)
-            result = {
+            return {
                 body: stringifyNormalized(link),
                 headers: {
                     ...DATA_HEADERS,
@@ -71,16 +68,12 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
                 },
                 statusCode: 308,
             }
-        } else {
-            result = {
-                body,
-                headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
-                statusCode: 200,
-            }
-        }
-    } finally {
-        await service.deletePgClient(client)
+        })
     }
-    return result
+    return {
+        body,
+        headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
+        statusCode: 200,
+    }
 }
 export default getNode

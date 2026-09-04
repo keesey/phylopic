@@ -11,6 +11,7 @@ import checkAccept from "../mediaTypes/checkAccept"
 import MAX_AUTOCOMPLETE_RESULTS from "../search/MAX_AUTOCOMPLETE_RESULTS"
 import normalizeSearchQuery from "../search/normalizeSearchQuery"
 import { PgClientService } from "../services/PgClientService"
+import withPgClient from "../services/withPgClient"
 import { Operation } from "./Operation"
 type GetAutocompleteParameters = DataRequestHeaders & Partial<SearchParameters>
 type GetAutocompleteService = PgClientService
@@ -18,18 +19,13 @@ const findMatches = async (service: PgClientService, query: string): Promise<rea
     if (query.length < 2) {
         return []
     }
-    let result: readonly string[]
-    const client = await service.createPgClient()
-    try {
+    return withPgClient(service, async client => {
         const queryResult = await client.query<{ normalized: string; from_start: boolean }>(
             `SELECT normalized,normalized LIKE $1::character varying AS from_start FROM node_name WHERE build=$2::bigint AND normalized LIKE $3::character varying GROUP BY normalized,from_start ORDER BY from_start DESC,normalized LIMIT ${MAX_AUTOCOMPLETE_RESULTS}`,
             [`${query}%`, BUILD, `%${query}%`],
         )
-        result = queryResult.rows.map(({ normalized }) => normalized)
-    } finally {
-        await service.deletePgClient(client)
-    }
-    return result
+        return queryResult.rows.map(({ normalized }) => normalized)
+    })
 }
 export const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocompleteService> = async (
     { accept, build, query },

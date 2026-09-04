@@ -9,7 +9,7 @@ const withPgClient = async <T, TClient extends ClientBase = ClientBase>(
     try {
         return await fn(client)
     } finally {
-        service.deletePgClient(client)
+        await service.deletePgClient(client)
     }
 }
 
