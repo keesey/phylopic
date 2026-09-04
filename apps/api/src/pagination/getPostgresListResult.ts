@@ -1,18 +1,18 @@
-import { TitledLink } from "@phylopic/api-models"
-import { stringifyNormalized, UUID } from "@phylopic/utils"
-import { APIGatewayProxyResult } from "aws-lambda"
-import { ClientBase } from "pg"
+import type { TitledLink } from "@phylopic/api-models"
+import { stringifyNormalized } from "@phylopic/utils"
+import type { APIGatewayProxyResult } from "aws-lambda"
+import type { ClientBase } from "pg"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import withPgClient from "../services/withPgClient"
 import getListObject from "./getListObject"
+import type { ListPageRow } from "./getListResult"
 import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
-import type { ListPageRow } from "./getListResult"
 
 export interface Parameters<TEmbedded = Record<string, never>> {
     embedListPageRows: (
@@ -32,81 +32,72 @@ export interface Parameters<TEmbedded = Record<string, never>> {
     validEmbeds: ReadonlyArray<string & keyof TEmbedded>
 }
 
+type IndexParameters = Pick<Parameters, "getTotalItems" | "itemsPerPage" | "listPath" | "listQuery" | "service">
+
+type ListParameters = Pick<
+    Parameters,
+    "getItemLinks" | "itemsPerPage" | "listPath" | "listQuery" | "service" | "userMessage"
+> &
+    Readonly<{ pageIndex: number }>
+
+type ListWithEmbedsParameters<TEmbedded> = Pick<
+    Parameters<TEmbedded>,
+    | "embedListPageRows"
+    | "fetchListPageRows"
+    | "itemsPerPage"
+    | "listPath"
+    | "listQuery"
+    | "page"
+    | "service"
+    | "userMessage"
+    | "validEmbeds"
+> &
+    Readonly<{ pageIndex: number }>
+
 const OK_RESULT: Pick<APIGatewayProxyResult, "headers" | "statusCode"> = {
     headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
     statusCode: 200,
 }
 
-const getPostgresListResult = async <TEmbedded = Record<string, never>>({
-    embedListPageRows,
-    fetchListPageRows,
-    getItemLinks,
-    getTotalItems,
-    itemsPerPage,
-    listPath,
-    listQuery,
-    page,
-    service,
-    userMessage = "There was an error in a request for data.",
-    validEmbeds,
-}: Parameters<TEmbedded>) => {
-    if (!page) {
-        return await withPgClient(service, async client => {
-            const totalItems = await getTotalItems(client)
-            return {
-                ...OK_RESULT,
-                body: stringifyNormalized(getListObject(listPath, listQuery, totalItems, itemsPerPage)),
-            }
-        })
-    }
-    const pageIndex = getPageIndex(page)
-    const create404 = () =>
-        new APIError(
-            404,
-            [
-                {
-                    developerMessage: "The requested page is out of bounds.",
-                    field: "page",
-                    type: "RESOURCE_NOT_FOUND",
-                    userMessage,
-                },
-            ],
-            PERMANENT_HEADERS,
-        )
-    if (listQuery.embed_items === "true") {
-        const isValidEmbed = (x: unknown): x is string & keyof TEmbedded =>
-            validEmbeds.includes(x as string & keyof TEmbedded)
-        const embeds = Object.keys(listQuery)
-            .filter(key => key.startsWith("embed_"))
-            .map(key => key.slice("embed_".length))
-            .filter(isValidEmbed)
-        const rows = await withPgClient(service, client =>
-            fetchListPageRows(client, pageIndex * itemsPerPage, itemsPerPage + 1),
-        )
-        const rawItems = await embedListPageRows(rows, embeds, service)
-        if (rawItems.length === 0) {
-            throw create404()
-        }
-        const lastPage = rawItems.length < itemsPerPage + 1
-        const items = rawItems.slice(0, itemsPerPage)
-        const itemLinks = items.map(([link]) => link)
-        const itemsJSON = items.map(([, json]) => json)
+const create404 = (userMessage: string) =>
+    new APIError(
+        404,
+        [
+            {
+                developerMessage: "The requested page is out of bounds.",
+                field: "page",
+                type: "RESOURCE_NOT_FOUND",
+                userMessage,
+            },
+        ],
+        PERMANENT_HEADERS,
+    )
+
+const getIndex = async (parameters: IndexParameters) => {
+    const { getTotalItems, itemsPerPage, listPath, listQuery, service } = parameters
+    return withPgClient(service, async client => {
+        const totalItems = await getTotalItems(client)
         return {
             ...OK_RESULT,
-            body: getPageObjectJSONWithEmbedded(
-                listPath,
-                { ...listQuery, page },
-                pageIndex,
-                lastPage,
-                itemLinks,
-                itemsJSON,
-            ),
+            body: stringifyNormalized(getListObject(listPath, listQuery, totalItems, itemsPerPage)),
         }
-    }
-    return await withPgClient(service, async client => {
+    })
+}
+
+const getList = async (parameters: ListParameters) => {
+    const {
+        getItemLinks,
+        itemsPerPage,
+        listPath,
+        listQuery,
+        pageIndex,
+        service,
+        userMessage = "There was an error in a request for data.",
+    } = parameters
+    return withPgClient(service, async client => {
         const rawItemLinks = await getItemLinks(client, pageIndex * itemsPerPage, itemsPerPage + 1)
         if (rawItemLinks.length === 0) {
-            throw create404()
+            throw create404(userMessage)
         }
         const lastPage = rawItemLinks.length < itemsPerPage + 1
         const itemLinks = rawItemLinks.slice(0, itemsPerPage)
@@ -115,6 +106,61 @@ const getPostgresListResult = async <TEmbedded = Record<string, never>>({
             body: stringifyNormalized(getPageObject(listPath, listQuery, pageIndex, lastPage, itemLinks)),
         }
     })
+}
+
+const getListWithEmbeds = async <TEmbedded>(parameters: ListWithEmbedsParameters<TEmbedded>) => {
+    const {
+        embedListPageRows,
+        fetchListPageRows,
+        itemsPerPage,
+        listPath,
+        listQuery,
+        page,
+        pageIndex,
+        service,
+        userMessage = "There was an error in a request for data.",
+        validEmbeds,
+    } = parameters
+    const isValidEmbed = (x: unknown): x is string & keyof TEmbedded =>
+        validEmbeds.includes(x as string & keyof TEmbedded)
+    const embeds = Object.keys(listQuery)
+        .filter(key => key.startsWith("embed_"))
+        .map(key => key.slice("embed_".length))
+        .filter(isValidEmbed)
+    const rows = await withPgClient(service, client =>
+        fetchListPageRows(client, pageIndex * itemsPerPage, itemsPerPage + 1),
+    )
+    const rawItems = await embedListPageRows(rows, embeds, service)
+    if (rawItems.length === 0) {
+        throw create404(userMessage)
+    }
+    const lastPage = rawItems.length < itemsPerPage + 1
+    const items = rawItems.slice(0, itemsPerPage)
+    const itemLinks = items.map(([link]) => link)
+    const itemsJSON = items.map(([, json]) => json)
+    return {
+        ...OK_RESULT,
+        body: getPageObjectJSONWithEmbedded(
+            listPath,
+            { ...listQuery, page },
+            pageIndex,
+            lastPage,
+            itemLinks,
+            itemsJSON,
+        ),
+    }
+}
+
+const getPostgresListResult = async <TEmbedded = Record<string, never>>(parameters: Parameters<TEmbedded>) => {
+    const { listQuery, page } = parameters
+    if (!page) {
+        return getIndex(parameters)
+    }
+    const pageIndex = getPageIndex(page)
+    if (listQuery.embed_items === "true") {
+        return getListWithEmbeds({ ...parameters, pageIndex })
+    }
+    return getList({ ...parameters, pageIndex })
 }
 
 export default getPostgresListResult
