@@ -18,6 +18,7 @@ import getListResult, { ListPageRow } from "../pagination/getListResult"
 import getPostgresListResult from "../pagination/getPostgresListResult"
 import { canServeListFromS3, isUnfilteredContributorsList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
+import { S3Client } from "@aws-sdk/client-s3"
 import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
@@ -80,7 +81,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         _embeds: readonly string[],
-        _service: S3ClientService,
+        _client: S3Client,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         return rows.map(({ json, title, uuid }) => [
             { href: `/contributors/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },

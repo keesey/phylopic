@@ -1,12 +1,14 @@
 import { isLink, Links } from "@phylopic/api-models"
+import { S3Client } from "@aws-sdk/client-s3"
 import { isString } from "@phylopic/utils"
 import APIError from "../errors/APIError"
-import type { S3ClientService } from "../services/S3ClientService"
 import selectEntitiesJSONFromLinks from "./selectEntitiesJSONFromLinks"
 import selectEntityJSONFromHRef from "./selectEntityJSONFromHRef"
+
 const isLinkWithStringHRef = isLink(isString)
+
 const selectEntityEmbeds = async <TLinks extends Links, TEmbeds extends string & keyof TLinks>(
-    service: S3ClientService,
+    client: S3Client,
     links: TLinks,
     embeds: readonly TEmbeds[],
     typeUserLabel: string,
@@ -15,10 +17,10 @@ const selectEntityEmbeds = async <TLinks extends Links, TEmbeds extends string &
         const propertyLink = links[property]
         const propertyJSON = `${JSON.stringify(property)}:`
         if (Array.isArray(propertyLink) && propertyLink.every(link => isLinkWithStringHRef(link))) {
-            return propertyJSON + (await selectEntitiesJSONFromLinks(service, propertyLink))
+            return propertyJSON + (await selectEntitiesJSONFromLinks(client, propertyLink))
         }
         if (isLinkWithStringHRef(propertyLink)) {
-            return propertyJSON + (await selectEntityJSONFromHRef(service, propertyLink.href))
+            return propertyJSON + (await selectEntityJSONFromHRef(client, propertyLink.href))
         }
         if (propertyLink === null) {
             return propertyJSON + "null"
@@ -34,4 +36,5 @@ const selectEntityEmbeds = async <TLinks extends Links, TEmbeds extends string &
     })
     return `{${(await Promise.all(embedPromises)).join(",")}}`
 }
+
 export default selectEntityEmbeds

@@ -10,6 +10,7 @@ import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import type { S3ClientService } from "../services/S3ClientService"
+import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetContributorParameters = DataRequestHeaders & Partial<ContributorParameters>
@@ -31,7 +32,7 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
         return createPermanentRedirect(path, queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const body = await selectEntityJSON(service, "contributor", normalizedUUID)
+    const body = await withS3Client(service, client => selectEntityJSON(client, "contributor", normalizedUUID))
     if (body === "null") {
         throw new APIError(404, [
             {

@@ -25,6 +25,7 @@ import getPostgresListResult from "../pagination/getPostgresListResult"
 import { canServeListFromS3, isUnfilteredImagesList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
+import { S3Client } from "@aws-sdk/client-s3"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
@@ -143,7 +144,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof ImageEmbedded>,
-        service: S3ClientService,
+        client: S3Client,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
             return rows.map(({ json, title, uuid }) => [
@@ -155,13 +156,7 @@ const embedListPageRows =
             rows.map(async ({ json, title, uuid }) => {
                 return [
                     { href: `/images/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
-                    await parseEntityJSONAndEmbed<Image, ImageLinks>(
-                        service,
-                        json,
-                        embeds,
-                        isImage,
-                        "silhouette image",
-                    ),
+                    await parseEntityJSONAndEmbed<Image, ImageLinks>(client, json, embeds, isImage, "silhouette image"),
                 ]
             }),
         )

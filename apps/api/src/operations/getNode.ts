@@ -23,6 +23,7 @@ import getExternalLink from "../search/getExternalLink"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import withPgClient from "../services/withPgClient"
+import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
@@ -49,13 +50,15 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
     const embeds = Object.keys(queryParameters)
         .filter(isEmbeddedParameter)
         .map(key => key.slice("embed_".length) as string & keyof NodeEmbedded)
-    const body = await selectEntityJSONWithEmbedded<Node, NodeLinks>(
-        service,
-        "node",
-        normalizedUUID,
-        embeds,
-        isNode,
-        "taxonomic group",
+    const body = await withS3Client(service, client =>
+        selectEntityJSONWithEmbedded<Node, NodeLinks>(
+            client,
+            "node",
+            normalizedUUID,
+            embeds,
+            isNode,
+            "taxonomic group",
+        ),
     )
     if (body === "null") {
         return await withPgClient(service, async client => {

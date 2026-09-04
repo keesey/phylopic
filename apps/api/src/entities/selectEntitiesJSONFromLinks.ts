@@ -1,10 +1,10 @@
 import { Link } from "@phylopic/api-models"
+import { S3Client } from "@aws-sdk/client-s3"
 import { isDefined } from "@phylopic/utils"
-import type { S3ClientService } from "../services/S3ClientService"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 import selectEntityJSON from "./selectEntityJSON"
 
-const selectEntitiesJSONFromLinks = async (service: S3ClientService, links: readonly Link[]): Promise<string> => {
+const selectEntitiesJSONFromLinks = async (client: S3Client, links: readonly Link[]): Promise<string> => {
     if (!links.length) {
         return "[]"
     }
@@ -18,7 +18,7 @@ const selectEntitiesJSONFromLinks = async (service: S3ClientService, links: read
         throw new Error("All links must have the same entity type.")
     }
     const uuids = tablesAndUUIDs.map(([, uuid]) => uuid)
-    const jsonList = await Promise.all(uuids.map(uuid => selectEntityJSON(service, table, uuid)))
+    const jsonList = await Promise.all(uuids.map(uuid => selectEntityJSON(client, table, uuid)))
     return `[${jsonList.join(",")}]`
 }
 

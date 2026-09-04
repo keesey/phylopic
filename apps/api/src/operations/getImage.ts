@@ -20,6 +20,7 @@ import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import type { S3ClientService } from "../services/S3ClientService"
+import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetImageParameters = DataRequestHeaders & Partial<EntityParameters<ImageEmbedded>>
@@ -46,13 +47,15 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
     const embeds = Object.keys(queryParameters)
         .filter(isEmbeddedParameter)
         .map(key => key.slice("embed_".length) as string & keyof ImageEmbedded)
-    const body = await selectEntityJSONWithEmbedded<Image, ImageLinks>(
-        service,
-        "image",
-        normalizedUUID,
-        embeds,
-        isImage,
-        "silhouette image",
+    const body = await withS3Client(service, client =>
+        selectEntityJSONWithEmbedded<Image, ImageLinks>(
+            client,
+            "image",
+            normalizedUUID,
+            embeds,
+            isImage,
+            "silhouette image",
+        ),
     )
     if (body === "null") {
         throw new APIError(404, [

@@ -14,6 +14,7 @@ import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import withPgClient from "../services/withPgClient"
+import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
@@ -68,7 +69,7 @@ const selectResolveLinkJSON = async (
     objectID: ObjectID,
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
 ): Promise<string> => {
-    const body = await selectResolveObjectJSON(service, authority, namespace, objectID)
+    const body = await withS3Client(service, client => selectResolveObjectJSON(client, authority, namespace, objectID))
     if (body !== null) {
         return mergeResolveLinkQuery(body, queryParameters)
     }

@@ -10,6 +10,7 @@ import checkAccept from "../mediaTypes/checkAccept"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import withPgClient from "../services/withPgClient"
+import withS3Client from "../services/withS3Client"
 import { Operation } from "./Operation"
 
 export type GetNamespaceParameters = DataRequestHeaders & DataParameters
@@ -34,7 +35,7 @@ export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesServi
         return createBuildRedirect("/namespaces", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const body = await selectNamespacesJSON(service)
+    const body = await withS3Client(service, client => selectNamespacesJSON(client))
     if (body !== null) {
         return {
             body,

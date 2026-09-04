@@ -1,6 +1,7 @@
 import type { TitledLink } from "@phylopic/api-models"
 import { stringifyNormalized } from "@phylopic/utils"
 import type { APIGatewayProxyResult } from "aws-lambda"
+import { S3Client } from "@aws-sdk/client-s3"
 import type { ClientBase } from "pg"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
@@ -8,6 +9,7 @@ import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import type { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import withPgClient from "../services/withPgClient"
+import withS3Client from "../services/withS3Client"
 import getListObject from "./getListObject"
 import type { ListPageRow } from "./getListResult"
 import getPageIndex from "./getPageIndex"
@@ -18,7 +20,7 @@ export interface Parameters<TEmbedded = Record<string, never>> {
     embedListPageRows: (
         rows: readonly ListPageRow[],
         embed: ReadonlyArray<string & keyof TEmbedded>,
-        service: S3ClientService,
+        client: S3Client,
     ) => Promise<readonly Readonly<[TitledLink, string]>[]>
     fetchListPageRows: (client: ClientBase, offset: number, limit: number) => Promise<readonly ListPageRow[]>
     getItemLinks: (client: ClientBase, offset: number, limit: number) => Promise<readonly TitledLink[]>
@@ -130,7 +132,7 @@ const getListWithEmbeds = async <TEmbedded>(parameters: ListWithEmbedsParameters
     const rows = await withPgClient(service, client =>
         fetchListPageRows(client, pageIndex * itemsPerPage, itemsPerPage + 1),
     )
-    const rawItems = await embedListPageRows(rows, embeds, service)
+    const rawItems = await withS3Client(service, client => embedListPageRows(rows, embeds, client))
     if (rawItems.length === 0) {
         throw create404(userMessage)
     }

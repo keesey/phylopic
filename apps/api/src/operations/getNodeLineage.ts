@@ -25,6 +25,7 @@ import { canServeListFromS3 } from "../pagination/isS3ListEligible"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
+import { S3Client } from "@aws-sdk/client-s3"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
@@ -88,7 +89,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof NodeEmbedded>,
-        service: S3ClientService,
+        client: S3Client,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
             return rows.map(({ json, title, uuid }) => [
@@ -100,7 +101,7 @@ const embedListPageRows =
             rows.map(async ({ json, title, uuid }) => {
                 return [
                     { href: `/nodes/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
-                    await parseEntityJSONAndEmbed<Node, NodeLinks>(service, json, embeds, isNode, "taxonomic group"),
+                    await parseEntityJSONAndEmbed<Node, NodeLinks>(client, json, embeds, isNode, "taxonomic group"),
                 ]
             }),
         )

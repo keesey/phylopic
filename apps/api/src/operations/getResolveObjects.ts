@@ -14,6 +14,7 @@ import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import withPgClient from "../services/withPgClient"
+import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
@@ -77,11 +78,17 @@ const selectResolveLinkJSON = async (
             },
         ])
     }
-    for (const objectID of objectIDs) {
-        const body = await selectResolveObjectJSON(service, authority, namespace, objectID)
-        if (body !== null) {
-            return mergeResolveLinkQuery(body, queryParameters)
+    const s3Body = await withS3Client(service, async client => {
+        for (const objectID of objectIDs) {
+            const body = await selectResolveObjectJSON(client, authority, namespace, objectID)
+            if (body !== null) {
+                return mergeResolveLinkQuery(body, queryParameters)
+            }
         }
+        return null
+    })
+    if (s3Body !== null) {
+        return s3Body
     }
     console.warn("Resolve JSON is missing from S3; falling back to Postgres.", { authority, namespace })
     return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectIDs, queryParameters)
