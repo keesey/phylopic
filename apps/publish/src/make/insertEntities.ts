@@ -285,6 +285,34 @@ const insertIllustrations = async (client: ClientBase, data: SourceData, isDryRu
     }
     console.info("Added image-node assigments to entities database.")
 }
+const stageAuxiliaryEntityJSON = (data: SourceData, s3Writer: EntityS3Writer) => {
+    console.info("Staging list, lineage, resolve, and namespace JSON (parallel with database)...")
+    s3Writer.putStatic(
+        "namespaces",
+        stringifyNormalized({
+            build: data.build,
+            namespaces: getAuthorizedNamespaces(data),
+        }),
+    )
+    for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
+        s3Writer.putResolve(authority, namespace, objectID, body)
+    }
+    console.info("Queued resolve object JSON for local staging.")
+    for (const upload of getContributorListJSONUploads(data)) {
+        s3Writer.putKey(upload.key, upload.body)
+    }
+    console.info("Queued contributor list JSON for local staging.")
+    for (const upload of getNodeListJSONUploads(data)) {
+        s3Writer.putKey(upload.key, upload.body)
+    }
+    console.info("Queued node list JSON for local staging.")
+    for (const upload of getImageListJSONUploads(data)) {
+        s3Writer.putKey(upload.key, upload.body)
+    }
+    console.info("Queued image list JSON for local staging.")
+    queueAllLineageJSONUploads(data, upload => s3Writer.putKey(upload.key, upload.body))
+    console.info("Queued node lineage JSON for local staging.")
+}
 const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Updating entities database...")
     const s3Writer = isDryRun ? undefined : new EntityS3Writer(data.build)
@@ -297,49 +325,20 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
         ])
     }
     await client.query("BEGIN")
-    // Insert entities and adjunct data
     await Promise.all([
-        insertContributorsAndImages(client, data, isDryRun, s3Writer),
-        insertNodes(client, data, isDryRun, s3Writer),
+        (async () => {
+            await Promise.all([
+                insertContributorsAndImages(client, data, isDryRun, s3Writer),
+                insertNodes(client, data, isDryRun, s3Writer),
+            ])
+            await insertIllustrations(client, data, isDryRun)
+        })(),
+        s3Writer ? Promise.resolve(stageAuxiliaryEntityJSON(data, s3Writer)) : Promise.resolve(),
     ])
-    // Insert node-image links
-    await insertIllustrations(client, data, isDryRun)
-    // Finalize the transaction.
     await client.query(isDryRun ? "ROLLBACK" : "COMMIT")
     console.info("Updated entities database.")
-    // Upload entity JSON to S3
     if (s3Writer) {
-        console.info("Staging entity JSON locally...")
-        s3Writer.putStatic(
-            "namespaces",
-            stringifyNormalized({
-                build: data.build,
-                namespaces: getAuthorizedNamespaces(data),
-            }),
-        )
-        console.info("Queueing resolve object JSON to S3...")
-        for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
-            s3Writer.putResolve(authority, namespace, objectID, body)
-        }
-        console.info("Queued resolve object JSON to S3.")
-        console.info("Queueing contributor list JSON to S3...")
-        for (const upload of getContributorListJSONUploads(data)) {
-            s3Writer.putKey(upload.key, upload.body)
-        }
-        console.info("Queued contributor list JSON to S3.")
-        console.info("Queueing node list JSON to S3...")
-        for (const upload of getNodeListJSONUploads(data)) {
-            s3Writer.putKey(upload.key, upload.body)
-        }
-        console.info("Queued node list JSON to S3.")
-        console.info("Queueing image list JSON to S3...")
-        for (const upload of getImageListJSONUploads(data)) {
-            s3Writer.putKey(upload.key, upload.body)
-        }
-        console.info("Queued image list JSON to S3.")
-        console.info("Queueing node lineage JSON to S3...")
-        queueAllLineageJSONUploads(data, upload => s3Writer.putKey(upload.key, upload.body))
-        console.info("Queued node lineage JSON to S3.")
+        console.info("Finishing local entity JSON staging...")
         await s3Writer.flush()
         console.info("Staged entity JSON locally.")
     }

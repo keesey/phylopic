@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `EntityS3Writer` writes entity, list, lineage, resolve, and static JSON to local staging instead
   of uploading via the SDK during insert.
+- `insertEntities` stages list, lineage, resolve, and namespace JSON in parallel with the Postgres
+  transaction; entity JSON writes are scheduled immediately and flushed after commit.
 
 ### Fixed
 
