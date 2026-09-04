@@ -10,9 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `@phylopic/api`: precomputed S3 reads for unfiltered list routes (`GET /contributors`, `GET /nodes`,
-  `GET /images`) and `GET /nodes/{uuid}/lineage` when `ENTITY_JSON_SOURCE` is `s3` or
-  `s3-fallback`, with Postgres fallback for filtered queries, extra embed parameters, or missing
-  objects.
+  `GET /images`) and `GET /nodes/{uuid}/lineage`, with Postgres fallback for filtered queries, extra
+  embed parameters, or missing objects.
 - `@phylopic/publish`: writes default list and per-node lineage link JSON to S3 during `yarn insert`
   (entity JSON hydrated at read time for `embed_items`); stages entities locally and uploads via
   `aws s3 sync`; `yarn verify:entities` checks list index totals and a sampled lineage index against
@@ -20,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `@phylopic/api`: entity JSON is read from S3; the `ENTITY_JSON_SOURCE` environment variable and runtime source switch are removed.
 - `S3.md`: documents `{build}/lists/` and `{build}/lineages/` key layout on `entities.phylopic.org`.
 - `@phylopic/api`: list and lineage `embed_items=true` S3 responses hydrate entity JSON from
   `{build}/{contributors|nodes|images}/{uuid}.json` instead of precomputed `.items.json` pages.

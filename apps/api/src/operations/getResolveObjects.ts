@@ -4,7 +4,6 @@ import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import ENTITY_JSON_SOURCE from "../entities/ENTITY_JSON_SOURCE"
 import selectResolveObjectJSON from "../entities/selectResolveObjectJSON"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
@@ -81,17 +80,13 @@ const selectResolveLinkJSON = async (
             },
         ])
     }
-    if (ENTITY_JSON_SOURCE !== "postgres") {
-        for (const objectID of objectIDs) {
-            const body = await selectResolveObjectJSON(service, authority, namespace, objectID)
-            if (body !== null) {
-                return mergeResolveLinkQuery(body, queryParameters)
-            }
-        }
-        if (ENTITY_JSON_SOURCE === "s3") {
-            console.warn("Resolve JSON is missing from S3; falling back to Postgres.", { authority, namespace })
+    for (const objectID of objectIDs) {
+        const body = await selectResolveObjectJSON(service, authority, namespace, objectID)
+        if (body !== null) {
+            return mergeResolveLinkQuery(body, queryParameters)
         }
     }
+    console.warn("Resolve JSON is missing from S3; falling back to Postgres.", { authority, namespace })
     return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectIDs, queryParameters)
 }
 

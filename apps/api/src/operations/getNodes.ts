@@ -20,7 +20,8 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
-import { isUnfilteredNodesList } from "../pagination/isS3ListEligible"
+import getPostgresListResult from "../pagination/getPostgresListResult"
+import { canServeListFromS3, isUnfilteredNodesList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
@@ -98,7 +99,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof NodeEmbedded>,
-        service: PgClientService & S3ClientService,
+        service: S3ClientService,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
             return rows.map(({ json, title, uuid }) => [
@@ -125,23 +126,35 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
         return createBuildRedirect("/nodes", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    return await getListResult({
+    const validEmbeds = ["childNodes", "parentNode", "primaryImage"] as const
+    const s3List = {
+        getIndexKey: () => getListIndexKey(BUILD, "nodes"),
+        getPageKey: (pageIndex: number) => getListPageKey(BUILD, "nodes", pageIndex),
+        isEligible: (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
+            isUnfilteredNodesList(listQuery as NodeListParameters),
+    }
+    const listParameters = {
+        itemsPerPage: ITEMS_PER_PAGE,
+        listPath: "/nodes",
+        listQuery: queryParameters,
+        page: queryParameters.page,
+        userMessage: USER_MESSAGE,
+        validEmbeds,
+    }
+    if (canServeListFromS3(queryParameters, s3List.isEligible, validEmbeds)) {
+        return await getListResult({
+            ...listParameters,
+            service,
+            s3List,
+        })
+    }
+    return await getPostgresListResult({
+        ...listParameters,
         embedListPageRows: embedListPageRows(queryParameters),
         fetchListPageRows: fetchListPageRows(queryParameters),
         getItemLinks: getItemLinks(queryParameters),
         getTotalItems: getTotalItems(queryParameters),
-        itemsPerPage: ITEMS_PER_PAGE,
-        listPath: "/nodes",
         service,
-        s3List: {
-            getIndexKey: () => getListIndexKey(BUILD, "nodes"),
-            getPageKey: pageIndex => getListPageKey(BUILD, "nodes", pageIndex),
-            isEligible: listQuery => isUnfilteredNodesList(listQuery as NodeListParameters),
-        },
-        listQuery: queryParameters,
-        page: queryParameters.page,
-        userMessage: USER_MESSAGE,
-        validEmbeds: ["childNodes", "parentNode", "primaryImage"],
     })
 }
 export default getNodes

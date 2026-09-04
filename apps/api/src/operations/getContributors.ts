@@ -15,7 +15,8 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
-import { isUnfilteredContributorsList } from "../pagination/isS3ListEligible"
+import getPostgresListResult from "../pagination/getPostgresListResult"
+import { canServeListFromS3, isUnfilteredContributorsList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
@@ -79,7 +80,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         _embeds: readonly string[],
-        _service: PgClientService & S3ClientService,
+        _service: S3ClientService,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         return rows.map(({ json, title, uuid }) => [
             { href: `/contributors/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
@@ -97,23 +98,35 @@ export const getContributors: Operation<GetContributorsParameters, GetContributo
         return createBuildRedirect("/contributors", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    return await getListResult<Record<string, never>>({
+    const validEmbeds: readonly string[] = []
+    const s3List = {
+        getIndexKey: () => getListIndexKey(BUILD, "contributors"),
+        getPageKey: (pageIndex: number) => getListPageKey(BUILD, "contributors", pageIndex),
+        isEligible: (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
+            isUnfilteredContributorsList(listQuery as ContributorListParameters),
+    }
+    const listParameters = {
+        itemsPerPage: ITEMS_PER_PAGE,
+        listPath: "/contributors",
+        listQuery: queryParameters,
+        page: queryParameters.page,
+        userMessage: USER_MESSAGE,
+        validEmbeds,
+    }
+    if (canServeListFromS3(queryParameters, s3List.isEligible, validEmbeds)) {
+        return await getListResult({
+            ...listParameters,
+            service,
+            s3List,
+        })
+    }
+    return await getPostgresListResult({
+        ...listParameters,
         embedListPageRows: embedListPageRows(queryParameters),
         fetchListPageRows: fetchListPageRows(queryParameters),
         getItemLinks: getItemLinks(queryParameters),
         getTotalItems: getTotalItems(queryParameters),
-        itemsPerPage: ITEMS_PER_PAGE,
-        listPath: "/contributors",
         service,
-        s3List: {
-            getIndexKey: () => getListIndexKey(BUILD, "contributors"),
-            getPageKey: pageIndex => getListPageKey(BUILD, "contributors", pageIndex),
-            isEligible: listQuery => isUnfilteredContributorsList(listQuery as ContributorListParameters),
-        },
-        listQuery: queryParameters,
-        page: queryParameters.page,
-        userMessage: USER_MESSAGE,
-        validEmbeds: [],
     })
 }
 export default getContributors

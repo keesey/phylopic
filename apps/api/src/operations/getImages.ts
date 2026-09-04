@@ -21,7 +21,8 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
-import { isUnfilteredImagesList } from "../pagination/isS3ListEligible"
+import getPostgresListResult from "../pagination/getPostgresListResult"
+import { canServeListFromS3, isUnfilteredImagesList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
@@ -142,7 +143,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof ImageEmbedded>,
-        service: PgClientService & S3ClientService,
+        service: S3ClientService,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
             return rows.map(({ json, title, uuid }) => [
@@ -175,23 +176,35 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
         return createBuildRedirect("/images", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    return await getListResult({
+    const validEmbeds = ["contributor", "generalNode", "nodes", "specificNode"] as const
+    const s3List = {
+        getIndexKey: () => getListIndexKey(BUILD, "images"),
+        getPageKey: (pageIndex: number) => getListPageKey(BUILD, "images", pageIndex),
+        isEligible: (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
+            isUnfilteredImagesList(listQuery as ImageListParameters),
+    }
+    const listParameters = {
+        itemsPerPage: ITEMS_PER_PAGE,
+        listPath: "/images",
+        listQuery: queryParameters,
+        page: queryParameters.page,
+        userMessage: USER_MESSAGE,
+        validEmbeds,
+    }
+    if (canServeListFromS3(queryParameters, s3List.isEligible, validEmbeds)) {
+        return await getListResult({
+            ...listParameters,
+            service,
+            s3List,
+        })
+    }
+    return await getPostgresListResult({
+        ...listParameters,
         embedListPageRows: embedListPageRows(queryParameters),
         fetchListPageRows: fetchListPageRows(queryParameters),
         getItemLinks: getItemLinks(queryParameters),
         getTotalItems: getTotalItems(queryParameters),
-        itemsPerPage: ITEMS_PER_PAGE,
-        listPath: "/images",
-        listQuery: queryParameters,
         service,
-        s3List: {
-            getIndexKey: () => getListIndexKey(BUILD, "images"),
-            getPageKey: pageIndex => getListPageKey(BUILD, "images", pageIndex),
-            isEligible: listQuery => isUnfilteredImagesList(listQuery as ImageListParameters),
-        },
-        page: queryParameters.page,
-        userMessage: USER_MESSAGE,
-        validEmbeds: ["contributor", "generalNode", "nodes", "specificNode"],
     })
 }
 export default getImages

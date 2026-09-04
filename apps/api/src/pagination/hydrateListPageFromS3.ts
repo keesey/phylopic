@@ -2,7 +2,6 @@ import { Page, TitledLink, isPage } from "@phylopic/api-models"
 import selectEntitiesJSONFromLinks from "../entities/selectEntitiesJSONFromLinks"
 import selectJSONFromS3 from "../entities/selectJSONFromS3"
 import withS3Client from "../entities/withS3Client"
-import type { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
 
@@ -11,7 +10,7 @@ export type HydratedListPage = Readonly<{
 }>
 
 const hydrateListPageFromS3 = async (
-    service: PgClientService & S3ClientService,
+    service: S3ClientService,
     getPageKey: (pageIndex: number) => string,
     listPath: string,
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>,

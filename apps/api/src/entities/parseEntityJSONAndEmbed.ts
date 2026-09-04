@@ -1,11 +1,10 @@
 import type { Entity, Links } from "@phylopic/api-models"
 import { FaultDetector } from "@phylopic/utils"
-import type { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import parseEntityJSON from "./parseEntityJSON"
 import selectEntityEmbeds from "./selectEntityEmbeds"
 const parseEntityJSONAndEmbed = async <TEntity extends Entity<TLinks>, TLinks extends Links>(
-    service: PgClientService & S3ClientService,
+    service: S3ClientService,
     json: string,
     embeds: ReadonlyArray<string & keyof TLinks>,
     detector: FaultDetector<TEntity>,

@@ -1,13 +1,12 @@
 import { isLink, Links } from "@phylopic/api-models"
 import { isString } from "@phylopic/utils"
 import APIError from "../errors/APIError"
-import type { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import selectEntitiesJSONFromLinks from "./selectEntitiesJSONFromLinks"
 import selectEntityJSONFromHRef from "./selectEntityJSONFromHRef"
 const isLinkWithStringHRef = isLink(isString)
 const selectEntityEmbeds = async <TLinks extends Links, TEmbeds extends string & keyof TLinks>(
-    service: PgClientService & S3ClientService,
+    service: S3ClientService,
     links: TLinks,
     embeds: readonly TEmbeds[],
     typeUserLabel: string,

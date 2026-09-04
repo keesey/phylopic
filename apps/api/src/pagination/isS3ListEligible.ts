@@ -36,3 +36,9 @@ export const isUnfilteredImagesList = (parameters: ImageListParameters) =>
     !isTruthyFilter(parameters.filter_modified_before) &&
     !isTruthyFilter(parameters.filter_modifiedFile_after) &&
     !isTruthyFilter(parameters.filter_modifiedFile_before)
+
+export const canServeListFromS3 = (
+    listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
+    isEligible: (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) => boolean,
+    validEmbeds: readonly string[],
+): boolean => isEligible(listQuery) && (listQuery.embed_items !== "true" || !hasExtraListEmbeds(listQuery, validEmbeds))

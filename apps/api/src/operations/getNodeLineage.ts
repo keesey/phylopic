@@ -20,6 +20,8 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
+import getPostgresListResult from "../pagination/getPostgresListResult"
+import { canServeListFromS3 } from "../pagination/isS3ListEligible"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
@@ -86,7 +88,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof NodeEmbedded>,
-        service: PgClientService & S3ClientService,
+        service: S3ClientService,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
             return rows.map(({ json, title, uuid }) => [
@@ -119,23 +121,34 @@ export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = as
         return createPermanentRedirect(path, { ...queryParameters, uuid: normalizedUUID })
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    return await getListResult({
+    const validEmbeds = ["childNodes", "parentNode", "primaryImage"] as const
+    const s3List = {
+        getIndexKey: () => getLineageIndexKey(BUILD, normalizedUUID),
+        getPageKey: (pageIndex: number) => getLineagePageKey(BUILD, normalizedUUID, pageIndex),
+        isEligible: () => true,
+    }
+    const listParameters = {
+        itemsPerPage: ITEMS_PER_PAGE,
+        listPath: path,
+        listQuery: queryParameters,
+        page: queryParameters.page,
+        userMessage: USER_MESSAGE,
+        validEmbeds,
+    }
+    if (canServeListFromS3(queryParameters, s3List.isEligible, validEmbeds)) {
+        return await getListResult({
+            ...listParameters,
+            service,
+            s3List,
+        })
+    }
+    return await getPostgresListResult({
+        ...listParameters,
         embedListPageRows: embedListPageRows(normalizedUUID),
         fetchListPageRows: fetchListPageRows(normalizedUUID),
         getItemLinks: getItemLinks(normalizedUUID),
         getTotalItems: getTotalItems(normalizedUUID),
-        itemsPerPage: ITEMS_PER_PAGE,
-        listPath: path,
         service,
-        s3List: {
-            getIndexKey: () => getLineageIndexKey(BUILD, normalizedUUID),
-            getPageKey: pageIndex => getLineagePageKey(BUILD, normalizedUUID, pageIndex),
-            isEligible: () => true,
-        },
-        listQuery: queryParameters,
-        page: queryParameters.page,
-        userMessage: USER_MESSAGE,
-        validEmbeds: ["childNodes", "parentNode", "primaryImage"],
     })
 }
 export default getNodeLineage

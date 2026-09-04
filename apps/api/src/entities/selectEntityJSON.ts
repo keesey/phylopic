@@ -1,34 +1,35 @@
+import { GetObjectCommand } from "@aws-sdk/client-s3"
 import type { UUID } from "@phylopic/utils"
-import type { PgClientService } from "../services/PgClientService"
+import { convertS3BodyToString, isAWSError } from "@phylopic/utils-aws"
+import BUILD from "../build/BUILD"
 import type { S3ClientService } from "../services/S3ClientService"
-import ENTITY_JSON_SOURCE from "./ENTITY_JSON_SOURCE"
+import { getEntityJSONKey } from "./getEntityJSONKey"
 import type { TableName } from "./TableName"
-import selectEntityJSONFromPostgres from "./selectEntityJSONFromPostgres"
-import selectEntityJSONFromS3 from "./selectEntityJSONFromS3"
 import withS3Client from "./withS3Client"
 
-const selectEntityJSON = async (
-    clientService: PgClientService & S3ClientService,
-    tableName: TableName,
-    uuid: UUID,
-    userMessage = "There was an error retrieving data.",
-): Promise<string> => {
-    if (ENTITY_JSON_SOURCE === "postgres") {
-        return selectEntityJSONFromPostgres(await clientService.createPgClient(), tableName, uuid, userMessage)
-    }
-    if (ENTITY_JSON_SOURCE === "s3") {
-        const json = await withS3Client(clientService, client => selectEntityJSONFromS3(client, tableName, uuid))
-        return json ?? "null"
-    }
-    try {
-        const json = await withS3Client(clientService, client => selectEntityJSONFromS3(client, tableName, uuid))
-        if (json !== null) {
-            return json
+const ENTITIES_BUCKET = process.env.ENTITIES_BUCKET ?? "entities.phylopic.org"
+
+const selectEntityJSON = async (clientService: S3ClientService, tableName: TableName, uuid: UUID): Promise<string> => {
+    const json = await withS3Client(clientService, async client => {
+        try {
+            const output = await client.send(
+                new GetObjectCommand({
+                    Bucket: ENTITIES_BUCKET,
+                    Key: getEntityJSONKey(BUILD, tableName, uuid),
+                }),
+            )
+            return await convertS3BodyToString(output.Body)
+        } catch (e) {
+            if (isAWSError(e) && e.$metadata.httpStatusCode === 404) {
+                return null
+            }
+            if (e instanceof Error && e.name === "NoSuchKey") {
+                return null
+            }
+            throw e
         }
-    } catch (e) {
-        console.warn(`S3 entity read failed for ${tableName}/${uuid}, falling back to Postgres.`, e)
-    }
-    return selectEntityJSONFromPostgres(await clientService.createPgClient(), tableName, uuid, userMessage)
+    })
+    return json ?? "null"
 }
 
 export default selectEntityJSON

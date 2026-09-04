@@ -19,12 +19,11 @@ import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
-import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetImageParameters = DataRequestHeaders & Partial<EntityParameters<ImageEmbedded>>
-export type GetImageService = PgClientService & S3ClientService
+export type GetImageService = S3ClientService
 const USER_MESSAGE = "There was a problem with an attempt to load silhouette data."
 const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParameters<ImageEmbedded> =>
     IMAGE_EMBEDDED_PARAMETERS.includes(x as any)

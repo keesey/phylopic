@@ -1,16 +1,10 @@
 import { Link } from "@phylopic/api-models"
-import { isDefined, UUID } from "@phylopic/utils"
-import BUILD from "../build/BUILD"
-import type { PgClientService } from "../services/PgClientService"
+import { isDefined } from "@phylopic/utils"
 import type { S3ClientService } from "../services/S3ClientService"
-import QueryConfigBuilder from "../sql/QueryConfigBuilder"
-import ENTITY_JSON_SOURCE from "./ENTITY_JSON_SOURCE"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 import selectEntityJSON from "./selectEntityJSON"
-const selectEntitiesJSONFromLinks = async (
-    service: PgClientService & S3ClientService,
-    links: readonly Link[],
-): Promise<string> => {
+
+const selectEntitiesJSONFromLinks = async (service: S3ClientService, links: readonly Link[]): Promise<string> => {
     if (!links.length) {
         return "[]"
     }
@@ -24,25 +18,8 @@ const selectEntitiesJSONFromLinks = async (
         throw new Error("All links must have the same entity type.")
     }
     const uuids = tablesAndUUIDs.map(([, uuid]) => uuid)
-    if (ENTITY_JSON_SOURCE !== "postgres") {
-        const jsonList = await Promise.all(uuids.map(uuid => selectEntityJSON(service, table, uuid)))
-        return `[${jsonList.join(",")}]`
-    }
-    const builder = new QueryConfigBuilder(`SELECT json,uuid FROM ${table} WHERE build=$::bigint AND (`, [BUILD])
-    uuids.forEach((uuid, index) => {
-        if (index > 0) {
-            builder.add("OR")
-        }
-        builder.add("uuid=$::uuid", [uuid])
-    })
-    builder.add(") LIMIT $::bigint", [limit])
-    const pgClient = await service.createPgClient()
-    try {
-        const response = await pgClient.query<{ json: string; uuid: UUID }>(builder.build())
-        const jsonList = uuids.map(uuid => response.rows.find(row => row.uuid === uuid)?.json ?? "null")
-        return `[${jsonList.join(",")}]`
-    } finally {
-        await service.deletePgClient(pgClient)
-    }
+    const jsonList = await Promise.all(uuids.map(uuid => selectEntityJSON(service, table, uuid)))
+    return `[${jsonList.join(",")}]`
 }
+
 export default selectEntitiesJSONFromLinks

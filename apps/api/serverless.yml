@@ -67,7 +67,6 @@ functions:
         timeout: 30
         environment:
             ENTITIES_BUCKET: entities.phylopic.org
-            ENTITY_JSON_SOURCE: s3
             PGDATABASE: "${ssm:PGDATABASE}"
             PGHOST: "${ssm:PGHOST}"
             PGPASSWORD: "${ssm:PGPASSWORD}"
