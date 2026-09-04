@@ -11,7 +11,7 @@ export const getDefaultListPageKey = (build: number, name: DefaultListName, page
     [build, "lists", name, "pages", page].map(encode).join("/") + ".json"
 
 export const getLineageIndexKey = (build: number, uuid: UUID) =>
-    [build, "lineage", uuid, "index"].map(encode).join("/") + ".json"
+    [build, "lineages", uuid, "index"].map(encode).join("/") + ".json"
 
 export const getLineagePageKey = (build: number, uuid: UUID, page: number) =>
-    [build, "lineage", uuid, "pages", page].map(encode).join("/") + ".json"
+    [build, "lineages", uuid, "pages", page].map(encode).join("/") + ".json"
