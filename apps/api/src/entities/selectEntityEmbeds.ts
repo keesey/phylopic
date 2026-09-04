@@ -1,12 +1,13 @@
 import { isLink, Links } from "@phylopic/api-models"
 import { isString } from "@phylopic/utils"
-import { ClientBase } from "pg"
 import APIError from "../errors/APIError"
+import type { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import selectEntitiesJSONFromLinks from "./selectEntitiesJSONFromLinks"
 import selectEntityJSONFromHRef from "./selectEntityJSONFromHRef"
 const isLinkWithStringHRef = isLink(isString)
 const selectEntityEmbeds = async <TLinks extends Links, TEmbeds extends string & keyof TLinks>(
-    client: ClientBase | undefined,
+    service: PgClientService & S3ClientService,
     links: TLinks,
     embeds: readonly TEmbeds[],
     typeUserLabel: string,
@@ -15,10 +16,10 @@ const selectEntityEmbeds = async <TLinks extends Links, TEmbeds extends string &
         const propertyLink = links[property]
         const propertyJSON = `${JSON.stringify(property)}:`
         if (Array.isArray(propertyLink) && propertyLink.every(link => isLinkWithStringHRef(link))) {
-            return propertyJSON + (await selectEntitiesJSONFromLinks(client, propertyLink))
+            return propertyJSON + (await selectEntitiesJSONFromLinks(service, propertyLink))
         }
         if (isLinkWithStringHRef(propertyLink)) {
-            return propertyJSON + (await selectEntityJSONFromHRef(client, propertyLink.href))
+            return propertyJSON + (await selectEntityJSONFromHRef(service, propertyLink.href))
         }
         if (propertyLink === null) {
             return propertyJSON + "null"

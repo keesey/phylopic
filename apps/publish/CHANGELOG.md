@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Publish writes default list and per-node lineage **links** JSON to `{build}/lists/` and
-  `{build}/lineage/` during `yarn insert`.
+  `{build}/lineages/` during `yarn insert`.
 - Entity JSON is staged under `.s3/entities.phylopic.org/{build}/` during insert and uploaded with
   `aws s3 sync` (`yarn upload:entities`).
 - `yarn verify:entities` checks default list index totals and a sampled lineage index against

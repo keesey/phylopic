@@ -4,13 +4,9 @@ let readClient: VercelKV | null = null
 let writeClient: VercelKV | null = null
 
 export const isKvReadConfigured = (): boolean =>
-    Boolean(
-        process.env.KV_REST_API_URL &&
-            (process.env.KV_REST_API_READ_ONLY_TOKEN || process.env.KV_REST_API_TOKEN),
-    )
+    Boolean(process.env.KV_REST_API_URL && (process.env.KV_REST_API_READ_ONLY_TOKEN || process.env.KV_REST_API_TOKEN))
 
-export const isKvWriteConfigured = (): boolean =>
-    Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+export const isKvWriteConfigured = (): boolean => Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
 
 /** @deprecated Prefer {@link isKvReadConfigured} or {@link isKvWriteConfigured}. */
 export const isKvConfigured = isKvWriteConfigured

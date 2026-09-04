@@ -15,16 +15,12 @@ export const buildListIndexJSON = (
 ): string =>
     stringifyNormalized({
         _links: {
-            firstPage:
-                totalItems > 0
-                    ? { href: listPath + createSearch({ ...listQuery, page: 0 }) }
-                    : null,
+            firstPage: totalItems > 0 ? { href: listPath + createSearch({ ...listQuery, page: 0 }) } : null,
             lastPage:
                 totalItems > 0
                     ? {
                           href:
-                              listPath +
-                              createSearch({ ...listQuery, page: Math.ceil(totalItems / itemsPerPage) - 1 }),
+                              listPath + createSearch({ ...listQuery, page: Math.ceil(totalItems / itemsPerPage) - 1 }),
                       }
                     : null,
             self: { href: listPath + createSearch(listQuery) },
@@ -55,8 +51,7 @@ export const buildListPageLinksJSON = (
             items: itemLinks,
             list: { href: listPath + createSearch(listQueryWithoutPage) },
             next: lastPage ? null : { href: listPath + createSearch({ ...listQuery, page: pageIndex + 1 }) },
-            previous:
-                pageIndex > 0 ? { href: listPath + createSearch({ ...listQuery, page: pageIndex - 1 }) } : null,
+            previous: pageIndex > 0 ? { href: listPath + createSearch({ ...listQuery, page: pageIndex - 1 }) } : null,
             self: { href: listPath + createSearch({ ...listQuery, page: pageIndex }) },
         },
         build,

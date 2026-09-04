@@ -4,15 +4,17 @@ import { ClientBase } from "pg"
 import parseEntityJSONAndEmbed from "./parseEntityJSONAndEmbed"
 import selectEntityJSON from "./selectEntityJSON"
 import { TableName } from "./TableName"
+import type { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 const selectEntityJSONWithEmbedded = async <TEntity extends Entity<TLinks>, TLinks extends Links>(
-    client: ClientBase,
+    service: PgClientService & S3ClientService,
     tableName: TableName,
     uuid: UUID,
     embeds: ReadonlyArray<string & keyof TLinks>,
     detector: FaultDetector<TEntity>,
     typeUserLabel: string,
 ): Promise<string> => {
-    const json = await selectEntityJSON(client, tableName, uuid)
-    return parseEntityJSONAndEmbed<TEntity, TLinks>(client, json, embeds, detector, typeUserLabel)
+    const json = await selectEntityJSON(service, tableName, uuid)
+    return parseEntityJSONAndEmbed<TEntity, TLinks>(service, json, embeds, detector, typeUserLabel)
 }
 export default selectEntityJSONWithEmbedded

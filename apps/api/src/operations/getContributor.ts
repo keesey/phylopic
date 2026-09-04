@@ -9,11 +9,12 @@ import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+import type { S3ClientService } from "../services/S3ClientService"
 export type GetContributorParameters = DataRequestHeaders & Partial<ContributorParameters>
-export type GetContributorService = PgClientService
+export type GetContributorService = PgClientService & S3ClientService
 const USER_MESSAGE = "There was a problem with an attempt to load contributor data."
 export const getContributor: Operation<GetContributorParameters, GetContributorService> = async (
     { accept, ...queryAndPathParameters },
@@ -31,13 +32,7 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
         return createPermanentRedirect(path, queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const client = await service.createPgClient()
-    let body: string
-    try {
-        body = await selectEntityJSON(client, "contributor", normalizedUUID, "contributor")
-    } finally {
-        await service.deletePgClient(client)
-    }
+    const body = await selectEntityJSON(service, "contributor", normalizedUUID, USER_MESSAGE)
     if (body === "null") {
         throw new APIError(404, [
             {

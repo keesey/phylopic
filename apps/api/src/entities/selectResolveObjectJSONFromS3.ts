@@ -4,10 +4,10 @@ import { convertS3BodyToString, isAWSError } from "@phylopic/utils-aws"
 import BUILD from "../build/BUILD"
 import { getResolveJSONKey } from "./getResolveJSONKey"
 
-const client = new S3Client({})
 const ENTITIES_BUCKET = process.env.ENTITIES_BUCKET ?? "entities.phylopic.org"
 
 const selectResolveObjectJSONFromS3 = async (
+    client: S3Client,
     authority: Authority,
     namespace: Namespace,
     objectID: ObjectID,

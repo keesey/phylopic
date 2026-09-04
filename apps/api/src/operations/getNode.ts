@@ -21,11 +21,12 @@ import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import getExternalLink from "../search/getExternalLink"
 import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-import { APIGatewayProxyResult } from "aws-lambda"
+import type { APIGatewayProxyResult } from "aws-lambda"
 export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
-export type GetNodeService = PgClientService
+export type GetNodeService = PgClientService & S3ClientService
 const USER_MESSAGE = "There was a problem with an attempt to load taxonomic data."
 const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParameters<NodeEmbedded> =>
     NODE_EMBEDDED_PARAMETERS.includes(x as any)
@@ -53,7 +54,7 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
     let result: APIGatewayProxyResult
     try {
         body = await selectEntityJSONWithEmbedded<Node, NodeLinks>(
-            client,
+            service,
             "node",
             normalizedUUID,
             embeds,

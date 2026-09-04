@@ -26,12 +26,17 @@ import getResolveObject from "../operations/getResolveObject"
 import postCollection from "../operations/postCollection"
 import getResolveObjects from "../operations/getResolveObjects"
 import { PgClientService } from "../services/PgClientService"
+import S3_CLIENT_SERVICE from "./services/S3_CLIENT_SERVICE"
+import { S3ClientService } from "../services/S3ClientService"
 import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
 import getUUID from "./parameters/getUUID"
 import PG_CLIENT_SERVICE from "./services/PG_CLIENT_SERVICE"
 import { EMPTY_UUID } from "@phylopic/utils"
-const SERVICE: PgClientService = PG_CLIENT_SERVICE
+const SERVICE: PgClientService & S3ClientService = {
+    ...PG_CLIENT_SERVICE,
+    ...S3_CLIENT_SERVICE,
+}
 const CONTRIBUTOR_FILTER_PARAMETERS: ReadonlyArray<keyof ContributorListParameters> = ["filter_collection"]
 const NODE_FILTER_PARAMETERS: ReadonlyArray<keyof NodeListParameters> = ["filter_collection", "filter_name"]
 const IMAGE_FILTER_PARAMETERS: ReadonlyArray<keyof ImageListParameters> = [

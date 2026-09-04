@@ -22,11 +22,12 @@ import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetNodesParameters = DataRequestHeaders & NodeLineageParameters
-export type GetNodesService = PgClientService
+export type GetNodesService = PgClientService & S3ClientService
 const DEFAULT_TITLE = "[Unnamed]"
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list taxonomic groups."
@@ -85,7 +86,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof NodeEmbedded>,
-        client?: ClientBase,
+        service: PgClientService & S3ClientService,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
             return rows.map(({ json, title, uuid }) => [
@@ -97,7 +98,7 @@ const embedListPageRows =
             rows.map(async ({ json, title, uuid }) => {
                 return [
                     { href: `/nodes/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
-                    await parseEntityJSONAndEmbed<Node, NodeLinks>(client, json, embeds, isNode, "taxonomic group"),
+                    await parseEntityJSONAndEmbed<Node, NodeLinks>(service, json, embeds, isNode, "taxonomic group"),
                 ]
             }),
         )

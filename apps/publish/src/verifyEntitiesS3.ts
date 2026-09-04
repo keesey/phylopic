@@ -5,10 +5,7 @@ import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import pg from "pg"
 import { ENTITIES_BUCKET } from "./entities/constants.js"
 import { EntityFolder, getEntityJSONKey } from "./entities/getEntityJSONKey.js"
-import {
-    getDefaultListIndexKey,
-    getLineageIndexKey,
-} from "./entities/getListJSONKey.js"
+import { getDefaultListIndexKey, getLineageIndexKey } from "./entities/getListJSONKey.js"
 import { getResolveJSONKey } from "./entities/getResolveJSONKey.js"
 import { getStaticJSONKey } from "./entities/getStaticJSONKey.js"
 const SAMPLE_SIZE = Number.parseInt(process.env.VERIFY_SAMPLE_SIZE ?? "20", 10)

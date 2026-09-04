@@ -1,10 +1,9 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { convertS3BodyToString, isAWSError } from "@phylopic/utils-aws"
 
-const client = new S3Client({})
 const ENTITIES_BUCKET = process.env.ENTITIES_BUCKET ?? "entities.phylopic.org"
 
-const selectJSONFromS3 = async (key: string): Promise<string | null> => {
+const selectJSONFromS3 = async (client: S3Client, key: string): Promise<string | null> => {
     try {
         const output = await client.send(
             new GetObjectCommand({

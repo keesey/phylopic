@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - List pagination serves `{build}/lists/{name}/index.json` and `{page}.json` from S3 when eligible;
   `embed_items=true` hydrates entity JSON from S3 entity files. Filtered lists, extra embed
   parameters, and missing objects fall back to Postgres.
-- Lineage pagination serves `{build}/lineage/{uuid}/index.json` and `{page}.json` from S3 when
+- Lineage pagination serves `{build}/lineages/{uuid}/index.json` and `{page}.json` from S3 when
   eligible; `embed_items=true` hydrates node entity JSON from S3. Extra embed parameters and missing
   objects fall back to Postgres.
 - `GET /autocomplete` remains on Postgres.

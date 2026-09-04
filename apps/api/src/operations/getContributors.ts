@@ -10,18 +10,19 @@ import { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import { getDefaultListIndexKey, getDefaultListPageKey } from "../entities/getListJSONKey"
+import { getListIndexKey, getListPageKey } from "../entities/getListJSONKey"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
 import { isUnfilteredContributorsList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetContributorsParameters = DataRequestHeaders & ContributorListParameters
-export type GetContributorsService = PgClientService
+export type GetContributorsService = PgClientService & S3ClientService
 const DEFAULT_TITLE = "[Anonymous]"
 const ITEMS_PER_PAGE = 96
 const USER_MESSAGE = "There was a problem with a request to list contributors."
@@ -78,7 +79,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         _embeds: readonly string[],
-        _client?: ClientBase,
+        _service: PgClientService & S3ClientService,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         return rows.map(({ json, title, uuid }) => [
             { href: `/contributors/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
@@ -105,8 +106,8 @@ export const getContributors: Operation<GetContributorsParameters, GetContributo
         listPath: "/contributors",
         service,
         s3List: {
-            getIndexKey: () => getDefaultListIndexKey(BUILD, "contributors"),
-            getPageKey: pageIndex => getDefaultListPageKey(BUILD, "contributors", pageIndex),
+            getIndexKey: () => getListIndexKey(BUILD, "contributors"),
+            getPageKey: pageIndex => getListPageKey(BUILD, "contributors", pageIndex),
             isEligible: listQuery => isUnfilteredContributorsList(listQuery as ContributorListParameters),
         },
         listQuery: queryParameters,

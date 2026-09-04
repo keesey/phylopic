@@ -1,8 +1,4 @@
-import {
-    ContributorListParameters,
-    ImageListParameters,
-    NodeListParameters,
-} from "@phylopic/api-models"
+import { ContributorListParameters, ImageListParameters, NodeListParameters } from "@phylopic/api-models"
 
 const isTruthyFilter = (value: string | number | boolean | undefined) =>
     value !== undefined && value !== "" && value !== false

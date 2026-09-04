@@ -1,10 +1,5 @@
 import { createSearch, compareStrings, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
-import {
-    buildListIndexJSON,
-    buildListPageLinksJSON,
-    ListLinkItem,
-    paginateListItems,
-} from "./buildListJSON.js"
+import { buildListIndexJSON, buildListPageLinksJSON, ListLinkItem, paginateListItems } from "./buildListJSON.js"
 import type { SourceData } from "./getSourceData.js"
 import {
     DefaultListName,
@@ -19,10 +14,8 @@ const LINEAGE_LOG_INTERVAL = 500
 const getContributorCount = (data: SourceData, uuid: UUID): number =>
     [...data.images.values()].filter(({ contributor, unlisted }) => !unlisted && contributor === uuid).length
 
-const compareContributorEntries = (
-    a: Readonly<[UUID, number, string]>,
-    b: Readonly<[UUID, number, string]>,
-) => b[1] - a[1] || compareStrings(a[2], b[2]) || compareStrings(a[0], b[0])
+const compareContributorEntries = (a: Readonly<[UUID, number, string]>, b: Readonly<[UUID, number, string]>) =>
+    b[1] - a[1] || compareStrings(a[2], b[2]) || compareStrings(a[0], b[0])
 
 const getContributorItems = (data: SourceData): readonly ListLinkItem[] =>
     [...data.contributors.entries()]
@@ -177,10 +170,7 @@ export const getLineageJSONUploads = (data: SourceData, uuid: UUID): readonly De
     return uploads
 }
 
-export const queueAllLineageJSONUploads = (
-    data: SourceData,
-    putUpload: (upload: DefaultListJSONUpload) => void,
-) => {
+export const queueAllLineageJSONUploads = (data: SourceData, putUpload: (upload: DefaultListJSONUpload) => void) => {
     const nodeUUIDs = [...data.nodes.keys()]
     nodeUUIDs.forEach((uuid, index) => {
         if (index % LINEAGE_LOG_INTERVAL === 0) {

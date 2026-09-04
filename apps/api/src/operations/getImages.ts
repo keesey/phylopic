@@ -15,7 +15,7 @@ import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import addFilterToQuery from "../entities/image/addFilterToQuery"
-import { getDefaultListIndexKey, getDefaultListPageKey } from "../entities/getListJSONKey"
+import { getListIndexKey, getListPageKey } from "../entities/getListJSONKey"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
@@ -23,11 +23,12 @@ import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
 import { isUnfilteredImagesList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 export type GetImagesParameters = DataRequestHeaders & ImageListParameters
-export type GetImagesService = PgClientService
+export type GetImagesService = PgClientService & S3ClientService
 const DEFAULT_TITLE = "[Untitled]"
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list silhouette images."
@@ -141,7 +142,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof ImageEmbedded>,
-        client?: ClientBase,
+        service: PgClientService & S3ClientService,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
             return rows.map(({ json, title, uuid }) => [
@@ -153,7 +154,13 @@ const embedListPageRows =
             rows.map(async ({ json, title, uuid }) => {
                 return [
                     { href: `/images/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
-                    await parseEntityJSONAndEmbed<Image, ImageLinks>(client, json, embeds, isImage, "silhouette image"),
+                    await parseEntityJSONAndEmbed<Image, ImageLinks>(
+                        service,
+                        json,
+                        embeds,
+                        isImage,
+                        "silhouette image",
+                    ),
                 ]
             }),
         )
@@ -178,8 +185,8 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
         listQuery: queryParameters,
         service,
         s3List: {
-            getIndexKey: () => getDefaultListIndexKey(BUILD, "images"),
-            getPageKey: pageIndex => getDefaultListPageKey(BUILD, "images", pageIndex),
+            getIndexKey: () => getListIndexKey(BUILD, "images"),
+            getPageKey: pageIndex => getListPageKey(BUILD, "images", pageIndex),
             isEligible: listQuery => isUnfilteredImagesList(listQuery as ImageListParameters),
         },
         page: queryParameters.page,

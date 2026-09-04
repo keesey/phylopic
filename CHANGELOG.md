@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `S3.md`: documents `{build}/lists/` and `{build}/lineage/` key layout on `entities.phylopic.org`.
+- `S3.md`: documents `{build}/lists/` and `{build}/lineages/` key layout on `entities.phylopic.org`.
 - `@phylopic/api`: list and lineage `embed_items=true` S3 responses hydrate entity JSON from
   `{build}/{contributors|nodes|images}/{uuid}.json` instead of precomputed `.items.json` pages.
 

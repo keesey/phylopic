@@ -4,9 +4,8 @@ import { UUID } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
 import { TableName } from "./TableName"
 import { getEntityJSONKey } from "./getEntityJSONKey"
-const client = new S3Client({})
 const ENTITIES_BUCKET = process.env.ENTITIES_BUCKET ?? "entities.phylopic.org"
-const selectEntityJSONFromS3 = async (tableName: TableName, uuid: UUID): Promise<string | null> => {
+const selectEntityJSONFromS3 = async (client: S3Client, tableName: TableName, uuid: UUID): Promise<string | null> => {
     try {
         const output = await client.send(
             new GetObjectCommand({

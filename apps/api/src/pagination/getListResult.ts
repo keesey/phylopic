@@ -8,6 +8,7 @@ import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import getListObject from "./getListObject"
 import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
@@ -15,6 +16,7 @@ import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
 import hydrateListPageFromS3 from "./hydrateListPageFromS3"
 import { hasExtraListEmbeds } from "./isS3ListEligible"
 import type { S3ListSource } from "./S3ListSource"
+import withS3Client from "../entities/withS3Client"
 export type ListPageRow = Readonly<{
     json: string
     title: string | null
@@ -24,7 +26,7 @@ export interface Parameters<TEmbedded = Record<string, never>> {
     embedListPageRows: (
         rows: readonly ListPageRow[],
         embed: ReadonlyArray<string & keyof TEmbedded>,
-        client?: ClientBase,
+        service: PgClientService & S3ClientService,
     ) => Promise<readonly Readonly<[TitledLink, string]>[]>
     fetchListPageRows: (client: ClientBase, offset: number, limit: number) => Promise<readonly ListPageRow[]>
     getItemLinks: (client: ClientBase, offset: number, limit: number) => Promise<readonly TitledLink[]>
@@ -33,7 +35,7 @@ export interface Parameters<TEmbedded = Record<string, never>> {
     listPath: string
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>
     page?: string
-    service: PgClientService
+    service: PgClientService & S3ClientService
     s3List?: S3ListSource
     userMessage?: string
     validEmbeds: ReadonlyArray<string & keyof TEmbedded>
@@ -57,13 +59,10 @@ const getListResult = async <TEmbedded = Record<string, never>>({
     validEmbeds,
 }: Parameters<TEmbedded>) => {
     let result: APIGatewayProxyResult
-    const tryS3List =
-        ENTITY_JSON_SOURCE !== "postgres" && s3List?.isEligible(listQuery)
-            ? s3List
-            : undefined
+    const tryS3List = ENTITY_JSON_SOURCE !== "postgres" && s3List?.isEligible(listQuery) ? s3List : undefined
     if (!page) {
         if (tryS3List) {
-            const body = await selectJSONFromS3(tryS3List.getIndexKey())
+            const body = await withS3Client(service, client => selectJSONFromS3(client, tryS3List.getIndexKey()))
             if (body !== null) {
                 return {
                     ...OK_RESULT,
@@ -108,6 +107,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 .filter(isValidEmbed)
             if (tryS3List && !hasExtraListEmbeds(listQuery, validEmbeds) && embeds.length === 0) {
                 const hydrated = await hydrateListPageFromS3(
+                    service,
                     tryS3List.getPageKey,
                     listPath,
                     listQuery,
@@ -128,14 +128,12 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 }
             }
             const client = await service.createPgClient()
-            let pgReleased = false
             try {
                 const rows = await fetchListPageRows(client, pageIndex * itemsPerPage, itemsPerPage + 1)
                 if (ENTITY_JSON_SOURCE === "s3") {
                     await service.deletePgClient(client)
-                    pgReleased = true
                 }
-                const rawItems = await embedListPageRows(rows, embeds, pgReleased ? undefined : client)
+                const rawItems = await embedListPageRows(rows, embeds, service)
                 if (rawItems.length === 0) {
                     throw create404()
                 }
@@ -155,13 +153,15 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                     ),
                 }
             } finally {
-                if (!pgReleased) {
+                if (ENTITY_JSON_SOURCE !== "s3") {
                     await service.deletePgClient(client)
                 }
             }
         } else {
             if (tryS3List) {
-                const body = await selectJSONFromS3(tryS3List.getPageKey(pageIndex))
+                const body = await withS3Client(service, client =>
+                    selectJSONFromS3(client, tryS3List.getPageKey(pageIndex)),
+                )
                 if (body !== null) {
                     return {
                         ...OK_RESULT,

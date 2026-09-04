@@ -15,20 +15,20 @@ project environment variables.
 
 #### Required
 
-| Variable                               | Purpose                                          | How it is read                         |
-| -------------------------------------- | ------------------------------------------------ | -------------------------------------- |
-| `AWS_ROLE_ARN`                         | IAM role for Vercel OIDC (production deploy)     | `process.env`, server-side only        |
-| `KV_REST_API_URL`                      | Upstash Redis REST URL for fundraiser state           | `process.env`, server-side only        |
-| `KV_REST_API_READ_ONLY_TOKEN`          | Read-only token for `GET /api/fundraiser`             | `process.env`, server-side only        |
-| `KV_REST_API_TOKEN`                    | Read-write token for `POST /api/fundraiser/paypal`    | `process.env`, server-side only        |
-| `NEXT_PUBLIC_API_URL`                  | Root URL of the _PhyloPic_ API                   | `process.env`, inlined into the bundle |
-| `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | Contributor who is also the site's contact point | `process.env`, inlined into the bundle |
-| `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of _PhyloPic: Contribute_               | `process.env`, inlined into the bundle |
-| `NEXT_PUBLIC_ROOT_UUID`                | UUID of the root phylogenetic node               | `process.env`, inlined into the bundle |
-| `NEXT_PUBLIC_WWW_URL`                  | Root URL of this site                            | `process.env`, inlined into the bundle |
-| `S3_ACCESS_KEY_ID`                     | Access key for the permalinks bucket (local dev) | `process.env`, server-side only        |
-| `S3_REGION`                            | Region of the permalinks bucket                  | `process.env`, server-side only        |
-| `S3_SECRET_ACCESS_KEY`                 | Secret key for the permalinks bucket (local dev) | `process.env`, server-side only        |
+| Variable                               | Purpose                                            | How it is read                         |
+| -------------------------------------- | -------------------------------------------------- | -------------------------------------- |
+| `AWS_ROLE_ARN`                         | IAM role for Vercel OIDC (production deploy)       | `process.env`, server-side only        |
+| `KV_REST_API_URL`                      | Upstash Redis REST URL for fundraiser state        | `process.env`, server-side only        |
+| `KV_REST_API_READ_ONLY_TOKEN`          | Read-only token for `GET /api/fundraiser`          | `process.env`, server-side only        |
+| `KV_REST_API_TOKEN`                    | Read-write token for `POST /api/fundraiser/paypal` | `process.env`, server-side only        |
+| `NEXT_PUBLIC_API_URL`                  | Root URL of the _PhyloPic_ API                     | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_CONTACT_CONTRIBUTOR_UUID` | Contributor who is also the site's contact point   | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of _PhyloPic: Contribute_                 | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_ROOT_UUID`                | UUID of the root phylogenetic node                 | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_WWW_URL`                  | Root URL of this site                              | `process.env`, inlined into the bundle |
+| `S3_ACCESS_KEY_ID`                     | Access key for the permalinks bucket (local dev)   | `process.env`, server-side only        |
+| `S3_REGION`                            | Region of the permalinks bucket                    | `process.env`, server-side only        |
+| `S3_SECRET_ACCESS_KEY`                 | Secret key for the permalinks bucket (local dev)   | `process.env`, server-side only        |
 
 The `S3_*` trio is only needed for permalinks locally; on Vercel use `AWS_ROLE_ARN` instead
 (see [`aws/README.md`](../../aws/README.md)). Everything else in the site runs without S3 access.

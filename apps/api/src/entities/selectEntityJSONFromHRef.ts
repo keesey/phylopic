@@ -1,12 +1,13 @@
-import { ClientBase } from "pg"
+import type { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 import selectEntityJSON from "./selectEntityJSON"
-const selectEntityJSONFromHRef = async (client: ClientBase | undefined, href: string): Promise<string> => {
+const selectEntityJSONFromHRef = async (service: PgClientService & S3ClientService, href: string): Promise<string> => {
     const tableAndUUID = getTableAndUUIDFromHRef(href)
     if (!tableAndUUID) {
         return "null"
     }
     const [table, uuid] = tableAndUUID
-    return await selectEntityJSON(client, table, uuid)
+    return await selectEntityJSON(service, table, uuid)
 }
 export default selectEntityJSONFromHRef

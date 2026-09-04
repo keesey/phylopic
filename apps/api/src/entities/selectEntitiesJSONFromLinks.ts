@@ -1,12 +1,16 @@
 import { Link } from "@phylopic/api-models"
 import { isDefined, UUID } from "@phylopic/utils"
-import { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
+import type { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import ENTITY_JSON_SOURCE from "./ENTITY_JSON_SOURCE"
 import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
 import selectEntityJSON from "./selectEntityJSON"
-const selectEntitiesJSONFromLinks = async (client: ClientBase | undefined, links: readonly Link[]): Promise<string> => {
+const selectEntitiesJSONFromLinks = async (
+    service: PgClientService & S3ClientService,
+    links: readonly Link[],
+): Promise<string> => {
     if (!links.length) {
         return "[]"
     }
@@ -21,7 +25,7 @@ const selectEntitiesJSONFromLinks = async (client: ClientBase | undefined, links
     }
     const uuids = tablesAndUUIDs.map(([, uuid]) => uuid)
     if (ENTITY_JSON_SOURCE !== "postgres") {
-        const jsonList = await Promise.all(uuids.map(uuid => selectEntityJSON(client, table, uuid)))
+        const jsonList = await Promise.all(uuids.map(uuid => selectEntityJSON(service, table, uuid)))
         return `[${jsonList.join(",")}]`
     }
     const builder = new QueryConfigBuilder(`SELECT json,uuid FROM ${table} WHERE build=$::bigint AND (`, [BUILD])
@@ -32,8 +36,13 @@ const selectEntitiesJSONFromLinks = async (client: ClientBase | undefined, links
         builder.add("uuid=$::uuid", [uuid])
     })
     builder.add(") LIMIT $::bigint", [limit])
-    const response = await client!.query<{ json: string; uuid: UUID }>(builder.build())
-    const jsonList = uuids.map(uuid => response.rows.find(row => row.uuid === uuid)?.json ?? "null")
-    return `[${jsonList.join(",")}]`
+    const pgClient = await service.createPgClient()
+    try {
+        const response = await pgClient.query<{ json: string; uuid: UUID }>(builder.build())
+        const jsonList = uuids.map(uuid => response.rows.find(row => row.uuid === uuid)?.json ?? "null")
+        return `[${jsonList.join(",")}]`
+    } finally {
+        await service.deletePgClient(pgClient)
+    }
 }
 export default selectEntitiesJSONFromLinks

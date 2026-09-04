@@ -13,11 +13,12 @@ import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
 export type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
-export type GetResolveObjectsService = PgClientService
+export type GetResolveObjectsService = PgClientService & S3ClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 
@@ -54,7 +55,7 @@ const selectResolveLinkJSONFromPostgres = async (
 }
 
 const selectResolveLinkJSON = async (
-    service: PgClientService,
+    service: PgClientService & S3ClientService,
     authority: Authority,
     namespace: Namespace,
     objectIDs: readonly ObjectID[],
@@ -82,7 +83,7 @@ const selectResolveLinkJSON = async (
     }
     if (ENTITY_JSON_SOURCE !== "postgres") {
         for (const objectID of objectIDs) {
-            const body = await selectResolveObjectJSON(authority, namespace, objectID)
+            const body = await selectResolveObjectJSON(service, authority, namespace, objectID)
             if (body !== null) {
                 return mergeResolveLinkQuery(body, queryParameters)
             }

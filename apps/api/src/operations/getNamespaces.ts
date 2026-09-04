@@ -9,10 +9,11 @@ import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import { Operation } from "./Operation"
 
 export type GetNamespaceParameters = DataRequestHeaders & DataParameters
-export type GetNamespacesService = PgClientService
+export type GetNamespacesService = PgClientService & S3ClientService
 
 const USER_MESSAGE = "There was a problem with a request for namespace data."
 
@@ -38,7 +39,7 @@ export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesServi
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
     if (ENTITY_JSON_SOURCE !== "postgres") {
-        const body = await selectNamespacesJSON()
+        const body = await selectNamespacesJSON(service)
         if (body !== null) {
             return {
                 body,

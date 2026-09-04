@@ -55,8 +55,8 @@ const FundraiserBanner: FC = () => {
                 <>
                     <p className={styles.title}>We did it!</p>
                     <p className={styles.message}>
-                        Thanks to everyone who contributed, we raised {formatDollars(goalCents)} to cover <SiteTitle/>&rsquo;s
-                        hosting costs.
+                        Thanks to everyone who contributed, we raised {formatDollars(goalCents)} to cover <SiteTitle />
+                        &rsquo;s hosting costs.
                     </p>
                     <p className={styles.message}>
                         <span className={styles.cta}>Click here to donate more!</span>
@@ -64,7 +64,9 @@ const FundraiserBanner: FC = () => {
                 </>
             ) : (
                 <>
-                    <p className={styles.title}><SiteTitle/> {monthName} Fundraiser</p>
+                    <p className={styles.title}>
+                        <SiteTitle /> {monthName} Fundraiser
+                    </p>
                     <div
                         aria-label="Fundraising progress"
                         aria-valuemax={goalCents}
@@ -81,7 +83,8 @@ const FundraiserBanner: FC = () => {
                     <p className={styles.message}>
                         <>
                             We&rsquo;ve raised {formatDollars(raisedCents)} of {formatDollars(goalCents)} to cover
-                            hosting costs for the past six months. <span className={styles.cta}>Click here to help us reach the goal!</span>
+                            hosting costs for the past six months.{" "}
+                            <span className={styles.cta}>Click here to help us reach the goal!</span>
                         </>
                     </p>
                 </>
