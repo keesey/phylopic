@@ -1,16 +1,16 @@
 import { S3Client } from "@aws-sdk/client-s3"
+import { getEntityJSONKey } from "@phylopic/s3-entities"
 import BUILD from "../build/BUILD"
-import { getEntityJSONKey } from "./getEntityJSONKey"
-import getTableAndUUIDFromHRef from "./getTableAndUUIDFromHRef"
+import getEntityFolderAndUUIDFromHRef from "./getEntityFolderAndUUIDFromHRef"
 import selectJSONFromS3Entities from "./selectJSONFromS3Entities"
 
 const selectEntityJSONFromHRef = async (client: S3Client, href: string): Promise<string> => {
-    const tableAndUUID = getTableAndUUIDFromHRef(href)
-    if (!tableAndUUID) {
+    const folderAndUUID = getEntityFolderAndUUIDFromHRef(href)
+    if (!folderAndUUID) {
         return "null"
     }
-    const [table, uuid] = tableAndUUID
-    return (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, table, uuid))) ?? "null"
+    const [folder, uuid] = folderAndUUID
+    return (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, folder, uuid))) ?? "null"
 }
 
 export default selectEntityJSONFromHRef

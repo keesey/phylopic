@@ -12,6 +12,7 @@
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
         "@phylopic/s3-entities": "*",
+        "@phylopic/source-models": "*",
         "jsonwebtoken": "^9.0.3",
         "lodash": "^4.17.21",
         "pg": "^8.22.0"
