@@ -21,7 +21,9 @@ const selectEntitiesJSONFromLinks = async (client: S3Client, links: readonly Lin
     }
     const uuids = foldersAndUUIDs.map(([, uuid]) => uuid)
     const jsonList = await Promise.all(
-        uuids.map(async uuid => (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, folder, uuid))) ?? "null"),
+        uuids.map(
+            async uuid => (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, folder, uuid))) ?? "null",
+        ),
     )
     return `[${jsonList.join(",")}]`
 }

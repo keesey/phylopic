@@ -56,7 +56,7 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
     const body = await withS3Client(service, client =>
         selectEntityJSONWithEmbedded<Node, NodeLinks>(
             client,
-            "node",
+            "nodes",
             normalizedUUID,
             embeds,
             isNode,

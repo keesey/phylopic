@@ -3,7 +3,6 @@ import { normalizeUUID } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import BUILD from "../build/BUILD"
-import { getEntityJSONKey } from "../entities/getEntityJSONKey"
 import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
@@ -15,6 +14,7 @@ import type { S3ClientService } from "../services/S3ClientService"
 import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+import { getEntityJSONKey } from "@phylopic/s3-entities"
 export type GetContributorParameters = DataRequestHeaders & Partial<ContributorParameters>
 export type GetContributorService = S3ClientService
 const USER_MESSAGE = "There was a problem with an attempt to load contributor data."
@@ -37,7 +37,7 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
     const body = await withS3Client(
         service,
         async client =>
-            (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, "contributor", normalizedUUID))) ?? "null",
+            (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, "contributors", normalizedUUID))) ?? "null",
     )
     if (body === "null") {
         throw new APIError(404, [

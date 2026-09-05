@@ -50,7 +50,7 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
     const body = await withS3Client(service, client =>
         selectEntityJSONWithEmbedded<Image, ImageLinks>(
             client,
-            "image",
+            "images",
             normalizedUUID,
             embeds,
             isImage,
