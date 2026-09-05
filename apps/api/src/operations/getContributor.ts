@@ -2,7 +2,9 @@ import { ContributorParameters, DATA_MEDIA_TYPE, isContributorParameters } from 
 import { normalizeUUID } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import selectEntityJSON from "../entities/selectEntityJSON"
+import BUILD from "../build/BUILD"
+import { getEntityJSONKey } from "../entities/getEntityJSONKey"
+import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
@@ -32,7 +34,11 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
         return createPermanentRedirect(path, queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const body = await withS3Client(service, client => selectEntityJSON(client, "contributor", normalizedUUID))
+    const body = await withS3Client(
+        service,
+        async client =>
+            (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, "contributor", normalizedUUID))) ?? "null",
+    )
     if (body === "null") {
         throw new APIError(404, [
             {

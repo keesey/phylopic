@@ -3,7 +3,8 @@ import { Authority, Namespace, ObjectID, stringifyNormalized } from "@phylopic/u
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
-import selectResolveObjectJSON from "../entities/selectResolveObjectJSON"
+import { getResolveJSONKey } from "@phylopic/s3-entities"
+import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
@@ -69,7 +70,9 @@ const selectResolveLinkJSON = async (
     objectID: ObjectID,
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
 ): Promise<string> => {
-    const body = await withS3Client(service, client => selectResolveObjectJSON(client, authority, namespace, objectID))
+    const body = await withS3Client(service, client =>
+        selectJSONFromS3Entities(client, getResolveJSONKey(BUILD, authority, namespace, objectID)),
+    )
     if (body !== null) {
         return mergeResolveLinkQuery(body, queryParameters)
     }

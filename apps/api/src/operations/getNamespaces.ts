@@ -2,7 +2,9 @@ import { AuthorizedNamespace, DataParameters, DATA_MEDIA_TYPE } from "@phylopic/
 import { stringifyNormalized } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import selectNamespacesJSON from "../entities/selectNamespacesJSON"
+import { getStaticJSONKey } from "@phylopic/s3-entities"
+import BUILD from "../build/BUILD"
+import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
@@ -35,7 +37,9 @@ export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesServi
         return createBuildRedirect("/namespaces", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const body = await withS3Client(service, client => selectNamespacesJSON(client))
+    const body = await withS3Client(service, client =>
+        selectJSONFromS3Entities(client, getStaticJSONKey(BUILD, "namespaces")),
+    )
     if (body !== null) {
         return {
             body,

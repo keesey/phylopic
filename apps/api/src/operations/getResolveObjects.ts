@@ -4,7 +4,8 @@ import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import selectResolveObjectJSON from "../entities/selectResolveObjectJSON"
+import { getResolveJSONKey } from "@phylopic/s3-entities"
+import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
@@ -80,7 +81,10 @@ const selectResolveLinkJSON = async (
     }
     const s3Body = await withS3Client(service, async client => {
         for (const objectID of objectIDs) {
-            const body = await selectResolveObjectJSON(client, authority, namespace, objectID)
+            const body = await selectJSONFromS3Entities(
+                client,
+                getResolveJSONKey(BUILD, authority, namespace, objectID),
+            )
             if (body !== null) {
                 return mergeResolveLinkQuery(body, queryParameters)
             }
