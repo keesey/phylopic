@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Lineage and resolve key helpers remain exported but are no longer written by `@phylopic/publish` or
+  read by `@phylopic/api`.
+
 ### Deprecated
 
 ### Fixed
