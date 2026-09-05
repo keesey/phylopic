@@ -27,6 +27,7 @@ import {
 import getImageJSON from "./getImageJSON.js"
 import getNodeJSON from "./getNodeJSON.js"
 import type { SourceData } from "./getSourceData.js"
+import { getEntityJSONKey } from "@phylopic/s3-entities"
 const MINIMUM_SEARCH_TEXT_LENGTH = 2
 interface NodeQueryConfigs {
     readonly externals: QueryConfig
@@ -204,11 +205,7 @@ const compareContributorEntries = (
     a: Readonly<[UUID, Contributor, number]>,
     b: Readonly<[UUID, Contributor, number]>,
 ) => b[2] - a[2] || compareStrings(a[1].created, b[1].created) || compareStrings(a[0], b[0])
-const insertContributors = async (
-    client: ClientBase,
-    data: SourceData,
-    isDryRun = false,
-) => {
+const insertContributors = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Adding contributor data to entities database...")
     const contributors = [...data.contributors.entries()]
         .map(
@@ -247,11 +244,7 @@ const insertContributors = async (
     }
     console.info("Added contributor data to entities database.")
 }
-const insertContributorsAndImages = async (
-    client: ClientBase,
-    data: SourceData,
-    isDryRun = false,
-) => {
+const insertContributorsAndImages = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     await insertContributors(client, data, isDryRun)
     await insertImages(client, data, isDryRun)
 }
@@ -280,48 +273,108 @@ const insertIllustrations = async (client: ClientBase, data: SourceData, isDryRu
     }
     console.info("Added image-node assigments to entities database.")
 }
-const writeEntityJSON = (data: SourceData, s3Writer: EntityS3Writer) => {
-    console.info("Staging list, lineage, resolve, and namespace JSON (parallel with database)...")
-    s3Writer.putStatic(
-        "namespaces",
-        stringifyNormalized({
-            build: data.build,
-            namespaces: getAuthorizedNamespaces(data),
-        }),
-    )
-    for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
-        s3Writer.putResolve(authority, namespace, objectID, body)
-    }
-    console.info("Queued resolve object JSON for local staging.")
-    for (const upload of getContributorListJSONUploads(data)) {
-        s3Writer.put(upload.key, upload.body)
-    }
-    console.info("Queued contributor list JSON for local staging.")
-    for (const upload of getNodeListJSONUploads(data)) {
-        s3Writer.put(upload.key, upload.body)
-    }
-    console.info("Queued node list JSON for local staging.")
-    for (const upload of getImageListJSONUploads(data)) {
-        s3Writer.put(upload.key, upload.body)
-    }
-    console.info("Queued image list JSON for local staging.")
-    queueAllLineageJSONUploads(data, upload => s3Writer.put(upload.key, upload.body))
-    console.info("Queued node lineage JSON for local staging.")
+const queueForBucket = async (label: string, promise: Promise<void>) => {
+    console.info(`Queueing ${label} for bucket...`)
+    await promise
+    console.info(`Queued ${label} for bucket.`)
+}
+const writeEntityJSON = async (data: SourceData, s3Writer: EntityS3Writer) => {
+    console.info("Queueing bucket entities...")
+    await Promise.all([
+        queueForBucket(
+            "namespaces object",
+            s3Writer.putStatic(
+                "namespaces",
+                stringifyNormalized({
+                    build: data.build,
+                    namespaces: getAuthorizedNamespaces(data),
+                }),
+            ),
+        ),
+        queueForBucket(
+            "contributor objects",
+            (async () => {
+                for (const uuid of data.contributors.keys()) {
+                    await s3Writer.put(
+                        getEntityJSONKey(data.build, "contributors", uuid),
+                        JSON.stringify(getContributorJSON(uuid, data, getContributorCount(data, uuid))),
+                    )
+                }
+            })(),
+        ),
+        queueForBucket(
+            "image objects",
+            (async () => {
+                for (const uuid of data.images.keys()) {
+                    await s3Writer.put(
+                        getEntityJSONKey(data.build, "images", uuid),
+                        JSON.stringify(getImageJSON(uuid, data)),
+                    )
+                }
+            })(),
+        ),
+        queueForBucket(
+            "node objects",
+            (async () => {
+                for (const uuid of data.nodes.keys()) {
+                    await s3Writer.put(
+                        getEntityJSONKey(data.build, "nodes", uuid),
+                        JSON.stringify(getNodeJSON(uuid, data)),
+                    )
+                }
+            })(),
+        ),
+        queueForBucket(
+            "resolve objects",
+            (async () => {
+                for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
+                    await s3Writer.putResolve(authority, namespace, objectID, body)
+                }
+            })(),
+        ),
+        queueForBucket(
+            "contributor lists",
+            (async () => {
+                for (const upload of getContributorListJSONUploads(data)) {
+                    await s3Writer.put(upload.key, upload.body)
+                }
+            })(),
+        ),
+        queueForBucket(
+            "node lists",
+            (async () => {
+                for (const upload of getNodeListJSONUploads(data)) {
+                    await s3Writer.put(upload.key, upload.body)
+                }
+            })(),
+        ),
+        queueForBucket(
+            "image lists",
+            (async () => {
+                for (const upload of getImageListJSONUploads(data)) {
+                    await s3Writer.put(upload.key, upload.body)
+                }
+            })(),
+        ),
+        queueForBucket(
+            "lineage lists",
+            queueAllLineageJSONUploads(data, upload => s3Writer.put(upload.key, upload.body)),
+        ),
+    ])
+    console.info("Queueing bucket entities.")
 }
 
 const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = false) => {
-    console.info("Updating entities database...")
-    const s3Writer = isDryRun ? undefined : new EntityS3Writer(data.build)
     // Clean anything from an aborted build.
+    console.info("Cleaning old builds...")
+    cleanEntitiesStaging(data.build)
     if (!isDryRun) {
-        cleanEntitiesStaging(data.build)
-        await Promise.all([
-            cleanTables(client, data.build, "="),
-            cleanEntitiesS3(data.build, "="),
-        ])
+        await Promise.all([cleanTables(client, data.build, "="), cleanEntitiesS3(data.build, "=")])
     }
+    console.info("Cleaned old builds.")
     await Promise.all([
         (async () => {
+            console.info("Updating entities database...")
             await client.query("BEGIN")
             await Promise.all([
                 insertContributorsAndImages(client, data, isDryRun),
@@ -329,13 +382,15 @@ const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = f
             ])
             await insertIllustrations(client, data, isDryRun)
             await client.query(isDryRun ? "ROLLBACK" : "COMMIT")
-            console.info("Updated entities database.")
+            console.info(isDryRun ? "Skipped update of entities database (dry run)." : "Updated entities database.")
         })(),
-        s3Writer ? (async () => {
-            writeEntityJSON(data, s3Writer)
+        (async () => {
+            const s3Writer = new EntityS3Writer(data.build)
+            await writeEntityJSON(data, s3Writer)
+            console.info("Staging bucket locally...")
             await s3Writer.flush()
-            console.info("Staged entity JSON locally.")
-        })() : Promise.resolve(),
+            console.info("Staged bucket locally.")
+        })(),
     ])
 }
 export default insertEntities

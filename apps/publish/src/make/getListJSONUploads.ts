@@ -3,8 +3,6 @@ import { buildListIndexJSON, buildListPageLinksJSON, ListLinkItem, paginateListI
 import type { SourceData } from "./getSourceData.js"
 import { ListName, getListIndexKey, getListPageKey, getLineageIndexKey, getLineagePageKey } from "@phylopic/s3-entities"
 
-const LINEAGE_LOG_INTERVAL = 500
-
 const getContributorCount = (data: SourceData, uuid: UUID): number =>
     [...data.images.values()].filter(({ contributor, unlisted }) => !unlisted && contributor === uuid).length
 
@@ -164,14 +162,13 @@ export const getLineageJSONUploads = (data: SourceData, uuid: UUID): readonly Li
     return uploads
 }
 
-export const queueAllLineageJSONUploads = (data: SourceData, putUpload: (upload: ListJSONUpload) => void) => {
-    const nodeUUIDs = [...data.nodes.keys()]
-    nodeUUIDs.forEach((uuid, index) => {
-        if (index % LINEAGE_LOG_INTERVAL === 0) {
-            console.info(`Building lineage JSON ${index}/${nodeUUIDs.length}...`)
-        }
+export const queueAllLineageJSONUploads = async (
+    data: SourceData,
+    putUpload: (upload: ListJSONUpload) => Promise<void>,
+) => {
+    for (const uuid of data.nodes.keys()) {
         for (const upload of getLineageJSONUploads(data, uuid)) {
-            putUpload(upload)
+            await putUpload(upload)
         }
-    })
+    }
 }

@@ -8,7 +8,7 @@ import uploadEntities from "./uploadEntities.js"
     try {
         const isDryRun = process.argv.includes("--dry-run")
         if (isDryRun) {
-            console.info("DRY RUN: No changes will be made to the database.")
+            console.info("DRY RUN: No changes will be made to the database or buckets.")
         }
         const build = (await getBuild()) + 1
         console.info("Inserting entities for build:", build)
@@ -16,9 +16,7 @@ import uploadEntities from "./uploadEntities.js"
         const sourceData = await getSourceData({ build })
         console.info("Loaded source data.")
         await (async () => {
-            const client = new pg.Client({
-                database: "phylopic-entities",
-            })
+            const client = new pg.Client({ database: "phylopic-entities" })
             try {
                 await client.connect()
                 await insertEntities(client, sourceData, isDryRun)
