@@ -23,11 +23,16 @@ import type { S3ClientService } from "../services/S3ClientService"
 import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+
 export type GetImageParameters = DataRequestHeaders & Partial<EntityParameters<ImageEmbedded>>
+
 export type GetImageService = S3ClientService
+
 const USER_MESSAGE = "There was a problem with an attempt to load silhouette data."
+
 const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParameters<ImageEmbedded> =>
     IMAGE_EMBEDDED_PARAMETERS.includes(x as any)
+
 export const getImage: Operation<GetImageParameters, GetImageService> = async (
     { accept, ...queryAndPathParameters },
     service: GetImageService,
@@ -73,4 +78,5 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
         statusCode: 200,
     }
 }
+
 export default getImage

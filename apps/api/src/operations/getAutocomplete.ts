@@ -13,8 +13,11 @@ import normalizeSearchQuery from "../search/normalizeSearchQuery"
 import { PgClientService } from "../services/PgClientService"
 import withPgClient from "../services/withPgClient"
 import { Operation } from "./Operation"
+
 type GetAutocompleteParameters = DataRequestHeaders & Partial<SearchParameters>
+
 type GetAutocompleteService = PgClientService
+
 const findMatches = async (service: PgClientService, query: string): Promise<readonly string[]> => {
     if (query.length < 2) {
         return []
@@ -27,6 +30,7 @@ const findMatches = async (service: PgClientService, query: string): Promise<rea
         return queryResult.rows.map(({ normalized }) => normalized)
     })
 }
+
 export const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocompleteService> = async (
     { accept, build, query },
     service,
@@ -55,4 +59,5 @@ export const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocomple
         statusCode: 200,
     }
 }
+
 export default getAutocomplete

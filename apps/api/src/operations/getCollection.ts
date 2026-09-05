@@ -9,9 +9,13 @@ import { PgClientService } from "../services/PgClientService"
 import withPgClient from "../services/withPgClient"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+
 const USER_MESSAGE = "There was a problem with an attempt to load a collection."
+
 export type GetCollectionParameters = DataRequestHeaders & Partial<CollectionParameters>
+
 export type GetCollectionService = PgClientService
+
 const ensureExistence = async (service: PgClientService, uuid: string) => {
     if (uuid !== EMPTY_UUID) {
         await withPgClient(service, async client => {
@@ -32,6 +36,7 @@ const ensureExistence = async (service: PgClientService, uuid: string) => {
         })
     }
 }
+
 export const getCollection: Operation<GetCollectionParameters, GetCollectionService> = async (
     { accept, ...queryAndPathParameters },
     service,
@@ -60,4 +65,5 @@ export const getCollection: Operation<GetCollectionParameters, GetCollectionServ
     // Unreachable.
     throw new Error()
 }
+
 export default getCollection

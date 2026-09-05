@@ -28,9 +28,11 @@ import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
 export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
+
 export type GetNodeService = S3ClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to load taxonomic data."
+
 const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParameters<NodeEmbedded> =>
     NODE_EMBEDDED_PARAMETERS.includes(x as any)
 

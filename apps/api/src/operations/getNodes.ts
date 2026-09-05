@@ -28,11 +28,17 @@ import { S3Client } from "@aws-sdk/client-s3"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+
 export type GetNodesParameters = DataRequestHeaders & NodeListParameters
+
 export type GetNodesService = PgClientService & S3ClientService
+
 const DEFAULT_TITLE = "[Unnamed]"
+
 const ITEMS_PER_PAGE = 48
+
 const USER_MESSAGE = "There was a problem with a request to list taxonomic groups."
+
 const getQueryBuilder = (parameters: NodeListParameters, results: "total" | "href" | "json") => {
     const builder = new QueryConfigBuilder()
     const selection =
@@ -71,11 +77,13 @@ SELECT ${selection} FROM node_name
     }
     return builder
 }
+
 const getTotalItems = (parameters: NodeListParameters) => async (client: ClientBase) => {
     const query = getQueryBuilder(parameters, "total").build()
     const queryResult = await client.query<{ total: string }>(query)
     return parseInt(queryResult.rows[0].total, 10) || 0
 }
+
 const getItemLinks =
     (parameters: NodeListParameters) =>
     async (client: ClientBase, offset: number, limit: number): Promise<readonly TitledLink[]> => {
@@ -87,6 +95,7 @@ const getItemLinks =
             title: title || DEFAULT_TITLE,
         }))
     }
+
 const fetchListPageRows =
     (parameters: NodeListParameters) =>
     async (client: ClientBase, offset: number, limit: number): Promise<readonly ListPageRow[]> => {
@@ -95,6 +104,7 @@ const fetchListPageRows =
         const queryResult = await client.query<{ json: string; title: string | null; uuid: UUID }>(queryBuilder.build())
         return queryResult.rows
     }
+
 const embedListPageRows =
     (parameters: NodeListParameters) =>
     async (
@@ -117,6 +127,18 @@ const embedListPageRows =
             }),
         )
     }
+
+const isEligible = (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
+    isUnfilteredNodesList(listQuery as NodeListParameters)
+
+const S3_LIST = {
+    getIndexKey: () => getListIndexKey(BUILD, "nodes"),
+    getPageKey: (pageIndex: number) => getListPageKey(BUILD, "nodes", pageIndex),
+    isEligible,
+}
+
+const VALID_EMBEDS = ["childNodes", "parentNode", "primaryImage"] as const
+
 export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
     { accept, ...queryParameters },
     service,
@@ -127,26 +149,19 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
         return createBuildRedirect("/nodes", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const validEmbeds = ["childNodes", "parentNode", "primaryImage"] as const
-    const s3List = {
-        getIndexKey: () => getListIndexKey(BUILD, "nodes"),
-        getPageKey: (pageIndex: number) => getListPageKey(BUILD, "nodes", pageIndex),
-        isEligible: (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
-            isUnfilteredNodesList(listQuery as NodeListParameters),
-    }
     const listParameters = {
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/nodes",
         listQuery: queryParameters,
         page: queryParameters.page,
         userMessage: USER_MESSAGE,
-        validEmbeds,
+        validEmbeds: VALID_EMBEDS,
     }
-    if (canServeListFromS3(queryParameters, s3List.isEligible, validEmbeds)) {
+    if (canServeListFromS3(queryParameters, isEligible, VALID_EMBEDS)) {
         return await getListResult({
             ...listParameters,
             service,
-            s3List,
+            s3List: S3_LIST,
         })
     }
     return await getPostgresListResult({

@@ -161,6 +161,14 @@ const embedListPageRows =
             }),
         )
     }
+const isEligible = (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
+    isUnfilteredImagesList(listQuery as ImageListParameters)
+const S3_LIST = {
+    getIndexKey: () => getListIndexKey(BUILD, "images"),
+    getPageKey: (pageIndex: number) => getListPageKey(BUILD, "images", pageIndex),
+    isEligible,
+}
+const VALID_EMBEDS = ["contributor", "generalNode", "nodes", "specificNode"] as const
 export const getImages: Operation<GetImagesParameters, GetImagesService> = async (
     { accept, ...queryParameters },
     service,
@@ -171,26 +179,19 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
         return createBuildRedirect("/images", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const validEmbeds = ["contributor", "generalNode", "nodes", "specificNode"] as const
-    const s3List = {
-        getIndexKey: () => getListIndexKey(BUILD, "images"),
-        getPageKey: (pageIndex: number) => getListPageKey(BUILD, "images", pageIndex),
-        isEligible: (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
-            isUnfilteredImagesList(listQuery as ImageListParameters),
-    }
     const listParameters = {
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/images",
         listQuery: queryParameters,
         page: queryParameters.page,
         userMessage: USER_MESSAGE,
-        validEmbeds,
+        validEmbeds: VALID_EMBEDS,
     }
-    if (canServeListFromS3(queryParameters, s3List.isEligible, validEmbeds)) {
+    if (canServeListFromS3(queryParameters, isEligible, VALID_EMBEDS)) {
         return await getListResult({
             ...listParameters,
             service,
-            s3List,
+            s3List: S3_LIST,
         })
     }
     return await getPostgresListResult({

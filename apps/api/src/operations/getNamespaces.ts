@@ -14,6 +14,7 @@ import withS3Client from "../services/withS3Client"
 import { Operation } from "./Operation"
 
 export type GetNamespaceParameters = DataRequestHeaders & DataParameters
+
 export type GetNamespacesService = S3ClientService
 
 const USER_MESSAGE = "There was a problem with a request for namespace data."
@@ -29,11 +30,11 @@ export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesServi
     checkBuild(queryParameters.build, USER_MESSAGE)
     const body = await withS3Client(service, client => getS3EntityJSON(client, getStaticJSONKey(BUILD, "namespaces")))
     if (body === null) {
-        throw new APIError(404, [
+        throw new APIError(500, [
             {
                 developerMessage: "Namespaces JSON is missing from S3.",
                 field: "build",
-                type: "RESOURCE_NOT_FOUND",
+                type: "DEFAULT_5XX",
                 userMessage: USER_MESSAGE,
             },
         ])

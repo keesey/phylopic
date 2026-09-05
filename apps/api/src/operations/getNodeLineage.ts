@@ -29,11 +29,19 @@ import { S3Client } from "@aws-sdk/client-s3"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+
 export type GetNodesParameters = DataRequestHeaders & NodeLineageParameters
+
 export type GetNodesService = PgClientService & S3ClientService
+
 const DEFAULT_TITLE = "[Unnamed]"
+
 const ITEMS_PER_PAGE = 48
+
 const USER_MESSAGE = "There was a problem with a request to list taxonomic groups."
+
+const VALID_EMBEDS = ["childNodes", "parentNode", "primaryImage"] as const
+
 const getQueryBuilder = (uuid: UUID, results: "total" | "href" | "json") => {
     const builder = new QueryConfigBuilder()
     const selection =
@@ -60,11 +68,13 @@ SELECT ${selection} FROM predecessors
     }
     return builder
 }
+
 const getTotalItems = (uuid: UUID) => async (client: ClientBase) => {
     const query = getQueryBuilder(uuid, "total").build()
     const queryResult = await client.query<{ total: string }>(query)
     return parseInt(queryResult.rows[0].total, 10) || 0
 }
+
 const getItemLinks =
     (uuid: UUID) =>
     async (client: ClientBase, offset: number, limit: number): Promise<readonly TitledLink[]> => {
@@ -76,6 +86,7 @@ const getItemLinks =
             title: title || DEFAULT_TITLE,
         }))
     }
+
 const fetchListPageRows =
     (uuid: UUID) =>
     async (client: ClientBase, offset: number, limit: number): Promise<readonly ListPageRow[]> => {
@@ -84,6 +95,7 @@ const fetchListPageRows =
         const queryResult = await client.query<{ json: string; title: string | null; uuid: UUID }>(queryBuilder.build())
         return queryResult.rows
     }
+
 const embedListPageRows =
     (uuid: UUID) =>
     async (
@@ -106,6 +118,9 @@ const embedListPageRows =
             }),
         )
     }
+
+const isEligible = () => true
+
 export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = async (
     { accept, ...queryAndPathParameters },
     service,
@@ -122,25 +137,23 @@ export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = as
         return createPermanentRedirect(path, { ...queryParameters, uuid: normalizedUUID })
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const validEmbeds = ["childNodes", "parentNode", "primaryImage"] as const
-    const s3List = {
-        getIndexKey: () => getLineageIndexKey(BUILD, normalizedUUID),
-        getPageKey: (pageIndex: number) => getLineagePageKey(BUILD, normalizedUUID, pageIndex),
-        isEligible: () => true,
-    }
     const listParameters = {
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: path,
         listQuery: queryParameters,
         page: queryParameters.page,
         userMessage: USER_MESSAGE,
-        validEmbeds,
+        validEmbeds: VALID_EMBEDS,
     }
-    if (canServeListFromS3(queryParameters, s3List.isEligible, validEmbeds)) {
+    if (canServeListFromS3(queryParameters, isEligible, VALID_EMBEDS)) {
         return await getListResult({
             ...listParameters,
             service,
-            s3List,
+            s3List: {
+                getIndexKey: () => getLineageIndexKey(BUILD, normalizedUUID),
+                getPageKey: (pageIndex: number) => getLineagePageKey(BUILD, normalizedUUID, pageIndex),
+                isEligible,
+            },
         })
     }
     return await getPostgresListResult({
@@ -152,4 +165,5 @@ export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = as
         service,
     })
 }
+
 export default getNodeLineage

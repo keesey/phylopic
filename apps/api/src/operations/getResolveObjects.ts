@@ -14,6 +14,7 @@ import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
 export type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
+
 export type GetResolveObjectsService = S3ClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."

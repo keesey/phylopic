@@ -15,9 +15,13 @@ import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 import { getEntityJSONKey } from "@phylopic/s3-entities"
+
 export type GetContributorParameters = DataRequestHeaders & Partial<ContributorParameters>
+
 export type GetContributorService = S3ClientService
+
 const USER_MESSAGE = "There was a problem with an attempt to load contributor data."
+
 export const getContributor: Operation<GetContributorParameters, GetContributorService> = async (
     { accept, ...queryAndPathParameters },
     service: GetContributorService,
@@ -55,4 +59,5 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
         statusCode: 200,
     }
 }
+
 export default getContributor
