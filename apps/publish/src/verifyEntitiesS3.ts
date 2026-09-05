@@ -3,7 +3,7 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { convertS3BodyToString } from "@phylopic/utils-aws"
 import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import pg from "pg"
-import { ENTITIES_BUCKET } from "./entities/constants.js"
+import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
 import {
     EntityFolder,
     getListIndexKey,
