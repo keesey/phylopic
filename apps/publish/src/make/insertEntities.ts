@@ -295,7 +295,7 @@ const writeEntityJSON = async (data: SourceData, s3Writer: EntityS3Writer) => {
                 for (const uuid of data.contributors.keys()) {
                     await s3Writer.put(
                         getEntityJSONKey(data.build, "contributors", uuid),
-                        JSON.stringify(getContributorJSON(uuid, data, getContributorCount(data, uuid))),
+                        stringifyNormalized(getContributorJSON(uuid, data, getContributorCount(data, uuid))),
                     )
                 }
             })(),
@@ -306,7 +306,7 @@ const writeEntityJSON = async (data: SourceData, s3Writer: EntityS3Writer) => {
                 for (const uuid of data.images.keys()) {
                     await s3Writer.put(
                         getEntityJSONKey(data.build, "images", uuid),
-                        JSON.stringify(getImageJSON(uuid, data)),
+                        stringifyNormalized(await getImageJSON(uuid, data)),
                     )
                 }
             })(),
@@ -317,7 +317,7 @@ const writeEntityJSON = async (data: SourceData, s3Writer: EntityS3Writer) => {
                 for (const uuid of data.nodes.keys()) {
                     await s3Writer.put(
                         getEntityJSONKey(data.build, "nodes", uuid),
-                        JSON.stringify(getNodeJSON(uuid, data)),
+                        stringifyNormalized(getNodeJSON(uuid, data)),
                     )
                 }
             })(),
