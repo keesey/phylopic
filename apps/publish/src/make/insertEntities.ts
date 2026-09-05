@@ -79,7 +79,7 @@ const processNodeExternals = (
         queryConfig.values.push(authority, namespace, objectID, build, nodeUUID, link.title)
     }
 }
-const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryConfigs, s3Writer?: EntityS3Writer) => {
+const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryConfigs) => {
     const node = data.nodes.get(nodeUUID)
     if (!node) {
         throw new Error(`Cannot find node! (UUID=${nodeUUID})`)
@@ -101,7 +101,6 @@ const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryCo
         jsonString,
         titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
     )
-    s3Writer?.put("nodes", nodeUUID, jsonString)
     processNodeNames(data.build, nodeUUID, node.names, queryConfigs.names)
     const nodeHRef = `/nodes/${nodeUUID}`
     const externals = [...data.externals.entries()].filter(([, { href }]) => href === nodeHRef)
@@ -115,7 +114,7 @@ const tryQuery = async <T extends unknown[]>(client: ClientBase, config: QueryCo
         throw e
     }
 }
-const insertNodes = async (client: ClientBase, data: SourceData, isDryRun: boolean, s3Writer?: EntityS3Writer) => {
+const insertNodes = async (client: ClientBase, data: SourceData, isDryRun: boolean) => {
     console.info("Adding node data to entities database...")
     const sorted = [...data.nodes.keys()].sort(
         (a, b) => (data.depths.get(a) ?? 0) - (data.depths.get(b) ?? 0) || (a < b ? -1 : b < a ? 1 : 0),
@@ -135,7 +134,7 @@ const insertNodes = async (client: ClientBase, data: SourceData, isDryRun: boole
             values: [],
         }
         const configs = { externals, names, nodes }
-        c.forEach(nodeUUID => processNode(data, nodeUUID, configs, s3Writer))
+        c.forEach(nodeUUID => processNode(data, nodeUUID, configs))
         if (!isDryRun) {
             if (nodes.values?.length) {
                 await tryQuery(client, nodes)
@@ -159,7 +158,7 @@ const isNC = (license: LicenseURL) =>
 const isSA = (license: LicenseURL) =>
     license === "https://creativecommons.org/licenses/by-nc-sa/3.0/" ||
     license === "https://creativecommons.org/licenses/by-sa/3.0/"
-const insertImages = async (client: ClientBase, data: SourceData, isDryRun = false, s3Writer?: EntityS3Writer) => {
+const insertImages = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Adding image data to entities database...")
     if (!isDryRun && data.images.size > 0) {
         const chunks = chunk(data.images.entries(), 1024)
@@ -192,7 +191,6 @@ const insertImages = async (client: ClientBase, data: SourceData, isDryRun = fal
                     titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
                     image.unlisted ? 1 : 0,
                 )
-                s3Writer?.put("images", uuid, jsonString)
             }
             await tryQuery(client, config)
         }
@@ -210,7 +208,6 @@ const insertContributors = async (
     client: ClientBase,
     data: SourceData,
     isDryRun = false,
-    s3Writer?: EntityS3Writer,
 ) => {
     console.info("Adding contributor data to entities database...")
     const contributors = [...data.contributors.entries()]
@@ -244,7 +241,6 @@ const insertContributors = async (
                     contributor.name || null,
                     count > 0 ? 0 : 1,
                 )
-                s3Writer?.put("contributors", uuid, jsonString)
             }
             await tryQuery(client, config)
         }
@@ -255,10 +251,9 @@ const insertContributorsAndImages = async (
     client: ClientBase,
     data: SourceData,
     isDryRun = false,
-    s3Writer?: EntityS3Writer,
 ) => {
-    await insertContributors(client, data, isDryRun, s3Writer)
-    await insertImages(client, data, isDryRun, s3Writer)
+    await insertContributors(client, data, isDryRun)
+    await insertImages(client, data, isDryRun)
 }
 const insertIllustrations = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Adding image-node assigments to entities database...")
@@ -285,7 +280,7 @@ const insertIllustrations = async (client: ClientBase, data: SourceData, isDryRu
     }
     console.info("Added image-node assigments to entities database.")
 }
-const stageAuxiliaryEntityJSON = (data: SourceData, s3Writer: EntityS3Writer) => {
+const writeEntityJSON = (data: SourceData, s3Writer: EntityS3Writer) => {
     console.info("Staging list, lineage, resolve, and namespace JSON (parallel with database)...")
     s3Writer.putStatic(
         "namespaces",
@@ -299,48 +294,48 @@ const stageAuxiliaryEntityJSON = (data: SourceData, s3Writer: EntityS3Writer) =>
     }
     console.info("Queued resolve object JSON for local staging.")
     for (const upload of getContributorListJSONUploads(data)) {
-        s3Writer.putKey(upload.key, upload.body)
+        s3Writer.put(upload.key, upload.body)
     }
     console.info("Queued contributor list JSON for local staging.")
     for (const upload of getNodeListJSONUploads(data)) {
-        s3Writer.putKey(upload.key, upload.body)
+        s3Writer.put(upload.key, upload.body)
     }
     console.info("Queued node list JSON for local staging.")
     for (const upload of getImageListJSONUploads(data)) {
-        s3Writer.putKey(upload.key, upload.body)
+        s3Writer.put(upload.key, upload.body)
     }
     console.info("Queued image list JSON for local staging.")
-    queueAllLineageJSONUploads(data, upload => s3Writer.putKey(upload.key, upload.body))
+    queueAllLineageJSONUploads(data, upload => s3Writer.put(upload.key, upload.body))
     console.info("Queued node lineage JSON for local staging.")
 }
+
 const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Updating entities database...")
     const s3Writer = isDryRun ? undefined : new EntityS3Writer(data.build)
     // Clean anything from an aborted build.
     if (!isDryRun) {
+        cleanEntitiesStaging(data.build)
         await Promise.all([
             cleanTables(client, data.build, "="),
             cleanEntitiesS3(data.build, "="),
-            Promise.resolve(cleanEntitiesStaging(data.build)),
         ])
     }
-    await client.query("BEGIN")
     await Promise.all([
         (async () => {
+            await client.query("BEGIN")
             await Promise.all([
-                insertContributorsAndImages(client, data, isDryRun, s3Writer),
-                insertNodes(client, data, isDryRun, s3Writer),
+                insertContributorsAndImages(client, data, isDryRun),
+                insertNodes(client, data, isDryRun),
             ])
             await insertIllustrations(client, data, isDryRun)
+            await client.query(isDryRun ? "ROLLBACK" : "COMMIT")
+            console.info("Updated entities database.")
         })(),
-        s3Writer ? Promise.resolve(stageAuxiliaryEntityJSON(data, s3Writer)) : Promise.resolve(),
+        s3Writer ? (async () => {
+            writeEntityJSON(data, s3Writer)
+            await s3Writer.flush()
+            console.info("Staged entity JSON locally.")
+        })() : Promise.resolve(),
     ])
-    await client.query(isDryRun ? "ROLLBACK" : "COMMIT")
-    console.info("Updated entities database.")
-    if (s3Writer) {
-        console.info("Finishing local entity JSON staging...")
-        await s3Writer.flush()
-        console.info("Staged entity JSON locally.")
-    }
 }
 export default insertEntities

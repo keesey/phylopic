@@ -1,5 +1,6 @@
 import { rmSync } from "fs"
-import { getEntitiesStagingBuildDir, ENTITIES_STAGING_ROOT } from "./EntityS3Writer.js"
+import { ENTITIES_STAGING_ROOT } from "./constants.js"
+import { getEntitiesStagingBuildDir } from "./EntityS3Writer.js"
 
 export const cleanEntitiesStaging = (build: number) => {
     console.info(`Removing local entity staging for build ${build}...`)

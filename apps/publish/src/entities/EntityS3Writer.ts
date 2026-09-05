@@ -10,8 +10,7 @@ import {
     getStaticJSONKey,
     StaticJSONName,
 } from "@phylopic/s3-entities"
-
-export const ENTITIES_STAGING_ROOT = ".s3/entities.phylopic.org"
+import { ENTITIES_STAGING_ROOT } from "./constants.js"
 
 export const getEntitiesStagingBuildDir = (build: number) => join(ENTITIES_STAGING_ROOT, String(build))
 
@@ -25,7 +24,7 @@ export class EntityS3Writer {
         this.build = build
     }
 
-    private scheduleWrite(key: string, body: string) {
+    put(key: string, body: string) {
         void this.limiter.schedule(async () => {
             const path = join(ENTITIES_STAGING_ROOT, key)
             await mkdir(dirname(path), { recursive: true })
@@ -33,20 +32,16 @@ export class EntityS3Writer {
         })
     }
 
-    put(folder: EntityFolder, uuid: UUID, body: string) {
-        this.scheduleWrite(getEntityJSONKey(this.build, folder, uuid), body)
+    putEntity(folder: EntityFolder, uuid: UUID, body: string) {
+        this.put(getEntityJSONKey(this.build, folder, uuid), body)
     }
 
     putStatic(name: StaticJSONName, body: string) {
-        this.scheduleWrite(getStaticJSONKey(this.build, name), body)
+        this.put(getStaticJSONKey(this.build, name), body)
     }
 
     putResolve(authority: string, namespace: string, objectID: string, body: string) {
-        this.scheduleWrite(getResolveJSONKey(this.build, authority, namespace, objectID), body)
-    }
-
-    putKey(key: string, body: string) {
-        this.scheduleWrite(key, body)
+        this.put(getResolveJSONKey(this.build, authority, namespace, objectID), body)
     }
 
     async flush() {

@@ -3,8 +3,8 @@ import { readFile } from "fs/promises"
 import { join } from "path"
 import { promisify } from "util"
 import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
-import { ENTITIES_CACHE_CONTROL } from "./entities/constants.js"
-import { getEntitiesStagingBuildDir, ENTITIES_STAGING_ROOT } from "./entities/EntityS3Writer.js"
+import { ENTITIES_CACHE_CONTROL, ENTITIES_STAGING_ROOT } from "./entities/constants.js"
+import { getEntitiesStagingBuildDir } from "./entities/EntityS3Writer.js"
 
 const execFileAsync = promisify(execFile)
 
