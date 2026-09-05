@@ -19,6 +19,7 @@ describe("putJSON", () => {
             Key: "key.json",
             Body: stringifyNormalized(object),
             ContentType: "application/json",
+            ServerSideEncryption: "AES256"
         })
     })
 
