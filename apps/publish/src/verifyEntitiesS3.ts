@@ -4,12 +4,7 @@ import { convertS3BodyToString } from "@phylopic/utils-aws"
 import { stringifyNormalized } from "@phylopic/utils"
 import pg from "pg"
 import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
-import {
-    EntityFolder,
-    getListIndexKey,
-    getEntityJSONKey,
-    getStaticJSONKey,
-} from "@phylopic/s3-entities"
+import { EntityFolder, getListIndexKey, getEntityJSONKey, getStaticJSONKey } from "@phylopic/s3-entities"
 const SAMPLE_SIZE = Number.parseInt(process.env.VERIFY_SAMPLE_SIZE ?? "20", 10)
 const BUILD = Number.parseInt(process.argv[2] ?? "", 10)
 if (Number.isNaN(BUILD)) {

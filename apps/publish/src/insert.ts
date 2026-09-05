@@ -2,7 +2,7 @@ import "dotenv/config"
 import pg from "pg"
 import getBuild from "./make/getBuild.js"
 import getSourceData from "./make/getSourceData.js"
-import insertEntities from "./make/insertEntities.js"
+import putEntities from "./make/putEntities.js"
 import uploadEntities from "./uploadEntities.js"
 ;(async () => {
     try {
@@ -19,7 +19,7 @@ import uploadEntities from "./uploadEntities.js"
             const client = new pg.Client({ database: "phylopic-entities" })
             try {
                 await client.connect()
-                await insertEntities(client, sourceData, isDryRun)
+                await putEntities(client, sourceData, isDryRun)
             } finally {
                 client.end()
             }

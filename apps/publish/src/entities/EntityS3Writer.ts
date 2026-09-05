@@ -3,13 +3,7 @@ import { mkdirSync, writeFileSync } from "fs"
 import { dirname, join } from "path"
 import { UUID } from "@phylopic/utils"
 import Bottleneck from "bottleneck"
-import {
-    EntityFolder,
-    getEntityJSONKey,
-    getStaticJSONKey,
-    ListName,
-    StaticJSONName,
-} from "@phylopic/s3-entities"
+import { EntityFolder, getEntityJSONKey, getStaticJSONKey, ListName, StaticJSONName } from "@phylopic/s3-entities"
 import { ENTITIES_STAGING_ROOT, WRITE_CONCURRENCY, WRITE_QUEUE_HIGH_WATER } from "./constants.js"
 
 export const getEntitiesStagingBuildDir = (build: number) => join(ENTITIES_STAGING_ROOT, String(build))
