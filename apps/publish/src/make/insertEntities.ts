@@ -17,12 +17,10 @@ import { cleanEntitiesS3 } from "../entities/cleanEntitiesS3.js"
 import { cleanTables } from "./cleanEntities.js"
 import getContributorJSON from "./getContributorJSON.js"
 import getAuthorizedNamespaces from "./getAuthorizedNamespaces.js"
-import getResolveObjectJSONEntries from "./getResolveObjectJSONEntries.js"
 import {
     getContributorListJSONUploads,
     getImageListJSONUploads,
     getNodeListJSONUploads,
-    queueAllLineageJSONUploads,
 } from "./getListJSONUploads.js"
 import getImageJSON from "./getImageJSON.js"
 import getNodeJSON from "./getNodeJSON.js"
@@ -325,14 +323,6 @@ const writeEntityJSON = async (data: SourceData, s3Writer: EntityS3Writer) => {
             })(),
         ),
         queueForBucket(
-            "resolve objects",
-            (async () => {
-                for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
-                    await s3Writer.putResolve(authority, namespace, objectID, body)
-                }
-            })(),
-        ),
-        queueForBucket(
             "contributor lists",
             (async () => {
                 for (const upload of getContributorListJSONUploads(data)) {
@@ -355,10 +345,6 @@ const writeEntityJSON = async (data: SourceData, s3Writer: EntityS3Writer) => {
                     await s3Writer.put(upload.key, upload.body)
                 }
             })(),
-        ),
-        queueForBucket(
-            "lineage lists",
-            queueAllLineageJSONUploads(data, upload => s3Writer.put(upload.key, upload.body)),
         ),
     ])
     console.info("Queueing bucket entities.")

@@ -1,7 +1,7 @@
 import { createSearch, compareStrings, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { buildListIndexJSON, buildListPageLinksJSON, ListLinkItem, paginateListItems } from "./buildListJSON.js"
 import type { SourceData } from "./getSourceData.js"
-import { ListName, getListIndexKey, getListPageKey, getLineageIndexKey, getLineagePageKey } from "@phylopic/s3-entities"
+import { ListName, getListIndexKey, getListPageKey } from "@phylopic/s3-entities"
 
 const getContributorCount = (data: SourceData, uuid: UUID): number =>
     [...data.images.values()].filter(({ contributor, unlisted }) => !unlisted && contributor === uuid).length
@@ -115,60 +115,3 @@ export const getImageListJSONUploads = (data: SourceData): readonly ListJSONUplo
         listName: "images",
         listPath: "/images",
     })
-
-export const getLineageJSONUploads = (data: SourceData, uuid: UUID): readonly ListJSONUpload[] => {
-    const items: ListLinkItem[] = []
-    let current: UUID | undefined = uuid
-    while (current) {
-        const node = data.nodes.get(current)
-        if (!node) {
-            break
-        }
-        const titleNomen = node.names[0]
-        items.push({
-            title: titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
-            uuid: current,
-        })
-        current = node.parent ?? undefined
-    }
-    const listPath = `/nodes/${encodeURIComponent(uuid)}/lineage`
-    const build = data.build
-    const listQuery = { build }
-    const itemsPerPage = 48
-    const linkHref = (nodeUUID: UUID) => `/nodes/${nodeUUID}${createSearch({ build })}`
-    const uploads: ListJSONUpload[] = [
-        {
-            key: getLineageIndexKey(build, uuid),
-            body: buildListIndexJSON(build, listPath, listQuery, items.length, itemsPerPage),
-        },
-    ]
-    const pages = paginateListItems(items, itemsPerPage)
-    pages.forEach((pageItems, pageIndex) => {
-        const lastPage = pageIndex === pages.length - 1
-        uploads.push({
-            key: getLineagePageKey(build, uuid, pageIndex),
-            body: buildListPageLinksJSON(
-                build,
-                listPath,
-                { ...listQuery, page: pageIndex },
-                pageIndex,
-                lastPage,
-                pageItems,
-                linkHref,
-                "[Unnamed]",
-            ),
-        })
-    })
-    return uploads
-}
-
-export const queueAllLineageJSONUploads = async (
-    data: SourceData,
-    putUpload: (upload: ListJSONUpload) => Promise<void>,
-) => {
-    for (const uuid of data.nodes.keys()) {
-        for (const upload of getLineageJSONUploads(data, uuid)) {
-            await putUpload(upload)
-        }
-    }
-}

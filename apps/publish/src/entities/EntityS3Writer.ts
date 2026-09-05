@@ -6,7 +6,6 @@ import Bottleneck from "bottleneck"
 import {
     EntityFolder,
     getEntityJSONKey,
-    getResolveJSONKey,
     getStaticJSONKey,
     ListName,
     StaticJSONName,
@@ -26,8 +25,6 @@ const getStagingDirs = (build: number): readonly string[] => {
         buildDir,
         ...ENTITY_FOLDERS.map(folder => join(buildDir, folder)),
         ...LIST_NAMES.flatMap(name => [join(buildDir, "lists", name), join(buildDir, "lists", name, "pages")]),
-        join(buildDir, "lineages"),
-        join(buildDir, "resolve"),
     ]
 }
 
@@ -76,10 +73,6 @@ export class EntityS3Writer {
 
     putStatic(name: StaticJSONName, body: string): Promise<void> {
         return this.put(getStaticJSONKey(this.build, name), body)
-    }
-
-    putResolve(authority: string, namespace: string, objectID: string, body: string): Promise<void> {
-        return this.put(getResolveJSONKey(this.build, authority, namespace, objectID), body)
     }
 
     async flush() {

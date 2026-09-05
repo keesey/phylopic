@@ -9,13 +9,13 @@ import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
-import type { S3ClientService } from "../services/S3ClientService"
+import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
 export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
 
-export type GetResolveObjectService = S3ClientService
+export type GetResolveObjectService = PgClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 

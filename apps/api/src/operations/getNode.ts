@@ -22,6 +22,7 @@ import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
+import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
@@ -29,7 +30,7 @@ import { Operation } from "./Operation"
 
 export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
 
-export type GetNodeService = S3ClientService
+export type GetNodeService = PgClientService & S3ClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to load taxonomic data."
 

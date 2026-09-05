@@ -11,21 +11,19 @@ import {
 } from "@phylopic/api-models"
 import { normalizeUUID, UUID } from "@phylopic/utils"
 import { ClientBase } from "pg"
+import { S3Client } from "@aws-sdk/client-s3"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import { getLineageIndexKey, getLineagePageKey } from "@phylopic/s3-entities"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
-import getListResult, { ListPageRow } from "../pagination/getListResult"
 import getPostgresListResult from "../pagination/getPostgresListResult"
-import { canServeListFromS3 } from "../pagination/isS3ListEligible"
+import { ListPageRow } from "../pagination/getListResult"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
-import { S3Client } from "@aws-sdk/client-s3"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
@@ -97,7 +95,7 @@ const fetchListPageRows =
     }
 
 const embedListPageRows =
-    (uuid: UUID) =>
+    () =>
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof NodeEmbedded>,
@@ -119,8 +117,6 @@ const embedListPageRows =
         )
     }
 
-const isEligible = () => true
-
 export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = async (
     { accept, ...queryAndPathParameters },
     service,
@@ -137,28 +133,14 @@ export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = as
         return createPermanentRedirect(path, { ...queryParameters, uuid: normalizedUUID })
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const listParameters = {
+    return await getPostgresListResult({
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: path,
         listQuery: queryParameters,
         page: queryParameters.page,
         userMessage: USER_MESSAGE,
         validEmbeds: VALID_EMBEDS,
-    }
-    if (canServeListFromS3(queryParameters, isEligible, VALID_EMBEDS)) {
-        return await getListResult({
-            ...listParameters,
-            service,
-            s3List: {
-                getIndexKey: () => getLineageIndexKey(BUILD, normalizedUUID),
-                getPageKey: (pageIndex: number) => getLineagePageKey(BUILD, normalizedUUID, pageIndex),
-                isEligible,
-            },
-        })
-    }
-    return await getPostgresListResult({
-        ...listParameters,
-        embedListPageRows: embedListPageRows(normalizedUUID),
+        embedListPageRows: embedListPageRows(),
         fetchListPageRows: fetchListPageRows(normalizedUUID),
         getItemLinks: getItemLinks(normalizedUUID),
         getTotalItems: getTotalItems(normalizedUUID),

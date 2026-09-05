@@ -9,18 +9,18 @@ import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
-import type { S3ClientService } from "../services/S3ClientService"
+import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
 export type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
 
-export type GetResolveObjectsService = S3ClientService
+export type GetResolveObjectsService = PgClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 
 const selectResolveLinkJSONFromObjectIDs = async (
-    service: S3ClientService,
+    service: PgClientService,
     authority: Authority,
     namespace: Namespace,
     objectIDs: readonly ObjectID[],
@@ -58,7 +58,7 @@ const selectResolveLinkJSONFromObjectIDs = async (
     }
     throw new APIError(404, [
         {
-            developerMessage: "Object could not be found. None of the IDs matched in S3.",
+            developerMessage: "Object could not be found.",
             field: "objectIDs",
             type: "RESOURCE_NOT_FOUND",
             userMessage: USER_MESSAGE,
