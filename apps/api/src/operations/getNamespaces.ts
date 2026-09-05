@@ -1,32 +1,22 @@
-import { AuthorizedNamespace, DataParameters, DATA_MEDIA_TYPE } from "@phylopic/api-models"
-import { stringifyNormalized } from "@phylopic/utils"
+import { DATA_MEDIA_TYPE, DataParameters } from "@phylopic/api-models"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import { getStaticJSONKey } from "@phylopic/s3-entities"
 import BUILD from "../build/BUILD"
 import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
+import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
-import withPgClient from "../services/withPgClient"
 import withS3Client from "../services/withS3Client"
 import { Operation } from "./Operation"
 
 export type GetNamespaceParameters = DataRequestHeaders & DataParameters
-export type GetNamespacesService = PgClientService & S3ClientService
+export type GetNamespacesService = S3ClientService
 
 const USER_MESSAGE = "There was a problem with a request for namespace data."
-
-const selectNamespacesFromPostgres = async (service: PgClientService): Promise<readonly AuthorizedNamespace[]> =>
-    withPgClient(service, async client => {
-        const queryResult = await client.query<AuthorizedNamespace>(
-            'SELECT authority,"namespace" FROM node_external GROUP BY authority,"namespace" ORDER BY authority,"namespace"',
-        )
-        return queryResult.rows
-    })
 
 export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesService> = async (
     { accept, ...queryParameters },
@@ -40,20 +30,18 @@ export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesServi
     const body = await withS3Client(service, client =>
         selectJSONFromS3Entities(client, getStaticJSONKey(BUILD, "namespaces")),
     )
-    if (body !== null) {
-        return {
-            body,
-            headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
-            statusCode: 200,
-        }
+    if (body === null) {
+        throw new APIError(404, [
+            {
+                developerMessage: "Namespaces JSON is missing from S3.",
+                field: "build",
+                type: "RESOURCE_NOT_FOUND",
+                userMessage: USER_MESSAGE,
+            },
+        ])
     }
-    console.warn("Namespaces JSON is missing from S3; falling back to Postgres.")
-    const namespaces = await selectNamespacesFromPostgres(service)
     return {
-        body: stringifyNormalized({
-            build: queryParameters.build,
-            namespaces,
-        }),
+        body,
         headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
         statusCode: 200,
     }

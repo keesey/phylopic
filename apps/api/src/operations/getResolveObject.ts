@@ -1,26 +1,20 @@
 import { DATA_MEDIA_TYPE, isResolveObjectParameters, ResolveObjectParameters, TitledLink } from "@phylopic/api-models"
-import { Authority, Namespace, ObjectID, stringifyNormalized } from "@phylopic/utils"
+import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
-import { getResolveJSONKey } from "@phylopic/s3-entities"
-import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import getExternalLink from "../search/getExternalLink"
-import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
-import { PgClientService } from "../services/PgClientService"
+import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
 import type { S3ClientService } from "../services/S3ClientService"
-import withPgClient from "../services/withPgClient"
-import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
 export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
-export type GetResolveObjectsService = PgClientService & S3ClientService
+export type GetResolveObjectService = S3ClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 
@@ -51,40 +45,7 @@ const assertResolvable = (
     }
 }
 
-const selectResolveLinkJSONFromPostgres = async (
-    service: PgClientService,
-    authority: Authority,
-    namespace: Namespace,
-    objectID: ObjectID,
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<string> =>
-    withPgClient(service, async client => {
-        const link = await getExternalLink(client, authority, namespace, objectID, queryParameters)
-        return stringifyNormalized(link)
-    })
-
-const selectResolveLinkJSON = async (
-    service: PgClientService & S3ClientService,
-    authority: Authority,
-    namespace: Namespace,
-    objectID: ObjectID,
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<string> => {
-    const body = await withS3Client(service, client =>
-        selectJSONFromS3Entities(client, getResolveJSONKey(BUILD, authority, namespace, objectID)),
-    )
-    if (body !== null) {
-        return mergeResolveLinkQuery(body, queryParameters)
-    }
-    console.warn("Resolve JSON is missing from S3; falling back to Postgres.", {
-        authority,
-        namespace,
-        objectID,
-    })
-    return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectID, queryParameters)
-}
-
-export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectsService> = async (
+export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {
