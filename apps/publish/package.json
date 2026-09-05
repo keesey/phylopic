@@ -9,6 +9,7 @@
         "@phylopic/source-models": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
+        "@phylopic/utils-s3": "*",
         "axios": "^1.18.1",
         "axios-retry": "^4.5.0",
         "bottleneck": "^2.19.5",

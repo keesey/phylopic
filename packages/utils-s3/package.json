@@ -1,0 +1,60 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "dependencies": {
+        "@phylopic/utils": "*"
+    },
+    "description": "S3 object key helpers for *PhyloPic* entity JSON storage.",
+    "devDependencies": {
+        "@phylopic/tsconfig": "*",
+        "eslint": "^8.57.0",
+        "eslint-config-phylopic": "*",
+        "prettier": "^3.9.6",
+        "tsup": "^8.5.1",
+        "typescript": "^5.4.5",
+        "vitest": "^4.1.10",
+        "yarn": "^1.22.22"
+    },
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.cjs",
+        "default": "./dist/index.js"
+    },
+    "files": [
+        "dist/**"
+    ],
+    "homepage": "https://github.com/keesey/phylopic/packages/utils-s3#readme",
+    "keywords": [
+        "amazon web services",
+        "aws",
+        "phylopic",
+        "s3"
+    ],
+    "license": "MIT",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "name": "@phylopic/utils-s3",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/keesey/phylopic.git"
+    },
+    "scripts": {
+        "build": "tsup src/index.ts --format esm,cjs --dts",
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+        "lint": "TIMING=1 eslint --fix src/**/*.ts*",
+        "test": "vitest --watch=false"
+    },
+    "sideEffects": false,
+    "types": "./dist/index.d.ts",
+    "version": "1.0.0"
+}

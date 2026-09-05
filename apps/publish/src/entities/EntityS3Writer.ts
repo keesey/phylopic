@@ -3,9 +3,7 @@ import { mkdirSync, writeFileSync } from "fs"
 import { dirname, join } from "path"
 import { UUID } from "@phylopic/utils"
 import Bottleneck from "bottleneck"
-import { EntityFolder, getEntityJSONKey } from "./getEntityJSONKey.js"
-import { getResolveJSONKey } from "./getResolveJSONKey.js"
-import { getStaticJSONKey, StaticJSONName } from "./getStaticJSONKey.js"
+import { EntityFolder, getEntityJSONKey, getResolveJSONKey, getStaticJSONKey, StaticJSONName } from "@phylopic/utils-s3"
 
 export const ENTITIES_STAGING_ROOT = ".s3/entities.phylopic.org"
 

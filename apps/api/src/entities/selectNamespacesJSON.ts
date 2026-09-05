@@ -1,6 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import BUILD from "../build/BUILD"
-import { getStaticJSONKey } from "./getStaticJSONKey"
+import { getStaticJSONKey } from "@phylopic/utils-s3"
 import selectJSONFromS3Entities from "./selectJSONFromS3Entities"
 
 const selectNamespacesJSON = async (client: S3Client): Promise<string | null> =>

@@ -4,10 +4,14 @@ import { convertS3BodyToString } from "@phylopic/utils-aws"
 import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import pg from "pg"
 import { ENTITIES_BUCKET } from "./entities/constants.js"
-import { EntityFolder, getEntityJSONKey } from "./entities/getEntityJSONKey.js"
-import { getDefaultListIndexKey, getLineageIndexKey } from "./entities/getListJSONKey.js"
-import { getResolveJSONKey } from "./entities/getResolveJSONKey.js"
-import { getStaticJSONKey } from "./entities/getStaticJSONKey.js"
+import {
+    EntityFolder,
+    getListIndexKey,
+    getEntityJSONKey,
+    getLineageIndexKey,
+    getResolveJSONKey,
+    getStaticJSONKey,
+} from "@phylopic/utils-s3"
 const SAMPLE_SIZE = Number.parseInt(process.env.VERIFY_SAMPLE_SIZE ?? "20", 10)
 const BUILD = Number.parseInt(process.argv[2] ?? "", 10)
 if (Number.isNaN(BUILD)) {
@@ -81,7 +85,7 @@ const verifyResolveSample = async (client: pg.Client) => {
     console.info(`Verified ${rows.length} resolve objects (${mismatches} mismatches).`)
     return mismatches
 }
-const verifyDefaultListIndex = async (
+const verifyListIndex = async (
     client: pg.Client,
     listName: "contributors" | "images" | "nodes",
     countQuery: string,
@@ -91,7 +95,7 @@ const verifyDefaultListIndex = async (
         values: [BUILD],
     })
     const expectedTotal = parseInt(rows[0]?.total ?? "0", 10) || 0
-    const key = getDefaultListIndexKey(BUILD, listName)
+    const key = getListIndexKey(BUILD, listName)
     const output = await s3.send(new GetObjectCommand({ Bucket: ENTITIES_BUCKET, Key: key }))
     const body = await convertS3BodyToString(output.Body)
     const { totalItems } = JSON.parse(body) as { totalItems: number }
@@ -153,17 +157,17 @@ SELECT COUNT("uuid") AS total FROM predecessors
         }
         totalMismatches += await verifyNamespaces(client)
         totalMismatches += await verifyResolveSample(client)
-        totalMismatches += await verifyDefaultListIndex(
+        totalMismatches += await verifyListIndex(
             client,
             "contributors",
             'SELECT COUNT("uuid") AS total FROM contributor WHERE build=$1::bigint AND unlisted=0::bit',
         )
-        totalMismatches += await verifyDefaultListIndex(
+        totalMismatches += await verifyListIndex(
             client,
             "nodes",
             'SELECT COUNT("uuid") AS total FROM node WHERE build=$1::bigint',
         )
-        totalMismatches += await verifyDefaultListIndex(
+        totalMismatches += await verifyListIndex(
             client,
             "images",
             'SELECT COUNT("uuid") AS total FROM image WHERE build=$1::bigint AND unlisted=0::bit',
