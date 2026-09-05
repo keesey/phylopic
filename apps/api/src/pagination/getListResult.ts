@@ -1,6 +1,6 @@
 import { UUID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
-import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
+import getS3EntityJSON from "../entities/getS3EntityJSON"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
@@ -57,7 +57,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
 }: Parameters<TEmbedded>) =>
     withS3Client(service, async client => {
         if (!page) {
-            const body = await selectJSONFromS3Entities(client, s3List.getIndexKey())
+            const body = await getS3EntityJSON(client, s3List.getIndexKey())
             if (body === null) {
                 throw createListNotFound(userMessage, "List index JSON is missing from S3.", "page")
             }
@@ -90,7 +90,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
                 body: hydrated.body,
             }
         }
-        const body = await selectJSONFromS3Entities(client, s3List.getPageKey(pageIndex))
+        const body = await getS3EntityJSON(client, s3List.getPageKey(pageIndex))
         if (body === null) {
             throw createListNotFound(userMessage, "List page JSON is missing from S3.", "page")
         }

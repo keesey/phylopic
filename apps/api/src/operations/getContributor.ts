@@ -3,7 +3,7 @@ import { normalizeUUID } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import BUILD from "../build/BUILD"
-import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
+import getS3EntityJSON from "../entities/getS3EntityJSON"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
@@ -37,7 +37,7 @@ export const getContributor: Operation<GetContributorParameters, GetContributorS
     const body = await withS3Client(
         service,
         async client =>
-            (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, "contributors", normalizedUUID))) ?? "null",
+            (await getS3EntityJSON(client, getEntityJSONKey(BUILD, "contributors", normalizedUUID))) ?? "null",
     )
     if (body === "null") {
         throw new APIError(404, [

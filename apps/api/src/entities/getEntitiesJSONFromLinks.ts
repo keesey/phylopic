@@ -3,14 +3,14 @@ import type { S3Client } from "@aws-sdk/client-s3"
 import { getEntityJSONKey } from "@phylopic/s3-entities"
 import { isDefined } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
-import getEntityFolderAndUUIDFromHRef from "./getEntityFolderAndUUIDFromHRef"
-import selectJSONFromS3Entities from "./selectJSONFromS3Entities"
+import getFolderAndUUIDFromHRef from "./getFolderAndUUIDFromHRef"
+import getS3EntityJSON from "./getS3EntityJSON"
 
-const selectEntitiesJSONFromLinks = async (client: S3Client, links: readonly Link[]): Promise<string> => {
+const getEntitiesJSONFromLinks = async (client: S3Client, links: readonly Link[]): Promise<string> => {
     if (!links.length) {
         return "[]"
     }
-    const foldersAndUUIDs = links.map(({ href }) => getEntityFolderAndUUIDFromHRef(href)).filter(isDefined)
+    const foldersAndUUIDs = links.map(({ href }) => getFolderAndUUIDFromHRef(href)).filter(isDefined)
     const limit = foldersAndUUIDs.length
     if (limit !== links.length) {
         throw new Error("The query data for one or more links could not be determined.")
@@ -21,11 +21,9 @@ const selectEntitiesJSONFromLinks = async (client: S3Client, links: readonly Lin
     }
     const uuids = foldersAndUUIDs.map(([, uuid]) => uuid)
     const jsonList = await Promise.all(
-        uuids.map(
-            async uuid => (await selectJSONFromS3Entities(client, getEntityJSONKey(BUILD, folder, uuid))) ?? "null",
-        ),
+        uuids.map(async uuid => (await getS3EntityJSON(client, getEntityJSONKey(BUILD, folder, uuid))) ?? "null"),
     )
     return `[${jsonList.join(",")}]`
 }
 
-export default selectEntitiesJSONFromLinks
+export default getEntitiesJSONFromLinks

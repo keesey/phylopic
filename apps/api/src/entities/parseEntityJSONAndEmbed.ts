@@ -2,7 +2,7 @@ import type { Entity, Links } from "@phylopic/api-models"
 import { S3Client } from "@aws-sdk/client-s3"
 import { FaultDetector } from "@phylopic/utils"
 import parseEntityJSON from "./parseEntityJSON"
-import selectEntityEmbeds from "./selectEntityEmbeds"
+import getEntityEmbeds from "./getEntityEmbeds"
 
 const parseEntityJSONAndEmbed = async <TEntity extends Entity<TLinks>, TLinks extends Links>(
     client: S3Client,
@@ -18,7 +18,7 @@ const parseEntityJSONAndEmbed = async <TEntity extends Entity<TLinks>, TLinks ex
     if (!entity) {
         return "null"
     }
-    const embeddedJSON = await selectEntityEmbeds(client, entity._links, embeds, typeUserLabel)
+    const embeddedJSON = await getEntityEmbeds(client, entity._links, embeds, typeUserLabel)
     return '{"_embedded":' + embeddedJSON + "," + json.slice(1)
 }
 

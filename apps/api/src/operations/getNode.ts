@@ -14,7 +14,7 @@ import { normalizeUUID } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"
+import getEntityJSONWithEmbedded from "../entities/getEntityJSONWithEmbedded"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
@@ -54,14 +54,7 @@ export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
         .filter(isEmbeddedParameter)
         .map(key => key.slice("embed_".length) as string & keyof NodeEmbedded)
     const body = await withS3Client(service, client =>
-        selectEntityJSONWithEmbedded<Node, NodeLinks>(
-            client,
-            "nodes",
-            normalizedUUID,
-            embeds,
-            isNode,
-            "taxonomic group",
-        ),
+        getEntityJSONWithEmbedded<Node, NodeLinks>(client, "nodes", normalizedUUID, embeds, isNode, "taxonomic group"),
     )
     if (body === "null") {
         const redirectBody = await selectResolveLinkJSON(service, "phylopic.org", "nodes", normalizedUUID, {

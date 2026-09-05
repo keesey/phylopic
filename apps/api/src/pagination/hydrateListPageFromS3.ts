@@ -1,7 +1,7 @@
 import { Page, TitledLink, isPage } from "@phylopic/api-models"
 import { S3Client } from "@aws-sdk/client-s3"
-import selectEntitiesJSONFromLinks from "../entities/selectEntitiesJSONFromLinks"
-import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
+import getEntitiesJSONFromLinks from "../entities/getEntitiesJSONFromLinks"
+import getS3EntityJSON from "../entities/getS3EntityJSON"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
 
 export type HydratedListPage = Readonly<{
@@ -16,7 +16,7 @@ const hydrateListPageFromS3 = async (
     pageIndex: number,
     page: string,
 ): Promise<HydratedListPage | null> => {
-    const linksBody = await selectJSONFromS3Entities(client, getPageKey(pageIndex))
+    const linksBody = await getS3EntityJSON(client, getPageKey(pageIndex))
     if (linksBody === null) {
         return null
     }
@@ -28,7 +28,7 @@ const hydrateListPageFromS3 = async (
     if (itemLinks.length === 0) {
         return null
     }
-    const itemsJSON = JSON.parse(await selectEntitiesJSONFromLinks(client, itemLinks)) as readonly string[]
+    const itemsJSON = JSON.parse(await getEntitiesJSONFromLinks(client, itemLinks)) as readonly string[]
     return {
         body: getPageObjectJSONWithEmbedded(
             listPath,

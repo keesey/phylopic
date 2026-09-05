@@ -2,7 +2,7 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
 import { convertS3BodyToString, isAWSError } from "@phylopic/utils-aws"
 
-const selectJSONFromS3Entities = async (client: S3Client, key: string): Promise<string | null> => {
+const getS3EntityJSON = async (client: S3Client, key: string): Promise<string | null> => {
     try {
         const output = await client.send(
             new GetObjectCommand({
@@ -22,4 +22,4 @@ const selectJSONFromS3Entities = async (client: S3Client, key: string): Promise<
     }
 }
 
-export default selectJSONFromS3Entities
+export default getS3EntityJSON

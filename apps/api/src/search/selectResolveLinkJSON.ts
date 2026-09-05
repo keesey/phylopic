@@ -1,7 +1,7 @@
 import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
 import { getResolveJSONKey } from "@phylopic/s3-entities"
-import selectJSONFromS3Entities from "../entities/selectJSONFromS3Entities"
+import getS3EntityJSON from "../entities/getS3EntityJSON"
 import APIError from "../errors/APIError"
 import mergeResolveLinkQuery from "./mergeResolveLinkQuery"
 import type { S3ClientService } from "../services/S3ClientService"
@@ -17,7 +17,7 @@ const selectResolveLinkJSON = async (
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
 ): Promise<string> => {
     const body = await withS3Client(service, client =>
-        selectJSONFromS3Entities(client, getResolveJSONKey(BUILD, authority, namespace, objectID)),
+        getS3EntityJSON(client, getResolveJSONKey(BUILD, authority, namespace, objectID)),
     )
     if (body === null) {
         throw new APIError(404, [

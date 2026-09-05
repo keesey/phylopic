@@ -12,7 +12,7 @@ import {
 import { normalizeUUID } from "@phylopic/utils"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import selectEntityJSONWithEmbedded from "../entities/selectEntityJSONWithEmbedded"
+import getEntityJSONWithEmbedded from "../entities/getEntityJSONWithEmbedded"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
@@ -48,7 +48,7 @@ export const getImage: Operation<GetImageParameters, GetImageService> = async (
         .filter(isEmbeddedParameter)
         .map(key => key.slice("embed_".length) as string & keyof ImageEmbedded)
     const body = await withS3Client(service, client =>
-        selectEntityJSONWithEmbedded<Image, ImageLinks>(
+        getEntityJSONWithEmbedded<Image, ImageLinks>(
             client,
             "images",
             normalizedUUID,

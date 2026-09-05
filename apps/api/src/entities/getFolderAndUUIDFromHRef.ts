@@ -4,7 +4,7 @@ import { extractPath, isUUID, UUID } from "@phylopic/utils"
 const isEntityFolder = (path: string): path is EntityFolder =>
     path === "contributors" || path === "images" || path === "nodes"
 
-const getEntityFolderAndUUIDFromHRef = (href: string) => {
+const getFolderAndUUIDFromHRef = (href: string) => {
     const parts = extractPath(href).split(/\//g).filter(Boolean)
     if (parts.length !== 2) {
         return null
@@ -16,4 +16,4 @@ const getEntityFolderAndUUIDFromHRef = (href: string) => {
     return [path, uuid] as Readonly<[EntityFolder, UUID]>
 }
 
-export default getEntityFolderAndUUIDFromHRef
+export default getFolderAndUUIDFromHRef
