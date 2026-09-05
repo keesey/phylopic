@@ -1,4 +1,4 @@
-import { getEntityJSONKey as getEntityJSONKeyForFolder, EntityFolder } from "@phylopic/utils-s3"
+import { getEntityJSONKey as getEntityJSONKeyForFolder, EntityFolder } from "@phylopic/s3-entities"
 import { UUID } from "@phylopic/utils"
 import { TableName } from "./TableName"
 

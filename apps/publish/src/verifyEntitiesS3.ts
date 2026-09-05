@@ -11,7 +11,7 @@ import {
     getLineageIndexKey,
     getResolveJSONKey,
     getStaticJSONKey,
-} from "@phylopic/utils-s3"
+} from "@phylopic/s3-entities"
 const SAMPLE_SIZE = Number.parseInt(process.env.VERIFY_SAMPLE_SIZE ?? "20", 10)
 const BUILD = Number.parseInt(process.argv[2] ?? "", 10)
 if (Number.isNaN(BUILD)) {

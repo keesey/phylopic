@@ -1,7 +1,7 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
-import { getResolveJSONKey } from "@phylopic/utils-s3"
+import { getResolveJSONKey } from "@phylopic/s3-entities"
 import selectJSONFromS3Entities from "./selectJSONFromS3Entities"
 
 const selectResolveObjectJSON = async (

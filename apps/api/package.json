@@ -11,7 +11,7 @@
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
-        "@phylopic/utils-s3": "*",
+        "@phylopic/s3-entities": "*",
         "jsonwebtoken": "^9.0.3",
         "lodash": "^4.17.21",
         "pg": "^8.22.0"

@@ -1,7 +1,7 @@
 import { createSearch, compareStrings, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
 import { buildListIndexJSON, buildListPageLinksJSON, ListLinkItem, paginateListItems } from "./buildListJSON.js"
 import type { SourceData } from "./getSourceData.js"
-import { ListName, getListIndexKey, getListPageKey, getLineageIndexKey, getLineagePageKey } from "@phylopic/utils-s3"
+import { ListName, getListIndexKey, getListPageKey, getLineageIndexKey, getLineagePageKey } from "@phylopic/s3-entities"
 
 const LINEAGE_LOG_INTERVAL = 500
 

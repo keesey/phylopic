@@ -29,7 +29,7 @@
     "files": [
         "dist/**"
     ],
-    "homepage": "https://github.com/keesey/phylopic/packages/utils-s3#readme",
+    "homepage": "https://github.com/keesey/phylopic/packages/s3-entities#readme",
     "keywords": [
         "amazon web services",
         "aws",
@@ -39,7 +39,7 @@
     "license": "MIT",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
-    "name": "@phylopic/utils-s3",
+    "name": "@phylopic/s3-entities",
     "publishConfig": {
         "access": "public"
     },
