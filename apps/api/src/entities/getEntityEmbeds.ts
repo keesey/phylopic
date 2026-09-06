@@ -17,7 +17,7 @@ const getEntityEmbeds = async <TLinks extends Links, TEmbeds extends string & ke
         const propertyLink = links[property]
         const propertyJSON = `${JSON.stringify(property)}:`
         if (Array.isArray(propertyLink) && propertyLink.every(link => isLinkWithStringHRef(link))) {
-            return propertyJSON + (await getEntitiesJSONFromLinks(client, propertyLink))
+            return propertyJSON + "[" + (await getEntitiesJSONFromLinks(client, propertyLink)).join(",") + "]"
         }
         if (isLinkWithStringHRef(propertyLink)) {
             return propertyJSON + (await selectEntityJSONFromHRef(client, propertyLink.href))

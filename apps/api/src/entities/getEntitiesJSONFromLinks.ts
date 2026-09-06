@@ -6,9 +6,9 @@ import BUILD from "../build/BUILD"
 import getFolderAndUUIDFromHRef from "./getFolderAndUUIDFromHRef"
 import getS3EntityJSON from "./getS3EntityJSON"
 
-const getEntitiesJSONFromLinks = async (client: S3Client, links: readonly Link[]): Promise<string> => {
+const getEntitiesJSONFromLinks = async (client: S3Client, links: readonly Link[]): Promise<readonly string[]> => {
     if (!links.length) {
-        return "[]"
+        return []
     }
     const foldersAndUUIDs = links.map(({ href }) => getFolderAndUUIDFromHRef(href)).filter(isDefined)
     const limit = foldersAndUUIDs.length
@@ -20,10 +20,9 @@ const getEntitiesJSONFromLinks = async (client: S3Client, links: readonly Link[]
         throw new Error("All links must have the same entity type.")
     }
     const uuids = foldersAndUUIDs.map(([, uuid]) => uuid)
-    const jsonList = await Promise.all(
+    return await Promise.all(
         uuids.map(async uuid => (await getS3EntityJSON(client, getEntityJSONKey(BUILD, folder, uuid))) ?? "null"),
     )
-    return `[${jsonList.join(",")}]`
 }
 
 export default getEntitiesJSONFromLinks

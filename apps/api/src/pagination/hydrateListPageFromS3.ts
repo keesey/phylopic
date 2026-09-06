@@ -28,7 +28,7 @@ const hydrateListPageFromS3 = async (
     if (itemLinks.length === 0) {
         return null
     }
-    const itemsJSON = JSON.parse(await getEntitiesJSONFromLinks(client, itemLinks)) as readonly string[]
+    const itemsJSON = await getEntitiesJSONFromLinks(client, itemLinks)
     return {
         body: getPageObjectJSONWithEmbedded(
             listPath,
