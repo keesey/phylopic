@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - In offline mode, adding `/prod` to the path is no longer needed.
+- Reduced `dynamic` and `uploader` Lambda timeouts from 30s to 29s so HTTP API has room to return responses before the 30s integration limit.
 
 ### Removed
 
