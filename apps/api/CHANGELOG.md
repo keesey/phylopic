@@ -13,8 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Entity JSON is always read from S3.
-- List pagination serves `{build}/lists/{name}/index.json` and `{page}.json` from S3 when eligible; `embed_items=true` hydrates entity JSON from S3 entity files. Filtered lists and extra embed parameters are served from Postgres.
+- Single-entity JSON is always read from S3.
+- List pagination serves `{build}/lists/{name}/index.json` and `{page}.json` from S3 when there are no filters or embeds.
 
 ### Deprecated
 

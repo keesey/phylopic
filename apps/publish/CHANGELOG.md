@@ -9,28 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Publish writes default list **links** JSON to `{build}/lists/` during `yarn insert`.
-- Entity JSON is staged under `.s3/entities.phylopic.org/{build}/` during insert and uploaded with
-  `aws s3 sync` (`yarn upload:entities`).
-- `yarn verify:entities` checks sampled entity JSON, `namespaces.json`, and default list index totals
-  against Postgres.
+- Publish writes unfiltered lists with no embedsto `{build}/lists/` during `yarn insert`.
+- Entity JSON is staged under `.s3/entities.phylopic.org/{build}/` during insert and uploaded with `aws s3 sync` (`yarn upload:entities`).
+- `yarn verify:entities` checks sampled entity JSON, `namespaces.json`, and unfiltered list index totals against Postgres.
 
 ### Changed
 
-- `EntityS3Writer` stages entity, list, and static JSON locally instead of uploading via the SDK
-  during insert.
-- `insertEntities` stages list and namespace JSON in parallel with the Postgres transaction; entity
-  JSON writes are scheduled immediately and flushed after commit.
+- `EntityS3Writer` stages entity, list, and static JSON locally instead of uploading via the SDK during insert.
+- `putEntities` (previously `insertEntities`) stages list and namespace JSON in parallel with the Postgres transaction; entity JSON writes are scheduled immediately and flushed after commit.
 
 ### Fixed
 
-- `yarn upload:entities` streams AWS CLI output instead of buffering it, avoiding `maxBuffer` errors
-  on large syncs.
+- `yarn upload:entities` streams AWS CLI output instead of buffering it, avoiding `maxBuffer` errors on large syncs.
 
 ### Removed
 
-- Staging `{build}/lineages/` and `{build}/resolve/` during insert.
-- Lineage and resolve checks from `yarn verify:entities`.
+- Staging `{build}/resolve/` during insert.
+- Resolve checks from `yarn verify:entities`.
 
 ### Security
 
