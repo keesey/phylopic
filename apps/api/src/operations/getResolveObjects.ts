@@ -4,19 +4,17 @@ import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import ENTITY_JSON_SOURCE from "../entities/ENTITY_JSON_SOURCE"
-import selectResolveObjectJSON from "../entities/selectResolveObjectJSON"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
 export type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
+
 export type GetResolveObjectsService = PgClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
@@ -79,17 +77,6 @@ const selectResolveLinkJSON = async (
                 userMessage: USER_MESSAGE,
             },
         ])
-    }
-    if (ENTITY_JSON_SOURCE !== "postgres") {
-        for (const objectID of objectIDs) {
-            const body = await selectResolveObjectJSON(authority, namespace, objectID)
-            if (body !== null) {
-                return mergeResolveLinkQuery(body, queryParameters)
-            }
-        }
-        if (ENTITY_JSON_SOURCE === "s3") {
-            console.warn("Resolve JSON is missing from S3; falling back to Postgres.", { authority, namespace })
-        }
     }
     return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectIDs, queryParameters)
 }

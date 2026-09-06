@@ -16,8 +16,8 @@ describe("putJSONString", () => {
             Bucket: "bucket",
             Key: "key.json",
             Body: '{"a":1}',
-            ContentType: "application/json",            
-            ServerSideEncryption: "AES256"
+            ContentType: "application/json",
+            ServerSideEncryption: "AES256",
         })
     })
 

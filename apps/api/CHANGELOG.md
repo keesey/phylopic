@@ -11,14 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Reduced `dynamic` and `uploader` Lambda timeouts from 30s to 29s so HTTP API has
-  room to return responses before the 30s integration limit.
+- No longer allowing S3 as an option for `ge4tResolveObject` or `getResolveObjects`.
 
 ### Deprecated
 
 ### Fixed
 
+- Reduced `dynamic` and `uploader` Lambda timeouts from 30s to 29s so HTTP API has room to return responses before the 30s integration limit.
+- No longer prefixing paths with `/prod` in offline mode.
+
 ### Removed
+
+- Use of `IS_OFFLINE` environment variable.
 
 ### Security
 

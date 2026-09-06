@@ -3,21 +3,19 @@ import { Authority, Namespace, ObjectID, stringifyNormalized } from "@phylopic/u
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
-import ENTITY_JSON_SOURCE from "../entities/ENTITY_JSON_SOURCE"
-import selectResolveObjectJSON from "../entities/selectResolveObjectJSON"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import getExternalLink from "../search/getExternalLink"
-import mergeResolveLinkQuery from "../search/mergeResolveLinkQuery"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
 export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
-export type GetResolveObjectsService = PgClientService
+
+export type GetResolveObjectService = PgClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 
@@ -48,7 +46,7 @@ const assertResolvable = (
     }
 }
 
-const selectResolveLinkJSONFromPostgres = async (
+const selectResolveLinkJSON = async (
     service: PgClientService,
     authority: Authority,
     namespace: Namespace,
@@ -64,30 +62,7 @@ const selectResolveLinkJSONFromPostgres = async (
     }
 }
 
-const selectResolveLinkJSON = async (
-    service: PgClientService,
-    authority: Authority,
-    namespace: Namespace,
-    objectID: ObjectID,
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<string> => {
-    if (ENTITY_JSON_SOURCE !== "postgres") {
-        const body = await selectResolveObjectJSON(authority, namespace, objectID)
-        if (body !== null) {
-            return mergeResolveLinkQuery(body, queryParameters)
-        }
-        if (ENTITY_JSON_SOURCE === "s3") {
-            console.warn("Resolve JSON is missing from S3; falling back to Postgres.", {
-                authority,
-                namespace,
-                objectID,
-            })
-        }
-    }
-    return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectID, queryParameters)
-}
-
-export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectsService> = async (
+export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {
