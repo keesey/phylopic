@@ -11,9 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- No longer allowing S3 as an option for `ge4tResolveObject` or `getResolveObjects`.
-
 ### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.14.3] - 2026-09-06
+
+### Changed
+
+- No longer allowing S3 as an option for `getResolveObject` or `getResolveObjects`.
 
 ### Fixed
 
@@ -23,8 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Use of `IS_OFFLINE` environment variable.
-
-### Security
 
 ## [2.14.2] - 2026-09-02
 
