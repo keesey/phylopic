@@ -9,32 +9,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `@phylopic/api`: precomputed S3 reads for unfiltered list routes (`GET /contributors`, `GET /nodes`,
-  `GET /images`), with Postgres fallback for filtered queries, extra embed parameters, or missing
-  objects.
-- `@phylopic/publish`: writes default list link JSON to S3 during `yarn insert` (entity JSON
-  hydrated at read time for `embed_items`); stages entities locally and uploads via `aws s3 sync`;
-  `yarn verify:entities` checks sampled entity JSON, `namespaces.json`, and default list index totals
-  against Postgres.
+- `@phylopic/s3-entities`: initial release.
+- `@phylopic/api`: precomputed S3 reads for unfiltered `GET /contributors`, `GET /nodes`, and
+  `GET /images`.
+- `@phylopic/publish`: writes unfiltered lists with no embeds to `{build}/lists/` during
+  `yarn insert`; stages entity JSON under `.s3/entities.phylopic.org/{build}/` and uploads with
+  `aws s3 sync` (`yarn upload:entities`); `yarn verify:entities` checks sampled entity JSON,
+  `namespaces.json`, and unfiltered list index totals against Postgres.
 
 ### Changed
 
-- `@phylopic/api`: entity JSON is read from S3; the `ENTITY_JSON_SOURCE` environment variable and runtime source switch are removed.
-- `@phylopic/api`: list `embed_items=true` S3 responses hydrate entity JSON from
-  `{build}/{contributors|nodes|images}/{uuid}.json` instead of precomputed `.items.json` pages.
-- `@phylopic/api`: `GET /nodes/{uuid}/lineage` and `GET /resolve/...` are served from Postgres again.
-- `@phylopic/publish`: no longer writes `{build}/lineages/` or `{build}/resolve/` to S3.
+- `@phylopic/api`: single-entity JSON is always read from S3; list pagination serves
+  `{build}/lists/{name}/index.json` and `{page}.json` from S3 when there are no filters or embeds.
+- `@phylopic/publish`: `EntityS3Writer` stages entity, list, and static JSON locally instead of
+  uploading via the SDK during insert; `putEntities` (previously `insertEntities`) stages list and
+  namespace JSON in parallel with the Postgres transaction, scheduling entity JSON writes immediately
+  and flushing after commit.
 
 ### Deprecated
 
 ### Fixed
 
-- `@phylopic/publish`: `yarn upload:entities` streams AWS CLI output instead of buffering it.
+- `@phylopic/publish`: `yarn upload:entities` streams AWS CLI output instead of buffering it,
+  avoiding `maxBuffer` errors on large syncs.
 
 ### Removed
 
-- `@phylopic/api`: precomputed S3 reads for `GET /nodes/{uuid}/lineage` and `GET /resolve/...`.
-- `@phylopic/publish`: staging and verification of lineage and resolve JSON on S3.
+- `@phylopic/api`: the `ENTITY_JSON_SOURCE` environment variable and runtime source switch;
+  now-unimplemented `POST` and `OPTIONS` HTTP API events for `GET /resolve/{authority}/{namespace}`
+  from `serverless.yml`.
+- `@phylopic/publish`: staging `{build}/resolve/` during insert; resolve checks from
+  `yarn verify:entities`.
 
 ### Security
 

@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release.
-- `ENTITIES_BUCKET` constant (`process.env.ENTITIES_BUCKET` or `entities.phylopic.org`).
 
 ### Changed
 
@@ -19,7 +18,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Removed
-
-- `getLineageIndexKey`, `getLineagePageKey`, and `getResolveJSONKey` (lineage and resolve are served from Postgres, not S3).
 
 ### Security
