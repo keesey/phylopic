@@ -13,13 +13,13 @@ import type { S3ClientService } from "../services/S3ClientService"
 import withS3Client from "../services/withS3Client"
 import { Operation } from "./Operation"
 
-export type GetNamespaceParameters = DataRequestHeaders & DataParameters
+type GetNamespaceParameters = DataRequestHeaders & DataParameters
 
-export type GetNamespacesService = S3ClientService
+type GetNamespacesService = S3ClientService
 
 const USER_MESSAGE = "There was a problem with a request for namespace data."
 
-export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesService> = async (
+const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesService> = async (
     { accept, ...queryParameters },
     service,
 ) => {

@@ -29,8 +29,8 @@ import { S3Client } from "@aws-sdk/client-s3"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-export type GetImagesParameters = DataRequestHeaders & ImageListParameters
-export type GetImagesService = PgClientService & S3ClientService
+type GetImagesParameters = DataRequestHeaders & ImageListParameters
+type GetImagesService = PgClientService & S3ClientService
 const DEFAULT_TITLE = "[Untitled]"
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list silhouette images."
@@ -169,7 +169,7 @@ const S3_LIST = {
     isEligible,
 }
 const VALID_EMBEDS = ["contributor", "generalNode", "nodes", "specificNode"] as const
-export const getImages: Operation<GetImagesParameters, GetImagesService> = async (
+const getImages: Operation<GetImagesParameters, GetImagesService> = async (
     { accept, ...queryParameters },
     service,
 ) => {

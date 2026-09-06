@@ -7,7 +7,7 @@ import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
-import { checkPostCollectionRateLimit } from "../rateLimit/checkPostCollectionRateLimit"
+import checkPostCollectionRateLimit from "../rateLimit/checkPostCollectionRateLimit"
 import { PgClientService } from "../services/PgClientService"
 import withPgClient from "../services/withPgClient"
 import { Operation } from "./Operation"
@@ -20,13 +20,13 @@ const MAX_BODY_SIZE = 24576
 
 const USER_MESSAGE = "There was a problem with an attempt to find a collection."
 
-export type PostCollectionParameters = DataRequestHeaders & {
+type PostCollectionParameters = DataRequestHeaders & {
     "content-type"?: string
     encoding?: "base64" | "utf8"
     sourceIp?: string
 }
 
-export type PostCollectionService = PgClientService
+type PostCollectionService = PgClientService
 
 const getUUIDsFromBody = (body: string): ReadonlySet<UUID> => {
     try {
@@ -95,7 +95,7 @@ const ensureExistence = async (service: PgClientService, uuid: string, uuids: Re
     }
 }
 
-export const postCollection: Operation<PostCollectionParameters, PostCollectionService> = async (
+const postCollection: Operation<PostCollectionParameters, PostCollectionService> = async (
     { accept, body, "content-type": contentType, encoding = "utf8", sourceIp = "unknown" },
     service,
 ) => {

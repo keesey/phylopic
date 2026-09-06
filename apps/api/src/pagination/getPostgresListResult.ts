@@ -16,7 +16,7 @@ import getPageIndex from "./getPageIndex"
 import getPageObject from "./getPageObject"
 import getPageObjectJSONWithEmbedded from "./getPageObjectJSONWithEmbedded"
 
-export interface Parameters<TEmbedded = Record<string, never>> {
+interface Parameters<TEmbedded = Record<string, never>> {
     embedListPageRows: (
         rows: readonly ListPageRow[],
         embed: ReadonlyArray<string & keyof TEmbedded>,

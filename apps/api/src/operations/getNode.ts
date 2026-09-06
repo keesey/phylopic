@@ -28,16 +28,16 @@ import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
-export type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
+type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
 
-export type GetNodeService = PgClientService & S3ClientService
+type GetNodeService = PgClientService & S3ClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to load taxonomic data."
 
 const isEmbeddedParameter = (x: unknown): x is string & keyof EmbeddableParameters<NodeEmbedded> =>
     NODE_EMBEDDED_PARAMETERS.includes(x as any)
 
-export const getNode: Operation<GetNodeParameters, GetNodeService> = async (
+const getNode: Operation<GetNodeParameters, GetNodeService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {

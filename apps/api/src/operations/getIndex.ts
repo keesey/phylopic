@@ -10,7 +10,7 @@ import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import { Operation } from "./Operation"
 
-export type GetRootParameters = DataRequestHeaders & DataParameters
+type GetRootParameters = DataRequestHeaders & DataParameters
 
 const BODY = `{"_links":{"contact":{"href":"mailto:keesey+phylopic@gmail.com","title":"Mike Keesey"},"documentation":{"href":"https://api-docs.phylopic.org/v2/index.html"},"resources":[{"href":"/autocomplete?build=${BUILD}","title":"Autocomplete for Phylogenetic Nodes"},{"href":"/collections","title":"Entity Collections"},{"href":"/contributors?build=${BUILD}","title":"Image Contributors"},{"href":"/images?build=${BUILD}","title":"Silhouette Images"},{"href":"/licenses?build=${BUILD}","title":"Licenses for New Submissions"},{"href":"/nodes?build=${BUILD}","title":"Phylogenetic Nodes"},{"href":"/ping","title":"API Check"},{"href":"/root?build=${BUILD}","title":"Phylogenetic Root Node"},{"href":"/uploads","title":"Image Submission Uploads"}],"self":{"href":"/?build=${BUILD}"}},"build":${BUILD},"buildTimestamp":${JSON.stringify(
     process.env.PHYLOPIC_BUILD_TIMESTAMP,
@@ -22,7 +22,7 @@ const RESULT_200: APIGatewayProxyResult = {
     statusCode: 200,
 }
 
-export const getIndex: Operation<GetRootParameters> = async ({ accept, ...queryParameters }) => {
+const getIndex: Operation<GetRootParameters> = async ({ accept, ...queryParameters }) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     if (!queryParameters.build) {
         return createBuildRedirect("/", queryParameters)

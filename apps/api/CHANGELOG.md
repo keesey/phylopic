@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - The `ENTITY_JSON_SOURCE` environment variable and runtime source switch.
+- Now-unimplemented `POST` and `OPTIONS` HTTP API events for `GET /resolve/{authority}/{namespace}` from `serverless.yml`.
 
 ### Security
 

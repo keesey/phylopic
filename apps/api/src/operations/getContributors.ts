@@ -23,8 +23,8 @@ import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-export type GetContributorsParameters = DataRequestHeaders & ContributorListParameters
-export type GetContributorsService = PgClientService & S3ClientService
+type GetContributorsParameters = DataRequestHeaders & ContributorListParameters
+type GetContributorsService = PgClientService & S3ClientService
 
 const DEFAULT_TITLE = "[Anonymous]"
 
@@ -109,7 +109,7 @@ const S3_LIST = {
     isEligible,
 }
 
-export const getContributors: Operation<GetContributorsParameters, GetContributorsService> = async (
+const getContributors: Operation<GetContributorsParameters, GetContributorsService> = async (
     { accept, ...queryParameters },
     service,
 ) => {

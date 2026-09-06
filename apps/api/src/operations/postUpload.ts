@@ -30,7 +30,7 @@ const USER_MESSAGE = "There was a problem with an attempt to upload your file."
 const USER_AUTH_MESSAGE =
     "There was a problem with an attempt to upload your file. You may need to sign out and sign back in."
 
-export type PostUploadParameters = DataRequestHeaders & {
+type PostUploadParameters = DataRequestHeaders & {
     /**
      * UUID of the authenticated contributor, as established by the request authorizer in
      * `lambdas/auth.ts`.
@@ -40,7 +40,7 @@ export type PostUploadParameters = DataRequestHeaders & {
     "content-type"?: string
 }
 
-export type PostUploadService = S3ClientService
+type PostUploadService = S3ClientService
 
 const getHash = (body: Buffer) => {
     const hashSum = createHash("sha256")
@@ -150,7 +150,7 @@ const getContributor = (contributor: string | undefined) => {
     return contributor
 }
 
-export const postUpload: Operation<PostUploadParameters, PostUploadService> = async (
+const postUpload: Operation<PostUploadParameters, PostUploadService> = async (
     { accept, body, contributorUUID, "content-type": contentType, encoding },
     service,
 ) => {

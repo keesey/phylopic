@@ -15,7 +15,7 @@ export type ListPageRow = Readonly<{
     uuid: UUID
 }>
 
-export interface Parameters<TEmbedded = Record<string, never>> {
+interface Parameters<TEmbedded = Record<string, never>> {
     listPath: string
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>
     page?: string
@@ -54,7 +54,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
         if (!page) {
             const body = await getS3EntityJSON(client, s3List.getIndexKey())
             if (body === null) {
-                throw createListNotFound(userMessage, "List index JSON is missing from S3.", "page")
+                throw createListNotFound(userMessage, "List index JSON is missing.", "page")
             }
             return {
                 ...OK_RESULT,
@@ -64,7 +64,7 @@ const getListResult = async <TEmbedded = Record<string, never>>({
         const pageIndex = getPageIndex(page)
         const body = await getS3EntityJSON(client, s3List.getPageKey(pageIndex))
         if (body === null) {
-            throw createListNotFound(userMessage, "List page JSON is missing from S3.", "page")
+            throw createListNotFound(userMessage, "List page JSON is missing.", "page")
         }
         return {
             ...OK_RESULT,

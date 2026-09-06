@@ -12,9 +12,9 @@ import { Operation } from "./Operation"
 
 const USER_MESSAGE = "There was a problem with an attempt to load a collection."
 
-export type GetCollectionParameters = DataRequestHeaders & Partial<CollectionParameters>
+type GetCollectionParameters = DataRequestHeaders & Partial<CollectionParameters>
 
-export type GetCollectionService = PgClientService
+type GetCollectionService = PgClientService
 
 const ensureExistence = async (service: PgClientService, uuid: string) => {
     if (uuid !== EMPTY_UUID) {
@@ -37,7 +37,7 @@ const ensureExistence = async (service: PgClientService, uuid: string) => {
     }
 }
 
-export const getCollection: Operation<GetCollectionParameters, GetCollectionService> = async (
+const getCollection: Operation<GetCollectionParameters, GetCollectionService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {

@@ -119,12 +119,6 @@ functions:
             - httpApi:
                   path: /resolve/{authority}/{namespace}
                   method: get
-            - httpApi:
-                  path: /resolve/{authority}/{namespace}
-                  method: post
-            - httpApi:
-                  path: /resolve/{authority}/{namespace}
-                  method: options
     uploader:
         handler: src/lambdas/uploader.onAPIGatewayProxy
         memorySize: 512

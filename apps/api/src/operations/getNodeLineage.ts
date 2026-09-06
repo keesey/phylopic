@@ -28,9 +28,9 @@ import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
-export type GetNodesParameters = DataRequestHeaders & NodeLineageParameters
+type GetNodesParameters = DataRequestHeaders & NodeLineageParameters
 
-export type GetNodesService = PgClientService & S3ClientService
+type GetNodesService = PgClientService & S3ClientService
 
 const DEFAULT_TITLE = "[Unnamed]"
 
@@ -117,7 +117,7 @@ const embedListPageRows =
         )
     }
 
-export const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = async (
+const getNodeLineage: Operation<GetNodesParameters, GetNodesService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {

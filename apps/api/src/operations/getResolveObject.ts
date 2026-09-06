@@ -13,9 +13,9 @@ import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
-export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
+type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
 
-export type GetResolveObjectService = PgClientService
+type GetResolveObjectService = PgClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 
@@ -46,7 +46,7 @@ const assertResolvable = (
     }
 }
 
-export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectService> = async (
+const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {

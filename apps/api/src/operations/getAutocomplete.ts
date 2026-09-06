@@ -31,7 +31,7 @@ const findMatches = async (service: PgClientService, query: string): Promise<rea
     })
 }
 
-export const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocompleteService> = async (
+const getAutocomplete: Operation<GetAutocompleteParameters, GetAutocompleteService> = async (
     { accept, build, query },
     service,
 ) => {

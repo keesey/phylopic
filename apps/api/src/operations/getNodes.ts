@@ -29,9 +29,9 @@ import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
-export type GetNodesParameters = DataRequestHeaders & NodeListParameters
+type GetNodesParameters = DataRequestHeaders & NodeListParameters
 
-export type GetNodesService = PgClientService & S3ClientService
+type GetNodesService = PgClientService & S3ClientService
 
 const DEFAULT_TITLE = "[Unnamed]"
 
@@ -139,7 +139,7 @@ const S3_LIST = {
 
 const VALID_EMBEDS = ["childNodes", "parentNode", "primaryImage"] as const
 
-export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
+const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
     { accept, ...queryParameters },
     service,
 ) => {
