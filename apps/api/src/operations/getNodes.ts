@@ -139,10 +139,7 @@ const S3_LIST = {
 
 const VALID_EMBEDS = ["childNodes", "parentNode", "primaryImage"] as const
 
-const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
-    { accept, ...queryParameters },
-    service,
-) => {
+const getNodes: Operation<GetNodesParameters, GetNodesService> = async ({ accept, ...queryParameters }, service) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryParameters, isNodeListParameters, USER_MESSAGE)
     if (checkListRedirect<NodeEmbedded>(queryParameters, NODE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {

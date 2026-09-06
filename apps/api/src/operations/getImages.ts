@@ -169,10 +169,7 @@ const S3_LIST = {
     isEligible,
 }
 const VALID_EMBEDS = ["contributor", "generalNode", "nodes", "specificNode"] as const
-const getImages: Operation<GetImagesParameters, GetImagesService> = async (
-    { accept, ...queryParameters },
-    service,
-) => {
+const getImages: Operation<GetImagesParameters, GetImagesService> = async ({ accept, ...queryParameters }, service) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryParameters, isImageListParameters, USER_MESSAGE)
     if (checkListRedirect<ImageEmbedded>(queryParameters, IMAGE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
