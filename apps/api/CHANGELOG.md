@@ -20,14 +20,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- In offline mode, adding `/prod` to the path is no longer needed.
-- Reduced `dynamic` and `uploader` Lambda timeouts from 30s to 29s so HTTP API has room to return responses before the 30s integration limit.
-
 ### Removed
 
 - The `ENTITY_JSON_SOURCE` environment variable and runtime source switch.
 
 ### Security
+
+## [2.14.3] - 2026-09-06
+
+### Changed
+
+- No longer allowing S3 as an option for `getResolveObject` or `getResolveObjects`.
+
+### Fixed
+
+- Reduced `dynamic` and `uploader` Lambda timeouts from 30s to 29s so HTTP API has room to return responses before the 30s integration limit.
+- No longer prefixing paths with `/prod` in offline mode.
+
+### Removed
+
+- Use of `IS_OFFLINE` environment variable.
 
 ## [2.14.2] - 2026-09-02
 

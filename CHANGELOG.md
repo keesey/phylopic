@@ -38,6 +38,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.61] - 2026-09-06
+
+### Changed
+
+- `@phylopic/api` `2.14.3`: `GET /resolve/...` no longer reads precomputed resolve JSON from S3.
+
+### Fixed
+
+- `@phylopic/api` `2.14.3`: reduced `dynamic` and `uploader` Lambda timeouts to 29s for HTTP API compatibility; offline redirects no longer prefix paths with `/prod`.
+
+### Removed
+
+- `@phylopic/api` `2.14.3`: `IS_OFFLINE` environment variable.
+
 ## [2.0.60] - 2026-09-02
 
 ### Security
