@@ -1,7 +1,6 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
 import { deletePrefix } from "@phylopic/utils-aws"
-import { ENTITIES_BUCKET } from "./constants.js"
-import { getBuildPrefix } from "./getEntityJSONKey.js"
+import { ENTITIES_BUCKET, getBuildPrefix } from "@phylopic/s3-entities"
 const client = new S3Client({})
 export const cleanEntitiesS3 = async (build: number, operator: "=" | "<>") => {
     if (operator === "=") {

@@ -67,7 +67,6 @@ functions:
         timeout: 29
         environment:
             ENTITIES_BUCKET: entities.phylopic.org
-            ENTITY_JSON_SOURCE: s3
             PGDATABASE: "${ssm:PGDATABASE}"
             PGHOST: "${ssm:PGHOST}"
             PGPASSWORD: "${ssm:PGPASSWORD}"
@@ -120,12 +119,6 @@ functions:
             - httpApi:
                   path: /resolve/{authority}/{namespace}
                   method: get
-            - httpApi:
-                  path: /resolve/{authority}/{namespace}
-                  method: post
-            - httpApi:
-                  path: /resolve/{authority}/{namespace}
-                  method: options
     uploader:
         handler: src/lambdas/uploader.onAPIGatewayProxy
         memorySize: 512

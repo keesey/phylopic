@@ -1,88 +1,76 @@
-import { S3Client } from "@aws-sdk/client-s3"
-import { putJSONString } from "@phylopic/utils-aws"
+import { mkdir, writeFile } from "fs/promises"
+import { mkdirSync, writeFileSync } from "fs"
+import { dirname, join } from "path"
 import { UUID } from "@phylopic/utils"
 import Bottleneck from "bottleneck"
-import { ENTITIES_CACHE_CONTROL, ENTITIES_BUCKET } from "./constants.js"
-import { EntityFolder, getEntityJSONKey } from "./getEntityJSONKey.js"
-import { getResolveJSONKey } from "./getResolveJSONKey.js"
-import { getStaticJSONKey, StaticJSONName } from "./getStaticJSONKey.js"
-const UPLOAD_CONCURRENCY = 50
-interface PendingUpload {
-    body: string
-    folder: EntityFolder
-    uuid: UUID
+import { EntityFolder, getEntityJSONKey, getStaticJSONKey, ListName, StaticJSONName } from "@phylopic/s3-entities"
+import { ENTITIES_STAGING_ROOT, WRITE_CONCURRENCY, WRITE_QUEUE_HIGH_WATER } from "./constants.js"
+
+export const getEntitiesStagingBuildDir = (build: number) => join(ENTITIES_STAGING_ROOT, String(build))
+
+const ENTITY_FOLDERS: readonly EntityFolder[] = ["contributors", "images", "nodes"]
+
+const LIST_NAMES: readonly ListName[] = ["contributors", "images", "nodes"]
+
+const getStagingDirs = (build: number): readonly string[] => {
+    const buildDir = join(ENTITIES_STAGING_ROOT, String(build))
+    return [
+        ENTITIES_STAGING_ROOT,
+        buildDir,
+        ...ENTITY_FOLDERS.map(folder => join(buildDir, folder)),
+        ...LIST_NAMES.flatMap(name => [join(buildDir, "lists", name), join(buildDir, "lists", name, "pages")]),
+    ]
 }
-interface PendingResolveUpload {
-    authority: string
-    body: string
-    namespace: string
-    objectID: string
-}
-interface PendingStaticUpload {
-    body: string
-    name: StaticJSONName
-}
+
 export class EntityS3Writer {
     private readonly build: number
-    private readonly client = new S3Client({})
-    private readonly limiter = new Bottleneck({ maxConcurrent: UPLOAD_CONCURRENCY })
-    private readonly pending: PendingUpload[] = []
-    private readonly resolvePending: PendingResolveUpload[] = []
-    private readonly staticPending: PendingStaticUpload[] = []
+
+    /** Parent directory paths that already exist on disk. */
+    private readonly createdDirs = new Set<string>()
+
+    private readonly limiter = new Bottleneck({
+        maxConcurrent: WRITE_CONCURRENCY,
+        highWater: WRITE_QUEUE_HIGH_WATER,
+        strategy: Bottleneck.strategy.BLOCK,
+    })
+
     constructor(build: number) {
         this.build = build
+        for (const dir of getStagingDirs(build)) {
+            mkdirSync(dir, { recursive: true })
+            this.createdDirs.add(dir)
+        }
     }
-    put(folder: EntityFolder, uuid: UUID, body: string) {
-        this.pending.push({ body, folder, uuid })
+
+    private async ensureDir(dir: string) {
+        if (this.createdDirs.has(dir)) {
+            return
+        }
+        await mkdir(dir, { recursive: true })
+        this.createdDirs.add(dir)
     }
-    putStatic(name: StaticJSONName, body: string) {
-        this.staticPending.push({ body, name })
+
+    put(key: string, body: string): Promise<void> {
+        return this.limiter.schedule(async () => {
+            const path = join(ENTITIES_STAGING_ROOT, key)
+            const parentDir = dirname(path)
+            if (!this.createdDirs.has(parentDir)) {
+                await this.ensureDir(parentDir)
+            }
+            await writeFile(path, body, "utf8")
+        })
     }
-    putResolve(authority: string, namespace: string, objectID: string, body: string) {
-        this.resolvePending.push({ authority, body, namespace, objectID })
+
+    putEntity(folder: EntityFolder, uuid: UUID, body: string): Promise<void> {
+        return this.put(getEntityJSONKey(this.build, folder, uuid), body)
     }
+
+    putStatic(name: StaticJSONName, body: string): Promise<void> {
+        return this.put(getStaticJSONKey(this.build, name), body)
+    }
+
     async flush() {
-        await Promise.all([
-            ...this.pending.map(({ body, folder, uuid }) =>
-                this.limiter.schedule(() =>
-                    putJSONString(
-                        this.client,
-                        {
-                            Bucket: ENTITIES_BUCKET,
-                            CacheControl: ENTITIES_CACHE_CONTROL,
-                            Key: getEntityJSONKey(this.build, folder, uuid),
-                        },
-                        body,
-                    ),
-                ),
-            ),
-            ...this.resolvePending.map(({ authority, body, namespace, objectID }) =>
-                this.limiter.schedule(() =>
-                    putJSONString(
-                        this.client,
-                        {
-                            Bucket: ENTITIES_BUCKET,
-                            CacheControl: ENTITIES_CACHE_CONTROL,
-                            Key: getResolveJSONKey(this.build, authority, namespace, objectID),
-                        },
-                        body,
-                    ),
-                ),
-            ),
-            ...this.staticPending.map(({ body, name }) =>
-                this.limiter.schedule(() =>
-                    putJSONString(
-                        this.client,
-                        {
-                            Bucket: ENTITIES_BUCKET,
-                            CacheControl: ENTITIES_CACHE_CONTROL,
-                            Key: getStaticJSONKey(this.build, name),
-                        },
-                        body,
-                    ),
-                ),
-            ),
-        ])
         await this.limiter.stop({ dropWaitingJobs: false })
+        writeFileSync(join(ENTITIES_STAGING_ROOT, ".staging-build"), String(this.build), "utf8")
     }
 }

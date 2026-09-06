@@ -15,17 +15,22 @@ import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import addFilterToQuery from "../entities/image/addFilterToQuery"
+import { getListIndexKey, getListPageKey } from "@phylopic/s3-entities"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
 import getListResult, { ListPageRow } from "../pagination/getListResult"
+import getPostgresListResult from "../pagination/getPostgresListResult"
+import { canServeListFromS3, isUnfilteredImagesList } from "../pagination/isS3ListEligible"
 import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
+import { S3Client } from "@aws-sdk/client-s3"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
-export type GetImagesParameters = DataRequestHeaders & ImageListParameters
-export type GetImagesService = PgClientService
+type GetImagesParameters = DataRequestHeaders & ImageListParameters
+type GetImagesService = PgClientService & S3ClientService
 const DEFAULT_TITLE = "[Untitled]"
 const ITEMS_PER_PAGE = 48
 const USER_MESSAGE = "There was a problem with a request to list silhouette images."
@@ -139,7 +144,7 @@ const embedListPageRows =
     async (
         rows: readonly ListPageRow[],
         embeds: ReadonlyArray<string & keyof ImageEmbedded>,
-        client?: ClientBase,
+        client: S3Client,
     ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
             return rows.map(({ json, title, uuid }) => [
@@ -156,28 +161,43 @@ const embedListPageRows =
             }),
         )
     }
-export const getImages: Operation<GetImagesParameters, GetImagesService> = async (
-    { accept, ...queryParameters },
-    service,
-) => {
+const isEligible = (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
+    isUnfilteredImagesList(listQuery as ImageListParameters)
+const S3_LIST = {
+    getIndexKey: () => getListIndexKey(BUILD, "images"),
+    getPageKey: (pageIndex: number) => getListPageKey(BUILD, "images", pageIndex),
+    isEligible,
+}
+const VALID_EMBEDS = ["contributor", "generalNode", "nodes", "specificNode"] as const
+const getImages: Operation<GetImagesParameters, GetImagesService> = async ({ accept, ...queryParameters }, service) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryParameters, isImageListParameters, USER_MESSAGE)
     if (checkListRedirect<ImageEmbedded>(queryParameters, IMAGE_EMBEDDED_PARAMETERS, USER_MESSAGE)) {
         return createBuildRedirect("/images", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    return await getListResult({
+    const listParameters = {
+        itemsPerPage: ITEMS_PER_PAGE,
+        listPath: "/images",
+        listQuery: queryParameters,
+        page: queryParameters.page,
+        userMessage: USER_MESSAGE,
+        validEmbeds: VALID_EMBEDS,
+    }
+    if (canServeListFromS3(queryParameters, isEligible)) {
+        return await getListResult({
+            ...listParameters,
+            service,
+            s3List: S3_LIST,
+        })
+    }
+    return await getPostgresListResult({
+        ...listParameters,
         embedListPageRows: embedListPageRows(queryParameters),
         fetchListPageRows: fetchListPageRows(queryParameters),
         getItemLinks: getItemLinks(queryParameters),
         getTotalItems: getTotalItems(queryParameters),
-        itemsPerPage: ITEMS_PER_PAGE,
-        listPath: "/images",
-        listQuery: queryParameters,
         service,
-        page: queryParameters.page,
-        userMessage: USER_MESSAGE,
-        validEmbeds: ["contributor", "generalNode", "nodes", "specificNode"],
     })
 }
 export default getImages

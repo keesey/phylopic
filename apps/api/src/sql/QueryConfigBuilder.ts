@@ -1,5 +1,5 @@
 import { QueryConfig } from "pg"
-export class QueryConfigBuilder {
+class QueryConfigBuilder {
     private clauses: string[] = []
     private values: unknown[] = []
     constructor(clause?: string, values?: readonly unknown[]) {

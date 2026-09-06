@@ -17,4 +17,6 @@ const increment = (key: string, limit: number): boolean => {
     return true
 }
 
-export const checkPostCollectionRateLimit = (ip: string): boolean => increment(`ip:${ip}`, IP_LIMIT)
+const checkPostCollectionRateLimit = (ip: string): boolean => increment(`ip:${ip}`, IP_LIMIT)
+
+export default checkPostCollectionRateLimit

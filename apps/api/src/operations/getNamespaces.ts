@@ -1,34 +1,25 @@
-import { AuthorizedNamespace, DataParameters, DATA_MEDIA_TYPE } from "@phylopic/api-models"
-import { stringifyNormalized } from "@phylopic/utils"
+import { DATA_MEDIA_TYPE, DataParameters } from "@phylopic/api-models"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import ENTITY_JSON_SOURCE from "../entities/ENTITY_JSON_SOURCE"
-import selectNamespacesJSON from "../entities/selectNamespacesJSON"
+import { getStaticJSONKey } from "@phylopic/s3-entities"
+import BUILD from "../build/BUILD"
+import getS3EntityJSON from "../entities/getS3EntityJSON"
+import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
+import withS3Client from "../services/withS3Client"
 import { Operation } from "./Operation"
 
-export type GetNamespaceParameters = DataRequestHeaders & DataParameters
-export type GetNamespacesService = PgClientService
+type GetNamespaceParameters = DataRequestHeaders & DataParameters
+
+type GetNamespacesService = S3ClientService
 
 const USER_MESSAGE = "There was a problem with a request for namespace data."
 
-const selectNamespacesFromPostgres = async (service: PgClientService): Promise<readonly AuthorizedNamespace[]> => {
-    const client = await service.createPgClient()
-    try {
-        const queryResult = await client.query<AuthorizedNamespace>(
-            'SELECT authority,"namespace" FROM node_external GROUP BY authority,"namespace" ORDER BY authority,"namespace"',
-        )
-        return queryResult.rows
-    } finally {
-        await service.deletePgClient(client)
-    }
-}
-
-export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesService> = async (
+const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesService> = async (
     { accept, ...queryParameters },
     service,
 ) => {
@@ -37,25 +28,19 @@ export const getNamespaces: Operation<GetNamespaceParameters, GetNamespacesServi
         return createBuildRedirect("/namespaces", queryParameters)
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    if (ENTITY_JSON_SOURCE !== "postgres") {
-        const body = await selectNamespacesJSON()
-        if (body !== null) {
-            return {
-                body,
-                headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
-                statusCode: 200,
-            }
-        }
-        if (ENTITY_JSON_SOURCE === "s3") {
-            console.warn("Namespaces JSON is missing from S3; falling back to Postgres.")
-        }
+    const body = await withS3Client(service, client => getS3EntityJSON(client, getStaticJSONKey(BUILD, "namespaces")))
+    if (body === null) {
+        throw new APIError(500, [
+            {
+                developerMessage: "Namespaces JSON is missing from S3.",
+                field: "build",
+                type: "DEFAULT_5XX",
+                userMessage: USER_MESSAGE,
+            },
+        ])
     }
-    const namespaces = await selectNamespacesFromPostgres(service)
     return {
-        body: stringifyNormalized({
-            build: queryParameters.build,
-            namespaces,
-        }),
+        body,
         headers: { ...DATA_HEADERS, ...PERMANENT_HEADERS },
         statusCode: 200,
     }
