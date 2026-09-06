@@ -3,18 +3,6 @@ import { ContributorListParameters, ImageListParameters, NodeListParameters } fr
 const isTruthyFilter = (value: string | number | boolean | undefined) =>
     value !== undefined && value !== "" && value !== false
 
-export const hasExtraListEmbeds = (
-    listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
-    validEmbeds: readonly string[],
-): boolean =>
-    Object.keys(listQuery).some(key => {
-        if (!key.startsWith("embed_") || key === "embed_items") {
-            return false
-        }
-        const embed = key.slice("embed_".length)
-        return validEmbeds.includes(embed)
-    })
-
 export const isUnfilteredContributorsList = (parameters: ContributorListParameters) =>
     !isTruthyFilter(parameters.filter_collection)
 
@@ -40,5 +28,4 @@ export const isUnfilteredImagesList = (parameters: ImageListParameters) =>
 export const canServeListFromS3 = (
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
     isEligible: (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) => boolean,
-    validEmbeds: readonly string[],
-): boolean => isEligible(listQuery) && (listQuery.embed_items !== "true" || !hasExtraListEmbeds(listQuery, validEmbeds))
+): boolean => isEligible(listQuery) && listQuery.embed_items !== "true"

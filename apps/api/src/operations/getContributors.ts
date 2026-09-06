@@ -127,7 +127,7 @@ export const getContributors: Operation<GetContributorsParameters, GetContributo
         userMessage: USER_MESSAGE,
         validEmbeds: VALID_EMBEDS,
     }
-    if (canServeListFromS3(queryParameters, isEligible, VALID_EMBEDS)) {
+    if (canServeListFromS3(queryParameters, isEligible)) {
         return await getListResult({
             ...listParameters,
             service,

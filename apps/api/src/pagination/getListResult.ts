@@ -7,8 +7,6 @@ import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import type { S3ClientService } from "../services/S3ClientService"
 import withS3Client from "../services/withS3Client"
 import getPageIndex from "./getPageIndex"
-import hydrateListPageFromS3 from "./hydrateListPageFromS3"
-import { hasExtraListEmbeds } from "./isS3ListEligible"
 import type { S3ListSource } from "./S3ListSource"
 
 export type ListPageRow = Readonly<{
@@ -47,13 +45,10 @@ const createListNotFound = (userMessage: string, developerMessage: string, field
     )
 
 const getListResult = async <TEmbedded = Record<string, never>>({
-    listPath,
-    listQuery,
     page,
     s3List,
     service,
     userMessage = "There was an error in a request for data.",
-    validEmbeds,
 }: Parameters<TEmbedded>) =>
     withS3Client(service, async client => {
         if (!page) {
@@ -67,29 +62,6 @@ const getListResult = async <TEmbedded = Record<string, never>>({
             }
         }
         const pageIndex = getPageIndex(page)
-        if (listQuery.embed_items === "true") {
-            if (hasExtraListEmbeds(listQuery, validEmbeds)) {
-                throw createListNotFound(
-                    userMessage,
-                    "List pages with embed parameters other than embed_items are not served from precomputed S3 data.",
-                )
-            }
-            const hydrated = await hydrateListPageFromS3(
-                client,
-                s3List.getPageKey,
-                listPath,
-                listQuery,
-                pageIndex,
-                page,
-            )
-            if (hydrated === null) {
-                throw createListNotFound(userMessage, "List page JSON is missing from S3.", "page")
-            }
-            return {
-                ...OK_RESULT,
-                body: hydrated.body,
-            }
-        }
         const body = await getS3EntityJSON(client, s3List.getPageKey(pageIndex))
         if (body === null) {
             throw createListNotFound(userMessage, "List page JSON is missing from S3.", "page")

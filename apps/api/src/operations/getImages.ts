@@ -187,7 +187,7 @@ export const getImages: Operation<GetImagesParameters, GetImagesService> = async
         userMessage: USER_MESSAGE,
         validEmbeds: VALID_EMBEDS,
     }
-    if (canServeListFromS3(queryParameters, isEligible, VALID_EMBEDS)) {
+    if (canServeListFromS3(queryParameters, isEligible)) {
         return await getListResult({
             ...listParameters,
             service,
