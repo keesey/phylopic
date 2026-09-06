@@ -42,11 +42,10 @@ names the functions that receive each one. That scoping is deliberate — see
 
 #### Optional
 
-| Variable          | Function(s) | Purpose                                                         | How it is read   |
-| ----------------- | ----------- | --------------------------------------------------------------- | ---------------- |
-| `ENTITIES_BUCKET` | `dynamic`   | S3 bucket for entity JSON (`entities.phylopic.org`)             | `process.env`    |
-| `PGPORT`          | `dynamic`   | Postgres port (default `5432`)                                  | `pg`, implicitly |
-| `IS_OFFLINE`      | all         | `"true"` under `serverless-offline`; prefixes redirects `/prod` | `process.env`    |
+| Variable          | Function(s) | Purpose                                             | How it is read   |
+| ----------------- | ----------- | --------------------------------------------------- | ---------------- |
+| `ENTITIES_BUCKET` | `dynamic`   | S3 bucket for entity JSON (`entities.phylopic.org`) | `process.env`    |
+| `PGPORT`          | `dynamic`   | Postgres port (default `5432`)                      | `pg`, implicitly |
 
 #### Set automatically
 

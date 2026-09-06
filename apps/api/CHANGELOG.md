@@ -13,22 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Entity JSON is read from S3; the `ENTITY_JSON_SOURCE` environment variable and runtime source switch are removed.
-- List pagination serves `{build}/lists/{name}/index.json` and `{page}.json` from S3 when eligible;
-  `embed_items=true` hydrates entity JSON from S3 entity files. Filtered lists, extra embed
-  parameters, and missing S3 objects are served from Postgres or return 404, respectively.
-- `GET /nodes/{uuid}/lineage` is served from Postgres (recursive query on `node.parent_uuid`).
-- `GET /resolve/...` is served from Postgres (`node_external` lookup).
-- `GET /autocomplete` remains on Postgres.
+- Entity JSON is always read from S3.
+- List pagination serves `{build}/lists/{name}/index.json` and `{page}.json` from S3 when eligible; `embed_items=true` hydrates entity JSON from S3 entity files. Filtered lists and extra embed parameters are served from Postgres.
 
 ### Deprecated
 
 ### Fixed
 
+- In offline mode, adding `/prod` to the path is no longer needed.
+
 ### Removed
 
-- Precomputed S3 reads for `GET /nodes/{uuid}/lineage`.
-- Precomputed S3 reads for `GET /resolve/...`.
+- The `ENTITY_JSON_SOURCE` environment variable and runtime source switch.
 
 ### Security
 
