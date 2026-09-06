@@ -64,7 +64,7 @@ functions:
         handler: src/lambdas/dynamic.onAPIGatewayProxy
         memorySize: 512
         reservedConcurrency: 50
-        timeout: 30
+        timeout: 29
         environment:
             ENTITIES_BUCKET: entities.phylopic.org
             ENTITY_JSON_SOURCE: s3
@@ -129,7 +129,7 @@ functions:
     uploader:
         handler: src/lambdas/uploader.onAPIGatewayProxy
         memorySize: 512
-        timeout: 30
+        timeout: 29
         events:
             - httpApi:
                   authorizer:
