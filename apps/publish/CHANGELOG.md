@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Publish writes unfiltered lists with no embedsto `{build}/lists/` during `yarn insert`.
+- Publish writes unfiltered lists with no embeds to `{build}/lists/` during `yarn insert`.
 - Entity JSON is staged under `.s3/entities.phylopic.org/{build}/` during insert and uploaded with `aws s3 sync` (`yarn upload:entities`).
 - `yarn verify:entities` checks sampled entity JSON, `namespaces.json`, and unfiltered list index totals against Postgres.
 
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Staging `{build}/resolve/` during insert.
+- Staging `{build}/lineages/` and `{build}/resolve/` during insert.
 - Resolve checks from `yarn verify:entities`.
 
 ### Security
