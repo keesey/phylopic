@@ -16,7 +16,7 @@
         "eslint-config-phylopic": "*",
         "tsup": "^8.5.1",
         "typescript": "^5.4.5",
-        "vitest": "^4.1.10"
+        "vitest": "^5.0.0"
     },
     "exports": {
         "types": "./dist/index.d.ts",
