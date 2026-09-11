@@ -36,7 +36,7 @@
         "ts-loader": "^9.6.2",
         "ts-node": "^10.9.2",
         "typescript": "^5.4.5",
-        "vitest": "^4.1.10",
+        "vitest": "^5.0.0",
         "webpack": "^5.108.4"
     },
     "license": "MIT",
@@ -56,5 +56,5 @@
         "predeploy": "yarn test",
         "test": "yarn build:docs && node ./scripts/validate-openapi.mjs"
     },
-    "version": "2.14.3"
+    "version": "2.14.4"
 }

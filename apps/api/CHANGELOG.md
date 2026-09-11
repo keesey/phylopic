@@ -28,6 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.14.4] - 2026-09-11
+
+### Changed
+
+- Upgraded `vitest` from `4.1.10` to `5.0.0`.
+
 ## [2.14.3] - 2026-09-06
 
 ### Changed
