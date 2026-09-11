@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.62] - 2026-09-11
+
+### Changed
+
+- `@phylopic/ui` `1.7.18`, `@phylopic/www` `2.15.2`, `@phylopic/contribute` `2.4.25`, and `@phylopic/edit` `1.10.2`: patch bumps for Next.js `15.5.24`.
+- `@phylopic/api` `2.14.4`, `@phylopic/api-models` `1.4.2`, `@phylopic/fundraiser` `1.0.1`, `@phylopic/source-client` `1.4.8`, `@phylopic/source-models` `1.1.5`, `@phylopic/utils-aws` `1.1.4`, and `@phylopic/utils` `1.2.5`: patch bumps upgrading `vitest` from `4.1.10` to `5.0.0`.
+
 ## [2.0.61] - 2026-09-06
 
 ### Changed

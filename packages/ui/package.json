@@ -118,5 +118,5 @@
         "target": "ESNext"
     },
     "types": "./dist/index.d.ts",
-    "version": "1.7.17"
+    "version": "1.7.18"
 }
