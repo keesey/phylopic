@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial release.
-
 ### Changed
 
 ### Deprecated
@@ -20,3 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.0.0] - 2026-09-12
+
+### Added
+
+- `ENTITIES_BUCKET` constant for the entities S3 bucket name.
+- Key helpers: `encodeKeySegment`, `getBuildPrefix`, `getEntityJSONKey`, `getListIndexKey`, `getListPageKey`, and `getStaticJSONKey`.
+- Vitest coverage for all exported helpers.

@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.14.0] - 2026-09-12
+
+### Added
+
 - Publish writes unfiltered lists with no embeds to `{build}/lists/` during `yarn insert`.
 - Entity JSON is staged under `.s3/entities.phylopic.org/{build}/` during insert and uploaded with `aws s3 sync` (`yarn upload:entities`).
 - `yarn verify:entities` checks sampled entity JSON, `namespaces.json`, and unfiltered list index totals against Postgres.
@@ -17,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `EntityS3Writer` stages entity, list, and static JSON locally instead of uploading via the SDK during insert.
 - `putEntities` (previously `insertEntities`) stages list and namespace JSON in parallel with the Postgres transaction; entity JSON writes are scheduled immediately and flushed after commit.
+- Upgraded `@phylopic/s3-entities` to `1.0.0`.
 
 ### Fixed
 
@@ -26,8 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Staging `{build}/lineages/` and `{build}/resolve/` during insert.
 - Resolve checks from `yarn verify:entities`.
-
-### Security
 
 ## [1.13.0] - 2026-08-28
 

@@ -9,13 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Precomputed S3 reads for unfiltered `GET /contributors`, `GET /nodes`, and `GET /images`.
-
 ### Changed
-
-- Single-entity JSON is always read from S3.
-- `GET /namespaces` reads `{build}/namespaces.json` from S3 only (no Postgres fallback).
-- List pagination serves `{build}/lists/{name}/index.json` and `{page}.json` from S3 when there are no filters or embeds; filtered lists and `embed_items=true` use Postgres.
 
 ### Deprecated
 
@@ -23,10 +17,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+### Security
+
+## [2.15.0] - 2026-09-12
+
+### Added
+
+- Precomputed S3 reads for unfiltered `GET /contributors`, `GET /nodes`, and `GET /images`.
+
+### Changed
+
+- Single-entity JSON is always read from S3.
+- `GET /namespaces` reads `{build}/namespaces.json` from S3 only (no Postgres fallback).
+- List pagination serves `{build}/lists/{name}/index.json` and `{page}.json` from S3 when there are no filters or embeds; filtered lists and `embed_items=true` use Postgres.
+- Upgraded `@phylopic/s3-entities` to `1.0.0`.
+
+### Removed
+
 - The `ENTITY_JSON_SOURCE` environment variable and runtime source switch.
 - Now-unimplemented `POST` and `OPTIONS` HTTP API events for `GET /resolve/{authority}/{namespace}` from `serverless.yml`.
-
-### Security
 
 ## [2.14.4] - 2026-09-11
 
