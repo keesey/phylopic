@@ -11,21 +11,26 @@ import {
 } from "@phylopic/utils"
 import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
+import { cleanEntitiesStaging } from "../entities/cleanEntitiesStaging.js"
 import { EntityS3Writer } from "../entities/EntityS3Writer.js"
 import { cleanEntitiesS3 } from "../entities/cleanEntitiesS3.js"
 import { cleanTables } from "./cleanEntities.js"
 import getContributorJSON from "./getContributorJSON.js"
 import getAuthorizedNamespaces from "./getAuthorizedNamespaces.js"
-import getResolveObjectJSONEntries from "./getResolveObjectJSONEntries.js"
+import { getContributorListJSONUploads, getImageListJSONUploads, getNodeListJSONUploads } from "./getListJSONUploads.js"
 import getImageJSON from "./getImageJSON.js"
 import getNodeJSON from "./getNodeJSON.js"
 import type { SourceData } from "./getSourceData.js"
+import { getEntityJSONKey } from "@phylopic/s3-entities"
+
 const MINIMUM_SEARCH_TEXT_LENGTH = 2
+
 interface NodeQueryConfigs {
     readonly externals: QueryConfig
     readonly names: QueryConfig
     readonly nodes: QueryConfig
 }
+
 const getNormalizedName = (name: readonly NomenPart[]) => {
     const normalized = normalizeQuery(
         name
@@ -38,6 +43,7 @@ const getNormalizedName = (name: readonly NomenPart[]) => {
     }
     return normalized
 }
+
 const processNodeNames = (
     build: number,
     nodeUUID: UUID,
@@ -55,6 +61,7 @@ const processNodeNames = (
         queryConfig.values.push(normalizedName, nodeUUID, build)
     }
 }
+
 const processNodeExternals = (
     build: number,
     nodeUUID: string,
@@ -72,7 +79,14 @@ const processNodeExternals = (
         queryConfig.values.push(authority, namespace, objectID, build, nodeUUID, link.title)
     }
 }
-const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryConfigs, s3Writer?: EntityS3Writer) => {
+
+const processNode = (
+    data: SourceData,
+    s3Writer: EntityS3Writer,
+    s3Promises: Promise<void>[],
+    nodeUUID: UUID,
+    queryConfigs: NodeQueryConfigs,
+) => {
     const node = data.nodes.get(nodeUUID)
     if (!node) {
         throw new Error(`Cannot find node! (UUID=${nodeUUID})`)
@@ -80,8 +94,8 @@ const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryCo
     if (!queryConfigs.nodes.values) {
         throw new Error("No values array!")
     }
-    const json = getNodeJSON(nodeUUID, data)
-    const jsonString = stringifyNormalized(json)
+    const jsonString = stringifyNormalized(getNodeJSON(nodeUUID, data))
+    s3Promises.push(s3Writer.put(getEntityJSONKey(data.build, "nodes", nodeUUID), jsonString))
     let index = queryConfigs.nodes.values.length + 1
     queryConfigs.nodes.text += index === 1 ? " " : ","
     queryConfigs.nodes.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::bigint,$${index++}::text,$${index++}::character varying)`
@@ -94,12 +108,12 @@ const processNode = (data: SourceData, nodeUUID: UUID, queryConfigs: NodeQueryCo
         jsonString,
         titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
     )
-    s3Writer?.put("nodes", nodeUUID, jsonString)
     processNodeNames(data.build, nodeUUID, node.names, queryConfigs.names)
     const nodeHRef = `/nodes/${nodeUUID}`
     const externals = [...data.externals.entries()].filter(([, { href }]) => href === nodeHRef)
     processNodeExternals(data.build, nodeUUID, externals, queryConfigs.externals)
 }
+
 const tryQuery = async <T extends unknown[]>(client: ClientBase, config: QueryConfig<T>) => {
     try {
         return await client.query(config)
@@ -108,13 +122,15 @@ const tryQuery = async <T extends unknown[]>(client: ClientBase, config: QueryCo
         throw e
     }
 }
-const insertNodes = async (client: ClientBase, data: SourceData, isDryRun: boolean, s3Writer?: EntityS3Writer) => {
+
+const insertNodes = async (client: ClientBase, s3Writer: EntityS3Writer, data: SourceData, isDryRun: boolean) => {
     console.info("Adding node data to entities database...")
     const sorted = [...data.nodes.keys()].sort(
         (a, b) => (data.depths.get(a) ?? 0) - (data.depths.get(b) ?? 0) || (a < b ? -1 : b < a ? 1 : 0),
     )
     const chunks = chunk(sorted, 500)
     for (const c of chunks) {
+        const s3Promises: Promise<void>[] = []
         const nodes: QueryConfig = {
             text: 'INSERT INTO node ("uuid",build,parent_uuid,sort_index,json,title) VALUES',
             values: [],
@@ -128,7 +144,7 @@ const insertNodes = async (client: ClientBase, data: SourceData, isDryRun: boole
             values: [],
         }
         const configs = { externals, names, nodes }
-        c.forEach(nodeUUID => processNode(data, nodeUUID, configs, s3Writer))
+        c.forEach(nodeUUID => processNode(data, s3Writer, s3Promises, nodeUUID, configs))
         if (!isDryRun) {
             if (nodes.values?.length) {
                 await tryQuery(client, nodes)
@@ -140,23 +156,29 @@ const insertNodes = async (client: ClientBase, data: SourceData, isDryRun: boole
                 await tryQuery(client, externals)
             }
         }
+        await Promise.all(s3Promises)
     }
     console.info("Added node data to entities database.")
 }
+
 const isBy = (license: LicenseURL) =>
     license !== "https://creativecommons.org/publicdomain/mark/1.0/" &&
     license !== "https://creativecommons.org/publicdomain/zero/1.0/"
+
 const isNC = (license: LicenseURL) =>
     license === "https://creativecommons.org/licenses/by-nc-sa/3.0/" ||
     license === "https://creativecommons.org/licenses/by-nc/3.0/"
+
 const isSA = (license: LicenseURL) =>
     license === "https://creativecommons.org/licenses/by-nc-sa/3.0/" ||
     license === "https://creativecommons.org/licenses/by-sa/3.0/"
-const insertImages = async (client: ClientBase, data: SourceData, isDryRun = false, s3Writer?: EntityS3Writer) => {
+
+const insertImages = async (client: ClientBase, s3Writer: EntityS3Writer, data: SourceData, isDryRun = false) => {
     console.info("Adding image data to entities database...")
     if (!isDryRun && data.images.size > 0) {
         const chunks = chunk(data.images.entries(), 1024)
         for (const c of chunks) {
+            const s3Promises: Promise<void>[] = []
             const config: QueryConfig = {
                 text: 'INSERT INTO image ("uuid",build,contributor_uuid,created,depth,license_by,license_nc,license_sa,modified,modified_file,json,title,unlisted) VALUES',
                 values: [],
@@ -168,6 +190,7 @@ const insertImages = async (client: ClientBase, data: SourceData, isDryRun = fal
             for (const [uuid, image] of c) {
                 const titleNomen = data.nodes.get(image.specific)?.names[0]
                 const jsonString = stringifyNormalized(await getImageJSON(uuid, data))
+                s3Promises.push(s3Writer.put(getEntityJSONKey(data.build, "images", uuid), jsonString))
                 config.text += index === 1 ? " " : ","
                 config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::uuid,$${index++}::timestamp without time zone,$${index++}::bigint,$${index++}::bit,$${index++}::bit,$${index++}::bit,$${index++}::timestamp without time zone,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::character varying,$${index++}::bit)`
                 config.values.push(
@@ -185,26 +208,23 @@ const insertImages = async (client: ClientBase, data: SourceData, isDryRun = fal
                     titleNomen ? stringifyNomen(shortenNomen(titleNomen)) : null,
                     image.unlisted ? 1 : 0,
                 )
-                s3Writer?.put("images", uuid, jsonString)
             }
-            await tryQuery(client, config)
+            await Promise.all([...s3Promises, tryQuery(client, config)])
         }
     }
     console.info("Added image data to entities database.")
 }
+
 const getContributorCount = (data: SourceData, uuid: UUID): number => {
     return [...data.images.values()].filter(({ contributor, unlisted }) => !unlisted && contributor === uuid).length
 }
+
 const compareContributorEntries = (
     a: Readonly<[UUID, Contributor, number]>,
     b: Readonly<[UUID, Contributor, number]>,
 ) => b[2] - a[2] || compareStrings(a[1].created, b[1].created) || compareStrings(a[0], b[0])
-const insertContributors = async (
-    client: ClientBase,
-    data: SourceData,
-    isDryRun = false,
-    s3Writer?: EntityS3Writer,
-) => {
+
+const insertContributors = async (client: ClientBase, s3Writer: EntityS3Writer, data: SourceData, isDryRun = false) => {
     console.info("Adding contributor data to entities database...")
     const contributors = [...data.contributors.entries()]
         .map(
@@ -216,6 +236,7 @@ const insertContributors = async (
         const chunks = chunk(contributors, 1024)
         let sortIndex = 0
         for (const c of chunks) {
+            const s3Promises: Promise<void>[] = []
             const config: QueryConfig = {
                 text: 'INSERT INTO contributor ("uuid",build,created,json,sort_index,title,unlisted) VALUES',
                 values: [],
@@ -226,6 +247,7 @@ const insertContributors = async (
             let index = 1
             for (const [uuid, contributor, count] of c) {
                 const jsonString = stringifyNormalized(getContributorJSON(uuid, data, count))
+                s3Promises.push(s3Writer.put(getEntityJSONKey(data.build, "contributors", uuid), jsonString))
                 config.text += index === 1 ? " " : ","
                 config.text += `($${index++}::uuid,$${index++}::bigint,$${index++}::timestamp without time zone,$${index++}::text,$${index++}::bigint,$${index++}::character varying,$${index++}::bit)`
                 config.values.push(
@@ -237,22 +259,23 @@ const insertContributors = async (
                     contributor.name || null,
                     count > 0 ? 0 : 1,
                 )
-                s3Writer?.put("contributors", uuid, jsonString)
             }
-            await tryQuery(client, config)
+            await Promise.all([...s3Promises, tryQuery(client, config)])
         }
     }
     console.info("Added contributor data to entities database.")
 }
+
 const insertContributorsAndImages = async (
     client: ClientBase,
+    s3Writer: EntityS3Writer,
     data: SourceData,
     isDryRun = false,
-    s3Writer?: EntityS3Writer,
 ) => {
-    await insertContributors(client, data, isDryRun, s3Writer)
-    await insertImages(client, data, isDryRun, s3Writer)
+    await insertContributors(client, s3Writer, data, isDryRun)
+    await insertImages(client, s3Writer, data, isDryRun)
 }
+
 const insertIllustrations = async (client: ClientBase, data: SourceData, isDryRun = false) => {
     console.info("Adding image-node assigments to entities database...")
     if (!isDryRun && data.illustration.size > 0) {
@@ -278,37 +301,81 @@ const insertIllustrations = async (client: ClientBase, data: SourceData, isDryRu
     }
     console.info("Added image-node assigments to entities database.")
 }
-const insertEntities = async (client: ClientBase, data: SourceData, isDryRun = false) => {
+
+const queueForBucket = async (label: string, promise: Promise<void>) => {
+    console.info(`Queueing ${label} for bucket...`)
+    await promise
+    console.info(`Queued ${label} for bucket.`)
+}
+
+const queueEntitiesForBucket = async (data: SourceData, s3Writer: EntityS3Writer) => {
+    await Promise.all([
+        queueForBucket(
+            "namespaces object",
+            s3Writer.putStatic(
+                "namespaces",
+                stringifyNormalized({
+                    build: data.build,
+                    namespaces: getAuthorizedNamespaces(data),
+                }),
+            ),
+        ),
+        queueForBucket(
+            "contributor lists",
+            (async () => {
+                for (const upload of getContributorListJSONUploads(data)) {
+                    await s3Writer.put(upload.key, upload.body)
+                }
+            })(),
+        ),
+        queueForBucket(
+            "node lists",
+            (async () => {
+                for (const upload of getNodeListJSONUploads(data)) {
+                    await s3Writer.put(upload.key, upload.body)
+                }
+            })(),
+        ),
+        queueForBucket(
+            "image lists",
+            (async () => {
+                for (const upload of getImageListJSONUploads(data)) {
+                    await s3Writer.put(upload.key, upload.body)
+                }
+            })(),
+        ),
+    ])
+}
+
+const insertEntities = async (client: ClientBase, s3Writer: EntityS3Writer, data: SourceData, isDryRun = false) => {
     console.info("Updating entities database...")
-    const s3Writer = isDryRun ? undefined : new EntityS3Writer(data.build)
-    // Clean anything from an aborted build.
+    await client.query("BEGIN")
+    await Promise.all([
+        insertContributorsAndImages(client, s3Writer, data, isDryRun),
+        insertNodes(client, s3Writer, data, isDryRun),
+    ])
+    await insertIllustrations(client, data, isDryRun)
+    await client.query(isDryRun ? "ROLLBACK" : "COMMIT")
+    console.info(isDryRun ? "Skipped update of entities database (dry run)." : "Updated entities database.")
+}
+
+const cleanOldBuilds = async (client: ClientBase, data: SourceData, isDryRun = false) => {
+    console.info("Cleaning old builds...")
+    cleanEntitiesStaging(data.build)
     if (!isDryRun) {
         await Promise.all([cleanTables(client, data.build, "="), cleanEntitiesS3(data.build, "=")])
     }
-    await client.query("BEGIN")
-    // Insert entities and adjunct data
-    await Promise.all([
-        insertContributorsAndImages(client, data, isDryRun, s3Writer),
-        insertNodes(client, data, isDryRun, s3Writer),
-    ])
-    // Insert node-image links
-    await insertIllustrations(client, data, isDryRun)
-    await client.query(isDryRun ? "ROLLBACK" : "COMMIT")
-    if (s3Writer) {
-        s3Writer.putStatic(
-            "namespaces",
-            stringifyNormalized({
-                build: data.build,
-                namespaces: getAuthorizedNamespaces(data),
-            }),
-        )
-        for (const { authority, body, namespace, objectID } of getResolveObjectJSONEntries(data)) {
-            s3Writer.putResolve(authority, namespace, objectID, body)
-        }
-        console.info("Uploading entity JSON to S3...")
-        await s3Writer.flush()
-        console.info("Uploaded entity JSON to S3.")
-    }
-    console.info("Updated entities database.")
+    console.info("Cleaned old builds.")
 }
-export default insertEntities
+
+const putEntities = async (client: ClientBase, data: SourceData, isDryRun = false) => {
+    await cleanOldBuilds(client, data, isDryRun)
+    console.info("Staging bucket locally...")
+    const s3Writer = new EntityS3Writer(data.build)
+    await Promise.all([insertEntities(client, s3Writer, data, isDryRun), queueEntitiesForBucket(data, s3Writer)])
+    console.info("Staging bucket locally...")
+    await s3Writer.flush()
+    console.info("Staged bucket locally.")
+}
+
+export default putEntities

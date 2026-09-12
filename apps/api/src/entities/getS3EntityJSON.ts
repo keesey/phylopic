@@ -1,17 +1,13 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
 import { convertS3BodyToString, isAWSError } from "@phylopic/utils-aws"
-import { UUID } from "@phylopic/utils"
-import BUILD from "../build/BUILD"
-import { TableName } from "./TableName"
-import { getEntityJSONKey } from "./getEntityJSONKey"
-const client = new S3Client({})
-const ENTITIES_BUCKET = process.env.ENTITIES_BUCKET ?? "entities.phylopic.org"
-const selectEntityJSONFromS3 = async (tableName: TableName, uuid: UUID): Promise<string | null> => {
+
+const getS3EntityJSON = async (client: S3Client, key: string): Promise<string | null> => {
     try {
         const output = await client.send(
             new GetObjectCommand({
                 Bucket: ENTITIES_BUCKET,
-                Key: getEntityJSONKey(BUILD, tableName, uuid),
+                Key: key,
             }),
         )
         return await convertS3BodyToString(output.Body)
@@ -25,4 +21,5 @@ const selectEntityJSONFromS3 = async (tableName: TableName, uuid: UUID): Promise
         throw e
     }
 }
-export default selectEntityJSONFromS3
+
+export default getS3EntityJSON

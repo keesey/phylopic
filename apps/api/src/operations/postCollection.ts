@@ -7,19 +7,27 @@ import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
-import { checkPostCollectionRateLimit } from "../rateLimit/checkPostCollectionRateLimit"
+import checkPostCollectionRateLimit from "../rateLimit/checkPostCollectionRateLimit"
 import { PgClientService } from "../services/PgClientService"
+import withPgClient from "../services/withPgClient"
 import { Operation } from "./Operation"
+
 const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
-const MAX_BODY_SIZE = 24576
+
 const EMPTY_DIGITS: readonly number[] = new Array(32).fill(0)
+
+const MAX_BODY_SIZE = 24576
+
 const USER_MESSAGE = "There was a problem with an attempt to find a collection."
-export type PostCollectionParameters = DataRequestHeaders & {
+
+type PostCollectionParameters = DataRequestHeaders & {
     "content-type"?: string
     encoding?: "base64" | "utf8"
     sourceIp?: string
 }
-export type PostCollectionService = PgClientService
+
+type PostCollectionService = PgClientService
+
 const getUUIDsFromBody = (body: string): ReadonlySet<UUID> => {
     try {
         const data = JSON.parse(body)
@@ -42,19 +50,23 @@ const getUUIDsFromBody = (body: string): ReadonlySet<UUID> => {
         ])
     }
 }
+
 const uuidToDigits = (uuid: string) => {
     return uuid
         .split("")
         .filter(c => c !== "-")
         .map(c => parseInt(c, 16))
 }
+
 const digitsToUUID = (digits: readonly number[]): string => {
     const s = digits.map(digit => digit.toString(16)).join("")
     return `${s.slice(0, 8)}-${s.slice(8, 12)}-${s.slice(12, 16)}-${s.slice(16, 20)}-${s.slice(20, 32)}`
 }
+
 const xorDigits = (a: readonly number[], b: readonly number[]): readonly number[] => {
     return a.map((digit, index) => digit ^ b[index])
 }
+
 const getCollectionUUID = (uuids: ReadonlySet<string>): string => {
     if (uuids.size === 0) {
         return EMPTY_UUID
@@ -65,10 +77,10 @@ const getCollectionUUID = (uuids: ReadonlySet<string>): string => {
     const digits = [...uuids].map(uuidToDigits).reduce<readonly number[]>(xorDigits, EMPTY_DIGITS)
     return digitsToUUID(digits)
 }
+
 const ensureExistence = async (service: PgClientService, uuid: string, uuids: ReadonlySet<string>) => {
     if (uuids.size > 0) {
-        const client = await service.createPgClient()
-        try {
+        await withPgClient(service, async client => {
             const result = await client.query<{ uuid: UUID }>(
                 "SELECT uuid FROM collection WHERE uuid=$1::uuid LIMIT 1",
                 [uuid],
@@ -79,12 +91,11 @@ const ensureExistence = async (service: PgClientService, uuid: string, uuids: Re
                     [...uuids].sort(),
                 ])
             }
-        } finally {
-            await service.deletePgClient(client)
-        }
+        })
     }
 }
-export const postCollection: Operation<PostCollectionParameters, PostCollectionService> = async (
+
+const postCollection: Operation<PostCollectionParameters, PostCollectionService> = async (
     { accept, body, "content-type": contentType, encoding = "utf8", sourceIp = "unknown" },
     service,
 ) => {
@@ -134,4 +145,5 @@ export const postCollection: Operation<PostCollectionParameters, PostCollectionS
         statusCode: 303,
     } as APIGatewayProxyResult
 }
+
 export default postCollection

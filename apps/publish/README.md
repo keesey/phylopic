@@ -21,7 +21,7 @@ Make sure you have the following installed on your system and reachable via the 
 
 These live in `.env` in the root of this project, loaded by `import "dotenv/config"` at the top of
 each entry script (`insert.ts`, `release.ts`, `revalidate.ts`, `autolink.ts`, `normalize.ts`,
-`coverage.ts`).
+`coverage.ts`, `uploadEntitiesCli.ts`, `verifyEntitiesS3.ts`).
 
 This project uses **one operator credential** for all AWS calls in `yarn make`. **`AWS_PROFILE`
 is set to `phylopic-publish`** on the relevant `package.json` scripts (see
@@ -85,22 +85,69 @@ host, port, user, and password to `ClientProvider` directly, and hardcodes the d
 
 ### Release a new build
 
-This will build and release a new build of the website, created from the files in the `source-images.phylopic.org` bucket and data in the `phylopic-source` database.
+This builds and releases a new website build from files in the `source-images.phylopic.org`
+bucket and data in the `phylopic-source` database.
 
 ```sh
 yarn make
 ```
 
+`yarn make` runs, in order:
+
+1. `yarn download` — sync source images and source data from S3
+2. `yarn process` — rasterize/vectorize new silhouettes (`process.sh`)
+3. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
+   `yarn upload:images` (sync processed images to `images.phylopic.org`)
+4. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront
+5. `yarn sync:images` — final public image bucket sync
+
+For a data-only release (no image download/process/upload):
+
+```sh
+yarn make:data
+```
+
+(`yarn insert && yarn release`)
+
+### Entity JSON on S3
+
+During `yarn insert`, `putEntities` writes to Postgres and stages JSON locally under
+`.s3/entities.phylopic.org/{build}/`:
+
+- `{build}/{contributors|images|nodes}/{uuid}.json` — entity documents
+- `{build}/namespaces.json` — authorized external namespaces
+- `{build}/lists/{contributors|nodes|images}/index.json` and `pages/{page}.json` — unfiltered
+  list metadata and link pages (no embedded items)
+
+Lineage and resolve JSON are **not** staged; the API serves those from Postgres.
+
+Staging uses roughly **250–350 MB** for a full build at current scale. When the Postgres
+transaction commits, `insert.ts` uploads the staged prefix to `s3://entities.phylopic.org/{build}/`
+via `aws s3 sync` (SSE + immutable cache headers). Re-run `yarn upload:entities [build]` if that
+upload fails without re-running insert.
+
+Optional: raise CLI upload concurrency, e.g.
+`aws configure set default.s3.max_concurrent_requests 100`.
+
+Pass `--dry-run` to `yarn insert` to exercise staging and SQL without committing Postgres changes
+or uploading to S3.
+
 ### Verify entity JSON on S3
 
-After `yarn insert`, spot-check that Postgres `json` columns match S3 objects for a build:
+After `yarn insert`, spot-check that S3 matches Postgres for a build:
 
 ```sh
 yarn verify:entities 547
 ```
 
-Optional: set `VERIFY_SAMPLE_SIZE` (default `20`) to control how many random entities per table are checked.
+Checks:
 
+- Random sample of `contributor`, `image`, and `node` rows (`json` column vs S3 object)
+- `namespaces.json` vs `node_external` aggregate
+- Unfiltered list `index.json` totals for contributors, nodes, and images
+
+Optional: set `VERIFY_SAMPLE_SIZE` (default `20`) to control how many random entities per table
+are checked.
 ### Autolink externals
 
 These commands will pull data from external APIs and try to match them to nodes in the `phylopic-source` database.
