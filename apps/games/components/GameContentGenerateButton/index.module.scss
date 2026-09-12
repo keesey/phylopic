@@ -1,0 +1,25 @@
+@use "@phylopic/styles/colors.scss";
+
+.cta {
+    background-color: colors.$dandelion;
+    border: 2px solid colors.$black;
+    border-radius: 24px;
+    color: colors.$black;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    height: 50px;
+    padding: 12px;
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: colors.$sunshine;
+    }
+
+    &:disabled {
+        background-color: colors.$wash;
+        border: 2px solid colors.$inkFade;
+        color: colors.$inkFade;
+        cursor: progress;
+    }
+}

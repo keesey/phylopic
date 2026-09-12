@@ -1,5 +1,5 @@
+import { useAPIFetcher } from "@phylopic/client-components"
 import { createSearch } from "@phylopic/utils"
-import { useAPIFetcher } from "@phylopic/utils-api"
 import { FC, useEffect, useState } from "react"
 import useSWRImmutable from "swr/immutable"
 const BuildChecker: FC = () => {

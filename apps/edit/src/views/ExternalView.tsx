@@ -1,5 +1,5 @@
 import { External } from "@phylopic/source-models"
-import { AuthorizedNamespaceView } from "@phylopic/ui"
+import { AuthorizedNamespaceView } from "@phylopic/client-components"
 import { Authority, getAuthorizedNamespace, getIdentifier, Namespace, ObjectID } from "@phylopic/utils"
 import Link from "next/link"
 import { parseNomen } from "parse-nomen"

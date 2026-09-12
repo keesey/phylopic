@@ -1,4 +1,4 @@
-import { SearchContext, useExternalResolutions } from "@phylopic/ui"
+import { SearchContext, useExternalResolutions } from "@phylopic/client-components"
 import { FC, Fragment, useContext, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import IllustratedNodeView from "~/views/IllustratedNodeView"

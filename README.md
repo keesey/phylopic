@@ -13,6 +13,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 | [api](./apps/api)               | Serverless API for accessing _PhyloPic_ data (includes API documentation)                            |
 | [contribute](./apps/contribute) | Public webapp for contributing silhouette images                                                     |
 | [edit](./apps/edit)             | Private webapp (run locally) for managing _PhyloPic_, including contribution review and data editing |
+| [games](./apps/games)           | Public webapp for puzzle games                                                                       |
 | [publish](./apps/publish)       | Code for administrating _PhyloPic_, including publishing releases and managing source files          |
 | [www](./apps/www)               | Public webapp for searching for and viewing silhouette images                                        |
 
@@ -22,6 +23,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 | ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | [api-models](./packages/api-models)                         | Type declarations and utility files for data models used by the API           |
 | [eslint-config-phylopic](./packages/eslint-config-phylopic) | ESLint configurations used throughout the project                             |
+| [games](./packages/games)                                   | Code for creating _PhyloPic_ games                                            |
 | [fundraiser](./packages/fundraiser)                         | Semiannual fundraiser campaign state                                          |
 | [source-client](./packages/source-client)                   | Client object for reading and writing source models and files                 |
 | [source-models](./packages/source-models)                   | Type declarations and utility files for data models used in the source bucket |

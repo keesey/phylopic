@@ -1,5 +1,5 @@
 import type { Image as ImageModel, ImageWithEmbedded } from "@phylopic/api-models"
-import { PaginationContainer } from "@phylopic/ui"
+import { PaginationContainer } from "@phylopic/client-components"
 import axios from "axios"
 import type { GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"

@@ -1,5 +1,5 @@
 import { Image } from "@phylopic/api-models"
-import { useLicenseText } from "@phylopic/ui"
+import { useLicenseText } from "@phylopic/client-components"
 import { extractPath, LicenseURL } from "@phylopic/utils"
 import Link from "next/link"
 import { FC, Fragment, useMemo } from "react"

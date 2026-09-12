@@ -1,0 +1,68 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    width: 100%;
+}
+
+.row {
+    align-items: center;
+    background-color: colors.$aquatic;
+    border: none;
+    color: colors.$white;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px;
+    text-align: center;
+    transition: all 0.3s;
+
+    img {
+        filter: invert(100%);
+        mix-blend-mode: lighten;
+    }
+}
+
+.rowGameOver {
+    cursor: pointer;
+    color: colors.$white;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.node {
+    flex-grow: 1;
+    padding-left: 24px;
+}
+
+.arrow {
+    opacity: 0;
+    padding-left: 12px;
+    transition: all 1s;
+}
+
+.arrowGameOver {
+    opacity: initial;
+}
+
+.prompt {
+    color: colors.$inkFade;
+    margin: 1em;
+    text-align: center;
+}
+
+.link {
+    align-self: center;
+    color: colors.$cerulean;
+    margin-top: 12px;
+
+    &:hover {
+        color: colors.$aquatic;
+    }
+}

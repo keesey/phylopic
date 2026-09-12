@@ -1,4 +1,4 @@
-import { Loader, SearchContext } from "@phylopic/ui"
+import { Loader, SearchContext } from "@phylopic/client-components"
 import dynamic from "next/dynamic"
 import { FC, Fragment, ReactNode, Suspense, useContext } from "react"
 const SearchResults = dynamic(() => import("../SearchResults"), { ssr: false })

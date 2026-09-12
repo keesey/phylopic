@@ -1,5 +1,5 @@
 import { Image, Node, TitledLink } from "@phylopic/api-models"
-import { gtag } from "@phylopic/ui"
+import { gtag } from "@phylopic/client-components"
 import { EmailAddress, Hash, UUIDish } from "@phylopic/utils"
 import { LicenseFilterType } from "~/models/LicenseFilterType"
 import extractUUIDv4 from "~/routes/extractUUIDv4"

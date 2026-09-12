@@ -9,6 +9,7 @@
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1093.0",
         "@phylopic/api-models": "*",
+        "@phylopic/client-components": "*",
         "@phylopic/fundraiser": "*",
         "@phylopic/source-models": "*",
         "@phylopic/styles": "*",

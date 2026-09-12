@@ -1,0 +1,16 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: space-between;
+    height: calc(100svh - 48px);
+    padding: 0 0 12px;
+    width: 100%;
+}
+
+.playArea {
+    width: 100%;
+}

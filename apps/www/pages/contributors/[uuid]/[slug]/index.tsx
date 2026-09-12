@@ -1,5 +1,5 @@
 import { Contributor, ImageListParameters, ImageWithEmbedded, List, PageWithEmbedded } from "@phylopic/api-models"
-import { ContributorContainer, Loader } from "@phylopic/ui"
+import { ContributorContainer, Loader } from "@phylopic/client-components"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"

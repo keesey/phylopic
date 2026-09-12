@@ -1,0 +1,23 @@
+.main {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.heading {
+    align-items: center;
+    display: flex;
+    gap: 0.5em;
+    min-height: 50px;
+    justify-content: space-between;
+}
+
+.date {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.message {
+    display: block;
+}

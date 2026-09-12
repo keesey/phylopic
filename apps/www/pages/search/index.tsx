@@ -6,7 +6,7 @@ import {
     PageWithEmbedded,
     QueryMatches,
 } from "@phylopic/api-models"
-import { getMatchingText } from "@phylopic/ui"
+import { getMatchingText } from "@phylopic/client-components"
 import { createSearch, Query } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"

@@ -1,0 +1,41 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    background-color: colors.$inkFade;
+    backdrop-filter: blur(12px);
+    bottom: 0;
+    color: colors.$white;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+.close {
+    background: none;
+    border: none;
+    color: colors.$white;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: xx-large;
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    transition: all 0.3s;
+
+    &:hover {
+        opacity: 0.8
+    }
+}
+
+.content {
+    align-items: center;
+    bottom: 48px;
+    display: flex;
+    justify-content: center;
+    left: 48px;
+    position: absolute;
+    right: 48px;
+    top: 48px;
+}

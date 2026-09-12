@@ -1,5 +1,5 @@
 import { normalizeQuery, QueryMatches } from "@phylopic/api-models"
-import { getSortIndex } from "@phylopic/ui" // :TODO: move to utils
+import { getSortIndex } from "@phylopic/client-components" // :TODO: move to utils
 import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import axios from "axios"
 import { NextApiHandler } from "next"

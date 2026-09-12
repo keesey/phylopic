@@ -1,0 +1,37 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    align-items: center;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    height: 100%;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    justify-content: center;
+    transition: all 0.5s;
+    width: 100%;
+
+    img {
+        transition: all 0.5s;
+    }
+}
+
+.default {
+    background-color: colors.$vellum;
+}
+
+.selected {
+    background-color: colors.$dandelion;
+}
+
+.submitted {
+    background-color: colors.$dandelion;
+
+    img: {
+        filter: invert(100%);
+        mix-blend-mode: lighten;
+        opacity: 0.67;
+    }
+}

@@ -13,7 +13,7 @@ import {
     PhyloPicAutocomplete,
     PhyloPicNodeSearch,
     SearchContainer,
-} from "@phylopic/ui"
+} from "@phylopic/client-components"
 import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { parseNomen } from "parse-nomen"
