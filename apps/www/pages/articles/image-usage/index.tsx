@@ -1,6 +1,5 @@
-import type { Collection, Image as ImageModel, ImageWithEmbedded } from "@phylopic/api-models"
+import type { Image as ImageModel, ImageWithEmbedded } from "@phylopic/api-models"
 import { PaginationContainer } from "@phylopic/client-components"
-import { isUUIDish } from "@phylopic/utils"
 import axios from "axios"
 import type { GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
@@ -11,6 +10,7 @@ import { FC, useContext } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
+import postCollectionPage from "~/collections/postCollectionPage"
 import PageLayout from "~/pages/PageLayout"
 import getImageSlug from "~/routes/getImageSlug"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -25,9 +25,7 @@ const SAMPLE_IMAGE_UUID = "045279d5-24e5-4838-bec9-0bea86812e35"
 export const getStaticProps: GetStaticProps<Props> = async () => {
     const { data } = await axios.get<ImageModel>(
         `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(SAMPLE_IMAGE_UUID)}`,
-        {
-            maxRedirects: 1,
-        },
+        { maxRedirects: 1 },
     )
     return { props: { image: data } }
 }
@@ -71,15 +69,14 @@ const Article: FC<Props> = ({ image }: Props) => {
         const uuids = currentImages.map(image => image.uuid)
         void (async () => {
             try {
-                const response = await axios.post<Collection>(`${process.env.NEXT_PUBLIC_API_URL}/collections`, uuids)
-                if (isUUIDish(response?.data?.uuid)) {
-                    customEvents.toggleCollectionDrawer(false)
-                    dispatch({ type: "CLOSE" })
-                    customEvents.openCollectionPage(response.data.uuid, currentCollection)
-                    await router.push(`/collections/${encodeURIComponent(response.data.uuid)}`)
-                }
+                const uuid = await postCollectionPage(uuids)
+                customEvents.toggleCollectionDrawer(false)
+                dispatch({ type: "CLOSE" })
+                customEvents.openCollectionPage(uuid, currentCollection)
+                await router.push(`/collections/${encodeURIComponent(uuid)}`)
             } catch (e) {
                 customEvents.exception(String(e))
+                console.error(e)
                 alert("There was an error creating the Collection Page.")
             }
         })()

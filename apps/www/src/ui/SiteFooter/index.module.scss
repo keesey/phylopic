@@ -1,6 +1,12 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/bullet.scss";
 
+// Next.js production CSS chunks are concatenated with a BOM before the first rule
+// in each module, which breaks selector matching for that rule.
+.moduleStart {
+    display: block;
+}
+
 .main {
     bottom: 0;
     left: 0;

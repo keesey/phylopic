@@ -10,8 +10,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 
 | Project Path                    | Description                                                                                          |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [api](./apps/api)               | Serverless API for accessing _PhyloPic_ data                                                         |
-| [api-docs](./apps/api-docs)     | Documentation for the _PhyloPic_ API                                                                 |
+| [api](./apps/api)               | Serverless API for accessing _PhyloPic_ data (includes API documentation)                            |
 | [contribute](./apps/contribute) | Public webapp for contributing silhouette images                                                     |
 | [edit](./apps/edit)             | Private webapp (run locally) for managing _PhyloPic_, including contribution review and data editing |
 | [games](./apps/games)           | Public webapp for puzzle games                                                                       |
@@ -25,6 +24,7 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 | [api-models](./packages/api-models)                         | Type declarations and utility files for data models used by the API           |
 | [eslint-config-phylopic](./packages/eslint-config-phylopic) | ESLint configurations used throughout the project                             |
 | [games](./packages/games)                                   | Code for creating _PhyloPic_ games                                            |
+| [fundraiser](./packages/fundraiser)                         | Semiannual fundraiser campaign state                                          |
 | [source-client](./packages/source-client)                   | Client object for reading and writing source models and files                 |
 | [source-models](./packages/source-models)                   | Type declarations and utility files for data models used in the source bucket |
 | [styles](./packages/styles)                                 | Stylesheet values and mixins                                                  |
@@ -38,9 +38,13 @@ Most of the code for _PhyloPic_ is [TypeScript](https://www.typescriptlang.org/)
 
 The scripts for creating the project's Postgres databases are in [sql](./sql/README.md).
 
+### AWS principals
+
+The IAM policies for the apps that authenticate to AWS with access keys are in [aws](./aws/README.md), along with the rollout order for changing them.
+
 ## Getting started
 
-[Yarn](https://classic.yarnpkg.com/) (v1.22 or higher) is required for this monorepo project. [Node.js](https://nodejs.org/en/download/) (v20 or higher) is also required for most apps.
+[Yarn](https://classic.yarnpkg.com/) (v1.22 or higher) is required for this monorepo project. [Node.js](https://nodejs.org/en/download/) (v24 or higher) is also required for most apps.
 
 Run `yarn` from the project root to install dependencies.
 
@@ -115,7 +119,7 @@ Each subproject (app or package) has its own [semantic versioning](https://semve
 - Commit the changes.
 - Tag the commit with `@phylopic/[subproject]/v[M].[m].[p]`, where `[subproject]` is the name of the project (for example, `www`) and `[M]`, `[m]`, and `[p]` are integers denoting the major version, minor version, and patch version, respectively. Example: `@phylopic/www/v2.6.12`. Push the tag to `origin`.
 - For apps, publish the new version:
-    - For `api` or `api-docs`, run `yarn deploy`.
+    - For `api`, run `yarn deploy` (publishes the API and its documentation).
     - For `contribute`, reset the `@phylopic/contribute/prod` branch to the release's commit and push to `origin`. Deployment can be monitored in Vercel.
     - For `www`, reset the `@phylopic/www/prod` branch to the release's commit and push to `origin`. Deployment can be monitored in Vercel.
     - No action is necessary for `edit` or `publish`, which are only run locally.

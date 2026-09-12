@@ -6,7 +6,7 @@ import selectEntitiesJSONFromLinks from "./selectEntitiesJSONFromLinks"
 import selectEntityJSONFromHRef from "./selectEntityJSONFromHRef"
 const isLinkWithStringHRef = isLink(isString)
 const selectEntityEmbeds = async <TLinks extends Links, TEmbeds extends string & keyof TLinks>(
-    client: ClientBase,
+    client: ClientBase | undefined,
     links: TLinks,
     embeds: readonly TEmbeds[],
     typeUserLabel: string,

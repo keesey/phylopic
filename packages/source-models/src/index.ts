@@ -1,5 +1,6 @@
 export * from "./constants/index"
 export * from "./conversion/index"
 export * from "./detection/index"
+export * from "./jwt/index"
 export * from "./normalization/index"
 export * from "./types/index"

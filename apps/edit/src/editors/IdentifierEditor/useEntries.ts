@@ -42,7 +42,7 @@ const useExternalEntries = (
 const convertResolutionToEntry = (resolution: ExternalResolution) =>
     ({
         authority: resolution.authority,
-        image: resolution.node._embedded.primaryImage,
+        image: resolution.node._embedded?.primaryImage,
         name: parseNomen(resolution.title),
         namespace: resolution.namespace,
         objectID: resolution.objectID,
@@ -52,7 +52,7 @@ const mapNodeResultsToEntries = (nodeResults: readonly NodeWithEmbedded[] | unde
         node =>
             ({
                 authority: "phylopic.org",
-                image: node._embedded.primaryImage,
+                image: node._embedded?.primaryImage,
                 name: node.names[0],
                 namespace: "nodes",
                 objectID: node.uuid,

@@ -1,0 +1,56 @@
+{
+    "$schema": "https://unpkg.com/knip@5/schema.json",
+    "ignoreExportsUsedInFile": {
+        "interface": true,
+        "type": true
+    },
+    "ignoreDependencies": [
+        "eslint-config-next",
+        "prettier",
+        "yarn",
+        "ts-node",
+        "tsup",
+        "vitest",
+        "ts-loader",
+        "serverless-webpack"
+    ],
+    "ignoreIssues": {
+        "apps/api/src/operations/**": ["exports", "duplicates"],
+        "apps/api/src/lambdas/**": ["exports", "duplicates"],
+        "apps/api/src/search/**": ["exports", "duplicates"],
+        "apps/api/src/sql/**": ["exports", "duplicates"]
+    },
+    "workspaces": {
+        "apps/www": {
+            "entry": ["pages/**/*.{ts,tsx}", "src/pages/**/*.{ts,tsx}"],
+            "paths": {
+                "~/*": ["src/*"]
+            }
+        },
+        "apps/edit": {
+            "entry": ["pages/**/*.{ts,tsx}"],
+            "paths": {
+                "~/*": ["src/*"]
+            }
+        },
+        "apps/contribute": {
+            "entry": ["pages/**/*.{ts,tsx}", "src/pages/**/*.{ts,tsx}"],
+            "paths": {
+                "~/*": ["src/*"]
+            }
+        },
+        "apps/api": {
+            "entry": ["src/lambdas/**/*.ts"],
+            "webpack": false
+        },
+        "apps/publish": {
+            "entry": ["src/*.ts", "src/**/*.ts"]
+        },
+        "packages/ui": {
+            "entry": ["src/index.ts", "src/securityHeaders.ts"]
+        },
+        "packages/*": {
+            "entry": ["src/index.ts"]
+        }
+    }
+}

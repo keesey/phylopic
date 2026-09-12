@@ -1,15 +1,15 @@
 "use client"
-import { NodeWithEmbedded } from "@phylopic/api-models"
+import { NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
+import { BuildContext } from "../../../builds"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { OTOL_URL } from "./OTOL_URL"
-import { BuildContext } from "../../../builds"
 interface OTOLLineageItem {
     // Abridged.
     readonly ott_id: number
@@ -27,7 +27,7 @@ const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async ([
     return response.data
 }
 const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
-    const response = await fetchDataAndCheck<NodeWithEmbedded>(url)
+    const response = await fetchDataAndCheck<NodeWithEmbedded>(url, undefined, isNodeWithEmbedded)
     return response.data
 }
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {

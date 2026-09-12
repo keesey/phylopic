@@ -1,6 +1,6 @@
-import { UUID } from "@phylopic/utils"
 import { sign } from "jsonwebtoken"
-import DOMAIN from "./DOMAIN"
+import { JWT_AUDIENCE, JWT_ISSUER } from "@phylopic/source-models"
+import { UUID } from "@phylopic/utils"
 export interface Args {
     expiration: Date
     issuedAt: Date
@@ -19,8 +19,8 @@ const createJWT = (args: Args) =>
             },
             process.env.AUTH_SECRET_KEY,
             {
-                audience: DOMAIN,
-                issuer: DOMAIN,
+                audience: JWT_AUDIENCE,
+                issuer: JWT_ISSUER,
                 jwtid: args.jti,
                 subject: args.subject,
             },

@@ -3,8 +3,14 @@ import { getSortIndex } from "@phylopic/client-components" // :TODO: move to uti
 import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import axios from "axios"
 import { NextApiHandler } from "next"
+import { checkProxyRateLimit, getClientIp } from "~/rateLimit/checkProxyRateLimit"
 import getString from "~/routes/getString"
+import packageJson from "../../../package.json"
 const index: NextApiHandler = async (req, res) => {
+    if (!checkProxyRateLimit(getClientIp(req.headers["x-forwarded-for"]))) {
+        res.status(429).setHeader("Content-Type", "text/plain").send("Too many requests.")
+        return
+    }
     try {
         const prefix = getString(req.query.q)
         const suggestions = await getSuggestions(prefix)
@@ -20,7 +26,7 @@ const index: NextApiHandler = async (req, res) => {
     } catch (err) {
         console.error(err)
         res.setHeader("Content-Type", "text/plain")
-        res.status(500).send(String(err))
+        res.status(500).send("An unexpected error occurred.")
     }
     res.end()
 }
@@ -125,6 +131,11 @@ const getPBDBSuggestions = async (prefix: string): Promise<readonly Suggestion[]
         if (prefix.length >= 2) {
             const response = await axios.get<Readonly<{ records: ReadonlyArray<{ readonly nam: string }> }>>(
                 "https://paleobiodb.org/data1.2/taxa/auto.json" + createSearch({ name: prefix }),
+                {
+                    headers: {
+                        "User-Agent": `PhyloPic Website/${packageJson.version.split(".", 2).join(".")}`,
+                    },
+                },
             )
             return response.data.records.map(({ nam }) => {
                 const term = normalizeQuery(nam)

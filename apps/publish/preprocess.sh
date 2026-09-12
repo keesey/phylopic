@@ -33,7 +33,10 @@ echo "Setting up scratch and destination..."
 }
 wait
 
-echo "Set up scratch and destination. Copying source images to scratch..."
+echo "Set up scratch and destination. Sanitizing local SVG files..."
+node --loader ts-node/esm ./src/svg/sanitizeLocalSVGs.ts
+
+echo "Copying source images to scratch..."
 for file in .s3/source-images.phylopic.org/images/**/source; do
     type=$(file --mime-type --brief $file 2>&1)
     if [ "$type" = "image/svg+xml" ]; then

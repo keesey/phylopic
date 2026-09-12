@@ -25,7 +25,6 @@ import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
 import postCollection from "../operations/postCollection"
 import getResolveObjects from "../operations/getResolveObjects"
-import postResolveObjects from "../operations/postResolveObjects"
 import { PgClientService } from "../services/PgClientService"
 import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
@@ -85,6 +84,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         {
                             body: event.body ?? undefined,
                             encoding: event.isBase64Encoded ? "base64" : "utf8",
+                            sourceIp: event.requestContext.identity.sourceIp,
                             ...getParameters(event.headers, ["accept", "content-type"]),
                         },
                         SERVICE,
@@ -284,17 +284,6 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                         SERVICE,
                     )
                 }
-                case "POST": {
-                    return postResolveObjects(
-                        {
-                            body: event.body ?? undefined,
-                            ...getParameters(event.headers, ["accept", "content-type"]),
-                            ...getParameters(event.pathParameters, ["authority", "namespace"]),
-                            ...getEmbedParameters(event.queryStringParameters, NODE_EMBEDDED_PARAMETERS),
-                        },
-                        undefined,
-                    )
-                }
                 default: {
                     throw create405()
                 }
@@ -315,6 +304,13 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
 }
 export const onAPIGatewayProxy: APIGatewayProxyHandler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 204,
+            headers: CORS_HEADERS,
+            body: "",
+        }
+    }
     let result: APIGatewayProxyResult
     try {
         result = await route(event)

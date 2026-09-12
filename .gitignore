@@ -1,4 +1,5 @@
 .cache
+.cursor
 .env
 .swc
 .turbo
@@ -20,3 +21,6 @@ public/dist
 **/.vscode
 **/.webpack
 **/node_modules
+*-AUDIT.md
+.vercel
+.env*

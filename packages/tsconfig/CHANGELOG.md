@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.1] - 2026-08-09
+
+### Added
+
+- `node24.json` TypeScript config preset.
+
 ## [1.1.0] - 2024-04-13
 
 - Upgraded to Node.js 20.

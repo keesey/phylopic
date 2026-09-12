@@ -15,9 +15,313 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-### Removed
+### Security
+
+## [2.15.2] - 2026-09-11
+
+### Changed
+
+- Patch upgrade for `next`.
+- Upgraded `@phylopic/ui` to `1.7.18`.
+
+## [2.15.1] - 2026-09-02
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.17`.
 
 ### Security
+
+- Minor upgrade for `sharp`, fixing `libvips` vulnerabilities.
+- Patch upgrade for `nanoid`.
+
+## [2.15.0] - 2026-09-01
+
+### Added
+
+- Semiannual hosting fundraiser banner (May and October, UTC) with progress toward a goal and PayPal donate link.
+- `GET /api/fundraiser` public status endpoint and `POST /api/fundraiser/paypal` PayPal IPN handler.
+- Shared `@phylopic/fundraiser` package (Upstash Redis campaign state).
+- Centralized PayPal donate URL in `src/donate/PAYPAL_DONATE_URL.ts`.
+
+### Changed
+
+- Donate links across the site now use the shared PayPal donate URL constant.
+
+## [2.14.39] - 2026-08-29
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.16`.
+
+## [2.14.38] - 2026-08-20
+
+### Fixed
+
+- Production CSS: strip UTF-8 BOMs inserted when CSS modules are concatenated, which prevented the first rule in each module from matching in production.
+
+### Changed
+
+- `yarn build` fails when minified CSS still contains BOMs or split flex-list rules.
+
+## [2.14.37] - 2026-08-20
+
+### Fixed
+
+- Production CSS: disable cssnano `mergeRules`, which split `flex-wrap` into a shared rule emitted before `display: inline-flex` and reset wrapping on flex lists.
+
+### Changed
+
+- `yarn build` verifies minified CSS does not split `display:flex` and `flex-wrap:wrap` across rules for the same selector.
+
+## [2.14.36] - 2026-08-20
+
+### Fixed
+
+- `NodeListView`: use one variant class per list so production CSS keeps `flex-wrap: wrap`.
+- `NomenView`: include serif `font-family` on part classes used alongside `.main`.
+
+## [2.14.35] - 2026-08-19
+
+### Fixed
+
+- `BulletList`: keep `flex-wrap: wrap` on the same class as `inline-flex` so production minification does not drop wrapping.
+
+## [2.14.34] - 2026-08-19
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.3`.
+
+## [2.14.33] - 2026-08-19
+
+### Fixed
+
+- Node Pages: restored horizontal wrapping layout for synonym lists in details.
+
+## [2.14.32] - 2026-08-13
+
+### Security
+
+- Rate-limit OpenSearch suggestions and TimeTree proxy routes; require numeric NCBI taxon IDs.
+
+## [2.14.31] - 2026-08-13
+
+### Added
+
+- Rate limiting on `GET /api/permalinks/collections/{uuid}` (30 requests/hour per IP, 10/hour per
+  collection) and an in-memory hash cache keyed by collection UUID and build index.
+
+### Changed
+
+- `GET /api/permalinks/collections/{uuid}` accepts only `GET`, `HEAD`, and `OPTIONS`; successful
+  responses include `Cache-Control` for repeat requests.
+
+### Security
+
+- Rate-limit and cache collection permalink creation (security audit M9).
+
+## [2.14.30] - 2026-08-12
+
+### Fixed
+
+- Node page: restored bullet separators between subgroup links in breadcrumbs and details.
+
+## [2.14.29] - 2026-08-12
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.2`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+- Upgraded `@phylopic/api-models` to `1.4.1`.
+- Upgraded `@phylopic/source-models` to `1.1.4`.
+- Upgraded `@phylopic/styles` to `1.0.1`.
+- Upgraded `@phylopic/ui` to `1.7.15`.
+- Upgraded `@phylopic/utils-api` to `1.0.15`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+### Fixed
+
+- Permalink page: TypeScript error when passing `S3Client` to `@phylopic/utils-aws` `getJSON` from
+  duplicate `@aws-sdk/client-s3` installs.
+
+### Security
+
+- Redirect `/api` to HTTPS API docs.
+- Upgraded `ws` to `7.5.13` (via `@next/bundle-analyzer`), fixing memory-exhaustion DoS from
+  tiny WebSocket fragments (CVE-2026-48779).
+
+## [2.14.28] - 2026-08-11
+
+### Fixed
+
+- Development Content Security Policy allows localhost WebSocket and HTTP connections.
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.14`.
+- Upgraded `@phylopic/utils-api` to `1.0.14`.
+
+## [2.14.27] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+## [2.14.26] - 2026-08-11
+
+### Changed
+
+- Links and the `/api` redirect target use `https://api-docs.phylopic.org`.
+
+## [2.14.25] - 2026-08-10
+
+### Security
+
+- Escape `<` in JSON-LD script payloads.
+
+## [2.14.24] - 2026-08-10
+
+### Fixed
+
+- Removed invalid direct dependency on `@aws-sdk/credential-provider-web-identity@^3.1093.0`
+  (that version was never published; the package is already provided transitively by
+  `@aws-sdk/client-s3`).
+
+## [2.14.23] - 2026-08-10
+
+### Fixed
+
+- Permalink creation uses a statically imported Vercel OIDC credential provider so S3 writes work
+  on Vercel (avoids a bundled `require("@vercel/functions/oidc")` runtime failure).
+
+## [2.14.22] - 2026-08-10
+
+### Fixed
+
+- Collection Pages are created through same-origin `POST /api/collections` instead of a
+  cross-origin `POST` to the API’s `303` response, which could fail in the browser.
+
+## [2.14.21] - 2026-08-10
+
+### Security
+
+- S3 clients use Vercel OIDC (`AWS_ROLE_ARN`) when configured, falling back to static keys for
+  local development. Upgraded `@phylopic/utils-aws` to `1.1.0`; added `@vercel/functions`.
+
+## [2.14.20] - 2026-08-10
+
+### Security
+
+- External identifier resolve redirects accept only relative `Location` paths from the API, blocking open redirects to third-party sites.
+
+## [2.14.19] - 2026-08-10
+
+### Security
+
+- `POST /api/revalidate` accepts only `Authorization: Bearer` (no query-string secret), compares tokens with a timing-safe check, and revalidates only allowlisted paths.
+
+## [2.14.18] - 2026-08-10
+
+### Fixed
+
+- No longer setting a `User-Agent` header on client-side requests to the _Paleobiology Database_ API.
+- Upgraded `@phylopic/ui` to `1.7.12`.
+
+### Removed
+
+- Progressive Web App service worker (`next-pwa`).
+
+## [2.14.17] - 2026-08-10
+
+### Fixed
+
+- Upgraded `@phylopic/ui` to `1.7.11`.
+
+## [2.14.16] - 2026-08-09
+
+### Fixed
+
+- Footer no longer sits above a large empty margin in production builds, where a BOM in concatenated CSS chunks prevented the footer's `position: fixed` rule from matching.
+
+## [2.14.15] - 2026-08-09
+
+### Changed
+
+- No longer generating static paths for Lineage Pages.
+
+## [2.14.14] - 2026-08-09
+
+### Fixed
+
+- Added missing `@phylopic/utils-aws` dependency so Vercel production builds resolve permalink S3 imports.
+
+## [2.14.13] - 2026-08-09
+
+### Security
+
+- Patch upgrade for `next`.
+- Upgraded `@phylopic/api-models` to `1.3.7`.
+- Upgraded `@phylopic/source-models` to `1.1.3`.
+- Upgraded `@phylopic/ui` to `1.7.10`.
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `@phylopic/utils-api` to `1.0.12`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [2.14.12] - 2026-08-09
+
+### Changed
+
+- No longer generating static paths for Contributor or Image Pages.
+
+## [2.14.11] - 2026-08-09
+
+### Fixed
+
+- `getStaticPropsResult` handles forbidden API responses during static generation.
+
+## [2.14.10] - 2026-08-09
+
+### Changed
+
+- No longer generating static paths for Node Pages from Quick Links.
+
+### Security
+
+- Global security headers (`Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Strict-Transport-Security`, and others) on all routes.
+
+## [2.14.9] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.3.6`, `@phylopic/ui` to `1.7.8`, and `@phylopic/utils-api` to `1.0.11`.
+
+## [2.14.8] - 2026-08-09
+
+### Changed
+
+- Upgraded to Node.js 24.
+
+## [2.14.7] - 2026-08-09
+
+### Fixed
+
+- Creating a Collection Page from the Collections Drawer no longer follows the API’s `303` redirect in the browser. The client reads the collection UUID from the redirect response body instead, avoiding cross-origin redirect failures when posting to `POST /collections`.
+
+## [2.14.6] - 2026-08-08
+
+### Security
+
+- `POST /api/revalidate` now fails closed when `REVALIDATE_TOKEN` is unset. Previously a missing token compared equal to a missing `secret` query parameter and left on-demand revalidation public.
+
+## [2.14.5] - 2026-07-26
+
+### Added
+
+- `User-Agent` header identifying _PhyloPic_ in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
+
+### Fixed
+
+- Upgraded `@phylopic/utils-api` to fix `Suspense` errors.
 
 ## [2.14.4] - 2026-07-23
 

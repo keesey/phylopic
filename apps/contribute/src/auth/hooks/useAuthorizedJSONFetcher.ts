@@ -1,26 +1,18 @@
-import axios, { AxiosRequestConfig } from "axios"
+import { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
-import useAuthToken from "./useAuthToken"
+import useAuthorizedRequest from "./useAuthorizedRequest"
 export type AuthorizedJSONFetcherConfig = Omit<AxiosRequestConfig, "responseType"> & {
     headers?: Omit<AxiosRequestConfig["headers"], "authorization">
 }
 const useAuthorizedJSONFetcher = <T>() => {
-    const token = useAuthToken()
+    const request = useAuthorizedRequest()
     return useCallback(
         async (key: string | AuthorizedJSONFetcherConfig) => {
-            if (!token) {
-                throw new Error("Unauthorized.")
-            }
             const config: AxiosRequestConfig = typeof key === "string" ? { url: key } : key
-            const response = await axios({
-                method: "GET",
-                ...config,
-                headers: { ...config?.headers, authorization: `Bearer ${token}` },
-                responseType: "json",
-            })
+            const response = await request({ ...config, responseType: "json" })
             return response.data as T
         },
-        [token],
+        [request],
     )
 }
 export default useAuthorizedJSONFetcher

@@ -1,6 +1,7 @@
 import { ErrorResponse } from "@phylopic/api-models"
 import { FaultDetector, ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
 import axios, { AxiosRequestConfig } from "axios"
+import { DEFAULT_API_HEADERS } from "./DEFAULT_API_HEADERS"
 export type HTTPRelatedDataResponse = {
     headers: Headers
     ok: boolean
@@ -19,7 +20,6 @@ export type DetectionErrorFetchDataResponse = {
 export type HTTPErrorFetchDataResponse = HTTPRelatedDataResponse & {
     build?: number
     code: "HTTPError"
-    details?: string
     error?: unknown
     ok: false
 }
@@ -35,6 +35,10 @@ export const fetchData = async <T>(
             method: "GET",
             responseType: "json",
             ...config,
+            headers: {
+                ...DEFAULT_API_HEADERS,
+                ...config?.headers,
+            },
         })
         if (detector) {
             const collector = new ValidationFaultCollector(["body"])
@@ -59,7 +63,6 @@ export const fetchData = async <T>(
             return {
                 build: data?.build,
                 code: "HTTPError",
-                details: data?.stack ?? undefined,
                 error: data?.errors,
                 headers: new Headers(e.response.headers as HeadersInit),
                 ok: false,

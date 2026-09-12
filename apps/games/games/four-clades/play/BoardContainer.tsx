@@ -61,13 +61,14 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({ children, data, 
         }
     }, [localStorageKey, state])
     const submissionJSON = useMemo(
-        () => JSON.stringify({
-            mistakes: state.mistakes,
-            uuids: Object.values(state.images)
+        () =>
+            JSON.stringify({
+                mistakes: state.mistakes,
+                uuids: Object.values(state.images)
                     .filter(value => value.mode === "submitted")
                     .map(value => value.image.uuid)
-                    .sort()
-        }),
+                    .sort(),
+            }),
         [state.images, state.mistakes],
     )
     const imagesPerAnswer = select.imagesPerAnswer(state)
@@ -75,7 +76,7 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({ children, data, 
         const submissionRaw = JSON.parse(submissionJSON) as Readonly<{ mistakes: number; uuids: readonly UUID[] }>
         const submission: Submission = {
             ...submissionRaw,
-            uuids: new Set(submissionRaw.uuids)
+            uuids: new Set(submissionRaw.uuids),
         }
         if (submission.uuids.size === imagesPerAnswer) {
             ;(async () => {

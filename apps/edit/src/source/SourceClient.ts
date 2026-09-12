@@ -1,8 +1,5 @@
-import BaseSourceClient, { PoolClientProvider } from "@phylopic/source-client"
-import { Pool } from "pg"
-const POOL = new Pool({
-    database: "phylopic-source",
-})
+import BaseSourceClient, { createSourcePool, PoolClientProvider } from "@phylopic/source-client"
+const POOL = createSourcePool()
 export default class SourceClient extends BaseSourceClient {
     constructor() {
         const provider = new PoolClientProvider(POOL, {

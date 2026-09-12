@@ -2,7 +2,9 @@ import { DATA_MEDIA_TYPE, ErrorResponse } from "@phylopic/api-models"
 import { URL } from "@phylopic/utils"
 import axios from "axios"
 import type { Dispatch, SetStateAction } from "react"
+import { startTransition } from "react"
 import { type Fetcher } from "swr"
+import { DEFAULT_API_HEADERS } from "../fetch/DEFAULT_API_HEADERS"
 import { APISWRError } from "./APISWRError"
 export const createAPIFetcher =
     <T extends Readonly<{ build: number }>>(
@@ -11,10 +13,16 @@ export const createAPIFetcher =
     ): Fetcher<T, URL> =>
     async key => {
         try {
-            const response = await axios.get<T>(key, { responseType: "json" })
+            const response = await axios.get<T>(key, {
+                headers: DEFAULT_API_HEADERS,
+                responseType: "json",
+            })
             const dataBuild = response.data?.build
             if (typeof dataBuild === "number" && (typeof build !== "number" || isNaN(build) || dataBuild > build)) {
-                setBuild?.((build = dataBuild))
+                build = dataBuild
+                if (setBuild) {
+                    startTransition(() => setBuild(dataBuild))
+                }
             }
             return response.data
         } catch (e) {
@@ -23,7 +31,10 @@ export const createAPIFetcher =
                     const data = e.response.data as ErrorResponse | undefined
                     const dataBuild = data?.build
                     if (typeof dataBuild === "number" && (typeof build !== "number" || dataBuild > build)) {
-                        setBuild?.((build = dataBuild))
+                        build = dataBuild
+                        if (setBuild) {
+                            startTransition(() => setBuild(dataBuild))
+                        }
                     }
                     throw new APISWRError(e.response.status, e.response.statusText, data)
                 }

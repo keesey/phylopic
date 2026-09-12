@@ -1,12 +1,14 @@
 import { handleAPIError } from "@phylopic/source-client"
+import { verifyJWT } from "@phylopic/source-models"
 import { EmailAddress, isEmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
-import { randomUUID } from "crypto"
 import { NextApiHandler } from "next"
-import decodeJWT from "~/auth/jwt/decodeJWT"
 import issueJWT from "~/auth/jwt/issueJWT"
+import { checkAuthorizeRateLimit, getClientIp } from "~/auth/rateLimit/checkAuthorizeRateLimit"
+import { resolveContributorUuidForEmail } from "~/auth/contributor/resolveContributorForEmail"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
 import getTTLFromBody from "~/auth/ttl/getTTLFromBody"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<void> = async (req, res) => {
     const now = new Date()
     let client: SourceClient | undefined
@@ -19,23 +21,32 @@ const index: NextApiHandler<void> = async (req, res) => {
             if (!isEmailAddress(email)) {
                 throw 404
             }
-            const client = new SourceClient()
-            const ttl = getTTLFromBody(req.body)
-            const authTokenClient = client.authToken(email)
-            let uuid: UUID
-            if (await authTokenClient.exists()) {
-                const { sub } = decodeJWT(await authTokenClient.get()) ?? {}
-                if (!isUUIDv4(sub)) {
-                    throw 403
-                }
-                uuid = sub
+            if (!checkAuthorizeRateLimit(getClientIp(req.headers["x-forwarded-for"]), email)) {
+                res.status(204)
             } else {
-                uuid = randomUUID()
+                client = new SourceClient()
+                const ttl = getTTLFromBody(req.body)
+                const authTokenClient = client.authToken(email)
+                let preferredUuid: UUID | undefined
+                if (await authTokenClient.exists()) {
+                    const secret = process.env.AUTH_SECRET_KEY
+                    if (!secret) {
+                        throw 500
+                    }
+                    const existingToken = await authTokenClient.get()
+                    const payload = verifyJWT(existingToken, secret)
+                    if (isUUIDv4(payload?.sub)) {
+                        preferredUuid = payload.sub
+                    } else {
+                        await authTokenClient.delete()
+                    }
+                }
+                const uuid = await resolveContributorUuidForEmail(client, email, preferredUuid)
+                const token = await issueJWT(uuid, ttl, now)
+                await authTokenClient.put(token)
+                await sendAuthEmail(email, token, now)
+                res.status(204)
             }
-            const token = await issueJWT(uuid, ttl, now)
-            await authTokenClient.put(token)
-            await sendAuthEmail(email, token, now)
-            res.status(204)
         } else {
             throw 405
         }

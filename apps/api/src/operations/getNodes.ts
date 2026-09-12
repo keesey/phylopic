@@ -18,7 +18,7 @@ import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
-import getListResult from "../pagination/getListResult"
+import getListResult, { ListPageRow } from "../pagination/getListResult"
 import { PgClientService } from "../services/PgClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
@@ -82,25 +82,29 @@ const getItemLinks =
             title: title || DEFAULT_TITLE,
         }))
     }
-const getItemLinksAndJSON =
+const fetchListPageRows =
     (parameters: NodeListParameters) =>
-    async (
-        client: ClientBase,
-        offset: number,
-        limit: number,
-        embeds: ReadonlyArray<string & keyof NodeEmbedded>,
-    ): Promise<ReadonlyArray<Readonly<[TitledLink, string]>>> => {
+    async (client: ClientBase, offset: number, limit: number): Promise<readonly ListPageRow[]> => {
         const queryBuilder = getQueryBuilder(parameters, "json")
         queryBuilder.add("OFFSET $ LIMIT $", [offset, limit])
         const queryResult = await client.query<{ json: string; title: string | null; uuid: UUID }>(queryBuilder.build())
+        return queryResult.rows
+    }
+const embedListPageRows =
+    (parameters: NodeListParameters) =>
+    async (
+        rows: readonly ListPageRow[],
+        embeds: ReadonlyArray<string & keyof NodeEmbedded>,
+        client?: ClientBase,
+    ): Promise<readonly Readonly<[TitledLink, string]>[]> => {
         if (!embeds.length) {
-            return queryResult.rows.map(({ json, title, uuid }) => [
+            return rows.map(({ json, title, uuid }) => [
                 { href: `/nodes/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
                 json,
             ])
         }
         return await Promise.all(
-            queryResult.rows.map(async ({ json, title, uuid }) => {
+            rows.map(async ({ json, title, uuid }) => {
                 return [
                     { href: `/nodes/${uuid}?build=${BUILD}`, title: title || DEFAULT_TITLE },
                     await parseEntityJSONAndEmbed<Node, NodeLinks>(client, json, embeds, isNode, "taxonomic group"),
@@ -119,8 +123,9 @@ export const getNodes: Operation<GetNodesParameters, GetNodesService> = async (
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
     return await getListResult({
+        embedListPageRows: embedListPageRows(queryParameters),
+        fetchListPageRows: fetchListPageRows(queryParameters),
         getItemLinks: getItemLinks(queryParameters),
-        getItemLinksAndJSON: getItemLinksAndJSON(queryParameters),
         getTotalItems: getTotalItems(queryParameters),
         itemsPerPage: ITEMS_PER_PAGE,
         listPath: "/nodes",

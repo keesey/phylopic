@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import { FC, useEffect, useState } from "react"
 import customEvents from "~/analytics/customEvents"
+import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
 const DonationPromo: FC = () => {
@@ -18,11 +19,11 @@ const DonationPromo: FC = () => {
             <p>
                 Hey, do you like <SiteTitle />?{" "}
                 <a
-                    href="//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW"
+                    href={PAYPAL_DONATE_URL}
                     onClick={() =>
                         customEvents.clickDonatePromoLink(
                             "make_donation",
-                            "//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
+                            PAYPAL_DONATE_URL,
                             "Make a donation",
                             variant,
                         )

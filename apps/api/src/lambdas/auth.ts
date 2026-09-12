@@ -6,6 +6,10 @@ import verifyJWT from "../auth/jwt/verifyJWT"
 export const onAPIGatewayRequestAuthorizer: APIGatewayRequestAuthorizerHandler = async (event, _context) => {
     const uuid = await getAuthorizedUUID(event.headers?.authorization ?? event.headers?.Authorization, new Date())
     return {
+        // Passed through to the authorized function as `event.requestContext.authorizer.uuid`.
+        // This is the only place a token's signature is checked, so downstream functions must
+        // take the caller's identity from here rather than reading the token themselves.
+        context: uuid ? { uuid } : undefined,
         policyDocument: {
             Statement: [
                 {
@@ -16,7 +20,7 @@ export const onAPIGatewayRequestAuthorizer: APIGatewayRequestAuthorizerHandler =
             ],
             Version: "2012-10-17",
         },
-        principalId: "token",
+        principalId: uuid ?? "anonymous",
     } as APIGatewayAuthorizerResult
 }
 const getAuthorizedUUID = async (authorization: string | undefined, now: Date): Promise<UUID | null> => {

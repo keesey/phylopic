@@ -1,6 +1,7 @@
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import customEvents from "~/analytics/customEvents"
+import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import EngineeringSection from "~/sections/EngineeringSection"
@@ -63,14 +64,9 @@ const PageComponent: NextPage = () => (
                     </p>
                     <p>
                         <a
-                            href="//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW"
+                            href={PAYPAL_DONATE_URL}
                             onClick={() =>
-                                customEvents.clickLink(
-                                    "donate_cancel_go_back",
-                                    "//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
-                                    "Go Back!",
-                                    "link",
-                                )
+                                customEvents.clickLink("donate_cancel_go_back", PAYPAL_DONATE_URL, "Go Back!", "link")
                             }
                             rel="noreferrer"
                         >

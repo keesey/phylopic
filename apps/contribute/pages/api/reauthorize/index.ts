@@ -9,7 +9,15 @@ import getTTLFromBody from "~/auth/ttl/getTTLFromBody"
 const handlePost = async (authorization: string | undefined, ttl: number): Promise<JWT> => {
     const now = new Date()
     const token = getBearerJWT(authorization)
-    const { sub: uuid, exp } = (await verifyJWT(token)) ?? {}
+    let payload: Awaited<ReturnType<typeof verifyJWT>>
+    try {
+        payload = await verifyJWT(token)
+    } catch (e) {
+        // A token that fails verification is an authorization failure, not a server error.
+        console.warn(e)
+        throw 401
+    }
+    const { sub: uuid, exp } = payload ?? {}
     if (!isUUIDv4(uuid) || !isPositiveInteger(exp) || exp * 1000 <= now.valueOf()) {
         throw 401
     }

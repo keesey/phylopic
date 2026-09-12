@@ -1,17 +1,9 @@
-import BaseSourceClient, { PoolClientProvider } from "@phylopic/source-client"
-import { Pool } from "pg"
-const POOL = new Pool({
-    database: "phylopic-source",
-})
+import BaseSourceClient, { createSourcePool, PoolClientProvider } from "@phylopic/source-client"
+import { createContributeS3ClientConfig } from "~/aws/createAwsClientConfig"
+const POOL = createSourcePool()
 export default class SourceClient extends BaseSourceClient {
     constructor() {
-        const provider = new PoolClientProvider(POOL, {
-            credentials: {
-                accessKeyId: process.env.S3_ACCESS_KEY_ID!,
-                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
-            },
-            region: process.env.S3_REGION!,
-        })
+        const provider = new PoolClientProvider(POOL, createContributeS3ClientConfig())
         super(provider)
         this.destroy = () => provider.destroy()
     }

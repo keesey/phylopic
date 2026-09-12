@@ -1,6 +1,0 @@
-@use "@phylopic/styles/colors.scss";
-@use "@phylopic/styles/mixins/bullet.scss";
-
-.item {
-    @include bullet.item(colors.$black);
-}

@@ -12,16 +12,18 @@ import getExternalLink from "../search/getExternalLink"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
+
 export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
-export type GetResolveObjectsService = PgClientService
+
+export type GetResolveObjectService = PgClientService
+
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
-const getRedirectLink = async (
-    service: PgClientService,
+
+const assertResolvable = (
     authority: Authority | undefined,
     namespace: Namespace | undefined,
     objectID: ObjectID | undefined,
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<TitledLink> => {
+) => {
     if (!authority || !namespace || !objectID) {
         throw new APIError(400, [
             {
@@ -42,16 +44,25 @@ const getRedirectLink = async (
             },
         ])
     }
+}
+
+const selectResolveLinkJSON = async (
+    service: PgClientService,
+    authority: Authority,
+    namespace: Namespace,
+    objectID: ObjectID,
+    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
+): Promise<string> => {
     const client = await service.createPgClient()
-    let result: TitledLink
     try {
-        result = await getExternalLink(client, authority, namespace, objectID, queryParameters)
+        const link = await getExternalLink(client, authority, namespace, objectID, queryParameters)
+        return stringifyNormalized(link)
     } finally {
         await service.deletePgClient(client)
     }
-    return result
 }
-export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectsService> = async (
+
+export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {
@@ -61,10 +72,15 @@ export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveO
     if (queryParameters.build) {
         checkBuild(queryParameters.build, USER_MESSAGE)
     }
-    const link = await getRedirectLink(service, authority, namespace, objectID, { ...queryParameters, build: BUILD })
+    assertResolvable(authority, namespace, objectID)
+    const body = await selectResolveLinkJSON(service, authority, namespace, objectID, {
+        ...queryParameters,
+        build: BUILD,
+    })
+    const link = JSON.parse(body) as TitledLink
     const permanent = queryParameters.build === BUILD.toString(10)
     return {
-        body: stringifyNormalized(link),
+        body,
         headers: {
             ...DATA_HEADERS,
             ...createRedirectHeaders(link.href, permanent),
@@ -72,4 +88,5 @@ export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveO
         statusCode: permanent ? 308 : 307,
     } as APIGatewayProxyResult
 }
+
 export default getResolveObject

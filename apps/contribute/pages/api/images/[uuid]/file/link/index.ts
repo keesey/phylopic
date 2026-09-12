@@ -1,0 +1,43 @@
+import { handleAPIError } from "@phylopic/source-client"
+import { isUUIDv4 } from "@phylopic/utils"
+import { NextApiHandler } from "next"
+import verifyAuthorization from "~/auth/http/verifyAuthorization"
+import getSourceImageFileURL from "~/source/getSourceImageFileURL"
+import SourceClient from "~/source/SourceClient"
+const index: NextApiHandler<{ href: string }> = async (req, res) => {
+    let client: SourceClient | undefined
+    try {
+        const uuid = req.query.uuid
+        if (!isUUIDv4(uuid)) {
+            throw 404
+        }
+        client = new SourceClient()
+        const imageClient = client.image(uuid)
+        const image = await imageClient.get()
+        await verifyAuthorization(req.headers, { sub: image.contributor })
+        switch (req.method) {
+            case "GET":
+            case "HEAD": {
+                // The link is itself a credential, so keep it out of any shared cache.
+                res.setHeader("cache-control", "no-store")
+                res.status(200)
+                res.json({ href: await getSourceImageFileURL(uuid) })
+                break
+            }
+            case "OPTIONS": {
+                res.setHeader("allow", "GET, HEAD, OPTIONS")
+                res.status(204)
+                break
+            }
+            default: {
+                throw 405
+            }
+        }
+    } catch (e) {
+        handleAPIError(res, e)
+    } finally {
+        await client?.destroy()
+    }
+    res.end()
+}
+export default index

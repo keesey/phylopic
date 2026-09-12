@@ -5,9 +5,9 @@ import { Links } from "./Links"
 import { TitledLink } from "./TitledLink"
 export interface NodeLinks extends Links<TitledLink> {
     readonly childNodes: readonly TitledLink[]
-    readonly cladeImages: TitledLink | null
+    readonly cladeImages: TitledLink
     readonly external: readonly TitledLink[]
-    readonly images: Link | null
+    readonly images: Link
     readonly lineage: Link
     readonly parentNode: TitledLink | null
     readonly primaryImage: TitledLink | null

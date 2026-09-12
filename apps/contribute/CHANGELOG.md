@@ -19,6 +19,231 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.25] - 2026-09-11
+
+### Changed
+
+- Patch upgrade for `next`.
+- Upgraded `@phylopic/ui` to `1.7.18`.
+
+## [2.4.24] - 2026-09-02
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.17`.
+
+### Security
+
+- Minor upgrade for `sharp`, fixing `libvips` vulnerabilities.
+- Patch upgrade for `nanoid`.
+
+## [2.4.23] - 2026-08-29
+
+### Fixed
+
+- Avoid a client-side crash when assigning PBDB search results for taxa not linked in PhyloPic
+  (resolve `404` left `_embedded` undefined on stored nodes).
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.16`.
+
+## [2.4.22] - 2026-08-19
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.7`.
+- Upgraded `@phylopic/utils-aws` to `1.1.3`.
+
+## [2.4.21] - 2026-08-13
+
+### Changed
+
+- Magic-link authorization page shows status-specific error messages for invalid or used links (`404`), expired links (`410`), and server errors (`500`), with links to request another authorization email.
+
+## [2.4.20] - 2026-08-12
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.2`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+- Upgraded `@phylopic/api-models` to `1.4.1`.
+- Upgraded `@phylopic/source-client` to `1.4.6`.
+- Upgraded `@phylopic/source-models` to `1.1.4`.
+- Upgraded `@phylopic/styles` to `1.0.1`.
+- Upgraded `@phylopic/ui` to `1.7.15`.
+- Upgraded `@phylopic/utils-api` to `1.0.15`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+## [2.4.19] - 2026-08-11
+
+### Fixed
+
+- Development Content Security Policy allows localhost WebSocket and HTTP connections.
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.5`.
+- Upgraded `@phylopic/ui` to `1.7.14`.
+- Upgraded `@phylopic/utils-api` to `1.0.14`.
+
+## [2.4.18] - 2026-08-11
+
+### Fixed
+
+- Cap the shared Postgres pool at one connection per serverless instance, so API routes do not exhaust RDS connection slots (`53300`).
+
+## [2.4.17] - 2026-08-11
+
+### Fixed
+
+- Replace an invalid stored magic-link token on `POST /api/authorize/{email}` instead of returning `403`, so users can request a new link after `AUTH_SECRET_KEY` rotation or other token corruption.
+
+## [2.4.16] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+## [2.4.15] - 2026-08-10
+
+### Security
+
+- Upgraded `@phylopic/source-client` to `1.4.3`.
+
+## [2.4.14] - 2026-08-10
+
+### Fixed
+
+- Magic-link redemption reuses an existing contributor row for the email instead of inserting a duplicate (`contributor_email_key` violation).
+
+## [2.4.13] - 2026-08-10
+
+### Fixed
+
+- Pin `jsdom@26.1.0` and `cssstyle@4.2.1` (root `resolutions`) to avoid a second serverless `ERR_REQUIRE_ESM` crash from `@csstools/css-calc` via `cssstyle` 5.
+
+## [2.4.12] - 2026-08-10
+
+### Fixed
+
+- Pin `jsdom` and `html-encoding-sniffer` (root `resolutions`) to avoid a serverless `ERR_REQUIRE_ESM` crash from `@exodus/bytes` on Node 24.
+
+## [2.4.11] - 2026-08-10
+
+### Fixed
+
+- Removed invalid direct dependency on `@aws-sdk/credential-provider-web-identity@^3.1093.0`.
+
+## [2.4.10] - 2026-08-10
+
+### Fixed
+
+- S3 and SES OIDC credentials use statically imported `@vercel/functions/oidc` (same bundling fix as `@phylopic/www`).
+
+## [2.4.9] - 2026-08-10
+
+### Security
+
+- S3 and SES clients use Vercel OIDC (`AWS_ROLE_ARN`) when configured, falling back to static keys for local development. Upgraded `@phylopic/utils-aws` to `1.1.0`; added `@vercel/functions`.
+
+## [2.4.8] - 2026-08-10
+
+### Fixed
+
+- Upgraded `@phylopic/ui` to `1.7.12`.
+
+## [2.4.7] - 2026-08-10
+
+### Fixed
+
+- Upgraded `@phylopic/ui` to `1.7.11`.
+
+## [2.4.6] - 2026-08-09
+
+### Security
+
+- Patch upgrade for `next`.
+- Upgraded `@phylopic/api-models` to `1.3.7`.
+- Upgraded `@phylopic/source-models` to `1.1.3`.
+- Upgraded `@phylopic/source-client` to `1.4.2`.
+- Upgraded `@phylopic/ui` to `1.7.10`.
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `@phylopic/utils-api` to `1.0.12`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [2.4.5] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.0`.
+
+## [2.4.4] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.3.5`.
+
+## [2.4.3] - 2026-08-09
+
+### Security
+
+- Magic-link sender is rate-limited per IP and email address; over-limit requests still return `204` without sending mail.
+- Magic links are single-use: redeeming a link deletes the stored auth token.
+- Auth token writes and verification use `verifyJWT` from `@phylopic/source-models` instead of decode-only checks.
+
+## [2.4.2] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.3.6`, `@phylopic/ui` to `1.7.8`, and `@phylopic/utils-api` to `1.0.11`.
+
+## [2.4.1] - 2026-08-09
+
+### Changed
+
+- Upgraded to Node.js 24.
+
+## [2.4.0] - 2026-08-07
+
+### Added
+
+- `GET /api/images/{uuid}/file/link`, which responds with a short-lived link to an image's file, as `{ "href": <URL> }`. Thumbnails of unpublished images load from that link. Requires authorization for the image's contributor.
+
+### Removed
+
+- `GET /api/images/{uuid}/file`, which responded with the contents of an image's file. Replaced by
+  `GET /api/images/{uuid}/file/link`.
+
+### Security
+
+- Uploaded files are no longer served from this application's origin.
+- All API routes are now authorized.
+
+## [2.3.8] - 2026-08-07
+
+### Changed
+
+- Authorized requests now go through a single request function, rather than each caller attaching its own `Authorization` header.
+
+### Fixed
+
+- Authorization tokens that fail verification, such as those signed with a retired key, are now discarded, and the user is prompted to re-authorize. Previously such tokens persisted indefinitely, leaving the interface in an apparently authorized state while every request failed.
+- Failed authorization now responds with `401` instead of `500`.
+
+### Security
+
+- Responses to failed authorization no longer include internal error details.
+
+## [2.3.7] - 2026-07-26
+
+### Added
+
+- `User-Agent` header identifying _PhyloPic_ in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
+
+### Fixed
+
+- Upgraded `@phylopic/utils-api` to fix `Suspense` errors.
+
 ## [2.3.6] - 2026-07-23
 
 ### Changed

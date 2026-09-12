@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.6] - 2026-08-09
+
+### Security
+
+- Patch upgrade for `eslint-config-next` (Next.js 15.5.23).
+
 ## [1.0.5] - 2026-07-23
 
 ### Changed

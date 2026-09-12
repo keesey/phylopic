@@ -6,12 +6,13 @@ import {
     ImageMediaType,
     isImageMediaType,
     isUUIDv4,
+    isVectorMediaType,
     stringifyNormalized,
     UUID,
 } from "@phylopic/utils"
+import { sanitizeSVGLite } from "@phylopic/utils/svg/lite"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { createHash } from "crypto"
-import decodeJWT from "../auth/jwt/decodeJWT"
 import APIError from "../errors/APIError"
 import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
@@ -24,14 +25,18 @@ const USER_MESSAGE = "There was a problem with an attempt to upload your file."
 const USER_AUTH_MESSAGE =
     "There was a problem with an attempt to upload your file. You may need to sign out and sign back in."
 export type PostUploadParameters = DataRequestHeaders & {
-    authorization?: string
+    /**
+     * UUID of the authenticated contributor, as established by the request authorizer in
+     * `lambdas/auth.ts`.
+     */
+    contributorUUID?: UUID
     encoding: "base64" | "utf8"
     "content-type"?: string
 }
 export type PostUploadService = S3ClientService
 const ACCEPT = "image/svg+xml,image/png,image/gif,image/bmp,image/jpeg"
 export const postUpload: Operation<PostUploadParameters, PostUploadService> = async (
-    { accept, authorization, body, "content-type": contentType, encoding },
+    { accept, body, contributorUUID, "content-type": contentType, encoding },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
@@ -42,10 +47,14 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     if (!body) {
         throw createMissingBodyError()
     }
-    const contributor = getContributor(authorization)
-    const hash = getHash(body)
+    const contributor = getContributor(contributorUUID)
+    let fileBody = Buffer.from(body, encoding)
+    if (isVectorMediaType(contentType)) {
+        fileBody = sanitizeSVGLite(fileBody)
+    }
+    const hash = getHash(fileBody)
     const key = `files/${encodeURIComponent(hash)}`
-    await uploadBody(service, key, contributor, Buffer.from(body, encoding), contentType)
+    await uploadBody(service, key, contributor, fileBody, contentType)
     const link: Link = {
         href: "https://uploads.phylopic.org/" + key,
     }
@@ -56,7 +65,7 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
     } as APIGatewayProxyResult
 }
 export default postUpload
-const getHash = (body: string) => {
+const getHash = (body: Buffer) => {
     const hashSum = createHash("sha256")
     hashSum.update(body)
     return hashSum.digest("hex")
@@ -73,7 +82,9 @@ const createMissingBodyError = () =>
 const createUUIDError = (falseUUID: unknown) =>
     new APIError(401, [
         {
-            developerMessage: "Invalid authorization. Expected a UUID: " + String(falseUUID),
+            developerMessage:
+                "Invalid authorization. Expected the request authorizer to supply a contributor UUID, but got: " +
+                String(falseUUID),
             field: "authorization",
             type: "UNAUTHORIZED",
             userMessage: USER_AUTH_MESSAGE,
@@ -147,9 +158,8 @@ const uploadBody = async (
         service.deleteS3Client(client)
     }
 }
-const getContributor = (authorization: string | undefined) => {
-    const payload = authorization ? decodeJWT(authorization.replace(/^Bearer\s+/, "")) : null
-    const contributor = payload?.sub
+const getContributor = (contributor: string | undefined) => {
+    // Absent means the authorizer did not run or did not authorize, so fail closed.
     if (!isUUIDv4(contributor)) {
         throw createUUIDError(contributor)
     }

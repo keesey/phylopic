@@ -37,7 +37,7 @@ const verifyJWT = (token: JWT) =>
                 if (!decoded) {
                     throw new APIError(401, [
                         {
-                            developerMessage: "Could not read token with secret: " + process.env.AUTH_SECRET_KEY,
+                            developerMessage: "Could not read token with secret key.",
                             field: "authorization",
                             type: "UNAUTHORIZED",
                             userMessage: "Please sign out and sign back in.",

@@ -5,6 +5,7 @@ import { S3ClientProvider } from "../interfaces/S3ClientProvider"
 import { BaseClientProvider } from "./BaseClientProvider"
 export class PoolClientProvider extends BaseClientProvider implements PGClientProvider, S3ClientProvider {
     protected pg: pg.PoolClient | null = null
+    private pgConnectPromise: Promise<pg.PoolClient> | null = null
     constructor(
         protected readonly pool: pg.Pool,
         s3Config: S3ClientConfig = {},
@@ -24,7 +25,12 @@ export class PoolClientProvider extends BaseClientProvider implements PGClientPr
     }
     public async getPG(): Promise<pg.ClientBase> {
         if (!this.pg) {
-            this.pg = await this.pool.connect()
+            this.pgConnectPromise ??= this.pool.connect()
+            try {
+                this.pg = await this.pgConnectPromise
+            } finally {
+                this.pgConnectPromise = null
+            }
         }
         return this.pg
     }

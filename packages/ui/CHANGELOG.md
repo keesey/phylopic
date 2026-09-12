@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   `BuildContainer` component and `BuildContext` (previously in `@phylopic/utils-api`).
--   The `"use client"` directive to exports.
+- `BuildContainer` component and `BuildContext` (previously in `@phylopic/utils-api`).
+- The `"use client"` directive to exports.
 
 ### Changed
 
--   Stopped using `useMemo()` in Views.
+- Stopped using `useMemo()` in Views.
 
 ### Deprecated
 
@@ -22,9 +22,101 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
--   Most folders moved to `@phylopic/client-components`.
+- Most folders moved to `@phylopic/client-components`.
 
 ### Security
+
+## [1.7.18] - 2026-09-11
+
+### Changed
+
+- Patch upgrade for `next`.
+
+## [1.7.17] - 2026-09-02
+
+### Security
+
+- Minor upgrade for `sharp`, fixing `libvips` vulnerabilities.
+- Patch upgrade for `nanoid`.
+
+## [1.7.16] - 2026-08-29
+
+### Fixed
+
+- PBDB and OTOL external resolve fetchers validate resolved nodes with `isNodeWithEmbedded`
+  before storing them in search state.
+- `useExternalResolutions` skips resolved nodes that fail validation.
+
+## [1.7.15] - 2026-08-12
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.1`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+- Upgraded `@phylopic/utils-api` to `1.0.15`.
+
+## [1.7.14] - 2026-08-11
+
+### Fixed
+
+- External autocomplete fetchers send `Accept: application/json` so GBIF and similar APIs do not
+  return `406`.
+- Development Content Security Policy allows `localhost` and `127.0.0.1` WebSocket and HTTP
+  connections (Next.js dev server binding mismatch).
+
+### Changed
+
+- Upgraded `@phylopic/utils-api` to `1.0.14`.
+
+## [1.7.13] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+## [1.7.12] - 2026-08-10
+
+### Fixed
+
+- No longer setting a `User-Agent` header on client-side requests to the _Paleobiology Database_ API.
+
+## [1.7.11] - 2026-08-10
+
+### Fixed
+
+- Content Security Policy allows Google Fonts and Google Tag Manager used by the apps.
+
+## [1.7.10] - 2026-08-09
+
+### Security
+
+- Patch upgrade for `next`.
+- Upgraded `@phylopic/api-models` to `1.3.7`.
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `@phylopic/utils-api` to `1.0.12`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [1.7.9] - 2026-08-09
+
+### Added
+
+- Shared `securityHeaders` module for Next.js `headers()` configuration.
+
+## [1.7.8] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.3.6` and `@phylopic/utils-api` to `1.0.11`.
+
+## [1.7.7] - 2026-07-26
+
+### Added
+
+- `User-Agent` header identifying _PhyloPic_ in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
+
+### Fixed
+
+- Upgraded `@phylopic/utils-api` to fix `Suspense` errors.
 
 ## [1.7.6] - 2026-07-23
 

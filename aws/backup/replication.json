@@ -1,0 +1,20 @@
+{
+    "Role": "ROLE_ARN",
+    "Rules": [
+        {
+            "ID": "RULE_ID",
+            "Status": "Enabled",
+            "Priority": 1,
+            "Filter": {
+                "Prefix": ""
+            },
+            "DeleteMarkerReplication": {
+                "Status": "Enabled"
+            },
+            "Destination": {
+                "Bucket": "DEST_BUCKET_ARN",
+                "StorageClass": "STANDARD"
+            }
+        }
+    ]
+}

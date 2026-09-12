@@ -47,7 +47,6 @@ import compressFallback from "~/swr/compressFallback"
 import Container from "~/ui/Container"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import NomenHeader from "~/ui/NomenHeader"
-import QUICK_LINKS from "~/ui/QuickLinks/QUICK_LINKS"
 import { QuickLinkNode } from "~/ui/QuickLinks/QuickLinkNode"
 import ImageListView from "~/views/ImageListView"
 import NodeListView from "~/views/NodeListView"
@@ -224,18 +223,9 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
     )
 }
 export default PageComponent
-const convertQuickLinkToPathParams = (link: QuickLinkNode): Array<{ params: { uuid: UUID; slug: string } }> => [
-    { params: { uuid: link.uuid, slug: `${link.slug}-silhouettes` } },
-    ...(Array.isArray(link.children)
-        ? (link.children as readonly QuickLinkNode[]).reduce<Array<{ params: { uuid: UUID; slug: string } }>>(
-              (prev, child) => [...prev, ...convertQuickLinkToPathParams(child)],
-              [],
-          )
-        : []),
-]
 export const getStaticPaths: GetStaticPaths<{ uuid: UUID; slug: string }> = () => ({
     fallback: "blocking",
-    paths: convertQuickLinkToPathParams(QUICK_LINKS),
+    paths: [],
 })
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}

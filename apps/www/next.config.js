@@ -1,9 +1,35 @@
 const path = require("path")
+const { createSecurityHeaderRoutes } = require("@phylopic/ui/securityHeaders")
+/** Keep in sync with `src/donate/PAYPAL_DONATE_URL.ts`. */
+const PAYPAL_DONATE_URL = "https://www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
+    serverExternalPackages: ["@aws-sdk/credential-provider-web-identity", "@vercel/functions", "@vercel/oidc"],
+    webpack: (config, { dev, isServer }) => {
+        if (!dev && !isServer) {
+            config.optimization.minimizer = config.optimization.minimizer.map(item => {
+                if (typeof item !== "function" || !item.toString().includes("CssMinimizerPlugin")) {
+                    return item
+                }
+                return compiler => {
+                    const { CssMinimizerPlugin } = require("./webpack/css-minimizer-plugin")
+                    new CssMinimizerPlugin({
+                        postcssOptions: {
+                            map: {
+                                inline: false,
+                                annotation: false,
+                            },
+                        },
+                    }).apply(compiler)
+                }
+            })
+        }
+        return config
+    },
     async headers() {
         return [
+            ...createSecurityHeaderRoutes({ development: process.env.NODE_ENV === "development" }),
             {
                 source: "/api/:path*",
                 headers: [
@@ -49,7 +75,7 @@ const nextConfig = {
             },
             {
                 source: "/donate",
-                destination: "https://www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
+                destination: PAYPAL_DONATE_URL,
                 permanent: true,
             },
             {
@@ -91,23 +117,7 @@ const nextConfig = {
         ]
     },
 }
-const runtimeCaching = require("next-pwa/cache")
-const withPWA = require("next-pwa")({
-    dest: "public",
-    disable: process.env.NODE_ENV === "development",
-    register: true,
-})
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
     enabled: process.env.ANALYZE === "true",
 })
-const config = withBundleAnalyzer(
-    withPWA({
-        ...nextConfig,
-        pwa: {
-            dest: "public",
-            runtimeCaching,
-        },
-    }),
-)
-delete config.pwa
-module.exports = config
+module.exports = withBundleAnalyzer(nextConfig)

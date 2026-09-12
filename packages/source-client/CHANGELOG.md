@@ -19,6 +19,89 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.8] - 2026-09-11
+
+### Changed
+
+- Upgraded `vitest` from `4.1.10` to `5.0.0`.
+
+## [1.4.7] - 2026-08-19
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.3`.
+
+### Security
+
+- Set `ServerSideEncryption: AES256` on `S3Editor` puts.
+
+## [1.4.6] - 2026-08-12
+
+### Changed
+
+- Upgraded `vitest` from `1.5.0` to `4.1.10`.
+- Upgraded `@phylopic/utils-aws` to `1.1.2`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+- Upgraded `@phylopic/source-models` to `1.1.4`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+### Security
+
+- Upgraded `vite` to `5.4.21` (via `vitest`), fixing path traversal via trailing backslash on
+  Windows when the Vite dev server is exposed to the network (CVE-2025-62522).
+
+## [1.4.5] - 2026-08-11
+
+### Fixed
+
+- Serialize the initial Postgres pool connection in `PoolClientProvider.getPG()` so parallel callers
+  no longer race on a `max: 1` pool (fixes node absorb/merge timeouts).
+
+## [1.4.4] - 2026-08-11
+
+### Added
+
+- `createSourcePool()` for serverless apps: one Postgres connection per instance (`max: 1`), matching
+  `@phylopic/api` pool settings.
+
+## [1.4.3] - 2026-08-10
+
+### Security
+
+- Return generic messages from `handleAPIError` for AWS and unexpected failures.
+
+## [1.4.2] - 2026-08-09
+
+### Security
+
+- Upgraded `@phylopic/source-models` to `1.1.3`.
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `@phylopic/utils-aws` to `1.0.7`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [1.4.1] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/utils/svg` to `1.2.1`.
+
+## [1.4.0] - 2026-08-09
+
+### Security
+
+- SVG source images are sanitized with DOMPurify before being written to S3 (`writeImageFile`).
+
+## [1.3.5] - 2026-08-09
+
+### Fixed
+
+- `writeJWT` imports `invalidate` from `@phylopic/utils` instead of `@phylopic/source-models`.
+
+## [1.3.4] - 2026-08-09
+
+### Security
+
+- `writeJWT` now verifies JWT signatures with `AUTH_SECRET_KEY` before persisting auth tokens.
+
 ## [1.3.3] - 2026-07-22
 
 ### Changed

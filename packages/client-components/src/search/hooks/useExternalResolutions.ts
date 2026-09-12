@@ -1,3 +1,4 @@
+import { isNodeWithEmbedded } from "@phylopic/api-models"
 import { compareStrings, isUUID, stringifyNomen, UUID } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
 import { SearchContext } from "../context"
@@ -35,7 +36,7 @@ export const useExternalResolutions = (maxResults = Infinity) => {
                     const uuid = state?.resolutions[authority]?.[namespace]?.[objectID]
                     if (isUUID(uuid) && typeof title === "string" && !uuids.has(uuid) && !nodeResultUUIDs.has(uuid)) {
                         const node = state?.resolvedNodes[uuid]
-                        if (node) {
+                        if (node && isNodeWithEmbedded(node)) {
                             results.push({ authority, namespace, node, objectID, title, uuid })
                             uuids.add(uuid)
                         }

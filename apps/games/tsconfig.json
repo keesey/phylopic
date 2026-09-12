@@ -1,32 +1,21 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist",
-    "paths": {
-      "~/*": [
-        "./*"
-      ]
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outDir": "dist",
+        "paths": {
+            "~/*": ["./*"]
+        },
+        "rootDir": ".",
+        "module": "esnext",
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "target": "ES2017"
     },
-    "rootDir": ".",
-    "module": "esnext",
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "target": "ES2017"
-  },
-  "exclude": [
-    "node_modules"
-  ],
-  "extends": "@phylopic/tsconfig/next.json",
-  "include": [
-    "app",
-    "components",
-    "games",
-    "lib",
-    "next-env.d.ts",
-    ".next/types/**/*.ts"
-  ]
+    "exclude": ["node_modules"],
+    "extends": "@phylopic/tsconfig/next.json",
+    "include": ["app", "components", "games", "lib", "next-env.d.ts", ".next/types/**/*.ts"]
 }

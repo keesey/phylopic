@@ -13,4 +13,7 @@ export class APISWRError extends Error {
                 .join("\n") || statusText,
         )
     }
+    get isForbidden(): boolean {
+        return this.statusCode === 403
+    }
 }

@@ -1,16 +1,15 @@
 import { Node } from "@phylopic/api-models"
-import clsx from "clsx"
 import { FC } from "react"
 import styles from "./index.module.scss"
 import NodeListViewItems from "./NodeListViewItems"
 export interface Props {
     short?: boolean
     value: readonly Node[]
-    variant?: "lineage" | "list"
+    variant?: "inline" | "lineage" | "list"
 }
-const NodeListView: FC<Props> = ({ variant = "list", ...itemsProps }) => {
+const NodeListView: FC<Props> = ({ variant = "inline", ...itemsProps }) => {
     return (
-        <ul className={clsx(styles.main, styles[variant])}>
+        <ul className={styles[variant]}>
             <NodeListViewItems {...itemsProps} />
         </ul>
     )

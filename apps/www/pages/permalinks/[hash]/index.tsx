@@ -1,7 +1,8 @@
-import { GetObjectCommandOutput, S3Client } from "@aws-sdk/client-s3"
+import { S3Client } from "@aws-sdk/client-s3"
 import { TimestampView } from "@phylopic/ui"
 import { Hash, isHash } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
+import createS3ClientConfig from "~/aws/createS3ClientConfig"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -60,35 +61,27 @@ export const getStaticProps: GetStaticProps<Props, { hash: Hash }> = async conte
     if (!isHash(hash)) {
         return { notFound: true }
     }
-    const client = new S3Client({
-        credentials: {
-            accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
-            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
-        },
-        region: process.env.S3_REGION,
-    })
-    let data: PermalinkData
-    let output: GetObjectCommandOutput
+    const client = new S3Client(createS3ClientConfig())
     try {
-        ;[data, output] = await getJSON<PermalinkData>(client, {
+        const [data, output] = await getJSON<PermalinkData>(client, {
             Bucket: PERMALINKS_BUCKET_NAME,
             Key: `data/${encodeURIComponent(hash)}.json`,
         })
+        if (
+            typeof output.$metadata.httpStatusCode === "number" &&
+            output.$metadata.httpStatusCode >= 400 &&
+            output.$metadata.httpStatusCode < 500
+        ) {
+            return { notFound: true }
+        }
+        return {
+            props: {
+                data,
+                date: output.LastModified?.toISOString(),
+                hash,
+            },
+        }
     } finally {
         client.destroy()
-    }
-    if (
-        typeof output.$metadata.httpStatusCode === "number" &&
-        output.$metadata.httpStatusCode >= 400 &&
-        output.$metadata.httpStatusCode < 500
-    ) {
-        return { notFound: true }
-    }
-    return {
-        props: {
-            data,
-            date: output.LastModified?.toISOString(),
-            hash,
-        },
     }
 }

@@ -19,9 +19,7 @@ const Breadcrumbs: FC<Props> = ({ items }) => (
                         isExternalLink(href) ? (
                             <a href={href}>{children}</a>
                         ) : (
-                            <Link href={href} legacyBehavior>
-                                {children}
-                            </Link>
+                            <Link href={href}>{children}</Link>
                         )
                     ) : (
                         children

@@ -1,9 +1,19 @@
 @use "@phylopic/styles/colors.scss";
 @use "@phylopic/styles/mixins/bullet.scss";
-.main {
-    display: flex;
-    flex-wrap: wrap;
+@use "@phylopic/styles/mixins/flex-list.scss";
+
+@mixin list {
     > li {
         @include bullet.item(colors.$black);
     }
+}
+
+.main {
+    @include flex-list.block-container;
+    @include list;
+}
+
+.inline {
+    @include flex-list.inline-container;
+    @include list;
 }

@@ -1,7 +1,7 @@
 import { Nomen } from "@phylopic/utils"
 import { FC } from "react"
+import BulletList from "~/ui/BulletList"
 import NomenView from "../NomenView"
-import styles from "./index.module.scss"
 export interface Props {
     defaultText?: string
     short?: boolean
@@ -9,13 +9,13 @@ export interface Props {
 }
 const NomenListView: FC<Props> = ({ defaultText, short, value }) => {
     return (
-        <ul className={styles.main}>
+        <BulletList inline>
             {value.map((name, index) => (
-                <li key={index} className={styles.item}>
+                <li key={index}>
                     <NomenView value={name} defaultText={defaultText} short={short} />
                 </li>
             ))}
-        </ul>
+        </BulletList>
     )
 }
 export default NomenListView

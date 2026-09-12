@@ -7,6 +7,7 @@ import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
+import { checkPostCollectionRateLimit } from "../rateLimit/checkPostCollectionRateLimit"
 import { PgClientService } from "../services/PgClientService"
 import { Operation } from "./Operation"
 const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
@@ -15,6 +16,8 @@ const EMPTY_DIGITS: readonly number[] = new Array(32).fill(0)
 const USER_MESSAGE = "There was a problem with an attempt to find a collection."
 export type PostCollectionParameters = DataRequestHeaders & {
     "content-type"?: string
+    encoding?: "base64" | "utf8"
+    sourceIp?: string
 }
 export type PostCollectionService = PgClientService
 const getUUIDsFromBody = (body: string): ReadonlySet<UUID> => {
@@ -82,10 +85,19 @@ const ensureExistence = async (service: PgClientService, uuid: string, uuids: Re
     }
 }
 export const postCollection: Operation<PostCollectionParameters, PostCollectionService> = async (
-    { accept, body, "content-type": contentType },
+    { accept, body, "content-type": contentType, encoding = "utf8", sourceIp = "unknown" },
     service,
 ) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
+    if (!checkPostCollectionRateLimit(sourceIp)) {
+        throw new APIError(429, [
+            {
+                developerMessage: "Rate limit exceeded.",
+                type: "THROTTLED",
+                userMessage: USER_MESSAGE,
+            },
+        ])
+    }
     checkContentType(contentType, ACCEPT)
     if (!body) {
         throw new APIError(400, [
@@ -97,7 +109,8 @@ export const postCollection: Operation<PostCollectionParameters, PostCollectionS
             },
         ])
     }
-    if (body.length > MAX_BODY_SIZE) {
+    const textBody = encoding === "base64" ? Buffer.from(body, "base64").toString("utf8") : body
+    if (textBody.length > MAX_BODY_SIZE) {
         throw new APIError(413, [
             {
                 developerMessage: "Payload too large.",
@@ -107,7 +120,7 @@ export const postCollection: Operation<PostCollectionParameters, PostCollectionS
             },
         ])
     }
-    const uuids = getUUIDsFromBody(body)
+    const uuids = getUUIDsFromBody(textBody)
     const uuid = getCollectionUUID(uuids)
     await ensureExistence(service, uuid, uuids)
     const link: Link = { href: `/collections/${encodeURIComponent(uuid)}` }

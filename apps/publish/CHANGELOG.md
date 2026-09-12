@@ -11,13 +11,154 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-### Deprecated
-
 ### Fixed
 
 ### Removed
 
 ### Security
+
+## [1.13.0] - 2026-08-28
+
+### Changed
+
+- Publish writes `{build}/namespaces.json` to S3 during `yarn insert`.
+- Publish writes `{build}/resolve/{authority}/{namespace}/{objectID}.json` for each external ID during `yarn insert`.
+- `yarn verify:entities` checks `namespaces.json` and sampled resolve objects against Postgres.
+
+## [1.12.15] - 2026-08-19
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.7`.
+- Upgraded `@phylopic/utils-aws` to `1.1.3`.
+
+## [1.12.14] - 2026-08-12
+
+### Changed
+
+- Upgraded `@phylopic/utils-aws` to `1.1.2`; `@aws-sdk/client-s3` peer dependency now `^3.1093.0`.
+- Upgraded `@phylopic/api-models` to `1.4.1`.
+- Upgraded `@phylopic/source-client` to `1.4.6`.
+- Upgraded `@phylopic/source-models` to `1.1.4`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+### Security
+
+- Confine publish filesystem helpers to the app root.
+
+## [1.12.13] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.5`.
+
+## [1.12.12] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+### Removed
+
+- `Image._links["twitter:image"]` from published image JSON (use `http://ogp.me/ns#image` instead).
+
+## [1.12.11] - 2026-08-10
+
+### Added
+
+- `AWS_PROFILE=phylopic-publish` on publish `package.json` scripts that call AWS.
+
+## [1.12.10] - 2026-08-10
+
+### Security
+
+- Upgraded `@phylopic/source-client` to `1.4.3`.
+
+## [1.12.9] - 2026-08-10
+
+### Fixed
+
+- Preprocess SVG sanitization strips corrupted Adobe Illustrator CDATA prefixes (`]&gt;`, etc.)
+  that caused `yarn make` insert failures on a small set of legacy source files.
+
+## [1.12.8] - 2026-08-10
+
+### Changed
+
+- `SourceClient` uses the default AWS credential chain when `S3_*` is omitted, so
+  `AWS_PROFILE=phylopic-publish` covers the full `yarn make` pipeline.
+
+### Security
+
+- Documented scoped `phylopic-publish` IAM profile (`aws/policies/phylopic-publish.json`) in
+  place of the administrator CLI profile for release.
+
+## [1.12.7] - 2026-08-10
+
+### Security
+
+- Revalidation script sends `POST /api/revalidate` with an `Authorization: Bearer` header and requires `REVALIDATE_TOKEN` at startup.
+
+## [1.12.6] - 2026-08-09
+
+### Security
+
+- Upgraded `@phylopic/api-models` to `1.3.7`.
+- Upgraded `@phylopic/source-models` to `1.1.3`.
+- Upgraded `@phylopic/source-client` to `1.4.2`.
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `@phylopic/utils-aws` to `1.0.7`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [1.12.5] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/utils/svg` to `1.2.1`.
+
+## [1.12.4] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.0`.
+
+## [1.12.3] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.3.5`.
+
+## [1.12.2] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.3.6`.
+
+## [1.12.1] - 2026-08-09
+
+### Changed
+
+- Upgraded to Node.js 24.
+
+## [1.12.0] - 2026-08-08
+
+### Added
+
+- Entity JSON dual-write to S3 (`entities.phylopic.org`) during `yarn insert`, mirroring Postgres `json` columns for contributors, images, and nodes.
+- S3 build cleanup on insert (abort recovery) and release (drop old builds).
+- `yarn verify:entities <build>` to spot-check Postgres vs. S3 parity.
+
+## [1.11.3] - 2026-08-08
+
+### Fixed
+
+- Revalidation script now reads `REVALIDATE_TOKEN`, matching `apps/www` and this project's `.env`. It previously read the unset name `REVALIDATE_KEY` and sent an empty secret.
+
+## [1.11.2] - 2026-07-26
+
+### Added
+
+- `User-Agent` header identifying PhyloPic in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
 
 ## [1.11.1] - 2026-07-22
 

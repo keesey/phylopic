@@ -11,7 +11,7 @@ const SchemaScript: FC<Props> = ({ id, object }) => {
         <Head>
             <script
                 dangerouslySetInnerHTML={{
-                    __html: stringifyNormalized(object),
+                    __html: stringifyNormalized(object).replace(/</g, "\\u003c"),
                 }}
                 key={id ? `script:schema:${id}` : undefined}
                 type="application/ld+json"

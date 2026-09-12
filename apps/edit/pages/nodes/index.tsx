@@ -30,7 +30,7 @@ const Page: NextPage = () => {
             </Head>
             <main>
                 <header>
-                    <Breadcrumbs items={[{ href: "/", children: <a>Home</a> }, { children: "Nodes" }]} />
+                    <Breadcrumbs items={[{ href: "/", children: "Home" }, { children: "Nodes" }]} />
                     <h1>Nodes</h1>
                 </header>
                 <a onClick={() => setModalOpen(true)} role="button">

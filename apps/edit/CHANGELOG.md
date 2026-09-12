@@ -19,6 +19,154 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.10.2] - 2026-09-11
+
+### Changed
+
+- Patch upgrade for `next`.
+- Upgraded `@phylopic/ui` to `1.7.18`.
+
+## [1.10.1] - 2026-09-02
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.17`.
+
+### Security
+
+- Minor upgrade for `sharp`, fixing `libvips` vulnerabilities.
+- Patch upgrade for `nanoid`.
+
+## [1.10.0] - 2026-09-01
+
+### Added
+
+- `FundraiserSection` on the home page to set campaign goal and manual offset via `GET`/`PATCH /api/fundraiser`.
+
+## [1.9.21] - 2026-09-01
+
+### Removed
+
+- "Phylogeny" link on Home Page.
+
+## [1.9.20] - 2026-08-29
+
+### Fixed
+
+- Avoid a client-side crash when external search resolves return nodes without `_embedded`.
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.16`.
+
+## [1.9.19] - 2026-08-19
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.7`.
+
+## [1.9.18] - 2026-08-12
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.6`.
+- Upgraded `@phylopic/source-models` to `1.1.4`.
+- Upgraded `@phylopic/ui` to `1.7.15`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+## [1.9.17] - 2026-08-11
+
+### Fixed
+
+- Breadcrumb links no longer nest `<a>` inside Next.js `<Link>` (Next.js 15).
+- Catch merge/absorb API failures instead of surfacing uncaught promise rejections.
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.5`.
+- Upgraded `@phylopic/ui` to `1.7.14`.
+
+## [1.9.16] - 2026-08-11
+
+### Fixed
+
+- Cap the shared Postgres pool at one connection per serverless instance (`createSourcePool`).
+
+## [1.9.15] - 2026-08-10
+
+### Security
+
+- Upgraded `@phylopic/source-client` to `1.4.3`.
+
+## [1.9.14] - 2026-08-10
+
+### Fixed
+
+- Upgraded `@phylopic/ui` to `1.7.12`.
+
+## [1.9.13] - 2026-08-10
+
+### Fixed
+
+- Upgraded `@phylopic/ui` to `1.7.11`.
+
+## [1.9.12] - 2026-08-09
+
+### Security
+
+- Patch upgrade for `next`.
+- Upgraded `@phylopic/source-models` to `1.1.3`.
+- Upgraded `@phylopic/source-client` to `1.4.2`.
+- Upgraded `@phylopic/ui` to `1.7.10`.
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [1.9.11] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.4.0`.
+
+## [1.9.10] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/source-client` to `1.3.5`.
+
+## [1.9.9] - 2026-08-09
+
+### Security
+
+- Global security headers (`Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Strict-Transport-Security`, and others) on all routes.
+
+## [1.9.8] - 2026-08-09
+
+### Changed
+
+- Upgraded `@phylopic/ui` to `1.7.8`.
+
+## [1.9.7] - 2026-08-09
+
+### Changed
+
+- Upgraded to Node.js 24.
+
+## [1.9.6] - 2026-08-07
+
+### Security
+
+- The development server now binds to `127.0.0.1` instead of all interfaces. This application has no authentication and holds credentials for the source data, so binding to `0.0.0.0` (the `next dev` default) made every mutating route reachable by any other device on the network while it was running.
+
+## [1.9.5] - 2026-07-26
+
+### Added
+
+- `User-Agent` header identifying _PhyloPic_ in requests to the _Paleobiology Database_ (`paleobiodb.org`) API.
+
+### Fixed
+
+- Upgraded `@phylopic/ui` to fix `Suspense` errors.
+
 ## [1.9.4] - 2026-07-23
 
 ### Changed

@@ -2,6 +2,7 @@ import { iterateList, SourceClient } from "@phylopic/source-client"
 import { Node } from "@phylopic/source-models"
 import { getIdentifier, isScientific, Nomen, stringifyNomen, UUID } from "@phylopic/utils"
 import axios from "axios"
+import packageJson from "../../package.json"
 type PBDBRecord = Readonly<{
     ext: string
     flg?: string
@@ -35,9 +36,15 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
     )
     let mainRecord: PBDBRecord | undefined
     const page = await client.node(node.uuid).externals.namespace("paleobiodb.org", "txn").page()
+    const axiosConfig = {
+        headers: {
+            "User-Agent": `PhyloPic Publisher/${packageJson.version.split(".", 2).join(".")}`,
+        },
+    }
     if (page.items.length) {
         const response = await axios.get<PBDBResponse>(
             `https://paleobiodb.org/data1.2/taxa/single.json?id=${encodeURIComponent(page.items[0].objectID)}`,
+            axiosConfig,
         )
         const record = response.data.records[0]
         mainRecord = record
@@ -48,6 +55,7 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
                 `https://paleobiodb.org/data1.2/taxa/list.json?name=${encodeURIComponent(
                     [...ancestorNames, name].join(":"),
                 )}&rel=synonyms`,
+                axiosConfig,
             )
             if (response.data.records.length > 0) {
                 for (const record of [...response.data.records].sort(
@@ -81,6 +89,7 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
     if (mainRecord) {
         const response = await axios.get<PBDBResponse>(
             `https://paleobiodb.org/data1.2/taxa/list.json?id=${encodeURIComponent(mainRecord.oid)}&rel=all_parents`,
+            axiosConfig,
         )
         ancestors = response.data.records.filter(isAcceptableAncestor)
     }

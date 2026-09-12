@@ -12,7 +12,7 @@ const Page: NextPage = () => (
         </Head>
         <main>
             <header>
-                <Breadcrumbs items={[{ href: "/", children: <a>Home</a> }, { children: "External Authorities" }]} />
+                <Breadcrumbs items={[{ href: "/", children: "Home" }, { children: "External Authorities" }]} />
                 <h1>External Authorities</h1>
             </header>
             <article>

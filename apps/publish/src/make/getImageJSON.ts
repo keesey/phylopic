@@ -151,8 +151,6 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
                 title: specificTitle,
             },
             thumbnailFiles,
-            // :TODO: Remove this line
-            "twitter:image": socialFile,
             vectorFile,
         },
         attribution: sourceImage.attribution || null,

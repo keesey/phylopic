@@ -1,7 +1,6 @@
 import {
     Collection,
     Contributor,
-    Data,
     ImageWithEmbedded,
     isCollection,
     List,
@@ -11,6 +10,7 @@ import {
 import { createSearch, EMPTY_UUID, normalizeUUID, UUIDish } from "@phylopic/utils"
 import axios from "axios"
 import { CollectionPermalinkData } from "../types/CollectionPermalinkData"
+import getBuild from "./getBuild"
 const loadList = async <T>(
     endpoint: string,
     build: number,
@@ -34,14 +34,6 @@ const loadList = async <T>(
     }
     return items
 }
-const getBuild = async (): Promise<number> => {
-    const index = await axios.get<Data>(process.env.NEXT_PUBLIC_API_URL ?? "")
-    const build = index.data.build
-    if (!build) {
-        throw new Error("Could not determine build index.")
-    }
-    return build
-}
 const checkCollectionExistence = async (uuid: UUIDish): Promise<void> => {
     const collectionResponse = await axios.get<Collection>(
         `${process.env.NEXT_PUBLIC_API_URL}/collections/${encodeURIComponent(normalizeUUID(uuid))}`,
@@ -53,7 +45,7 @@ const checkCollectionExistence = async (uuid: UUIDish): Promise<void> => {
         throw new Error("Invalid collection.")
     }
 }
-const loadCollection = async (uuid: UUIDish): Promise<CollectionPermalinkData> => {
+const loadCollection = async (uuid: UUIDish, build?: number): Promise<CollectionPermalinkData> => {
     if (uuid === EMPTY_UUID) {
         return {
             entities: {
@@ -65,12 +57,13 @@ const loadCollection = async (uuid: UUIDish): Promise<CollectionPermalinkData> =
             uuid,
         }
     }
-    const [build] = await Promise.all([getBuild(), checkCollectionExistence(uuid)])
+    const resolvedBuild = build ?? (await getBuild())
+    await checkCollectionExistence(uuid)
     return {
         entities: {
-            contributors: await loadList<Contributor>("/contributors", build, uuid),
-            nodes: await loadList<NodeWithEmbedded>("/nodes", build, uuid, { embed_primaryImage: "true" }),
-            images: await loadList<ImageWithEmbedded>("/images", build, uuid, { embed_specificNode: "true" }),
+            contributors: await loadList<Contributor>("/contributors", resolvedBuild, uuid),
+            nodes: await loadList<NodeWithEmbedded>("/nodes", resolvedBuild, uuid, { embed_primaryImage: "true" }),
+            images: await loadList<ImageWithEmbedded>("/images", resolvedBuild, uuid, { embed_specificNode: "true" }),
         },
         type: "collection",
         uuid,

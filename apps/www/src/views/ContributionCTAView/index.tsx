@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { FC } from "react"
 import customEvents from "~/analytics/customEvents"
+import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
 import Container from "~/ui/Container"
@@ -58,11 +59,11 @@ const ContributionCTAView: FC = () => {
                             </li>
                             <li>
                                 <a
-                                    href="http://api-docs.phylopic.org/v2"
+                                    href="https://api-docs.phylopic.org/v2/index.html"
                                     onClick={() =>
                                         customEvents.clickLink(
                                             "contribution_cta_link",
-                                            "http://api-docs.phylopic.org/v2",
+                                            "https://api-docs.phylopic.org/v2/index.html",
                                             "API Documentation",
                                             "link",
                                         )
@@ -78,7 +79,7 @@ const ContributionCTAView: FC = () => {
                                     onClick={() =>
                                         customEvents.clickLink(
                                             "//github.com/keesey/phylopic",
-                                            "http://api-docs.phylopic.org/v2",
+                                            "https://api-docs.phylopic.org/v2/index.html",
                                             "Codebase",
                                             "link",
                                         )
@@ -98,11 +99,11 @@ const ContributionCTAView: FC = () => {
                         <ul className={styles.ctaList}>
                             <li>
                                 <a
-                                    href="//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW"
+                                    href={PAYPAL_DONATE_URL}
                                     onClick={() =>
                                         customEvents.clickLink(
                                             "//github.com/keesey/phylopic",
-                                            "//www.paypal.com/donate/?hosted_button_id=9GL697FDK7ZWW",
+                                            PAYPAL_DONATE_URL,
                                             "Make a donation",
                                             "link",
                                         )

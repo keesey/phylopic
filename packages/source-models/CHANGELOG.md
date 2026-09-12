@@ -19,6 +19,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.1.5] - 2026-09-11
+
+### Changed
+
+- Upgraded `vitest` from `4.1.10` to `5.0.0`.
+
+## [1.1.4] - 2026-08-12
+
+### Changed
+
+- Upgraded `vitest` from `1.5.0` to `4.1.10`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+### Security
+
+- Read JWT issuer and audience from `JWT_ISSUER` and `JWT_AUDIENCE`.
+- Upgraded `vite` to `5.4.21` (via `vitest`), fixing path traversal via trailing backslash on
+  Windows when the Vite dev server is exposed to the network (CVE-2025-62522).
+
+## [1.1.3] - 2026-08-09
+
+### Security
+
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [1.1.2] - 2026-08-09
+
+### Added
+
+- `decodeJWT`, `verifyJWT`, and JWT issuer/audience constants for signed contributor tokens.
+
+### Changed
+
+- `isJWT` now checks token structure only; signature verification belongs in `verifyJWT`.
+
 ## [1.1.1] - 2026-07-22
 
 ### Changed

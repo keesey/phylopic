@@ -19,6 +19,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.2] - 2026-09-11
+
+### Changed
+
+- Upgraded `vitest` from `4.1.10` to `5.0.0`.
+
+## [1.4.1] - 2026-08-12
+
+### Changed
+
+- Upgraded `vitest` from `1.5.0` to `4.1.10`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+### Security
+
+- Upgraded `vite` to `5.4.21` (via `vitest`), fixing path traversal via trailing backslash on
+  Windows when the Vite dev server is exposed to the network (CVE-2025-62522).
+
+## [1.4.0] - 2026-08-11
+
+### Removed
+
+- `Image._links["twitter:image"]` (use `http://ogp.me/ns#image` instead).
+
+## [1.3.7] - 2026-08-09
+
+### Security
+
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [1.3.6] - 2026-08-09
+
+### Added
+
+- `AuthorizedNamespaces`, `Licenses` types and `isAuthorizedNamespaces`, `isErrorResponse` validators.
+
+### Changed
+
+- Aligned `Node` link types and validators with the API and OpenAPI spec.
+
+### Deprecated
+
+- `Image._links["twitter:image"]` in favor of `http://ogp.me/ns#image`.
+
+### Removed
+
+- Unused `ErrorResponse.stack` property.
+
 ## [1.3.5] - 2026-07-22
 
 ### Changed

@@ -10,24 +10,31 @@
         "@aws-sdk/client-s3": "^3.1093.0",
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
+        "@phylopic/utils-aws": "*",
         "jsonwebtoken": "^9.0.3",
+        "lodash": "^4.17.21",
         "pg": "^8.22.0"
     },
     "description": "Application Programming Interface for PhyloPic",
+    "engines": {
+        "node": "24.x"
+    },
     "devDependencies": {
         "@phylopic/tsconfig": "*",
         "@types/aws-lambda": "^8.10.162",
         "@types/jsonwebtoken": "^9.0.10",
         "@types/pg": "^8.20.0",
-        "aws-lambda": "^1.0.7",
+        "@aws-sdk/client-cloudfront": "^3.1093.0",
+        "dotenv": "^16.4.5",
         "eslint-config-phylopic": "*",
         "fork-ts-checker-webpack-plugin": "^9.1.0",
+        "@apidevtools/swagger-parser": "^12.1.0",
         "serverless": "^4.40.0",
         "serverless-offline": "^14.7.4",
         "ts-loader": "^9.6.2",
         "ts-node": "^10.9.2",
         "typescript": "^5.4.5",
-        "vitest": "^1.5.0",
+        "vitest": "^5.0.0",
         "webpack": "^5.108.4"
     },
     "license": "MIT",
@@ -37,10 +44,15 @@
     },
     "private": true,
     "scripts": {
-        "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf node_modules",
-        "deploy": "sls deploy",
-        "dev": "sls offline --httpPort 3003 --lambdaPort 3103",
-        "lint": "eslint --fix ./**/*.[jt]s"
+        "build:docs": "node ./scripts/build-docs.mjs",
+        "clean": "rm -rf .serverless && rm -rf .turbo && rm -rf .webpack && rm -rf docs/dist && rm -rf node_modules",
+        "deploy": "yarn build:docs && node ./scripts/deploy.mjs",
+        "deploy:docs": "yarn build:docs && aws s3 sync --acl public-read --delete ./docs/dist s3://api-docs.phylopic.org",
+        "dev": "sls offline --httpPort 3003 --lambdaPort 3103 && rm -rf .serverless",
+        "invalidate-cache": "node ./scripts/invalidate-cloudfront-cache.mjs",
+        "lint": "eslint --fix ./**/*.[jt]s",
+        "predeploy": "yarn test",
+        "test": "yarn build:docs && node ./scripts/validate-openapi.mjs"
     },
-    "version": "2.7.4"
+    "version": "2.14.4"
 }

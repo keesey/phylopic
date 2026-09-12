@@ -1,0 +1,23 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ReadSourceForReplication",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetReplicationConfiguration",
+                "s3:ListBucket",
+                "s3:GetObjectVersionForReplication",
+                "s3:GetObjectVersionAcl",
+                "s3:GetObjectVersionTagging"
+            ],
+            "Resource": ["arn:aws:s3:::source-images.phylopic.org", "arn:aws:s3:::source-images.phylopic.org/*"]
+        },
+        {
+            "Sid": "ReplicateToBackup",
+            "Effect": "Allow",
+            "Action": ["s3:ReplicateObject", "s3:ReplicateDelete", "s3:ReplicateTags"],
+            "Resource": "arn:aws:s3:::source-images-backup.phylopic.org/*"
+        }
+    ]
+}

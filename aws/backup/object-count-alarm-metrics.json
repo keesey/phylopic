@@ -1,0 +1,23 @@
+[
+    {
+        "Id": "m1",
+        "ReturnData": true,
+        "MetricStat": {
+            "Metric": {
+                "Namespace": "AWS/S3",
+                "MetricName": "NumberOfObjects",
+                "Dimensions": [
+                    { "Name": "BucketName", "Value": "source-images.phylopic.org" },
+                    { "Name": "StorageType", "Value": "AllStorageTypes" }
+                ]
+            },
+            "Period": 86400,
+            "Stat": "Average"
+        }
+    },
+    {
+        "Id": "ad",
+        "Expression": "ANOMALY_DETECTION_BAND(m1, 2)",
+        "ReturnData": true
+    }
+]

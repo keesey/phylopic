@@ -17,9 +17,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
--   `BuildContainer` component and `BuildContext` (now in in `@phylopic/ui`).
+- `BuildContainer` component and `BuildContext` (now in in `@phylopic/ui`).
 
 ### Security
+
+## [1.0.15] - 2026-08-12
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.1`.
+- Upgraded `@phylopic/utils` to `1.2.4`.
+
+## [1.0.14] - 2026-08-11
+
+### Added
+
+- `JSON_API_HEADERS` with `Accept: application/json` for third-party JSON APIs.
+
+## [1.0.13] - 2026-08-11
+
+### Changed
+
+- Upgraded `@phylopic/api-models` to `1.4.0`.
+
+## [1.0.12] - 2026-08-09
+
+### Security
+
+- Upgraded `@phylopic/api-models` to `1.3.7`.
+- Upgraded `@phylopic/utils` to `1.2.2`.
+- Upgraded `eslint-config-phylopic` to `1.0.6`.
+
+## [1.0.11] - 2026-08-09
+
+### Added
+
+- `DEFAULT_API_HEADERS` with `Accept: application/vnd.phylopic.v2+json`.
+- `APISWRError.isForbidden` and `fetchResult` `{ status: "forbidden" }` for HTTP 403 responses.
+
+### Changed
+
+- `fetchData` and `createAPIFetcher` send the default API `Accept` header.
+
+## [1.0.10] - 2026-07-26
+
+### Fixed
+
+- `createAPIFetcher()` was triggering `Suspense` errors.
 
 ## [1.0.9] - 2026-07-22
 

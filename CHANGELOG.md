@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   New app: `games`.
--   New package: `client-components` (previously part of `ui`).
+- New app: `games`.
+- New package: `client-components` (previously part of `ui`).
 
 ### Changed
 
@@ -21,6 +21,334 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.0.62] - 2026-09-11
+
+### Changed
+
+- `@phylopic/ui` `1.7.18`, `@phylopic/www` `2.15.2`, `@phylopic/contribute` `2.4.25`, and `@phylopic/edit` `1.10.2`: patch bumps for Next.js `15.5.24`.
+- `@phylopic/api` `2.14.4`, `@phylopic/api-models` `1.4.2`, `@phylopic/fundraiser` `1.0.1`, `@phylopic/source-client` `1.4.8`, `@phylopic/source-models` `1.1.5`, `@phylopic/utils-aws` `1.1.4`, and `@phylopic/utils` `1.2.5`: patch bumps upgrading `vitest` from `4.1.10` to `5.0.0`.
+
+## [2.0.61] - 2026-09-06
+
+### Changed
+
+- `@phylopic/api` `2.14.3`: `GET /resolve/...` no longer reads precomputed resolve JSON from S3.
+
+### Fixed
+
+- `@phylopic/api` `2.14.3`: reduced `dynamic` and `uploader` Lambda timeouts to 29s for HTTP API compatibility; offline redirects no longer prefix paths with `/prod`.
+
+### Removed
+
+- `@phylopic/api` `2.14.3`: `IS_OFFLINE` environment variable.
+
+## [2.0.60] - 2026-09-02
+
+### Security
+
+- Root `resolutions` pin `sharp@0.35.0` (was `0.34.5`) and `nanoid@3.3.18` (was `3.3.17`) to address high-severity audit findings (libvips CVEs; nanoid infinite loop when size is zero).
+- `@phylopic/ui` `1.7.17`, `@phylopic/contribute` `2.4.24`, `@phylopic/www` `2.15.1`, and `@phylopic/edit` `1.10.1`: patch bumps for transitive `sharp` and `nanoid` upgrades via Next.js.
+
+## [2.0.59] - 2026-09-02
+
+### Fixed
+
+- `@phylopic/api` `2.14.2`: `POST /collections` with `Content-Type: application/vnd.phylopic.v2+json` returned `400` after the HTTP API migration; decode base64-encoded request bodies when API Gateway sets `isBase64Encoded`.
+
+## [2.0.58] - 2026-09-01
+
+### Added
+
+- `@phylopic/fundraiser` `1.0.0`: semiannual fundraiser campaign state (Upstash Redis), PayPal IPN
+  helpers, and public/editor status types.
+- `@phylopic/www` `2.15.0`: semiannual hosting fundraiser banner, public fundraiser API routes, and
+  shared PayPal donate URL.
+- `@phylopic/edit` `1.10.0`: `FundraiserSection` on the home page to set campaign goal and manual
+  offset.
+
+## [2.0.57] - 2026-08-30
+
+### Added
+
+- Backups for `permalinks.phylopic.org` (us-east-1 replica via `seed-replica`, no live versioning).
+
+## [2.0.56] - 2026-08-30
+
+### Added
+
+- Routine backups for `phylopic-source` (RDS) and `source-images.phylopic.org`: enable script, AWS Backup plan, S3 versioning and cross-region replica, restore runbook in `aws/BACKUP.md`.
+
+## [2.0.55] - 2026-08-29
+
+- `@phylopic/edit` `1.9.20`: avoid client-side crash when external search resolves return nodes without `_embedded`.
+- `@phylopic/www` `2.14.39`: avoid client-side crash when external search resolves return nodes without `_embedded`.
+
+## [2.0.54] - 2026-08-29
+
+### Fixed
+
+- `@phylopic/api` `2.14.1`: S3 resolve redirects preserve request embed query parameters in the redirect `href`.
+
+### Changed
+
+- `@phylopic/edit` `1.9.20`, `@phylopic/www` `2.14.39`: upgraded `@phylopic/ui` to `1.7.16`.
+
+## [2.0.53] - 2026-08-29
+
+### Fixed
+
+- `@phylopic/contribute` `2.4.23`: avoid client-side crash when assigning PBDB search results for taxa not linked in _PhyloPic_.
+- `@phylopic/ui` `1.7.16`: validate PBDB and OTOL resolve responses before storing them in search state.
+
+## [2.0.52] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: strip UTF-8 BOMs from minified CSS so the first rule in each module matches in production.
+
+### Changed
+
+- `@phylopic/www`: production build fails when minified CSS still contains BOMs or split flex-list rules.
+
+## [2.0.51] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: disable cssnano `mergeRules` so production minification does not reset `flex-wrap` on flex lists.
+
+### Changed
+
+- `@phylopic/www`: production build verifies minified CSS keeps `display:flex` and `flex-wrap:wrap` on the same rule per selector.
+
+## [2.0.50] - 2026-08-20
+
+### Fixed
+
+- `@phylopic/www`: use one `NodeListView` variant class per list so production CSS keeps `flex-wrap: wrap`.
+- `@phylopic/www`: include serif `font-family` on `NomenView` part classes used alongside `.main`.
+
+## [2.0.49] - 2026-08-19
+
+### Fixed
+
+- `@phylopic/www`: keep `flex-wrap: wrap` on the same `BulletList` class as `inline-flex` so production minification does not drop wrapping.
+
+## [2.0.48] - 2026-08-19
+
+### Changed
+
+- `@phylopic/api`, `@phylopic/contribute`, `@phylopic/edit`, `@phylopic/publish`, and `@phylopic/www`: dependency bumps for `@phylopic/utils-aws` `1.1.3` and `@phylopic/source-client` `1.4.7`.
+
+### Security
+
+- `@phylopic/utils-aws`, `@phylopic/source-client`: explicit AES256 SSE on S3 puts (security audit L6).
+
+## [2.0.47] - 2026-08-19
+
+### Fixed
+
+- `@phylopic/www`: restored horizontal wrapping layout for synonym lists in details.
+
+## [2.0.46] - 2026-08-13
+
+### Changed
+
+- `@phylopic/contribute`: magic-link authorization page shows status-specific error messages for invalid or used links (`404`), expired links (`410`), and server errors (`500`).
+
+### Security
+
+- `@phylopic/www`: rate-limit external proxy API routes.
+
+## [2.0.45] - 2026-08-13
+
+### Security
+
+- `@phylopic/www`: rate-limit and cache collection permalink creation (security audit M9).
+
+## [2.0.44] - 2026-08-12
+
+### Changed
+
+- Root `resolutions` pin `@aws-sdk/client-s3@3.1093.0`; `@phylopic/utils-aws` peer/dev dependency aligned to `^3.1093.0` for `@phylopic/api`, `@phylopic/contribute`, `@phylopic/publish`,
+  `@phylopic/source-client`, and `@phylopic/www`.
+- Root `resolutions` pin `sharp@0.34.5` (was `0.35.3`) to stay within Next.js optional dependency range.
+
+### Fixed
+
+- `@phylopic/www`: permalink page TypeScript error from duplicate `@aws-sdk/client-s3` installs when calling `@phylopic/utils-aws` `getJSON`.
+
+### Removed
+
+- `@changesets/cli` and root scripts `changeset`, `release`, and `version-packages`.
+
+### Security
+
+- `@phylopic/source-models`: configurable JWT issuer and audience.
+- `@phylopic/api`: Swagger UI SRI pins and HTTPS API docs URLs.
+- `@phylopic/www`: redirect `/api` to HTTPS API docs.
+- `@phylopic/publish`: path containment checks in filesystem helpers.
+- `@phylopic/utils`: require 64-character SHA-256 digests in `isHash`.
+- `@phylopic/www`: upgraded `ws` to `7.5.13` (CVE-2026-48779).
+- Upgraded `vite` to `5.4.21` (CVE-2025-62522) for packages that use `vitest`
+  (`@phylopic/api`, `@phylopic/api-models`, `@phylopic/source-client`, `@phylopic/source-models`,
+  `@phylopic/utils`).
+- `@phylopic/api`: upgraded `@hapi/wreck` to `18.1.2` (CVE-2026-48022).
+
+## [2.0.43] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/utils-api` `1.0.14`: `JSON_API_HEADERS` for third-party JSON APIs.
+- `@phylopic/source-client` `1.4.5`: fix Postgres pool connection race on parallel `getPG()` calls.
+- `@phylopic/ui` `1.7.14`: external autocomplete `Accept` headers; dev CSP for localhost/127.0.0.1.
+- `@phylopic/edit` `1.9.17`: Next.js 15 breadcrumb links; merge error handling.
+- `@phylopic/contribute` `2.4.19`, `@phylopic/www` `2.14.28`: dev CSP headers.
+
+## [2.0.42] - 2026-08-11
+
+### Fixed
+
+- `aws` `1.2.2`: grant `s3:PutObjectTagging` on source-image keys so `edit` can accept submissions.
+
+## [2.0.41] - 2026-08-11
+
+### Fixed
+
+- `aws` `1.2.1`: grant `s3:PutObjectTagging` on submission trash keys for editorial and contribute deletes.
+
+## [2.0.40] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/utils` `1.2.3`: `@phylopic/utils/svg/lite` (regex SVG sanitization without jsdom).
+- `@phylopic/api` `2.13.4`: use svg/lite on `POST /uploads` to avoid `ERR_REQUIRE_ESM` in the uploader Lambda.
+
+## [2.0.39] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/source-client` `1.4.4`: `createSourcePool()` (one Postgres connection per serverless instance).
+- `@phylopic/contribute` `2.4.18`: use capped pool so API routes do not exhaust RDS connections (`53300`).
+- `@phylopic/edit` `1.9.16`: same pool cap.
+
+## [2.0.38] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/api` `2.13.3`: fix `POST /uploads` Lambda init crash (`jsdom` bundled incorrectly by esbuild).
+
+## [2.0.37] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/api` `2.13.2`: CORS preflight for cross-origin `POST /uploads` (route `OPTIONS /uploads` through the `dynamic` Lambda).
+
+## [2.0.36] - 2026-08-11
+
+### Fixed
+
+- `@phylopic/api` `2.13.1`: CORS preflight for cross-origin `POST /uploads`.
+- `@phylopic/contribute` `2.4.17`: replace invalid stored magic-link token instead of returning `403` on authorize.
+
+## [2.0.35] - 2026-08-11
+
+### Changed
+
+- `@phylopic/api` `2.13.0`: removed deprecated `postResolveObjects` and `twitter:image`; upgraded `@phylopic/api-models` to `1.4.0`.
+- `@phylopic/api-models` `1.4.0`: removed deprecated `Image._links["twitter:image"]`.
+- `@phylopic/publish` `1.12.12`: stopped emitting `twitter:image` in image JSON; upgraded `@phylopic/api-models` to `1.4.0`.
+- `@phylopic/contribute` `2.4.16`, `@phylopic/ui` `1.7.13`, `@phylopic/utils-api` `1.0.13`, `@phylopic/www` `2.14.27`: upgraded `@phylopic/api-models` to `1.4.0`.
+
+## [2.0.34] - 2026-08-11
+
+### Changed
+
+- `@phylopic/api` `2.12.0`: HTTPS API documentation on `api-docs.phylopic.org`.
+- `@phylopic/www` `2.14.26`: `https://` links to API documentation.
+
+## [2.0.33] - 2026-08-10
+
+### Security
+
+- `@phylopic/api` `2.11.5`: rate-limit unauthenticated `POST /collections`; generic unexpected error messages.
+- `@phylopic/source-client` `1.4.3`: generic error messages from `handleAPIError`.
+- `@phylopic/contribute` `2.4.15`, `@phylopic/edit` `1.9.15`, `@phylopic/publish` `1.12.10`: upgraded
+  `@phylopic/source-client` to `1.4.3`.
+- `@phylopic/www` `2.14.25`: escape `<` in JSON-LD script payloads.
+
+## [2.0.32] - 2026-08-10
+
+### Security
+
+- `aws` `1.2.0`: scoped `phylopic-publish` IAM policy for the publication pipeline.
+- `@phylopic/publish` `1.12.8`: credential chain fallback for unified operator profile.
+
+## [2.0.31] - 2026-08-10
+
+### Fixed
+
+- `@phylopic/contribute` `2.4.14`: Magic-link redemption for emails that already have a contributor row.
+
+## [2.0.30] - 2026-08-10
+
+### Fixed
+
+- Root `resolutions` pin `jsdom@26.1.0` and `cssstyle@4.2.1` after `jsdom@27` still pulled an
+  ESM-only `@csstools/css-calc` chain on serverless.
+
+## [2.0.29] - 2026-08-10
+
+### Fixed
+
+- Root `resolutions` pin `jsdom@27.0.0` and `html-encoding-sniffer@4.0.0` to fix serverless
+  `ERR_REQUIRE_ESM` from the `jsdom` 28 / `@exodus/bytes` dependency chain (`@phylopic/contribute`).
+
+## [2.0.28] - 2026-08-10
+
+### Fixed
+
+- `@phylopic/www` `2.14.24`: Remove unpublished `@aws-sdk/credential-provider-web-identity` version pin.
+- `@phylopic/contribute` `2.4.11`: Same dependency fix.
+
+## [2.0.27] - 2026-08-10
+
+### Fixed
+
+- `@phylopic/www` `2.14.23`: Permalink creation OIDC/S3 bundling fix.
+- `@phylopic/contribute` `2.4.10`: Same OIDC static-import fix for S3/SES.
+- `@phylopic/utils-aws` `1.1.1`: Static import of `@vercel/functions/oidc`.
+
+## [2.0.26] - 2026-08-10
+
+### Fixed
+
+- `@phylopic/www` `2.14.22`: Collection Page creation via same-origin API proxy.
+
+## [2.0.25] - 2026-08-10
+
+### Security
+
+- Vercel OIDC federation for `@phylopic/www` and `@phylopic/contribute` (`@phylopic/utils-aws`
+  `1.1.0`).
+
+## [2.0.24] - 2026-08-09
+
+### Security
+
+- Yarn resolutions pin transitive dependencies with known vulnerabilities (`postcss`, `sharp`, `serialize-javascript`, `brace-expansion`, `js-yaml`, `nanoid`, `phin`, `xml2js`, `fast-uri`, `core-js-compat`).
+
+## [2.0.23] - 2026-08-09
+
+### Changed
+
+- Upgraded `turbo` to `2.10.9`.
+
+## [2.0.22] - 2026-08-09
+
+### Changed
+
+- Upgraded to Node.js 24.
 
 ## [2.0.21] - 2026-07-22
 

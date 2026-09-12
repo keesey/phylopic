@@ -10,7 +10,9 @@ const ImageGrid = () => {
             {state?.imageUUIDs
                 .map(uuid => state.images[uuid])
                 .filter(item => item.mode !== "completed")
-                .map(item => <ImageSelector key={item.image.uuid} item={item} />)}
+                .map(item => (
+                    <ImageSelector key={item.image.uuid} item={item} />
+                ))}
         </section>
     )
 }
