@@ -1,26 +1,24 @@
 import { List, Page } from "@phylopic/api-models"
-import { extractPath } from "@phylopic/utils"
+import { createSearch, extractPath } from "@phylopic/utils"
 import { FetchResult, fetchResult } from "@phylopic/utils-api"
 import { GetServerSideProps } from "next"
+import BUILD from "~/build/BUILD"
 import getSlug from "~/routes/getSlug"
 
 const createGetServerSideListSitemapProps =
     (path: string): GetServerSideProps =>
     async ({ res }) => {
         const lastmod = new Date().toISOString()
-        const listResult = await fetchResult<List>(process.env.NEXT_PUBLIC_API_URL + path)
+        const listResult = await fetchResult<List>(
+            process.env.NEXT_PUBLIC_API_URL + path + createSearch({ build: BUILD }),
+        )
         if (!listResult.ok) {
             throw new Error(listResult.status)
         }
-        const build = listResult.data.build
         const pagePromises: Promise<FetchResult<Page>>[] = []
         for (let page = 0; page < listResult.data.totalPages; ++page) {
             pagePromises.push(
-                fetchResult<Page>(
-                    process.env.NEXT_PUBLIC_API_URL +
-                        path +
-                        `?build=${encodeURIComponent(build)}&page=${encodeURIComponent(page)}`,
-                ),
+                fetchResult<Page>(process.env.NEXT_PUBLIC_API_URL + path + createSearch({ build: BUILD, page })),
             )
         }
         const pageResults = await Promise.all(pagePromises)

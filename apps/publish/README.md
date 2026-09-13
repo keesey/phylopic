@@ -15,13 +15,14 @@ Make sure you have the following installed on your system and reachable via the 
 - [Inkscape](https://inkscape.org/release/inkscape-1.1.2/) (v1.1 or higher)
 - [Node.js](https://nodejs.org/en/download/) (v24 or higher)
 - [potrace](http://potrace.sourceforge.net/#downloading) (v1.16 or higher)
+- [Vercel CLI](https://vercel.com/docs/cli) (for `yarn release` www deploys)
 - [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
 
 ### Environment variables
 
 These live in `.env` in the root of this project, loaded by `import "dotenv/config"` at the top of
-each entry script (`insert.ts`, `release.ts`, `revalidate.ts`, `autolink.ts`, `normalize.ts`,
-`coverage.ts`, `uploadEntitiesCli.ts`, `verifyEntitiesS3.ts`).
+each entry script (`insert.ts`, `release.ts`, `autolink.ts`, `normalize.ts`, `coverage.ts`,
+`uploadEntitiesCli.ts`, `verifyEntitiesS3.ts`).
 
 This project uses **one operator credential** for all AWS calls in `yarn make`. **`AWS_PROFILE`
 is set to `phylopic-publish`** on the relevant `package.json` scripts (see
@@ -32,15 +33,14 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 
 #### Required
 
-| Variable                         | Purpose                                                                   | How it is read |
-| -------------------------------- | ------------------------------------------------------------------------- | -------------- |
-| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data    | `process.env`  |
-| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)     | `process.env`  |
-| `PGHOST`                         | Postgres host                                                             | `process.env`  |
-| `PGPASSWORD`                     | Postgres password                                                         | `process.env`  |
-| `PGUSER`                         | Postgres login role (`phylopic_publish`)                                  | `process.env`  |
-| `REVALIDATE_TOKEN`               | Shared secret sent as `Authorization: Bearer …` on `POST /api/revalidate` | `process.env`  |
-| `WWW_URL`                        | Root URL of the main website, called to trigger revalidation              | `process.env`  |
+| Variable                         | Purpose                                                                | How it is read |
+| -------------------------------- | ---------------------------------------------------------------------- | -------------- |
+| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data | `process.env`  |
+| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)  | `process.env`  |
+| `PGHOST`                         | Postgres host                                                          | `process.env`  |
+| `PGPASSWORD`                     | Postgres password                                                      | `process.env`  |
+| `PGUSER`                         | Postgres login role (`phylopic_publish`)                               | `process.env`  |
+| `VERCEL_TOKEN`                   | Token for `vercel env` and `vercel deploy` during `yarn release`       | `process.env`  |
 
 #### Optional (legacy S3 keys)
 
@@ -52,11 +52,13 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 
 #### Optional
 
-| Variable       | Purpose                                                 | How it is read |
-| -------------- | ------------------------------------------------------- | -------------- |
-| `EOL_API_KEY`  | [Encyclopedia of Life](https://eol.org) API key         | `process.env`  |
-| `NCBI_API_KEY` | NCBI API key, for higher rate limits during autolinking | `process.env`  |
-| `PGPORT`       | Postgres port (default `5432`)                          | `process.env`  |
+| Variable            | Purpose                                                 | How it is read |
+| ------------------- | ------------------------------------------------------- | -------------- |
+| `EOL_API_KEY`       | [Encyclopedia of Life](https://eol.org) API key         | `process.env`  |
+| `NCBI_API_KEY`      | NCBI API key, for higher rate limits during autolinking | `process.env`  |
+| `PGPORT`            | Postgres port (default `5432`)                          | `process.env`  |
+| `VERCEL_PROJECT_ID` | Vercel project id for `phylopic-www` (if not linked)    | `process.env`  |
+| `VERCEL_SCOPE`      | Vercel team/user scope (if not linked)                  | `process.env`  |
 
 #### Resolved from the AWS credential chain (required for `yarn make`)
 
@@ -98,8 +100,17 @@ yarn make
 2. `yarn process` — rasterize/vectorize new silhouettes (`process.sh`)
 3. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
    `yarn upload:images` (sync processed images to `images.phylopic.org`)
-4. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront
+4. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront, set
+   `NEXT_PUBLIC_BUILD` on Vercel (production, preview, and development), deploy `www`, and update
+   `apps/www/.env.local`
 5. `yarn sync:images` — final public image bucket sync
+
+If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
+`NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
+failure is not silent.
+
+If `vercel env add` succeeds but `vercel deploy --prod` fails, Vercel project env may be ahead of
+the live production deployment. Run `yarn release` again or deploy `www` manually to reconcile.
 
 For a data-only release (no image download/process/upload):
 
@@ -148,6 +159,7 @@ Checks:
 
 Optional: set `VERIFY_SAMPLE_SIZE` (default `20`) to control how many random entities per table
 are checked.
+
 ### Autolink externals
 
 These commands will pull data from external APIs and try to match them to nodes in the `phylopic-source` database.

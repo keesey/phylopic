@@ -9,11 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Required `NEXT_PUBLIC_BUILD` for static generation and client build context.
+
 ### Changed
+
+- Server-side PhyloPic API calls include `build` to avoid 307 redirect round-trips.
 
 ### Deprecated
 
 ### Fixed
+
+### Removed
+
+- `BuildChecker` client component that cache-busted `GET /` on every page load.
+- `POST /api/revalidate` on-demand revalidation endpoint.
+- `getBuildStaticProps()` and the `PageLayout` `build` prop.
+- Server-side `GET /` lookup for the current build number (`getBuild.ts`).
 
 ### Security
 

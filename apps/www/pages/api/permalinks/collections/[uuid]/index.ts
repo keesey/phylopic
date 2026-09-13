@@ -2,11 +2,11 @@ import { S3Client } from "@aws-sdk/client-s3"
 import { Hash, isUUIDish, normalizeUUID } from "@phylopic/utils"
 import type { NextApiHandler } from "next"
 import createS3ClientConfig from "~/aws/createS3ClientConfig"
+import BUILD from "~/build/BUILD"
 import getClientIp from "~/http/getClientIp"
 import { getCachedPermalinkHash, setCachedPermalinkHash } from "~/permalinks/cache/permalinkHashCache"
 import checkPermalinkRateLimit from "~/permalinks/rateLimit/checkPermalinkRateLimit"
 import loadCollection from "~/permalinks/utils/loadCollection"
-import getBuild from "~/permalinks/utils/getBuild"
 import save from "~/permalinks/utils/save"
 
 const PERMALINK_CACHE_CONTROL = "public,max-age=3600,stale-while-revalidate=86400"
@@ -45,16 +45,15 @@ const index: NextApiHandler = async (req, res) => {
             res.status(429).json({ error: "Too many permalink requests." })
             return
         }
-        const build = await getBuild()
-        const cachedHash = getCachedPermalinkHash(normalizedUUID, build)
+        const cachedHash = getCachedPermalinkHash(normalizedUUID, BUILD)
         if (cachedHash) {
             sendHash(res, cachedHash, req.method)
             return
         }
-        const collection = await loadCollection(normalizedUUID, build)
+        const collection = await loadCollection(normalizedUUID, BUILD)
         s3Client = new S3Client(createS3ClientConfig())
         const hash = await save(s3Client, collection)
-        setCachedPermalinkHash(normalizedUUID, build, hash)
+        setCachedPermalinkHash(normalizedUUID, BUILD, hash)
         sendHash(res, hash, req.method)
     } catch (e) {
         if (typeof e === "number") {

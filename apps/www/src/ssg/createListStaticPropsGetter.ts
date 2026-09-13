@@ -1,34 +1,35 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
-import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
-import type { GetStaticProps } from "next"
+import { fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
-import { unstable_serialize } from "swr"
+import type { GetStaticProps } from "next"
 import type { SWRConfiguration } from "swr"
+import { unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
+import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import compressFallback from "~/swr/compressFallback"
 export type Props = {
     fallback: Compressed
-} & Pick<List, "build">
+}
 const createListStaticPropsGetter =
     <TEntity>(endpoint: string, query?: Query): GetStaticProps<Props, Record<string, never>> =>
     async () => {
-        const listKey = process.env.NEXT_PUBLIC_API_URL + endpoint
+        const listKey = process.env.NEXT_PUBLIC_API_URL + endpoint + createSearch({ build: BUILD })
         const listResponse = await fetchResult<List>(listKey)
         if (listResponse.status !== "success") {
             return getStaticPropsResult(listResponse)
         }
-        const build = listResponse.data.build
         const fallback: NonNullable<SWRConfiguration["fallback"]> = {
-            [unstable_serialize(addBuildToURL(listKey, build))]: listResponse.data,
+            [unstable_serialize(listKey)]: listResponse.data,
         }
         if (listResponse.data.totalPages > 0) {
             const getPageKey = (page: number) =>
-                listKey +
+                process.env.NEXT_PUBLIC_API_URL +
+                endpoint +
                 createSearch({
                     ...query,
-                    build,
+                    build: BUILD,
                     embed_items: true,
                     page,
                 })
@@ -39,7 +40,6 @@ const createListStaticPropsGetter =
         }
         return {
             props: {
-                build,
                 fallback: compressFallback(fallback),
             },
         }

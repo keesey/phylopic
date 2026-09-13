@@ -1,13 +1,16 @@
 import "dotenv/config"
 import pg from "pg"
 import cleanEntities from "./make/cleanEntities.js"
+import deployWww from "./make/deployWww.js"
 import getBuild from "./make/getBuild.js"
 import invalidateAPICache from "./make/invalidateAPICache.js"
 import updateParameters from "./make/updateParameters.js"
+import updateWwwBuildEnv from "./make/updateWwwBuildEnv.js"
 ;(async () => {
     const pgClient = new pg.Client({
         database: "phylopic-entities",
     })
+    let invalidationError: unknown
     try {
         const [, prevBuild] = await Promise.all([pgClient.connect(), getBuild()])
         const build = prevBuild + 1
@@ -16,9 +19,19 @@ import updateParameters from "./make/updateParameters.js"
         console.info("Build", build, "released.")
         await Promise.all([
             (async () => {
-                console.info("Invalidating API cache...")
-                await invalidateAPICache(build)
-                console.info("Invalidated API cache.")
+                try {
+                    console.info("Invalidating API cache...")
+                    await invalidateAPICache(build)
+                    console.info("Invalidated API cache.")
+                } catch (e) {
+                    console.error("Failed to invalidate API cache.")
+                    console.error(e)
+                    invalidationError = e
+                }
+                updateWwwBuildEnv(build)
+                console.info("Deploying `www`...")
+                await deployWww(build)
+                console.info("Deployed `www`.")
             })(),
             (async () => {
                 console.info("Cleaning up entities database...")
@@ -26,6 +39,9 @@ import updateParameters from "./make/updateParameters.js"
                 console.info("Cleaned up entities database.")
             })(),
         ])
+        if (invalidationError) {
+            throw invalidationError
+        }
     } catch (e) {
         console.info("ERROR!")
         console.error(e)

@@ -6,6 +6,7 @@ import { NextApiHandler } from "next"
 import { checkProxyRateLimit, getClientIp } from "~/rateLimit/checkProxyRateLimit"
 import getString from "~/routes/getString"
 import packageJson from "../../../package.json"
+import BUILD from "~/build/BUILD"
 const index: NextApiHandler = async (req, res) => {
     if (!checkProxyRateLimit(getClientIp(req.headers["x-forwarded-for"]))) {
         res.status(429).setHeader("Content-Type", "text/plain").send("Too many requests.")
@@ -108,9 +109,7 @@ const getOTOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]
             const response = await axios.post<ReadonlyArray<{ readonly unique_name: string }>>(
                 "https://api.opentreeoflife.org/v3/tnrs/autocomplete_name",
                 { name: prefix },
-                {
-                    headers: { "content-type": "application/json" },
-                },
+                { headers: { "content-type": "application/json" } },
             )
             return response.data.map(({ unique_name }) => {
                 const term = normalizeQuery(sanitizeUniqueName(unique_name))
@@ -156,7 +155,7 @@ const getPhyloPicSuggestions = async (prefix: string): Promise<readonly Suggesti
         if (prefix.length >= 2) {
             const query = normalizeQuery(prefix)
             const response = await axios.get<QueryMatches>(
-                process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ query }),
+                process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ build: BUILD, query }),
             )
             return response.data.matches.map(term => ({
                 description: "Illustrated",

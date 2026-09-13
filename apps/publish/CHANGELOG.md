@@ -9,13 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `yarn release` sets Vercel `NEXT_PUBLIC_BUILD` on all environments and deploys `www`.
+- `yarn release` writes `NEXT_PUBLIC_BUILD` to `apps/www/.env.local`.
+
 ### Changed
+
+- `yarn release` deploys `www` via the Vercel CLI instead of calling `POST /api/revalidate`.
+- On API cache invalidation failure, `yarn release` still updates `apps/www/.env.local`, sets Vercel
+  `NEXT_PUBLIC_BUILD`, and deploys `www`, but exits with an error afterward.
 
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+- `yarn revalidate`, `revalidate.ts`, and required `REVALIDATE_TOKEN` / `WWW_URL`.
 
 ### Security
 

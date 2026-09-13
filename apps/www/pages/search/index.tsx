@@ -1,5 +1,4 @@
 import {
-    API,
     NodeListParameters,
     NodeWithEmbedded,
     normalizeQuery,
@@ -13,6 +12,7 @@ import type { Compressed } from "compress-json"
 import type { GetServerSideProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import type { SWRConfiguration } from "swr"
+import BUILD from "~/build/BUILD"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
@@ -56,35 +56,28 @@ const getInitialText = (q?: string | string[]) => {
 export const getServerSideProps: GetServerSideProps<Props, { q?: string | string[] }> = async context => {
     const initialText = getInitialText(context.query.q)
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {}
-    let build: number | undefined
-    const endpoint = process.env.NEXT_PUBLIC_API_URL + "/"
-    const response = await fetchResult<API>(endpoint)
-    if (response.status === "success") {
-        build = response.data.build
-        if (initialText) {
-            const endpoint =
-                process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ build, query: initialText })
-            const response = await fetchResult<QueryMatches>(endpoint)
-            if (response.status === "success") {
-                fallback[endpoint] = response.data
-                build = response.data.build
-                if (response.data.matches.length) {
-                    const matchingText = getMatchingText(response.data.matches, initialText)
-                    if (matchingText) {
-                        const searchEndpoint =
-                            process.env.NEXT_PUBLIC_API_URL +
-                            "/nodes" +
-                            createSearch({
-                                build: build.toString(10),
-                                embed_items: "true",
-                                embed_primaryImage: "true",
-                                filter_name: matchingText,
-                                page: "0",
-                            } as NodeListParameters & Query)
-                        const searchResponse = await fetchResult<PageWithEmbedded<NodeWithEmbedded>>(searchEndpoint)
-                        if (searchResponse.status === "success") {
-                            fallback[searchEndpoint] = searchResponse.data
-                        }
+    if (initialText) {
+        const endpoint =
+            process.env.NEXT_PUBLIC_API_URL + "/autocomplete" + createSearch({ build: BUILD, query: initialText })
+        const response = await fetchResult<QueryMatches>(endpoint)
+        if (response.status === "success") {
+            fallback[endpoint] = response.data
+            if (response.data.matches.length) {
+                const matchingText = getMatchingText(response.data.matches, initialText)
+                if (matchingText) {
+                    const searchEndpoint =
+                        process.env.NEXT_PUBLIC_API_URL +
+                        "/nodes" +
+                        createSearch({
+                            build: BUILD.toString(10),
+                            embed_items: "true",
+                            embed_primaryImage: "true",
+                            filter_name: matchingText,
+                            page: "0",
+                        } as NodeListParameters & Query)
+                    const searchResponse = await fetchResult<PageWithEmbedded<NodeWithEmbedded>>(searchEndpoint)
+                    if (searchResponse.status === "success") {
+                        fallback[searchEndpoint] = searchResponse.data
                     }
                 }
             }
@@ -92,7 +85,6 @@ export const getServerSideProps: GetServerSideProps<Props, { q?: string | string
     }
     return {
         props: {
-            ...(build ? { build } : null),
             fallback: compressFallback(fallback),
             initialText,
         },
