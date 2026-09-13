@@ -16,13 +16,15 @@ import updateWwwBuildEnv from "./make/updateWwwBuildEnv.js"
         console.info("Releasing build", build, "...")
         await updateParameters(build /*, source.root*/)
         console.info("Build", build, "released.")
-        updateWwwBuildEnv(build)
         await Promise.all([
             (async () => {
                 console.info("Invalidating API cache...")
                 await invalidateAPICache(build)
                 console.info("Invalidated API cache.")
+                updateWwwBuildEnv(build)
+                console.info("Deploying `www`...")
                 await deployWww(build)
+                console.info("Deployed `www`.")
             })(),
             (async () => {
                 console.info("Cleaning up entities database...")
