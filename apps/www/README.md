@@ -26,6 +26,7 @@ project environment variables.
 | `NEXT_PUBLIC_CONTRIBUTE_URL`           | Root URL of _PhyloPic: Contribute_                 | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_ROOT_UUID`                | UUID of the root phylogenetic node                 | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_WWW_URL`                  | Root URL of this site                              | `process.env`, inlined into the bundle |
+| `NEXT_PUBLIC_BUILD`                    | Current PhyloPic build number (production)         | `process.env`, inlined into the bundle |
 | `S3_ACCESS_KEY_ID`                     | Access key for the permalinks bucket (local dev)   | `process.env`, server-side only        |
 | `S3_REGION`                            | Region of the permalinks bucket                    | `process.env`, server-side only        |
 | `S3_SECRET_ACCESS_KEY`                 | Secret key for the permalinks bucket (local dev)   | `process.env`, server-side only        |
@@ -49,10 +50,10 @@ NEXT_PUBLIC_WWW_URL=https://www.phylopic.org
 | `NEXT_PUBLIC_EOL_API_KEY`           | [Encyclopedia of Life](https://eol.org) API key                      | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_FUNDRAISER_PREVIEW`    | Set to `true` to show the fundraiser banner outside May/October      | `process.env`, inlined into the bundle |
 | `NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID` | Google Analytics measurement ID                                      | `process.env`, inlined into the bundle |
-| `REVALIDATE_TOKEN`                  | Shared secret for `POST /api/revalidate` (`Authorization: Bearer …`) | `process.env`, server-side only        |
 
-Required for on-demand revalidation (including the call from `apps/publish`). If unset, that
-endpoint rejects every request rather than failing open.
+`NEXT_PUBLIC_BUILD` is set on Vercel by `apps/publish` during `yarn release` and written to
+`apps/www/.env.local` for local dev. When unset locally, static generation falls back to
+`GET /` on the API for the current build number.
 
 #### Set automatically
 

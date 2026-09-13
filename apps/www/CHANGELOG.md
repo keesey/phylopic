@@ -9,11 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `NEXT_PUBLIC_BUILD` for static generation and client build context; falls back to `GET /` when unset locally.
+
 ### Changed
 
 ### Deprecated
 
 ### Fixed
+
+### Removed
+
+- `BuildChecker` client component that cache-busted `GET /` on every page load.
+- `POST /api/revalidate` on-demand revalidation endpoint.
 
 ### Security
 

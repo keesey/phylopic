@@ -9,13 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `@phylopic/www`: `NEXT_PUBLIC_BUILD` for static generation and client build context.
+- `@phylopic/publish`: `yarn release` sets Vercel production `NEXT_PUBLIC_BUILD`, deploys `www`, and
+  writes `apps/www/.env.local`.
+
 ### Changed
+
+- `@phylopic/publish`: `yarn release` deploys `www` via the Vercel CLI instead of on-demand
+  revalidation.
 
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+- `@phylopic/www`: `BuildChecker` cache-busting poll of `GET /` on every page load; `POST
+  /api/revalidate`.
+- `@phylopic/publish`: `yarn revalidate`.
 
 ### Security
 

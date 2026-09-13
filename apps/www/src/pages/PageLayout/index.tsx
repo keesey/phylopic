@@ -1,14 +1,14 @@
 import { SearchContainer } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import dynamic from "next/dynamic"
-import { FC, ReactNode, Suspense, useEffect } from "react"
+import { FC, ReactNode, Suspense } from "react"
+import parseBuildFromEnv from "~/build/parseBuildFromEnv"
 import CollectionsContainer from "~/collections/context/CollectionsContainer"
 import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import styles from "./index.module.scss"
-const BuildChecker = dynamic(() => import("./BuildChecker"), { ssr: false })
 const FundraiserBanner = dynamic(() => import("~/fundraiser/FundraiserBanner"), { ssr: false })
 const Search = dynamic(() => import("./Search"), { ssr: false })
 export type Props = {
@@ -19,10 +19,7 @@ export type Props = {
 }
 const PageLayout: FC<Props> = ({ aside, build, children, initialText }) => {
     return (
-        <BuildContainer initialValue={build}>
-            <Suspense>
-                <BuildChecker />
-            </Suspense>
+        <BuildContainer initialValue={build ?? parseBuildFromEnv()}>
             <PageLoader />
             {aside && <aside key="aside">{aside}</aside>}
             <FundraiserBanner />
