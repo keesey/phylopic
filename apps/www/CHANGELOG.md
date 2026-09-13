@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `NEXT_PUBLIC_BUILD` for static generation and client build context; falls back to `GET /` when unset locally.
+- Required `NEXT_PUBLIC_BUILD` for static generation and client build context.
 
 ### Changed
 
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Override for age of *Aves*.
+- Override for age of _Aves_.
 
 ## [2.15.2] - 2026-09-11
 

@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - `@phylopic/www`: `BuildChecker` cache-busting poll of `GET /` on every page load; `POST
-  /api/revalidate`.
+/api/revalidate`.
 - `@phylopic/publish`: `yarn revalidate`.
 
 ### Security

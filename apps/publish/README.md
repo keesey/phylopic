@@ -33,14 +33,14 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 
 #### Required
 
-| Variable                         | Purpose                                                                   | How it is read |
-| -------------------------------- | ------------------------------------------------------------------------- | -------------- |
-| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data    | `process.env`  |
-| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)     | `process.env`  |
-| `PGHOST`                         | Postgres host                                                             | `process.env`  |
-| `PGPASSWORD`                     | Postgres password                                                         | `process.env`  |
-| `PGUSER`                         | Postgres login role (`phylopic_publish`)                                  | `process.env`  |
-| `VERCEL_TOKEN`                   | Token for `vercel env` and `vercel deploy` during `yarn release`          | `process.env`  |
+| Variable                         | Purpose                                                                | How it is read |
+| -------------------------------- | ---------------------------------------------------------------------- | -------------- |
+| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data | `process.env`  |
+| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)  | `process.env`  |
+| `PGHOST`                         | Postgres host                                                          | `process.env`  |
+| `PGPASSWORD`                     | Postgres password                                                      | `process.env`  |
+| `PGUSER`                         | Postgres login role (`phylopic_publish`)                               | `process.env`  |
+| `VERCEL_TOKEN`                   | Token for `vercel env` and `vercel deploy` during `yarn release`       | `process.env`  |
 
 #### Optional (legacy S3 keys)
 
@@ -52,13 +52,13 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 
 #### Optional
 
-| Variable       | Purpose                                                 | How it is read |
-| -------------- | ------------------------------------------------------- | -------------- |
-| `EOL_API_KEY`        | [Encyclopedia of Life](https://eol.org) API key         | `process.env`  |
-| `NCBI_API_KEY`       | NCBI API key, for higher rate limits during autolinking | `process.env`  |
-| `PGPORT`             | Postgres port (default `5432`)                          | `process.env`  |
-| `VERCEL_PROJECT_ID`  | Vercel project id for `phylopic-www` (if not linked)    | `process.env`  |
-| `VERCEL_SCOPE`       | Vercel team/user scope (if not linked)                  | `process.env`  |
+| Variable            | Purpose                                                 | How it is read |
+| ------------------- | ------------------------------------------------------- | -------------- |
+| `EOL_API_KEY`       | [Encyclopedia of Life](https://eol.org) API key         | `process.env`  |
+| `NCBI_API_KEY`      | NCBI API key, for higher rate limits during autolinking | `process.env`  |
+| `PGPORT`            | Postgres port (default `5432`)                          | `process.env`  |
+| `VERCEL_PROJECT_ID` | Vercel project id for `phylopic-www` (if not linked)    | `process.env`  |
+| `VERCEL_SCOPE`      | Vercel team/user scope (if not linked)                  | `process.env`  |
 
 #### Resolved from the AWS credential chain (required for `yarn make`)
 
@@ -151,6 +151,7 @@ Checks:
 
 Optional: set `VERIFY_SAMPLE_SIZE` (default `20`) to control how many random entities per table
 are checked.
+
 ### Autolink externals
 
 These commands will pull data from external APIs and try to match them to nodes in the `phylopic-source` database.

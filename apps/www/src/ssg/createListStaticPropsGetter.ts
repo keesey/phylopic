@@ -1,12 +1,11 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
 import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
-import type { GetStaticProps } from "next"
 import type { Compressed } from "compress-json"
-import { unstable_serialize } from "swr"
+import type { GetStaticProps } from "next"
 import type { SWRConfiguration } from "swr"
+import { unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
-import BUILD from "~/build/parseBuildFromEnv"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import compressFallback from "~/swr/compressFallback"
 export type Props = {
@@ -20,7 +19,7 @@ const createListStaticPropsGetter =
         if (listResponse.status !== "success") {
             return getStaticPropsResult(listResponse)
         }
-        const build = BUILD ?? listResponse.data.build
+        const { build } = listResponse.data
         const fallback: NonNullable<SWRConfiguration["fallback"]> = {
             [unstable_serialize(addBuildToURL(listKey, build))]: listResponse.data,
         }
