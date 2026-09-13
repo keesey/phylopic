@@ -27,7 +27,7 @@ const runVercel = async (args: readonly string[], stdin?: string) => {
             env: process.env,
             stdio: [stdin !== undefined ? "pipe" : "inherit", "inherit", "inherit"],
         })
-        if (stdin !== undefined) {
+        if (stdin && child.stdin) {
             child.stdin.write(stdin)
             child.stdin.end()
         }

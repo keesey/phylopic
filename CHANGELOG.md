@@ -9,14 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `@phylopic/www`: `NEXT_PUBLIC_BUILD` for static generation and client build context.
+- `@phylopic/www`: required `NEXT_PUBLIC_BUILD` for static generation and client build context.
 - `@phylopic/publish`: `yarn release` sets Vercel `NEXT_PUBLIC_BUILD` on all environments, deploys
   `www`, and writes `apps/www/.env.local`.
 
 ### Changed
 
+- `@phylopic/www`: server-side PhyloPic API calls include `build` to avoid 307 redirect
+  round-trips.
 - `@phylopic/publish`: `yarn release` deploys `www` via the Vercel CLI instead of on-demand
   revalidation.
+- `@phylopic/publish`: on API cache invalidation failure, `yarn release` still updates
+  `apps/www/.env.local`, sets Vercel `NEXT_PUBLIC_BUILD`, and deploys `www`, but exits with an
+  error afterward.
 
 ### Deprecated
 
@@ -24,9 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- `@phylopic/www`: `BuildChecker` cache-busting poll of `GET /` on every page load; `POST
-/api/revalidate`.
-- `@phylopic/publish`: `yarn revalidate`.
+- `@phylopic/www`: `BuildChecker`, `POST /api/revalidate`, `getBuildStaticProps()`, the
+  `PageLayout` `build` prop, and server-side `GET /` build lookup.
+- `@phylopic/publish`: `yarn revalidate`, `revalidate.ts`, and required `REVALIDATE_TOKEN` /
+  `WWW_URL`.
 
 ### Security
 

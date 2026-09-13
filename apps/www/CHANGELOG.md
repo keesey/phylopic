@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Server-side PhyloPic API calls include `build` to avoid 307 redirect round-trips.
+
 ### Deprecated
 
 ### Fixed
@@ -21,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `BuildChecker` client component that cache-busted `GET /` on every page load.
 - `POST /api/revalidate` on-demand revalidation endpoint.
+- `getBuildStaticProps()` and the `PageLayout` `build` prop.
+- Server-side `GET /` lookup for the current build number (`getBuild.ts`).
 
 ### Security
 
@@ -28,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Override for age of _Aves_.
+- Override for age of *Aves*.
 
 ## [2.15.2] - 2026-09-11
 
