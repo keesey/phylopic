@@ -1,13 +1,14 @@
 import { Contributor, ImageListParameters, ImageWithEmbedded, List, PageWithEmbedded } from "@phylopic/api-models"
 import { ContributorContainer, Loader } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
-import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
+import { fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import { FC, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
+import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
@@ -18,7 +19,6 @@ import getContributorName from "~/models/getContributorName"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
 import getContributorHRef from "~/routes/getContributorHRef"
 import getContributorSlug from "~/routes/getContributorSlug"
-import createStaticPathsGetter from "~/ssg/createListStaticPathsGetter"
 import { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
@@ -117,8 +117,8 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         return { notFound: true }
     }
     const imagesQuery: ImageListParameters & Query = { filter_contributor: uuid }
-    const contributorKey = process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid
-    const listImagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
+    const contributorKey = process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid + createSearch({ build: BUILD })
+    const listImagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch({ ...imagesQuery, build: BUILD })
     const [listImagesResponse, contributorResult] = await Promise.all([
         fetchData<List>(listImagesKey),
         fetchResult<Contributor>(contributorKey),
@@ -139,17 +139,16 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             },
         }
     }
-    const build = contributorResult.data.build
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {
-        [unstable_serialize(addBuildToURL(contributorKey, build))]: contributorResult.data,
+        [unstable_serialize(contributorKey)]: contributorResult.data,
     }
     if (listImagesResponse.ok) {
-        fallback[unstable_serialize(addBuildToURL(listImagesKey, build))] = listImagesResponse.data
+        fallback[unstable_serialize(listImagesKey)] = listImagesResponse.data
         if (listImagesResponse.data.totalItems > 0) {
             const getImagesPageKey = (page: number) =>
                 process.env.NEXT_PUBLIC_API_URL +
                 "/images" +
-                createSearch({ ...imagesQuery, build, embed_items: true, page })
+                createSearch({ ...imagesQuery, build: BUILD, embed_items: true, page })
             const imagesPageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getImagesPageKey(0))
             if (imagesPageResponse.ok) {
                 fallback[unstable_serialize_infinite(getImagesPageKey)] = [imagesPageResponse.data]
@@ -158,7 +157,6 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     }
     return {
         props: {
-            build,
             fallback: compressFallback(fallback),
             uuid,
         },

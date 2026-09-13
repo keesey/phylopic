@@ -2,7 +2,7 @@ import { SearchContainer } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import dynamic from "next/dynamic"
 import { FC, ReactNode, Suspense } from "react"
-import BUILD from "~/build/parseBuildFromEnv"
+import BUILD from "~/build/BUILD"
 import CollectionsContainer from "~/collections/context/CollectionsContainer"
 import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
@@ -13,13 +13,12 @@ const FundraiserBanner = dynamic(() => import("~/fundraiser/FundraiserBanner"), 
 const Search = dynamic(() => import("./Search"), { ssr: false })
 export type Props = {
     aside?: ReactNode
-    build?: number
     children: ReactNode
     initialText?: string
 }
-const PageLayout: FC<Props> = ({ aside, build, children, initialText }) => {
+const PageLayout: FC<Props> = ({ aside, children, initialText }) => {
     return (
-        <BuildContainer initialValue={build ?? BUILD}>
+        <BuildContainer initialValue={BUILD}>
             <PageLoader />
             {aside && <aside key="aside">{aside}</aside>}
             <FundraiserBanner />

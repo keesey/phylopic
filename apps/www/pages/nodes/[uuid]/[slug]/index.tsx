@@ -28,6 +28,7 @@ import { FC, Fragment, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import customEvents from "~/analytics/customEvents"
+import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import CladeImageLicensePaginator from "~/licenses/CladeImageLicensePaginator"
 import ImageLicenseControls from "~/licenses/ImageLicenseControls"
@@ -47,7 +48,6 @@ import compressFallback from "~/swr/compressFallback"
 import Container from "~/ui/Container"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import NomenHeader from "~/ui/NomenHeader"
-import { QuickLinkNode } from "~/ui/QuickLinks/QuickLinkNode"
 import ImageListView from "~/views/ImageListView"
 import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
@@ -237,7 +237,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         embed_parentNode: "true",
         embed_primaryImage: "true",
     } as NodeParameters & Query
-    const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + createSearch(nodeQuery)
+    const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + createSearch({ ...nodeQuery, build: BUILD })
     const nodeResultPromise = fetchResult<NodeWithEmbedded>(nodeKey)
     const nodeResult = await nodeResultPromise
     if (nodeResult.status !== "success") {
@@ -261,26 +261,25 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     }
     const cladeImagesUUID =
         parseQueryString(extractQueryString(nodeResult.data._links.cladeImages?.href ?? "")).filter_clade ?? uuid
-    const build = nodeResult.data.build
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {
-        [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data,
+        [unstable_serialize(nodeKey)]: nodeResult.data,
     }
     const imagesQuery = { filter_clade: cladeImagesUUID } as ImageListParameters & Query
-    const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch(imagesQuery)
+    const imagesKey = process.env.NEXT_PUBLIC_API_URL + "/images" + createSearch({ ...imagesQuery, build: BUILD })
     const imagesResponsePromise = fetchData<List>(imagesKey)
     const imagesResponse = await imagesResponsePromise
     if (imagesResponse.ok) {
-        fallback[unstable_serialize(addBuildToURL(imagesKey, build))] = imagesResponse.data
+        fallback[unstable_serialize(imagesKey)] = imagesResponse.data
         if (imagesResponse.data.totalPages) {
             const getPageKey = (page: number) =>
                 process.env.NEXT_PUBLIC_API_URL +
                 "/images" +
-                createSearch({ ...imagesQuery, build, embed_items: true, page })
+                createSearch({ ...imagesQuery, build: BUILD, embed_items: true, page })
             const pageResponse = await fetchData<PageWithEmbedded<ImageWithEmbedded>>(getPageKey(0))
             if (pageResponse.ok) {
                 fallback[unstable_serialize_infinite(getPageKey)] = [pageResponse.data]
             }
         }
     }
-    return { props: { build, fallback: compressFallback(fallback), uuid }, revalidate: 3600 }
+    return { props: { fallback: compressFallback(fallback), uuid }, revalidate: 3600 }
 }
