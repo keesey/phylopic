@@ -1,16 +1,15 @@
 import { API } from "@phylopic/api-models"
 import { fetchResult } from "@phylopic/utils-api"
 import type { GetStaticProps } from "next"
-import parseBuildFromEnv from "~/build/parseBuildFromEnv"
+import BUILD from "~/build/parseBuildFromEnv"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 export type Props = {
     build: number
 }
 const getBuildStaticProps: GetStaticProps<Props, Record<string, never>> = async () => {
-    const envBuild = parseBuildFromEnv()
-    if (envBuild !== undefined) {
+    if (BUILD !== undefined) {
         return {
-            props: { build: envBuild },
+            props: { build: BUILD },
         }
     }
     const key = process.env.NEXT_PUBLIC_API_URL + "/"

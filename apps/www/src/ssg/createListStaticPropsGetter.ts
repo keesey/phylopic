@@ -6,7 +6,7 @@ import type { Compressed } from "compress-json"
 import { unstable_serialize } from "swr"
 import type { SWRConfiguration } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
-import parseBuildFromEnv from "~/build/parseBuildFromEnv"
+import BUILD from "~/build/parseBuildFromEnv"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import compressFallback from "~/swr/compressFallback"
 export type Props = {
@@ -20,7 +20,7 @@ const createListStaticPropsGetter =
         if (listResponse.status !== "success") {
             return getStaticPropsResult(listResponse)
         }
-        const build = parseBuildFromEnv() ?? listResponse.data.build
+        const build = BUILD ?? listResponse.data.build
         const fallback: NonNullable<SWRConfiguration["fallback"]> = {
             [unstable_serialize(addBuildToURL(listKey, build))]: listResponse.data,
         }

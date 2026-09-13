@@ -6,4 +6,7 @@ const parseBuildFromEnv = (): number | undefined => {
     const build = Number.parseInt(raw, 10)
     return Number.isNaN(build) ? undefined : build
 }
-export default parseBuildFromEnv
+
+const BUILD = parseBuildFromEnv()
+
+export default BUILD

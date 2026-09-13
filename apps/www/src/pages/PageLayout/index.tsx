@@ -2,7 +2,7 @@ import { SearchContainer } from "@phylopic/ui"
 import { BuildContainer } from "@phylopic/utils-api"
 import dynamic from "next/dynamic"
 import { FC, ReactNode, Suspense } from "react"
-import parseBuildFromEnv from "~/build/parseBuildFromEnv"
+import BUILD from "~/build/parseBuildFromEnv"
 import CollectionsContainer from "~/collections/context/CollectionsContainer"
 import PageLoader from "~/ui/PageLoader"
 import SearchOverlay from "~/ui/SearchOverlay"
@@ -19,7 +19,7 @@ export type Props = {
 }
 const PageLayout: FC<Props> = ({ aside, build, children, initialText }) => {
     return (
-        <BuildContainer initialValue={build ?? parseBuildFromEnv()}>
+        <BuildContainer initialValue={build ?? BUILD}>
             <PageLoader />
             {aside && <aside key="aside">{aside}</aside>}
             <FundraiserBanner />
