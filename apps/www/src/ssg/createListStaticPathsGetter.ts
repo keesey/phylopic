@@ -5,11 +5,12 @@ import { GetStaticPaths, GetStaticPathsResult } from "next"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getSlug from "~/routes/getSlug"
 import { EntityPageQuery } from "./EntityPageQuery"
+import BUILD from "~/build/BUILD"
 const isEntityPageQuery = (x: Partial<EntityPageQuery>): x is EntityPageQuery => Boolean(x?.uuid)
 const createStaticPathsGetter =
     (endpoint: string): GetStaticPaths<EntityPageQuery> =>
     async () => {
-        const listKey = process.env.NEXT_PUBLIC_API_URL + endpoint
+        const listKey = process.env.NEXT_PUBLIC_API_URL + endpoint + createSearch({ build: BUILD })
         const listResponse = await fetchData<List>(listKey)
         if (!listResponse.ok || !listResponse.data.totalPages) {
             if (!listResponse.ok) {
@@ -20,8 +21,7 @@ const createStaticPathsGetter =
                 paths: [],
             }
         }
-        const build = listResponse.data.build
-        const pageKey = listKey + createSearch({ build, page: 0 })
+        const pageKey = process.env.NEXT_PUBLIC_API_URL + endpoint + createSearch({ build: BUILD, page: 0 })
         const pageResponse = await fetchData<Page>(pageKey)
         if (!pageResponse.ok) {
             console.error(pageKey, "=>", pageResponse)

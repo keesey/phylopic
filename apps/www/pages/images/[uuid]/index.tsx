@@ -1,7 +1,8 @@
 import { Image } from "@phylopic/api-models"
-import { isUUIDv4 } from "@phylopic/utils"
+import { createSearch, isUUIDv4 } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
+import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import getImageHRef from "~/routes/getImageHRef"
 const PageComponent: NextPage = () => null
@@ -11,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const imageKey = process.env.NEXT_PUBLIC_API_URL + "/images/" + uuid
+    const imageKey = process.env.NEXT_PUBLIC_API_URL + "/images/" + uuid + createSearch({ build: BUILD })
     const imageResult = await fetchResult<Image>(imageKey)
     if (imageResult.status !== "success") {
         return getStaticPropsResult(imageResult)

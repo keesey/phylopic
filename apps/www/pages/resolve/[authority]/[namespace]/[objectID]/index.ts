@@ -1,7 +1,8 @@
-import { isAuthority, isNamespace, isObjectID, isUUIDv4, normalizeUUID } from "@phylopic/utils"
+import { createSearch, isAuthority, isNamespace, isObjectID, isUUIDv4, normalizeUUID } from "@phylopic/utils"
 import axios from "axios"
 import { GetServerSideProps, NextPage } from "next"
 import { ParsedUrlQuery } from "querystring"
+import BUILD from "~/build/BUILD"
 
 const toSafeRelativeRedirect = (location: string): string | null => {
     if (!location.startsWith("/") || location.startsWith("//") || location.includes("..")) {
@@ -38,10 +39,8 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
                 encodeURIComponent(authority),
                 encodeURIComponent(namespace),
                 encodeURIComponent(objectID),
-            ].join("/"),
-            {
-                maxRedirects: 0,
-            },
+            ].join("/") + createSearch({ build: BUILD }),
+            { maxRedirects: 0 },
         )
     } catch (e) {
         if (axios.isAxiosError(e) && e.response && (e.response.status === 307 || e.response.status === 308)) {

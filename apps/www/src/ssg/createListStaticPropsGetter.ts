@@ -1,6 +1,6 @@
 import { List, PageWithEmbedded } from "@phylopic/api-models"
 import { createSearch, Query } from "@phylopic/utils"
-import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
+import { fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticProps } from "next"
 import type { SWRConfiguration } from "swr"
@@ -20,16 +20,16 @@ const createListStaticPropsGetter =
         if (listResponse.status !== "success") {
             return getStaticPropsResult(listResponse)
         }
-        const { build } = listResponse.data
         const fallback: NonNullable<SWRConfiguration["fallback"]> = {
             [unstable_serialize(listKey)]: listResponse.data,
         }
         if (listResponse.data.totalPages > 0) {
             const getPageKey = (page: number) =>
-                listKey +
+                process.env.NEXT_PUBLIC_API_URL +
+                endpoint +
                 createSearch({
                     ...query,
-                    build,
+                    build: BUILD,
                     embed_items: true,
                     page,
                 })
