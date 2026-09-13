@@ -70,9 +70,9 @@ the source.
 **Postgres connection limits.** RDS `phylopic` (`db.t3.micro`) has roughly 80 usable connection
 slots. Each warm `dynamic` Lambda container holds one pooled connection (`max: 1`). The `dynamic`
 function sets `reservedConcurrency: 50` in [`serverless.yml`](./serverless.yml) so peak Lambda
-concurrency stays below that limit (leaving headroom for Vercel, publish, and admin tools). List
-routes with `embed_items=true` release the Postgres client after the list query and before S3
-embed fan-out. Under heavy spikes, throttling (503) is preferable to connection exhaustion (500).
+concurrency stays below that limit (leaving headroom for Vercel, publish, and admin tools). Unfiltered
+list pages without `embed_items` read from S3; filtered lists and `embed_items=true` use Postgres.
+Under heavy spikes, throttling (503) is preferable to connection exhaustion (500).
 Tune the cap in the 40–60 range if you see sustained throttles or connection errors.
 
 **No AWS keys are required.** The service assumes `role/phylopic-api-executor`
