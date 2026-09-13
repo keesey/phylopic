@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.16.0] - 2026-09-13
+
+### Added
+
 - Required `NEXT_PUBLIC_BUILD` for static generation and client build context.
 
 ### Changed
