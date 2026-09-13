@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `@phylopic/www`: `NEXT_PUBLIC_BUILD` for static generation and client build context.
-- `@phylopic/publish`: `yarn release` sets Vercel production `NEXT_PUBLIC_BUILD`, deploys `www`, and
-  writes `apps/www/.env.local`.
+- `@phylopic/publish`: `yarn release` sets Vercel `NEXT_PUBLIC_BUILD` on all environments, deploys
+  `www`, and writes `apps/www/.env.local`.
 
 ### Changed
 

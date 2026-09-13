@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `yarn release` sets Vercel production `NEXT_PUBLIC_BUILD` and deploys `www`.
+- `yarn release` sets Vercel `NEXT_PUBLIC_BUILD` on all environments and deploys `www`.
 - `yarn release` writes `NEXT_PUBLIC_BUILD` to `apps/www/.env.local`.
 
 ### Changed

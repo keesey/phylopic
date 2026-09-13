@@ -101,8 +101,16 @@ yarn make
 3. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
    `yarn upload:images` (sync processed images to `images.phylopic.org`)
 4. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront, set
-   `NEXT_PUBLIC_BUILD` on Vercel, deploy `www`, and update `apps/www/.env.local`
+   `NEXT_PUBLIC_BUILD` on Vercel (production, preview, and development), deploy `www`, and update
+   `apps/www/.env.local`
 5. `yarn sync:images` — final public image bucket sync
+
+If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
+`NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
+failure is not silent.
+
+If `vercel env add` succeeds but `vercel deploy --prod` fails, Vercel project env may be ahead of
+the live production deployment. Run `yarn release` again or deploy `www` manually to reconcile.
 
 For a data-only release (no image download/process/upload):
 
