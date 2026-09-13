@@ -27,7 +27,6 @@ const SAMPLE_IMAGE_UUID = "045279d5-24e5-4838-bec9-0bea86812e35"
 export const getStaticProps: GetStaticProps<Props> = async () => {
     const { data } = await axios.get<ImageModel>(
         `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(SAMPLE_IMAGE_UUID)}${createSearch({ build: BUILD })}`,
-        { maxRedirects: 1 },
     )
     return { props: { image: data } }
 }

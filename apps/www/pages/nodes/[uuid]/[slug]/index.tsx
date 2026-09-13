@@ -19,7 +19,7 @@ import {
     shortenNomen,
     stringifyNomen,
 } from "@phylopic/utils"
-import { addBuildToURL, fetchData, fetchResult } from "@phylopic/utils-api"
+import { fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"

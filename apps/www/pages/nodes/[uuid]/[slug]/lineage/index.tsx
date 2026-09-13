@@ -1,7 +1,7 @@
 import { NodeParameters, NodeWithEmbedded } from "@phylopic/api-models"
 import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/ui"
 import { createSearch, isUUIDv4, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
-import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
+import { fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
