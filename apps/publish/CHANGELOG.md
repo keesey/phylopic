@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.15.1] - 2026-09-14
+
+### Changed
+
 - `yarn release` redeploys the latest production `www` deployment via `vercel redeploy` instead of
   `vercel deploy --prod` (Git-connected; avoids the CLI’s 10 MB upload limit in this monorepo).
 - `yarn release` sets one Vercel `NEXT_PUBLIC_BUILD` for production, preview, and development in a
@@ -18,14 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `deployWww` defaults `--project` to `phylopic-www` and only passes `--scope` when `VERCEL_SCOPE`
   is set (omit for personal Vercel accounts).
 
-### Deprecated
-
 ### Fixed
 
 - `yarn release` prints failure details to stdout so errors are visible when stderr is redirected
   to `release-error.log`.
-
-### Removed
 
 ### Security
 

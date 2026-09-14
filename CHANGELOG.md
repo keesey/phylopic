@@ -19,6 +19,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.65] - 2026-09-14
+
+### Changed
+
+- `@phylopic/publish` `1.15.1`: `yarn release` redeploys the latest production `www` deployment via
+  `vercel redeploy` instead of `vercel deploy --prod`.
+- `@phylopic/publish` `1.15.1`: one `vercel env add` sets `NEXT_PUBLIC_BUILD` for production,
+  preview, and development.
+- `@phylopic/publish` `1.15.1`: `deployWww` defaults `--project` to `phylopic-www` and only passes
+  `--scope` when `VERCEL_SCOPE` is set.
+
+### Fixed
+
+- `@phylopic/publish` `1.15.1`: `yarn release` prints failure details to stdout when stderr is
+  redirected to `release-error.log`.
+
+### Security
+
+- `@phylopic/publish` `1.15.1`: `deployWww` omits the Vercel token from thrown error messages.
+
 ## [2.0.64] - 2026-09-13
 
 ### Added
