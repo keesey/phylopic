@@ -57,8 +57,8 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 | `EOL_API_KEY`       | [Encyclopedia of Life](https://eol.org) API key         | `process.env`  |
 | `NCBI_API_KEY`      | NCBI API key, for higher rate limits during autolinking | `process.env`  |
 | `PGPORT`            | Postgres port (default `5432`)                          | `process.env`  |
-| `VERCEL_PROJECT_ID` | Vercel project id for `phylopic-www` (if not linked)    | `process.env`  |
-| `VERCEL_SCOPE`      | Vercel team/user scope (if not linked)                  | `process.env`  |
+| `VERCEL_PROJECT_ID` | Vercel project name or id (default `phylopic-www`)      | `process.env`  |
+| `VERCEL_SCOPE`      | Vercel **team** slug only (omit for personal accounts)  | `process.env`  |
 
 #### Resolved from the AWS credential chain (required for `yarn make`)
 
@@ -101,7 +101,8 @@ yarn make
 3. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
    `yarn upload:images` (sync processed images to `images.phylopic.org`)
 4. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront, set
-   `NEXT_PUBLIC_BUILD` on Vercel (production, preview, and development), deploy `www`, and update
+   `NEXT_PUBLIC_BUILD` on Vercel (production, preview, and development), redeploy the latest
+   production `www` deployment (Git-connected; no local source upload), and update
    `apps/www/.env.local`
 5. `yarn sync:images` — final public image bucket sync
 
@@ -109,8 +110,18 @@ If API cache invalidation fails, `yarn release` still updates `apps/www/.env.loc
 `NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
 failure is not silent.
 
-If `vercel env add` succeeds but `vercel deploy --prod` fails, Vercel project env may be ahead of
-the live production deployment. Run `yarn release` again or deploy `www` manually to reconcile.
+If `vercel env add` succeeds but the production redeploy fails, Vercel project env may be ahead of
+the live site. Run `yarn release` again or redeploy manually:
+
+```sh
+cd apps/www
+vercel list phylopic-www --environment production --json --limit 1
+vercel redeploy <deployment-id> --yes --project phylopic-www
+```
+
+Do not use `vercel deploy --prod` from this monorepo; the CLI upload exceeds Vercel’s 10 MB request
+limit. Production deploys go through Git (`@phylopic/www/prod`); release only triggers a rebuild of
+the latest production deployment so `NEXT_PUBLIC_BUILD` is picked up.
 
 For a data-only release (no image download/process/upload):
 

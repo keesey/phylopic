@@ -44,7 +44,7 @@ import updateWwwBuildEnv from "./make/updateWwwBuildEnv.js"
         }
     } catch (e) {
         console.info("ERROR!")
-        console.error(e)
+        console.info(e)
         process.exit(1)
     } finally {
         await pgClient.end()
