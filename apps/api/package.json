@@ -11,6 +11,8 @@
         "@phylopic/api-models": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-aws": "*",
+        "@phylopic/s3-entities": "*",
+        "@phylopic/source-models": "*",
         "jsonwebtoken": "^9.0.3",
         "lodash": "^4.17.21",
         "pg": "^8.22.0"
@@ -54,5 +56,5 @@
         "predeploy": "yarn test",
         "test": "yarn build:docs && node ./scripts/validate-openapi.mjs"
     },
-    "version": "2.14.4"
+    "version": "2.15.0"
 }

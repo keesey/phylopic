@@ -1,7 +1,6 @@
 import { DATA_MEDIA_TYPE, isResolveObjectsParameters, ResolveObjectsParameters, TitledLink } from "@phylopic/api-models"
-import { Authority, createSearch, Namespace, ObjectID, stringifyNormalized, UUID } from "@phylopic/utils"
+import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
-import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import APIError from "../errors/APIError"
@@ -9,49 +8,18 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
+import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
-export type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
+type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
 
-export type GetResolveObjectsService = PgClientService
+type GetResolveObjectsService = PgClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 
-const selectResolveLinkJSONFromPostgres = async (
-    service: PgClientService,
-    authority: Authority,
-    namespace: Namespace,
-    objectIDs: readonly ObjectID[],
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<string> => {
-    const client = await service.createPgClient()
-    try {
-        const result = await client.query<{ node_uuid: UUID; title: string | null }>(
-            'SELECT node_uuid,title FROM node_external WHERE authority=$1::character varying AND "namespace"=$2::character varying AND objectid=ANY($3::character varying[]) AND build=$4::bigint ORDER BY array_position($3::character varying[],objectid) LIMIT 1',
-            [authority, namespace, objectIDs, BUILD],
-        )
-        if (result.rowCount !== 1) {
-            throw new APIError(404, [
-                {
-                    developerMessage: "Object could not be found. None of the IDs matched.",
-                    field: "objectIDs",
-                    type: "RESOURCE_NOT_FOUND",
-                    userMessage: USER_MESSAGE,
-                },
-            ])
-        }
-        return stringifyNormalized({
-            href: `/nodes/${encodeURIComponent(result.rows[0].node_uuid)}${createSearch(queryParameters)}`,
-            title: result.rows[0].title ?? "",
-        })
-    } finally {
-        await service.deletePgClient(client)
-    }
-}
-
-const selectResolveLinkJSON = async (
+const selectResolveLinkJSONFromObjectIDs = async (
     service: PgClientService,
     authority: Authority,
     namespace: Namespace,
@@ -78,10 +46,27 @@ const selectResolveLinkJSON = async (
             },
         ])
     }
-    return selectResolveLinkJSONFromPostgres(service, authority, namespace, objectIDs, queryParameters)
+    for (const objectID of objectIDs) {
+        try {
+            return await selectResolveLinkJSON(service, authority, namespace, objectID, queryParameters)
+        } catch (e) {
+            if (e instanceof APIError && e.httpCode === 404) {
+                continue
+            }
+            throw e
+        }
+    }
+    throw new APIError(404, [
+        {
+            developerMessage: "Object could not be found.",
+            field: "objectIDs",
+            type: "RESOURCE_NOT_FOUND",
+            userMessage: USER_MESSAGE,
+        },
+    ])
 }
 
-export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
+const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
     { accept, body: _body, ...queryAndPathParameters },
     service,
 ) => {
@@ -93,7 +78,13 @@ export const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolv
         return createBuildRedirect(path, { ...queryParameters, objectIDs })
     }
     checkBuild(queryParameters.build, USER_MESSAGE)
-    const body = await selectResolveLinkJSON(service, authority, namespace, objectIDs.split(","), queryParameters)
+    const body = await selectResolveLinkJSONFromObjectIDs(
+        service,
+        authority,
+        namespace,
+        objectIDs.split(","),
+        queryParameters,
+    )
     const link = JSON.parse(body) as TitledLink
     return {
         body,

@@ -2,7 +2,7 @@ import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageContainer, useLicenseText, useNomenText } from "@phylopic/client-components"
 import { TimestampView } from "@phylopic/ui"
 import { createSearch, isDefined, isUUIDv4, Nomen, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
-import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
+import { fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
@@ -11,6 +11,7 @@ import Link from "next/link"
 import { FC, useContext, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import customEvents from "~/analytics/customEvents"
+import BUILD from "~/build/BUILD"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
@@ -306,7 +307,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const key = process.env.NEXT_PUBLIC_API_URL + "/images/" + uuid + createSearch(IMAGE_QUERY)
+    const key = process.env.NEXT_PUBLIC_API_URL + "/images/" + uuid + createSearch({ ...IMAGE_QUERY, build: BUILD })
     const result = await fetchResult<ImageWithEmbedded>(key)
     if (result.status !== "success") {
         return getStaticPropsResult(result)
@@ -319,12 +320,10 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             },
         }
     }
-    const { build } = result.data
     return {
         props: {
-            build,
             fallback: compressFallback({
-                [unstable_serialize(addBuildToURL(key, build))]: result.data,
+                [unstable_serialize(key)]: result.data,
             }),
             uuid,
         },

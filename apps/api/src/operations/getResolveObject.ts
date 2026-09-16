@@ -1,5 +1,5 @@
 import { DATA_MEDIA_TYPE, isResolveObjectParameters, ResolveObjectParameters, TitledLink } from "@phylopic/api-models"
-import { Authority, Namespace, ObjectID, stringifyNormalized } from "@phylopic/utils"
+import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
@@ -8,14 +8,14 @@ import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import getExternalLink from "../search/getExternalLink"
+import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
 import { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
 import { Operation } from "./Operation"
 
-export type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
+type GetResolveObjectParameters = DataRequestHeaders & Partial<ResolveObjectParameters>
 
-export type GetResolveObjectService = PgClientService
+type GetResolveObjectService = PgClientService
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 
@@ -46,23 +46,7 @@ const assertResolvable = (
     }
 }
 
-const selectResolveLinkJSON = async (
-    service: PgClientService,
-    authority: Authority,
-    namespace: Namespace,
-    objectID: ObjectID,
-    queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
-): Promise<string> => {
-    const client = await service.createPgClient()
-    try {
-        const link = await getExternalLink(client, authority, namespace, objectID, queryParameters)
-        return stringifyNormalized(link)
-    } finally {
-        await service.deletePgClient(client)
-    }
-}
-
-export const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectService> = async (
+const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectService> = async (
     { accept, ...queryAndPathParameters },
     service,
 ) => {

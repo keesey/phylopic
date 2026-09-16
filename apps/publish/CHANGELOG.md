@@ -11,11 +11,79 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
 ### Fixed
 
 ### Removed
 
 ### Security
+
+## [1.15.1] - 2026-09-14
+
+### Changed
+
+- `yarn release` redeploys the latest production `www` deployment via `vercel redeploy` instead of
+  `vercel deploy --prod` (Git-connected; avoids the CLI’s 10 MB upload limit in this monorepo).
+- `yarn release` sets one Vercel `NEXT_PUBLIC_BUILD` for production, preview, and development in a
+  single `vercel env add` call.
+- `deployWww` defaults `--project` to `phylopic-www` and only passes `--scope` when `VERCEL_SCOPE`
+  is set (omit for personal Vercel accounts).
+
+### Fixed
+
+- `yarn release` prints failure details to stdout so errors are visible when stderr is redirected
+  to `release-error.log`.
+
+### Security
+
+- `deployWww` omits the Vercel token from thrown error messages.
+
+## [1.15.0] - 2026-09-13
+
+### Added
+
+- `yarn release` sets Vercel `NEXT_PUBLIC_BUILD` on all environments and deploys `www`.
+- `yarn release` writes `NEXT_PUBLIC_BUILD` to `apps/www/.env.local`.
+
+### Changed
+
+- `yarn release` deploys `www` via the Vercel CLI instead of calling `POST /api/revalidate`.
+- On API cache invalidation failure, `yarn release` still updates `apps/www/.env.local`, sets Vercel
+  `NEXT_PUBLIC_BUILD`, and deploys `www`, but exits with an error afterward.
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+- `yarn revalidate`, `revalidate.ts`, and required `REVALIDATE_TOKEN` / `WWW_URL`.
+
+### Security
+
+## [1.14.0] - 2026-09-12
+
+### Added
+
+- Publish writes unfiltered lists with no embeds to `{build}/lists/` during `yarn insert`.
+- Entity JSON is staged under `.s3/entities.phylopic.org/{build}/` during insert and uploaded with `aws s3 sync` (`yarn upload:entities`).
+- `yarn verify:entities` checks sampled entity JSON, `namespaces.json`, and unfiltered list index totals against Postgres.
+
+### Changed
+
+- `EntityS3Writer` stages entity, list, and static JSON locally instead of uploading via the SDK during insert.
+- `putEntities` (previously `insertEntities`) stages list and namespace JSON in parallel with the Postgres transaction; entity JSON writes are scheduled immediately and flushed after commit.
+- Upgraded `@phylopic/s3-entities` to `1.0.0`.
+
+### Fixed
+
+- `yarn upload:entities` streams AWS CLI output instead of buffering it, avoiding `maxBuffer` errors on large syncs.
+
+### Removed
+
+- Staging `{build}/lineages/` and `{build}/resolve/` during insert.
+- Resolve checks from `yarn verify:entities`.
 
 ## [1.13.0] - 2026-08-28
 

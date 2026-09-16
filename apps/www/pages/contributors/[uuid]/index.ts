@@ -1,7 +1,8 @@
 import { Contributor } from "@phylopic/api-models"
-import { isUUIDv4 } from "@phylopic/utils"
+import { createSearch, isUUIDv4 } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
+import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import getContributorHRef from "~/routes/getContributorHRef"
 const PageComponent: NextPage = () => null
@@ -11,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const contributorKey = process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid
+    const contributorKey = process.env.NEXT_PUBLIC_API_URL + "/contributors/" + uuid + createSearch({ build: BUILD })
     const contributorResult = await fetchResult<Contributor>(contributorKey)
     if (contributorResult.status !== "success") {
         return getStaticPropsResult(contributorResult)

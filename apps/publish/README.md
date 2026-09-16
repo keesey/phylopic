@@ -15,13 +15,14 @@ Make sure you have the following installed on your system and reachable via the 
 - [Inkscape](https://inkscape.org/release/inkscape-1.1.2/) (v1.1 or higher)
 - [Node.js](https://nodejs.org/en/download/) (v24 or higher)
 - [potrace](http://potrace.sourceforge.net/#downloading) (v1.16 or higher)
+- [Vercel CLI](https://vercel.com/docs/cli) (for `yarn release` www deploys)
 - [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
 
 ### Environment variables
 
 These live in `.env` in the root of this project, loaded by `import "dotenv/config"` at the top of
-each entry script (`insert.ts`, `release.ts`, `revalidate.ts`, `autolink.ts`, `normalize.ts`,
-`coverage.ts`).
+each entry script (`insert.ts`, `release.ts`, `autolink.ts`, `normalize.ts`, `coverage.ts`,
+`uploadEntitiesCli.ts`, `verifyEntitiesS3.ts`).
 
 This project uses **one operator credential** for all AWS calls in `yarn make`. **`AWS_PROFILE`
 is set to `phylopic-publish`** on the relevant `package.json` scripts (see
@@ -32,15 +33,14 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 
 #### Required
 
-| Variable                         | Purpose                                                                   | How it is read |
-| -------------------------------- | ------------------------------------------------------------------------- | -------------- |
-| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data    | `process.env`  |
-| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)     | `process.env`  |
-| `PGHOST`                         | Postgres host                                                             | `process.env`  |
-| `PGPASSWORD`                     | Postgres password                                                         | `process.env`  |
-| `PGUSER`                         | Postgres login role (`phylopic_publish`)                                  | `process.env`  |
-| `REVALIDATE_TOKEN`               | Shared secret sent as `Authorization: Bearer …` on `POST /api/revalidate` | `process.env`  |
-| `WWW_URL`                        | Root URL of the main website, called to trigger revalidation              | `process.env`  |
+| Variable                         | Purpose                                                                | How it is read |
+| -------------------------------- | ---------------------------------------------------------------------- | -------------- |
+| `API_CLOUDFRONT_DISTRIBUTION_ID` | Distribution to invalidate after a build, so the API serves fresh data | `process.env`  |
+| `ENTITIES_BUCKET`                | S3 bucket for entity JSON (`entities.phylopic.org`; default if unset)  | `process.env`  |
+| `PGHOST`                         | Postgres host                                                          | `process.env`  |
+| `PGPASSWORD`                     | Postgres password                                                      | `process.env`  |
+| `PGUSER`                         | Postgres login role (`phylopic_publish`)                               | `process.env`  |
+| `VERCEL_TOKEN`                   | Token for `vercel env` and `vercel deploy` during `yarn release`       | `process.env`  |
 
 #### Optional (legacy S3 keys)
 
@@ -52,11 +52,13 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 
 #### Optional
 
-| Variable       | Purpose                                                 | How it is read |
-| -------------- | ------------------------------------------------------- | -------------- |
-| `EOL_API_KEY`  | [Encyclopedia of Life](https://eol.org) API key         | `process.env`  |
-| `NCBI_API_KEY` | NCBI API key, for higher rate limits during autolinking | `process.env`  |
-| `PGPORT`       | Postgres port (default `5432`)                          | `process.env`  |
+| Variable            | Purpose                                                 | How it is read |
+| ------------------- | ------------------------------------------------------- | -------------- |
+| `EOL_API_KEY`       | [Encyclopedia of Life](https://eol.org) API key         | `process.env`  |
+| `NCBI_API_KEY`      | NCBI API key, for higher rate limits during autolinking | `process.env`  |
+| `PGPORT`            | Postgres port (default `5432`)                          | `process.env`  |
+| `VERCEL_PROJECT_ID` | Vercel project name or id (default `phylopic-www`)      | `process.env`  |
+| `VERCEL_SCOPE`      | Vercel **team** slug only (omit for personal accounts)  | `process.env`  |
 
 #### Resolved from the AWS credential chain (required for `yarn make`)
 
@@ -85,21 +87,89 @@ host, port, user, and password to `ClientProvider` directly, and hardcodes the d
 
 ### Release a new build
 
-This will build and release a new build of the website, created from the files in the `source-images.phylopic.org` bucket and data in the `phylopic-source` database.
+This builds and releases a new website build from files in the `source-images.phylopic.org`
+bucket and data in the `phylopic-source` database.
 
 ```sh
 yarn make
 ```
 
+`yarn make` runs, in order:
+
+1. `yarn download` — sync source images and source data from S3
+2. `yarn process` — rasterize/vectorize new silhouettes (`process.sh`)
+3. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
+   `yarn upload:images` (sync processed images to `images.phylopic.org`)
+4. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront, set
+   `NEXT_PUBLIC_BUILD` on Vercel (production, preview, and development), redeploy the latest
+   production `www` deployment (Git-connected; no local source upload), and update
+   `apps/www/.env.local`
+5. `yarn sync:images` — final public image bucket sync
+
+If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
+`NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
+failure is not silent.
+
+If `vercel env add` succeeds but the production redeploy fails, Vercel project env may be ahead of
+the live site. Run `yarn release` again or redeploy manually:
+
+```sh
+cd apps/www
+vercel list phylopic-www --environment production --json --limit 1
+vercel redeploy <deployment-id> --yes --project phylopic-www
+```
+
+Do not use `vercel deploy --prod` from this monorepo; the CLI upload exceeds Vercel’s 10 MB request
+limit. Production deploys go through Git (`@phylopic/www/prod`); release only triggers a rebuild of
+the latest production deployment so `NEXT_PUBLIC_BUILD` is picked up.
+
+For a data-only release (no image download/process/upload):
+
+```sh
+yarn make:data
+```
+
+(`yarn insert && yarn release`)
+
+### Entity JSON on S3
+
+During `yarn insert`, `putEntities` writes to Postgres and stages JSON locally under
+`.s3/entities.phylopic.org/{build}/`:
+
+- `{build}/{contributors|images|nodes}/{uuid}.json` — entity documents
+- `{build}/namespaces.json` — authorized external namespaces
+- `{build}/lists/{contributors|nodes|images}/index.json` and `pages/{page}.json` — unfiltered
+  list metadata and link pages (no embedded items)
+
+Lineage and resolve JSON are **not** staged; the API serves those from Postgres.
+
+Staging uses roughly **250–350 MB** for a full build at current scale. When the Postgres
+transaction commits, `insert.ts` uploads the staged prefix to `s3://entities.phylopic.org/{build}/`
+via `aws s3 sync` (SSE + immutable cache headers). Re-run `yarn upload:entities [build]` if that
+upload fails without re-running insert.
+
+Optional: raise CLI upload concurrency, e.g.
+`aws configure set default.s3.max_concurrent_requests 100`.
+
+Pass `--dry-run` to `yarn insert` to exercise staging and SQL without committing Postgres changes
+or uploading to S3.
+
 ### Verify entity JSON on S3
 
-After `yarn insert`, spot-check that Postgres `json` columns match S3 objects for a build:
+After `yarn insert`, spot-check that S3 matches Postgres for a build:
 
 ```sh
 yarn verify:entities 547
 ```
 
-Optional: set `VERIFY_SAMPLE_SIZE` (default `20`) to control how many random entities per table are checked.
+Checks:
+
+- Random sample of `contributor`, `image`, and `node` rows (`json` column vs S3 object)
+- `namespaces.json` vs `node_external` aggregate
+- Unfiltered list `index.json` totals for contributors, nodes, and images
+
+Optional: set `VERIFY_SAMPLE_SIZE` (default `20`) to control how many random entities per table
+are checked.
 
 ### Autolink externals
 

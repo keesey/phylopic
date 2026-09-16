@@ -1,0 +1,40 @@
+import { isLink, Links } from "@phylopic/api-models"
+import { S3Client } from "@aws-sdk/client-s3"
+import { isString } from "@phylopic/utils"
+import APIError from "../errors/APIError"
+import getEntitiesJSONFromLinks from "./getEntitiesJSONFromLinks"
+import selectEntityJSONFromHRef from "./getEntityJSONFromHRef"
+
+const isLinkWithStringHRef = isLink(isString)
+
+const getEntityEmbeds = async <TLinks extends Links, TEmbeds extends string & keyof TLinks>(
+    client: S3Client,
+    links: TLinks,
+    embeds: readonly TEmbeds[],
+    typeUserLabel: string,
+): Promise<string> => {
+    const embedPromises = embeds.map(async (property): Promise<string> => {
+        const propertyLink = links[property]
+        const propertyJSON = `${JSON.stringify(property)}:`
+        if (Array.isArray(propertyLink) && propertyLink.every(link => isLinkWithStringHRef(link))) {
+            return propertyJSON + "[" + (await getEntitiesJSONFromLinks(client, propertyLink)).join(",") + "]"
+        }
+        if (isLinkWithStringHRef(propertyLink)) {
+            return propertyJSON + (await selectEntityJSONFromHRef(client, propertyLink.href))
+        }
+        if (propertyLink === null) {
+            return propertyJSON + "null"
+        }
+        throw new APIError(500, [
+            {
+                developerMessage: `Invalid embed property: ${propertyJSON}.`,
+                field: `embed_${property}`,
+                type: "DEFAULT_5XX",
+                userMessage: `The ${typeUserLabel} data is improperly formed.`,
+            },
+        ])
+    })
+    return `{${(await Promise.all(embedPromises)).join(",")}}`
+}
+
+export default getEntityEmbeds

@@ -15,7 +15,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Removed
+
 ### Security
+
+## [2.17.0] - 2026-09-16
+
+### Added
+
+### Changed
+
+- Search `<datalist>` suggestions debounce for 500ms after typing pauses.
+- Search input uses `readOnly`-until-interaction and `type="text"` with search keyboard hints instead of a hidden focus-stealer decoy.
+
+### Deprecated
+
+### Fixed
+
+- iOS Safari no longer autofocuses the search field on page load.
+- iOS Safari search typing is no longer disrupted by autocomplete suggestions updating mid-keystroke.
+
+### Removed
+
+### Security
+
+## [2.16.0] - 2026-09-13
+
+### Added
+
+- Required `NEXT_PUBLIC_BUILD` for static generation and client build context.
+
+### Changed
+
+- Server-side PhyloPic API calls include `build` to avoid 307 redirect round-trips.
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+- `BuildChecker` client component that cache-busted `GET /` on every page load.
+- `POST /api/revalidate` on-demand revalidation endpoint.
+- `getBuildStaticProps()` and the `PageLayout` `build` prop.
+- Server-side `GET /` lookup for the current build number (`getBuild.ts`).
+
+### Security
+
+## [2.15.3] - 2026-09-11
+
+### Added
+
+- Override for age of _Aves_.
 
 ## [2.15.2] - 2026-09-11
 

@@ -22,6 +22,118 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.66] - 2026-09-16
+
+### Added
+
+### Changed
+
+- `@phylopic/www` `2.17.0`: search `<datalist>` suggestions debounce for 500ms after typing pauses.
+- `@phylopic/www` `2.17.0`: search input uses `readOnly`-until-interaction and `type="text"` with search keyboard hints instead of a hidden focus-stealer decoy.
+
+### Deprecated
+
+### Fixed
+
+- `@phylopic/www` `2.17.0`: iOS Safari no longer autofocuses the search field on page load.
+- `@phylopic/www` `2.17.0`: iOS Safari search typing is no longer disrupted by autocomplete suggestions updating mid-keystroke.
+
+### Removed
+
+### Security
+
+## [2.0.65] - 2026-09-14
+
+### Changed
+
+- `@phylopic/publish` `1.15.1`: `yarn release` redeploys the latest production `www` deployment via
+  `vercel redeploy` instead of `vercel deploy --prod`.
+- `@phylopic/publish` `1.15.1`: one `vercel env add` sets `NEXT_PUBLIC_BUILD` for production,
+  preview, and development.
+- `@phylopic/publish` `1.15.1`: `deployWww` defaults `--project` to `phylopic-www` and only passes
+  `--scope` when `VERCEL_SCOPE` is set.
+
+### Fixed
+
+- `@phylopic/publish` `1.15.1`: `yarn release` prints failure details to stdout when stderr is
+  redirected to `release-error.log`.
+
+### Security
+
+- `@phylopic/publish` `1.15.1`: `deployWww` omits the Vercel token from thrown error messages.
+
+## [2.0.64] - 2026-09-13
+
+### Added
+
+- `@phylopic/www` `2.16.0`: required `NEXT_PUBLIC_BUILD` for static generation and client build
+  context.
+- `@phylopic/publish` `1.15.0`: `yarn release` sets Vercel `NEXT_PUBLIC_BUILD` on all environments,
+  deploys `www`, and writes `apps/www/.env.local`.
+
+### Changed
+
+- `@phylopic/www` `2.16.0`: server-side PhyloPic API calls include `build` to avoid 307 redirect
+  round-trips.
+- `@phylopic/publish` `1.15.0`: `yarn release` deploys `www` via the Vercel CLI instead of on-demand
+  revalidation.
+- `@phylopic/publish` `1.15.0`: on API cache invalidation failure, `yarn release` still updates
+  `apps/www/.env.local`, sets Vercel `NEXT_PUBLIC_BUILD`, and deploys `www`, but exits with an
+  error afterward.
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+- `@phylopic/www` `2.16.0`: `BuildChecker`, `POST /api/revalidate`, `getBuildStaticProps()`, the
+  `PageLayout` `build` prop, and server-side `GET /` build lookup.
+- `@phylopic/publish` `1.15.0`: `yarn revalidate`, `revalidate.ts`, and required `REVALIDATE_TOKEN` /
+  `WWW_URL`.
+
+### Security
+
+## [2.0.63] - 2026-09-12
+
+### Added
+
+- `@phylopic/s3-entities` `1.0.0`: S3 object key helpers for entity JSON storage.
+- `@phylopic/api` `2.15.0`: precomputed S3 reads for unfiltered `GET /contributors`, `GET /nodes`, and
+  `GET /images`.
+- `@phylopic/publish` `1.14.0`: writes unfiltered lists with no embeds to `{build}/lists/` during
+  `yarn insert`.
+- `@phylopic/publish` `1.14.0`: stages entity JSON under `.s3/entities.phylopic.org/{build}/` during insert
+  and uploads with `aws s3 sync` (`yarn upload:entities`).
+- `@phylopic/publish` `1.14.0`: `yarn verify:entities` checks sampled entity JSON, `namespaces.json`, and
+  unfiltered list index totals against Postgres.
+
+### Changed
+
+- `@phylopic/api` `2.15.0`: single-entity JSON is always read from S3.
+- `@phylopic/api` `2.15.0`: `GET /namespaces` reads `{build}/namespaces.json` from S3 only (no Postgres
+  fallback).
+- `@phylopic/api` `2.15.0`: list pagination serves `{build}/lists/{name}/index.json` and `{page}.json` from
+  S3 when there are no filters or embeds; filtered lists and `embed_items=true` use Postgres.
+- `@phylopic/publish` `1.14.0`: `EntityS3Writer` stages entity, list, and static JSON locally instead of
+  uploading via the SDK during insert.
+- `@phylopic/publish` `1.14.0`: `putEntities` (previously `insertEntities`) stages list and namespace JSON in
+  parallel with the Postgres transaction; entity JSON writes are scheduled immediately and flushed
+  after commit.
+
+### Fixed
+
+- `@phylopic/publish` `1.14.0`: `yarn upload:entities` streams AWS CLI output instead of buffering it,
+  avoiding `maxBuffer` errors on large syncs.
+
+### Removed
+
+- `@phylopic/api` `2.15.0`: the `ENTITY_JSON_SOURCE` environment variable and runtime source switch.
+- `@phylopic/api` `2.15.0`: now-unimplemented `POST` and `OPTIONS` HTTP API events for
+  `GET /resolve/{authority}/{namespace}` from `serverless.yml`.
+- `@phylopic/publish` `1.14.0`: staging `{build}/lineages/` and `{build}/resolve/` during insert.
+- `@phylopic/publish` `1.14.0`: resolve checks from `yarn verify:entities`.
+
 ## [2.0.62] - 2026-09-11
 
 ### Changed

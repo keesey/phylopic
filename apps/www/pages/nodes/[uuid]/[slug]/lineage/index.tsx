@@ -1,7 +1,7 @@
 import { NodeParameters, NodeWithEmbedded } from "@phylopic/api-models"
 import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/client-components"
 import { createSearch, isUUIDv4, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
-import { addBuildToURL, fetchResult } from "@phylopic/utils-api"
+import { fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
@@ -9,6 +9,7 @@ import Link from "next/link"
 import { FC, useMemo } from "react"
 import { SWRConfiguration, unstable_serialize } from "swr"
 import customEvents from "~/analytics/customEvents"
+import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
@@ -113,7 +114,7 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
     if (!isUUIDv4(uuid)) {
         return { notFound: true }
     }
-    const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + createSearch(NODE_QUERY)
+    const nodeKey = process.env.NEXT_PUBLIC_API_URL + "/nodes/" + uuid + createSearch({ ...NODE_QUERY, build: BUILD })
     const nodeResult = await fetchResult<NodeWithEmbedded>(nodeKey)
     if (nodeResult.status !== "success") {
         return getStaticPropsResult(nodeResult)
@@ -126,13 +127,11 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             },
         }
     }
-    const build = nodeResult.data.build
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {
-        [unstable_serialize(addBuildToURL(nodeKey, build))]: nodeResult.data,
+        [unstable_serialize(nodeKey)]: nodeResult.data,
     }
     return {
         props: {
-            build,
             fallback: compressFallback(fallback),
             uuid,
         },

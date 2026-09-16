@@ -10,7 +10,6 @@ import {
 import { createSearch, EMPTY_UUID, normalizeUUID, UUIDish } from "@phylopic/utils"
 import axios from "axios"
 import { CollectionPermalinkData } from "../types/CollectionPermalinkData"
-import getBuild from "./getBuild"
 const loadList = async <T>(
     endpoint: string,
     build: number,
@@ -45,7 +44,7 @@ const checkCollectionExistence = async (uuid: UUIDish): Promise<void> => {
         throw new Error("Invalid collection.")
     }
 }
-const loadCollection = async (uuid: UUIDish, build?: number): Promise<CollectionPermalinkData> => {
+const loadCollection = async (uuid: UUIDish, build: number): Promise<CollectionPermalinkData> => {
     if (uuid === EMPTY_UUID) {
         return {
             entities: {
@@ -57,13 +56,12 @@ const loadCollection = async (uuid: UUIDish, build?: number): Promise<Collection
             uuid,
         }
     }
-    const resolvedBuild = build ?? (await getBuild())
     await checkCollectionExistence(uuid)
     return {
         entities: {
-            contributors: await loadList<Contributor>("/contributors", resolvedBuild, uuid),
-            nodes: await loadList<NodeWithEmbedded>("/nodes", resolvedBuild, uuid, { embed_primaryImage: "true" }),
-            images: await loadList<ImageWithEmbedded>("/images", resolvedBuild, uuid, { embed_specificNode: "true" }),
+            contributors: await loadList<Contributor>("/contributors", build, uuid),
+            nodes: await loadList<NodeWithEmbedded>("/nodes", build, uuid, { embed_primaryImage: "true" }),
+            images: await loadList<ImageWithEmbedded>("/images", build, uuid, { embed_specificNode: "true" }),
         },
         type: "collection",
         uuid,

@@ -1,19 +1,25 @@
 import { SearchContext, useExternalResolutions, useMatches } from "@phylopic/client-components"
 import { extractPath } from "@phylopic/utils"
+import { useDebounce } from "@react-hook/debounce"
 import clsx from "clsx"
 import { useRouter } from "next/router"
-import { ChangeEvent, FC, FormEvent, useContext, useState } from "react"
+import { ChangeEvent, FC, FocusEvent, FormEvent, useContext, useEffect, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
 const MAX_MATCHES = 16
+const DATALIST_DEBOUNCE_MS = 500
 const SearchBar: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const [value, setValue] = useState(state?.text ?? "")
+    const [readOnly, setReadOnly] = useState(true)
     const { focused, nodeResults: internalResults } = state || {}
     const internalResult = internalResults?.[0]
     const resolution = useExternalResolutions()[0]
     const matches = useMatches(MAX_MATCHES)
+    const [debouncedMatches, setDebouncedMatches] = useDebounce<string[]>([], DATALIST_DEBOUNCE_MS)
     const router = useRouter()
+    useEffect(() => setDebouncedMatches(matches), [matches, setDebouncedMatches])
+    const enableInput = () => setReadOnly(false)
     const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         customEvents.submitForm("search")
@@ -33,49 +39,48 @@ const SearchBar: FC = () => {
         customEvents.search(payload)
         dispatch?.({ type: "SET_TEXT", payload })
     }
-    const handleInputFocus = () => {
+    const handleInputFocus = (event: FocusEvent<HTMLInputElement>) => {
+        if (readOnly) {
+            event.currentTarget.blur()
+            return
+        }
         customEvents.toggleSearch(true)
         dispatch?.({ type: "SET_ACTIVE", payload: true })
     }
     return (
-        <>
-            <form className={styles.focusStealer}>
-                <input type="search" />
-            </form>
-            <form
-                action="/search"
-                aria-label="Taxonomic"
-                className={styles.main}
-                onSubmit={handleFormSubmit}
-                role="search"
-            >
-                <p id="search-description" style={{ display: "none" }}>
-                    Search for a taxonomic group by typing in the name.
-                </p>
-                <input
-                    aria-describedby="search-description"
-                    aria-label="Search for a group of organisms."
-                    className={clsx(focused && styles.focused)}
-                    id="q"
-                    list="autocomplete"
-                    maxLength={128}
-                    minLength={2}
-                    name="q"
-                    onBlur={handleInputBlur}
-                    onChange={handleInputChange}
-                    onFocus={handleInputFocus}
-                    placeholder="Search for a group of organisms."
-                    spellCheck={false}
-                    type="search"
-                    value={value}
-                />
-                <datalist id="autocomplete">
-                    {matches.map(match => (
-                        <option key={match}>{match}</option>
-                    ))}
-                </datalist>
-            </form>
-        </>
+        <form action="/search" aria-label="Taxonomic" className={styles.main} onSubmit={handleFormSubmit} role="search">
+            <p id="search-description" style={{ display: "none" }}>
+                Search for a taxonomic group by typing in the name.
+            </p>
+            <input
+                aria-describedby="search-description"
+                aria-label="Search for a group of organisms."
+                autoComplete="off"
+                className={clsx(focused && styles.focused)}
+                enterKeyHint="search"
+                id="q"
+                inputMode="search"
+                list="autocomplete"
+                maxLength={128}
+                minLength={2}
+                name="q"
+                onBlur={handleInputBlur}
+                onChange={handleInputChange}
+                onFocus={handleInputFocus}
+                onMouseDown={enableInput}
+                onTouchStart={enableInput}
+                placeholder="Search for a group of organisms."
+                readOnly={readOnly}
+                spellCheck={false}
+                type="text"
+                value={value}
+            />
+            <datalist id="autocomplete">
+                {debouncedMatches.map(match => (
+                    <option key={match}>{match}</option>
+                ))}
+            </datalist>
+        </form>
     )
 }
 export default SearchBar

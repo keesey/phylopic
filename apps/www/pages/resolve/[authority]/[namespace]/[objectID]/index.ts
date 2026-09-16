@@ -39,9 +39,7 @@ export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQ
                 encodeURIComponent(namespace),
                 encodeURIComponent(objectID),
             ].join("/"),
-            {
-                maxRedirects: 0,
-            },
+            { maxRedirects: 0 },
         )
     } catch (e) {
         if (axios.isAxiosError(e) && e.response && (e.response.status === 307 || e.response.status === 308)) {

@@ -20,11 +20,17 @@ import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
 import { S3ClientService } from "../services/S3ClientService"
 import { Operation } from "./Operation"
-const Bucket = "uploads.phylopic.org"
+
+const ACCEPT = "image/svg+xml,image/png,image/gif,image/bmp,image/jpeg"
+
+const BUCKET = "uploads.phylopic.org"
+
 const USER_MESSAGE = "There was a problem with an attempt to upload your file."
+
 const USER_AUTH_MESSAGE =
     "There was a problem with an attempt to upload your file. You may need to sign out and sign back in."
-export type PostUploadParameters = DataRequestHeaders & {
+
+type PostUploadParameters = DataRequestHeaders & {
     /**
      * UUID of the authenticated contributor, as established by the request authorizer in
      * `lambdas/auth.ts`.
@@ -33,9 +39,118 @@ export type PostUploadParameters = DataRequestHeaders & {
     encoding: "base64" | "utf8"
     "content-type"?: string
 }
-export type PostUploadService = S3ClientService
-const ACCEPT = "image/svg+xml,image/png,image/gif,image/bmp,image/jpeg"
-export const postUpload: Operation<PostUploadParameters, PostUploadService> = async (
+
+type PostUploadService = S3ClientService
+
+const getHash = (body: Buffer) => {
+    const hashSum = createHash("sha256")
+    hashSum.update(body)
+    return hashSum.digest("hex")
+}
+
+const createMissingBodyError = () =>
+    new APIError(400, [
+        {
+            developerMessage: "Missing body.",
+            field: "body",
+            type: "BAD_REQUEST_BODY",
+            userMessage: USER_MESSAGE,
+        },
+    ])
+
+const createUUIDError = (falseUUID: unknown) =>
+    new APIError(401, [
+        {
+            developerMessage:
+                "Invalid authorization. Expected the request authorizer to supply a contributor UUID, but got: " +
+                String(falseUUID),
+            field: "authorization",
+            type: "UNAUTHORIZED",
+            userMessage: USER_AUTH_MESSAGE,
+        },
+    ])
+
+const createExistingError = () =>
+    new APIError(403, [
+        {
+            developerMessage: "Upload already exists and is attributed to another contributor.",
+            field: "authorization",
+            type: "ACCESS_DENIED",
+            userMessage: "Somebody else already uploaded that file.",
+        },
+    ])
+
+const getCurrentStatus = async (
+    client: S3Client,
+    Key: string,
+): Promise<{ uploaded: false } | { contributor: UUID; uploaded: true }> => {
+    let contributor: string | undefined
+    try {
+        const response = await client.send(
+            new GetObjectTaggingCommand({
+                Bucket: BUCKET,
+                Key,
+            }),
+        )
+        contributor = response.TagSet?.find(tag => tag.Key === "contributor")?.Value
+    } catch (e) {
+        if ((e as any)?.$metadata?.httpStatusCode === 404) {
+            return { uploaded: false }
+        }
+        throw e
+    }
+    return contributor ? { contributor, uploaded: true } : { uploaded: false }
+}
+
+const upload = async (client: S3Client, Body: Buffer, ContentType: ImageMediaType, Key: string, contributor: UUID) => {
+    await client.send(
+        new PutObjectCommand({
+            ACL: "public-read",
+            Body,
+            Bucket: BUCKET,
+            ContentType,
+            Key,
+            Tagging: createQueryString({
+                contributor,
+                created: new Date().toISOString(),
+                status: "incomplete",
+            } as Partial<Submission> & Record<string, string>),
+        }),
+    )
+}
+
+const uploadBody = async (
+    service: S3ClientService,
+    key: string,
+    contributor: UUID,
+    body: Buffer,
+    contentType: ImageMediaType,
+) => {
+    const client = service.createS3Client()
+    try {
+        const status = await getCurrentStatus(client, key)
+        if (status.uploaded) {
+            if (status.contributor !== contributor) {
+                throw createExistingError()
+            }
+            console.warn("User already uploaded this file.")
+        } else {
+            await upload(client, body, contentType, key, contributor)
+        }
+    } finally {
+        service.deleteS3Client(client)
+    }
+}
+
+const getContributor = (contributor: string | undefined) => {
+    // Absent means the authorizer did not run or did not authorize, so fail closed.
+    if (!isUUIDv4(contributor)) {
+        throw createUUIDError(contributor)
+    }
+    return contributor
+}
+
+const postUpload: Operation<PostUploadParameters, PostUploadService> = async (
     { accept, body, contributorUUID, "content-type": contentType, encoding },
     service,
 ) => {
@@ -64,104 +179,5 @@ export const postUpload: Operation<PostUploadParameters, PostUploadService> = as
         statusCode: 200,
     } as APIGatewayProxyResult
 }
+
 export default postUpload
-const getHash = (body: Buffer) => {
-    const hashSum = createHash("sha256")
-    hashSum.update(body)
-    return hashSum.digest("hex")
-}
-const createMissingBodyError = () =>
-    new APIError(400, [
-        {
-            developerMessage: "Missing body.",
-            field: "body",
-            type: "BAD_REQUEST_BODY",
-            userMessage: USER_MESSAGE,
-        },
-    ])
-const createUUIDError = (falseUUID: unknown) =>
-    new APIError(401, [
-        {
-            developerMessage:
-                "Invalid authorization. Expected the request authorizer to supply a contributor UUID, but got: " +
-                String(falseUUID),
-            field: "authorization",
-            type: "UNAUTHORIZED",
-            userMessage: USER_AUTH_MESSAGE,
-        },
-    ])
-const createExistingError = () =>
-    new APIError(403, [
-        {
-            developerMessage: "Upload already exists and is attributed to another contributor.",
-            field: "authorization",
-            type: "ACCESS_DENIED",
-            userMessage: "Somebody else already uploaded that file.",
-        },
-    ])
-const getCurrentStatus = async (
-    client: S3Client,
-    Key: string,
-): Promise<{ uploaded: false } | { contributor: UUID; uploaded: true }> => {
-    let contributor: string | undefined
-    try {
-        const response = await client.send(
-            new GetObjectTaggingCommand({
-                Bucket,
-                Key,
-            }),
-        )
-        contributor = response.TagSet?.find(tag => tag.Key === "contributor")?.Value
-    } catch (e) {
-        if ((e as any)?.$metadata?.httpStatusCode === 404) {
-            return { uploaded: false }
-        }
-        throw e
-    }
-    return contributor ? { contributor, uploaded: true } : { uploaded: false }
-}
-const upload = async (client: S3Client, Body: Buffer, ContentType: ImageMediaType, Key: string, contributor: UUID) => {
-    await client.send(
-        new PutObjectCommand({
-            ACL: "public-read",
-            Body,
-            Bucket,
-            ContentType,
-            Key,
-            Tagging: createQueryString({
-                contributor,
-                created: new Date().toISOString(),
-                status: "incomplete",
-            } as Partial<Submission> & Record<string, string>),
-        }),
-    )
-}
-const uploadBody = async (
-    service: S3ClientService,
-    key: string,
-    contributor: UUID,
-    body: Buffer,
-    contentType: ImageMediaType,
-) => {
-    const client = service.createS3Client()
-    try {
-        const status = await getCurrentStatus(client, key)
-        if (status.uploaded) {
-            if (status.contributor !== contributor) {
-                throw createExistingError()
-            }
-            console.warn("User already uploaded this file.")
-        } else {
-            await upload(client, body, contentType, key, contributor)
-        }
-    } finally {
-        service.deleteS3Client(client)
-    }
-}
-const getContributor = (contributor: string | undefined) => {
-    // Absent means the authorizer did not run or did not authorize, so fail closed.
-    if (!isUUIDv4(contributor)) {
-        throw createUUIDError(contributor)
-    }
-    return contributor
-}

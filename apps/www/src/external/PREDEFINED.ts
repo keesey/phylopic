@@ -174,6 +174,11 @@ const ROOT: AgeSourceRecord = {
 }
 // :KLUDGE: TimeTree has some nodes that have invalid data in the API or are difficult to look up.
 const TIMETREE_ERRATA: AgeSourceRecord = {
+    // Aves
+    "667b8664-5dd7-487e-ba56-c6c5c95055a2": {
+        ...TIMETREE,
+        ages: [97000000, 118100000],
+    },
     // Biota
     "d2a5e07b-bf10-4733-96f2-cae5a807fc83": {
         ...TIMETREE,

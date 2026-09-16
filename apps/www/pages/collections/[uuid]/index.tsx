@@ -1,7 +1,6 @@
 import { Contributor, ImageParameters, List, Node } from "@phylopic/api-models"
 import { Loader, PaginationContainer } from "@phylopic/client-components"
 import { createSearch, EMPTY_UUID, isUUIDish, Query, UUIDish } from "@phylopic/utils"
-import { addBuildToURL } from "@phylopic/utils-api"
 import axios from "axios"
 import { type Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
@@ -9,6 +8,7 @@ import { NextSeo } from "next-seo"
 import Link from "next/link"
 import { unstable_serialize } from "swr"
 import customEvents from "~/analytics/customEvents"
+import BUILD from "~/build/BUILD"
 import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
@@ -197,23 +197,22 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
         return { props: { has: { contributors: false, images: false, nodes: false }, uuid } }
     }
     const contributorsKey = `${process.env.NEXT_PUBLIC_API_URL}/contributors${createSearch({
+        build: BUILD,
         filter_collection: uuid,
     })}`
-    const imagesKey = `${process.env.NEXT_PUBLIC_API_URL}/images${createSearch({ filter_collection: uuid })}`
-    const nodesKey = `${process.env.NEXT_PUBLIC_API_URL}/nodes${createSearch({ filter_collection: uuid })}`
+    const imagesKey = `${process.env.NEXT_PUBLIC_API_URL}/images${createSearch({ build: BUILD, filter_collection: uuid })}`
+    const nodesKey = `${process.env.NEXT_PUBLIC_API_URL}/nodes${createSearch({ build: BUILD, filter_collection: uuid })}`
     const [contributors, images, nodes] = await Promise.all([
         axios.get<List>(contributorsKey),
         axios.get<List>(imagesKey),
         axios.get<List>(nodesKey),
     ])
-    const build = contributors.data.build
     return {
         props: {
-            build,
             fallback: compressFallback({
-                [unstable_serialize(addBuildToURL(contributorsKey, build))]: contributors.data,
-                [unstable_serialize(addBuildToURL(imagesKey, build))]: images.data,
-                [unstable_serialize(addBuildToURL(nodesKey, build))]: nodes.data,
+                [unstable_serialize(contributorsKey)]: contributors.data,
+                [unstable_serialize(imagesKey)]: images.data,
+                [unstable_serialize(nodesKey)]: nodes.data,
             }),
             has: {
                 contributors: contributors.data.totalItems > 0,
