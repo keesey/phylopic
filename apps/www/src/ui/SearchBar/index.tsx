@@ -1,5 +1,6 @@
 import { SearchContext, useExternalResolutions, useMatches } from "@phylopic/ui"
 import { extractPath } from "@phylopic/utils"
+import { useDebounce } from "@react-hook/debounce"
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import { ChangeEvent, FC, FocusEvent, FormEvent, useContext, useEffect, useState } from "react"
@@ -11,16 +12,13 @@ const SearchBar: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const [value, setValue] = useState(state?.text ?? "")
     const [readOnly, setReadOnly] = useState(true)
-    const [debouncedMatches, setDebouncedMatches] = useState<string[]>([])
     const { focused, nodeResults: internalResults } = state || {}
     const internalResult = internalResults?.[0]
     const resolution = useExternalResolutions()[0]
     const matches = useMatches(MAX_MATCHES)
+    const [debouncedMatches, setDebouncedMatches] = useDebounce<string[]>([], DATALIST_DEBOUNCE_MS)
     const router = useRouter()
-    useEffect(() => {
-        const timer = window.setTimeout(() => setDebouncedMatches(matches), DATALIST_DEBOUNCE_MS)
-        return () => window.clearTimeout(timer)
-    }, [matches])
+    useEffect(() => setDebouncedMatches(matches), [matches, setDebouncedMatches])
     const enableInput = () => setReadOnly(false)
     const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
