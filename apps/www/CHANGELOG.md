@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.17.0] - 2026-09-16
+
+### Added
+
+### Changed
+
 - Search `<datalist>` suggestions debounce for 500ms after typing pauses.
 - Search input uses `readOnly`-until-interaction and `type="text"` with search keyboard hints instead of a hidden focus-stealer decoy.
 

@@ -11,14 +11,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `@phylopic/www`: search `<datalist>` suggestions debounce for 500ms after typing pauses.
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.0.66] - 2026-09-16
+
+### Added
+
+### Changed
+
+- `@phylopic/www` `2.17.0`: search `<datalist>` suggestions debounce for 500ms after typing pauses.
+- `@phylopic/www` `2.17.0`: search input uses `readOnly`-until-interaction and `type="text"` with search keyboard hints instead of a hidden focus-stealer decoy.
 
 ### Deprecated
 
 ### Fixed
 
-- `@phylopic/www`: iOS Safari no longer autofocuses the search field on page load.
-- `@phylopic/www`: iOS Safari search typing is no longer disrupted by autocomplete suggestions updating mid-keystroke.
+- `@phylopic/www` `2.17.0`: iOS Safari no longer autofocuses the search field on page load.
+- `@phylopic/www` `2.17.0`: iOS Safari search typing is no longer disrupted by autocomplete suggestions updating mid-keystroke.
 
 ### Removed
 
