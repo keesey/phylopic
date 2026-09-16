@@ -3,8 +3,12 @@
 .main {
     align-items: stretch;
     display: flex;
+    flex: 0 1 auto;
     flex-direction: column;
     gap: 2px;
+    max-height: 40%;
+    min-height: 0;
+    overflow-y: auto;
     padding-bottom: 2px;
     padding-top: 2px;
     width: 100%;
