@@ -18,7 +18,7 @@ export const PhyloPicAutocomplete: React.FC = () => {
     )
     const fetcher = useAPIFetcher<QueryMatches>()
     const key = useAPISWRKey(endpoint)
-    const [debouncedKey, setDebouncedKey] = useDebounce<string | null>(key, DEBOUNCE_WAIT)
+    const [debouncedKey, setDebouncedKey] = useDebounce<string | null>(key, DEBOUNCE_WAIT, true)
     React.useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
     const response = useSWRImmutable(debouncedKey, fetcher)
     React.useEffect(() => {

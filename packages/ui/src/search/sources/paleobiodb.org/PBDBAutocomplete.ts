@@ -38,7 +38,7 @@ export const PBDBAutocomplete: React.FC<PBDBAutocompleteProps> = ({ limit = 10 }
                 : null,
         [text],
     )
-    const [debouncedKey, setDebouncedKey] = useDebounce<[string, string] | null>(key, DEBOUNCE_WAIT)
+    const [debouncedKey, setDebouncedKey] = useDebounce<[string, string] | null>(key, DEBOUNCE_WAIT, true)
     React.useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
     const response = useSWRImmutable(debouncedKey, fetcher)
     React.useEffect(() => {

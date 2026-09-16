@@ -27,7 +27,7 @@ const fetchNode: Fetcher<NodeWithEmbedded, URL> = async url => {
 const GBIFResolveObject: React.FC<{ id: number }> = ({ id }) => {
     const [build] = useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
-    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT)
+    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
             setDirectKey(
@@ -53,7 +53,7 @@ const GBIFResolveObject: React.FC<{ id: number }> = ({ id }) => {
                 .map(value => String(value)),
         [usage.data],
     )
-    const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT)
+    const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
             setIndirectKey(

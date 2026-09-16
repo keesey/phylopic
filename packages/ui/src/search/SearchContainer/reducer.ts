@@ -121,6 +121,7 @@ export const reducer: Reducer<State, Action> = (prevState, action) => {
             return {
                 ...prevState,
                 externalResults: {},
+                focused: text ? prevState.focused : false,
                 imageResults: [],
                 nodeResults: [],
                 matches: [],

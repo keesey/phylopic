@@ -1,10 +1,8 @@
 import { fetchDataAndCheck, JSON_API_HEADERS } from "@phylopic/utils-api"
-import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
-import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { OTOL_URL } from "./OTOL_URL"
 interface OTOLAutocompleteName {
     readonly is_higher: boolean
@@ -26,13 +24,7 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
 const sanitizeUniqueName = (name: string) => name.replace(/\s*\([a-z\s+(in|with)[^)]+\)/gi, "")
 export const OTOLAutocomplete: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
-    const key = React.useMemo(
-        () => (state?.text ? ([OTOL_URL + "/tnrs/autocomplete_name", state.text] as const) : null),
-        [state?.text],
-    )
-    const [debouncedKey, setDebouncedKey] = useDebounce<typeof key>(key, DEBOUNCE_WAIT)
-    React.useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
-    const response = useSWRImmutable(debouncedKey, fetcher)
+    const response = useSWRImmutable(state?.text ? [OTOL_URL + "/tnrs/autocomplete_name", state.text] : null, fetcher)
     React.useEffect(() => {
         if (dispatch && response.data) {
             dispatch({
