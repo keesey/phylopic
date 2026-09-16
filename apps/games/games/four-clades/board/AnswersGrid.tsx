@@ -3,6 +3,7 @@ import { ImageThumbnailView } from "@phylopic/ui"
 import { extractPath } from "@phylopic/utils"
 import clsx from "clsx"
 import Link from "next/link"
+import { useParams } from "next/navigation"
 import { FC, useContext } from "react"
 import slugify from "slugify"
 import NomenView from "~/components/NomenView"
@@ -12,6 +13,7 @@ export interface AnswersGridProps {
     onNewGame?: () => void
 }
 const AnswersGrid: FC<AnswersGridProps> = ({ onNewGame }) => {
+    const { code } = useParams<{ code?: string }>()
     const [state] = useContext(BoardContext) ?? []
     const over = Boolean(state && select.isOver(state))
     return (
@@ -43,8 +45,8 @@ const AnswersGrid: FC<AnswersGridProps> = ({ onNewGame }) => {
                     Play a new game.
                 </a>
             )}
-            {over && !onNewGame && (
-                <Link href="/games/four-clades/practice" className={styles.link} onClick={onNewGame}>
+            {over && !onNewGame && code && (
+                <Link href={`/games/${encodeURIComponent(code)}/practice`} className={styles.link}>
                     Play a practice game.
                 </Link>
             )}

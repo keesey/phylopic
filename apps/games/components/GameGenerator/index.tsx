@@ -24,7 +24,9 @@ export const GameGenerator = ({ code, date }: Props) => {
         }
         await putGameInstance(code, date, instance)
         revalidatePath(`/edit/${encodeURIComponent(code)}${toPath(date)}`)
-        revalidateTag
+        revalidateTag("games")
+        revalidateTag(`games/${encodeURIComponent(code)}`)
+        revalidateTag(`games/${encodeURIComponent(code)}${toPath(date)}`)
     }
     return (
         <div className={styles.main}>

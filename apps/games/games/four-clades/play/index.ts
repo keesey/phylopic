@@ -1,5 +1,4 @@
 export * from "./BoardContainer"
 export * from "./BoardState"
 export * from "./select"
-export * from "./Player"
 export * from "./PlayerClient"

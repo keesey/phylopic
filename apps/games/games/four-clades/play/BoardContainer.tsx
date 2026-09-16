@@ -8,15 +8,18 @@ import { Action, InitializeAction } from "./actions"
 import reducer from "./reducer"
 import { select } from "./select"
 import { trimImage } from "./trimImage"
+import { Game } from "../models"
+import { submitGame } from "./submitGame"
 export type Submission = {
     uuids: ReadonlySet<UUID>
     mistakes: number
 }
 export type BoardContainerProps = PropsWithChildren<{
     data: InitializeAction["payload"] | null
+    game?: Game
     gameDate?: CalendarDate
     onNewGame?: () => void
-    onSubmit: (submission: Submission) => Promise<Action>
+    onSubmit?: (submission: Submission) => Promise<Action>
 }>
 export const BoardContext = createContext<Readonly<[BoardState, React.Dispatch<Action>]> | undefined>(undefined)
 const DEFAULT_STATE: BoardState = {
@@ -28,7 +31,14 @@ const DEFAULT_STATE: BoardState = {
     mistakes: 0,
     totalAnswers: 0,
 }
-export const BoardContainer: React.FC<BoardContainerProps> = ({ children, data, gameDate, onNewGame, onSubmit }) => {
+export const BoardContainer: React.FC<BoardContainerProps> = ({
+    children,
+    data,
+    game,
+    gameDate,
+    onNewGame,
+    onSubmit,
+}) => {
     const contextValue = useReducer(reducer, DEFAULT_STATE)
     const pathname = usePathname()
     const [state, dispatch] = contextValue
@@ -81,13 +91,21 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({ children, data, 
         if (submission.uuids.size === imagesPerAnswer) {
             ;(async () => {
                 try {
-                    dispatch(await onSubmit(submission))
+                    const action = game
+                        ? await submitGame(game, {
+                              mistakes: submission.mistakes,
+                              uuids: Array.from(submission.uuids),
+                          })
+                        : await onSubmit?.(submission)
+                    if (action) {
+                        dispatch(action)
+                    }
                 } catch (e) {
                     dispatch({ type: "SUBMIT_CANCEL" })
                     alert(String(e))
                 }
             })()
         }
-    }, [dispatch, imagesPerAnswer, submissionJSON])
+    }, [dispatch, game, imagesPerAnswer, onSubmit, submissionJSON])
     return <BoardContext.Provider value={contextValue}>{children}</BoardContext.Provider>
 }

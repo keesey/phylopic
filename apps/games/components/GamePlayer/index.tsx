@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { Game as FourCladesGame } from "~/games/four-clades/models"
-import { Player as FourCladesPlayer } from "~/games/four-clades/play"
+import { Player as FourCladesPlayer } from "~/games/four-clades/play/Player"
 import { CalendarDate } from "~/lib/datetime"
 export interface Props {
     code: string

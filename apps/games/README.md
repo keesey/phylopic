@@ -16,6 +16,7 @@ The following environment variables are required. They may be stored in `.env.lo
 | ---------------------------- | ---------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_API_URL`        | Root URL of the _PhyloPic_ API (`https://api.phylopic.org`)                        |
 | `NEXT_PUBLIC_CONTRIBUTE_URL` | Root URL of the _PhyloPic: Contribute_ website (`https://contribute.phylopic.org`) |
+| `NEXT_PUBLIC_GAMES_URL`      | Root URL of this website (`https://games.phylopic.org`)                            |
 | `NEXT_PUBLIC_WWW_URL`        | Root URL of the main _PhyloPic_ website (`https://www.phylopic.org`)               |
 | `S3_ACCESS_KEY_ID`           | Amazon Web Services S3 access key ID                                               |
 | `S3_REGION`                  | Amazon Web Services S3 region                                                      |
