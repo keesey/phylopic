@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `@react-hook/debounce` for datalist debouncing in `SearchBar`.
-
 ### Changed
 
 - Search `<datalist>` suggestions debounce for 500ms after typing pauses.
