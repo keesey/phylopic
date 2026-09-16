@@ -9,11 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `@react-hook/debounce` for datalist debouncing in `SearchBar`.
+
 ### Changed
+
+- Search `<datalist>` suggestions debounce for 500ms after typing pauses.
+- Search input uses `readOnly`-until-interaction and `type="text"` with search keyboard hints instead of a hidden focus-stealer decoy.
 
 ### Deprecated
 
 ### Fixed
+
+- iOS Safari no longer autofocuses the search field on page load.
+- iOS Safari search typing is no longer disrupted by autocomplete suggestions updating mid-keystroke.
 
 ### Removed
 
