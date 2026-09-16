@@ -2,7 +2,7 @@ import { defineConfig } from "tsup"
 export default defineConfig({
     clean: true,
     dts: true,
-    entry: ["src/index.ts"],
+    entry: ["src/index.ts", "src/securityHeaders.ts"],
     external: [
         "@phylopic/api-models",
         "@phylopic/utils",
