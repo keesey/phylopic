@@ -32,7 +32,7 @@ export const PhyloPicNodeSearch: React.FC = () => {
     )
     const apiSWRKey = useAPISWRKey(endpoint)
     const key = React.useMemo(() => (apiSWRKey && basis ? ([apiSWRKey, basis] as QueryKey) : null), [apiSWRKey, basis])
-    const [debouncedKey, setDebouncedKey] = useDebounce(key, DEBOUNCE_WAIT, true)
+    const [debouncedKey, setDebouncedKey] = useDebounce(key, DEBOUNCE_WAIT)
     React.useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
     const fetcher = useQueryFetcher<PageWithEmbedded<NodeWithEmbedded>>()
     const { data } = useSWRImmutable(debouncedKey, fetcher)

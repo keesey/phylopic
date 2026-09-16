@@ -31,7 +31,7 @@ const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
     const [build] = useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
-    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
+    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT)
     React.useEffect(
         () =>
             setDirectKey(
@@ -57,7 +57,7 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
         }
         return [String(ott_id), ...lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))]
     }, [lineage.data?.lineage, ott_id])
-    const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
+    const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT)
     React.useEffect(
         () =>
             setIndirectKey(

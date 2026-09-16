@@ -1,14 +1,19 @@
+import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
+import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { GBIF_URL } from "./GBIF_URL"
 import { fetchNameUsagePage } from "./fetchNameUsagePage"
 export const GBIFAutocomplete: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
-    const response = useSWRImmutable(
-        state?.text ? [GBIF_URL + "species/suggest", state.text] : null,
-        fetchNameUsagePage,
+    const key = React.useMemo(
+        () => (state?.text ? ([GBIF_URL + "species/suggest", state.text] as const) : null),
+        [state?.text],
     )
+    const [debouncedKey, setDebouncedKey] = useDebounce<typeof key>(key, DEBOUNCE_WAIT)
+    React.useEffect(() => setDebouncedKey(key), [key, setDebouncedKey])
+    const response = useSWRImmutable(debouncedKey, fetchNameUsagePage)
     React.useEffect(() => {
         if (dispatch && response.data) {
             dispatch({

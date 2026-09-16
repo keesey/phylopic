@@ -33,7 +33,7 @@ const fetchNode: Fetcher<NodeWithEmbedded, string> = async url => {
 const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
     const [build] = useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
-    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
+    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT)
     React.useEffect(
         () =>
             setDirectKey(
@@ -56,7 +56,7 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
         }
         return lineage.data.records.map(({ oid }) => oid.replace(/^txn:/, "")).reverse()
     }, [lineage.data?.records])
-    const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
+    const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT)
     React.useEffect(
         () =>
             setIndirectKey(
