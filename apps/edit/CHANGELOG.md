@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Unused editor context containers, views, and legacy webpack globals stylesheet.
+
 ### Security
 
 ## [1.10.3] - 2026-09-17

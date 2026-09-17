@@ -12,6 +12,7 @@
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
+        "@react-hook/debounce": "^4.0.0",
         "axios": "^1.6.8",
         "clsx": "^2.1.0",
         "next": "^15.5.24",

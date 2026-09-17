@@ -7,10 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- `useLiveImageExists` hook and `isNotFoundError` helper for live image lookups.
-
 ### Changed
 
 - Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
@@ -21,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Removed
+
+- Unused analytics helper, image lookup hook, search entry icon component, and orphan stylesheets.
 
 ### Security
 

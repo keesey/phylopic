@@ -5,7 +5,6 @@ import { LicenseFilterType } from "~/models/LicenseFilterType"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getHRefFromAPILink from "~/routes/getHRefFromAPILink"
 export type LinkType = "button" | "link"
-export type FilterMode = "all" | "public_domain" | "no-nc" | "no-nc-sa" | "no-sa"
 const getImageOptions = (image: Image) => ({
     contributor_uuid: extractUUIDv4(image._links.contributor.href),
     contributor_name: image._links.contributor.title,
@@ -103,9 +102,6 @@ const customEvents = {
     },
     filterImages(filter_type: LicenseFilterType) {
         gtag.event("filter_images", { filter_type: filter_type ?? "all" })
-    },
-    flipPocketPhylogeny(index: number, to_side: "front" | "back") {
-        gtag.event("flip_pocket_phylogeny", { index, to_side })
     },
     loadContributorListPage(id: string, index: number) {
         gtag.event("load_contributor_list_page", { id, index })

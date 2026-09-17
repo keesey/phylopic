@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Dead code and stale dependencies across `www`, `contribute`, `edit`, and `api` after the client-components split.
+
 ### Security
 
 ## [2.0.67] - 2026-09-17
