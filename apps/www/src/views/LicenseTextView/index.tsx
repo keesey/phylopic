@@ -1,4 +1,4 @@
-import { useLicenseText } from "@phylopic/ui"
+import { useLicenseText } from "@phylopic/client-components"
 import { LicenseURL } from "@phylopic/utils"
 import { FC } from "react"
 export interface Props {

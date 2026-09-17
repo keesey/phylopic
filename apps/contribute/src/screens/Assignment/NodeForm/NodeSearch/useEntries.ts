@@ -1,5 +1,5 @@
 import { NodeWithEmbedded } from "@phylopic/api-models"
-import { ExternalResolution, SearchContext, useExternalResolutions } from "@phylopic/ui"
+import { ExternalResolution, SearchContext, useExternalResolutions } from "@phylopic/client-components"
 import { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { useContext, useMemo } from "react"

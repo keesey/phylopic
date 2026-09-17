@@ -1,5 +1,4 @@
-import { SearchContainer } from "@phylopic/ui"
-import { BuildContainer } from "@phylopic/utils-api"
+import { BuildContainer, SearchContainer } from "@phylopic/client-components"
 import dynamic from "next/dynamic"
 import { FC, ReactNode, Suspense } from "react"
 import BUILD from "~/build/BUILD"

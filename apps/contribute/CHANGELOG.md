@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `useLiveImageExists` hook and `isNotFoundError` helper for live image lookups.
+
 ### Changed
+
+- Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
+- Use `svh`/`svw` viewport units for layout sizing.
 
 ### Deprecated
 

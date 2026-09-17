@@ -1,4 +1,4 @@
-import { useMatches } from "@phylopic/ui"
+import { useMatches } from "@phylopic/client-components"
 import { FC } from "react"
 import UserInput from "~/ui/UserInput"
 interface Props {

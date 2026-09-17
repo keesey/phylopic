@@ -9,11 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- New package: `client-components` (previously part of `ui`).
+
 ### Changed
+
+- `@phylopic/www`, `@phylopic/contribute`, and `@phylopic/edit`: import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
+- `@phylopic/ui`: add `"use client"` to exports; move most modules to `@phylopic/client-components`.
+- `@phylopic/utils-api`: move `fetchJSON` into package root; remove React SWR hooks and `BuildContainer` (now in `@phylopic/client-components`).
 
 ### Deprecated
 
 ### Fixed
+
+- `@phylopic/client-components`: `PhyloPicImageSearch` no longer sends erroneous API calls.
+- `@phylopic/utils-aws`: `objectExists()` now explicitly checks for 4xx responses.
 
 ### Removed
 

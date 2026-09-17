@@ -1,5 +1,5 @@
 import { Contributor } from "@phylopic/api-models"
-import { PaginationContainer } from "@phylopic/ui"
+import { PaginationContainer } from "@phylopic/client-components"
 import Image from "next/image"
 import Link from "next/link"
 import { FC, ReactNode } from "react"

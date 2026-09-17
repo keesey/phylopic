@@ -1,5 +1,5 @@
 import { Page } from "@phylopic/source-client"
-import { InfiniteScroll } from "@phylopic/ui"
+import { InfiniteScroll } from "@phylopic/client-components"
 import { createSearch } from "@phylopic/utils"
 import { FC, Fragment, ReactNode, useCallback, useEffect, useMemo } from "react"
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"

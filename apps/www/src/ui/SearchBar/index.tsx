@@ -1,4 +1,4 @@
-import { SearchContext, useExternalResolutions, useMatches } from "@phylopic/ui"
+import { SearchContext, useExternalResolutions, useMatches } from "@phylopic/client-components"
 import { extractPath } from "@phylopic/utils"
 import { useDebounce } from "@react-hook/debounce"
 import clsx from "clsx"

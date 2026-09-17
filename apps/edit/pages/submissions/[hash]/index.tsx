@@ -1,5 +1,5 @@
 import { INCOMPLETE_STRING, Submission } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { Hash, isHash } from "@phylopic/utils"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"

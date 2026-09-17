@@ -1,6 +1,5 @@
 import { Submission } from "@phylopic/source-models"
 import {
-    fetchJSON,
     GBIFAutocomplete,
     GBIFResolve,
     OTOLAutocomplete,
@@ -10,7 +9,8 @@ import {
     PhyloPicAutocomplete,
     PhyloPicNodeSearch,
     SearchContainer,
-} from "@phylopic/ui"
+} from "@phylopic/client-components"
+import { fetchJSON } from "@phylopic/utils-api"
 import { Hash } from "@phylopic/utils"
 import { FC } from "react"
 import useSWR from "swr"

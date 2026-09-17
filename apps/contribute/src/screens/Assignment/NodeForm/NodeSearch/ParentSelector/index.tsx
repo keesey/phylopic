@@ -1,4 +1,4 @@
-import { PhyloPicAutocomplete, PhyloPicNodeSearch, SearchContainer } from "@phylopic/ui"
+import { PhyloPicAutocomplete, PhyloPicNodeSearch, SearchContainer } from "@phylopic/client-components"
 import { FC, useState } from "react"
 import useNormalizedText from "~/screens/Assignment/AssignmentContainer/hooks/useNormalizedText"
 import NoBreak from "~/ui/NoBreak"

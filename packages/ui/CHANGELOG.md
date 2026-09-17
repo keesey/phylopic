@@ -9,13 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- The `"use client"` directive to exports.
+
 ### Changed
+
+- Stopped using `useMemo()` in Views.
 
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+- Most folders moved to `@phylopic/client-components`.
 
 ### Security
 

@@ -1,5 +1,6 @@
 import { Contributor, INCOMPLETE_STRING, Image, Submission } from "@phylopic/source-models"
-import { Loader, fetchJSON } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
+import { fetchJSON } from "@phylopic/utils-api"
 import { Hash, UUID, isUUIDv4 } from "@phylopic/utils"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"

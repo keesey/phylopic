@@ -1,4 +1,4 @@
-import { Loader, LoaderContext } from "@phylopic/ui"
+import { Loader, LoaderContext } from "@phylopic/client-components"
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import clsx from "clsx"
 import dynamic from "next/dynamic"

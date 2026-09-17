@@ -1,4 +1,4 @@
-import { ExternalResolution } from "@phylopic/ui"
+import { ExternalResolution } from "@phylopic/client-components"
 import { parseNomen } from "parse-nomen"
 import { FC, useMemo } from "react"
 import getShortNomen from "~/models/getShortNomen"
