@@ -103,6 +103,9 @@ const customEvents = {
     filterImages(filter_type: LicenseFilterType) {
         gtag.event("filter_images", { filter_type: filter_type ?? "all" })
     },
+    flipPocketPhylogeny(index: number, to_side: "front" | "back") {
+        gtag.event("flip_pocket_phylogeny", { index, to_side })
+    },
     loadContributorListPage(id: string, index: number) {
         gtag.event("load_contributor_list_page", { id, index })
     },

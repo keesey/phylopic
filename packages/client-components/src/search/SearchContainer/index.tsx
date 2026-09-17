@@ -1,5 +1,6 @@
 "use client"
-import React, { ReactNode, useEffect } from "react"
+import { useRouter } from "next/router"
+import React, { ReactNode } from "react"
 import { BuildContext } from "../../builds"
 import { SearchContext } from "../context"
 import { State } from "../context/State"
@@ -24,9 +25,12 @@ export const SearchContainer: React.FC<SearchContainerProps> = ({ children, init
     const [prevBuild, setPrevBuild] = React.useState(build)
     const contextValue = React.useReducer(reducer, [initialText], () => createInitialState(initialText))
     const [, dispatch] = contextValue
-    useEffect(() => {
-        return () => dispatch({ type: "RESET" })
-    }, [dispatch])
+    const { events } = useRouter()
+    React.useEffect(() => {
+        const handler = () => dispatch({ type: "RESET" })
+        events.on("routeChangeStart", handler)
+        return () => events.off("routeChangeStart", handler)
+    }, [dispatch, events])
     React.useEffect(() => {
         if (prevBuild !== build) {
             setPrevBuild(build)

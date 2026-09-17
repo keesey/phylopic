@@ -16,6 +16,7 @@ export interface PhyloPicImageSearchProps {
     filter_license_sa?: boolean
 }
 export const PhyloPicImageSearch: React.FC<PhyloPicImageSearchProps> = props => {
+    const { filter_license_by, filter_license_nc, filter_license_sa } = props
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const basis = state?.text || undefined
     const matchingText = React.useMemo(
@@ -35,7 +36,7 @@ export const PhyloPicImageSearch: React.FC<PhyloPicImageSearchProps> = props => 
                       page: "0",
                   } as ImageListParameters & Query)
                 : null,
-        [matchingText],
+        [filter_license_by, filter_license_nc, filter_license_sa, matchingText],
     )
     const apiSWRKey = useAPISWRKey(endpoint)
     const key = React.useMemo(() => (apiSWRKey && basis ? ([apiSWRKey, basis] as QueryKey) : null), [apiSWRKey, basis])
