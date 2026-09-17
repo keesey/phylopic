@@ -1,5 +1,5 @@
 {
-    "background_color": "#305860",
+    "background_color": "#000000",
     "description": "Local web application for editing PhyloPic source data and image files.",
     "display": "standalone",
     "icons": [
