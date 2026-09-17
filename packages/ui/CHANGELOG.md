@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Stopped using `useMemo()` in Views.
+- Consolidate build configuration in `tsup.config.ts`.
 
 ### Deprecated
 

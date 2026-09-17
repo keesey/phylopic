@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Re-export `getImageLoader` from `@phylopic/ui`.
+- Declare `@phylopic/ui` and `@react-hook/debounce` dependencies.
+
 ### Deprecated
 
 ### Fixed

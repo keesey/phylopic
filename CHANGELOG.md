@@ -16,13 +16,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `@phylopic/www`, `@phylopic/contribute`, and `@phylopic/edit`: import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
 - `@phylopic/ui`: move most modules to `@phylopic/client-components`; retain server-safe views and image utilities.
 - `@phylopic/client-components`: add `"use client"` to exports.
-- `@phylopic/utils-api`: move `fetchJSON` into package root; remove React SWR hooks and `BuildContainer` (now in `@phylopic/client-components`).
+- `@phylopic/utils-api`: move `fetchJSON` into `src/fetch/`; remove React SWR hooks and `BuildContainer` (now in `@phylopic/client-components`).
+- `@phylopic/client-components`: re-export `getImageLoader` from `@phylopic/ui`; declare `@phylopic/ui` and `@react-hook/debounce` dependencies.
+- `@phylopic/styles`: table `max-width` uses `svw`.
 
 ### Deprecated
 
 ### Fixed
 
 - `@phylopic/client-components`: `PhyloPicImageSearch` no longer sends erroneous API calls.
+- `@phylopic/contribute`: `isNotFoundError` checks 404 only.
 - `@phylopic/utils-aws`: `objectExists()` now explicitly checks for 4xx responses.
 
 ### Removed
