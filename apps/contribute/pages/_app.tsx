@@ -9,6 +9,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <DefaultSeo
                 additionalLinkTags={[
                     { href: "http://tmkeesey.net", rel: "author" },
+                    { href: "/icon.svg", rel: "icon", type: "image/svg+xml" },
                     { href: "/apple-touch-icon.png", rel: "icon", sizes: "180x180", type: "image/png" },
                     { href: "/favicon-32x32.png", rel: "icon", sizes: "32x32", type: "image/png" },
                     { href: "/favicon-16x16.png", rel: "icon", sizes: "16x16", type: "image/png" },

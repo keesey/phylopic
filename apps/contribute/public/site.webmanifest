@@ -1,1 +1,21 @@
-{"name":"PhyloPic: Contributor","short_name":"PhyloPic: Contribute","description":"Upload silhouette images of animals, plants, and other life forms to PhyloPic, the open database.","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+{
+    "background_color": "#305860",
+    "description": "Upload silhouette images of animals, plants, and other life forms to PhyloPic, the open database.",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "name": "PhyloPic: Contributor",
+    "short_name": "PhyloPic: Contribute",
+    "start_url": ".",
+    "theme_color": "#305860"
+}

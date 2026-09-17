@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Restored web app manifest fields removed during the favicon update.
+
 ### Removed
 
 ### Security
