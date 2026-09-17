@@ -1,1 +1,21 @@
-{"name":"PhyloPic API Documentation","short_name":"PhyloPic API Docs","description":"Documentation for the free, open-source, public API of PhyloPic, the open database of life form silhouettes.","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+{
+    "background_color": "#305860",
+    "description": "Documentation for the free, open-source, public API of PhyloPic, the open database of life form silhouettes.",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "name": "PhyloPic API Documentation",
+    "short_name": "PhyloPic API Docs",
+    "start_url": ".",
+    "theme_color": "#305860"
+}
