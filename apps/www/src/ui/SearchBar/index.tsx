@@ -48,13 +48,7 @@ const SearchBar: FC = () => {
         dispatch?.({ type: "SET_ACTIVE", payload: true })
     }
     return (
-        <form
-            action="/search"
-            aria-label="Taxonomic"
-            className={styles.main}
-            onSubmit={handleFormSubmit}
-            role="search"
-        >
+        <form action="/search" aria-label="Taxonomic" className={styles.main} onSubmit={handleFormSubmit} role="search">
             <p id="search-description" style={{ display: "none" }}>
                 Search for a taxonomic group by typing in the name.
             </p>
