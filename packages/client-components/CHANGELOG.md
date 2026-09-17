@@ -17,12 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Re-export `getImageLoader` from `@phylopic/ui`.
 - Declare `@phylopic/ui` and `@react-hook/debounce` dependencies.
+- Request `embed_items` in image search queries.
 
 ### Deprecated
 
 ### Fixed
-
-- `PhyloPicImageSearch` was sending erroneous API calls.
 
 ### Removed
 

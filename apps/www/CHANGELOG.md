@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Unused Pocket Phylogenies materials, orphan service worker files, and unused analytics exports.
+- Pocket Phylogenies materials, orphan service worker files, unused `FilterMode` analytics export, and orphan ExpandableLineageBreadcrumbs stylesheet.
 - Redundant `@vercel/kv` dependency.
 
 ### Security

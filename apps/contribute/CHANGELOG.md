@@ -18,11 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `isNotFoundError` checks for 404 only (not all 4xx responses).
-
 ### Removed
 
-- Unused analytics helper, image lookup hook, search entry icon component, and orphan stylesheets.
+- Orphan Account screen stylesheets.
 - Unused `@phylopic/utils-aws` dependency.
 
 ### Security
