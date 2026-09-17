@@ -1,7 +1,8 @@
 "use client"
 import { Loader } from "@phylopic/client-components"
 import { FC, useCallback, useEffect, useState } from "react"
-import { GamePlayerClient } from "~/components/GamePlayerClient"
+import { Game as FourCladesGame } from "~/games/four-clades/models"
+import { PlayerClient } from "~/games/four-clades/play/PlayerClient"
 import { GAMES } from "~/games/GAMES"
 import { generatePracticeGame } from "~/lib/games/generatePracticeGame"
 import styles from "./GameGenerator.module.scss"
@@ -10,7 +11,7 @@ export interface Props {
 }
 export const GameGenerator: FC<Props> = ({ code }) => {
     const [generating, setGenerating] = useState(false)
-    const [game, setGame] = useState<unknown | null>(null)
+    const [game, setGame] = useState<FourCladesGame | null>(null)
     const [error, setError] = useState<string | null>(null)
     const generatePracticeGameInstance = useCallback(() => {
         setGame(null)
@@ -22,7 +23,7 @@ export const GameGenerator: FC<Props> = ({ code }) => {
         setError(null)
         ;(async () => {
             try {
-                setGame(await generatePracticeGame(code))
+                setGame((await generatePracticeGame(code)) as FourCladesGame)
             } catch (e) {
                 setError(String(e))
             } finally {
@@ -50,6 +51,8 @@ export const GameGenerator: FC<Props> = ({ code }) => {
         )
     }
     return (
-        <GamePlayerClient key="player" code={code} gameContent={game} onNewGame={() => generatePracticeGameInstance()} />
+        <div className={styles.game}>
+            <PlayerClient game={game} onNewGame={() => generatePracticeGameInstance()} />
+        </div>
     )
 }

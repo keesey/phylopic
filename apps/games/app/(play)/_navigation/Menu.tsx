@@ -6,6 +6,8 @@ import { Drawer } from "~/components/Drawer"
 import { GAMES } from "~/games/GAMES"
 import { fromDate, toPath } from "~/lib/datetime"
 import styles from "./Menu.module.scss"
+const WWW_URL = process.env.NEXT_PUBLIC_WWW_URL ?? "https://www.phylopic.org"
+const CONTRIBUTE_URL = process.env.NEXT_PUBLIC_CONTRIBUTE_URL ?? "https://contribute.phylopic.org"
 export interface Props {
     onClose: () => void
 }
@@ -32,15 +34,10 @@ const Menu: FC<Props> = ({ onClose }) => {
                         </Link>
                     </>
                 )}
-                <Link href={process.env.NEXT_PUBLIC_WWW_URL!} onClick={onClose} target="_blank" rel="noreferrer">
+                <Link href={WWW_URL} onClick={onClose} target="_blank" rel="noreferrer">
                     PhyloPic
                 </Link>
-                <Link
-                    href={process.env.NEXT_PUBLIC_CONTRIBUTE_URL!}
-                    onClick={onClose}
-                    target="_blank"
-                    rel="noreferrer"
-                >
+                <Link href={CONTRIBUTE_URL} onClick={onClose} target="_blank" rel="noreferrer">
                     Contribute
                 </Link>
             </nav>

@@ -44,7 +44,7 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({
     const [state, dispatch] = contextValue
     const gameCode = pathname.match(/\/games\/([^/]+)/)?.[1]
     const localStorageKey = gameCode && gameDate ? `@phylopic/games/${gameCode}${toPath(gameDate)}` : null
-    const lastProcessedSubmission = useRef<string | null>(null)
+    const submitting = useRef(false)
     useEffect(() => {
         if (localStorageKey) {
             const saved = localStorage.getItem(localStorageKey)
@@ -88,13 +88,10 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({
             ...submissionRaw,
             uuids: new Set(submissionRaw.uuids),
         }
-        if (submission.uuids.size !== imagesPerAnswer) {
+        if (submission.uuids.size !== imagesPerAnswer || submitting.current) {
             return
         }
-        if (lastProcessedSubmission.current === submissionJSON) {
-            return
-        }
-        lastProcessedSubmission.current = submissionJSON
+        submitting.current = true
         ;(async () => {
             try {
                 const action = game
@@ -107,9 +104,10 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({
                     dispatch(action)
                 }
             } catch (e) {
-                lastProcessedSubmission.current = null
                 dispatch({ type: "SUBMIT_CANCEL" })
                 alert(String(e))
+            } finally {
+                submitting.current = false
             }
         })()
     }, [dispatch, game, imagesPerAnswer, onSubmit, submissionJSON])
