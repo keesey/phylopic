@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `@phylopic/www`, `@phylopic/contribute`, and `@phylopic/edit`: import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
-- `@phylopic/ui`: add `"use client"` to exports; move most modules to `@phylopic/client-components`.
+- `@phylopic/ui`: move most modules to `@phylopic/client-components`; retain server-safe views and image utilities.
+- `@phylopic/client-components`: add `"use client"` to exports.
 - `@phylopic/utils-api`: move `fetchJSON` into package root; remove React SWR hooks and `BuildContainer` (now in `@phylopic/client-components`).
 
 ### Deprecated
