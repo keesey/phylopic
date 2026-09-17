@@ -14,7 +14,7 @@
             "type": "image/png"
         }
     ],
-    "name": "PhyloPic: Contributor",
+    "name": "PhyloPic: Image Contribution Tool",
     "short_name": "PhyloPic: Contribute",
     "start_url": ".",
     "theme_color": "#305860"
