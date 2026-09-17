@@ -1,6 +1,6 @@
 {
-    "background_color": "#305860",
-    "description": "Documentation for the free, open-source, public API of PhyloPic, the open database of life form silhouettes.",
+    "background_color": "#000000",
+    "description": "Local web application for editing PhyloPic source data and image files.",
     "display": "standalone",
     "icons": [
         {
@@ -14,8 +14,8 @@
             "type": "image/png"
         }
     ],
-    "name": "PhyloPic API Documentation",
-    "short_name": "PhyloPic API Docs",
+    "name": "PhyloPic: Editor",
+    "short_name": "PhyloPic: Edit",
     "start_url": ".",
     "theme_color": "#305860"
 }
