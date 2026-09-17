@@ -9,11 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Changed
+- Four Clades puzzle game with daily and practice modes.
+- Games editor for scheduling puzzle content.
 
-- Major upgrade for `next`, to version 15.
-- Migrated App Router `params` to the asynchronous form required by Next.js 15.
-- Updated Next.js configuration for version 15: replaced deprecated `images.domains` with `images.remotePatterns` and set `outputFileTracingRoot`.
+### Changed
 
 ### Deprecated
 
@@ -22,3 +21,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+- `/revalidate` requires `Authorization: Bearer` with `REVALIDATE_TOKEN` and fails closed when the token is unset.

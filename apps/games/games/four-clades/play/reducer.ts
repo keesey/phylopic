@@ -34,7 +34,6 @@ const deselectOne = (images: BoardState["images"], uuid: UUID) => {
     )
 }
 const reducer: Reducer<BoardState, Action> = (prevState, action) => {
-    console.debug(action)
     switch (action.type) {
         case "DESELECT": {
             return {
@@ -72,12 +71,12 @@ const reducer: Reducer<BoardState, Action> = (prevState, action) => {
         case "LOSE": {
             return {
                 ...prevState,
-                answers: {
+                answers: [
                     ...prevState.answers,
                     ...action.payload.filter(
                         node => !prevState.answers.some(prevAnswer => prevAnswer.uuid === node.uuid),
                     ),
-                },
+                ],
                 discrepancy: 0,
                 images: updateImageStates(prevState.images, imageState => ({ ...imageState, mode: "completed" })),
                 lastSubmission: [],

@@ -1,0 +1,14 @@
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    a {
+        font-size: larger;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

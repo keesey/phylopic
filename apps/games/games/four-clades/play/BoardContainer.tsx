@@ -1,7 +1,7 @@
 "use client"
 import type { UUID } from "@phylopic/utils"
 import { usePathname } from "next/navigation"
-import { PropsWithChildren, createContext, useEffect, useMemo, useReducer } from "react"
+import { PropsWithChildren, createContext, useEffect, useMemo, useReducer, useRef } from "react"
 import { CalendarDate, toPath } from "~/lib/datetime"
 import { BoardState } from "./BoardState"
 import { Action, InitializeAction } from "./actions"
@@ -42,9 +42,9 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({
     const contextValue = useReducer(reducer, DEFAULT_STATE)
     const pathname = usePathname()
     const [state, dispatch] = contextValue
-    const isPractice = pathname.endsWith("/practice")
-    const localStorageKey =
-        gameDate || isPractice ? `@phylopic/games/four-clades${gameDate ? toPath(gameDate) : "/practice/state"}` : null
+    const gameCode = pathname.match(/\/games\/([^/]+)/)?.[1]
+    const localStorageKey = gameCode && gameDate ? `@phylopic/games/${gameCode}${toPath(gameDate)}` : null
+    const lastProcessedSubmission = useRef<string | null>(null)
     useEffect(() => {
         if (localStorageKey) {
             const saved = localStorage.getItem(localStorageKey)
@@ -64,7 +64,7 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({
         } else {
             onNewGame?.()
         }
-    }, [data, dispatch, isPractice, localStorageKey])
+    }, [data, dispatch, localStorageKey, onNewGame])
     useEffect(() => {
         if (localStorageKey && state.totalAnswers > 0) {
             localStorage.setItem(localStorageKey, JSON.stringify(state))
@@ -88,24 +88,30 @@ export const BoardContainer: React.FC<BoardContainerProps> = ({
             ...submissionRaw,
             uuids: new Set(submissionRaw.uuids),
         }
-        if (submission.uuids.size === imagesPerAnswer) {
-            ;(async () => {
-                try {
-                    const action = game
-                        ? await submitGame(game, {
-                              mistakes: submission.mistakes,
-                              uuids: Array.from(submission.uuids),
-                          })
-                        : await onSubmit?.(submission)
-                    if (action) {
-                        dispatch(action)
-                    }
-                } catch (e) {
-                    dispatch({ type: "SUBMIT_CANCEL" })
-                    alert(String(e))
-                }
-            })()
+        if (submission.uuids.size !== imagesPerAnswer) {
+            return
         }
+        if (lastProcessedSubmission.current === submissionJSON) {
+            return
+        }
+        lastProcessedSubmission.current = submissionJSON
+        ;(async () => {
+            try {
+                const action = game
+                    ? await submitGame(game, {
+                          mistakes: submission.mistakes,
+                          uuids: Array.from(submission.uuids),
+                      })
+                    : await onSubmit?.(submission)
+                if (action) {
+                    dispatch(action)
+                }
+            } catch (e) {
+                lastProcessedSubmission.current = null
+                dispatch({ type: "SUBMIT_CANCEL" })
+                alert(String(e))
+            }
+        })()
     }, [dispatch, game, imagesPerAnswer, onSubmit, submissionJSON])
     return <BoardContext.Provider value={contextValue}>{children}</BoardContext.Provider>
 }

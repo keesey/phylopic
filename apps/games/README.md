@@ -1,4 +1,4 @@
-# _PhyloPic_ Contribution Webapp
+# _PhyloPic_ Games
 
 This [Next.js](https://nextjs.org/) application features puzzle games involving silhouette images from [_PhyloPic_](https://www.phylopic.org).
 
@@ -18,6 +18,7 @@ The following environment variables are required. They may be stored in `.env.lo
 | `NEXT_PUBLIC_CONTRIBUTE_URL` | Root URL of the _PhyloPic: Contribute_ website (`https://contribute.phylopic.org`) |
 | `NEXT_PUBLIC_GAMES_URL`      | Root URL of this website (`https://games.phylopic.org`)                            |
 | `NEXT_PUBLIC_WWW_URL`        | Root URL of the main _PhyloPic_ website (`https://www.phylopic.org`)               |
+| `REVALIDATE_TOKEN`           | Bearer token for the `/revalidate` on-demand cache invalidation endpoint           |
 | `S3_ACCESS_KEY_ID`           | Amazon Web Services S3 access key ID                                               |
 | `S3_REGION`                  | Amazon Web Services S3 region                                                      |
 | `S3_SECRET_ACCESS_KEY`       | Amazon Web Services S3 secret access key                                           |

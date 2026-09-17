@@ -29,7 +29,7 @@
 .submitted {
     background-color: colors.$dandelion;
 
-    img: {
+    img {
         filter: invert(100%);
         mix-blend-mode: lighten;
         opacity: 0.67;

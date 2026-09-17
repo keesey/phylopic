@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- `BuildContainer` component and `BuildContext` (now in in `@phylopic/ui`).
+- `BuildContainer` component and `BuildContext` (now in `@phylopic/ui`).
 
 ### Security
 

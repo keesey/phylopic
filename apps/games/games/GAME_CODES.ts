@@ -1,1 +1,1 @@
-export const GAME_CODES = ["four-clades", "ancestor"]
+export const GAME_CODES = ["four-clades"]

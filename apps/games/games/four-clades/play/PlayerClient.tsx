@@ -3,9 +3,8 @@ import { Loader } from "@phylopic/client-components"
 import { FC, useEffect, useState } from "react"
 import Board from "../board/Board"
 import { Game } from "../models"
-import { BoardContainer, Submission } from "./BoardContainer"
-import { Action, InitializeAction } from "./actions"
-import { adjudicate } from "./adjudicate"
+import { BoardContainer } from "./BoardContainer"
+import { InitializeAction } from "./actions"
 import { createInitial } from "./createInitial"
 export interface PlayerClientProps {
     game: Game | null
@@ -22,18 +21,11 @@ export const PlayerClient: FC<PlayerClientProps> = ({ game, onNewGame }) => {
             setData(null)
         }
     }, [game])
-    const handleSubmit = async (submission: Submission): Promise<Action> => {
-        console.debug({ game, submission })
-        if (game) {
-            return await adjudicate(game, submission)
-        }
-        return { type: "SUBMIT_CANCEL" }
-    }
     if (game && !data) {
         return <Loader />
     }
     return (
-        <BoardContainer data={data} onSubmit={handleSubmit} onNewGame={onNewGame}>
+        <BoardContainer data={data} game={game ?? undefined} onNewGame={onNewGame}>
             <Board onNewGame={onNewGame} />
         </BoardContainer>
     )

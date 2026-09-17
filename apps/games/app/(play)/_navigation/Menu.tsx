@@ -1,10 +1,50 @@
-import styles from "./Menu.module.scss"
+"use client"
+import Link from "next/link"
+import { useParams } from "next/navigation"
 import { FC } from "react"
+import { Drawer } from "~/components/Drawer"
+import { GAMES } from "~/games/GAMES"
+import { fromDate, toPath } from "~/lib/datetime"
+import styles from "./Menu.module.scss"
 export interface Props {
     onClose: () => void
 }
 const Menu: FC<Props> = ({ onClose }) => {
-    // :TODO:
-    return null
+    const { code } = useParams<{ code?: string }>()
+    const game = code ? GAMES[code] : undefined
+    const todayPath = toPath(fromDate(new Date()))
+    return (
+        <Drawer open onClose={onClose}>
+            <header>
+                <h2>Menu</h2>
+            </header>
+            <nav className={styles.nav}>
+                <Link href="/" onClick={onClose}>
+                    Today&rsquo;s Puzzles
+                </Link>
+                {code && game && (
+                    <>
+                        <Link href={`/games/${encodeURIComponent(code)}/dates${todayPath}`} onClick={onClose}>
+                            Today&rsquo;s {game.title}
+                        </Link>
+                        <Link href={`/games/${encodeURIComponent(code)}/practice`} onClick={onClose}>
+                            Practice {game.title}
+                        </Link>
+                    </>
+                )}
+                <Link href={process.env.NEXT_PUBLIC_WWW_URL!} onClick={onClose} target="_blank" rel="noreferrer">
+                    PhyloPic
+                </Link>
+                <Link
+                    href={process.env.NEXT_PUBLIC_CONTRIBUTE_URL!}
+                    onClick={onClose}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    Contribute
+                </Link>
+            </nav>
+        </Drawer>
+    )
 }
 export default Menu
