@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 27.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-	 x="0px" y="0px" viewBox="0 0 801 801" overflow="visible" xml:space="preserve">
+	 x="0px" y="0px" viewBox="0 0 801 801" overflow="hidden" xml:space="preserve">
+<defs>
+	<clipPath id="mask">
+		<circle cx="400.5" cy="400.5" r="400"/>
+	</clipPath>
+</defs>
+<g clip-path="url(#mask)">
 <rect fill="#305860" width="800" height="800"/>
 <g transform="translate(0.000000,448.000000) scale(0.100000,-0.100000)">
 	<path fill="#F5BB00" d="M3020.8,2710c-85-30-185-65-223-80c-94-36-104-32-23,11c70,38,87,56,68,75c-18,18-81-3-242-81
@@ -46,5 +52,6 @@
 		c5,28-53,39-212,40c-169,1-167,4,29,44c66,14,126,32,134,39c35,36-18,58-116,48c-54-5-75,10-30,21c12,4,31,13,42,20
 		c16,13,17,17,6,31c-25,30-86,23-383-48c-54-12-98-20-98-17s35,18,78,33c207,71,282,109,282,142c0,11-23,28-33,26
 		C3176.8,2763,3105.8,2739,3020.8,2710z"/>
+</g>
 </g>
 </svg>
