@@ -17,8 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- API documentation pages now use local favicon assets.
-
 ### Removed
 
 ### Security
