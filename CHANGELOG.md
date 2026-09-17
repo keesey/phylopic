@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Distinct favicons for `www`, `contribute`, `edit`, and API documentation.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.0.67] - 2026-09-17
+
+### Changed
+
+- `@phylopic/www` `2.17.1`: distinct favicons and web app manifest.
+- `@phylopic/contribute` `2.4.26`: distinct favicons and web app manifest.
+- `@phylopic/edit` `1.10.3`: distinct favicons and web app manifest.
+- `@phylopic/api` `2.15.1`: distinct favicons and web app manifest for API documentation.
 
 ## [2.0.66] - 2026-09-16
 

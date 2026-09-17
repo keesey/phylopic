@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Distinct favicons and web app manifest.
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.10.3] - 2026-09-17
+
+### Added
+
+- Distinct favicons and web app manifest.
 
 ## [1.10.2] - 2026-09-11
 

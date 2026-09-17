@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Distinct favicons and web app manifest for API documentation.
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.15.1] - 2026-09-17
+
+### Changed
+
+- Distinct favicons and web app manifest for API documentation.
 
 ## [2.15.0] - 2026-09-12
 
