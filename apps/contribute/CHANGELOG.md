@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- PhyloPic logo for taxonomic search entry buttons (`/logos/phylopic-black.svg`).
+- Search entry `Icon` component: shows a primary-image thumbnail for PhyloPic nodes when available, otherwise the authority logo.
+- `useLiveImageExists` hook to check whether a published image exists via the public API.
+- `isNotFoundError` HTTP helper for `404` responses.
+
 ### Changed
+
+- Taxonomic search entry buttons use the shared `Icon` component instead of inline thumbnail and authority-logo logic.
 
 ### Deprecated
 

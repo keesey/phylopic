@@ -1,3 +1,4 @@
+"use client"
 import { useAPIFetcher } from "@phylopic/client-components"
 import type { UUID } from "@phylopic/utils"
 import { useMemo } from "react"
