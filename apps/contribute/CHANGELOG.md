@@ -11,11 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
+- Use `svh`/`svw` viewport units for layout sizing.
+
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+- Orphan Account screen stylesheets.
+- Unused `@phylopic/utils-aws` dependency.
 
 ### Security
 

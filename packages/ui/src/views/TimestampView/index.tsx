@@ -5,22 +5,23 @@ export interface TimestampViewProps {
     value: ISOTimestamp
 }
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-export const TimestampView: React.FC<TimestampViewProps> = ({ format = "date", value }) => {
-    const date = React.useMemo(() => (value ? new Date(value) : null), [value])
-    const title = React.useMemo(() => date?.toLocaleString("en-US", { timeZone: "UTC" }), [date])
-    const isYear = format === "year"
-    const dateString = React.useMemo(() => {
-        if (date) {
-            const year = date?.getUTCFullYear().toString(10)
-            if (isYear) {
-                return year
-            }
-            const month = MONTH_NAMES[date.getUTCMonth()]
-            const day = date.getUTCDate().toString(10)
-            return `${year} ${month} ${day}`
+const getDateString = (date: Date | null, isYear: boolean) => {
+    if (date) {
+        const year = date?.getUTCFullYear().toString(10)
+        if (isYear) {
+            return year
         }
-    }, [date, isYear])
-    const timeString = React.useMemo(() => date?.toLocaleTimeString("en-US", { timeZone: "UTC" }), [date])
+        const month = MONTH_NAMES[date.getUTCMonth()]
+        const day = date.getUTCDate().toString(10)
+        return `${year} ${month} ${day}`
+    }
+}
+export const TimestampView: React.FC<TimestampViewProps> = ({ format = "date", value }) => {
+    const date = value ? new Date(value) : null
+    const title = date?.toLocaleString("en-US", { timeZone: "UTC" })
+    const isYear = format === "year"
+    const dateString = getDateString(date, isYear)
+    const timeString = date?.toLocaleTimeString("en-US", { timeZone: "UTC" })
     if (!date || isNaN(date.valueOf())) {
         return null
     }

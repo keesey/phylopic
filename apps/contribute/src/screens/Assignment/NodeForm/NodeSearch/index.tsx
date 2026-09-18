@@ -1,4 +1,4 @@
-import { Loader, SearchContext } from "@phylopic/ui"
+import { Loader, SearchContext } from "@phylopic/client-components"
 import { getIdentifier } from "@phylopic/utils"
 import { FC, useCallback, useContext, useEffect, useState } from "react"
 import { ICON_CHECK, ICON_X } from "~/ui/ICON_SYMBOLS"

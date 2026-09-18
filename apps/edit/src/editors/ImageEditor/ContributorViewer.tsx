@@ -1,5 +1,5 @@
 import { Contributor, Image, INCOMPLETE_STRING } from "@phylopic/source-models"
-import { fetchJSON } from "@phylopic/ui"
+import { fetchJSON } from "@phylopic/utils-api"
 import { UUID } from "@phylopic/utils"
 import Link from "next/link"
 import { FC } from "react"

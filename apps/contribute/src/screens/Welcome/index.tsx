@@ -1,4 +1,4 @@
-import { Loader } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
 import { FC, Fragment } from "react"
 import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"

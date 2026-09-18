@@ -11,11 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
+- Modal max height uses `svh` instead of `vh`.
+- Add explicit `@phylopic/utils-api` dependency.
+
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+- Unused editor context containers, views, and legacy webpack globals stylesheet.
+- Redundant `@vercel/kv` dependency.
 
 ### Security
 

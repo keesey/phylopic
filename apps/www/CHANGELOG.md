@@ -11,11 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
+- Use `svh`/`svw` viewport units for layout sizing.
+
 ### Deprecated
 
 ### Fixed
 
+- Image usage article static props validate API responses with `fetchResult`.
+
 ### Removed
+
+- Pocket Phylogenies materials, orphan service worker files, unused `FilterMode` analytics export, and orphan ExpandableLineageBreadcrumbs stylesheet.
+- Redundant `@vercel/kv` dependency.
 
 ### Security
 

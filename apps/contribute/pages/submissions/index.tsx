@@ -1,4 +1,4 @@
-import { Loader } from "@phylopic/ui"
+import { Loader } from "@phylopic/client-components"
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
 import { Suspense } from "react"

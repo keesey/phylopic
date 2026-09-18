@@ -1,5 +1,5 @@
 import { Contributor, ImageParameters, List, Node } from "@phylopic/api-models"
-import { Loader, PaginationContainer } from "@phylopic/ui"
+import { Loader, PaginationContainer } from "@phylopic/client-components"
 import { createSearch, EMPTY_UUID, isUUIDish, Query, UUIDish } from "@phylopic/utils"
 import axios from "axios"
 import { type Compressed } from "compress-json"

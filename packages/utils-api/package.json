@@ -52,9 +52,9 @@
         "@types/react": "^18.2.78"
     },
     "scripts": {
-        "build": "tsup src/index.ts --format esm,cjs --dts --external @phylopic/api-models @phylopic/utils axios react swr",
+        "build": "tsup",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-        "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external @phylopic/api-models @phylopic/utils axios react swr",
+        "dev": "tsup --watch",
         "lint": "TIMING=1 eslint --fix src/**/*.ts*"
     },
     "sideEffects": false,

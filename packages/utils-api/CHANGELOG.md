@@ -11,11 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Move `fetchJSON` into `src/fetch/` (from `@phylopic/ui` SWR fetchers).
+- Switch build scripts to `tsup.config.ts`.
+
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+- `BuildContainer` component and `BuildContext` (now in `@phylopic/client-components`).
+- React SWR hooks (`useAPIFetcher`, `useAPISWRKey`; now in `@phylopic/client-components`).
 
 ### Security
 

@@ -1,6 +1,6 @@
-import { Nomen } from "@phylopic/utils"
+import { type Nomen } from "@phylopic/utils"
 import clsx from "clsx"
-import { NomenPartClass } from "parse-nomen"
+import { type NomenPartClass } from "parse-nomen"
 import React from "react"
 export interface NomenViewProps {
     classes?: Partial<Record<"main" | NomenPartClass, string>>
@@ -10,21 +10,17 @@ export interface NomenViewProps {
     value?: Nomen
 }
 export const NomenView: React.FC<NomenViewProps> = ({ classes, defaultText = "", short, value }) => {
-    const parts = React.useMemo(
-        () =>
-            value
-                ? short
-                    ? value.filter(
-                          (part, index, array) =>
-                              part.class === "scientific" ||
-                              part.class === "vernacular" ||
-                              part.class === "operator" ||
-                              (part.class === "rank" && index < array.length - 1),
-                      )
-                    : value
-                : [],
-        [short, value],
-    )
+    const parts = value
+        ? short
+            ? value.filter(
+                  (part, index, array) =>
+                      part.class === "scientific" ||
+                      part.class === "vernacular" ||
+                      part.class === "operator" ||
+                      (part.class === "rank" && index < array.length - 1),
+              )
+            : value
+        : []
     if (!parts.length) {
         return <>{defaultText}</>
     }

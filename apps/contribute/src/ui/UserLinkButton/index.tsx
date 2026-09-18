@@ -1,4 +1,4 @@
-import { LoaderContext } from "@phylopic/ui"
+import { LoaderContext } from "@phylopic/client-components"
 import clsx from "clsx"
 import Link from "next/link"
 import { FC, ReactNode, useEffect, useState } from "react"

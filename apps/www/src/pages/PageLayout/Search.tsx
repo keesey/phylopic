@@ -8,7 +8,7 @@ import {
     PBDBResolve,
     PhyloPicAutocomplete,
     PhyloPicNodeSearch,
-} from "@phylopic/ui"
+} from "@phylopic/client-components"
 import { FC } from "react"
 const Search: FC = () => (
     <>

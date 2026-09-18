@@ -1,5 +1,5 @@
-import { NomenView as UINomenView, NomenViewProps } from "@phylopic/ui"
-import { FC } from "react"
+import { NomenView as UINomenView, type NomenViewProps } from "@phylopic/ui"
+import { type FC } from "react"
 import styles from "./index.module.scss"
 export type Props = Omit<NomenViewProps, "classes">
 const NomenView: FC<Props> = props => {

@@ -1,4 +1,4 @@
-import { LoaderContext } from "@phylopic/ui"
+import { LoaderContext } from "@phylopic/client-components"
 import clsx from "clsx"
 import { FC, ReactNode, useEffect, useState } from "react"
 import SpeechStack from "../SpeechStack"
