@@ -30,6 +30,11 @@ const ICONS: Readonly<Record<Authority, IconInfo | undefined>> = {
         aspectRatio: 1,
         src: "/logos/paleobiodb.svg",
     },
+    "phylopic.org": {
+        alt: "PhyloPic",
+        aspectRatio: 313 / 50.8,
+        src: "/logos/phylopic-black.svg",
+    },
 }
 
 export type Props = {

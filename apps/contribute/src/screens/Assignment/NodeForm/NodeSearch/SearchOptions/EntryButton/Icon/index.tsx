@@ -1,3 +1,4 @@
+"use client"
 import type { ImageWithEmbedded, NodeWithEmbedded } from "@phylopic/api-models"
 import { useAPIFetcher } from "@phylopic/client-components"
 import { ImageThumbnailView } from "@phylopic/ui"
