@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.1.5] - 2026-09-17
+
+### Added
+
+### Changed
+
 - The `objectExists()` function now explicitly checks for 4xx codes.
 
 ### Deprecated

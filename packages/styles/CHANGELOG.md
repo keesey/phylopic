@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.0.2] - 2026-09-17
+
+### Added
+
+### Changed
+
 - Table `max-width` uses `100svw` instead of `100vw`.
 
 ### Deprecated

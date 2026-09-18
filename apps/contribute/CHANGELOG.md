@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.4.27] - 2026-09-17
+
+### Added
+
+### Changed
+
 - Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
 - Use `svh`/`svw` viewport units for layout sizing.
 

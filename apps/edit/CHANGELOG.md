@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.10.4] - 2026-09-17
+
+### Added
+
+### Changed
+
 - Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
 - Modal max height uses `svh` instead of `vh`.
 - Add explicit `@phylopic/utils-api` dependency.
