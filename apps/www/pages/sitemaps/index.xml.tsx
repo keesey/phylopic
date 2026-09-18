@@ -1,5 +1,5 @@
-import { URL } from "@phylopic/utils"
-import { GetServerSideProps, NextPage } from "next"
+import type { URL } from "@phylopic/utils"
+import type { GetServerSideProps, NextPage } from "next"
 const Page: NextPage = () => null
 const URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}`,

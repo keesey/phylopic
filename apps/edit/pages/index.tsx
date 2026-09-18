@@ -1,7 +1,6 @@
 import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
-import React from "react"
 import FundraiserSection from "~/sections/FundraiserSection"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 

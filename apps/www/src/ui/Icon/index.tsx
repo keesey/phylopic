@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { FC } from "react"
+import type { FC } from "react"
 import styles from "./index.module.scss"
 export interface Props {
     name: "info" | "link" | "pencil" | "plus" | "trash"

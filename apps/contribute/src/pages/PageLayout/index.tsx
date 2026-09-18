@@ -1,5 +1,5 @@
 import { BuildContainer, LoaderContext } from "@phylopic/client-components"
-import { Hash } from "@phylopic/utils"
+import type { Hash } from "@phylopic/utils"
 import type { NextSeoProps } from "next-seo"
 import { NextSeo } from "next-seo"
 import type { FC, PropsWithChildren } from "react"

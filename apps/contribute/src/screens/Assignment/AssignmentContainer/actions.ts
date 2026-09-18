@@ -1,4 +1,4 @@
-import { FSA, FSAWithPayload } from "flux-standard-action"
+import type { FSA, FSAWithPayload } from "flux-standard-action"
 export type RequestChangeAction = FSA<"REQUEST_CHANGE">
 export type RequestParentAction = FSA<"REQUEST_PARENT">
 export type ResetAction = FSA<"RESET">

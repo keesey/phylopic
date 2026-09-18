@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from "axios"
+import type { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
 import useAuthorizedRequest from "./useAuthorizedRequest"
 export type AuthorizedJSONFetcherConfig = Omit<AxiosRequestConfig, "responseType"> & {

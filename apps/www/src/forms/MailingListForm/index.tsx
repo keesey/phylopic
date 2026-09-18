@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
 

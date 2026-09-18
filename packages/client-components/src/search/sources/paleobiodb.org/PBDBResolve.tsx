@@ -1,5 +1,5 @@
 "use client"
-import { NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
+import { type NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"

@@ -1,9 +1,9 @@
-import { Contributor, INCOMPLETE_STRING } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
-import { NextPage } from "next"
+import { type Contributor, INCOMPLETE_STRING } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
+import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 const Page: NextPage = () => {

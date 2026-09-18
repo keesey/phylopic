@@ -1,13 +1,17 @@
 "use client"
-import { List, PageWithEmbedded } from "@phylopic/api-models"
-import { Query, URL, createSearch } from "@phylopic/utils"
+import type { List, PageWithEmbedded } from "@phylopic/api-models"
+import { type Query, type URL, createSearch } from "@phylopic/utils"
 import React, { useEffect } from "react"
-import useSWR, { BareFetcher, SWRConfiguration } from "swr"
-import useSWRInfinite, { SWRInfiniteConfiguration, SWRInfiniteFetcher, SWRInfiniteKeyLoader } from "swr/infinite"
+import useSWR, { type BareFetcher, type SWRConfiguration } from "swr"
+import useSWRInfinite, {
+    type SWRInfiniteConfiguration,
+    type SWRInfiniteFetcher,
+    type SWRInfiniteKeyLoader,
+} from "swr/infinite"
 import { BuildContext } from "../../builds"
 import { InfiniteScroll } from "../../controls"
-import { createPageKeyGetter } from "./createPageKeyGetter"
 import { useAPIFetcher } from "../hooks"
+import { createPageKeyGetter } from "./createPageKeyGetter"
 export type PaginationContainerProps<T> = {
     autoLoad?: boolean
     children: (value: readonly T[], total: number, isLoading: boolean) => React.ReactNode

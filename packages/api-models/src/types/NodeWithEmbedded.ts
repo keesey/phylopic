@@ -1,6 +1,6 @@
-import { Image } from "./Image"
-import { Node, NodeLinks } from "./Node"
-import { WithEmbedded } from "./WithEmbedded"
+import type { Image } from "./Image"
+import type { Node, NodeLinks } from "./Node"
+import type { WithEmbedded } from "./WithEmbedded"
 export interface NodeEmbedded {
     readonly childNodes: readonly Node[]
     readonly parentNode: Node | null

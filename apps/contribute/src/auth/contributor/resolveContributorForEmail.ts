@@ -1,5 +1,5 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
-import { EmailAddress, UUID } from "@phylopic/utils"
+import type { EmailAddress, UUID } from "@phylopic/utils"
 import { randomUUID } from "crypto"
 import type SourceClient from "~/source/SourceClient"
 

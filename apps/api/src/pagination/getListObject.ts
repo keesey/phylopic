@@ -1,4 +1,4 @@
-import { List } from "@phylopic/api-models"
+import type { List } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
 const getListObject = (

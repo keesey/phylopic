@@ -1,5 +1,5 @@
-import { Nomen, stringifyNomen } from "@phylopic/utils"
-import { FC, ReactNode } from "react"
+import { type Nomen, stringifyNomen } from "@phylopic/utils"
+import type { FC, ReactNode } from "react"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
 export interface Props {

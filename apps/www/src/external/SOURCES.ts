@@ -1,4 +1,4 @@
-import { type AgeResult } from "./AgeResult"
+import type { AgeResult } from "./AgeResult"
 export type AgeSource = Pick<AgeResult, "source" | "sourceTitle">
 export const PALEOBIOLOGY_DATABASE: AgeSource = {
     source: "https://paleobiodb.org/",

@@ -1,5 +1,5 @@
-import type { FC, PropsWithChildren } from "react"
 import type { Compressed } from "compress-json"
+import type { FC, PropsWithChildren } from "react"
 import { SWRConfig } from "swr"
 import useCompressedFallback from "./useCompressedFallback"
 export type Props = PropsWithChildren<{

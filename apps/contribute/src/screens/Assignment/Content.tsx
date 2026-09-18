@@ -1,5 +1,5 @@
 import { Loader } from "@phylopic/client-components"
-import { FC } from "react"
+import type { FC } from "react"
 import Dialogue from "~/ui/Dialogue"
 import FileView from "~/ui/FileView"
 import { ICON_CHECK, ICON_X } from "~/ui/ICON_SYMBOLS"
@@ -8,13 +8,13 @@ import SubmissionNameView from "~/ui/SubmissionNameView"
 import UserButton from "~/ui/UserButton"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+import LoadingState from "../LoadingState"
 import useAssignmentSubmission from "./AssignmentContainer/hooks/useAssignmentSubmission"
 import useChangeRequested from "./AssignmentContainer/hooks/useChangeRequested"
 import useDispatch from "./AssignmentContainer/hooks/useDispatch"
 import usePending from "./AssignmentContainer/hooks/usePending"
 import useSubmissionHash from "./AssignmentContainer/hooks/useSubmissionHash"
 import NodeForm from "./NodeForm"
-import LoadingState from "../LoadingState"
 const Content: FC = () => {
     const changeRequested = useChangeRequested()
     const pending = usePending()

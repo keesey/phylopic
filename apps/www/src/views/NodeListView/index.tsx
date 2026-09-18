@@ -1,5 +1,5 @@
-import { Node } from "@phylopic/api-models"
-import { FC } from "react"
+import type { Node } from "@phylopic/api-models"
+import type { FC } from "react"
 import styles from "./index.module.scss"
 import NodeListViewItems from "./NodeListViewItems"
 export interface Props {

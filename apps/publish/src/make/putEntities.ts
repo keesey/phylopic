@@ -1,27 +1,27 @@
-import { normalizeQuery, TitledLink } from "@phylopic/api-models"
-import { Contributor } from "@phylopic/source-models"
+import { normalizeQuery, type TitledLink } from "@phylopic/api-models"
+import { getEntityJSONKey } from "@phylopic/s3-entities"
+import type { Contributor } from "@phylopic/source-models"
 import {
     chunk,
     compareStrings,
-    LicenseURL,
+    type LicenseURL,
     shortenNomen,
     stringifyNomen,
     stringifyNormalized,
-    UUID,
+    type UUID,
 } from "@phylopic/utils"
 import type { NomenPart } from "parse-nomen"
 import type { ClientBase, QueryConfig } from "pg"
+import { cleanEntitiesS3 } from "../entities/cleanEntitiesS3.js"
 import { cleanEntitiesStaging } from "../entities/cleanEntitiesStaging.js"
 import { EntityS3Writer } from "../entities/EntityS3Writer.js"
-import { cleanEntitiesS3 } from "../entities/cleanEntitiesS3.js"
 import { cleanTables } from "./cleanEntities.js"
-import getContributorJSON from "./getContributorJSON.js"
 import getAuthorizedNamespaces from "./getAuthorizedNamespaces.js"
-import { getContributorListJSONUploads, getImageListJSONUploads, getNodeListJSONUploads } from "./getListJSONUploads.js"
+import getContributorJSON from "./getContributorJSON.js"
 import getImageJSON from "./getImageJSON.js"
+import { getContributorListJSONUploads, getImageListJSONUploads, getNodeListJSONUploads } from "./getListJSONUploads.js"
 import getNodeJSON from "./getNodeJSON.js"
 import type { SourceData } from "./getSourceData.js"
-import { getEntityJSONKey } from "@phylopic/s3-entities"
 
 const MINIMUM_SEARCH_TEXT_LENGTH = 2
 

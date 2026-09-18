@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { FC } from "react"
 import useContributor from "~/profile/useContributor"
 import Speech from "~/ui/Speech"
 const Greeting: FC = () => {

@@ -1,4 +1,4 @@
-import { ISOTimestamp } from "@phylopic/utils"
+import type { ISOTimestamp } from "@phylopic/utils"
 import React from "react"
 export interface TimestampViewProps {
     format?: "date" | "datetime" | "year"

@@ -1,7 +1,15 @@
 import { handleAPIError } from "@phylopic/source-client"
-import { Entity, Node, Submission } from "@phylopic/source-models"
-import { Authority, isAuthority, isNamespace, isObjectID, Namespace, ObjectID, UUID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { Entity, Node, Submission } from "@phylopic/source-models"
+import {
+    type Authority,
+    isAuthority,
+    isNamespace,
+    isObjectID,
+    type Namespace,
+    type ObjectID,
+    type UUID,
+} from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import getResolver from "~/resolvers/getResolver"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {

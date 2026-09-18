@@ -1,5 +1,5 @@
-import { isNormalizedText, isUUIDish, ValidationFaultCollector } from "@phylopic/utils"
-import { Collection } from "../types/Collection"
+import { isNormalizedText, isUUIDish, type ValidationFaultCollector } from "@phylopic/utils"
+import type { Collection } from "../types/Collection"
 import { isLink } from "./isLink"
 import { isLinks } from "./isLinks"
 const isCollectionLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Collection["_links"] =>

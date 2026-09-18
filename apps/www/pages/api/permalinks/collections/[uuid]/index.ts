@@ -1,5 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { Hash, isUUIDish, normalizeUUID } from "@phylopic/utils"
+import { type Hash, isUUIDish, normalizeUUID } from "@phylopic/utils"
 import type { NextApiHandler } from "next"
 import createS3ClientConfig from "~/aws/createS3ClientConfig"
 import BUILD from "~/build/BUILD"

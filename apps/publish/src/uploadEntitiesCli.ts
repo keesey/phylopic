@@ -1,6 +1,5 @@
 import "dotenv/config"
 import uploadEntities from "./uploadEntities.js"
-
 ;(async () => {
     try {
         const buildArg = Number.parseInt(process.argv[2] ?? "", 10)

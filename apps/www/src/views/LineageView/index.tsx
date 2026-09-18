@@ -1,8 +1,8 @@
-import { Node } from "@phylopic/api-models"
-import { FC } from "react"
+import type { Node } from "@phylopic/api-models"
+import type { FC } from "react"
+import { AgesProvider } from "./AgesProvider"
 import styles from "./index.module.scss"
 import LineageNodeView from "./LineageNodeView"
-import { AgesProvider } from "./AgesProvider"
 export interface Props {
     short?: boolean
     value: readonly Node[]

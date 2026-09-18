@@ -1,11 +1,11 @@
-import { Node } from "@phylopic/source-models"
-import { normalizeUUID, UUID } from "@phylopic/utils"
+import type { Node } from "@phylopic/source-models"
+import { normalizeUUID, type UUID } from "@phylopic/utils"
 import axios from "axios"
 import { randomUUID } from "crypto"
 import { parseNomen } from "parse-nomen"
-import SourceClient from "~/source/SourceClient"
-import { Resolver } from "../Resolver"
+import type SourceClient from "~/source/SourceClient"
 import packageJson from "../../../package.json"
+import type { Resolver } from "../Resolver"
 interface PBDBRecord {
     // Abridged.
     readonly nam: string

@@ -1,6 +1,6 @@
-import { Node } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
-import { Arc, createAcyclicGraph, CycleError, Digraph, sources } from "simple-digraph"
+import type { Node } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
+import { type Arc, createAcyclicGraph, CycleError, type Digraph, sources } from "simple-digraph"
 export interface PhylogenySourceData {
     nodes: ReadonlyMap<UUID, Node>
 }

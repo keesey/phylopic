@@ -5,7 +5,7 @@ import {
     isNullOr,
     type ValidationFaultCollector,
 } from "@phylopic/utils"
-import { type Page } from "../types/Page"
+import type { Page } from "../types/Page"
 import { isData } from "./isData"
 import { isLink } from "./isLink"
 import { isLinks } from "./isLinks"

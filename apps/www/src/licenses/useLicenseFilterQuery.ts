@@ -1,4 +1,4 @@
-import { ImageListParameters } from "@phylopic/api-models"
+import type { ImageListParameters } from "@phylopic/api-models"
 import { useContext, useMemo } from "react"
 import LicenseFilterTypeContext from "./LicenseFilterTypeContext"
 const useLicenseFilterQuery = () => {

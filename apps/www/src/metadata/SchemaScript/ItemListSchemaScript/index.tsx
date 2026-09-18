@@ -1,6 +1,6 @@
-import { URL } from "@phylopic/utils"
-import { FC, useMemo } from "react"
-import { ItemList, WithContext } from "schema-dts"
+import type { URL } from "@phylopic/utils"
+import { type FC, useMemo } from "react"
+import type { ItemList, WithContext } from "schema-dts"
 import SchemaScript from ".."
 
 export type Props = {

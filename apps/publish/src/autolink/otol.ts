@@ -1,15 +1,15 @@
-import { iterateList, SourceClient } from "@phylopic/source-client"
-import { External, Node } from "@phylopic/source-models"
+import { iterateList, type SourceClient } from "@phylopic/source-client"
+import type { External, Node } from "@phylopic/source-models"
 import {
-    Authority,
+    type Authority,
     getIdentifier,
     isScientific,
-    Namespace,
-    Nomen,
+    type Namespace,
+    type Nomen,
     normalizeText,
-    ObjectID,
+    type ObjectID,
     stringifyNomen,
-    UUID,
+    type UUID,
 } from "@phylopic/utils"
 import axios from "axios"
 interface OTOLTaxon {

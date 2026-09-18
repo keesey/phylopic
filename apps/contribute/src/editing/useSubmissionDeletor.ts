@@ -1,4 +1,4 @@
-import { Hash } from "@phylopic/utils"
+import type { Hash } from "@phylopic/utils"
 import { useCallback } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useAuthorizedRequest from "~/auth/hooks/useAuthorizedRequest"

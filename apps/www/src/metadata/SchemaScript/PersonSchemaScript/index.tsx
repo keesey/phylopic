@@ -1,6 +1,6 @@
-import { Contributor } from "@phylopic/api-models"
-import { FC, useMemo } from "react"
-import { Person, WithContext } from "schema-dts"
+import type { Contributor } from "@phylopic/api-models"
+import { type FC, useMemo } from "react"
+import type { Person, WithContext } from "schema-dts"
 import getContributorHRef from "~/routes/getContributorHRef"
 import SchemaScript from ".."
 

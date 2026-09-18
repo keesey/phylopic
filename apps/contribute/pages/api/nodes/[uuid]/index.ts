@@ -1,7 +1,7 @@
 import { handleAPIError, handleWithReader } from "@phylopic/source-client"
-import { Node } from "@phylopic/source-models"
-import { isUUIDv4, UUID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { Node } from "@phylopic/source-models"
+import { isUUIDv4, type UUID } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Node & { uuid: UUID }> = async (req, res) => {

@@ -2,11 +2,11 @@ import {
     isLegacyLicenseURL,
     isLicenseURL,
     LEGACY_LICENSE_URLS,
-    LicenseURL,
     LICENSE_NAMES,
+    type LicenseURL,
     VALID_LICENSE_URLS,
 } from "@phylopic/utils"
-import { ChangeEvent, FC, useCallback, useState } from "react"
+import { type ChangeEvent, type FC, useCallback, useState } from "react"
 import styles from "./LicenseURLEditor.module.scss"
 export type Props = {
     onChange: (value: LicenseURL | null) => void

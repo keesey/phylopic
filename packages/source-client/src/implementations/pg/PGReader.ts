@@ -1,9 +1,9 @@
-import { QueryResultRow } from "pg"
-import { PGClientProvider } from "../../interfaces/PGClientProvider"
-import { Readable } from "../../interfaces/Readable"
+import type { QueryResultRow } from "pg"
+import type { PGClientProvider } from "../../interfaces/PGClientProvider"
+import type { Readable } from "../../interfaces/Readable"
 import { getFields } from "./fields/getFields"
-import { IDField } from "./fields/IDField"
-import { ReadField } from "./fields/ReadField"
+import type { IDField } from "./fields/IDField"
+import type { ReadField } from "./fields/ReadField"
 export class PGReader<T> implements Readable<T> {
     constructor(
         protected provider: PGClientProvider,

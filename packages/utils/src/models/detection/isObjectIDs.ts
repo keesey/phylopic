@@ -1,6 +1,6 @@
 import { invalidate } from "../../validation"
-import { type ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
-import { ObjectIDs } from "../types/ObjectIDs"
+import type { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
+import type { ObjectIDs } from "../types/ObjectIDs"
 import { isObjectID } from "./isObjectID"
 export const isObjectIDs = (x: unknown, faultCollector?: ValidationFaultCollector): x is ObjectIDs => {
     if (typeof x === "string") {

@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import Link from "next/link"
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import styles from "./index.module.scss"
 export type Props = {
     disabled?: boolean

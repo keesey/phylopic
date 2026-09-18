@@ -1,7 +1,7 @@
 import { DATA_MEDIA_TYPE } from "@phylopic/api-models"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
-import { DragEvent, FC, Suspense, useContext, useState } from "react"
+import { type DragEvent, type FC, Suspense, useContext, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"

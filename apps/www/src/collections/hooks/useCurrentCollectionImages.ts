@@ -1,4 +1,4 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
 import { compareStrings, isDefined } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
 import CollectionsContext from "../context/CollectionsContext"

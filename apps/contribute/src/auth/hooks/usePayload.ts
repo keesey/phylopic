@@ -1,6 +1,6 @@
-import { JwtPayload } from "jsonwebtoken"
-import { useMemo } from "react"
 import { decodeJWT } from "@phylopic/source-models"
+import type { JwtPayload } from "jsonwebtoken"
+import { useMemo } from "react"
 import useAuthToken from "./useAuthToken"
 const usePayload = () => {
     const token = useAuthToken()

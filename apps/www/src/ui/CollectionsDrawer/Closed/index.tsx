@@ -1,10 +1,10 @@
-import { FC } from "react"
-import useCurrentCollection from "~/collections/hooks/useCurrentCollection"
-import useCurrentCollectionName from "~/collections/hooks/useCurrentCollectionName"
-import styles from "./index.module.scss"
 import clsx from "clsx"
 import Link from "next/link"
+import type { FC } from "react"
+import useCurrentCollection from "~/collections/hooks/useCurrentCollection"
+import useCurrentCollectionName from "~/collections/hooks/useCurrentCollectionName"
 import Icon from "~/ui/Icon"
+import styles from "./index.module.scss"
 const Closed: FC = () => {
     const collection = useCurrentCollection()
     const name = useCurrentCollectionName()

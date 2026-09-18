@@ -1,6 +1,6 @@
-import { Reducer } from "react"
-import { Action } from "./actions"
-import { State } from "./State"
+import type { Reducer } from "react"
+import type { Action } from "./actions"
+import type { State } from "./State"
 const reducer: Reducer<State, Action> = (prevState, action) => {
     switch (action.type) {
         case "REQUEST_CHANGE": {

@@ -1,4 +1,4 @@
-import { AxiosError } from "axios"
+import type { AxiosError } from "axios"
 /**
  * Distinguishes a rejected token from a legitimate denial for requests to the public API.
  *

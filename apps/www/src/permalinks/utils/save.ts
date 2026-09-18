@@ -1,10 +1,10 @@
 import type { S3Client } from "@aws-sdk/client-s3"
 import { HeadObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
+import { type Hash, stringifyNormalized } from "@phylopic/utils"
 import { isAWSError } from "@phylopic/utils-aws"
-import { Hash, stringifyNormalized } from "@phylopic/utils"
-import { PermalinkData } from "../types/PermalinkData"
 import { createHash } from "crypto"
 import PERMALINKS_BUCKET_NAME from "../constants/PERMALINKS_BUCKET_NAME"
+import type { PermalinkData } from "../types/PermalinkData"
 const exists = async (client: S3Client, Key: string): Promise<boolean> => {
     try {
         const output = await client.send(

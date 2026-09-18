@@ -1,7 +1,6 @@
-import { NomenPart } from "parse-nomen"
 import { stringifyNormalized } from "../../json/stringifyNormalized"
 import { stringifyNomen } from "../../nomina/stringifyNomen"
-import { Nomen } from "../types/Nomen"
+import type { Nomen } from "../types/Nomen"
 import { normalizeNomen } from "./normalizeNomen"
 const compare = (a: Nomen, b: Nomen) => {
     if (a === b) {

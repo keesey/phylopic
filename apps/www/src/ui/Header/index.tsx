@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 export type HeaderLevel = 1 | 2 | 3 | 4 | 5 | 6
 export interface Props {
     children: ReactNode

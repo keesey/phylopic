@@ -1,5 +1,5 @@
 import { isArray, isNullOr, isObject, isUndefinedOr, type ValidationFaultCollector } from "@phylopic/utils"
-import { NodeEmbedded, NodeWithEmbedded } from "../types/NodeWithEmbedded"
+import type { NodeEmbedded, NodeWithEmbedded } from "../types/NodeWithEmbedded"
 import { isImage } from "./isImage"
 import { isNode } from "./isNode"
 const isNodeEmbedded = (x: unknown, faultCollector?: ValidationFaultCollector): x is NodeEmbedded =>

@@ -1,5 +1,5 @@
 import { isArray, isObject, isUndefinedOr, type FaultDetector, type ValidationFaultCollector } from "@phylopic/utils"
-import { type PageEmbedded, type PageWithEmbedded } from "../types/PageWithEmbedded"
+import type { PageEmbedded, PageWithEmbedded } from "../types/PageWithEmbedded"
 import { isPage } from "./isPage"
 const isPageEmbedded =
     <TItem>(isItem: FaultDetector<TItem>): FaultDetector<PageEmbedded<TItem>> =>

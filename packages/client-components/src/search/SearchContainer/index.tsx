@@ -1,9 +1,9 @@
 "use client"
 import { useRouter } from "next/router"
-import React, { ReactNode } from "react"
+import React, { type ReactNode } from "react"
 import { BuildContext } from "../../builds"
 import { SearchContext } from "../context"
-import { State } from "../context/State"
+import type { State } from "../context/State"
 import { reducer } from "./reducer"
 const createInitialState = (text: string): State => ({
     externalMatches: [],

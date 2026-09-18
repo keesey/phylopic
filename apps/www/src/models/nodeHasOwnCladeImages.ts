@@ -1,4 +1,4 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import { isUUID } from "@phylopic/utils"
 import getCladeImagesUUID from "./getCladeImagesUUID"
 const nodeHasOwnCladeImages = (node: Node) => {

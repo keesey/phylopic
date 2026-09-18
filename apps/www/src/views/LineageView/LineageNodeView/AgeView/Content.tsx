@@ -1,5 +1,5 @@
-import { type FC } from "react"
-import { type AgeResult } from "~/external/AgeResult"
+import type { FC } from "react"
+import type { AgeResult } from "~/external/AgeResult"
 import RECENT from "~/external/RECENT"
 import AgePresentationView from "./AgePresentationView"
 import getAgePresentation from "./getAgePresentation"

@@ -1,8 +1,8 @@
 import axios from "axios"
 import { useRouter } from "next/router"
 import { useCallback } from "react"
-import { KeyedMutator, SWRResponse } from "swr"
-import { UrlObject } from "url"
+import type { KeyedMutator, SWRResponse } from "swr"
+import type { UrlObject } from "url"
 const useDeletor = (
     key: string,
     response: SWRResponse,

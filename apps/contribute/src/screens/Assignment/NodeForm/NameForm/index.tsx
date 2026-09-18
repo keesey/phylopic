@@ -1,6 +1,6 @@
 import { SearchContext } from "@phylopic/client-components"
-import { FC, useCallback, useContext } from "react"
-import UserTextForm, { Props as UserTextFormProps } from "~/ui/UserTextForm"
+import { type FC, useCallback, useContext } from "react"
+import UserTextForm, { type Props as UserTextFormProps } from "~/ui/UserTextForm"
 import NameRenderer from "../NameRenderer"
 import NameInput from "./NameInput"
 export type Props = Pick<UserTextFormProps, "editable" | "postfix" | "prefix"> & {

@@ -2,14 +2,14 @@ import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import customEvents from "~/analytics/customEvents"
 import PageLayout from "~/pages/PageLayout"
-import Breadcrumbs from "~/ui/Breadcrumbs"
 import EngineeringSection from "~/sections/EngineeringSection"
-import InlineSections from "~/ui/InlineSections"
 import PatreonSection from "~/sections/PatreonSection"
-import SiteTitle from "~/ui/SiteTitle"
 import SpreadWordSection from "~/sections/SpreadWordSection"
 import TechDonateList from "~/sections/TechDonateList"
+import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
+import InlineSections from "~/ui/InlineSections"
+import SiteTitle from "~/ui/SiteTitle"
 const PageComponent: NextPage = () => (
     <PageLayout>
         <NextSeo

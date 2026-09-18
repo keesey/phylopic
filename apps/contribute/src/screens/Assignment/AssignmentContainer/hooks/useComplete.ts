@@ -1,4 +1,4 @@
-import { Identifier } from "@phylopic/utils"
+import type { Identifier } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { useCallback } from "react"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"

@@ -1,8 +1,8 @@
-import { Contributor, Image, INCOMPLETE_STRING } from "@phylopic/source-models"
+import { type Contributor, type Image, INCOMPLETE_STRING } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { UUID } from "@phylopic/utils"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR from "swr"
 export type Props = {
     uuid: UUID

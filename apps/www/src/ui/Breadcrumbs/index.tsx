@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
 export type BreadcrumbItem = Readonly<{

@@ -1,6 +1,6 @@
 import type { NextPage } from "next"
 import dynamic from "next/dynamic"
-import { FC, Suspense } from "react"
+import { type FC, Suspense } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"

@@ -1,9 +1,9 @@
-import { External } from "@phylopic/source-models"
+import type { External } from "@phylopic/source-models"
 import { AuthorizedNamespaceView } from "@phylopic/ui"
-import { Authority, getAuthorizedNamespace, getIdentifier, Namespace, ObjectID } from "@phylopic/utils"
+import { type Authority, getAuthorizedNamespace, getIdentifier, type Namespace, type ObjectID } from "@phylopic/utils"
 import Link from "next/link"
 import { parseNomen } from "parse-nomen"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import NameView from "./NameView"
 
 export type Props = {

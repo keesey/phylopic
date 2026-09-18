@@ -1,14 +1,23 @@
-import { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
+import type { ImageParameters, ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageContainer, useLicenseText, useNomenText } from "@phylopic/client-components"
 import { TimestampView } from "@phylopic/ui"
-import { createSearch, isDefined, isUUIDv4, Nomen, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
+import {
+    createSearch,
+    isDefined,
+    isUUIDv4,
+    type Nomen,
+    type Query,
+    shortenNomen,
+    stringifyNomen,
+    type UUID,
+} from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { FC, useContext, useMemo } from "react"
+import { type FC, useContext, useMemo } from "react"
 import { unstable_serialize } from "swr"
 import customEvents from "~/analytics/customEvents"
 import BUILD from "~/build/BUILD"
@@ -17,13 +26,13 @@ import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollection
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import VisualArtworkSchemaScript from "~/metadata/SchemaScript/VisualArtworkSchemaScript"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import DonationPromo from "~/promos/DonationPromo"
 import getContributorHRef from "~/routes/getContributorHRef"
 import getImageHRef from "~/routes/getImageHRef"
 import getImageSlug from "~/routes/getImageSlug"
 import getNodeHRef from "~/routes/getNodeHRef"
-import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import type { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"

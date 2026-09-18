@@ -1,5 +1,5 @@
-import { FC, ReactNode, useState } from "react"
-import { LicenseFilterType } from "~/models/LicenseFilterType"
+import { type FC, type ReactNode, useState } from "react"
+import type { LicenseFilterType } from "~/models/LicenseFilterType"
 import LicenseFilterTypeContext from "./LicenseFilterTypeContext"
 export interface Props {
     children?: ReactNode

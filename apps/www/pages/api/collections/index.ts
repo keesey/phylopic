@@ -1,4 +1,4 @@
-import { DATA_MEDIA_TYPE, Link } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, type Link } from "@phylopic/api-models"
 import { isUUIDish } from "@phylopic/utils"
 import axios from "axios"
 import type { NextApiHandler } from "next"

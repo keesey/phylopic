@@ -1,5 +1,5 @@
-import { UUID } from "@phylopic/utils"
-import { APIGatewayProxyResult } from "aws-lambda"
+import type { UUID } from "@phylopic/utils"
+import type { APIGatewayProxyResult } from "aws-lambda"
 import getS3EntityJSON from "../entities/getS3EntityJSON"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"

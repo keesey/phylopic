@@ -8,9 +8,9 @@ import {
     isPublicDomainLicenseURL,
     isUUIDv4,
     isValidLicenseURL,
-    ValidationFaultCollector,
+    type ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Submission } from "../types"
+import type { Submission } from "../types"
 const isStatus = (x: unknown, faultCollector?: ValidationFaultCollector): x is "incomplete" | "submitted" => {
     if (x === "incomplete" || x === "submitted") {
         return true

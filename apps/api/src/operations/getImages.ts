@@ -1,34 +1,34 @@
+import type { S3Client } from "@aws-sdk/client-s3"
 import {
     DATA_MEDIA_TYPE,
-    Image,
-    ImageEmbedded,
-    ImageLinks,
-    ImageListParameters,
     IMAGE_EMBEDDED_PARAMETERS,
     isImage,
     isImageListParameters,
-    TitledLink,
+    type Image,
+    type ImageEmbedded,
+    type ImageLinks,
+    type ImageListParameters,
+    type TitledLink,
 } from "@phylopic/api-models"
-import { UUID } from "@phylopic/utils"
-import { ClientBase } from "pg"
+import { getListIndexKey, getListPageKey } from "@phylopic/s3-entities"
+import type { UUID } from "@phylopic/utils"
+import type { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import addFilterToQuery from "../entities/image/addFilterToQuery"
-import { getListIndexKey, getListPageKey } from "@phylopic/s3-entities"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
-import getListResult, { ListPageRow } from "../pagination/getListResult"
+import getListResult, { type ListPageRow } from "../pagination/getListResult"
 import getPostgresListResult from "../pagination/getPostgresListResult"
 import { canServeListFromS3, isUnfilteredImagesList } from "../pagination/isS3ListEligible"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
-import { S3Client } from "@aws-sdk/client-s3"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 type GetImagesParameters = DataRequestHeaders & ImageListParameters
 type GetImagesService = PgClientService & S3ClientService
 const DEFAULT_TITLE = "[Untitled]"

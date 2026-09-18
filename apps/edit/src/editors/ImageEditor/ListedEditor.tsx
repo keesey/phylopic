@@ -1,7 +1,7 @@
-import { Image } from "@phylopic/source-models"
+import type { Image } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { UUID } from "@phylopic/utils"
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR from "swr"
 import useModifiedPatcher from "~/swr/useModifiedPatcher"
 export type Props = {

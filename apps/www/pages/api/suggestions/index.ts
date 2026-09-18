@@ -1,12 +1,12 @@
-import { normalizeQuery, QueryMatches } from "@phylopic/api-models"
+import { normalizeQuery, type QueryMatches } from "@phylopic/api-models"
 import { getSortIndex } from "@phylopic/client-components" // :TODO: move to utils
 import { createSearch, stringifyNormalized } from "@phylopic/utils"
 import axios from "axios"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
+import BUILD from "~/build/BUILD"
 import { checkProxyRateLimit, getClientIp } from "~/rateLimit/checkProxyRateLimit"
 import getString from "~/routes/getString"
 import packageJson from "../../../package.json"
-import BUILD from "~/build/BUILD"
 const index: NextApiHandler = async (req, res) => {
     if (!checkProxyRateLimit(getClientIp(req.headers["x-forwarded-for"]))) {
         res.status(429).setHeader("Content-Type", "text/plain").send("Too many requests.")

@@ -1,3 +1,3 @@
-import { NodeEmbedded } from "../../types/NodeWithEmbedded"
-import { ListParameters } from "./ListParameters"
+import type { NodeEmbedded } from "../../types/NodeWithEmbedded"
+import type { ListParameters } from "./ListParameters"
 export type NodeLineageParameters = ListParameters<NodeEmbedded>

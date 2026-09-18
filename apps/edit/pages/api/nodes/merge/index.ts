@@ -1,7 +1,7 @@
 import { handleAPIError } from "@phylopic/source-client"
-import { Submission } from "@phylopic/source-models"
-import { isUUIDv4, UUID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { Submission } from "@phylopic/source-models"
+import { isUUIDv4, type UUID } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
     let client: SourceClient | undefined

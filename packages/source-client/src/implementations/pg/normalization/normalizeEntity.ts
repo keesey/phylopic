@@ -1,4 +1,4 @@
-import { ISOTimestamp } from "@phylopic/utils"
+import type { ISOTimestamp } from "@phylopic/utils"
 import { normalizeISOTimestamp } from "./normalizeISOTimestamp"
 export const normalizeEntity = <T extends { created: ISOTimestamp; modified: ISOTimestamp }>(entity: T): T => {
     return {

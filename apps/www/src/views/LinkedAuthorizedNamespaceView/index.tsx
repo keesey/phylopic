@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import AuthorizedNamespaceView from "../AuthorizedNamespaceView"
 export interface Props {

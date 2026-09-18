@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useCallback } from "react"
-import { SWRResponse } from "swr"
+import type { SWRResponse } from "swr"
 const usePatcher = <T>(key: string, response: SWRResponse<T, unknown>) => {
     const { data, mutate } = response
     return useCallback(

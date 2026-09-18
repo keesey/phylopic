@@ -1,5 +1,5 @@
-import { List, PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, Query } from "@phylopic/utils"
+import type { List, PageWithEmbedded } from "@phylopic/api-models"
+import { createSearch, type Query } from "@phylopic/utils"
 import { fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticProps } from "next"

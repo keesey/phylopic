@@ -1,7 +1,7 @@
-import { createSearch, compareStrings, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
-import { buildListIndexJSON, buildListPageLinksJSON, ListLinkItem, paginateListItems } from "./buildListJSON.js"
+import { getListIndexKey, getListPageKey, type ListName } from "@phylopic/s3-entities"
+import { compareStrings, createSearch, shortenNomen, stringifyNomen, type UUID } from "@phylopic/utils"
+import { buildListIndexJSON, buildListPageLinksJSON, type ListLinkItem, paginateListItems } from "./buildListJSON.js"
 import type { SourceData } from "./getSourceData.js"
-import { ListName, getListIndexKey, getListPageKey } from "@phylopic/s3-entities"
 
 const getContributorCount = (data: SourceData, uuid: UUID): number =>
     [...data.images.values()].filter(({ contributor, unlisted }) => !unlisted && contributor === uuid).length

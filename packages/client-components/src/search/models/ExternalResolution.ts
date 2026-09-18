@@ -1,4 +1,4 @@
-import { NodeWithEmbedded } from "@phylopic/api-models"
+import type { NodeWithEmbedded } from "@phylopic/api-models"
 
 export interface ExternalResolution {
     readonly authority: string

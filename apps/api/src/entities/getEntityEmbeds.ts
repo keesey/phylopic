@@ -1,5 +1,5 @@
-import { isLink, Links } from "@phylopic/api-models"
-import { S3Client } from "@aws-sdk/client-s3"
+import type { S3Client } from "@aws-sdk/client-s3"
+import { isLink, type Links } from "@phylopic/api-models"
 import { isString } from "@phylopic/utils"
 import APIError from "../errors/APIError"
 import getEntitiesJSONFromLinks from "./getEntitiesJSONFromLinks"

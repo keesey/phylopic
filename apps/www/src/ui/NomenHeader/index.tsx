@@ -1,11 +1,11 @@
-import { NodeWithEmbedded } from "@phylopic/api-models"
-import { FC, Key, useMemo, useState } from "react"
+import type { NodeWithEmbedded } from "@phylopic/api-models"
+import { type FC, type Key, useMemo, useState } from "react"
 import customEvents from "~/analytics/customEvents"
+import getNodeHRef from "~/routes/getNodeHRef"
 import NodeDetailsView from "~/views/NodeDetailsView"
 import NomenView from "~/views/NomenView"
-import HeaderNav, { Props as HeaderNavProps } from "../HeaderNav"
-import { Props as HeaderNavButtonProps } from "../HeaderNav/HeaderNavButton"
-import getNodeHRef from "~/routes/getNodeHRef"
+import HeaderNav, { type Props as HeaderNavProps } from "../HeaderNav"
+import type { Props as HeaderNavButtonProps } from "../HeaderNav/HeaderNavButton"
 export type Props = {
     value?: NodeWithEmbedded
 }

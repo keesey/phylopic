@@ -1,17 +1,22 @@
-import { DATA_MEDIA_TYPE, isResolveObjectsParameters, ResolveObjectsParameters, TitledLink } from "@phylopic/api-models"
-import { Authority, Namespace, ObjectID } from "@phylopic/utils"
-import { APIGatewayProxyResult } from "aws-lambda"
+import {
+    DATA_MEDIA_TYPE,
+    isResolveObjectsParameters,
+    type ResolveObjectsParameters,
+    type TitledLink,
+} from "@phylopic/api-models"
+import type { Authority, Namespace, ObjectID } from "@phylopic/utils"
+import type { APIGatewayProxyResult } from "aws-lambda"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import APIError from "../errors/APIError"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import validate from "../validation/validate"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 
 type GetResolveObjectsParameters = DataRequestHeaders & Partial<ResolveObjectsParameters>
 

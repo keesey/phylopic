@@ -1,4 +1,4 @@
-import { UUID } from "@phylopic/utils"
+import type { UUID } from "@phylopic/utils"
 import useImageSWR from "./useImageSWR"
 const useImage = (uuid: UUID | undefined) => {
     const { data } = useImageSWR(uuid)

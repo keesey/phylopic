@@ -1,4 +1,4 @@
-import jsonwebtoken, { JwtPayload } from "jsonwebtoken"
+import jsonwebtoken, { type JwtPayload } from "jsonwebtoken"
 import { JWT_ALGORITHMS, JWT_AUDIENCE, JWT_ISSUER } from "./constants"
 
 export const verifyJWT = (token: string, secret: string): JwtPayload | null => {

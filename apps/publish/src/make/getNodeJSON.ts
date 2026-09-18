@@ -1,6 +1,6 @@
-import { Node, TitledLink } from "@phylopic/api-models"
-import { Entity, Image } from "@phylopic/source-models"
-import { isDefined, isString, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
+import type { Node, TitledLink } from "@phylopic/api-models"
+import type { Entity, Image } from "@phylopic/source-models"
+import { isDefined, isString, shortenNomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import { immediateSuccessors } from "simple-digraph"
 import type { SourceData } from "./getSourceData.js"
 const getChildNodes = (vertex: number, data: SourceData): readonly TitledLink[] => {

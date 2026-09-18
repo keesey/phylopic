@@ -1,5 +1,4 @@
-import clsx from "clsx"
-import { FC, useCallback, useContext } from "react"
+import { type FC, useCallback, useContext } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import Icon from "~/ui/Icon"

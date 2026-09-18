@@ -1,4 +1,4 @@
-import { TitledLink } from "@phylopic/api-models"
+import type { TitledLink } from "@phylopic/api-models"
 import { extractPath } from "@phylopic/utils"
 import getSlug from "./getSlug"
 const getHRefFromAPILink = (link: TitledLink) => {

@@ -1,7 +1,7 @@
 import { NumberView } from "@phylopic/ui"
-import { type FC } from "react"
+import type { FC } from "react"
 import UnitView from "./UnitView"
-import { type AgePresentation } from "./getAgePresentation"
+import type { AgePresentation } from "./getAgePresentation"
 const AgePresentationView: FC<{ presentation: AgePresentation; showTilde: boolean; showUnit: boolean }> = ({
     presentation,
     showTilde,

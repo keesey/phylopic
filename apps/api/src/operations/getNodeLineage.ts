@@ -1,32 +1,32 @@
+import type { S3Client } from "@aws-sdk/client-s3"
 import {
     DATA_MEDIA_TYPE,
     isNode,
     isNodeLineageParameters,
-    Node,
-    NodeEmbedded,
-    NodeLineageParameters,
-    NodeLinks,
     NODE_EMBEDDED_PARAMETERS,
-    TitledLink,
+    type Node,
+    type NodeEmbedded,
+    type NodeLineageParameters,
+    type NodeLinks,
+    type TitledLink,
 } from "@phylopic/api-models"
-import { normalizeUUID, UUID } from "@phylopic/utils"
-import { ClientBase } from "pg"
-import { S3Client } from "@aws-sdk/client-s3"
+import { normalizeUUID, type UUID } from "@phylopic/utils"
+import type { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import parseEntityJSONAndEmbed from "../entities/parseEntityJSONAndEmbed"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkListRedirect from "../pagination/checkListRedirect"
+import type { ListPageRow } from "../pagination/getListResult"
 import getPostgresListResult from "../pagination/getPostgresListResult"
-import { ListPageRow } from "../pagination/getListResult"
 import createPermanentRedirect from "../results/createPermanentRedirect"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 
 type GetNodesParameters = DataRequestHeaders & NodeLineageParameters
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { EmailAddress } from "../types/EmailAddress"
+import type { EmailAddress } from "../types/EmailAddress"
 import { isEmailAddress } from "./isEmailAddress"
 describe("isEmailAddress", () => {
     const test = (value: EmailAddress, valid: boolean) => {

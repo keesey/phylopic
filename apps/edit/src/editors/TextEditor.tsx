@@ -1,5 +1,5 @@
 import { normalizeText } from "@phylopic/utils"
-import { FC, KeyboardEvent, useCallback, useEffect, useState } from "react"
+import { type FC, type KeyboardEvent, useCallback, useEffect, useState } from "react"
 import styles from "./TextEditor.module.scss"
 export type Props =
     | {

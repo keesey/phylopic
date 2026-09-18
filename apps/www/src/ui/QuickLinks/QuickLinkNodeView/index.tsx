@@ -1,8 +1,8 @@
-import { FC, Fragment, useMemo } from "react"
-import { QuickLinkNode } from "../QuickLinkNode"
-import styles from "./index.module.scss"
-import getNodeSlug from "~/routes/getNodeSlug"
 import Link from "next/link"
+import { type FC, Fragment, useMemo } from "react"
+import getNodeSlug from "~/routes/getNodeSlug"
+import type { QuickLinkNode } from "../QuickLinkNode"
+import styles from "./index.module.scss"
 export interface Props {
     node: QuickLinkNode
 }

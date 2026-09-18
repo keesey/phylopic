@@ -1,5 +1,5 @@
-import { ISOTimestamp } from "@phylopic/utils"
-import { FC } from "react"
+import type { ISOTimestamp } from "@phylopic/utils"
+import type { FC } from "react"
 import DateView from "./DateView"
 
 export interface Props {

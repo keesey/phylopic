@@ -1,4 +1,4 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import { useContext, useEffect, type FC } from "react"
 import useNodeAge from "~/external/useNodeAge"
 import { AgesContext, useAgeResult, useIsTerminal } from "../../AgesProvider"

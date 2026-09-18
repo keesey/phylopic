@@ -1,17 +1,17 @@
 "use client"
-import { NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
-import { URL, createSearch, isFiniteNumber } from "@phylopic/utils"
+import { type NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
+import { type URL, createSearch, isFiniteNumber } from "@phylopic/utils"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
+import { BuildContext } from "../../../builds"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
-import { GBIF_URL } from "./GBIF_URL"
 import { fetchNameUsage } from "./fetchNameUsage"
-import { GBIFNameUsage } from "./GBIFNameUsage"
-import { BuildContext } from "../../../builds"
+import { GBIF_URL } from "./GBIF_URL"
+import type { GBIFNameUsage } from "./GBIFNameUsage"
 const GBIF_RANK_KEYS: ReadonlyArray<keyof GBIFNameUsage> = [
     "key",
     "speciesKey",

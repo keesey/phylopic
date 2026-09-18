@@ -1,5 +1,5 @@
-import { FaultDetector, isObject, type ValidationFaultCollector } from "@phylopic/utils"
-import { type Link } from "../types/Link"
+import { type FaultDetector, isObject, type ValidationFaultCollector } from "@phylopic/utils"
+import type { Link } from "../types/Link"
 export const isLink =
     <THRef extends string>(isHRef: FaultDetector<THRef>): FaultDetector<Link<THRef>> =>
     (x: unknown, faultCollector?: ValidationFaultCollector): x is Link<THRef> =>

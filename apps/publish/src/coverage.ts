@@ -1,5 +1,5 @@
 // Compares the number of silhouettes to the number of terminal nodes (source: Open Tree of Life)
-import { List, Node } from "@phylopic/api-models"
+import type { List, Node } from "@phylopic/api-models"
 import { isUUIDv4, stringifyNomen } from "@phylopic/utils"
 import axios from "axios"
 import "dotenv/config"

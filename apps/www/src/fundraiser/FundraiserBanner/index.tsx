@@ -1,10 +1,10 @@
 import type { CampaignId, FundraiserStatus } from "@phylopic/fundraiser"
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR from "swr"
 import customEvents from "~/analytics/customEvents"
 import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
-import styles from "./index.module.scss"
 import SiteTitle from "~/ui/SiteTitle"
+import styles from "./index.module.scss"
 
 const fetcher = async (url: string): Promise<FundraiserStatus> => {
     const response = await fetch(url)

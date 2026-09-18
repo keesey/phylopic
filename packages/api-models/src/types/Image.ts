@@ -1,9 +1,9 @@
 import type { ISOTimestamp, LicenseURL, RasterMediaType, URL, VectorMediaType } from "@phylopic/utils"
-import { Entity } from "./Entity"
-import { Link } from "./Link"
-import { Links } from "./Links"
-import { MediaLink } from "./MediaLink"
-import { TitledLink } from "./TitledLink"
+import type { Entity } from "./Entity"
+import type { Link } from "./Link"
+import type { Links } from "./Links"
+import type { MediaLink } from "./MediaLink"
+import type { TitledLink } from "./TitledLink"
 export interface ImageLinks extends Links<TitledLink> {
     readonly contributor: TitledLink
     readonly generalNode: TitledLink | null

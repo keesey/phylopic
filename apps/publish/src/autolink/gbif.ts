@@ -1,6 +1,6 @@
-import { iterateList, SourceClient } from "@phylopic/source-client"
-import { Node } from "@phylopic/source-models"
-import { createSearch, getIdentifier, isScientific, Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { iterateList, type SourceClient } from "@phylopic/source-client"
+import type { Node } from "@phylopic/source-models"
+import { createSearch, getIdentifier, isScientific, type Nomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import axios from "axios"
 type GBIFRank = "species" | "genus" | "family" | "order" | "class" | "phylum" | "kingdom"
 type GBIFNameUsage = Readonly<Partial<Record<GBIFRank, string>>> &

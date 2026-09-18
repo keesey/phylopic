@@ -1,5 +1,5 @@
-import { UUID } from "@phylopic/utils"
-import { FC } from "react"
+import type { UUID } from "@phylopic/utils"
+import type { FC } from "react"
 import AttributionEditor from "./AttributionEditor"
 import ContributorViewer from "./ContributorViewer"
 import Controls from "./Controls"

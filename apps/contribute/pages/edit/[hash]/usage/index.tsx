@@ -1,4 +1,4 @@
-import { Hash, isHash } from "@phylopic/utils"
+import { type Hash, isHash } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import { Suspense } from "react"

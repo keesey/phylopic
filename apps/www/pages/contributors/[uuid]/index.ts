@@ -1,4 +1,4 @@
-import { Contributor } from "@phylopic/api-models"
+import type { Contributor } from "@phylopic/api-models"
 import { createSearch, isUUIDv4 } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"

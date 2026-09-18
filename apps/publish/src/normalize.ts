@@ -1,6 +1,6 @@
+import { normalizeNomina, stringifyNomen } from "@phylopic/utils"
 import "dotenv/config"
 import SourceClient from "./source/SourceClient.js"
-import { normalizeNomina, stringifyNomen } from "@phylopic/utils"
 ;(async () => {
     const client = new SourceClient()
     try {

@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { FC } from "react"
 import useCollectionNames from "~/collections/hooks/useCollectionNames"
 import Add from "./Add"
 import styles from "./index.module.scss"

@@ -1,4 +1,4 @@
-import { QuickLinkNode } from "./QuickLinkNode"
+import type { QuickLinkNode } from "./QuickLinkNode"
 
 const QUICK_LINKS: QuickLinkNode = {
     label: "life",

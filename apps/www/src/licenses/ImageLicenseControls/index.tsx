@@ -1,6 +1,6 @@
 import { CountView } from "@phylopic/ui"
 import clsx from "clsx"
-import { FC, useContext, useEffect, useMemo, useState } from "react"
+import { type FC, useContext, useEffect, useMemo, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import LicenseFilterView from "~/views/LicenseFilterView"
 import LicenseFilterTypeContext from "../LicenseFilterTypeContext"

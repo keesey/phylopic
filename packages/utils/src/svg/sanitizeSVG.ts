@@ -2,7 +2,6 @@ import DOMPurify from "isomorphic-dompurify"
 import {
     containsRemovableThreats,
     hasLeadingSvgCorruption,
-    isLikelySVG,
     removeKnownMetadataBlocks,
     stripDanglingMetadataText,
     stripLeadingSvgCorruption,

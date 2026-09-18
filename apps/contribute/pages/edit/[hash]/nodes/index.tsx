@@ -1,5 +1,5 @@
-import { API } from "@phylopic/api-models"
-import { Hash, isHash } from "@phylopic/utils"
+import type { API } from "@phylopic/api-models"
+import { type Hash, isHash } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"

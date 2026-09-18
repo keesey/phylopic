@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react"
+import type { FC, PropsWithChildren } from "react"
 import styles from "./index.module.scss"
 export type ContainerVariant = "page" | "full" | "varying"
 export type Props = PropsWithChildren<{

@@ -1,10 +1,10 @@
-import { Authority, createSearch, Namespace, ObjectID, stringifyNormalized } from "@phylopic/utils"
-import { ClientBase } from "pg"
+import { type Authority, createSearch, type Namespace, type ObjectID, stringifyNormalized } from "@phylopic/utils"
+import type { ClientBase } from "pg"
 import BUILD from "../build/BUILD"
 import APIError from "../errors/APIError"
-import mergeResolveLinkQuery from "./mergeResolveLinkQuery"
 import type { PgClientService } from "../services/PgClientService"
 import withPgClient from "../services/withPgClient"
+import mergeResolveLinkQuery from "./mergeResolveLinkQuery"
 
 const USER_MESSAGE = "There was a problem with an attempt to find taxonomic data."
 

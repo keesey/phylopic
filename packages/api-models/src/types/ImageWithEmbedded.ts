@@ -1,7 +1,7 @@
-import { Contributor } from "./Contributor"
-import { Image, ImageLinks } from "./Image"
-import { Node } from "./Node"
-import { WithEmbedded } from "./WithEmbedded"
+import type { Contributor } from "./Contributor"
+import type { Image, ImageLinks } from "./Image"
+import type { Node } from "./Node"
+import type { WithEmbedded } from "./WithEmbedded"
 export interface ImageEmbedded {
     readonly contributor: Contributor
     readonly generalNode: Node | null

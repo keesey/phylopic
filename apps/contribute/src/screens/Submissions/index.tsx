@@ -1,5 +1,5 @@
-import { Submission } from "@phylopic/source-models"
-import { FC, ReactNode } from "react"
+import type { Submission } from "@phylopic/source-models"
+import type { FC, ReactNode } from "react"
 import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import Paginator from "~/pagination/Paginator"

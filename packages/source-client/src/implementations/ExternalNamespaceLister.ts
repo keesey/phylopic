@@ -1,7 +1,7 @@
-import { Authority, isAuthority, Namespace } from "@phylopic/utils"
-import { Listable } from "../interfaces/Listable"
-import { Page } from "../interfaces/Page"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
+import { type Authority, isAuthority, type Namespace } from "@phylopic/utils"
+import type { Listable } from "../interfaces/Listable"
+import type { Page } from "../interfaces/Page"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
 import { EXTERNAL_TABLE } from "./pg/constants/EXTERNAL_TABLE"
 export class ExternalNamespaceLister implements Listable<Namespace, number> {
     constructor(

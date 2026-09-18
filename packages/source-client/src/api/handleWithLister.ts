@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { Listable, Page } from "../interfaces"
+import type { NextApiRequest, NextApiResponse } from "next"
+import type { Listable, Page } from "../interfaces"
 export const handleWithLister = async <T, TPageSpecifier>(
     req: NextApiRequest,
     res: NextApiResponse<Page<T, TPageSpecifier> | number>,

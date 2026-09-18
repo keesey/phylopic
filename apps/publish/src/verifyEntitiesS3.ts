@@ -1,10 +1,15 @@
-import "dotenv/config"
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import { convertS3BodyToString } from "@phylopic/utils-aws"
+import {
+    ENTITIES_BUCKET,
+    type EntityFolder,
+    getEntityJSONKey,
+    getListIndexKey,
+    getStaticJSONKey,
+} from "@phylopic/s3-entities"
 import { stringifyNormalized } from "@phylopic/utils"
+import { convertS3BodyToString } from "@phylopic/utils-aws"
+import "dotenv/config"
 import pg from "pg"
-import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
-import { EntityFolder, getListIndexKey, getEntityJSONKey, getStaticJSONKey } from "@phylopic/s3-entities"
 const SAMPLE_SIZE = Number.parseInt(process.env.VERIFY_SAMPLE_SIZE ?? "20", 10)
 const BUILD = Number.parseInt(process.argv[2] ?? "", 10)
 if (Number.isNaN(BUILD)) {

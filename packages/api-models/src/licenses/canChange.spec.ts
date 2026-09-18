@@ -1,4 +1,4 @@
-import { type LicenseURL, type ValidLicenseURL } from "@phylopic/utils"
+import type { LicenseURL, ValidLicenseURL } from "@phylopic/utils"
 import { describe, expect, it } from "vitest"
 import { canChange } from "./canChange"
 describe("licenses/canChange", () => {

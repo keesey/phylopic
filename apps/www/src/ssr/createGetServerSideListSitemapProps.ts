@@ -1,7 +1,7 @@
-import { List, Page } from "@phylopic/api-models"
+import type { List, Page } from "@phylopic/api-models"
 import { createSearch, extractPath } from "@phylopic/utils"
-import { FetchResult, fetchResult } from "@phylopic/utils-api"
-import { GetServerSideProps } from "next"
+import { type FetchResult, fetchResult } from "@phylopic/utils-api"
+import type { GetServerSideProps } from "next"
 import BUILD from "~/build/BUILD"
 import getSlug from "~/routes/getSlug"
 

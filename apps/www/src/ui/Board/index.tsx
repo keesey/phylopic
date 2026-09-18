@@ -1,4 +1,4 @@
-import { Key, ReactNode, FC } from "react"
+import type { FC, Key, ReactNode } from "react"
 import styles from "./index.module.scss"
 export interface Props {
     items: readonly Readonly<[Key, ReactNode, ReactNode]>[]

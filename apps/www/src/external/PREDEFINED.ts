@@ -1,5 +1,5 @@
-import { type UUID } from "@phylopic/utils"
-import { type AgeResult } from "./AgeResult"
+import type { UUID } from "@phylopic/utils"
+import type { AgeResult } from "./AgeResult"
 import { SMITHSONIAN_HUMAN_ORIGINS, TIMETREE, WIKIPEDIA } from "./SOURCES"
 export type AgeSourceRecord = Record<UUID, AgeResult | null | undefined>
 // :KLUDGE: The Paleobiology Database's hominin dates are too general.

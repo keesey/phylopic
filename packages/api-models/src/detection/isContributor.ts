@@ -4,9 +4,9 @@ import {
     isNonnegativeInteger,
     isNormalizedText,
     isNullOr,
-    ValidationFaultCollector,
+    type ValidationFaultCollector,
 } from "@phylopic/utils"
-import { type Contributor } from "../types/Contributor"
+import type { Contributor } from "../types/Contributor"
 import { isEntity } from "./isEntity"
 import { isLink } from "./isLink"
 import { isLinks } from "./isLinks"

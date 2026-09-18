@@ -1,4 +1,4 @@
-import { ReadField } from "./ReadField"
+import type { ReadField } from "./ReadField"
 export const getFields = <T>(fields: ReadonlyArray<(string & keyof T) | ReadField<T>>) => {
     return fields
         .map(field =>

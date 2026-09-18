@@ -7,9 +7,9 @@ import {
     isUUIDv4,
     type ValidationFaultCollector,
 } from "@phylopic/utils"
-import { type ImageEmbedded } from "../../types/ImageWithEmbedded"
+import type { ImageEmbedded } from "../../types/ImageWithEmbedded"
 import { IMAGE_EMBEDDED_PARAMETERS } from "../constants/IMAGE_EMBEDDED_PARAMETERS"
-import { type ImageListParameters } from "../types/ImageListParameters"
+import type { ImageListParameters } from "../types/ImageListParameters"
 import { hasOnlyOne } from "./hasOnlyOne"
 import { isListParameters } from "./isListParameters"
 import { precedes } from "./precedes"

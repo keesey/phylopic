@@ -1,5 +1,5 @@
-import { NomenPart, NomenPartClass } from "parse-nomen"
-import { FC } from "react"
+import type { NomenPart, NomenPartClass } from "parse-nomen"
+import type { FC } from "react"
 import TextEditor from "../TextEditor"
 import styles from "./NomenPartEditor.module.scss"
 

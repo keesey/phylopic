@@ -1,25 +1,25 @@
-import { GetObjectTaggingCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import { DATA_MEDIA_TYPE, Link } from "@phylopic/api-models"
-import { Submission } from "@phylopic/source-models"
+import { GetObjectTaggingCommand, PutObjectCommand, type S3Client } from "@aws-sdk/client-s3"
+import { DATA_MEDIA_TYPE, type Link } from "@phylopic/api-models"
+import type { Submission } from "@phylopic/source-models"
 import {
     createQueryString,
-    ImageMediaType,
+    type ImageMediaType,
     isImageMediaType,
     isUUIDv4,
     isVectorMediaType,
     stringifyNormalized,
-    UUID,
+    type UUID,
 } from "@phylopic/utils"
 import { sanitizeSVGLite } from "@phylopic/utils/svg/lite"
-import { APIGatewayProxyResult } from "aws-lambda"
+import type { APIGatewayProxyResult } from "aws-lambda"
 import { createHash } from "crypto"
 import APIError from "../errors/APIError"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
-import { S3ClientService } from "../services/S3ClientService"
-import { Operation } from "./Operation"
+import type { S3ClientService } from "../services/S3ClientService"
+import type { Operation } from "./Operation"
 
 const ACCEPT = "image/svg+xml,image/png,image/gif,image/bmp,image/jpeg"
 

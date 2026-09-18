@@ -1,4 +1,4 @@
-import { GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { GetObjectCommand, HeadObjectCommand, PutObjectCommand, type S3Client } from "@aws-sdk/client-s3"
 import { convertS3BodyToBuffer } from "@phylopic/utils-aws"
 import { isLikelySVG, sanitizeSVG, svgNeedsSanitization } from "@phylopic/utils/svg"
 import { sanitizeUploadS3Object } from "./sanitizeUploadS3Object.js"

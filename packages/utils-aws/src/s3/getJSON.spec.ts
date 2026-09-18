@@ -1,5 +1,5 @@
 import { GetObjectCommand, type S3Client } from "@aws-sdk/client-s3"
-import { type FaultDetector, type ValidationFaultCollector } from "@phylopic/utils"
+import type { FaultDetector, ValidationFaultCollector } from "@phylopic/utils"
 import { describe, expect, it, vi } from "vitest"
 import { getJSON } from "./getJSON"
 

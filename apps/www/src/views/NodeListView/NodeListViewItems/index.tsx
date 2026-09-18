@@ -1,6 +1,6 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import getNodeHRef from "~/routes/getNodeHRef"

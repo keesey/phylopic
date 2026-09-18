@@ -1,4 +1,4 @@
-import { NextPage } from "next"
+import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import PageLayout from "~/pages/PageLayout"

@@ -1,5 +1,5 @@
-import { Contributor, Image, Node } from "@phylopic/api-models"
-import { UUID } from "@phylopic/utils"
+import type { Contributor, Image, Node } from "@phylopic/api-models"
+import type { UUID } from "@phylopic/utils"
 export type EntityRecord =
     | Readonly<{
           entity: Contributor

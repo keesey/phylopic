@@ -1,6 +1,6 @@
-import { ExternalResolution } from "@phylopic/client-components"
+import type { ExternalResolution } from "@phylopic/client-components"
 import { parseNomen } from "parse-nomen"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import getShortNomen from "~/models/getShortNomen"
 import NomenView from "~/views/NomenView"
 export interface Props {

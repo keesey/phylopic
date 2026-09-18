@@ -1,7 +1,7 @@
 import clsx from "clsx"
-import { FC, Key, ReactNode } from "react"
-import Header, { HeaderLevel } from "../Header"
-import HeaderNavButton, { Props as HeaderNavButtonProps } from "./HeaderNavButton"
+import type { FC, Key, ReactNode } from "react"
+import Header, { type HeaderLevel } from "../Header"
+import HeaderNavButton, { type Props as HeaderNavButtonProps } from "./HeaderNavButton"
 import styles from "./index.module.scss"
 export interface Props {
     buttons: ReadonlyArray<HeaderNavButtonProps & { key: Key }>

@@ -1,6 +1,6 @@
-import { ErrorResponse } from "@phylopic/api-models"
-import { FaultDetector, ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
-import axios, { AxiosRequestConfig } from "axios"
+import type { ErrorResponse } from "@phylopic/api-models"
+import { type FaultDetector, type ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
+import axios, { type AxiosRequestConfig } from "axios"
 import { DEFAULT_API_HEADERS } from "./DEFAULT_API_HEADERS"
 export type HTTPRelatedDataResponse = {
     headers: Headers

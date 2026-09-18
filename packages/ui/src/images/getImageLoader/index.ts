@@ -1,5 +1,5 @@
-import { MediaLink } from "@phylopic/api-models"
-import { ISOTimestamp, RasterMediaType, URL } from "@phylopic/utils"
+import type { MediaLink } from "@phylopic/api-models"
+import type { ISOTimestamp, RasterMediaType, URL } from "@phylopic/utils"
 import type { ImageLoader } from "next/image"
 const findBestSize = (links: readonly MediaLink<URL, RasterMediaType>[], width: number) => {
     const linksByWidth = links

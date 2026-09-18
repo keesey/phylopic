@@ -1,4 +1,4 @@
-import { EntityParameters, ListParameters } from "@phylopic/api-models"
+import type { EntityParameters, ListParameters } from "@phylopic/api-models"
 import APIError from "../errors/APIError"
 const isValidEmbedField = (value: unknown, validEmbedValues: readonly string[]): value is string => {
     return typeof value === "string" && validEmbedValues.includes(value)

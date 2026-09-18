@@ -1,8 +1,8 @@
-import { Page } from "@phylopic/source-client"
 import { InfiniteScroll } from "@phylopic/client-components"
+import type { Page } from "@phylopic/source-client"
 import { createSearch } from "@phylopic/utils"
-import { FC, Fragment, ReactNode, useCallback, useEffect, useMemo } from "react"
-import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite"
+import { type FC, Fragment, type ReactNode, useCallback, useEffect, useMemo } from "react"
+import useSWRInfinite, { type SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 export type Props = {

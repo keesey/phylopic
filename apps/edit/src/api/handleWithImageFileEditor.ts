@@ -1,8 +1,8 @@
-import { Editable, ImageFile, Patchable } from "@phylopic/source-client"
-import { Image } from "@phylopic/source-models"
-import { isImageMediaType, UUID } from "@phylopic/utils"
+import type { Editable, ImageFile, Patchable } from "@phylopic/source-client"
+import type { Image } from "@phylopic/source-models"
+import { isImageMediaType, type UUID } from "@phylopic/utils"
 import { convertS3BodyToBuffer } from "@phylopic/utils-aws"
-import { NextApiRequest, NextApiResponse } from "next"
+import type { NextApiRequest, NextApiResponse } from "next"
 import getImageFilename from "~/files/getImageFilename"
 const handleWithImageFileEditor = async (
     req: NextApiRequest,

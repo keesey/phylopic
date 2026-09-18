@@ -1,4 +1,4 @@
-import { Contributor, isContributor } from "@phylopic/source-models"
+import { type Contributor, isContributor } from "@phylopic/source-models"
 import { useCallback } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useAuthorizedRequest from "~/auth/hooks/useAuthorizedRequest"

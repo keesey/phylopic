@@ -1,4 +1,4 @@
-import { Nomen } from "@phylopic/utils"
+import type { Nomen } from "@phylopic/utils"
 const getShortNomen = (name?: Nomen) =>
     name
         ?.filter(

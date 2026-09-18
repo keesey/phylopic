@@ -1,6 +1,6 @@
-import { Contributor } from "@phylopic/api-models"
+import type { Contributor } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 export interface Props {
     value?: Contributor

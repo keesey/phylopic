@@ -1,17 +1,26 @@
-import { TitledLink } from "@phylopic/api-models"
-import { Page, S3Entry, SourceClient as ISourceClient } from "@phylopic/source-client"
-import { Contributor, External, Image, isContributor, isExternal, isImage, isNode, Node } from "@phylopic/source-models"
+import type { TitledLink } from "@phylopic/api-models"
+import type { SourceClient as ISourceClient, Page, S3Entry } from "@phylopic/source-client"
 import {
-    Authority,
+    type Contributor,
+    type External,
+    type Image,
+    isContributor,
+    isExternal,
+    isImage,
+    isNode,
+    type Node,
+} from "@phylopic/source-models"
+import {
+    type Authority,
     compareStrings,
     isAuthority,
     isNamespace,
-    ISOTimestamp,
-    Namespace,
-    ObjectID,
-    UUID,
+    type ISOTimestamp,
+    type Namespace,
+    type ObjectID,
+    type UUID,
 } from "@phylopic/utils"
-import { Arc, Digraph, sources } from "simple-digraph"
+import { type Arc, type Digraph, sources } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
 import SourceClient from "../source/SourceClient.js"
 export type SourceData = Readonly<{

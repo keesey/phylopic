@@ -1,8 +1,8 @@
 import { isNodeWithEmbedded } from "@phylopic/api-models"
-import { compareStrings, isUUID, stringifyNomen, UUID } from "@phylopic/utils"
+import { compareStrings, isUUID, stringifyNomen, type UUID } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
 import { SearchContext } from "../context"
-import { ExternalResolution } from "../models/ExternalResolution"
+import type { ExternalResolution } from "../models/ExternalResolution"
 import { getSortIndex } from "../utils/getSortIndex"
 const createResolutionComparator = (text: string) => (a: ExternalResolution, b: ExternalResolution) => {
     if (a === b) {

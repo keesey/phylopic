@@ -1,5 +1,5 @@
-import { type Node } from "@phylopic/api-models"
-import { type UUID } from "@phylopic/utils"
+import type { Node } from "@phylopic/api-models"
+import type { UUID } from "@phylopic/utils"
 import type { FSAWithPayload } from "flux-standard-action"
 import {
     createContext,
@@ -12,7 +12,7 @@ import {
     type PropsWithChildren,
     type Reducer,
 } from "react"
-import { type AgeResult } from "~/external/AgeResult"
+import type { AgeResult } from "~/external/AgeResult"
 import PREDEFINED from "~/external/PREDEFINED"
 export type AgeEntry = Readonly<{
     ageResult: AgeResult | null

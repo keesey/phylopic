@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { UUID } from "../types/UUID"
+import type { UUID } from "../types/UUID"
 import { normalizeUUID } from "./normalizeUUID"
 describe("normalizeUUID", () => {
     const test = (value: UUID, expected: UUID) => {

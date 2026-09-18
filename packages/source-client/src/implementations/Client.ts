@@ -1,21 +1,21 @@
 import { CopyObjectCommand } from "@aws-sdk/client-s3"
-import { External } from "@phylopic/source-models"
+import type { External } from "@phylopic/source-models"
 import {
-    Authority,
-    Hash,
+    type Authority,
+    type Hash,
     isAuthority,
     isEmailAddress,
     isHash,
     isNamespace,
     isUUIDv4,
-    Namespace,
-    ObjectID,
-    UUID,
+    type Namespace,
+    type ObjectID,
+    type UUID,
 } from "@phylopic/utils"
-import { Editable } from "../interfaces/Editable"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
-import { S3ClientProvider } from "../interfaces/S3ClientProvider"
-import { SourceClient } from "../interfaces/SourceClient"
+import type { Editable } from "../interfaces/Editable"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { S3ClientProvider } from "../interfaces/S3ClientProvider"
+import type { SourceClient } from "../interfaces/SourceClient"
 import { ContributorClient } from "./ContributorClient"
 import { ContributorsClient } from "./ContributorsClient"
 import { ExternalAuthorityLister } from "./ExternalAuthorityLister"

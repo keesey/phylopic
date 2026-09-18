@@ -1,12 +1,12 @@
-import { Image, MediaLink, TitledLink } from "@phylopic/api-models"
+import type { Image, MediaLink, TitledLink } from "@phylopic/api-models"
 import {
     isImageMediaType,
     normalizeUUID,
-    RasterMediaType,
+    type RasterMediaType,
     shortenNomen,
     stringifyNomen,
-    UUID,
-    VectorMediaType,
+    type UUID,
+    type VectorMediaType,
 } from "@phylopic/utils"
 import { createReadStream } from "fs"
 import { join } from "path"

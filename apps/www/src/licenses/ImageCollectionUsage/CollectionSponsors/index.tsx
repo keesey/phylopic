@@ -1,5 +1,5 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
-import { FC, useMemo } from "react"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
+import { type FC, useMemo } from "react"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
 export interface Props {

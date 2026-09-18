@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { FC } from "react"
 import { ICON_PLUS } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"

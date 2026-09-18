@@ -1,7 +1,7 @@
 import clsx from "clsx"
-import { ChangeEvent, FC, useCallback } from "react"
+import { type ChangeEvent, type FC, useCallback } from "react"
 import styles from "./index.module.scss"
-import { TTL } from "./TTL"
+import type { TTL } from "./TTL"
 export interface Props {
     disabled?: boolean
     mode?: "light"

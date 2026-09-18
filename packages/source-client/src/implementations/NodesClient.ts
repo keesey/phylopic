@@ -1,7 +1,14 @@
-import { Node } from "@phylopic/source-models"
-import { Authority, Identifier, Namespace, normalizeText, ObjectID, UUID } from "@phylopic/utils"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
-import { SourceClient } from "../interfaces/SourceClient"
+import type { Node } from "@phylopic/source-models"
+import {
+    type Authority,
+    type Identifier,
+    type Namespace,
+    normalizeText,
+    type ObjectID,
+    type UUID,
+} from "@phylopic/utils"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { SourceClient } from "../interfaces/SourceClient"
 import { NODE_FIELDS } from "./pg/constants/NODE_FIELDS"
 import { NODE_TABLE } from "./pg/constants/NODE_TABLE"
 import { normalizeNode } from "./pg/normalization/normalizeNode"

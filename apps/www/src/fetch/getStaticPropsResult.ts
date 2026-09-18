@@ -1,5 +1,5 @@
 import type { ErrorFetchResult, ForbiddenFetchResult, NotFoundFetchResult } from "@phylopic/utils-api"
-import { GetStaticPropsResult } from "next"
+import type { GetStaticPropsResult } from "next"
 const getStaticPropsResult = (
     result: ErrorFetchResult | ForbiddenFetchResult | NotFoundFetchResult,
 ): GetStaticPropsResult<never> => {

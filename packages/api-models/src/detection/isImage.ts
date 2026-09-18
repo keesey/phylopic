@@ -9,9 +9,9 @@ import {
     isUndefinedOr,
     isURL,
     isVectorMediaType,
-    ValidationFaultCollector,
+    type ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Image } from "../types/Image"
+import type { Image } from "../types/Image"
 import { isEntity } from "./isEntity"
 import { isLink } from "./isLink"
 import { isLinks } from "./isLinks"

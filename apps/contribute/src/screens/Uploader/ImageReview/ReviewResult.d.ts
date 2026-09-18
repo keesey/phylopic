@@ -1,4 +1,4 @@
-import { ImageMediaType } from "@phylopic/utils"
+import type { ImageMediaType } from "@phylopic/utils"
 
 export type ReviewResult = Readonly<{
     buffer: Buffer

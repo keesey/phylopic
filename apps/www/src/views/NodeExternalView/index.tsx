@@ -1,6 +1,6 @@
-import { TitledLink } from "@phylopic/api-models"
+import type { TitledLink } from "@phylopic/api-models"
 import { compareStrings, extractPath } from "@phylopic/utils"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import ExternalTitledLinkView from "../ExternalTitledLinkView"
 import LinkedAuthorizedNamespaceView from "../LinkedAuthorizedNamespaceView"
 import styles from "./index.module.scss"

@@ -1,5 +1,5 @@
-import { FC, useMemo } from "react"
 import { toWords } from "number-to-words"
+import { type FC, useMemo } from "react"
 export type Props = {
     caps?: boolean
     max?: number

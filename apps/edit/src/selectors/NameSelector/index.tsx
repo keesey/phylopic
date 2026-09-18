@@ -1,10 +1,10 @@
-import { isNomen, Nomen } from "@phylopic/utils"
+import { isNomen, type Nomen } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import {
-    DetailedHTMLProps,
-    FC,
-    InputHTMLAttributes,
-    KeyboardEvent,
+    type DetailedHTMLProps,
+    type FC,
+    type InputHTMLAttributes,
+    type KeyboardEvent,
     useCallback,
     useEffect,
     useMemo,

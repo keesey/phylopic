@@ -1,5 +1,5 @@
 import { isImageMediaType } from "@phylopic/utils"
-import { FC, useCallback, useMemo, useState } from "react"
+import { type FC, useCallback, useMemo, useState } from "react"
 import MAX_FILE_SIZE from "~/filesizes/MAX_FILE_SIZE"
 import LoadingState from "~/screens/LoadingState"
 import Dialogue from "~/ui/Dialogue"
@@ -7,13 +7,13 @@ import { ICON_ARROW_LEFT, ICON_CHECK, ICON_PENCIL, ICON_X } from "~/ui/ICON_SYMB
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
+import type { FileResult } from "../SelectFile/FileResult"
 import useFileIsVector from "../hooks/useFileIsVector"
 import useVectorization from "../hooks/useVectorization"
 import useVectorizedImageSource from "../hooks/useVectorizedImageSource"
 import ImageBox from "./ImageBox"
-import { ReviewResult } from "./ReviewResult"
+import type { ReviewResult } from "./ReviewResult"
 import styles from "./index.module.scss"
-import { FileResult } from "../SelectFile/FileResult"
 export type Props = FileResult & {
     onCancel?: () => void
     onComplete?: (result: ReviewResult) => void

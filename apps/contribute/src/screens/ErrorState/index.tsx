@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { FC, ReactNode, useCallback } from "react"
+import { type FC, type ReactNode, useCallback } from "react"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_ARROW_LEFT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"

@@ -1,8 +1,8 @@
-import { FC, ReactNode, Reducer, useReducer } from "react"
-import { Action } from "./actions"
+import { type FC, type ReactNode, type Reducer, useReducer } from "react"
+import type { Action } from "./actions"
 import AssignmentContext from "./AssignmentContext"
 import reducer from "./reducer"
-import { State } from "./State"
+import type { State } from "./State"
 export type Props = {
     children: ReactNode
     initialState: State

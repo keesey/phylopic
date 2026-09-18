@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { Nomen } from "../types/Nomen"
+import type { Nomen } from "../types/Nomen"
 import { normalizeNomen } from "./normalizeNomen"
 describe("normalizeNomen", () => {
     const test = (value: Nomen, expected: Nomen) => {

@@ -1,5 +1,5 @@
-import { Nomen } from "@phylopic/utils"
-import { FC } from "react"
+import type { Nomen } from "@phylopic/utils"
+import type { FC } from "react"
 import NomenView from "~/views/NomenView"
 import Container from "../Container"
 const EXAMPLE_SCIENTIFIC_NAME: Nomen = [{ class: "scientific", text: "Homo sapiens" }]

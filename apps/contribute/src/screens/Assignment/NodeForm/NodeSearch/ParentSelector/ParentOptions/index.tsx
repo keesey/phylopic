@@ -1,11 +1,11 @@
 import { getIdentifier } from "@phylopic/utils"
-import { FC, useCallback } from "react"
+import { type FC, useCallback } from "react"
 import useComplete from "~/screens/Assignment/AssignmentContainer/hooks/useComplete"
 import useNormalizedText from "~/screens/Assignment/AssignmentContainer/hooks/useNormalizedText"
 import Speech from "~/ui/Speech"
 import UserOptions from "~/ui/UserOptions"
 import UserScrollTo from "~/ui/UserScrollTo"
-import { SearchEntry } from "../../SearchEntry"
+import type { SearchEntry } from "../../SearchEntry"
 import EntryButton from "../../SearchOptions/EntryButton"
 import useEntries from "../../useEntries"
 export const ParentOptions: FC = () => {

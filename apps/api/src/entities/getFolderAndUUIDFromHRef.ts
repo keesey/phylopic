@@ -1,5 +1,5 @@
-import { EntityFolder } from "@phylopic/s3-entities"
-import { extractPath, isUUID, UUID } from "@phylopic/utils"
+import type { EntityFolder } from "@phylopic/s3-entities"
+import { extractPath, isUUID, type UUID } from "@phylopic/utils"
 
 const isEntityFolder = (path: string): path is EntityFolder =>
     path === "contributors" || path === "images" || path === "nodes"

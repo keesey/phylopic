@@ -1,4 +1,4 @@
-import { Page, TitledLink } from "@phylopic/api-models"
+import type { Page, TitledLink } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import omit from "lodash/omit"
 import BUILD from "../build/BUILD"

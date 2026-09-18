@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import { ICON_ARROW_RIGHT, ICON_PLUS } from "~/ui/ICON_SYMBOLS"

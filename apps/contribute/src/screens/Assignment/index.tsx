@@ -1,5 +1,5 @@
-import { Hash } from "@phylopic/utils"
-import { FC } from "react"
+import type { Hash } from "@phylopic/utils"
+import type { FC } from "react"
 import AssignmentContainer from "./AssignmentContainer"
 import Content from "./Content"
 export type Props = {

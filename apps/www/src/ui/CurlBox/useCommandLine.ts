@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { CurlOptions } from "./CurlOptions"
+import type { CurlOptions } from "./CurlOptions"
 const useCommandLine = (url: string, options?: CurlOptions) => {
     return useMemo(() => {
         let line = "curl "

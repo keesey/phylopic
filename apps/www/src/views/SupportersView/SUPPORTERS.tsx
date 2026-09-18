@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 const SUPPORTERS: ReadonlyArray<{ names: readonly ReactNode[] }> = [
     {
         names: ["Jesse Emrys"],

@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/router"
 import Script from "next/script"
-import { FC, useEffect } from "react"
+import { type FC, useEffect } from "react"
 import { gtag } from "../gtag"
 export type GTagAnalyticsProps = {
     gaMeasurementId?: string

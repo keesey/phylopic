@@ -1,10 +1,10 @@
-import { type ValidationFaultCollector } from "@phylopic/utils"
+import type { ValidationFaultCollector } from "@phylopic/utils"
 import { isAuthority, isNamespace, isObjectIDs } from "@phylopic/utils"
-import { NodeEmbedded } from "../../types/NodeWithEmbedded"
+import type { NodeEmbedded } from "../../types/NodeWithEmbedded"
 import { NODE_EMBEDDED_PARAMETERS } from "../constants/NODE_EMBEDDED_PARAMETERS"
-import { ResolveObjectsParameters } from "../types/ResolveObjectsParameters"
-import { isEmbeddableParameters } from "./isEmbeddableParameters"
+import type { ResolveObjectsParameters } from "../types/ResolveObjectsParameters"
 import { isDataParameters } from "./isDataParameters"
+import { isEmbeddableParameters } from "./isEmbeddableParameters"
 export const isResolveObjectsParameters = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

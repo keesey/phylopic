@@ -1,5 +1,5 @@
-import { useMemo, FC } from "react"
-import Breadcrumbs, { BreadcrumbItem } from "../../Breadcrumbs"
+import { useMemo, type FC } from "react"
+import Breadcrumbs, { type BreadcrumbItem } from "../../Breadcrumbs"
 export interface Props {
     afterItems: readonly BreadcrumbItem[]
     beforeItems: readonly BreadcrumbItem[]

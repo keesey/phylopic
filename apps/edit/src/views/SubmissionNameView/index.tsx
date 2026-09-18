@@ -1,5 +1,5 @@
-import { Submission } from "@phylopic/source-models"
-import { FC } from "react"
+import type { Submission } from "@phylopic/source-models"
+import type { FC } from "react"
 import IdentifierView from "../IdentifierView"
 import NameRenderer from "../NameRenderer"
 export type Props = {

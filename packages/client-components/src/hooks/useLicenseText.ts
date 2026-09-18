@@ -1,4 +1,4 @@
-import { ExtendedLicenseURL, LICENSE_NAMES, SHORT_LICENSE_NAMES } from "@phylopic/utils"
+import { type ExtendedLicenseURL, LICENSE_NAMES, SHORT_LICENSE_NAMES } from "@phylopic/utils"
 import { useMemo } from "react"
 export const useLicenseText = (licenseURL: ExtendedLicenseURL | undefined, short = false) => {
     return useMemo(

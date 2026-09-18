@@ -1,6 +1,6 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-import { UUID } from "@phylopic/utils"
+import type { UUID } from "@phylopic/utils"
 import { createContributeS3ClientConfig } from "~/aws/createAwsClientConfig"
 // :TODO: Set in one place? Also used in @phylopic/source-client's ImageClient.
 const BUCKET_NAME = "source-images.phylopic.org"

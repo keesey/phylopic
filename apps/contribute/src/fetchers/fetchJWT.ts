@@ -1,4 +1,4 @@
-import { JWT } from "@phylopic/source-models"
+import type { JWT } from "@phylopic/source-models"
 import axios from "axios"
 import { decode } from "jsonwebtoken"
 const fetchJWT = async (key: string): Promise<JWT> => {

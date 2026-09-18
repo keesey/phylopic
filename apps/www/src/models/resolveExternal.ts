@@ -1,4 +1,4 @@
-import { Authority, Namespace, ObjectID } from "@phylopic/utils"
+import type { Authority, Namespace, ObjectID } from "@phylopic/utils"
 const RESOLVERS: Readonly<Record<string, ((id: string) => string) | undefined>> = {
     ["eol.org/pages"]: id => `https://www.eol.org/pages/${encodeURIComponent(id)}`,
     ["gbif.org/species"]: id => `https://www.gbif.org/species/${encodeURIComponent(id)}`,

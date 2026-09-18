@@ -1,8 +1,8 @@
-import { ListObjectsV2Command, ListObjectsV2Output } from "@aws-sdk/client-s3"
-import { FaultDetector } from "@phylopic/utils"
-import { S3Entry } from "../../interfaces"
-import { Listable } from "../../interfaces/Listable"
-import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
+import { ListObjectsV2Command, type ListObjectsV2Output } from "@aws-sdk/client-s3"
+import type { FaultDetector } from "@phylopic/utils"
+import type { S3Entry } from "../../interfaces"
+import type { Listable } from "../../interfaces/Listable"
+import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 export class S3Lister<TKey extends string = string> implements Listable<S3Entry<TKey>, string> {
     constructor(
         protected readonly provider: S3ClientProvider,

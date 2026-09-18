@@ -1,5 +1,5 @@
-import { NodeWithEmbedded } from "@phylopic/api-models"
-import { FC } from "react"
+import type { NodeWithEmbedded } from "@phylopic/api-models"
+import type { FC } from "react"
 import InlineSections from "~/ui/InlineSections"
 import NodeExternalView from "~/views/NodeExternalView"
 import NodeListView from "~/views/NodeListView"

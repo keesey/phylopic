@@ -1,5 +1,5 @@
-import { AuthorizedNamespace } from "./AuthorizedNamespace"
-import { Data } from "./Data"
+import type { AuthorizedNamespace } from "./AuthorizedNamespace"
+import type { Data } from "./Data"
 export interface AuthorizedNamespaces extends Data {
     readonly namespaces: readonly AuthorizedNamespace[]
 }

@@ -1,4 +1,4 @@
-import { UUID } from "@phylopic/utils"
+import type { UUID } from "@phylopic/utils"
 import { encodeKeySegment } from "./encodeKeySegment"
 
 export type EntityFolder = "contributors" | "images" | "nodes"

@@ -1,7 +1,7 @@
 import Image from "next/image"
-import { FC } from "react"
+import type { FC } from "react"
+import type { FileResult } from "../../SelectFile/FileResult"
 import styles from "./index.module.scss"
-import { FileResult } from "../../SelectFile/FileResult"
 export type Props = Pick<FileResult, "size" | "source"> & {
     alt: string
 }

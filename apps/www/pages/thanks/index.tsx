@@ -1,6 +1,6 @@
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"

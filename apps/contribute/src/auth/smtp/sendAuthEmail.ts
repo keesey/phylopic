@@ -1,6 +1,6 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses"
-import { JWT, decodeJWT } from "@phylopic/source-models"
-import { EmailAddress, isEmailAddress, isUUIDv4 } from "@phylopic/utils"
+import { type JWT, decodeJWT } from "@phylopic/source-models"
+import { type EmailAddress, isEmailAddress, isUUIDv4 } from "@phylopic/utils"
 import { createContributeSesClientConfig } from "~/aws/createAwsClientConfig"
 const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
     if (!isEmailAddress(email)) {

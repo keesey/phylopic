@@ -1,6 +1,6 @@
-import { JWT } from "@phylopic/source-models"
 import { useStoredState } from "@phylopic/client-components"
-import { FC, ReactNode } from "react"
+import type { JWT } from "@phylopic/source-models"
+import type { FC, ReactNode } from "react"
 import AuthContext from "./AuthContext"
 type Props = {
     children: ReactNode

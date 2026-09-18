@@ -1,5 +1,5 @@
-import { Hash } from "@phylopic/utils"
-import { FC } from "react"
+import type { Hash } from "@phylopic/utils"
+import type { FC } from "react"
 import useSubmission from "~/editing/useSubmission"
 import { ICON_PENCIL } from "~/ui/ICON_SYMBOLS"
 import MenuLink from "../../MenuLink"

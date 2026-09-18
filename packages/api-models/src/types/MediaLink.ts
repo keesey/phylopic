@@ -1,6 +1,6 @@
-import { ImageMediaType } from "@phylopic/utils"
-import { Link } from "./Link"
-import { Sizes } from "./Sizes"
+import type { ImageMediaType } from "@phylopic/utils"
+import type { Link } from "./Link"
+import type { Sizes } from "./Sizes"
 export interface MediaLink<
     THRef extends string = string,
     TType extends ImageMediaType = ImageMediaType,

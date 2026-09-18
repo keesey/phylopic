@@ -1,15 +1,15 @@
-import { Submission } from "@phylopic/source-models"
 import { SearchContext } from "@phylopic/client-components"
-import { getIdentifier, Hash } from "@phylopic/utils"
-import { ChangeEvent, FC, useCallback, useContext, useState } from "react"
+import type { Submission } from "@phylopic/source-models"
+import { getIdentifier, type Hash } from "@phylopic/utils"
+import { fetchJSON } from "@phylopic/utils-api"
+import { type ChangeEvent, type FC, useCallback, useContext, useState } from "react"
 import useSWR from "swr"
-import { SearchEntry } from "~/models/SearchEntry"
+import type { SearchEntry } from "~/models/SearchEntry"
 import usePatcher from "~/swr/usePatcher"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
 import useEntries from "./useEntries"
-import { fetchJSON } from "@phylopic/utils-api"
 export type Props = {
     hash: Hash
 }

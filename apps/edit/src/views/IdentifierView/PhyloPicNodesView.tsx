@@ -1,8 +1,8 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import { useAPIFetcher } from "@phylopic/client-components"
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
-import { FC } from "react"
+import type { UUID } from "@phylopic/utils"
+import type { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"
 export type Props = {

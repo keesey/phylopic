@@ -1,11 +1,11 @@
 import { SearchContext, useExternalResolutions } from "@phylopic/client-components"
-import { FC, Fragment, useContext, useMemo } from "react"
+import { type FC, Fragment, useContext, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import IllustratedNodeView from "~/views/IllustratedNodeView"
+import Container from "../Container"
 import SearchAside from "../SearchAside"
 import ExternalResolutionCaption from "./ExternalResolutionCaption"
 import styles from "./index.module.scss"
-import Container from "../Container"
 export interface Props {
     maxResults?: number
 }

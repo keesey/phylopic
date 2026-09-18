@@ -1,4 +1,4 @@
-import { TitledLink } from "@phylopic/api-models"
+import type { TitledLink } from "@phylopic/api-models"
 import { stringifyNormalized } from "@phylopic/utils"
 import getPageObject from "./getPageObject"
 

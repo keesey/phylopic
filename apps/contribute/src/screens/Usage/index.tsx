@@ -1,6 +1,6 @@
-import { Hash, isPublicDomainLicenseURL, isValidLicenseURL } from "@phylopic/utils"
+import { type Hash, isPublicDomainLicenseURL, isValidLicenseURL } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import useContributor from "~/profile/useContributor"

@@ -1,4 +1,4 @@
-import { Authority, Namespace } from "@phylopic/utils"
+import type { Authority, Namespace } from "@phylopic/utils"
 
 export interface AuthorizedNamespace {
     readonly authority: Authority

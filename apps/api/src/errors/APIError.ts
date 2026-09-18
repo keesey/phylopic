@@ -1,4 +1,4 @@
-import { Error as ErrorModel } from "@phylopic/api-models"
+import type { Error as ErrorModel } from "@phylopic/api-models"
 export default class APIError extends Error {
     constructor(
         public readonly httpCode: number,

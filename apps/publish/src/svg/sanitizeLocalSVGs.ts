@@ -1,6 +1,6 @@
+import { isLikelySVG, sanitizeSVG, svgNeedsSanitization } from "@phylopic/utils/svg"
 import { readFile, readdir, stat, writeFile } from "fs/promises"
 import { join } from "path"
-import { isLikelySVG, sanitizeSVG, svgNeedsSanitization } from "@phylopic/utils/svg"
 
 const LOCAL_TARGETS = [
     {

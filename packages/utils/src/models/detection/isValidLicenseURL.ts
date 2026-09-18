@@ -1,7 +1,7 @@
 import { invalidate } from "../../validation/invalidate"
-import { type ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
+import type { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
 import { VALID_LICENSE_URLS } from "../constants/VALID_LICENSE_URLS"
-import { ValidLicenseURL } from "../types/ValidLicenseURL"
+import type { ValidLicenseURL } from "../types/ValidLicenseURL"
 const VALIDATION_MESSAGE = `Expected one of the following license URLs: ${Array.from(VALID_LICENSE_URLS)
     .sort()
     .join(", ")}.`

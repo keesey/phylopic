@@ -1,5 +1,5 @@
 import axios from "axios"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import TIMETREE_API_URL from "~/external/timetree.org/TIMETREE_API_URL"
 import fetchField from "~/external/timetree.org/fetchField"
 import { checkProxyRateLimit, getClientIp } from "~/rateLimit/checkProxyRateLimit"

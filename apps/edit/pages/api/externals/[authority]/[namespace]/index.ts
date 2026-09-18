@@ -1,7 +1,7 @@
-import { handleAPIError, handleWithLister, Page } from "@phylopic/source-client"
-import { External } from "@phylopic/source-models"
-import { Authority, isAuthority, isNamespace, Namespace, ObjectID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import { handleAPIError, handleWithLister, type Page } from "@phylopic/source-client"
+import type { External } from "@phylopic/source-models"
+import { type Authority, isAuthority, isNamespace, type Namespace, type ObjectID } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<
     Page<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number> | number

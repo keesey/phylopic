@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { FC, ReactNode, useEffect, useState } from "react"
+import { type FC, type ReactNode, useEffect, useState } from "react"
 import useAuthorized from "./hooks/useAuthorized"
 import useExpireEffect from "./hooks/useExpireEffect"
 type Props = {

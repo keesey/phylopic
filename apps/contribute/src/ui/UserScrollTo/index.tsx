@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { type FC, useEffect, useState } from "react"
 const UserScrollTo: FC = () => {
     const [element, setElement] = useState<HTMLElement | null>(null)
     useEffect(() => {

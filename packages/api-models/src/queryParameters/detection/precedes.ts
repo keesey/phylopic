@@ -1,4 +1,4 @@
-import { invalidate, isDefined, ValidationFaultCollector } from "@phylopic/utils"
+import { invalidate, isDefined, type ValidationFaultCollector } from "@phylopic/utils"
 export const precedes = <T>(
     x: T,
     predecessorField: keyof T,

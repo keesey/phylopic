@@ -1,4 +1,4 @@
-import { type JWT } from "@phylopic/source-models"
+import type { JWT } from "@phylopic/source-models"
 import {
     type EmailAddress,
     isEmailAddress,

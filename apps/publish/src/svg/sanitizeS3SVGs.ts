@@ -1,9 +1,9 @@
+import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
 import "dotenv/config"
 import { writeFile } from "fs/promises"
-import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3"
+import { parseSanitizeArgs, printSanitizeUsage } from "./parseSanitizeArgs.js"
 import { createSummary, recordResult, sanitizeS3Object } from "./sanitizeS3Object.js"
 import { sanitizeUploadS3Object } from "./sanitizeUploadS3Object.js"
-import { parseSanitizeArgs, printSanitizeUsage } from "./parseSanitizeArgs.js"
 import { extractImageUUID, getSVGBucketTargets, matchesUUIDPrefix } from "./targets.js"
 
 const listKeys = async (client: S3Client, bucketName: string, prefix: string): Promise<string[]> => {

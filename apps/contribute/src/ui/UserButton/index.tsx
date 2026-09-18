@@ -1,6 +1,6 @@
 import { LoaderContext } from "@phylopic/client-components"
 import clsx from "clsx"
-import { FC, ReactNode, useEffect, useState } from "react"
+import { type FC, type ReactNode } from "react"
 import SpeechStack from "../SpeechStack"
 import styles from "./index.module.scss"
 export type Props = {

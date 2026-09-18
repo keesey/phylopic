@@ -1,5 +1,5 @@
-import { Authority, Namespace } from "@phylopic/utils"
-import { Resolver } from "./Resolver"
+import type { Authority, Namespace } from "@phylopic/utils"
+import type { Resolver } from "./Resolver"
 import resolveGBIF from "./namespaces/resolveGBIF"
 import resolveOTOL from "./namespaces/resolveOTOL"
 import resolvePBDB from "./namespaces/resolvePBDB"

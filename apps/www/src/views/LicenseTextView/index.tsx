@@ -1,6 +1,6 @@
 import { useLicenseText } from "@phylopic/client-components"
-import { LicenseURL } from "@phylopic/utils"
-import { FC } from "react"
+import type { LicenseURL } from "@phylopic/utils"
+import type { FC } from "react"
 export interface Props {
     short?: boolean
     value: LicenseURL

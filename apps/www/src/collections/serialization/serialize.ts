@@ -1,6 +1,6 @@
 import { stringifyNormalized } from "@phylopic/utils"
-import { State } from "../context/State"
-import { SerializedState } from "./SerializedState"
+import type { State } from "../context/State"
+import type { SerializedState } from "./SerializedState"
 const serialize = (state: State): string => {
     return stringifyNormalized({
         ...state,

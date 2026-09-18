@@ -1,10 +1,10 @@
-import { Node } from "@phylopic/source-models"
-import { isDefined, isFiniteNumber, normalizeNomina, normalizeUUID, UUID } from "@phylopic/utils"
+import type { Node } from "@phylopic/source-models"
+import { isDefined, isFiniteNumber, normalizeNomina, normalizeUUID, type UUID } from "@phylopic/utils"
 import axios from "axios"
 import { randomUUID } from "crypto"
 import { parseNomen } from "parse-nomen"
-import SourceClient from "~/source/SourceClient"
-import { Resolver } from "../Resolver"
+import type SourceClient from "~/source/SourceClient"
+import type { Resolver } from "../Resolver"
 export type GBIFRank = "species" | "genus" | "family" | "order" | "class" | "phylum" | "kingdom"
 export type GBIFNameUsage = Readonly<Partial<Record<GBIFRank, string>>> &
     Readonly<Partial<Record<`${GBIFRank}Key`, number>>> &

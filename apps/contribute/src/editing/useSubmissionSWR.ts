@@ -1,5 +1,5 @@
-import { Submission } from "@phylopic/source-models"
-import { Hash, isHash } from "@phylopic/utils"
+import type { Submission } from "@phylopic/source-models"
+import { type Hash, isHash } from "@phylopic/utils"
 import { useMemo } from "react"
 import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"

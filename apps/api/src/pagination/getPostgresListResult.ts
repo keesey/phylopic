@@ -1,7 +1,7 @@
+import type { S3Client } from "@aws-sdk/client-s3"
 import type { TitledLink } from "@phylopic/api-models"
 import { stringifyNormalized } from "@phylopic/utils"
 import type { APIGatewayProxyResult } from "aws-lambda"
-import { S3Client } from "@aws-sdk/client-s3"
 import type { ClientBase } from "pg"
 import APIError from "../errors/APIError"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"

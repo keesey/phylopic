@@ -1,6 +1,6 @@
 import { LoaderContext } from "@phylopic/client-components"
 import clsx from "clsx"
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import styles from "./index.module.scss"
 export type Props = {
     children: ReactNode

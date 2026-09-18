@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import logoDiscord from "../../../public/logos/discord.svg"
 import logoFacebook from "../../../public/logos/facebook.svg"

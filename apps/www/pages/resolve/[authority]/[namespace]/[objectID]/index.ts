@@ -1,7 +1,7 @@
 import { isAuthority, isNamespace, isObjectID, isUUIDv4, normalizeUUID } from "@phylopic/utils"
 import axios from "axios"
-import { GetServerSideProps, NextPage } from "next"
-import { ParsedUrlQuery } from "querystring"
+import type { GetServerSideProps, NextPage } from "next"
+import type { ParsedUrlQuery } from "querystring"
 
 const toSafeRelativeRedirect = (location: string): string | null => {
     if (!location.startsWith("/") || location.startsWith("//") || location.includes("..")) {

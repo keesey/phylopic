@@ -3,7 +3,7 @@ import { extractPath } from "@phylopic/utils"
 import { useDebounce } from "@react-hook/debounce"
 import clsx from "clsx"
 import { useRouter } from "next/router"
-import { ChangeEvent, FC, FocusEvent, FormEvent, useContext, useEffect, useState } from "react"
+import { type ChangeEvent, type FC, type FocusEvent, type FormEvent, useContext, useEffect, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
 const MAX_MATCHES = 16

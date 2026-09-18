@@ -1,9 +1,9 @@
-import { QueryResultRow } from "pg"
-import { Listable } from "../../interfaces/Listable"
-import { PGClientProvider } from "../../interfaces/PGClientProvider"
+import type { QueryResultRow } from "pg"
+import type { Listable } from "../../interfaces/Listable"
+import type { PGClientProvider } from "../../interfaces/PGClientProvider"
 import { getFields } from "./fields/getFields"
-import { IDField } from "./fields/IDField"
-import { ReadField } from "./fields/ReadField"
+import type { IDField } from "./fields/IDField"
+import type { ReadField } from "./fields/ReadField"
 export type WhereField = IDField & {
     operator?: "=" | "<" | ">" | "<=" | ">=" | "!-" | "~" | "~*" | "!~" | "!~*" | "~~" | "~~*" | "!~~" | "!~~*"
 }

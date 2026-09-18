@@ -1,5 +1,5 @@
-import { Image } from "@phylopic/api-models"
-import { ExtendedLicenseURL } from "@phylopic/utils"
+import type { Image } from "@phylopic/api-models"
+import type { ExtendedLicenseURL } from "@phylopic/utils"
 import { useMemo } from "react"
 import getLicenseFlags from "./getLicenseFlags"
 import getLicenseForFlags from "./getLicenseForFlags"

@@ -1,6 +1,6 @@
 import { BuildContainer, SearchContainer } from "@phylopic/client-components"
 import dynamic from "next/dynamic"
-import { FC, ReactNode, Suspense } from "react"
+import { type FC, type ReactNode, Suspense } from "react"
 import BUILD from "~/build/BUILD"
 import CollectionsContainer from "~/collections/context/CollectionsContainer"
 import PageLoader from "~/ui/PageLoader"

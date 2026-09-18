@@ -1,11 +1,11 @@
-import { Contributor, External, Image, JWT, Node, Submission } from "@phylopic/source-models"
-import { Authority, EmailAddress, Hash, Identifier, Namespace, Nomen, ObjectID, UUID } from "@phylopic/utils"
-import { Deletable } from "./Deletable"
-import { Editable } from "./Editable"
-import { ImageFile } from "./ImageFile"
-import { Listable } from "./Listable"
-import { Patchable } from "./Patchable"
-import { S3Entry } from "./S3Entry"
+import type { Contributor, External, Image, JWT, Node, Submission } from "@phylopic/source-models"
+import type { Authority, EmailAddress, Hash, Identifier, Namespace, Nomen, ObjectID, UUID } from "@phylopic/utils"
+import type { Deletable } from "./Deletable"
+import type { Editable } from "./Editable"
+import type { ImageFile } from "./ImageFile"
+import type { Listable } from "./Listable"
+import type { Patchable } from "./Patchable"
+import type { S3Entry } from "./S3Entry"
 export type SourceClient = Readonly<{
     authEmails: Listable<S3Entry<EmailAddress>, string>
     authToken(emailAddress: EmailAddress): Editable<JWT>

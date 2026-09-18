@@ -1,6 +1,6 @@
-import { URL } from "@phylopic/utils"
-import { FC } from "react"
-import { CollectionPermalinkData } from "~/permalinks/types/CollectionPermalinkData"
+import type { URL } from "@phylopic/utils"
+import type { FC } from "react"
+import type { CollectionPermalinkData } from "~/permalinks/types/CollectionPermalinkData"
 import ImagesView from "./ImagesView"
 export interface Props {
     url: URL

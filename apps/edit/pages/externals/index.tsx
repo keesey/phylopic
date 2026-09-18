@@ -1,5 +1,5 @@
-import { Authority } from "@phylopic/utils"
-import { NextPage } from "next"
+import type { Authority } from "@phylopic/utils"
+import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { SWRConfig } from "swr"

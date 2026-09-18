@@ -1,5 +1,5 @@
-import { UUID } from "@phylopic/utils"
-import { ListParameters } from "./ListParameters"
+import type { UUID } from "@phylopic/utils"
+import type { ListParameters } from "./ListParameters"
 export interface ContributorListParameters extends ListParameters<{}> {
     filter_collection?: UUID
 }

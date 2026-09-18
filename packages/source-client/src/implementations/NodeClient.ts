@@ -1,19 +1,19 @@
-import { External, Node } from "@phylopic/source-models"
+import type { External, Node } from "@phylopic/source-models"
 import {
-    Authority,
+    type Authority,
     isUUIDv4,
-    Namespace,
-    Nomen,
+    type Namespace,
+    type Nomen,
     normalizeNomina,
     normalizeUUID,
-    ObjectID,
+    type ObjectID,
     stringifyNomen,
     stringifyNormalized,
-    UUID,
+    type UUID,
 } from "@phylopic/utils"
-import { Listable } from "../interfaces"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
-import { SourceClient } from "../interfaces/SourceClient"
+import type { Listable } from "../interfaces"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { SourceClient } from "../interfaces/SourceClient"
 import { ExternalClient } from "./ExternalClient"
 import { NodeExternalsClient } from "./NodeExternalsClient"
 import { NodeLineageClient } from "./NodeLineageClient"

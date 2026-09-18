@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { FC } from "react"
 import { ICON_ARROW_RIGHT, ICON_HAND_POINT_RIGHT } from "~/ui/ICON_SYMBOLS"
 import MenuLink from "../../MenuLink"
 const SiteMenu: FC = () => {

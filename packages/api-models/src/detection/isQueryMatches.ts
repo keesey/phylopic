@@ -1,5 +1,5 @@
 import { isArray, isNormalizedText, type ValidationFaultCollector } from "@phylopic/utils"
-import { type QueryMatches } from "../types/QueryMatches"
+import type { QueryMatches } from "../types/QueryMatches"
 import { isData } from "./isData"
 import { isLink } from "./isLink"
 import { isLinks } from "./isLinks"

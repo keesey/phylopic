@@ -1,5 +1,5 @@
 import type { CampaignEditorState, CampaignId } from "@phylopic/fundraiser"
-import { FC, FormEvent, useEffect, useRef, useState } from "react"
+import { type FC, type FormEvent, useEffect, useRef, useState } from "react"
 import useSWR from "swr"
 
 const fetcher = async (url: string): Promise<CampaignEditorState> => {

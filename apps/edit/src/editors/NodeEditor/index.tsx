@@ -1,5 +1,5 @@
-import { UUID } from "@phylopic/utils"
-import { FC } from "react"
+import type { UUID } from "@phylopic/utils"
+import type { FC } from "react"
 import NamesEditor from "./NamesEditor"
 import ParentEditor from "./ParentEditor"
 export type Props = { uuid: UUID }

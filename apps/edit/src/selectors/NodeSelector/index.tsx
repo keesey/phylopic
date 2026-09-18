@@ -1,6 +1,4 @@
 import { normalizeQuery } from "@phylopic/api-models"
-import { Page } from "@phylopic/source-client"
-import { Entity, Node } from "@phylopic/source-models"
 import {
     GBIFAutocomplete,
     GBIFResolve,
@@ -13,11 +11,13 @@ import {
     PhyloPicNodeSearch,
     SearchContainer,
 } from "@phylopic/client-components"
+import type { Page } from "@phylopic/source-client"
+import type { Entity, Node } from "@phylopic/source-models"
+import { type Nomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { parseNomen } from "parse-nomen"
-import { FC, useCallback, useState } from "react"
+import { type FC, useCallback, useState } from "react"
 import useSWR from "swr"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"

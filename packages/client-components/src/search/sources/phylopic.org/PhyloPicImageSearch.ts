@@ -1,15 +1,15 @@
 "use client"
-import { ImageListParameters, ImageWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
-import { Query, createSearch } from "@phylopic/utils"
+import type { ImageListParameters, ImageWithEmbedded, PageWithEmbedded } from "@phylopic/api-models"
+import { createSearch, type Query } from "@phylopic/utils"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
 import useSWRImmutable from "swr/immutable"
+import { useAPISWRKey } from "../../../swr"
 import { SearchContext } from "../../context"
-import { SetImageResultsAction } from "../../context/actions"
+import type { SetImageResultsAction } from "../../context/actions"
 import { useQueryFetcher, type QueryKey } from "../../hooks/useQueryFetcher"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { getMatchingText } from "../getMatchingText"
-import { useAPISWRKey } from "../../../swr"
 export interface PhyloPicImageSearchProps {
     filter_license_by?: boolean
     filter_license_nc?: boolean

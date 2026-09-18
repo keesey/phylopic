@@ -1,5 +1,5 @@
-import { List, Page, TitledLink } from "@phylopic/api-models"
-import { createSearch, stringifyNormalized, UUID } from "@phylopic/utils"
+import type { List, Page, TitledLink } from "@phylopic/api-models"
+import { createSearch, stringifyNormalized, type UUID } from "@phylopic/utils"
 
 export type ListLinkItem = Readonly<{
     title: string | null

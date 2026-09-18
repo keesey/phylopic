@@ -1,5 +1,5 @@
-import { MediaLink } from "@phylopic/api-models"
-import { FC, useMemo } from "react"
+import type { MediaLink } from "@phylopic/api-models"
+import { type FC, useMemo } from "react"
 import slugify from "slugify"
 import customEvents from "~/analytics/customEvents"
 import getImageFileExtension from "~/files/getImageFileExtension"

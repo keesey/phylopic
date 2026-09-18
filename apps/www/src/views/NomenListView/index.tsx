@@ -1,5 +1,5 @@
-import { Nomen } from "@phylopic/utils"
-import { FC } from "react"
+import type { Nomen } from "@phylopic/utils"
+import type { FC } from "react"
 import BulletList from "~/ui/BulletList"
 import NomenView from "../NomenView"
 export interface Props {

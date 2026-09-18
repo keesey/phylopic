@@ -1,6 +1,6 @@
-import { isUUIDv4, UUID } from "@phylopic/utils"
+import { isUUIDv4, type UUID } from "@phylopic/utils"
 import type { APIGatewayAuthorizerResult, APIGatewayRequestAuthorizerHandler } from "aws-lambda"
-import { JwtPayload } from "jsonwebtoken"
+import type { JwtPayload } from "jsonwebtoken"
 import isExpired from "../auth/jwt/isExpired"
 import verifyJWT from "../auth/jwt/verifyJWT"
 export const onAPIGatewayRequestAuthorizer: APIGatewayRequestAuthorizerHandler = async (event, _context) => {

@@ -1,6 +1,6 @@
 import { handleAPIError } from "@phylopic/source-client"
 import { isUUIDv4 } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import getSourceImageFileURL from "~/source/getSourceImageFileURL"
 import SourceClient from "~/source/SourceClient"

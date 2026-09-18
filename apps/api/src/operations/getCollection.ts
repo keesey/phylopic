@@ -1,14 +1,19 @@
-import { Collection, CollectionParameters, DATA_MEDIA_TYPE, isCollectionParameters } from "@phylopic/api-models"
-import { EMPTY_UUID, stringifyNormalized, UUID } from "@phylopic/utils"
-import { APIGatewayProxyResult } from "aws-lambda"
+import {
+    type Collection,
+    type CollectionParameters,
+    DATA_MEDIA_TYPE,
+    isCollectionParameters,
+} from "@phylopic/api-models"
+import { EMPTY_UUID, stringifyNormalized, type UUID } from "@phylopic/utils"
+import type { APIGatewayProxyResult } from "aws-lambda"
 import APIError from "../errors/APIError"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import withPgClient from "../services/withPgClient"
 import validate from "../validation/validate"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 
 const USER_MESSAGE = "There was a problem with an attempt to load a collection."
 

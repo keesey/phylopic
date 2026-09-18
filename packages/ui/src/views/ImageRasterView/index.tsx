@@ -1,5 +1,5 @@
-import { Image as ImageModel, MediaLink } from "@phylopic/api-models"
-import { ImageMediaType, URL } from "@phylopic/utils"
+import type { Image as ImageModel, MediaLink } from "@phylopic/api-models"
+import type { ImageMediaType, URL } from "@phylopic/utils"
 import NextImage from "next/image"
 import React from "react"
 import { getImageLoader } from "../../images"

@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { ChangeEvent, FC, HTMLInputTypeAttribute, useCallback } from "react"
+import { type ChangeEvent, type FC, type HTMLInputTypeAttribute, useCallback } from "react"
 import { ICON_CHECK } from "../ICON_SYMBOLS"
 import styles from "./index.module.scss"
 export interface Props {

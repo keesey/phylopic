@@ -1,6 +1,6 @@
 import clsx from "clsx"
-import Link, { LinkProps } from "next/link"
-import { FC, HTMLProps, PropsWithChildren, useMemo } from "react"
+import Link, { type LinkProps } from "next/link"
+import { type FC, type HTMLProps, type PropsWithChildren, useMemo } from "react"
 import styles from "./index.module.scss"
 export type Props =
     | PropsWithChildren<{ className?: string; type: "anchor" } & LinkProps>

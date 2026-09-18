@@ -1,10 +1,15 @@
-import { DataParameters, DATA_MEDIA_TYPE, EmbeddableParameters, NodeEmbedded } from "@phylopic/api-models"
-import { EMPTY_UUID, UUID } from "@phylopic/utils"
+import {
+    DATA_MEDIA_TYPE,
+    type DataParameters,
+    type EmbeddableParameters,
+    type NodeEmbedded,
+} from "@phylopic/api-models"
+import { EMPTY_UUID, type UUID } from "@phylopic/utils"
 import createBuildRedirect from "../build/createBuildRedirect"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 
 type GetRootParameters = DataRequestHeaders & DataParameters & EmbeddableParameters<NodeEmbedded>
 

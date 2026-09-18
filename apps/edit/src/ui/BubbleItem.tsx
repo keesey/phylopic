@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, FC, LiHTMLAttributes } from "react"
+import type { DetailedHTMLProps, FC, LiHTMLAttributes } from "react"
 import styles from "./BubbleItemOrNode.module.scss"
 
 export type Props = Omit<DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>, "className"> & {

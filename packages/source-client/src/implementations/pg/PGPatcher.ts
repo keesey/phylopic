@@ -1,7 +1,7 @@
-import { Patchable } from "../../interfaces/Patchable"
-import { PGClientProvider } from "../../interfaces/PGClientProvider"
-import { EditField } from "./fields/EditField"
-import { IDField } from "./fields/IDField"
+import type { Patchable } from "../../interfaces/Patchable"
+import type { PGClientProvider } from "../../interfaces/PGClientProvider"
+import type { EditField } from "./fields/EditField"
+import type { IDField } from "./fields/IDField"
 import { PGEditor } from "./PGEditor"
 import { prepareValue } from "./preparation/prepareValue"
 export class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {

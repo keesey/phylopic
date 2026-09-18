@@ -1,4 +1,4 @@
-import { isUUIDv4, normalizeUUID, UUID } from "@phylopic/utils"
+import { isUUIDv4, normalizeUUID, type UUID } from "@phylopic/utils"
 import { randomUUID } from "crypto"
 import DEFAULT_TTL from "../ttl/DEFAULT_TTL"
 import createJWT from "./createJWT"

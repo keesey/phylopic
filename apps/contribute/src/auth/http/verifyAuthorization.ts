@@ -1,5 +1,5 @@
-import { JwtPayload } from "jsonwebtoken"
-import { NextApiRequest } from "next"
+import type { JwtPayload } from "jsonwebtoken"
+import type { NextApiRequest } from "next"
 import verifyJWT from "../jwt/verifyJWT"
 import getBearerJWT from "./getBearerJWT"
 const verifyAuthorization = async (

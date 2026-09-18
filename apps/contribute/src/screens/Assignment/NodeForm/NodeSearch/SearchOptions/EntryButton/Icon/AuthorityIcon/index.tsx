@@ -1,6 +1,6 @@
-import { Authority } from "@phylopic/utils"
+import type { Authority } from "@phylopic/utils"
 import Image from "next/image"
-import { FC } from "react"
+import type { FC } from "react"
 import styles from "./index.module.scss"
 type IconInfo = Readonly<{
     alt: string

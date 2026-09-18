@@ -1,5 +1,5 @@
 import { createSearch } from "@phylopic/utils"
-import { APIGatewayProxyResult } from "aws-lambda"
+import type { APIGatewayProxyResult } from "aws-lambda"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import BUILD from "./BUILD"
 const createBuildRedirect = (

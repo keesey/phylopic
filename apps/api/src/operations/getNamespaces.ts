@@ -1,17 +1,17 @@
-import { DATA_MEDIA_TYPE, DataParameters } from "@phylopic/api-models"
-import checkBuild from "../build/checkBuild"
-import createBuildRedirect from "../build/createBuildRedirect"
+import { DATA_MEDIA_TYPE, type DataParameters } from "@phylopic/api-models"
 import { getStaticJSONKey } from "@phylopic/s3-entities"
 import BUILD from "../build/BUILD"
+import checkBuild from "../build/checkBuild"
+import createBuildRedirect from "../build/createBuildRedirect"
 import getS3EntityJSON from "../entities/getS3EntityJSON"
 import APIError from "../errors/APIError"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import type { S3ClientService } from "../services/S3ClientService"
 import withS3Client from "../services/withS3Client"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 
 type GetNamespaceParameters = DataRequestHeaders & DataParameters
 

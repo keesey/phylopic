@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { Arc } from "../types/Arc"
+import type { Arc } from "../types/Arc"
 import { normalizeArcs } from "./normalizeArcs"
 describe("normalizeArcs", () => {
     const test = (value: readonly Arc[], expected: readonly Arc[]) => {

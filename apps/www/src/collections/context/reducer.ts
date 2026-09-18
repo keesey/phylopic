@@ -1,8 +1,8 @@
-import { UUID } from "@phylopic/utils"
-import { Reducer } from "react"
-import { Action } from "./Action"
+import type { UUID } from "@phylopic/utils"
+import type { Reducer } from "react"
+import type { Action } from "./Action"
 import DEFAULT_COLLECTION_NAME from "./DEFAULT_COLLECTION_NAME"
-import { State } from "./State"
+import type { State } from "./State"
 const cleanEntities = (entities: State["entities"], collections: State["collections"]): State["entities"] => {
     return Object.fromEntries(
         Object.entries(entities).filter(([uuid]) => Object.values(collections).some(uuids => uuids.has(uuid))),

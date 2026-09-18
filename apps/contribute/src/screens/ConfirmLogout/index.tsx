@@ -1,4 +1,4 @@
-import { FC, useCallback, useContext } from "react"
+import { type FC, useCallback, useContext } from "react"
 import AuthContext from "~/auth/AuthContext"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_ARROW_LEFT, ICON_X } from "~/ui/ICON_SYMBOLS"

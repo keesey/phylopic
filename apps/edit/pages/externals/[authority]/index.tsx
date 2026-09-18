@@ -1,5 +1,5 @@
-import { Authority, isAuthority, Namespace } from "@phylopic/utils"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import { type Authority, isAuthority, type Namespace } from "@phylopic/utils"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { SWRConfig } from "swr"

@@ -1,5 +1,5 @@
-import { Image, ImageWithEmbedded } from "@phylopic/api-models"
-import { OpenGraph } from "next-seo/lib/types"
+import type { Image, ImageWithEmbedded } from "@phylopic/api-models"
+import type { OpenGraph } from "next-seo/lib/types"
 import { useMemo } from "react"
 const useOpenGraphForImage = (image: Image | ImageWithEmbedded | null | undefined): OpenGraph | undefined => {
     return useMemo(() => {

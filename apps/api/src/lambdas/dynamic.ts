@@ -1,11 +1,12 @@
 import {
-    ContributorListParameters,
+    type ContributorListParameters,
+    type ImageListParameters,
+    type NodeListParameters,
     CONTRIBUTOR_EMBEDDED_PARAMETERS,
-    ImageListParameters,
     IMAGE_EMBEDDED_PARAMETERS,
-    NodeListParameters,
     NODE_EMBEDDED_PARAMETERS,
 } from "@phylopic/api-models"
+import { EMPTY_UUID } from "@phylopic/utils"
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
 import APIError from "../errors/APIError"
 import create405 from "../errors/create405"
@@ -23,16 +24,15 @@ import getNode from "../operations/getNode"
 import getNodeLineage from "../operations/getNodeLineage"
 import getNodes from "../operations/getNodes"
 import getResolveObject from "../operations/getResolveObject"
-import postCollection from "../operations/postCollection"
 import getResolveObjects from "../operations/getResolveObjects"
-import { PgClientService } from "../services/PgClientService"
-import S3_CLIENT_SERVICE from "./services/S3_CLIENT_SERVICE"
-import { S3ClientService } from "../services/S3ClientService"
+import postCollection from "../operations/postCollection"
+import type { PgClientService } from "../services/PgClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
 import getUUID from "./parameters/getUUID"
 import PG_CLIENT_SERVICE from "./services/PG_CLIENT_SERVICE"
-import { EMPTY_UUID } from "@phylopic/utils"
+import S3_CLIENT_SERVICE from "./services/S3_CLIENT_SERVICE"
 const SERVICE: PgClientService & S3ClientService = {
     ...PG_CLIENT_SERVICE,
     ...S3_CLIENT_SERVICE,

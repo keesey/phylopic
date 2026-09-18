@@ -1,6 +1,6 @@
 import { Loader, SearchContext } from "@phylopic/client-components"
 import { getIdentifier } from "@phylopic/utils"
-import { FC, useCallback, useContext, useEffect, useState } from "react"
+import { type FC, useCallback, useContext, useEffect, useState } from "react"
 import { ICON_CHECK, ICON_X } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
@@ -11,7 +11,7 @@ import useParentRequested from "../../AssignmentContainer/hooks/useParentRequest
 import useText from "../../AssignmentContainer/hooks/useText"
 import NameForm from "../NameForm"
 import ParentSelector from "./ParentSelector"
-import { SearchEntry } from "./SearchEntry"
+import type { SearchEntry } from "./SearchEntry"
 import EntryButton from "./SearchOptions/EntryButton"
 import useEntries from "./useEntries"
 export const NodeSearch: FC = () => {

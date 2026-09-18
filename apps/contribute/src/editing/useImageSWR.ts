@@ -1,5 +1,5 @@
-import { Image } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
+import type { Image } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
 import { useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"

@@ -1,4 +1,4 @@
-import { ExtendedLicenseURL } from "../types"
+import type { ExtendedLicenseURL } from "../types"
 import { LICENSE_URLS } from "./LICENSE_URLS"
 export const EXTENDED_LICENSE_URLS: ReadonlySet<ExtendedLicenseURL> = new Set<ExtendedLicenseURL>([
     ...Array.from(LICENSE_URLS),

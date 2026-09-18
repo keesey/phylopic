@@ -1,7 +1,7 @@
-import { External } from "@phylopic/source-models"
-import { Authority, Namespace, ObjectID, UUID } from "@phylopic/utils"
-import { Listable } from "../interfaces"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { External } from "@phylopic/source-models"
+import type { Authority, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import type { Listable } from "../interfaces"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
 const EXTERNALS_PAGE_SIZE = 1024
 type INodeExternalsClient = Listable<
     External & { authority: Authority; namespace: Namespace; objectID: ObjectID },

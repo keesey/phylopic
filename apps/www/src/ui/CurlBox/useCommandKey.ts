@@ -1,6 +1,6 @@
-import { AxiosRequestConfig, Method } from "axios"
+import type { AxiosRequestConfig, Method } from "axios"
 import { useMemo } from "react"
-import { CurlOptions } from "./CurlOptions"
+import type { CurlOptions } from "./CurlOptions"
 const useCommandKey = (url: string, options?: CurlOptions): AxiosRequestConfig => {
     return useMemo(() => {
         let method: Method = "GET"

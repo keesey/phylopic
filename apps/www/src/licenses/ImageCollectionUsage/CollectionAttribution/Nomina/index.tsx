@@ -1,5 +1,5 @@
-import { Nomen } from "@phylopic/utils"
-import { FC, Fragment } from "react"
+import type { Nomen } from "@phylopic/utils"
+import { type FC, Fragment } from "react"
 import NomenView from "~/views/NomenView"
 export interface Props {
     nomina: readonly Nomen[]

@@ -1,6 +1,6 @@
-import { PutObjectTaggingCommand, Tagging } from "@aws-sdk/client-s3"
-import { Editable } from "../../interfaces/Editable"
-import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
+import { PutObjectTaggingCommand, type Tagging } from "@aws-sdk/client-s3"
+import type { Editable } from "../../interfaces/Editable"
+import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { writeTagging } from "./io/writeTagging"
 import { S3TaggingDeletor } from "./S3TaggingDeletor"
 export class S3TaggingEditor<T extends Readonly<Record<string, string | null>>>

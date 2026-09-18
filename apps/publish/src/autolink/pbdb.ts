@@ -1,6 +1,6 @@
-import { iterateList, SourceClient } from "@phylopic/source-client"
-import { Node } from "@phylopic/source-models"
-import { getIdentifier, isScientific, Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { iterateList, type SourceClient } from "@phylopic/source-client"
+import type { Node } from "@phylopic/source-models"
+import { getIdentifier, isScientific, type Nomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import axios from "axios"
 import packageJson from "../../package.json"
 type PBDBRecord = Readonly<{

@@ -1,6 +1,6 @@
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import NomenView from "~/views/NomenView"
-import Breadcrumbs, { BreadcrumbItem } from "../../Breadcrumbs"
+import Breadcrumbs, { type BreadcrumbItem } from "../../Breadcrumbs"
 import styles from "./index.module.scss"
 export interface Props {
     afterItems: readonly BreadcrumbItem[]

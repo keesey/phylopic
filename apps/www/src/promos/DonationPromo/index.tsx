@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { FC, useEffect, useState } from "react"
+import { type FC, useEffect, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import SiteTitle from "~/ui/SiteTitle"

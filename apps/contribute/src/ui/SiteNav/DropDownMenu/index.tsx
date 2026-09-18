@@ -1,8 +1,8 @@
-import { Submission } from "@phylopic/source-models"
-import { Hash, UUID } from "@phylopic/utils"
+import type { Submission } from "@phylopic/source-models"
+import { type Hash } from "@phylopic/utils"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
-import { FC } from "react"
+import type { FC } from "react"
 import styles from "./index.module.scss"
 const AccountMenu = dynamic(() => import("./menus/AccountMenu"), { ssr: false })
 const EditMenu = dynamic(() => import("./menus/EditMenu"), { ssr: false })

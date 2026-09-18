@@ -1,5 +1,5 @@
-import { Nomen } from "@phylopic/utils"
-import { FC, Fragment, useMemo } from "react"
+import type { Nomen } from "@phylopic/utils"
+import { type FC, Fragment, useMemo } from "react"
 import styles from "./index.module.scss"
 export interface Props {
     defaultText?: string

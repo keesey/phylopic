@@ -1,4 +1,4 @@
-import { TitledLink } from "@phylopic/api-models"
+import type { TitledLink } from "@phylopic/api-models"
 import extractUUIDv4 from "./extractUUIDv4"
 import getContributorSlug from "./getContributorSlug"
 const getContributorHRef = (link: TitledLink) => {

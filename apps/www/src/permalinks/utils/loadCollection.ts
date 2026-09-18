@@ -1,15 +1,15 @@
 import {
-    Collection,
-    Contributor,
-    ImageWithEmbedded,
+    type Collection,
+    type Contributor,
+    type ImageWithEmbedded,
     isCollection,
-    List,
-    NodeWithEmbedded,
-    PageWithEmbedded,
+    type List,
+    type NodeWithEmbedded,
+    type PageWithEmbedded,
 } from "@phylopic/api-models"
-import { createSearch, EMPTY_UUID, normalizeUUID, UUIDish } from "@phylopic/utils"
+import { createSearch, EMPTY_UUID, normalizeUUID, type UUIDish } from "@phylopic/utils"
 import axios from "axios"
-import { CollectionPermalinkData } from "../types/CollectionPermalinkData"
+import type { CollectionPermalinkData } from "../types/CollectionPermalinkData"
 const loadList = async <T>(
     endpoint: string,
     build: number,

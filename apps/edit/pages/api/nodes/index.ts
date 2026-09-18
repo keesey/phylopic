@@ -1,8 +1,8 @@
+import { handleAPIError, handleWithLister, type Page } from "@phylopic/source-client"
+import { isNode, type Node } from "@phylopic/source-models"
+import { normalizeUUID, type UUID, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
 import { randomUUID } from "crypto"
-import { handleAPIError, handleWithLister, Page } from "@phylopic/source-client"
-import { isNode, Node } from "@phylopic/source-models"
-import { normalizeUUID, UUID, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
 const index: NextApiHandler<(Node & { uuid: UUID }) | Page<Node & { uuid: UUID }, number> | number> = async (
     req,

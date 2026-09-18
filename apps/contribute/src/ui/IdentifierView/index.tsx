@@ -1,5 +1,5 @@
-import { getIdentifierParts, Identifier, isIdentifier, isUUIDv4 } from "@phylopic/utils"
-import { FC, useMemo } from "react"
+import { getIdentifierParts, type Identifier, isIdentifier, isUUIDv4 } from "@phylopic/utils"
+import { type FC, useMemo } from "react"
 import ExternalView from "./ExternalView"
 import PhyloPicNodesView from "./PhyloPicNodesView"
 export type Props = {

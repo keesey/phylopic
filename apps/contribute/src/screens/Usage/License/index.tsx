@@ -1,5 +1,5 @@
-import { Hash, LICENSE_NAMES, UUID } from "@phylopic/utils"
-import { FC } from "react"
+import { type Hash, LICENSE_NAMES } from "@phylopic/utils"
+import type { FC } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Speech from "~/ui/Speech"
