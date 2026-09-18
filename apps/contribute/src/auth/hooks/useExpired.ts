@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react"
 import useExpirationHandler from "./useExpirationHandler"
+
 const useExpired = (bufferMS = 0) => {
     const [expired, setExpired] = useState(false)
     const handler = useCallback(() => {
@@ -8,4 +9,5 @@ const useExpired = (bufferMS = 0) => {
     useExpirationHandler(handler, bufferMS)
     return expired
 }
+
 export default useExpired

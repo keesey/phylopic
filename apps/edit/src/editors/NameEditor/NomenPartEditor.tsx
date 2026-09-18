@@ -1,5 +1,5 @@
-import { NomenPart, NomenPartClass } from "parse-nomen"
-import { FC } from "react"
+import type { NomenPart, NomenPartClass } from "parse-nomen"
+import type { FC } from "react"
 import TextEditor from "../TextEditor"
 import styles from "./NomenPartEditor.module.scss"
 
@@ -8,6 +8,7 @@ export interface Props {
     value: NomenPart | null
     isFirst: boolean
 }
+
 const NomenPartEditor: FC<Props> = ({ isFirst, onChange, value }) => {
     if (!value) {
         return null
@@ -35,4 +36,5 @@ const NomenPartEditor: FC<Props> = ({ isFirst, onChange, value }) => {
         </section>
     )
 }
+
 export default NomenPartEditor

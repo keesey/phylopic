@@ -1,5 +1,6 @@
 import type { NodeLinks } from "@phylopic/api-models"
 import type { Authority, Namespace } from "@phylopic/utils"
+
 const getObjectIDs = (links: NodeLinks, authority: Authority, namespace: Namespace) => {
     const prefix = `/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}/`
     return links.external
@@ -8,4 +9,5 @@ const getObjectIDs = (links: NodeLinks, authority: Authority, namespace: Namespa
         .filter(Boolean)
         .map(s => decodeURIComponent(s))
 }
+
 export default getObjectIDs

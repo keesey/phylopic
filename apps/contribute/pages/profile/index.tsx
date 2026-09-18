@@ -4,7 +4,9 @@ import { Suspense } from "react"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
+
 const AccountProfile = dynamic(() => import("~/screens/AccountProfile"), { ssr: false })
+
 const Page: NextPage = () => (
     <PageLayout
         seo={{
@@ -19,4 +21,5 @@ const Page: NextPage = () => (
         </AuthorizedOnly>
     </PageLayout>
 )
+
 export default Page

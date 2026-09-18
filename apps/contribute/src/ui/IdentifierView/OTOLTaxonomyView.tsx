@@ -1,12 +1,14 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
 import { fetchJSON } from "@phylopic/utils-api"
 import { parseNomen } from "parse-nomen"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"
+
 export type Props = {
     id: number
 }
+
 const OTOLTaxonomyView: FC<Props> = ({ id }) => {
     const { data } = useSWRImmutable<{ unique_name: string }>(
         {
@@ -22,4 +24,5 @@ const OTOLTaxonomyView: FC<Props> = ({ id }) => {
     }
     return <NameView value={name} />
 }
+
 export default OTOLTaxonomyView

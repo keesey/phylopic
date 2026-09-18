@@ -8,4 +8,5 @@ const getBearerJWT = (authorization: string | undefined) => {
     }
     return match[1]
 }
+
 export default getBearerJWT

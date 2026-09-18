@@ -1,9 +1,10 @@
-import { Identifier } from "@phylopic/utils"
+import type { Identifier } from "@phylopic/utils"
 import { useRouter } from "next/router"
 import { useCallback } from "react"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import useDispatch from "./useDispatch"
 import useSubmissionHash from "./useSubmissionHash"
+
 const useComplete = () => {
     const dispatch = useDispatch()
     const hash = useSubmissionHash()
@@ -20,4 +21,5 @@ const useComplete = () => {
         [dispatch, hash, mutate, router],
     )
 }
+
 export default useComplete

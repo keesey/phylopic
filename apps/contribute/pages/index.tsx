@@ -3,7 +3,9 @@ import type { NextPage } from "next"
 import dynamic from "next/dynamic"
 import { Suspense } from "react"
 import PageLayout from "~/pages/PageLayout"
+
 const Home = dynamic(() => import("~/pages/Home"), { ssr: false })
+
 const Page: NextPage = () => (
     <PageLayout
         seo={{
@@ -16,4 +18,5 @@ const Page: NextPage = () => (
         </Suspense>
     </PageLayout>
 )
+
 export default Page

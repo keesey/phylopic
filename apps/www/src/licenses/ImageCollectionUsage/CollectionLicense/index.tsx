@@ -1,12 +1,14 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
 import { NumberView } from "@phylopic/ui"
 import { isPublicDomainLicenseURL, LICENSE_NAMES } from "@phylopic/utils"
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import useCollectionLicense from "./useCollectionLicense"
+
 export interface Props {
     images: readonly ImageWithEmbedded[]
 }
+
 const CollectionLicense: FC<Props> = ({ images }) => {
     const license = useCollectionLicense(images)
     if (!images.length) {
@@ -54,4 +56,5 @@ const CollectionLicense: FC<Props> = ({ images }) => {
         </p>
     )
 }
+
 export default CollectionLicense

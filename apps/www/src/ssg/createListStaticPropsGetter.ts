@@ -1,5 +1,5 @@
-import { List, PageWithEmbedded } from "@phylopic/api-models"
-import { createSearch, Query } from "@phylopic/utils"
+import type { List, PageWithEmbedded } from "@phylopic/api-models"
+import { createSearch, type Query } from "@phylopic/utils"
 import { fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticProps } from "next"
@@ -9,9 +9,11 @@ import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import compressFallback from "~/swr/compressFallback"
+
 export type Props = {
     fallback: Compressed
 }
+
 const createListStaticPropsGetter =
     <TEntity>(endpoint: string, query?: Query): GetStaticProps<Props, Record<string, never>> =>
     async () => {
@@ -44,4 +46,5 @@ const createListStaticPropsGetter =
             },
         }
     }
+
 export default createListStaticPropsGetter

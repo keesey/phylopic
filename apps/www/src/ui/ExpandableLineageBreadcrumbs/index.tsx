@@ -1,12 +1,13 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import { PaginationContainer } from "@phylopic/client-components"
-import { UUID } from "@phylopic/utils"
-import { FC, useCallback, useState } from "react"
+import type { UUID } from "@phylopic/utils"
+import { type FC, useCallback, useState } from "react"
 import customEvents from "~/analytics/customEvents"
-import { BreadcrumbItem } from "../Breadcrumbs"
+import type { BreadcrumbItem } from "../Breadcrumbs"
 import Collapsed from "./Collapsed"
 import Expanded from "./Expanded"
 import Static from "./Static"
+
 export interface Props {
     afterItems: readonly BreadcrumbItem[]
     beforeItems: readonly BreadcrumbItem[]
@@ -34,4 +35,5 @@ const ExpandableLineageBreadcrumbs: FC<Props> = ({ afterItems, beforeItems, uuid
         </PaginationContainer>
     )
 }
+
 export default ExpandableLineageBreadcrumbs

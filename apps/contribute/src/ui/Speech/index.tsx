@@ -1,11 +1,13 @@
 import { LoaderContext } from "@phylopic/client-components"
 import clsx from "clsx"
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import styles from "./index.module.scss"
+
 export type Props = {
     children: ReactNode
     mode: "system" | "user" | "user-input"
 }
+
 const Speech: FC<Props> = ({ children, mode }) => {
     return (
         <section className={clsx(styles.main, styles[mode])}>
@@ -15,4 +17,5 @@ const Speech: FC<Props> = ({ children, mode }) => {
         </section>
     )
 }
+
 export default Speech

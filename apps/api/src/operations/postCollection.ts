@@ -1,16 +1,16 @@
-import { DATA_MEDIA_TYPE, Link } from "@phylopic/api-models"
-import { EMPTY_UUID, isUUIDv4, stringifyNormalized, UUID } from "@phylopic/utils"
-import { APIGatewayProxyResult } from "aws-lambda"
+import { DATA_MEDIA_TYPE, type Link } from "@phylopic/api-models"
+import { EMPTY_UUID, isUUIDv4, stringifyNormalized, type UUID } from "@phylopic/utils"
+import type { APIGatewayProxyResult } from "aws-lambda"
 import APIError from "../errors/APIError"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import checkContentType from "../mediaTypes/checkContentType"
 import checkPostCollectionRateLimit from "../rateLimit/checkPostCollectionRateLimit"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import withPgClient from "../services/withPgClient"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 
 const ACCEPT = `application/json,${DATA_MEDIA_TYPE}`
 

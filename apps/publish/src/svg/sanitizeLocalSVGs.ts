@@ -1,6 +1,6 @@
+import { isLikelySVG, sanitizeSVG, svgNeedsSanitization } from "@phylopic/utils/svg"
 import { readFile, readdir, stat, writeFile } from "fs/promises"
 import { join } from "path"
-import { isLikelySVG, sanitizeSVG, svgNeedsSanitization } from "@phylopic/utils/svg"
 
 const LOCAL_TARGETS = [
     {
@@ -43,7 +43,6 @@ const sanitizeFile = async (path: string): Promise<"unchanged" | "updated"> => {
     await writeFile(path, sanitizeSVG(body))
     return "updated"
 }
-
 ;(async () => {
     let examined = 0
     let updated = 0

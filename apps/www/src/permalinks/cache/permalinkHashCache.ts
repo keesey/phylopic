@@ -1,4 +1,4 @@
-import { Hash } from "@phylopic/utils"
+import type { Hash } from "@phylopic/utils"
 
 const CACHE_TTL_MS = 60 * 60 * 1000
 

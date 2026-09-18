@@ -1,11 +1,20 @@
-import { Entity, External, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
 import { Loader } from "@phylopic/client-components"
-import { Authority, getIdentifier, isUUIDv4, Namespace, ObjectID, stringifyNomen, UUID } from "@phylopic/utils"
+import { type Entity, type External, INCOMPLETE_STRING, type Node } from "@phylopic/source-models"
+import {
+    type Authority,
+    getIdentifier,
+    isUUIDv4,
+    type Namespace,
+    type ObjectID,
+    stringifyNomen,
+    type UUID,
+} from "@phylopic/utils"
+import { fetchJSON } from "@phylopic/utils-api"
 import axios from "axios"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
-import { FC, useCallback, useMemo, useState } from "react"
+import { type FC, useCallback, useMemo, useState } from "react"
 import useSWR, { SWRConfig } from "swr"
 import NodeEditor from "~/editors/NodeEditor"
 import Paginator from "~/pagination/Paginator"
@@ -16,10 +25,11 @@ import BubbleList from "~/ui/BubbleList"
 import ExternalView from "~/views/ExternalView"
 import NameView from "~/views/NameView"
 import TimesView from "~/views/TimesView"
-import { fetchJSON } from "@phylopic/utils-api"
+
 export type Props = {
     uuid: UUID
 }
+
 const Page: NextPage<Props> = ({ uuid }) => {
     return (
         <SWRConfig>
@@ -27,7 +37,9 @@ const Page: NextPage<Props> = ({ uuid }) => {
         </SWRConfig>
     )
 }
+
 export default Page
+
 export const getStaticProps: GetStaticProps<Props> = context => {
     const { uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
@@ -35,12 +47,14 @@ export const getStaticProps: GetStaticProps<Props> = context => {
     }
     return { props: { uuid } }
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",
         paths: [],
     }
 }
+
 const Content: FC<Props> = ({ uuid }) => {
     const [merging, setMerging] = useState(false)
     const { data: node, mutate: mutateNode } = useSWR<Node & { uuid: UUID }>(`/api/nodes/_/${uuid}`, fetchJSON)

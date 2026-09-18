@@ -1,4 +1,5 @@
-import { ValidationFault } from "./ValidationFault"
+import type { ValidationFault } from "./ValidationFault"
+
 export class ValidationError extends Error {
     constructor(
         public readonly faults: readonly ValidationFault[],

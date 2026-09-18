@@ -3,6 +3,7 @@ import { dirname, join } from "path"
 import { fileURLToPath } from "url"
 
 const VERCEL_ENVIRONMENTS = "production,preview,development"
+
 const DEFAULT_VERCEL_PROJECT = "phylopic-www"
 
 const getWwwRoot = () => join(dirname(fileURLToPath(import.meta.url)), "../../..", "www")

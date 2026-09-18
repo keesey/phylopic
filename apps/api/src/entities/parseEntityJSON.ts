@@ -1,6 +1,7 @@
-import { FaultDetector } from "@phylopic/utils"
+import type { FaultDetector } from "@phylopic/utils"
 import APIError from "../errors/APIError"
 import validate from "../validation/validate"
+
 const parseEntityJSON = <T>(json: string, detector: FaultDetector<T>): T => {
     let result: T
     try {
@@ -17,4 +18,5 @@ const parseEntityJSON = <T>(json: string, detector: FaultDetector<T>): T => {
     validate(result, detector, "There is a problem with the website (unexpected data structure).", 500)
     return result
 }
+
 export default parseEntityJSON

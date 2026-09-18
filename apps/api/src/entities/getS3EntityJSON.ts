@@ -1,4 +1,4 @@
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { GetObjectCommand, type S3Client } from "@aws-sdk/client-s3"
 import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
 import { convertS3BodyToString, isAWSError } from "@phylopic/utils-aws"
 

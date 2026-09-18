@@ -1,8 +1,9 @@
-import { iterateList, SourceClient } from "@phylopic/source-client"
-import { Node } from "@phylopic/source-models"
-import { getIdentifier, isScientific, Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { iterateList, type SourceClient } from "@phylopic/source-client"
+import type { Node } from "@phylopic/source-models"
+import { getIdentifier, isScientific, type Nomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import axios from "axios"
 import packageJson from "../../package.json"
+
 type PBDBRecord = Readonly<{
     ext: string
     flg?: string
@@ -12,10 +13,12 @@ type PBDBRecord = Readonly<{
     rid: string
     rnk: number
 }>
+
 type PBDBResponse = Readonly<{
     // Abridged.
     records: readonly PBDBRecord[]
 }>
+
 const getScientificNames = (names: readonly Nomen[]) =>
     names.filter(isScientific).map(name =>
         name
@@ -23,8 +26,11 @@ const getScientificNames = (names: readonly Nomen[]) =>
             .map(part => part.text)
             .join(" "),
     )
+
 const ACCEPTED_ANCESTOR_RANKS = new Set([23, 20])
+
 const isAcceptableAncestor = (ancestor: PBDBRecord) => ACCEPTED_ANCESTOR_RANKS.has(ancestor.rnk)
+
 const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, ancestors: readonly PBDBRecord[]) => {
     const ancestorNames = ancestors.map(ancestor => ancestor.nam)
     console.info(
@@ -97,8 +103,10 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
         await processNode(client, child, ancestors)
     }
 }
+
 const autolinkPBDB = async (client: SourceClient): Promise<void> => {
     const node = await client.root.get()
     await processNode(client, node, [])
 }
+
 export default autolinkPBDB

@@ -1,10 +1,11 @@
-import { FaultDetector } from "../../detection/FaultDetector"
+import type { FaultDetector } from "../../detection/FaultDetector"
 import { invalidate } from "../../validation/invalidate"
-import { type ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
-import { Identifier } from "../types/Identifier"
+import type { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
+import type { Identifier } from "../types/Identifier"
 import { isAuthority } from "./isAuthority"
 import { isNamespace } from "./isNamespace"
 import { isObjectID } from "./isObjectID"
+
 export const isIdentifier: FaultDetector<Identifier> = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

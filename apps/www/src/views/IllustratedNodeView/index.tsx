@@ -1,17 +1,19 @@
-import { NodeWithEmbedded } from "@phylopic/api-models"
+import type { NodeWithEmbedded } from "@phylopic/api-models"
 import { ImageThumbnailView } from "@phylopic/ui"
 import { extractPath } from "@phylopic/utils"
 import Link from "next/link"
-import { FC, ReactNode, useMemo } from "react"
+import { type FC, type ReactNode, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import NomenView from "../NomenView"
 import EmptyImage from "./EmptyImage"
 import styles from "./index.module.scss"
+
 export interface Props {
     caption?: ReactNode
     short?: boolean
     value: NodeWithEmbedded
 }
+
 const IllustratedNodeView: FC<Props> = ({ caption, value, short }) => {
     const href = useMemo(() => extractPath(value._links.self.href), [value._links.self.href])
     return (
@@ -34,4 +36,5 @@ const IllustratedNodeView: FC<Props> = ({ caption, value, short }) => {
         </Link>
     )
 }
+
 export default IllustratedNodeView

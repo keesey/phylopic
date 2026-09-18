@@ -1,30 +1,36 @@
-import { ErrorResponse } from "@phylopic/api-models"
-import { FaultDetector, ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
-import axios, { AxiosRequestConfig } from "axios"
+import type { ErrorResponse } from "@phylopic/api-models"
+import { type FaultDetector, type ValidationFault, ValidationFaultCollector } from "@phylopic/utils"
+import axios, { type AxiosRequestConfig } from "axios"
 import { DEFAULT_API_HEADERS } from "./DEFAULT_API_HEADERS"
+
 export type HTTPRelatedDataResponse = {
     headers: Headers
     ok: boolean
     status: number
     statusText: string
 }
+
 export type SuccessfulFetchDataResponse<T> = HTTPRelatedDataResponse & {
     data: T
     ok: true
 }
+
 export type DetectionErrorFetchDataResponse = {
     code: "DetectionError"
     faults: readonly ValidationFault[]
     ok: false
 }
+
 export type HTTPErrorFetchDataResponse = HTTPRelatedDataResponse & {
     build?: number
     code: "HTTPError"
     error?: unknown
     ok: false
 }
+
 export type FetchDataResponse<T> =
     SuccessfulFetchDataResponse<T> | DetectionErrorFetchDataResponse | HTTPErrorFetchDataResponse
+
 export const fetchData = async <T>(
     url: string,
     config?: AxiosRequestConfig<T>,

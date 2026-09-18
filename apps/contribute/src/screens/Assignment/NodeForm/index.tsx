@@ -9,8 +9,9 @@ import {
     PhyloPicNodeSearch,
     SearchContainer,
 } from "@phylopic/client-components"
-import { FC } from "react"
+import type { FC } from "react"
 import NodeSearch from "./NodeSearch"
+
 const NodeForm: FC = () => {
     return (
         <SearchContainer>
@@ -28,4 +29,5 @@ const NodeForm: FC = () => {
         </SearchContainer>
     )
 }
+
 export default NodeForm

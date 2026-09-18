@@ -1,10 +1,10 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
 import { useAPIFetcher } from "@phylopic/client-components"
-import { Node } from "@phylopic/source-models"
+import type { Node } from "@phylopic/source-models"
 import { ImageThumbnailView } from "@phylopic/ui"
-import { UUID } from "@phylopic/utils"
+import type { UUID } from "@phylopic/utils"
 import clsx from "clsx"
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR from "swr"
 import useSWRImmutable from "swr/immutable"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
@@ -12,9 +12,11 @@ import useImage from "~/editing/useImage"
 import FileThumbnailView from "../FileThumbnailView"
 import NameView from "../NameView"
 import styles from "./index.module.scss"
+
 export type Props = {
     uuid: UUID
 }
+
 const UserImageThumbnail: FC<Props> = ({ uuid }) => {
     const apiFetcher = useAPIFetcher<ImageWithEmbedded>()
     const publishedSWR = useSWRImmutable(
@@ -43,7 +45,9 @@ const UserImageThumbnail: FC<Props> = ({ uuid }) => {
     }
     return null
 }
+
 export default UserImageThumbnail
+
 const Unpublished: FC<Props> = ({ uuid }) => {
     const image = useImage(uuid)
     const fetcher = useAuthorizedJSONFetcher<Node & { uuid: UUID }>()

@@ -1,7 +1,7 @@
-import { INCOMPLETE_STRING, Submission } from "@phylopic/source-models"
+import { INCOMPLETE_STRING, type Submission } from "@phylopic/source-models"
+import { type Hash, isHash } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { Hash, isHash } from "@phylopic/utils"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
 import useSWR, { SWRConfig } from "swr"
 import SubmissionEditor from "~/editors/SubmissionEditor"
@@ -9,9 +9,11 @@ import SubmissionFileEditor from "~/editors/SubmissionFileEditor"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SubmissionNameView from "~/views/SubmissionNameView"
 import TimesView from "~/views/TimesView"
+
 export type Props = {
     hash: Hash
 }
+
 const Page: NextPage<Props> = ({ hash }) => {
     const { data: submission } = useSWR<Submission>(`/api/submissions/_/${hash}`, fetchJSON)
     return (
@@ -46,7 +48,9 @@ const Page: NextPage<Props> = ({ hash }) => {
         </SWRConfig>
     )
 }
+
 export default Page
+
 export const getStaticProps: GetStaticProps<Props> = context => {
     const { hash } = context.params ?? {}
     if (!isHash(hash)) {
@@ -54,6 +58,7 @@ export const getStaticProps: GetStaticProps<Props> = context => {
     }
     return { props: { hash } }
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",

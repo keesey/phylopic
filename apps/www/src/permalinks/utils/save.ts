@@ -1,10 +1,11 @@
 import type { S3Client } from "@aws-sdk/client-s3"
 import { HeadObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
+import { type Hash, stringifyNormalized } from "@phylopic/utils"
 import { isAWSError } from "@phylopic/utils-aws"
-import { Hash, stringifyNormalized } from "@phylopic/utils"
-import { PermalinkData } from "../types/PermalinkData"
 import { createHash } from "crypto"
 import PERMALINKS_BUCKET_NAME from "../constants/PERMALINKS_BUCKET_NAME"
+import type { PermalinkData } from "../types/PermalinkData"
+
 const exists = async (client: S3Client, Key: string): Promise<boolean> => {
     try {
         const output = await client.send(
@@ -21,11 +22,13 @@ const exists = async (client: S3Client, Key: string): Promise<boolean> => {
         throw e
     }
 }
+
 const getHash = (data: string) => {
     const hashSum = createHash("sha256")
     hashSum.update(data)
     return hashSum.digest("hex")
 }
+
 const save = async (s3Client: S3Client, data: PermalinkData): Promise<Hash> => {
     const json = stringifyNormalized(data)
     const hash = getHash(json)
@@ -42,4 +45,5 @@ const save = async (s3Client: S3Client, data: PermalinkData): Promise<Hash> => {
     }
     return hash
 }
+
 export default save

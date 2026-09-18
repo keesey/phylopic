@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest"
-import { Nomen } from "../types/Nomen"
-import { normalizeNomina } from "./normalizeNomina"
 import { stringifyNomen } from "../../nomina"
+import type { Nomen } from "../types/Nomen"
+import { normalizeNomina } from "./normalizeNomina"
+
 const HOMO_SAPIENS: Nomen = [
     {
         class: "scientific",
@@ -12,12 +13,14 @@ const HOMO_SAPIENS: Nomen = [
         text: "Linnaeus 1758",
     },
 ]
+
 const HOMO_SAPIENS_UNCITED: Nomen = [
     {
         class: "scientific",
         text: "Homo sapiens",
     },
 ]
+
 const HOMO_SAPIENS_ALT_CITATION: Nomen = [
     {
         class: "scientific",
@@ -28,6 +31,7 @@ const HOMO_SAPIENS_ALT_CITATION: Nomen = [
         text: "L.",
     },
 ]
+
 const HOMO_HELMEI: Nomen = [
     {
         class: "scientific",
@@ -38,19 +42,23 @@ const HOMO_HELMEI: Nomen = [
         text: "Dreyer 1935",
     },
 ]
+
 const HUMANS: Nomen = [
     {
         class: "vernacular",
         text: "humans",
     },
 ]
+
 const ORANG: Nomen = [
     {
         class: "vernacular",
         text: "orang",
     },
 ]
+
 const stringifyNomina = (nomina: readonly Nomen[]) => nomina.map(n => stringifyNomen(n)).join("; ")
+
 describe("normalizeNomina", () => {
     const test = (value: readonly Nomen[], expected: readonly Nomen[]) => {
         it(`should convert ${stringifyNomina(value)} to ${stringifyNomina(expected)}`, () => {

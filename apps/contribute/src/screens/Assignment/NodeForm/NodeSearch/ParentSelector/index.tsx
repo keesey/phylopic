@@ -1,11 +1,12 @@
 import { PhyloPicAutocomplete, PhyloPicNodeSearch, SearchContainer } from "@phylopic/client-components"
-import { FC, useState } from "react"
+import { type FC, useState } from "react"
 import useNormalizedText from "~/screens/Assignment/AssignmentContainer/hooks/useNormalizedText"
 import NoBreak from "~/ui/NoBreak"
 import Speech from "~/ui/Speech"
 import NameForm from "../../NameForm"
 import NameRenderer from "../../NameRenderer"
 import ParentOptions from "./ParentOptions"
+
 export const ParentSelector: FC = () => {
     const childNameText = useNormalizedText()
     const [parentNameText, setParentNameText] = useState("")
@@ -32,4 +33,5 @@ export const ParentSelector: FC = () => {
         </SearchContainer>
     )
 }
+
 export default ParentSelector

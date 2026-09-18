@@ -1,9 +1,10 @@
 import axios from "axios"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import TIMETREE_API_URL from "~/external/timetree.org/TIMETREE_API_URL"
 import fetchField from "~/external/timetree.org/fetchField"
 import { checkProxyRateLimit, getClientIp } from "~/rateLimit/checkProxyRateLimit"
 import getString from "~/routes/getString"
+
 const index: NextApiHandler = async (req, res) => {
     if (!checkProxyRateLimit(getClientIp(req.headers["x-forwarded-for"]))) {
         res.status(429).end()
@@ -28,4 +29,5 @@ const index: NextApiHandler = async (req, res) => {
     }
     res.end()
 }
+
 export default index

@@ -1,14 +1,16 @@
 import { SearchContext, useExternalResolutions } from "@phylopic/client-components"
-import { FC, Fragment, useContext, useMemo } from "react"
+import { type FC, Fragment, useContext, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import IllustratedNodeView from "~/views/IllustratedNodeView"
+import Container from "../Container"
 import SearchAside from "../SearchAside"
 import ExternalResolutionCaption from "./ExternalResolutionCaption"
 import styles from "./index.module.scss"
-import Container from "../Container"
+
 export interface Props {
     maxResults?: number
 }
+
 const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
     const [state] = useContext(SearchContext) ?? []
     const nodeResults = useMemo(() => (state?.nodeResults ?? []).slice(0, maxResults), [maxResults, state?.nodeResults])
@@ -115,4 +117,5 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
         </aside>
     )
 }
+
 export default SearchResults

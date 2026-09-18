@@ -1,4 +1,5 @@
-import { Links } from "./Links"
+import type { Links } from "./Links"
+
 export interface QueryMatches {
     readonly _links: Links
     readonly build: number

@@ -1,3 +1,4 @@
-import { Authority, Identifier, Namespace, ObjectID } from "../types"
+import type { Authority, Identifier, Namespace, ObjectID } from "../types"
+
 export const getIdentifierParts = (identifier: Identifier) =>
     identifier.split("/").map(x => decodeURIComponent(x)) as unknown as Readonly<[Authority, Namespace, ObjectID]>

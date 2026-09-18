@@ -1,9 +1,11 @@
-import { AxiosRequestConfig } from "axios"
+import type { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
 import useAuthorizedRequest from "./useAuthorizedRequest"
+
 export type AuthorizedJSONFetcherConfig = Omit<AxiosRequestConfig, "responseType"> & {
     headers?: Omit<AxiosRequestConfig["headers"], "authorization">
 }
+
 const useAuthorizedJSONFetcher = <T>() => {
     const request = useAuthorizedRequest()
     return useCallback(
@@ -15,4 +17,5 @@ const useAuthorizedJSONFetcher = <T>() => {
         [request],
     )
 }
+
 export default useAuthorizedJSONFetcher

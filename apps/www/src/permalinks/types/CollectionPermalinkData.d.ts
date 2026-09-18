@@ -1,5 +1,6 @@
-import { Contributor, ImageWithEmbedded, NodeWithEmbedded } from "@phylopic/api-models"
-import { UUIDish } from "@phylopic/utils"
+import type { Contributor, ImageWithEmbedded, NodeWithEmbedded } from "@phylopic/api-models"
+import type { UUIDish } from "@phylopic/utils"
+
 export type CollectionPermalinkData = Readonly<{
     entities: Readonly<{
         contributors: readonly Contributor[]

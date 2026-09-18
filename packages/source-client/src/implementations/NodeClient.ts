@@ -1,19 +1,19 @@
-import { External, Node } from "@phylopic/source-models"
+import type { External, Node } from "@phylopic/source-models"
 import {
-    Authority,
+    type Authority,
     isUUIDv4,
-    Namespace,
-    Nomen,
+    type Namespace,
+    type Nomen,
     normalizeNomina,
     normalizeUUID,
-    ObjectID,
+    type ObjectID,
     stringifyNomen,
     stringifyNormalized,
-    UUID,
+    type UUID,
 } from "@phylopic/utils"
-import { Listable } from "../interfaces"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
-import { SourceClient } from "../interfaces/SourceClient"
+import type { Listable } from "../interfaces"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { SourceClient } from "../interfaces/SourceClient"
 import { ExternalClient } from "./ExternalClient"
 import { NodeExternalsClient } from "./NodeExternalsClient"
 import { NodeLineageClient } from "./NodeLineageClient"
@@ -22,6 +22,7 @@ import { NODE_TABLE } from "./pg/constants/NODE_TABLE"
 import { normalizeNode } from "./pg/normalization/normalizeNode"
 import { PGLister } from "./pg/PGLister"
 import { PGPatcher } from "./pg/PGPatcher"
+
 export class NodeClient extends PGPatcher<Node & { uuid: UUID }> implements ReturnType<SourceClient["node"]> {
     constructor(
         protected provider: PGClientProvider,

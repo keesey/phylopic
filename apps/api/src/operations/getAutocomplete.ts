@@ -1,18 +1,18 @@
-import { DATA_MEDIA_TYPE, SearchParameters } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, type SearchParameters } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import MAX_AUTOCOMPLETE_RESULTS from "../search/MAX_AUTOCOMPLETE_RESULTS"
 import normalizeSearchQuery from "../search/normalizeSearchQuery"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import withPgClient from "../services/withPgClient"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 
 type GetAutocompleteParameters = DataRequestHeaders & Partial<SearchParameters>
 

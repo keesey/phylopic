@@ -2,7 +2,6 @@ import DOMPurify from "isomorphic-dompurify"
 import {
     containsRemovableThreats,
     hasLeadingSvgCorruption,
-    isLikelySVG,
     removeKnownMetadataBlocks,
     stripDanglingMetadataText,
     stripLeadingSvgCorruption,
@@ -21,7 +20,6 @@ const containsSanitizableCruft = (svg: string): boolean =>
     DANGLING_METADATA_TEXT_PATTERN.test(svg)
 
 export { containsRemovableThreats, hasLeadingSvgCorruption, isLikelySVG } from "./sanitizeSVGLite"
-
 export const sanitizeSVGString = (svg: string): string => {
     const prepared = stripLeadingSvgCorruption(removeKnownMetadataBlocks(svg))
     const purified = DOMPurify.sanitize(prepared, PURIFY_CONFIG)

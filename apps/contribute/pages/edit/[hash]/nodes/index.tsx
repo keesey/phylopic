@@ -1,5 +1,5 @@
-import { API } from "@phylopic/api-models"
-import { Hash, isHash } from "@phylopic/utils"
+import type { API } from "@phylopic/api-models"
+import { type Hash, isHash } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
@@ -8,14 +8,17 @@ import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
 import SourceClient from "~/source/SourceClient"
+
 const Assignment = dynamic(() => import("~/screens/Assignment"), {
     loading: () => <LoadingState>One moment…</LoadingState>,
     ssr: false,
 })
+
 type Props = {
     build: number
     hash: Hash
 }
+
 const Page: NextPage<Props> = ({ build, hash }) => (
     <PageLayout
         build={build}
@@ -32,7 +35,9 @@ const Page: NextPage<Props> = ({ build, hash }) => (
         </AuthorizedOnly>
     </PageLayout>
 )
+
 export default Page
+
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const hash = context.params?.hash
     if (!isHash(hash)) {

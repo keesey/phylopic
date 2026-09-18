@@ -1,7 +1,8 @@
-import { GetObjectCommand, GetObjectOutput } from "@aws-sdk/client-s3"
-import { Readable } from "../../interfaces/Readable"
-import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
+import { GetObjectCommand, type GetObjectOutput } from "@aws-sdk/client-s3"
+import type { Readable } from "../../interfaces/Readable"
+import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { exists } from "./methods/exists"
+
 export class S3Reader<T> implements Readable<T> {
     constructor(
         protected readonly provider: S3ClientProvider,

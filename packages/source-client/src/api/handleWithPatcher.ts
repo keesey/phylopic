@@ -1,5 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { Patchable } from "../interfaces"
+import type { NextApiRequest, NextApiResponse } from "next"
+import type { Patchable } from "../interfaces"
+
 export const handleWithPatcher = async <T>(req: NextApiRequest, res: NextApiResponse<T>, editor: Patchable<T>) => {
     switch (req.method) {
         case "DELETE": {

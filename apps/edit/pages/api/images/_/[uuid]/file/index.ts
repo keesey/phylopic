@@ -1,8 +1,9 @@
 import { handleAPIError } from "@phylopic/source-client"
 import { isUUIDv4 } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import handleWithImageFileEditor from "~/api/handleWithImageFileEditor"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Buffer> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -19,4 +20,5 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

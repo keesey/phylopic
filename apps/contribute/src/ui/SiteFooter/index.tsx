@@ -1,14 +1,16 @@
 import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import logoDiscord from "../../../public/logos/discord.svg"
 import logoFacebook from "../../../public/logos/facebook.svg"
 import logoMail from "../../../public/logos/mail.svg"
 import logoMastodon from "../../../public/logos/mastodon.svg"
 import logoPatreon from "../../../public/logos/patreon-white.svg"
 import styles from "./index.module.scss"
+
 const YEAR = new Date().getFullYear()
+
 const SiteFooter: FC = () => (
     <nav className={styles.main}>
         <ul>
@@ -55,4 +57,5 @@ const SiteFooter: FC = () => (
         </ul>
     </nav>
 )
+
 export default SiteFooter

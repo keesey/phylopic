@@ -10,10 +10,8 @@ vi.mock("@vercel/functions/oidc", () => ({
 }))
 
 import createAwsClientConfig from "./createAwsClientConfig"
-
 describe("createAwsClientConfig", () => {
     const originalEnv = process.env
-
     beforeEach(() => {
         process.env = { ...originalEnv }
         delete process.env.AWS_ROLE_ARN
@@ -23,11 +21,9 @@ describe("createAwsClientConfig", () => {
         delete process.env.CUSTOM_SECRET_KEY
         awsCredentialsProvider.mockClear()
     })
-
     afterEach(() => {
         process.env = originalEnv
     })
-
     it("uses OIDC credentials when roleArn is provided", () => {
         const config = createAwsClientConfig({
             region: "us-east-1",
@@ -43,7 +39,6 @@ describe("createAwsClientConfig", () => {
             forcePathStyle: true,
         })
     })
-
     it("uses AWS_ROLE_ARN from the environment by default", () => {
         process.env.AWS_ROLE_ARN = "arn:aws:iam::123456789012:role/from-env"
         const config = createAwsClientConfig({ region: "eu-west-1" })
@@ -55,7 +50,6 @@ describe("createAwsClientConfig", () => {
             roleArn: "arn:aws:iam::123456789012:role/from-env",
         })
     })
-
     it("uses static credentials from default env var names", () => {
         process.env.S3_ACCESS_KEY_ID = "AKIAEXAMPLE"
         process.env.S3_SECRET_ACCESS_KEY = "secret-example"
@@ -67,7 +61,6 @@ describe("createAwsClientConfig", () => {
             forcePathStyle: undefined,
         })
     })
-
     it("uses static credentials from custom env var names", () => {
         process.env.CUSTOM_ACCESS_KEY = "custom-key"
         process.env.CUSTOM_SECRET_KEY = "custom-secret"
@@ -81,13 +74,11 @@ describe("createAwsClientConfig", () => {
             secretAccessKey: "custom-secret",
         })
     })
-
     it("returns region-only config when no credentials are available", () => {
         const config = createAwsClientConfig({ region: "ca-central-1", forcePathStyle: false })
         expect(awsCredentialsProvider).not.toHaveBeenCalled()
         expect(config).toEqual({ region: "ca-central-1", forcePathStyle: false })
     })
-
     it("ignores incomplete static credentials", () => {
         process.env.S3_ACCESS_KEY_ID = "AKIAEXAMPLE"
         const config = createAwsClientConfig({ region: "us-east-1" })

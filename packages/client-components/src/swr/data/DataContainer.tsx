@@ -1,9 +1,10 @@
-import { createSearch, Query, URL } from "@phylopic/utils"
+import { createSearch, type Query, type URL } from "@phylopic/utils"
 import React from "react"
 import useSWRImmutable from "swr/immutable"
 import { BuildContext } from "../../builds"
 import { Loader } from "../../loading"
 import { useAPIFetcher } from "../hooks"
+
 export type DataContainerProps<T extends Readonly<{ build: number }> = Readonly<{ build: number }>> = {
     children?: (value?: T) => React.ReactNode
     endpoint: URL
@@ -11,6 +12,7 @@ export type DataContainerProps<T extends Readonly<{ build: number }> = Readonly<
     onError?: (error: Error) => void
     query?: Query
 }
+
 export const DataContainer: React.FC<DataContainerProps> = ({ children, endpoint, hideLoader, onError, query }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const fetcher = useAPIFetcher()

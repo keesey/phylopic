@@ -1,5 +1,6 @@
-import { ImageListParameters } from "@phylopic/api-models"
-import QueryConfigBuilder from "../../sql/QueryConfigBuilder"
+import type { ImageListParameters } from "@phylopic/api-models"
+import type QueryConfigBuilder from "../../sql/QueryConfigBuilder"
+
 const addFilterToQuery = (params: ImageListParameters, builder: QueryConfigBuilder) => {
     if (params.filter_contributor !== undefined) {
         builder.add("AND image.contributor_uuid=$::uuid", [params.filter_contributor])
@@ -32,4 +33,5 @@ const addFilterToQuery = (params: ImageListParameters, builder: QueryConfigBuild
         builder.add("AND modified_file<=$::timestamp without time zone", [params.filter_modifiedFile_before])
     }
 }
+
 export default addFilterToQuery

@@ -1,18 +1,20 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import { useAPIFetcher } from "@phylopic/client-components"
-import { Authority, isPositiveInteger, Namespace, ObjectID } from "@phylopic/utils"
-import { FC } from "react"
+import { type Authority, isPositiveInteger, type Namespace, type ObjectID } from "@phylopic/utils"
+import type { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"
 import GBIFSpeciesView from "./GBIFSpeciesView"
 import OTOLTaxonomyView from "./OTOLTaxonomyView"
 import PBDBTxnView from "./PBDBTxnView"
+
 export type Props = {
     authority: Authority
     namespace: Namespace
     objectID: ObjectID
     short?: boolean
 }
+
 const ExternalView: FC<Props> = ({ authority, namespace, objectID, short }) => {
     const fetcher = useAPIFetcher<Node>()
     const { data: node } = useSWRImmutable(
@@ -48,4 +50,5 @@ const ExternalView: FC<Props> = ({ authority, namespace, objectID, short }) => {
         </code>
     )
 }
+
 export default ExternalView

@@ -1,15 +1,17 @@
-import { Image } from "@phylopic/api-models"
+import type { Image } from "@phylopic/api-models"
 import { useAPIFetcher, useStoredState } from "@phylopic/client-components"
-import { isJWT, JWT } from "@phylopic/source-models"
-import { isUUIDv4, UUID } from "@phylopic/utils"
+import { isJWT, type JWT } from "@phylopic/source-models"
+import { isUUIDv4, type UUID } from "@phylopic/utils"
 import { decode } from "jsonwebtoken"
-import { FC, useMemo, useState } from "react"
+import { type FC, useMemo, useState } from "react"
 import useSWRImmutable from "swr/immutable"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
+
 export type Props = {
     imageUUID: UUID
 }
+
 const ContributorBanner: FC<Props> = ({ imageUUID }) => {
     const [dismissed, setDismissed] = useState(false)
     const fetcher = useAPIFetcher<Image>()
@@ -50,4 +52,5 @@ const ContributorBanner: FC<Props> = ({ imageUUID }) => {
         </div>
     )
 }
+
 export default ContributorBanner

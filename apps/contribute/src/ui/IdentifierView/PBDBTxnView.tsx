@@ -1,12 +1,14 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
 import { fetchJSON } from "@phylopic/utils-api"
 import { parseNomen } from "parse-nomen"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"
+
 export type Props = {
     oid: number
 }
+
 const PBDBTxnView: FC<Props> = ({ oid }) => {
     const { data } = useSWRImmutable<{ records: [{ nam: string }] }>(
         `https://paleobiodb.org/data1.2/taxa/single.json?id=txn:${encodeURIComponent(oid)}`,
@@ -19,4 +21,5 @@ const PBDBTxnView: FC<Props> = ({ oid }) => {
     }
     return <NameView value={name} />
 }
+
 export default PBDBTxnView

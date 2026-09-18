@@ -1,5 +1,6 @@
-import { UUID } from "@phylopic/utils"
-import { Image, Submission } from "../types"
+import type { UUID } from "@phylopic/utils"
+import type { Image, Submission } from "../types"
+
 export const getImage = (submission: Submission & { submitted: true }, specific: UUID): Image => {
     return {
         attribution: submission.attribution ?? null,

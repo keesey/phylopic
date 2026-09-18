@@ -1,7 +1,8 @@
-import { type Nomen } from "@phylopic/utils"
+import type { Nomen } from "@phylopic/utils"
 import clsx from "clsx"
-import { type NomenPartClass } from "parse-nomen"
+import type { NomenPartClass } from "parse-nomen"
 import React from "react"
+
 export interface NomenViewProps {
     classes?: Partial<Record<"main" | NomenPartClass, string>>
     defaultText?: string
@@ -9,6 +10,7 @@ export interface NomenViewProps {
     short?: boolean
     value?: Nomen
 }
+
 export const NomenView: React.FC<NomenViewProps> = ({ classes, defaultText = "", short, value }) => {
     const parts = value
         ? short

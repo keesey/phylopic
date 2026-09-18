@@ -1,5 +1,5 @@
-import { JWT, verifyJWT as verifyJWTToken } from "@phylopic/source-models"
-import { JwtPayload } from "jsonwebtoken"
+import { type JWT, verifyJWT as verifyJWTToken } from "@phylopic/source-models"
+import type { JwtPayload } from "jsonwebtoken"
 
 const verifyJWT = (token: JWT) => {
     const secret = process.env.AUTH_SECRET_KEY

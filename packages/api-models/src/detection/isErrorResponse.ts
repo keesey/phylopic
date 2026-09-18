@@ -1,5 +1,5 @@
 import { isArray, type ValidationFaultCollector } from "@phylopic/utils"
-import { type ErrorResponse } from "../types/ErrorResponse"
+import type { ErrorResponse } from "../types/ErrorResponse"
 import { isData } from "./isData"
 import { isError } from "./isError"
 

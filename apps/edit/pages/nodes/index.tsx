@@ -1,16 +1,17 @@
-import { Entity, Node } from "@phylopic/source-models"
+import type { Entity, Node } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { UUID } from "@phylopic/utils"
-import { NextPage } from "next"
+import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { FC, useCallback, useState } from "react"
+import { type FC, useCallback, useState } from "react"
 import useSWR from "swr"
 import Paginator from "~/pagination/Paginator"
 import NodeSelector from "~/selectors/NodeSelector"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import NameView from "~/views/NameView"
+
 const Page: NextPage = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const router = useRouter()
@@ -58,7 +59,9 @@ const Page: NextPage = () => {
         </>
     )
 }
+
 export default Page
+
 const NodeView: FC<{ node: Node & { uuid: UUID } }> = ({ node }) => {
     const { data: parent } = useSWR<Node & { uuid: UUID }>(
         node.parent ? `/api/nodes/_/${encodeURIComponent(node.parent)}` : null,

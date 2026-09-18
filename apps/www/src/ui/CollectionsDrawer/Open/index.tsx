@@ -1,6 +1,7 @@
-import { FC } from "react"
+import type { FC } from "react"
 import Collections from "./Collections"
 import Images from "./Images"
+
 const Open: FC = () => {
     return (
         <>
@@ -9,4 +10,5 @@ const Open: FC = () => {
         </>
     )
 }
+
 export default Open

@@ -1,15 +1,17 @@
-import { External } from "@phylopic/source-models"
-import { Authority, isAuthority, isNamespace, Namespace, ObjectID } from "@phylopic/utils"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import type { External } from "@phylopic/source-models"
+import { type Authority, isAuthority, isNamespace, type Namespace, type ObjectID } from "@phylopic/utils"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+
 export type Props = {
     authority: Authority
     namespace: Namespace
 }
+
 const Page: NextPage<Props> = ({ authority, namespace }) => (
     <SWRConfig>
         <Head>
@@ -62,7 +64,9 @@ const Page: NextPage<Props> = ({ authority, namespace }) => (
         </main>
     </SWRConfig>
 )
+
 export default Page
+
 export const getStaticProps: GetStaticProps<Props> = context => {
     const { authority, namespace } = context.params ?? {}
     if (!isAuthority(authority) || !isNamespace(namespace)) {
@@ -70,6 +74,7 @@ export const getStaticProps: GetStaticProps<Props> = context => {
     }
     return { props: { authority, namespace } }
 }
+
 export const getStaticPaths: GetStaticPaths = context => {
     return {
         fallback: "blocking",

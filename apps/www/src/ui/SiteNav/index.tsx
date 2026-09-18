@@ -1,12 +1,14 @@
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { FC, Suspense, useEffect, useState } from "react"
+import { type FC, Suspense, useEffect, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import SearchBar from "../SearchBar"
 import SiteTitle from "../SiteTitle"
 import styles from "./index.module.scss"
+
 const DropdownNav = dynamic(() => import("./DropdownNav"), { ssr: false })
+
 const SiteNav: FC = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const router = useRouter()
@@ -52,4 +54,5 @@ const SiteNav: FC = () => {
         </nav>
     )
 }
+
 export default SiteNav

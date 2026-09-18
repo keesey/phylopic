@@ -1,5 +1,7 @@
 import BaseSourceClient, { createSourcePool, PoolClientProvider } from "@phylopic/source-client"
+
 const POOL = createSourcePool()
+
 export default class SourceClient extends BaseSourceClient {
     constructor() {
         const provider = new PoolClientProvider(POOL, {

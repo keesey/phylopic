@@ -1,5 +1,5 @@
 import { BuildContainer, LoaderContext } from "@phylopic/client-components"
-import { Hash } from "@phylopic/utils"
+import type { Hash } from "@phylopic/utils"
 import type { NextSeoProps } from "next-seo"
 import { NextSeo } from "next-seo"
 import type { FC, PropsWithChildren } from "react"
@@ -10,12 +10,14 @@ import PageLoader from "~/ui/PageLoader"
 import SiteFooter from "~/ui/SiteFooter"
 import SiteNav from "~/ui/SiteNav"
 import styles from "./index.module.scss"
+
 type Props = PropsWithChildren<{
     build?: number
     fallback?: SWRConfiguration["fallback"]
     seo?: NextSeoProps
     submissionHash?: Hash
 }>
+
 const PageLayout: FC<Props> = ({ build, children, fallback = {}, seo, submissionHash }) => {
     return (
         <SWRConfig value={{ fallback }}>
@@ -42,4 +44,5 @@ const PageLayout: FC<Props> = ({ build, children, fallback = {}, seo, submission
         </SWRConfig>
     )
 }
+
 export default PageLayout

@@ -1,2 +1,3 @@
 const MAX_FILE_SIZE_MEBIBYTES = 5
+
 export default MAX_FILE_SIZE_MEBIBYTES

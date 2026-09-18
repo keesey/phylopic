@@ -1,4 +1,4 @@
-import { FC, useCallback, useContext } from "react"
+import { type FC, useCallback, useContext } from "react"
 import AuthContext from "~/auth/AuthContext"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_ARROW_LEFT, ICON_X } from "~/ui/ICON_SYMBOLS"
@@ -6,6 +6,7 @@ import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+
 const ConfirmLogout: FC = () => {
     const [, setToken] = useContext(AuthContext) ?? []
     const handleLogOutButtonClick = useCallback(() => {
@@ -28,4 +29,5 @@ const ConfirmLogout: FC = () => {
         </Dialogue>
     )
 }
+
 export default ConfirmLogout

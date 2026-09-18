@@ -5,19 +5,23 @@ import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
+
 const URL = "https://eol.org/api/search/1.0.json"
+
 interface EOLSearch {
     readonly itemsPerPage: number
     readonly results: readonly EOLSearchResult[]
     readonly startIndex: number
     readonly totalResults: number
 }
+
 interface EOLSearchResult {
     readonly content: string
     readonly id: number
     readonly link: URL
     readonly title: string
 }
+
 const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, string]> = async ([url, query]) => {
     if (query.length < 2) {
         return [[], query]
@@ -32,6 +36,7 @@ const fetcher: Fetcher<Readonly<[readonly EOLSearchResult[], string]>, [string, 
     )
     return [response.data.results, query]
 }
+
 export const EOLSearch: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const response = useSWRImmutable(state?.text ? [URL, state.text] : null, fetcher)

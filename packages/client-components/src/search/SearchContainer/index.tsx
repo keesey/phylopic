@@ -1,9 +1,10 @@
 "use client"
-import React, { ReactNode, useEffect } from "react"
+import { type FC, type ReactNode, useContext, useEffect, useReducer, useState } from "react"
 import { BuildContext } from "../../builds"
 import { SearchContext } from "../context"
-import { State } from "../context/State"
+import type { State } from "../context/State"
 import { reducer } from "./reducer"
+
 const createInitialState = (text: string): State => ({
     externalMatches: [],
     externalResults: {},
@@ -15,19 +16,21 @@ const createInitialState = (text: string): State => ({
     resolvedNodes: {},
     text,
 })
+
 export interface SearchContainerProps {
     children?: ReactNode
     initialText?: string
 }
-export const SearchContainer: React.FC<SearchContainerProps> = ({ children, initialText = "" }) => {
-    const [build] = React.useContext(BuildContext) ?? []
-    const [prevBuild, setPrevBuild] = React.useState(build)
-    const contextValue = React.useReducer(reducer, [initialText], () => createInitialState(initialText))
+
+export const SearchContainer: FC<SearchContainerProps> = ({ children, initialText = "" }) => {
+    const [build] = useContext(BuildContext) ?? []
+    const [prevBuild, setPrevBuild] = useState(build)
+    const contextValue = useReducer(reducer, [initialText], () => createInitialState(initialText))
     const [, dispatch] = contextValue
     useEffect(() => {
         return () => dispatch({ type: "RESET" })
     }, [dispatch])
-    React.useEffect(() => {
+    useEffect(() => {
         if (prevBuild !== build) {
             setPrevBuild(build)
             dispatch({ type: "RESET_INTERNAL" })

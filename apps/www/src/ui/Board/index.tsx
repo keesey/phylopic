@@ -1,8 +1,10 @@
-import { Key, ReactNode, FC } from "react"
+import type { FC, Key, ReactNode } from "react"
 import styles from "./index.module.scss"
+
 export interface Props {
     items: readonly Readonly<[Key, ReactNode, ReactNode]>[]
 }
+
 const Board: FC<Props> = ({ items }) => (
     <ul className={styles.main}>
         {items.map(([key, left, right]) => (
@@ -14,4 +16,5 @@ const Board: FC<Props> = ({ items }) => (
         ))}
     </ul>
 )
+
 export default Board

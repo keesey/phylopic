@@ -1,8 +1,9 @@
 import { handleAPIError, handleWithPatcher } from "@phylopic/source-client"
-import { Contributor } from "@phylopic/source-models"
-import { isUUIDv4, UUID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { Contributor } from "@phylopic/source-models"
+import { isUUIDv4, type UUID } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Contributor & { uuid: UUID }> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -19,4 +20,5 @@ const index: NextApiHandler<Contributor & { uuid: UUID }> = async (req, res) => 
     }
     res.end()
 }
+
 export default index

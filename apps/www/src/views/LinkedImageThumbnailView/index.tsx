@@ -1,15 +1,17 @@
-import { DATA_MEDIA_TYPE, Image } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, type Image } from "@phylopic/api-models"
 import { ImageThumbnailView } from "@phylopic/ui"
 import { extractPath, stringifyNormalized } from "@phylopic/utils"
 import clsx from "clsx"
 import Link from "next/link"
-import { DragEvent, FC } from "react"
+import type { DragEvent, FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
+
 export interface Props {
     inverted?: boolean
     value: Image
 }
+
 const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
     const handleDragStart = (event: DragEvent) => {
         customEvents.dragImage("thumbnail", value)
@@ -28,4 +30,5 @@ const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
         </Link>
     )
 }
+
 export default LinkedImageThumbnailView

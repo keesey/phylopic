@@ -1,7 +1,7 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import { isDefined, shortenNomen, stringifyNomen } from "@phylopic/utils"
-import { FC, useMemo } from "react"
-import { Taxon, WithContext } from "schema-dts"
+import { type FC, useMemo } from "react"
+import type { Taxon, WithContext } from "schema-dts"
 import resolveExternalHRef from "~/models/resolveExternalHRef"
 import getImageHRef from "~/routes/getImageHRef"
 import getNodeHRef from "~/routes/getNodeHRef"
@@ -10,6 +10,7 @@ import SchemaScript from ".."
 export type Props = {
     node: Node
 }
+
 const TaxonSchemaScript: FC<Props> = ({ node }) => {
     const object = useMemo<WithContext<Taxon>>(() => {
         const name = stringifyNomen(node.names[0])
@@ -46,4 +47,5 @@ const TaxonSchemaScript: FC<Props> = ({ node }) => {
     }, [node])
     return <SchemaScript id="Taxon" object={object} />
 }
+
 export default TaxonSchemaScript

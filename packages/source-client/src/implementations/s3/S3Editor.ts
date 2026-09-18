@@ -1,8 +1,9 @@
-import { GetObjectOutput, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3"
+import { type GetObjectOutput, PutObjectCommand, type PutObjectCommandInput } from "@aws-sdk/client-s3"
 import { S3_SERVER_SIDE_ENCRYPTION_AES256 } from "@phylopic/utils-aws"
-import { Editable } from "../../interfaces/Editable"
-import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
+import type { Editable } from "../../interfaces/Editable"
+import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { S3Deletor } from "./S3Deletor"
+
 export class S3Editor<T> extends S3Deletor<T> implements Editable<T> {
     constructor(
         provider: S3ClientProvider,

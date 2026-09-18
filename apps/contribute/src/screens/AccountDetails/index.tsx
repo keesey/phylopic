@@ -2,10 +2,11 @@ import { useCallback, useState } from "react"
 import useContributorMutator from "~/profile/useContributorMutator"
 import Dialogue from "~/ui/Dialogue"
 import NoBreak from "~/ui/NoBreak"
-import UserTextForm from "~/ui/UserTextForm"
 import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
+import UserTextForm from "~/ui/UserTextForm"
 import UserVerification from "~/ui/UserVerification"
+
 const AccountDetails = () => {
     const mutate = useContributorMutator()
     const [name, setName] = useState("")
@@ -79,4 +80,5 @@ const AccountDetails = () => {
         </Dialogue>
     )
 }
+
 export default AccountDetails

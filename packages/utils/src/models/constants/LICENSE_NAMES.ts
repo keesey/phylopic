@@ -1,4 +1,5 @@
-import { ExtendedLicenseURL } from "../types/ExtendedLicenseURL"
+import type { ExtendedLicenseURL } from "../types/ExtendedLicenseURL"
+
 export const LICENSE_NAMES: Readonly<Record<ExtendedLicenseURL, string>> = {
     "https://creativecommons.org/licenses/by-nc-sa/3.0/": "Attribution-NonCommercial-ShareAlike 3.0 Unported",
     "https://creativecommons.org/licenses/by-nc-sa/4.0/": "Attribution-NonCommercial-ShareAlike 4.0 International",

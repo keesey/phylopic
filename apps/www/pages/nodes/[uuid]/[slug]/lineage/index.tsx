@@ -1,33 +1,36 @@
-import { NodeParameters, NodeWithEmbedded } from "@phylopic/api-models"
+import type { NodeParameters, NodeWithEmbedded } from "@phylopic/api-models"
 import { NodeContainer, PaginationContainer, useNomenText } from "@phylopic/client-components"
-import { createSearch, isUUIDv4, Query, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { createSearch, isUUIDv4, type Query, shortenNomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
-import { FC, useMemo } from "react"
-import { SWRConfiguration, unstable_serialize } from "swr"
+import { type FC, useMemo } from "react"
+import { type SWRConfiguration, unstable_serialize } from "swr"
 import customEvents from "~/analytics/customEvents"
 import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getNodeHRef from "~/routes/getNodeHRef"
 import getNodeSlug from "~/routes/getNodeSlug"
-import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import type { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Container from "~/ui/Container"
 import ExpandableLineageBreadcrumbs from "~/ui/ExpandableLineageBreadcrumbs"
 import LineageView from "~/views/LineageView"
 import NomenView from "~/views/NomenView"
+
 const NODE_QUERY: Pick<NodeParameters, "embed_primaryImage"> & Query = { embed_primaryImage: "true" }
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
     uuid: UUID
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...pageLayoutProps}>
@@ -39,6 +42,7 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) 
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     const name = node.names[0]
     const nameString = useNomenText(name, false, "[Unnamed Group]")
@@ -104,11 +108,14 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         </>
     )
 }
+
 export default PageComponent
+
 export const getStaticPaths: GetStaticPaths<{ uuid: UUID; slug: string }> = () => ({
     fallback: "blocking",
     paths: [],
 })
+
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

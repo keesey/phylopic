@@ -1,8 +1,9 @@
-import { NextPage } from "next"
+import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
+
 const Page: NextPage = () => (
     <PageLayout>
         <NextSeo noindex title="Offline - PhyloPic" />
@@ -19,4 +20,5 @@ const Page: NextPage = () => (
         </Container>
     </PageLayout>
 )
+
 export default Page

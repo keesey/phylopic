@@ -39,7 +39,6 @@ const createAwsClientConfig = ({
             forcePathStyle,
         }
     }
-
     const accessKeyId = process.env[accessKeyIdEnv]
     const secretAccessKey = process.env[secretAccessKeyEnv]
     if (accessKeyId && secretAccessKey) {
@@ -49,7 +48,6 @@ const createAwsClientConfig = ({
             forcePathStyle,
         }
     }
-
     return { region, forcePathStyle }
 }
 

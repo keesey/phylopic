@@ -3,6 +3,7 @@ import { Analytics as VercelAnalytics } from "@vercel/analytics/react"
 import { DefaultSeo } from "next-seo"
 import type { AppProps } from "next/app"
 import "../src/styles/globals.scss"
+
 const App = ({ Component, pageProps }: AppProps) => {
     return (
         <>
@@ -40,4 +41,5 @@ const App = ({ Component, pageProps }: AppProps) => {
         </>
     )
 }
+
 export default App

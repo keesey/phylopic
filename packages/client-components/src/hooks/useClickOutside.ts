@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+
 export const useClickOutside = (element: Element | null | undefined, callback?: () => void) => {
     useEffect(() => {
         if (callback && element) {

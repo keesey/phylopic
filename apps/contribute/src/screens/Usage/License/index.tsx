@@ -1,5 +1,5 @@
-import { Hash, LICENSE_NAMES, UUID } from "@phylopic/utils"
-import { FC } from "react"
+import { type Hash, LICENSE_NAMES } from "@phylopic/utils"
+import type { FC } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Speech from "~/ui/Speech"
@@ -7,9 +7,11 @@ import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 import Icon from "./Icon"
 import styles from "./index.module.scss"
+
 export interface Props {
     hash: Hash
 }
+
 const License: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const mutate = useSubmissionMutator(hash)
@@ -79,4 +81,5 @@ const License: FC<Props> = ({ hash }) => {
         </UserOptions>
     )
 }
+
 export default License

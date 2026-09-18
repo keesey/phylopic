@@ -1,7 +1,8 @@
-import { ISOTimestamp, UUID } from "@phylopic/utils"
+import type { ISOTimestamp, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useCallback } from "react"
-import { SWRResponse } from "swr"
+import type { SWRResponse } from "swr"
+
 const useModifiedPatcher = <T extends { modified: ISOTimestamp }>(
     key: string,
     response: SWRResponse<T & { uuid: UUID }, unknown>,
@@ -24,4 +25,5 @@ const useModifiedPatcher = <T extends { modified: ISOTimestamp }>(
         [data, key, mutate],
     )
 }
+
 export default useModifiedPatcher

@@ -1,7 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
+import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios"
 import { useCallback } from "react"
 import useAuthToken from "./useAuthToken"
 import useDeauthorize from "./useDeauthorize"
+
 const useAuthorizedRequest = () => {
     const token = useAuthToken()
     const deauthorize = useDeauthorize()
@@ -28,4 +29,5 @@ const useAuthorizedRequest = () => {
         [deauthorize, token],
     )
 }
+
 export default useAuthorizedRequest

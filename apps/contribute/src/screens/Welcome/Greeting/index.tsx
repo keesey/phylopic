@@ -1,6 +1,7 @@
-import { FC } from "react"
+import type { FC } from "react"
 import useContributor from "~/profile/useContributor"
 import Speech from "~/ui/Speech"
+
 const Greeting: FC = () => {
     const contributor = useContributor()
     return (
@@ -9,4 +10,5 @@ const Greeting: FC = () => {
         </Speech>
     )
 }
+
 export default Greeting

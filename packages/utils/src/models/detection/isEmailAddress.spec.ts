@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { EmailAddress } from "../types/EmailAddress"
+import type { EmailAddress } from "../types/EmailAddress"
 import { isEmailAddress } from "./isEmailAddress"
+
 describe("isEmailAddress", () => {
     const test = (value: EmailAddress, valid: boolean) => {
         it(`should return ${valid ? "true" : "false"} for ${JSON.stringify(value)}.`, () => {

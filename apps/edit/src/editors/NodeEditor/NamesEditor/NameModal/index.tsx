@@ -1,11 +1,13 @@
-import { Nomen } from "@phylopic/utils"
-import { FC } from "react"
+import type { Nomen } from "@phylopic/utils"
+import type { FC } from "react"
 import NameEditor from "~/editors/NameEditor"
 import Modal from "~/ui/Modal"
+
 export interface Props {
     name: Nomen | null
     onComplete: (value: Nomen | null) => void
 }
+
 const NameModal: FC<Props> = ({ name, onComplete }) => {
     if (!name) {
         return null
@@ -16,4 +18,5 @@ const NameModal: FC<Props> = ({ name, onComplete }) => {
         </Modal>
     )
 }
+
 export default NameModal

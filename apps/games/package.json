@@ -47,7 +47,7 @@
         "build": "next build",
         "clean": "rm -rf .next && rm -rf .swc && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3005",
-        "lint": "TIMING=1 next lint",
+        "lint": "TIMING=1 eslint --fix ./**/*.[jt]s",
         "start": "next start",
         "unused": "next-unused"
     },

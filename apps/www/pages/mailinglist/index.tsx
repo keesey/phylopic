@@ -6,6 +6,7 @@ import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
+
 const PageComponent: NextPage = () => (
     <PageLayout>
         <NextSeo
@@ -41,4 +42,5 @@ const PageComponent: NextPage = () => (
         </Container>
     </PageLayout>
 )
+
 export default PageComponent

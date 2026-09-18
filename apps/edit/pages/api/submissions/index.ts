@@ -1,7 +1,8 @@
-import { handleAPIError, handleWithLister, Page, S3Entry } from "@phylopic/source-client"
-import { Hash, ISOTimestamp } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import { handleAPIError, handleWithLister, type Page, type S3Entry } from "@phylopic/source-client"
+import type { Hash, ISOTimestamp } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Page<{ Key: Hash; LastModified?: ISOTimestamp }, string> | number> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -14,4 +15,5 @@ const index: NextApiHandler<Page<{ Key: Hash; LastModified?: ISOTimestamp }, str
     }
     res.end()
 }
+
 export default index

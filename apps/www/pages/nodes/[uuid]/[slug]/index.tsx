@@ -1,15 +1,15 @@
 import {
-    ImageListParameters,
-    ImageWithEmbedded,
-    List,
-    NodeParameters,
-    NodeWithEmbedded,
-    PageWithEmbedded,
+    type ImageListParameters,
+    type ImageWithEmbedded,
+    type List,
+    type NodeParameters,
+    type NodeWithEmbedded,
+    type PageWithEmbedded,
 } from "@phylopic/api-models"
 import { Loader, NodeContainer, useNomenText } from "@phylopic/client-components"
 import {
-    Query,
-    UUID,
+    type Query,
+    type UUID,
     createSearch,
     extractPath,
     extractQueryString,
@@ -24,8 +24,8 @@ import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
-import { FC, Fragment, useMemo } from "react"
-import { SWRConfiguration, unstable_serialize } from "swr"
+import { type FC, Fragment, useMemo } from "react"
+import { type SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import customEvents from "~/analytics/customEvents"
 import BUILD from "~/build/BUILD"
@@ -37,12 +37,12 @@ import LicenseQualifier from "~/licenses/LicenseQualifier"
 import TaxonSchemaScript from "~/metadata/SchemaScript/TaxonSchemaScript"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getHRefFromAPILink from "~/routes/getHRefFromAPILink"
 import getNodeHRef from "~/routes/getNodeHRef"
 import getNodeSlug from "~/routes/getNodeSlug"
-import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import type { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Container from "~/ui/Container"
@@ -51,15 +51,18 @@ import NomenHeader from "~/ui/NomenHeader"
 import ImageListView from "~/views/ImageListView"
 import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
+
 const NODE_QUERY: Omit<NodeParameters, "uuid"> & Query = {
     embed_childNodes: "true",
     embed_parentNode: "true",
     embed_primaryImage: "true",
 }
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
     uuid: UUID
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...pageLayoutProps}>
@@ -71,6 +74,7 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) 
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     const name = node.names[0]
     const nameString = useNomenText(name)
@@ -165,6 +169,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         </LicenseTypeFilterContainer>
     )
 }
+
 const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEmbedded; totalImages: number }> = ({
     images,
     node,
@@ -222,11 +227,14 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
         </>
     )
 }
+
 export default PageComponent
+
 export const getStaticPaths: GetStaticPaths<{ uuid: UUID; slug: string }> = () => ({
     fallback: "blocking",
     paths: [],
 })
+
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

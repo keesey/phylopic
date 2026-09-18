@@ -1,8 +1,8 @@
-import { Entity, Image, Node } from "@phylopic/source-models"
+import type { Entity, Image, Node } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { UUID } from "@phylopic/utils"
 import Link from "next/link"
-import { FC, useCallback, useMemo, useState } from "react"
+import { type FC, useCallback, useMemo, useState } from "react"
 import useSWR from "swr"
 import Paginator from "~/pagination/Paginator"
 import NodeSelector from "~/selectors/NodeSelector"
@@ -10,9 +10,11 @@ import useModifiedPatcher from "~/swr/useModifiedPatcher"
 import BubbleList from "~/ui/BubbleList"
 import BubbleNode from "~/ui/BubbleNode"
 import NameView from "~/views/NameView"
+
 export type Props = {
     uuid: UUID
 }
+
 const NodesEditor: FC<Props> = ({ uuid }) => {
     const { data } = useSWR<Image & { uuid: UUID }>(`/api/images/_/${encodeURIComponent(uuid)}`, fetchJSON)
     if (!data) {
@@ -35,7 +37,9 @@ const NodesEditor: FC<Props> = ({ uuid }) => {
         </section>
     )
 }
+
 export default NodesEditor
+
 const LineageEditor: FC<{
     image: Image & { uuid: UUID }
     nodes: ReadonlyArray<Node & { uuid: UUID }>

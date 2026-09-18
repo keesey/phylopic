@@ -1,21 +1,21 @@
 import { CopyObjectCommand } from "@aws-sdk/client-s3"
-import { External } from "@phylopic/source-models"
+import type { External } from "@phylopic/source-models"
 import {
-    Authority,
-    Hash,
+    type Authority,
+    type Hash,
     isAuthority,
     isEmailAddress,
     isHash,
     isNamespace,
     isUUIDv4,
-    Namespace,
-    ObjectID,
-    UUID,
+    type Namespace,
+    type ObjectID,
+    type UUID,
 } from "@phylopic/utils"
-import { Editable } from "../interfaces/Editable"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
-import { S3ClientProvider } from "../interfaces/S3ClientProvider"
-import { SourceClient } from "../interfaces/SourceClient"
+import type { Editable } from "../interfaces/Editable"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { S3ClientProvider } from "../interfaces/S3ClientProvider"
+import type { SourceClient } from "../interfaces/SourceClient"
 import { ContributorClient } from "./ContributorClient"
 import { ContributorsClient } from "./ContributorsClient"
 import { ExternalAuthorityLister } from "./ExternalAuthorityLister"
@@ -39,6 +39,7 @@ import { writeJWT } from "./s3/io/writeJWT"
 import { S3Editor } from "./s3/S3Editor"
 import { S3Lister } from "./s3/S3Lister"
 import { SubmissionClient } from "./SubmissionClient"
+
 export class Client implements SourceClient {
     constructor(protected readonly provider: PGClientProvider & S3ClientProvider) {
         this.authEmails = new S3Lister(provider, AUTH_BUCKET_NAME, "emails/", isEmailAddress)

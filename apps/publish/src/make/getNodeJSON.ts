@@ -1,8 +1,9 @@
-import { Node, TitledLink } from "@phylopic/api-models"
-import { Entity, Image } from "@phylopic/source-models"
-import { isDefined, isString, shortenNomen, stringifyNomen, UUID } from "@phylopic/utils"
+import type { Node, TitledLink } from "@phylopic/api-models"
+import type { Entity, Image } from "@phylopic/source-models"
+import { isDefined, isString, shortenNomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import { immediateSuccessors } from "simple-digraph"
 import type { SourceData } from "./getSourceData.js"
+
 const getChildNodes = (vertex: number, data: SourceData): readonly TitledLink[] => {
     const childVertices = immediateSuccessors(data.phylogeny, new Set([vertex]))
     return [...childVertices]
@@ -18,6 +19,7 @@ const getChildNodes = (vertex: number, data: SourceData): readonly TitledLink[] 
             title: stringifyNomen(shortenNomen(data.nodes.get(childUUID)?.names[0] ?? [])) || "[Unnamed]",
         }))
 }
+
 const compareImageEntitiesByCreated = (a: Entity<Image>, b: Entity<Image>) => {
     const aValue = a.value.created + a.uuid
     const bValue = b.value.created + b.uuid
@@ -29,6 +31,7 @@ const compareImageEntitiesByCreated = (a: Entity<Image>, b: Entity<Image>) => {
     }
     return 0
 }
+
 const getDirectImage = (uuid: UUID, data: SourceData): Entity<Image> | null => {
     const imageEntities = [...data.illustration.entries()]
         .filter(([, nodeUUIDs]) => nodeUUIDs.includes(uuid))
@@ -46,6 +49,7 @@ const getDirectImage = (uuid: UUID, data: SourceData): Entity<Image> | null => {
     }
     return imageEntities.sort(compareImageEntitiesByCreated)[0]
 }
+
 const getImageCandidatesFromSuccessors = (
     uuid: UUID,
     data: SourceData,
@@ -70,11 +74,13 @@ const getImageCandidatesFromSuccessors = (
         [],
     )
 }
+
 const getImageFromSuccessors = (uuid: UUID, data: SourceData): Entity<Image> | null => {
     const candidates = getImageCandidatesFromSuccessors(uuid, data)
     const lead = [...candidates].sort((a, b) => a.depth - b.depth || a.sortIndex - b.sortIndex)[0]
     return lead?.entity ?? null
 }
+
 const getImageFromPredecessors = (uuid: UUID, data: SourceData): Entity<Image> | null => {
     const { parent } = data.nodes.get(uuid) ?? {}
     if (!parent) {
@@ -82,6 +88,7 @@ const getImageFromPredecessors = (uuid: UUID, data: SourceData): Entity<Image> |
     }
     return getDirectImage(parent, data) ?? getImageFromPredecessors(parent, data)
 }
+
 const getPrimaryImage = (uuid: UUID, data: SourceData): TitledLink | null => {
     const imageEntity =
         getDirectImage(uuid, data) ?? getImageFromSuccessors(uuid, data) ?? getImageFromPredecessors(uuid, data)
@@ -93,6 +100,7 @@ const getPrimaryImage = (uuid: UUID, data: SourceData): TitledLink | null => {
         title: stringifyNomen(shortenNomen(data.nodes.get(imageEntity.value.specific)?.names[0] ?? [])) || "[Untitled]",
     }
 }
+
 const getExternal = (uuid: UUID, data: SourceData) => {
     const href = `/nodes/${uuid}`
     return [...data.externals.entries()]
@@ -106,6 +114,7 @@ const getExternal = (uuid: UUID, data: SourceData) => {
                 }) as TitledLink,
         )
 }
+
 const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData): UUID => {
     const vertex = data.nodeUUIDsToVertices.get(nodeUUID)
     if (!vertex) {
@@ -133,6 +142,7 @@ const getCladeImagesUUID = (nodeUUID: UUID, data: SourceData): UUID => {
     }
     return nodeUUID
 }
+
 const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
     uuid = uuid.toLowerCase()
     const sourceNode = data.nodes.get(uuid)
@@ -174,4 +184,5 @@ const getNodeJSON = (uuid: UUID, data: SourceData): Node => {
         uuid,
     }
 }
+
 export default getNodeJSON

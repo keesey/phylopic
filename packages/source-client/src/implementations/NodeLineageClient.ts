@@ -1,11 +1,13 @@
-import { Node } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
-import { Listable } from "../interfaces"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { Node } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
+import type { Listable } from "../interfaces"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
 import { NODE_FIELDS } from "./pg/constants/NODE_FIELDS"
 import { getFields } from "./pg/fields/getFields"
 import { normalizeNode } from "./pg/normalization/normalizeNode"
+
 const LINEAGE_PAGE_SIZE = 64
+
 export class NodeLineageClient implements Listable<Node & { uuid: UUID }, number> {
     constructor(
         protected provider: PGClientProvider,

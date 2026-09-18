@@ -1,4 +1,5 @@
-import { Readable } from "./Readable"
+import type { Readable } from "./Readable"
+
 export interface Deletable<T> extends Readable<T> {
     delete(): Promise<void>
     isRestorable(): Promise<boolean>

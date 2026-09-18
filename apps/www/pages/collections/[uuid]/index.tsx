@@ -1,8 +1,8 @@
-import { Contributor, ImageParameters, List, Node } from "@phylopic/api-models"
+import type { Contributor, ImageParameters, List, Node } from "@phylopic/api-models"
 import { Loader, PaginationContainer } from "@phylopic/client-components"
-import { createSearch, EMPTY_UUID, isUUIDish, Query, UUIDish } from "@phylopic/utils"
+import { createSearch, EMPTY_UUID, isUUIDish, type Query, type UUIDish } from "@phylopic/utils"
 import axios from "axios"
-import { type Compressed } from "compress-json"
+import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
@@ -12,10 +12,10 @@ import BUILD from "~/build/BUILD"
 import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
 import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import getContributorHRef from "~/routes/getContributorHRef"
 import getNodeHRef from "~/routes/getNodeHRef"
-import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import type { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -23,11 +23,14 @@ import BulletList from "~/ui/BulletList"
 import Container from "~/ui/Container"
 import ImageListView from "~/views/ImageListView"
 import NomenView from "~/views/NomenView"
+
 const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
     embed_contributor: "true",
     embed_specificNode: "true",
 }
+
 type CollectionType = "contributors" | "images" | "nodes" | "multiple" | "empty"
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
     has: {
@@ -37,6 +40,7 @@ type Props = Omit<PageLayoutProps, "children"> & {
     }
     uuid: UUIDish
 }
+
 const TYPE_LABELS: Readonly<Record<CollectionType, string>> = {
     contributors: "image contributors",
     empty: "entities",
@@ -44,6 +48,7 @@ const TYPE_LABELS: Readonly<Record<CollectionType, string>> = {
     multiple: "entities",
     nodes: "taxonomic groups",
 }
+
 const COLLECTION_LABELS: Readonly<Record<CollectionType, string>> = {
     contributors: "Image Contributor Collection",
     empty: "Collection",
@@ -51,6 +56,7 @@ const COLLECTION_LABELS: Readonly<Record<CollectionType, string>> = {
     multiple: "Collection",
     nodes: "Taxonomic Group Collection",
 }
+
 const COLLECTION_LABELS_SHORT: Readonly<Record<CollectionType, string>> = {
     contributors: "Image Contributors",
     empty: "Collection",
@@ -58,6 +64,7 @@ const COLLECTION_LABELS_SHORT: Readonly<Record<CollectionType, string>> = {
     multiple: "Collection",
     nodes: "Taxonomic Groups",
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
     const type = getCollectionType(has.contributors, has.images, has.nodes)
     return (
@@ -169,13 +176,16 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
         </CompressedSWRConfig>
     )
 }
+
 export default PageComponent
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",
         paths: [],
     }
 }
+
 const getCollectionType = (hasContributors: boolean, hasImages: boolean, hasNodes: boolean): CollectionType => {
     if (hasContributors && !hasImages && !hasNodes) {
         return "contributors"
@@ -188,6 +198,7 @@ const getCollectionType = (hasContributors: boolean, hasImages: boolean, hasNode
     }
     return "multiple"
 }
+
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { uuid } = context.params ?? {}
     if (!isUUIDish(uuid)) {

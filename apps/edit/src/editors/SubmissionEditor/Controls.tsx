@@ -1,16 +1,18 @@
-import { Page } from "@phylopic/source-client"
-import { Submission } from "@phylopic/source-models"
+import type { Page } from "@phylopic/source-client"
+import type { Submission } from "@phylopic/source-models"
+import type { Hash, UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { Hash, UUID } from "@phylopic/utils"
 import axios from "axios"
 import { useRouter } from "next/router"
-import { FC, useCallback, useMemo } from "react"
+import { type FC, useCallback, useMemo } from "react"
 import useSWR from "swr"
 import useDeletor from "~/swr/useDeletor"
 import styles from "./Controls.module.scss"
+
 export type Props = {
     hash: Hash
 }
+
 const Controls: FC<Props> = ({ hash }) => {
     const key = `/api/submissions/_/${encodeURIComponent(hash)}`
     const response = useSWR<Submission>(key, fetchJSON)
@@ -48,4 +50,5 @@ const Controls: FC<Props> = ({ hash }) => {
         </nav>
     )
 }
+
 export default Controls

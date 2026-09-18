@@ -1,18 +1,22 @@
-import { Node } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
-import { Arc, createAcyclicGraph, CycleError, Digraph, sources } from "simple-digraph"
+import type { Node } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
+import { type Arc, createAcyclicGraph, CycleError, type Digraph, sources } from "simple-digraph"
+
 export interface PhylogenySourceData {
     nodes: ReadonlyMap<UUID, Node>
 }
+
 export interface PhylogenyOptions {
     handleParentedRoot?: (uuid: UUID, node: Node) => void
     handleOrphan?: (uuid: UUID, node: Node) => void
 }
+
 export interface PhylogenyResult {
     nodeUUIDsToVertices: ReadonlyMap<UUID, number>
     phylogeny: Digraph
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>
 }
+
 const createPhylogeny = (
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>,
     arcs: Iterable<Arc>,
@@ -27,6 +31,7 @@ const createPhylogeny = (
         throw e
     }
 }
+
 const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): PhylogenyResult => {
     const nodeUUIDsToVertices = new Map<UUID, number>()
     const verticesToNodeUUIDs = new Map<number, UUID>()
@@ -82,4 +87,5 @@ const getPhylogeny = (data: PhylogenySourceData, options?: PhylogenyOptions): Ph
         verticesToNodeUUIDs,
     }
 }
+
 export default getPhylogeny

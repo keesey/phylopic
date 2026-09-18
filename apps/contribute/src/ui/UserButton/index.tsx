@@ -1,14 +1,16 @@
 import { LoaderContext } from "@phylopic/client-components"
 import clsx from "clsx"
-import { FC, ReactNode, useEffect, useState } from "react"
+import { type FC, type ReactNode } from "react"
 import SpeechStack from "../SpeechStack"
 import styles from "./index.module.scss"
+
 export type Props = {
     children: ReactNode
     icon?: ReactNode
     danger?: boolean
     onClick?: () => void
 }
+
 const UserButton: FC<Props> = ({ children, icon, danger, onClick }) => {
     return (
         <button className={clsx(styles.main, danger && styles.danger, !onClick && styles.wait)} onClick={onClick}>
@@ -25,4 +27,5 @@ const UserButton: FC<Props> = ({ children, icon, danger, onClick }) => {
         </button>
     )
 }
+
 export default UserButton

@@ -1,9 +1,9 @@
-import clsx from "clsx"
-import { FC, useCallback, useContext } from "react"
+import { type FC, useCallback, useContext } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import Icon from "~/ui/Icon"
 import styles from "./index.module.scss"
+
 const Add: FC = () => {
     const [, dispatch] = useContext(CollectionsContext)
     const handleAddClick = useCallback(() => {
@@ -21,4 +21,5 @@ const Add: FC = () => {
         </div>
     )
 }
+
 export default Add

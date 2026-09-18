@@ -1,6 +1,8 @@
-import { Nomen } from "@phylopic/utils"
+import type { Nomen } from "@phylopic/utils"
 import { useMemo } from "react"
+
 const EMPTY: Nomen = []
+
 export const useNomenText = (name: Nomen = EMPTY, short = false, defaultText = "") => {
     const text = useMemo(
         () =>

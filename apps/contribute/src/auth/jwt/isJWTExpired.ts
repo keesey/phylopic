@@ -1,4 +1,5 @@
 import { decodeJWT } from "@phylopic/source-models"
+
 const isJWTExpired = (token: string | null, now = NaN) => {
     if (!token) {
         return false
@@ -12,4 +13,5 @@ const isJWTExpired = (token: string | null, now = NaN) => {
     }
     return payload.exp * 1000 <= now
 }
+
 export default isJWTExpired

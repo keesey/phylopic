@@ -1,5 +1,5 @@
 import { isArray, isNormalizedText, type ValidationFaultCollector } from "@phylopic/utils"
-import { type AuthorizedNamespaces } from "../types/AuthorizedNamespaces"
+import type { AuthorizedNamespaces } from "../types/AuthorizedNamespaces"
 import { isData } from "./isData"
 
 const isAuthorizedNamespace = (

@@ -1,11 +1,12 @@
-import { Nomen, stringifyNormalized } from "@phylopic/utils"
-import { NomenPartClass } from "parse-nomen"
-import { FC, useEffect, useMemo, useState } from "react"
+import { type Nomen, stringifyNormalized } from "@phylopic/utils"
+import type { NomenPartClass } from "parse-nomen"
+import { type FC, useEffect, useMemo, useState } from "react"
 import NameSelector from "~/selectors/NameSelector"
 import NameView from "~/views/NameView"
 import TextEditor from "../TextEditor"
 import styles from "./index.module.scss"
 import NomenPartEditor from "./NomenPartEditor"
+
 const getNextClass = (name: Nomen): NomenPartClass => {
     if (!name.length) {
         return "vernacular"
@@ -24,10 +25,12 @@ const getNextClass = (name: Nomen): NomenPartClass => {
         }
     }
 }
+
 export type Props = {
     onChange: (value: Nomen) => void
     value: Nomen
 }
+
 const NameEditor: FC<Props> = ({ onChange, value }) => {
     const [editing, setEditing] = useState(false)
     const [modified, setModified] = useState(() => [...value])
@@ -78,4 +81,5 @@ const NameEditor: FC<Props> = ({ onChange, value }) => {
         </section>
     )
 }
+
 export default NameEditor

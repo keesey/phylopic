@@ -1,4 +1,5 @@
 import { DATA_MEDIA_TYPE, isImage } from "@phylopic/api-models"
+
 const getImageFromDataTransfer = (dataTransfer: DataTransfer) => {
     const json = dataTransfer.getData(DATA_MEDIA_TYPE)
     if (!json) {
@@ -14,4 +15,5 @@ const getImageFromDataTransfer = (dataTransfer: DataTransfer) => {
     }
     return null
 }
+
 export default getImageFromDataTransfer

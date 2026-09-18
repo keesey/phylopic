@@ -1,6 +1,6 @@
-import { Hash, isPublicDomainLicenseURL, isValidLicenseURL } from "@phylopic/utils"
+import { type Hash, isPublicDomainLicenseURL, isValidLicenseURL } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import useContributor from "~/profile/useContributor"
@@ -17,9 +17,11 @@ import UserOptions from "~/ui/UserOptions"
 import LoadingState from "../LoadingState"
 import Attribution from "./Attribution"
 import License from "./License"
+
 export type Props = {
     hash: Hash
 }
+
 const Usage: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const contributor = useContributor()
@@ -101,4 +103,5 @@ const Usage: FC<Props> = ({ hash }) => {
         </Dialogue>
     )
 }
+
 export default Usage

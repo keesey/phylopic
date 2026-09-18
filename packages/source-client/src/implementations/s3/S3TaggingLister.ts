@@ -1,7 +1,13 @@
-import { GetObjectTaggingCommand, ListObjectsV2Command, ListObjectsV2Output, Tagging } from "@aws-sdk/client-s3"
-import { FaultDetector, isString } from "@phylopic/utils"
-import { Listable } from "../../interfaces/Listable"
-import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
+import {
+    GetObjectTaggingCommand,
+    ListObjectsV2Command,
+    type ListObjectsV2Output,
+    type Tagging,
+} from "@aws-sdk/client-s3"
+import { type FaultDetector, isString } from "@phylopic/utils"
+import type { Listable } from "../../interfaces/Listable"
+import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
+
 export class S3TaggingLister<TValue extends Readonly<Record<string, string | null>>> implements Listable<
     TValue & { Key: string },
     string
@@ -69,4 +75,5 @@ export class S3TaggingLister<TValue extends Readonly<Record<string, string | nul
             .filter((value): value is TValue & { Key: string } => this.validate(value))
     }
 }
+
 const isSettled = <T>(x: PromiseSettledResult<T>): x is PromiseFulfilledResult<T> => x.status === "fulfilled"

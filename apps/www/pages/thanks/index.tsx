@@ -1,12 +1,14 @@
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import SupportersView from "~/views/SupportersView"
 import SUPPORTERS from "~/views/SupportersView/SUPPORTERS"
+
 const NAMES = SUPPORTERS.reduce<readonly ReactNode[]>((prev, supporters) => [...prev, ...supporters.names], [])
+
 const PageComponent: NextPage = () => (
     <PageLayout>
         <NextSeo canonical={`${process.env.NEXT_PUBLIC_WWW_URL}/thanks`} title="Special Thanks from PhyloPic" />
@@ -19,4 +21,5 @@ const PageComponent: NextPage = () => (
         </Container>
     </PageLayout>
 )
+
 export default PageComponent

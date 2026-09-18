@@ -1,6 +1,6 @@
-import { Image } from "@phylopic/api-models"
-import { FC, useMemo } from "react"
-import { ImageObject, Thing, VisualArtwork, WithContext } from "schema-dts"
+import type { Image } from "@phylopic/api-models"
+import { type FC, useMemo } from "react"
+import type { ImageObject, Thing, VisualArtwork, WithContext } from "schema-dts"
 import getContributorHRef from "~/routes/getContributorHRef"
 import getImageHRef from "~/routes/getImageHRef"
 import getNodeHRef from "~/routes/getNodeHRef"
@@ -9,6 +9,7 @@ import SchemaScript from ".."
 export type Props = {
     image: Image
 }
+
 const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
     const object = useMemo<WithContext<VisualArtwork>>(() => {
         const url = `${process.env.NEXT_PUBLIC_WWW_URL}${getImageHRef(image._links.self)}`
@@ -70,4 +71,5 @@ const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
     }, [image])
     return <SchemaScript id="VisualArtwork" object={object} />
 }
+
 export default VisualArtworkSchemaScript

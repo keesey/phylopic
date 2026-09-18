@@ -8,9 +8,10 @@ import {
     isPublicDomainLicenseURL,
     isUUIDv4,
     isValidLicenseURL,
-    ValidationFaultCollector,
+    type ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Submission } from "../types"
+import type { Submission } from "../types"
+
 const isStatus = (x: unknown, faultCollector?: ValidationFaultCollector): x is "incomplete" | "submitted" => {
     if (x === "incomplete" || x === "submitted") {
         return true
@@ -18,6 +19,7 @@ const isStatus = (x: unknown, faultCollector?: ValidationFaultCollector): x is "
     faultCollector?.add('Expected "incomplete" or "submitted".')
     return false
 }
+
 export const isSubmission = (x: unknown, faultCollector?: ValidationFaultCollector): x is Submission =>
     isObject(x, faultCollector) &&
     isNullOr(isNormalizedText)((x as Submission).attribution, faultCollector?.sub("attribution")) &&

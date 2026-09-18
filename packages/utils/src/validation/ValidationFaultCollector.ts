@@ -1,4 +1,5 @@
-import { ValidationFault } from "./ValidationFault"
+import type { ValidationFault } from "./ValidationFault"
+
 export class ValidationFaultCollector {
     constructor(
         private fields: readonly string[] = [],

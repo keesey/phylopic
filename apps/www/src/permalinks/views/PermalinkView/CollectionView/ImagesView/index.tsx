@@ -1,20 +1,21 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
 import { ImageThumbnailView } from "@phylopic/ui"
-import { URL } from "@phylopic/utils"
+import type { URL } from "@phylopic/utils"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionLicense from "~/licenses/ImageCollectionUsage/CollectionLicense"
 import getImageSlug from "~/routes/getImageSlug"
 import getNodeHRef from "~/routes/getNodeHRef"
-import getNodeSlug from "~/routes/getNodeSlug"
 import LicenseView from "~/views/LicenseView"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
+
 export interface Props {
     url: URL
     value: readonly ImageWithEmbedded[]
 }
+
 const ImagesView: FC<Props> = ({ url, value }) => {
     if (!value.length) {
         return null
@@ -75,4 +76,5 @@ const ImagesView: FC<Props> = ({ url, value }) => {
         </section>
     )
 }
+
 export default ImagesView

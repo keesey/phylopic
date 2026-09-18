@@ -1,6 +1,6 @@
-import { isSubmission, Submission } from "@phylopic/source-models"
-import { Hash, LICENSE_NAMES } from "@phylopic/utils"
-import { FC, useCallback, useMemo, useState } from "react"
+import { isSubmission, type Submission } from "@phylopic/source-models"
+import { type Hash, LICENSE_NAMES } from "@phylopic/utils"
+import { type FC, useCallback, useMemo, useState } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Dialogue from "~/ui/Dialogue"
@@ -15,9 +15,11 @@ import UserOptions from "~/ui/UserOptions"
 import UserVerification from "../../ui/UserVerification"
 import NameRenderer from "../Assignment/NodeForm/NameRenderer"
 import LoadingState from "../LoadingState"
+
 export type Props = {
     hash: Hash
 }
+
 const Editor: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const submittable = useMemo(
@@ -188,4 +190,5 @@ const Editor: FC<Props> = ({ hash }) => {
         </Dialogue>
     )
 }
+
 export default Editor

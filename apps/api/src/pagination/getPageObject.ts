@@ -1,7 +1,8 @@
-import { Page, TitledLink } from "@phylopic/api-models"
+import type { Page, TitledLink } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import omit from "lodash/omit"
 import BUILD from "../build/BUILD"
+
 const getPageObject = (
     listEndpoint: string,
     listQuery: Readonly<Record<string, string | number | boolean | undefined>>,
@@ -21,4 +22,5 @@ const getPageObject = (
         index,
     }
 }
+
 export default getPageObject

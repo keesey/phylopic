@@ -1,12 +1,14 @@
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
+
 export type Props = {
     onClose?: () => void
 }
+
 const DropdownNav: FC<Props> = ({ onClose }) => (
     <nav className={styles.main}>
         <div className={styles.menuButton}>
@@ -298,4 +300,5 @@ const DropdownNav: FC<Props> = ({ onClose }) => (
         </section>
     </nav>
 )
+
 export default DropdownNav

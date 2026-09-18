@@ -1,10 +1,12 @@
-import { isValidLicenseURL, LICENSE_NAMES, ValidLicenseURL, VALID_LICENSE_URLS } from "@phylopic/utils"
-import { ChangeEvent, FC, useCallback, useState } from "react"
+import { isValidLicenseURL, LICENSE_NAMES, VALID_LICENSE_URLS, type ValidLicenseURL } from "@phylopic/utils"
+import { type ChangeEvent, type FC, useCallback, useState } from "react"
 import styles from "./LicenseURLEditor.module.scss"
+
 export type Props = {
     onChange: (value: ValidLicenseURL | null) => void
     value: ValidLicenseURL | null
 }
+
 const ValidLicenseURLEditor: FC<Props> = ({ onChange, value }) => {
     const [editing, setEditing] = useState(false)
     const selectChangeHandler = useCallback(
@@ -44,4 +46,5 @@ const ValidLicenseURLEditor: FC<Props> = ({ onChange, value }) => {
         </div>
     )
 }
+
 export default ValidLicenseURLEditor

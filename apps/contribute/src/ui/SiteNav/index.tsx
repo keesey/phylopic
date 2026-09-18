@@ -1,7 +1,7 @@
 import { INCOMPLETE_STRING } from "@phylopic/source-models"
-import { Hash } from "@phylopic/utils"
+import type { Hash } from "@phylopic/utils"
 import { useRouter } from "next/router"
-import { FC, useState } from "react"
+import { type FC, useState } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useSubmission from "~/editing/useSubmission"
 import useContributor from "~/profile/useContributor"
@@ -9,9 +9,11 @@ import SiteTitle from "../SiteTitle"
 import DropDownMenu from "./DropDownMenu"
 import styles from "./index.module.scss"
 import NavItem from "./NavItem"
+
 export type Props = {
     submissionHash?: Hash
 }
+
 const SiteNav: FC<Props> = ({ submissionHash }) => {
     const authorized = useAuthorized()
     const contributor = useContributor()
@@ -59,4 +61,5 @@ const SiteNav: FC<Props> = ({ submissionHash }) => {
         </>
     )
 }
+
 export default SiteNav

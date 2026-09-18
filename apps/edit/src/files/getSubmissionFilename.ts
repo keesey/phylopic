@@ -1,5 +1,6 @@
-import { Submission } from "@phylopic/source-models"
-import { getImageFileExtension, Hash, ImageMediaType, SHORT_LICENSE_NAMES } from "@phylopic/utils"
+import type { Submission } from "@phylopic/source-models"
+import { getImageFileExtension, type Hash, type ImageMediaType, SHORT_LICENSE_NAMES } from "@phylopic/utils"
+
 const getSubmissionFilename = (submission: Submission & { hash: Hash }, contentType: ImageMediaType) => {
     return [
         submission.hash,
@@ -10,4 +11,5 @@ const getSubmissionFilename = (submission: Submission & { hash: Hash }, contentT
         .map(x => encodeURIComponent(x))
         .join(".")
 }
+
 export default getSubmissionFilename

@@ -2,6 +2,7 @@ import slugify from "slugify"
 import getContributorSlug from "./getContributorSlug"
 import getImageSlug from "./getImageSlug"
 import getNodeSlug from "./getNodeSlug"
+
 const getSlug = (href: string, title?: string) => {
     if (href.startsWith("/images/")) {
         return getImageSlug(title)
@@ -14,4 +15,5 @@ const getSlug = (href: string, title?: string) => {
     }
     return slugify(title ?? "", { lower: true, strict: true, trim: true })
 }
+
 export default getSlug

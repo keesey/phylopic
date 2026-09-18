@@ -1,10 +1,12 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
-import { FC, useMemo } from "react"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
+import { type FC, useMemo } from "react"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
+
 export interface Props {
     images: readonly ImageWithEmbedded[]
 }
+
 const CollectionSponsors: FC<Props> = ({ images }) => {
     const [sponsors, numSponsored] = useMemo<[readonly string[], number]>(() => {
         const result = new Set<string>()
@@ -46,4 +48,5 @@ const CollectionSponsors: FC<Props> = ({ images }) => {
         </p>
     )
 }
+
 export default CollectionSponsors

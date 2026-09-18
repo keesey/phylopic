@@ -2,6 +2,7 @@ import type { NextPage } from "next"
 import Link from "next/link"
 import customEvents from "~/analytics/customEvents"
 import SiteTitle from "~/ui/SiteTitle"
+
 const PatreonSection: NextPage = () => (
     <section>
         <h2>Become a Patron</h2>
@@ -54,4 +55,5 @@ const PatreonSection: NextPage = () => (
         </p>
     </section>
 )
+
 export default PatreonSection

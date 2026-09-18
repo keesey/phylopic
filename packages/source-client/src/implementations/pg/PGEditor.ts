@@ -1,9 +1,10 @@
-import { Editable } from "../../interfaces/Editable"
-import { PGClientProvider } from "../../interfaces/PGClientProvider"
-import { EditField } from "./fields/EditField"
-import { IDField } from "./fields/IDField"
+import type { Editable } from "../../interfaces/Editable"
+import type { PGClientProvider } from "../../interfaces/PGClientProvider"
+import type { EditField } from "./fields/EditField"
+import type { IDField } from "./fields/IDField"
 import { PGReader } from "./PGReader"
 import { prepareValue } from "./preparation/prepareValue"
+
 export class PGEditor<T> extends PGReader<T> implements Editable<T> {
     constructor(
         provider: PGClientProvider,

@@ -1,6 +1,7 @@
 import { ValidationError } from "@phylopic/utils"
 import { isAWSError } from "@phylopic/utils-aws"
-import { NextApiResponse } from "next"
+import type { NextApiResponse } from "next"
+
 export const handleAPIError = (res: NextApiResponse, e: unknown) => {
     console.error(e)
     if (typeof e === "number") {

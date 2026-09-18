@@ -1,12 +1,14 @@
 import clsx from "clsx"
 import Image from "next/image"
-import { FC, useCallback, useState } from "react"
+import { type FC, useCallback, useState } from "react"
 import styles from "./index.module.scss"
+
 export interface Props {
     alt?: string
     small?: boolean
     src?: string
 }
+
 const FileThumbnailView: FC<Props> = ({ alt, src, small }) => {
     const [imgError, setImgError] = useState(false)
     const [imgPending, setImgPending] = useState(true)
@@ -49,4 +51,5 @@ const FileThumbnailView: FC<Props> = ({ alt, src, small }) => {
         </div>
     )
 }
+
 export default FileThumbnailView

@@ -1,5 +1,6 @@
-import { Node } from "@phylopic/source-models"
+import type { Node } from "@phylopic/source-models"
 import { normalizeEntity } from "./normalizeEntity"
+
 export const normalizeNode = <T extends Node>(value: T): T => {
     return {
         ...normalizeEntity(value),

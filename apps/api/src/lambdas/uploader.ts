@@ -6,10 +6,12 @@ import errorToResult from "../errors/errorToResult"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import TEMPORARY_HEADERS from "../headers/responses/TEMPORARY_HEADERS"
 import postUpload from "../operations/postUpload"
-import { S3ClientService } from "../services/S3ClientService"
+import type { S3ClientService } from "../services/S3ClientService"
 import getParameters from "./parameters/getParameters"
 import S3_CLIENT_SERVICE from "./services/S3_CLIENT_SERVICE"
+
 const SERVICE: S3ClientService = S3_CLIENT_SERVICE
+
 const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (event: APIGatewayProxyEvent) => {
     const { path } = event
     switch (path) {
@@ -47,6 +49,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
         }
     }
 }
+
 export const onAPIGatewayProxy: APIGatewayProxyHandler = async (event, _context) => {
     if (event.httpMethod === "OPTIONS") {
         return {

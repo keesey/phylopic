@@ -1,15 +1,17 @@
-import { Hash } from "@phylopic/utils"
-import { FC } from "react"
+import type { Hash } from "@phylopic/utils"
+import type { FC } from "react"
+import IdentifierEditor from "../IdentifierEditor"
 import AttributionEditor from "./AttributionEditor"
 import ContributorViewer from "./ContributorViewer"
 import Controls from "./Controls"
 import styles from "./index.module.scss"
 import LicenseEditor from "./LicenseEditor"
-import IdentifierEditor from "../IdentifierEditor"
 import SponsorEditor from "./SponsorEditor"
+
 export type Props = {
     hash: Hash
 }
+
 const SubmissionEditor: FC<Props> = ({ hash }) => {
     return (
         <section className={styles.main}>
@@ -39,4 +41,5 @@ const SubmissionEditor: FC<Props> = ({ hash }) => {
         </section>
     )
 }
+
 export default SubmissionEditor

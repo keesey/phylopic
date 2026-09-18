@@ -1,5 +1,5 @@
-import type { Link } from "@phylopic/api-models"
 import type { S3Client } from "@aws-sdk/client-s3"
+import type { Link } from "@phylopic/api-models"
 import { getEntityJSONKey } from "@phylopic/s3-entities"
 import { isDefined } from "@phylopic/utils"
 import BUILD from "../build/BUILD"

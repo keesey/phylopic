@@ -1,13 +1,15 @@
 import clsx from "clsx"
-import { ChangeEvent, FC, useCallback } from "react"
+import { type ChangeEvent, type FC, useCallback } from "react"
 import styles from "./index.module.scss"
-import { TTL } from "./TTL"
+import type { TTL } from "./TTL"
+
 export interface Props {
     disabled?: boolean
     mode?: "light"
     onChange?: (value: TTL) => void
     value?: TTL
 }
+
 const TTLSelector: FC<Props> = ({ disabled, mode, onChange, value }) => {
     const handleTTLChange = useCallback(
         (event: ChangeEvent<HTMLSelectElement>) => {
@@ -31,4 +33,5 @@ const TTLSelector: FC<Props> = ({ disabled, mode, onChange, value }) => {
         </select>
     )
 }
+
 export default TTLSelector

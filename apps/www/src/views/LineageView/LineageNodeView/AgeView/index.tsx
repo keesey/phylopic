@@ -1,11 +1,13 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import { useContext, useEffect, type FC } from "react"
 import useNodeAge from "~/external/useNodeAge"
 import { AgesContext, useAgeResult, useIsTerminal } from "../../AgesProvider"
 import Content from "./Content"
+
 export interface Props {
     value?: Node
 }
+
 const AgeView: FC<Props> = ({ value }) => {
     const { uuid } = value ?? {}
     const ageResult = useNodeAge(value ?? null)
@@ -33,4 +35,5 @@ const AgeView: FC<Props> = ({ value }) => {
         </>
     )
 }
+
 export default AgeView

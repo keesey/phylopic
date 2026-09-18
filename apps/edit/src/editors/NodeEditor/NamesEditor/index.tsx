@@ -1,8 +1,8 @@
-import { Node } from "@phylopic/source-models"
+import type { Node } from "@phylopic/source-models"
+import { type Nomen, normalizeNomina, stringifyNormalized, type UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { Nomen, normalizeNomina, stringifyNormalized, UUID } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
-import { FC, FormEvent, useCallback, useState } from "react"
+import { type FC, type FormEvent, useCallback, useState } from "react"
 import useSWR from "swr"
 import NameSelector from "~/selectors/NameSelector"
 import useModifiedPatcher from "~/swr/useModifiedPatcher"
@@ -10,10 +10,12 @@ import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
 import NameModal from "./NameModal"
+
 export interface Props {
     onSplit?: (name: Nomen) => void
     uuid: UUID
 }
+
 const NamesEditor: FC<Props> = ({ onSplit, uuid }) => {
     const key = `/api/nodes/_/${uuid}`
     const response = useSWR<Node & { uuid: UUID }>(key, fetchJSON)
@@ -142,4 +144,5 @@ const NamesEditor: FC<Props> = ({ onSplit, uuid }) => {
         </>
     )
 }
+
 export default NamesEditor

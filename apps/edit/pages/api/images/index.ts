@@ -1,8 +1,9 @@
-import { handleAPIError, handleWithLister, Page } from "@phylopic/source-client"
-import { Image } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import { handleAPIError, handleWithLister, type Page } from "@phylopic/source-client"
+import type { Image } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Page<Image & { uuid: UUID }, number> | number> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -15,4 +16,5 @@ const index: NextApiHandler<Page<Image & { uuid: UUID }, number> | number> = asy
     }
     res.end()
 }
+
 export default index

@@ -1,7 +1,8 @@
-import { Authority, Namespace, ObjectID } from "@phylopic/utils"
-import { NodeEmbedded } from "../../types/NodeWithEmbedded"
-import { DataParameters } from "./DataParameters"
-import { EmbeddableParameters } from "./EmbeddableParameters"
+import type { Authority, Namespace, ObjectID } from "@phylopic/utils"
+import type { NodeEmbedded } from "../../types/NodeWithEmbedded"
+import type { DataParameters } from "./DataParameters"
+import type { EmbeddableParameters } from "./EmbeddableParameters"
+
 export type ResolveObjectParameters = DataParameters &
     EmbeddableParameters<NodeEmbedded> &
     Readonly<{

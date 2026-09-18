@@ -1,12 +1,14 @@
-import { Contributor, INCOMPLETE_STRING, Submission } from "@phylopic/source-models"
+import { type Contributor, INCOMPLETE_STRING, type Submission } from "@phylopic/source-models"
+import type { Hash, UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { Hash, UUID } from "@phylopic/utils"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR from "swr"
+
 export type Props = {
     hash: Hash
 }
+
 const ContributorViewer: FC<Props> = ({ hash }) => {
     const { data: submission } = useSWR<Submission>(`/api/submissions/_/${encodeURIComponent(hash)}`, fetchJSON)
     const { data: contributor } = useSWR<Contributor & { uuid: UUID }>(
@@ -25,4 +27,5 @@ const ContributorViewer: FC<Props> = ({ hash }) => {
         </Link>
     )
 }
+
 export default ContributorViewer

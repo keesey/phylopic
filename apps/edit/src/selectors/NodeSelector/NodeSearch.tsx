@@ -1,15 +1,17 @@
-import { Entity, Node } from "@phylopic/source-models"
+import type { Entity, Node } from "@phylopic/source-models"
 import { getIdentifier } from "@phylopic/utils"
 import axios from "axios"
-import { FC, useCallback } from "react"
-import { SearchEntry } from "~/models/SearchEntry"
+import { type FC, useCallback } from "react"
+import type { SearchEntry } from "~/models/SearchEntry"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
 import useEntries from "./useEntries"
+
 export interface Props {
     onSelect: (node: Entity<Node> | undefined) => void
 }
+
 export const NodeSearch: FC<Props> = ({ onSelect }) => {
     const handleEntryClick = useCallback(
         async (entry: SearchEntry) => {
@@ -52,4 +54,5 @@ export const NodeSearch: FC<Props> = ({ onSelect }) => {
         </BubbleList>
     )
 }
+
 export default NodeSearch

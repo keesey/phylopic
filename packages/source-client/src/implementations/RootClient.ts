@@ -1,8 +1,9 @@
-import { Node } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
-import { Patchable } from "../interfaces"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { Node } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
+import type { Patchable } from "../interfaces"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
 import { NodeClient } from "./NodeClient"
+
 export class RootClient implements Patchable<Node & { uuid: UUID }> {
     constructor(protected provider: PGClientProvider) {}
     async patch(value: Partial<Node & { uuid: string }>): Promise<void> {

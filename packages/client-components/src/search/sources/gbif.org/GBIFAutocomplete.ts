@@ -4,6 +4,7 @@ import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
 import { GBIF_URL } from "./GBIF_URL"
 import { fetchNameUsagePage } from "./fetchNameUsagePage"
+
 export const GBIFAutocomplete: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const response = useSWRImmutable(

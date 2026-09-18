@@ -1,8 +1,8 @@
+import type { S3Client } from "@aws-sdk/client-s3"
 import type { Entity, Links } from "@phylopic/api-models"
-import { S3Client } from "@aws-sdk/client-s3"
-import { FaultDetector } from "@phylopic/utils"
-import parseEntityJSON from "./parseEntityJSON"
+import type { FaultDetector } from "@phylopic/utils"
 import getEntityEmbeds from "./getEntityEmbeds"
+import parseEntityJSON from "./parseEntityJSON"
 
 const parseEntityJSONAndEmbed = async <TEntity extends Entity<TLinks>, TLinks extends Links>(
     client: S3Client,

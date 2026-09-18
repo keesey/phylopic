@@ -1,5 +1,6 @@
 import APIError from "../errors/APIError"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
+
 const getPageIndex = (page: string, userMessage = "There was a problem with a request for data.") => {
     const index = parseInt(page, 10)
     if (!isFinite(index) || index < 0) {
@@ -18,4 +19,5 @@ const getPageIndex = (page: string, userMessage = "There was a problem with a re
     }
     return index
 }
+
 export default getPageIndex

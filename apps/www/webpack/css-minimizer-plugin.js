@@ -1,7 +1,11 @@
 const postcss = require("postcss")
+
 const cssnanoSimple = require("next/dist/compiled/cssnano-simple")
+
 const postcssScss = require("next/dist/compiled/postcss-scss")
+
 const { webpack, sources } = require("next/dist/compiled/webpack/webpack")
+
 const { getCompilationSpan } = require("next/dist/build/webpack/utils")
 
 const CSS_REGEX = /\.css(\?.*)?$/i
@@ -11,7 +15,6 @@ class CssMinimizerPlugin {
         this.__next_css_remove = true
         this.options = options
     }
-
     optimizeAsset(file, asset) {
         const postcssOptions = {
             ...this.options.postcssOptions,
@@ -40,7 +43,6 @@ class CssMinimizerPlugin {
                 return new sources.RawSource(css)
             })
     }
-
     apply(compiler) {
         compiler.hooks.compilation.tap("CssMinimizerPlugin", compilation => {
             const cache = compilation.getCache("CssMinimizerPlugin")

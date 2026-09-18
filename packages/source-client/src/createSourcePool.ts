@@ -1,4 +1,4 @@
-import { Pool, PoolConfig } from "pg"
+import { Pool, type PoolConfig } from "pg"
 
 export type CreateSourcePoolOptions = Pick<PoolConfig, "database">
 

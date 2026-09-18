@@ -1,11 +1,12 @@
 import { handleAPIError, handleWithPatcher } from "@phylopic/source-client"
-import { Node, Submission } from "@phylopic/source-models"
-import { getIdentifierParts, Hash, isHash, normalizeUUID, UUID } from "@phylopic/utils"
+import type { Node, Submission } from "@phylopic/source-models"
+import { getIdentifierParts, type Hash, isHash, normalizeUUID, type UUID } from "@phylopic/utils"
 import { randomUUID } from "crypto"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import { parseNomen } from "parse-nomen"
 import getResolver from "~/resolvers/getResolver"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -32,7 +33,9 @@ const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
     }
     res.end()
 }
+
 export default index
+
 const accept = async (client: SourceClient, hash: Hash): Promise<UUID> => {
     const now = new Date().toISOString()
     const submission = await client.submission(hash).get()

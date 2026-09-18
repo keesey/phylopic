@@ -1,6 +1,7 @@
-import { List } from "@phylopic/api-models"
+import type { List } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import BUILD from "../build/BUILD"
+
 const getListObject = (
     endpoint: string,
     query: Readonly<Record<string, string | number | boolean | undefined>>,
@@ -25,4 +26,5 @@ const getListObject = (
         totalPages,
     }
 }
+
 export default getListObject

@@ -1,10 +1,11 @@
-import { Authority } from "@phylopic/utils"
-import { NextPage } from "next"
+import type { Authority } from "@phylopic/utils"
+import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+
 const Page: NextPage = () => (
     <SWRConfig>
         <Head>
@@ -37,4 +38,5 @@ const Page: NextPage = () => (
         </main>
     </SWRConfig>
 )
+
 export default Page

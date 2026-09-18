@@ -4,8 +4,8 @@ import {
     GetObjectTaggingCommand,
     HeadObjectCommand,
     PutObjectCommand,
-    S3Client,
-    Tag,
+    type S3Client,
+    type Tag,
 } from "@aws-sdk/client-s3"
 import { convertS3BodyToBuffer } from "@phylopic/utils-aws"
 import { isLikelySVG, sanitizeSVG } from "@phylopic/utils/svg"
@@ -66,7 +66,6 @@ export const sanitizeUploadS3Object = async (
     if (!oldHash) {
         return { kind: "skipped" }
     }
-
     const head = await client.send(new HeadObjectCommand({ Bucket: target.bucketName, Key: key }))
     const [output, taggingOutput] = await Promise.all([
         client.send(new GetObjectCommand({ Bucket: target.bucketName, Key: key })),
@@ -76,16 +75,13 @@ export const sanitizeUploadS3Object = async (
     if (!isLikelySVG(body, head.ContentType)) {
         return { kind: "skipped" }
     }
-
     const sanitized = sanitizeSVG(body)
     if (sanitized.equals(body)) {
         return { kind: "unchanged" }
     }
-
     const newHash = hashBuffer(sanitized)
     const tagSet = taggingOutput.TagSet
     const tagging = tagSetToQueryString(tagSet)
-
     if (newHash === oldHash) {
         if (dryRun) {
             return { kind: "updated" }
@@ -102,10 +98,8 @@ export const sanitizeUploadS3Object = async (
         )
         return { kind: "updated" }
     }
-
     const newKey = uploadKeyForHash(newHash)
     const rekey: UploadRekey = { newHash, oldHash }
-
     if (await objectExists(client, target.bucketName, newKey)) {
         const existingTags = await client.send(new GetObjectTaggingCommand({ Bucket: target.bucketName, Key: newKey }))
         const existingContributor = getContributorFromTagSet(existingTags.TagSet)
@@ -122,11 +116,9 @@ export const sanitizeUploadS3Object = async (
         await client.send(new DeleteObjectCommand({ Bucket: target.bucketName, Key: key }))
         return { kind: "updated", rekey }
     }
-
     if (dryRun) {
         return { kind: "updated", rekey }
     }
-
     await client.send(
         new PutObjectCommand({
             ACL: target.acl,

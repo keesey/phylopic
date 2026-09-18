@@ -9,17 +9,19 @@ import {
     PhyloPicNodeSearch,
     SearchContainer,
 } from "@phylopic/client-components"
-import { Submission } from "@phylopic/source-models"
-import { Hash } from "@phylopic/utils"
+import type { Submission } from "@phylopic/source-models"
+import type { Hash } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR from "swr"
 import IdentifierView from "~/views/IdentifierView"
 import NameRenderer from "~/views/NameRenderer"
 import NodeSearch from "./NodeSearch"
+
 export type Props = {
     hash: Hash
 }
+
 const IdentifierEditor: FC<Props> = ({ hash }) => {
     const { data } = useSWR<Submission>(`/api/submissions/_/${encodeURIComponent(hash)}`, fetchJSON)
     if (!data) {
@@ -55,4 +57,5 @@ const IdentifierEditor: FC<Props> = ({ hash }) => {
         </div>
     )
 }
+
 export default IdentifierEditor

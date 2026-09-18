@@ -1,10 +1,11 @@
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
+import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
-import Container from "~/ui/Container"
+
 const ContributionCTAView: FC = () => {
     return (
         <section>
@@ -150,4 +151,5 @@ const ContributionCTAView: FC = () => {
         </section>
     )
 }
+
 export default ContributionCTAView

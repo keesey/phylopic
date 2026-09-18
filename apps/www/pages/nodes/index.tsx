@@ -1,19 +1,21 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import { PaginationContainer } from "@phylopic/client-components"
 import { CountView } from "@phylopic/ui"
 import type { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import customEvents from "~/analytics/customEvents"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import NodeListView from "~/views/NodeListView"
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
@@ -49,5 +51,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 export default PageComponent
+
 export const getStaticProps = createListStaticPropsGetter<Node>("/nodes")

@@ -1,5 +1,6 @@
-import { Image } from "@phylopic/api-models"
-import { LicenseFlags } from "./LicenseFlags"
+import type { Image } from "@phylopic/api-models"
+import type { LicenseFlags } from "./LicenseFlags"
+
 const getLicenseFlags = (images: readonly Image[]): LicenseFlags => {
     let by = false
     let nc = false
@@ -34,4 +35,5 @@ const getLicenseFlags = (images: readonly Image[]): LicenseFlags => {
     }
     return { by, nc, sa, v4 }
 }
+
 export default getLicenseFlags

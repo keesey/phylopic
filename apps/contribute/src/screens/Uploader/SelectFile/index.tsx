@@ -1,7 +1,7 @@
 import { NumberView } from "@phylopic/ui"
-import { Hash } from "@phylopic/utils"
+import type { Hash } from "@phylopic/utils"
 import clsx from "clsx"
-import { ChangeEvent, FC, FormEvent, useCallback, useEffect, useMemo } from "react"
+import { type ChangeEvent, type FC, type FormEvent, useCallback, useEffect, useMemo } from "react"
 import MAX_FILE_SIZE from "~/filesizes/MAX_FILE_SIZE"
 import MAX_FILE_SIZE_MEBIBYTES from "~/filesizes/MAX_FILE_SIZE_MEBIBYTES"
 import MIN_AREA_PIXELS_SQUARED from "~/filesizes/MIN_AREA_PIXELS_SQUARED"
@@ -23,16 +23,19 @@ import useImageSource from "../hooks/useImageSource"
 import useImageTooSmall from "../hooks/useImageTooSmall"
 import useWindowDragHighlight from "../hooks/useWindowDragHighlight"
 import useWindowDrop from "../hooks/useWindowDrop"
-import { FileResult } from "./FileResult"
+import type { FileResult } from "./FileResult"
 import styles from "./index.module.scss"
+
 const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 }
+
 export interface Props {
     onCancel: () => void
     onComplete: (result?: FileResult) => void
     value?: Hash
 }
+
 const SelectFile: FC<Props> = ({ onCancel, onComplete, value }) => {
     const [file, setFile] = useFileState()
     const highlightDrag = useWindowDragHighlight(true)
@@ -194,4 +197,5 @@ const SelectFile: FC<Props> = ({ onCancel, onComplete, value }) => {
         </section>
     )
 }
+
 export default SelectFile

@@ -1,8 +1,9 @@
 import { handleAPIError } from "@phylopic/source-client"
 import { isHash } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import handleWithImageFileDeletor from "~/api/handleWithImageFileDeletor"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Buffer> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -19,4 +20,5 @@ const index: NextApiHandler<Buffer> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

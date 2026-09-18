@@ -1,9 +1,10 @@
-import { FC, useContext } from "react"
+import { type FC, useContext } from "react"
 import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import LinkedImageThumbnailView from "~/views/LinkedImageThumbnailView"
 import styles from "./index.module.scss"
+
 const Images: FC = () => {
     const images = useCurrentCollectionImages()
     const [{ currentCollection }, dispatch] = useContext(CollectionsContext)
@@ -34,4 +35,5 @@ const Images: FC = () => {
         </section>
     )
 }
+
 export default Images

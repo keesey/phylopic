@@ -1,9 +1,10 @@
-import { handleAPIError, handleWithLister, Page } from "@phylopic/source-client"
-import { Submission } from "@phylopic/source-models"
+import { handleAPIError, handleWithLister, type Page } from "@phylopic/source-client"
+import type { Submission } from "@phylopic/source-models"
 import { isUUIDv4 } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Page<Submission & { Key: string }, string> | number> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -20,4 +21,5 @@ const index: NextApiHandler<Page<Submission & { Key: string }, string> | number>
     }
     res.end()
 }
+
 export default index

@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import logoDiscord from "../../../public/logos/discord.svg"
 import logoFacebook from "../../../public/logos/facebook.svg"
@@ -10,7 +10,9 @@ import logoMastodon from "../../../public/logos/mastodon.svg"
 import logoPatreon from "../../../public/logos/patreon-white.svg"
 import CollectionsDrawer from "../CollectionsDrawer"
 import styles from "./index.module.scss"
+
 const YEAR = new Date().getFullYear()
+
 const SiteFooter: FC = () => (
     <footer className={styles.main}>
         <CollectionsDrawer />
@@ -107,4 +109,5 @@ const SiteFooter: FC = () => (
         </ul>
     </footer>
 )
+
 export default SiteFooter

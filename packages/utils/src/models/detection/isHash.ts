@@ -1,6 +1,7 @@
 import { invalidate } from "../../validation/invalidate"
-import { type ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
-import { Hash } from "../types/Hash"
+import type { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
+import type { Hash } from "../types/Hash"
+
 export const isHash = (value: unknown, faultCollector?: ValidationFaultCollector): value is Hash =>
     (typeof value === "string" && /^[a-f0-9]{64}$/.test(value)) ||
     invalidate(faultCollector, "Not a valid hexadecimal hash.")

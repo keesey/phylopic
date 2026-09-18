@@ -1,5 +1,6 @@
 import { createSearch } from "@phylopic/utils"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
+
 const createPermanentRedirect = (
     path: string,
     query: Readonly<Record<string, string | number | boolean | undefined>> = {},
@@ -10,4 +11,5 @@ const createPermanentRedirect = (
         statusCode: 308,
     }
 }
+
 export default createPermanentRedirect

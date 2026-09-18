@@ -1,18 +1,20 @@
-import { Contributor } from "@phylopic/api-models"
+import type { Contributor } from "@phylopic/api-models"
 import { PaginationContainer } from "@phylopic/client-components"
 import Image from "next/image"
 import Link from "next/link"
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import customEvents from "~/analytics/customEvents"
 import getContributorHRef from "~/routes/getContributorHRef"
 import logoIndiegogo from "../../../public/logos/indiegogo-cerulean.svg"
 import logoPatreon from "../../../public/logos/patreon-cerulean.svg"
 import logoSSB from "../../../public/logos/ssb-cerulean.svg"
 import styles from "./index.module.scss"
+
 export interface Props {
     showContributors?: boolean
     supporters?: readonly ReactNode[]
 }
+
 const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
     return (
         <div className={styles.main}>
@@ -127,4 +129,5 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
         </div>
     )
 }
+
 export default SupportersView

@@ -1,23 +1,25 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { TimestampView } from "@phylopic/ui"
-import { Hash, isHash } from "@phylopic/utils"
+import { type Hash, isHash } from "@phylopic/utils"
 import { getJSON } from "@phylopic/utils-aws"
-import createS3ClientConfig from "~/aws/createS3ClientConfig"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import createS3ClientConfig from "~/aws/createS3ClientConfig"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import PERMALINKS_BUCKET_NAME from "~/permalinks/constants/PERMALINKS_BUCKET_NAME"
 import usePermalinkSubheader from "~/permalinks/hooks/usePermalinkSubheader"
-import { PermalinkData } from "~/permalinks/types/PermalinkData"
+import type { PermalinkData } from "~/permalinks/types/PermalinkData"
 import PermalinkView from "~/permalinks/views/PermalinkView"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
+
 type Props = Omit<PageLayoutProps, "children"> & {
     data: PermalinkData
     date?: string
     hash: Hash
 }
+
 const PageComponent: NextPage<Props> = props => {
     const subheader = usePermalinkSubheader(props.data)
     const url = `${process.env.NEXT_PUBLIC_WWW_URL}/permalinks/${encodeURIComponent(props.hash)}`
@@ -49,13 +51,16 @@ const PageComponent: NextPage<Props> = props => {
         </PageLayout>
     )
 }
+
 export default PageComponent
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",
         paths: [],
     }
 }
+
 export const getStaticProps: GetStaticProps<Props, { hash: Hash }> = async context => {
     const { hash } = context.params ?? {}
     if (!isHash(hash)) {

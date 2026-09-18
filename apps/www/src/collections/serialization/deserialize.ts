@@ -1,6 +1,7 @@
-import { UUID } from "@phylopic/utils"
-import { State } from "../context/State"
-import { SerializedState } from "./SerializedState"
+import type { UUID } from "@phylopic/utils"
+import type { State } from "../context/State"
+import type { SerializedState } from "./SerializedState"
+
 const deserialize = (serialized: string): State => {
     const state: SerializedState = JSON.parse(serialized)
     return {
@@ -10,4 +11,5 @@ const deserialize = (serialized: string): State => {
         ),
     }
 }
+
 export default deserialize

@@ -1,9 +1,10 @@
-import { FC } from "react"
+import type { FC } from "react"
 import Dialogue from "~/ui/Dialogue"
 import { ICON_ARROW_LEFT, ICON_ARROW_RIGHT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+
 const Farewell: FC = () => {
     return (
         <Dialogue>
@@ -21,4 +22,5 @@ const Farewell: FC = () => {
         </Dialogue>
     )
 }
+
 export default Farewell

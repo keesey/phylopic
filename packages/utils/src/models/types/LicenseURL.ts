@@ -1,3 +1,4 @@
-import { LegacyLicenseURL } from "./LegacyLicenseURL"
-import { ValidLicenseURL } from "./ValidLicenseURL"
+import type { LegacyLicenseURL } from "./LegacyLicenseURL"
+import type { ValidLicenseURL } from "./ValidLicenseURL"
+
 export type LicenseURL = LegacyLicenseURL | ValidLicenseURL

@@ -1,9 +1,10 @@
 import { handleAPIError } from "@phylopic/source-client"
-import { isSubmission, Submission } from "@phylopic/source-models"
+import { isSubmission, type Submission } from "@phylopic/source-models"
 import { isHash, ValidationError, ValidationFaultCollector } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import SourceClient from "~/source/SourceClient"
+
 const SUBMISSION_KEYS: ReadonlyArray<keyof Submission> = [
     "attribution",
     "contributor",
@@ -14,6 +15,7 @@ const SUBMISSION_KEYS: ReadonlyArray<keyof Submission> = [
     "sponsor",
     "status",
 ]
+
 const index: NextApiHandler<Submission> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -75,4 +77,5 @@ const index: NextApiHandler<Submission> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

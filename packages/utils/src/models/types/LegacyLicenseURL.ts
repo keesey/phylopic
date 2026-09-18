@@ -1,4 +1,5 @@
-import { URL } from "./URL"
+import type { URL } from "./URL"
+
 export type LegacyLicenseURL = URL &
     (
         | "https://creativecommons.org/licenses/by/3.0/"

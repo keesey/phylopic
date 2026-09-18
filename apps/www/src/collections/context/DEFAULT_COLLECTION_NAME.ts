@@ -1,2 +1,3 @@
 const DEFAULT_COLLECTION_NAME = "My Collection"
+
 export default DEFAULT_COLLECTION_NAME

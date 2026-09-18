@@ -1,6 +1,7 @@
-import { type FaultDetector } from "@phylopic/utils"
-import { type AxiosRequestConfig } from "axios"
+import type { FaultDetector } from "@phylopic/utils"
+import type { AxiosRequestConfig } from "axios"
 import { fetchData, type SuccessfulFetchDataResponse } from "./fetchData"
+
 export const fetchDataAndCheck = async <T>(
     url: string,
     config?: AxiosRequestConfig,

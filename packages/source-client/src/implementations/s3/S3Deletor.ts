@@ -1,11 +1,12 @@
-import { GetObjectOutput } from "@aws-sdk/client-s3"
-import { Deletable } from "../../interfaces/Deletable"
-import { S3ClientProvider } from "../../interfaces/S3ClientProvider"
+import type { GetObjectOutput } from "@aws-sdk/client-s3"
+import type { Deletable } from "../../interfaces/Deletable"
+import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { copyFromTrash } from "./methods/copyFromTrash"
 import { copyToTrash } from "./methods/copyToTrash"
 import { deleteObject } from "./methods/deleteObject"
 import { exists } from "./methods/exists"
 import { S3Reader } from "./S3Reader"
+
 export class S3Deletor<T> extends S3Reader<T> implements Deletable<T> {
     constructor(
         provider: S3ClientProvider,

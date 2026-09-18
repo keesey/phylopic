@@ -1,7 +1,7 @@
-import { Image, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
+import { type Image, INCOMPLETE_STRING, type Node } from "@phylopic/source-models"
+import { isUUIDv4, stringifyNomen, type UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { isUUIDv4, stringifyNomen, UUID } from "@phylopic/utils"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
 import { useMemo } from "react"
 import useSWR, { SWRConfig } from "swr"
@@ -14,6 +14,7 @@ import TimesView from "~/views/TimesView"
 export type Props = {
     uuid: UUID
 }
+
 const Page: NextPage<Props> = ({ uuid }) => {
     const { data: image } = useSWR<Image & { uuid: UUID }>(`/api/images/_/${uuid}`, fetchJSON)
     const { data: specific } = useSWR<Node & { uuid: UUID }>(image ? `/api/nodes/_/${image.specific}` : null, fetchJSON)
@@ -63,7 +64,9 @@ const Page: NextPage<Props> = ({ uuid }) => {
         </SWRConfig>
     )
 }
+
 export default Page
+
 export const getStaticProps: GetStaticProps<Props> = context => {
     const { uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
@@ -71,6 +74,7 @@ export const getStaticProps: GetStaticProps<Props> = context => {
     }
     return { props: { uuid } }
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",

@@ -1,4 +1,4 @@
-import { S3Client } from "@aws-sdk/client-s3"
+import type { S3Client } from "@aws-sdk/client-s3"
 import type { S3ClientService } from "./S3ClientService"
 
 const withS3Client = async <T>(service: S3ClientService, fn: (client: S3Client) => Promise<T>): Promise<T> => {

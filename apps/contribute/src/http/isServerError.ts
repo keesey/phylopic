@@ -1,5 +1,6 @@
 import { APISWRError } from "@phylopic/utils-api"
-import axios, { AxiosError } from "axios"
+import axios, { type AxiosError } from "axios"
+
 const isServerError = (error: unknown): error is AxiosError | APISWRError => {
     if (axios.isAxiosError(error)) {
         const status = error.response?.status
@@ -10,4 +11,5 @@ const isServerError = (error: unknown): error is AxiosError | APISWRError => {
     }
     return false
 }
+
 export default isServerError

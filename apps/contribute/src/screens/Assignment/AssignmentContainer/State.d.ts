@@ -1,4 +1,5 @@
-import { Hash, Identifier } from "@phylopic/utils"
+import { type Hash } from "@phylopic/utils"
+
 export type State = {
     changeRequested: boolean
     hash: Hash

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import isJWTExpired from "../jwt/isJWTExpired"
 import useAuthToken from "./useAuthToken"
 import useExpirationHandler from "./useExpirationHandler"
+
 const useAuthorized = () => {
     const [mounted, setMounted] = useState(false)
     useEffect(() => setMounted(true), [])
@@ -12,4 +13,5 @@ const useAuthorized = () => {
     useExpirationHandler(handleExpire)
     return mounted && Boolean(token) && !expired
 }
+
 export default useAuthorized

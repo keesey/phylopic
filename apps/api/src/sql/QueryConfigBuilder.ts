@@ -1,4 +1,5 @@
-import { QueryConfig } from "pg"
+import type { QueryConfig } from "pg"
+
 class QueryConfigBuilder {
     private clauses: string[] = []
     private values: unknown[] = []
@@ -40,4 +41,5 @@ class QueryConfigBuilder {
         return { text, values }
     }
 }
+
 export default QueryConfigBuilder

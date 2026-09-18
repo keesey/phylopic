@@ -1,3 +1,4 @@
-import { NodeEmbedded } from "../../types/NodeWithEmbedded"
-import { EntityParameters } from "./EntityParameters"
+import type { NodeEmbedded } from "../../types/NodeWithEmbedded"
+import type { EntityParameters } from "./EntityParameters"
+
 export type NodeParameters = EntityParameters<NodeEmbedded>

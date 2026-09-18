@@ -1,5 +1,5 @@
-import { Nomen } from "@phylopic/utils"
-import { FC } from "react"
+import type { Nomen } from "@phylopic/utils"
+import type { FC } from "react"
 import NameView from "./NameView"
 
 export interface Props {
@@ -7,6 +7,7 @@ export interface Props {
     name: Nomen | null
     sponsor: string | null
 }
+
 const ImageTitleView: FC<Props> = ({ attribution, name, sponsor }) => (
     <span>
         {name ? <NameView name={name} short /> : "Unassigned"}
@@ -15,4 +16,5 @@ const ImageTitleView: FC<Props> = ({ attribution, name, sponsor }) => (
         {sponsor ? ` (Sponsored by ${sponsor})` : null}
     </span>
 )
+
 export default ImageTitleView

@@ -1,15 +1,17 @@
-import { Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import getCladeImagesUUID from "~/models/getCladeImagesUUID"
 import getNodeHRef from "~/routes/getNodeHRef"
 import NomenView from "~/views/NomenView"
 import styles from "../index.module.scss"
+
 export interface Props {
     short?: boolean
     value: readonly Node[]
 }
+
 const NodeListViewItems: FC<Props> = ({ short, value }) => {
     return (
         <>
@@ -29,4 +31,5 @@ const NodeListViewItems: FC<Props> = ({ short, value }) => {
         </>
     )
 }
+
 export default NodeListViewItems

@@ -1,14 +1,15 @@
-import { Contributor, Image, INCOMPLETE_STRING, Node } from "@phylopic/source-models"
+import { type Contributor, type Image, INCOMPLETE_STRING, type Node } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { UUID } from "@phylopic/utils"
-import { NextPage } from "next"
+import type { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR, { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import NameView from "~/views/NameView"
+
 const Page: NextPage = () => {
     return (
         <SWRConfig>
@@ -41,7 +42,9 @@ const Page: NextPage = () => {
         </SWRConfig>
     )
 }
+
 export default Page
+
 const ImageView: FC<{ image: Image & { uuid: UUID } }> = ({ image }) => {
     const { data: specific } = useSWR<Node & { uuid: UUID }>(
         image.specific ? `/api/nodes/_/${encodeURIComponent(image.specific)}` : null,

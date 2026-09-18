@@ -1,5 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { Readable } from "../interfaces"
+import type { NextApiRequest, NextApiResponse } from "next"
+import type { Readable } from "../interfaces"
+
 export const handleWithReader = async <T>(req: NextApiRequest, res: NextApiResponse<T>, reader: Readable<T>) => {
     switch (req.method) {
         case "GET":

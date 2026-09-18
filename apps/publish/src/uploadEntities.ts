@@ -1,7 +1,7 @@
+import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
 import { spawn } from "child_process"
 import { readFile } from "fs/promises"
 import { join } from "path"
-import { ENTITIES_BUCKET } from "@phylopic/s3-entities"
 import { ENTITIES_CACHE_CONTROL, ENTITIES_STAGING_ROOT } from "./entities/constants.js"
 import { getEntitiesStagingBuildDir } from "./entities/EntityS3Writer.js"
 

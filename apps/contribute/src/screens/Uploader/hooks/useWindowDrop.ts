@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+
 const useWindowDrop = (setFile?: (file: File | undefined) => void) => {
     useEffect(() => {
         if (setFile) {
@@ -13,4 +14,5 @@ const useWindowDrop = (setFile?: (file: File | undefined) => void) => {
         }
     }, [setFile])
 }
+
 export default useWindowDrop

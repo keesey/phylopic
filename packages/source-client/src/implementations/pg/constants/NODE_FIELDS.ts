@@ -1,6 +1,7 @@
-import { Node } from "@phylopic/source-models"
-import { UUID } from "@phylopic/utils"
-import { EditField } from "../fields/EditField"
+import type { Node } from "@phylopic/source-models"
+import type { UUID } from "@phylopic/utils"
+import type { EditField } from "../fields/EditField"
+
 export const NODE_FIELDS: ReadonlyArray<EditField<Node & { uuid: UUID }>> = [
     {
         column: "created",

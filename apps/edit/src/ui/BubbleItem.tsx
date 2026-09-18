@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, FC, LiHTMLAttributes } from "react"
+import type { DetailedHTMLProps, FC, LiHTMLAttributes } from "react"
 import styles from "./BubbleItemOrNode.module.scss"
 
 export type Props = Omit<DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>, "className"> & {
@@ -6,6 +6,7 @@ export type Props = Omit<DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTML
     deleted?: boolean
     light?: boolean
 }
+
 const BubbleItem: FC<Props> = ({ changed, children, deleted, light, ...liProps }) => (
     <li
         {...liProps}
@@ -22,4 +23,5 @@ const BubbleItem: FC<Props> = ({ changed, children, deleted, light, ...liProps }
         <div className={styles.content}>{children}</div>
     </li>
 )
+
 export default BubbleItem

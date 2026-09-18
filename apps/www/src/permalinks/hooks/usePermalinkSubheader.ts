@@ -1,5 +1,6 @@
 import { useMemo } from "react"
-import { PermalinkData } from "../types/PermalinkData"
+import type { PermalinkData } from "../types/PermalinkData"
+
 const usePermalinkSubheader = (data: PermalinkData) =>
     useMemo(() => {
         switch (data.type) {
@@ -26,4 +27,5 @@ const usePermalinkSubheader = (data: PermalinkData) =>
             }
         }
     }, [data])
+
 export default usePermalinkSubheader

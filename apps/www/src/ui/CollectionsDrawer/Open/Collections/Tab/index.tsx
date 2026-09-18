@@ -1,18 +1,20 @@
+import { NumberView } from "@phylopic/ui"
 import { normalizeText } from "@phylopic/utils"
 import clsx from "clsx"
 import { useRouter } from "next/router"
-import { FC, useContext } from "react"
-import postCollectionPage from "~/collections/postCollectionPage"
+import { type FC, useContext } from "react"
+import customEvents from "~/analytics/customEvents"
 import CollectionsContext from "~/collections/context/CollectionsContext"
 import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollectionImages"
 import useCurrentCollectionName from "~/collections/hooks/useCurrentCollectionName"
-import styles from "./index.module.scss"
-import { NumberView } from "@phylopic/ui"
+import postCollectionPage from "~/collections/postCollectionPage"
 import Icon from "~/ui/Icon"
-import customEvents from "~/analytics/customEvents"
+import styles from "./index.module.scss"
+
 export interface Props {
     name: string
 }
+
 const Tab: FC<Props> = ({ name }) => {
     const currentName = useCurrentCollectionName()
     const currentImages = useCurrentCollectionImages()
@@ -99,4 +101,5 @@ const Tab: FC<Props> = ({ name }) => {
         </div>
     )
 }
+
 export default Tab

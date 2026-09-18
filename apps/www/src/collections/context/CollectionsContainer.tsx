@@ -1,14 +1,17 @@
-import { FC, ReactNode, useCallback, useEffect, useReducer, useState } from "react"
+import { type FC, type ReactNode, useCallback, useEffect, useReducer, useState } from "react"
+import deserialize from "../serialization/deserialize"
+import serialize from "../serialization/serialize"
 import CollectionsContext from "./CollectionsContext"
 import INITIAL_STATE from "./INITIAL_STATE"
 import reducer from "./reducer"
-import deserialize from "../serialization/deserialize"
-import serialize from "../serialization/serialize"
-import { State } from "./State"
+import type { State } from "./State"
+
 export interface Props {
     children: ReactNode
 }
+
 const LOCAL_STORAGE_KEY = "collections"
+
 const CollectionsContainer: FC<Props> = ({ children }) => {
     const value = useReducer(reducer, INITIAL_STATE)
     const [state, dispatch] = value
@@ -44,4 +47,5 @@ const CollectionsContainer: FC<Props> = ({ children }) => {
     }, [initialized, state])
     return <CollectionsContext.Provider value={value}>{children}</CollectionsContext.Provider>
 }
+
 export default CollectionsContainer

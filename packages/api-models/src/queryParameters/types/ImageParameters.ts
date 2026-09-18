@@ -1,3 +1,4 @@
-import { ImageEmbedded } from "../../types/ImageWithEmbedded"
-import { EntityParameters } from "./EntityParameters"
+import type { ImageEmbedded } from "../../types/ImageWithEmbedded"
+import type { EntityParameters } from "./EntityParameters"
+
 export type ImageParameters = EntityParameters<ImageEmbedded>

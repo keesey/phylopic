@@ -1,7 +1,7 @@
-import { Link } from "@phylopic/api-models"
-import { getImageFileExtension, Hash, ImageMediaType, isHash } from "@phylopic/utils"
-import axios, { AxiosProgressEvent } from "axios"
-import { FC, useEffect, useMemo, useState } from "react"
+import type { Link } from "@phylopic/api-models"
+import { getImageFileExtension, type Hash, type ImageMediaType, isHash } from "@phylopic/utils"
+import axios, { type AxiosProgressEvent } from "axios"
+import { type FC, useEffect, useMemo, useState } from "react"
 import useAuthToken from "~/auth/hooks/useAuthToken"
 import useDeauthorize from "~/auth/hooks/useDeauthorize"
 import isUnauthorizedAPIResponse from "~/auth/http/isUnauthorizedAPIResponse"
@@ -12,6 +12,7 @@ import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 import styles from "./index.module.scss"
+
 export interface Props {
     buffer: Buffer
     filename?: string
@@ -19,6 +20,7 @@ export interface Props {
     onComplete: (hash: Hash) => void
     type: ImageMediaType
 }
+
 const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, type }) => {
     const token = useAuthToken()
     const deauthorize = useDeauthorize()
@@ -99,4 +101,5 @@ const UploadProgress: FC<Props> = ({ buffer, filename, onCancel, onComplete, typ
         </Dialogue>
     )
 }
+
 export default UploadProgress

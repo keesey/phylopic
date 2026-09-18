@@ -1,6 +1,6 @@
-import "dotenv/config"
 import axios from "axios"
 import axiosRetry from "axios-retry"
+import "dotenv/config"
 import SourceClient from "./source/SourceClient.js"
 ;(async () => {
     axiosRetry(axios, {

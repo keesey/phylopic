@@ -1,9 +1,10 @@
-import { NodeWithEmbedded } from "@phylopic/api-models"
-import { ExternalResolution, SearchContext, useExternalResolutions } from "@phylopic/client-components"
-import { Authority, Namespace, ObjectID } from "@phylopic/utils"
+import type { NodeWithEmbedded } from "@phylopic/api-models"
+import { type ExternalResolution, SearchContext, useExternalResolutions } from "@phylopic/client-components"
+import type { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import { parseNomen } from "parse-nomen"
 import { useContext, useMemo } from "react"
-import { SearchEntry } from "./SearchEntry"
+import type { SearchEntry } from "./SearchEntry"
+
 export const useEntries = () => {
     const [{ externalResults, nodeResults }] = useContext(SearchContext) ?? [{}]
     const externalResolutions = useExternalResolutions()
@@ -11,7 +12,9 @@ export const useEntries = () => {
     const externalUnresolved = useUnresolved(externalEntries, externalResolutions)
     return useCombinedEntries(nodeResults, externalResolutions, externalUnresolved)
 }
+
 export default useEntries
+
 const useExternalEntries = (
     externalResults:
         Readonly<Record<Authority, Readonly<Record<Namespace, Readonly<Record<ObjectID, string>>>>>> | undefined,
@@ -39,6 +42,7 @@ const useExternalEntries = (
         return entries
     }, [externalResults])
 }
+
 const convertResolutionToEntry = (resolution: ExternalResolution) =>
     ({
         authority: resolution.authority,
@@ -47,6 +51,7 @@ const convertResolutionToEntry = (resolution: ExternalResolution) =>
         namespace: resolution.namespace,
         objectID: resolution.objectID,
     }) as SearchEntry
+
 const mapNodeResultsToEntries = (nodeResults: readonly NodeWithEmbedded[] | undefined): readonly SearchEntry[] => {
     return (nodeResults ?? []).map(
         node =>
@@ -59,6 +64,7 @@ const mapNodeResultsToEntries = (nodeResults: readonly NodeWithEmbedded[] | unde
             }) as SearchEntry,
     )
 }
+
 const useUnresolved = (
     entries: readonly SearchEntry[],
     resolutions: readonly ExternalResolution[],

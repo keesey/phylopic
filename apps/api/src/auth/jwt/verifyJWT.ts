@@ -1,7 +1,8 @@
-import { JWT } from "@phylopic/source-models"
-import { JwtPayload, verify } from "jsonwebtoken"
+import type { JWT } from "@phylopic/source-models"
+import { type JwtPayload, verify } from "jsonwebtoken"
 import APIError from "../../errors/APIError"
 import DOMAIN from "./DOMAIN"
+
 const verifyJWT = (token: JWT) =>
     new Promise<JwtPayload | null>((resolve, reject) => {
         if (!process.env.AUTH_SECRET_KEY) {
@@ -66,4 +67,5 @@ const verifyJWT = (token: JWT) =>
             },
         )
     })
+
 export default verifyJWT

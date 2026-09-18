@@ -1,9 +1,10 @@
 import { handleAPIError } from "@phylopic/source-client"
-import { External, Node } from "@phylopic/source-models"
-import { isUUIDv4, normalizeUUID, UUID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { External, Node } from "@phylopic/source-models"
+import { isUUIDv4, normalizeUUID, type UUID } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import { parseNomen } from "parse-nomen"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Node | { uuid: UUID }> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -33,7 +34,9 @@ const index: NextApiHandler<Node | { uuid: UUID }> = async (req, res) => {
     }
     res.end()
 }
+
 export default index
+
 const restoreNode = async (
     node: ReturnType<SourceClient["node"]>,
     external: ReturnType<SourceClient["external"]>,
@@ -57,6 +60,7 @@ const restoreNode = async (
     }
     throw 404
 }
+
 const createNodeFromExternal = async (
     client: ReturnType<SourceClient["node"]>,
     external: External,

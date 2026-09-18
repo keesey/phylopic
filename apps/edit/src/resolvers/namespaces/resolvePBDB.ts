@@ -1,16 +1,18 @@
-import { Node } from "@phylopic/source-models"
-import { normalizeUUID, UUID } from "@phylopic/utils"
+import type { Node } from "@phylopic/source-models"
+import { normalizeUUID, type UUID } from "@phylopic/utils"
 import axios from "axios"
 import { randomUUID } from "crypto"
 import { parseNomen } from "parse-nomen"
-import SourceClient from "~/source/SourceClient"
-import { Resolver } from "../Resolver"
+import type SourceClient from "~/source/SourceClient"
 import packageJson from "../../../package.json"
+import type { Resolver } from "../Resolver"
+
 interface PBDBRecord {
     // Abridged.
     readonly nam: string
     readonly oid: string
 }
+
 const resolveItem = async (client: SourceClient, item: PBDBRecord, lineage: readonly PBDBRecord[]) => {
     const externalClient = client.external("paleobiodb.org", "txn", item.oid.replace(/^txn:/, ""))
     if (await externalClient.exists()) {
@@ -38,6 +40,7 @@ const resolveItem = async (client: SourceClient, item: PBDBRecord, lineage: read
     })
     return newNode
 }
+
 const resolvePBDB: Resolver = async (client, objectID) => {
     const minorVersion = packageJson.version.split(".", 2).join(".")
     const result = await axios.get<{ records: readonly PBDBRecord[] }>(
@@ -53,4 +56,5 @@ const resolvePBDB: Resolver = async (client, objectID) => {
     const node = await resolveItem(client, item!, lineage)
     return node
 }
+
 export default resolvePBDB

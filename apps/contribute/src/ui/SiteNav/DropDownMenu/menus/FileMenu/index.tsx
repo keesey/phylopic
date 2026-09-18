@@ -1,17 +1,19 @@
-import { isSubmission, Submission } from "@phylopic/source-models"
-import { Hash } from "@phylopic/utils"
+import { isSubmission, type Submission } from "@phylopic/source-models"
+import type { Hash } from "@phylopic/utils"
 import { useRouter } from "next/router"
-import { FC, useCallback, useMemo } from "react"
+import { type FC, useCallback, useMemo } from "react"
 import useSubmissionDeletor from "~/editing/useSubmissionDeletor"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import { ICON_CHECK, ICON_DANGER, ICON_PLUS, ICON_X } from "~/ui/ICON_SYMBOLS"
 import MenuButton from "../../MenuButton"
 import MenuDivider from "../../MenuDivider"
 import MenuLink from "../../MenuLink"
+
 export type Props = {
     submissionHash?: Hash
     submission?: Submission
 }
+
 const FileMenu: FC<Props> = ({ submission, submissionHash }) => {
     const mutator = useSubmissionMutator(submissionHash)
     const deletor = useSubmissionDeletor(submissionHash)
@@ -58,4 +60,5 @@ const FileMenu: FC<Props> = ({ submission, submissionHash }) => {
         </>
     )
 }
+
 export default FileMenu

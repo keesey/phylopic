@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+
 const useFileState = () => {
     const state = useState<File | undefined>()
     useEffect(() => {
@@ -31,4 +32,5 @@ const useFileState = () => {
     }, [state])
     return state
 }
+
 export default useFileState

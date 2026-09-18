@@ -1,11 +1,13 @@
-import { Nomen, stringifyNomen } from "@phylopic/utils"
-import { FC, ReactNode } from "react"
+import { type Nomen, stringifyNomen } from "@phylopic/utils"
+import type { FC, ReactNode } from "react"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
+
 export interface Props {
     header?: ReactNode
     names: readonly Nomen[]
 }
+
 const NameList: FC<Props> = ({ header, names }) => {
     return (
         <aside className={styles.main}>
@@ -20,4 +22,5 @@ const NameList: FC<Props> = ({ header, names }) => {
         </aside>
     )
 }
+
 export default NameList

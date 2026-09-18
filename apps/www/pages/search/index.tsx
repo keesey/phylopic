@@ -1,27 +1,29 @@
 import {
-    NodeListParameters,
-    NodeWithEmbedded,
+    type NodeListParameters,
+    type NodeWithEmbedded,
     normalizeQuery,
-    PageWithEmbedded,
-    QueryMatches,
+    type PageWithEmbedded,
+    type QueryMatches,
 } from "@phylopic/api-models"
 import { getMatchingText } from "@phylopic/client-components"
-import { createSearch, Query } from "@phylopic/utils"
+import { createSearch, type Query } from "@phylopic/utils"
 import { fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetServerSideProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import type { SWRConfiguration } from "swr"
 import BUILD from "~/build/BUILD"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import SearchAside from "~/ui/SearchAside"
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
@@ -40,7 +42,9 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 export default PageComponent
+
 const getInitialText = (q?: string | string[]) => {
     if (Array.isArray(q)) {
         if (!q.length) {
@@ -53,6 +57,7 @@ const getInitialText = (q?: string | string[]) => {
     }
     return ""
 }
+
 export const getServerSideProps: GetServerSideProps<Props, { q?: string | string[] }> = async context => {
     const initialText = getInitialText(context.query.q)
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {}

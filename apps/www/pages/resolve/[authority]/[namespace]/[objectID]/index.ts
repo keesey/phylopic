@@ -1,7 +1,7 @@
 import { isAuthority, isNamespace, isObjectID, isUUIDv4, normalizeUUID } from "@phylopic/utils"
 import axios from "axios"
-import { GetServerSideProps, NextPage } from "next"
-import { ParsedUrlQuery } from "querystring"
+import type { GetServerSideProps, NextPage } from "next"
+import type { ParsedUrlQuery } from "querystring"
 
 const toSafeRelativeRedirect = (location: string): string | null => {
     if (!location.startsWith("/") || location.startsWith("//") || location.includes("..")) {
@@ -11,12 +11,15 @@ const toSafeRelativeRedirect = (location: string): string | null => {
 }
 
 const PageComponent: NextPage = () => null
+
 export default PageComponent
+
 interface PageQuery extends ParsedUrlQuery {
     authority: string
     namespace: string
     objectID: string
 }
+
 export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQuery> = async context => {
     const { authority, namespace, objectID } = context.query
     if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {

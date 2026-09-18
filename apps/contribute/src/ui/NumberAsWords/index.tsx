@@ -1,11 +1,14 @@
-import { FC, useMemo } from "react"
 import { toWords } from "number-to-words"
+import { type FC, useMemo } from "react"
+
 export type Props = {
     caps?: boolean
     max?: number
     value: number
 }
+
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 // :TODO: Move to ui?
 const NumberAsWords: FC<Props> = ({ caps, max, value }) => {
     const words = useMemo(
@@ -15,4 +18,5 @@ const NumberAsWords: FC<Props> = ({ caps, max, value }) => {
     const title = useMemo(() => value.toLocaleString("en-us"), [value])
     return <span title={title}>{words}</span>
 }
+
 export default NumberAsWords

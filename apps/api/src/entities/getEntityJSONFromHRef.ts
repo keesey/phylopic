@@ -1,4 +1,4 @@
-import { S3Client } from "@aws-sdk/client-s3"
+import type { S3Client } from "@aws-sdk/client-s3"
 import { getEntityJSONKey } from "@phylopic/s3-entities"
 import BUILD from "../build/BUILD"
 import getFolderAndUUIDFromHRef from "./getFolderAndUUIDFromHRef"

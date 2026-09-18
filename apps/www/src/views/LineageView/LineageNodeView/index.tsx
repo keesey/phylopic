@@ -1,21 +1,23 @@
-import { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
+import type { ImageListParameters, ImageWithEmbedded, Node } from "@phylopic/api-models"
 import { Loader, PaginationContainer } from "@phylopic/client-components"
-import { Query } from "@phylopic/utils"
+import type { Query } from "@phylopic/utils"
 import clsx from "clsx"
 import Link from "next/link"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import getNodeHRef from "~/routes/getNodeHRef"
 import ImageListView from "~/views/ImageListView"
 import NomenView from "~/views/NomenView"
-import styles from "./index.module.scss"
 import AgeView from "./AgeView"
+import styles from "./index.module.scss"
+
 export interface Props {
     pageSize?: number
     short?: boolean
     value: Node
 }
+
 const LineageNodeView: FC<Props> = ({ value }) => {
     const query = useMemo<ImageListParameters & Query>(
         () => ({ filter_node: value.uuid, embed_items: "true", embed_specificNode: "true" }),
@@ -54,4 +56,5 @@ const LineageNodeView: FC<Props> = ({ value }) => {
         </section>
     )
 }
+
 export default LineageNodeView

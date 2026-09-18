@@ -1,10 +1,11 @@
-import { Node } from "@phylopic/source-models"
-import { normalizeNomina, normalizeUUID, UUID } from "@phylopic/utils"
+import type { Node } from "@phylopic/source-models"
+import { normalizeNomina, normalizeUUID, type UUID } from "@phylopic/utils"
 import axios from "axios"
 import { randomUUID } from "crypto"
 import { parseNomen } from "parse-nomen"
-import SourceClient from "~/source/SourceClient"
-import { Resolver } from "../Resolver"
+import type SourceClient from "~/source/SourceClient"
+import type { Resolver } from "../Resolver"
+
 interface OTOLLineageItem {
     // Abridged.
     readonly name: string
@@ -12,6 +13,7 @@ interface OTOLLineageItem {
     readonly synonyms?: readonly string[]
     readonly unique_name: string
 }
+
 interface OTOLTaxonInfo {
     // Abridged.
     readonly synonyms?: readonly string[]
@@ -20,6 +22,7 @@ interface OTOLTaxonInfo {
     readonly ott_id: number
     readonly unique_name: string
 }
+
 const resolveItem = async (client: SourceClient, item: OTOLLineageItem, lineage: readonly OTOLLineageItem[]) => {
     const externalClient = client.external("opentreeoflife.org", "taxonomy", String(item.ott_id))
     if (await externalClient.exists()) {
@@ -45,6 +48,7 @@ const resolveItem = async (client: SourceClient, item: OTOLLineageItem, lineage:
     })
     return newNode
 }
+
 const resolveOTOL: Resolver = async (client, objectID) => {
     const result = await axios.post<OTOLTaxonInfo>(
         "https://api.opentreeoflife.org/v3/taxonomy/taxon_info",
@@ -60,4 +64,5 @@ const resolveOTOL: Resolver = async (client, objectID) => {
     const node = await resolveItem(client, result.data, result.data.lineage ?? [])
     return node
 }
+
 export default resolveOTOL

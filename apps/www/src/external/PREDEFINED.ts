@@ -1,7 +1,9 @@
-import { type UUID } from "@phylopic/utils"
-import { type AgeResult } from "./AgeResult"
+import type { UUID } from "@phylopic/utils"
+import type { AgeResult } from "./AgeResult"
 import { SMITHSONIAN_HUMAN_ORIGINS, TIMETREE, WIKIPEDIA } from "./SOURCES"
+
 export type AgeSourceRecord = Record<UUID, AgeResult | null | undefined>
+
 // :KLUDGE: The Paleobiology Database's hominin dates are too general.
 const HOMININI: AgeSourceRecord = {
     // Hominini
@@ -167,11 +169,13 @@ const HOMININI: AgeSourceRecord = {
         ages: [100000, 50000],
     },
 }
+
 // :KLUDGE: The root node doesn't have a reliable estimate.
 const ROOT: AgeSourceRecord = {
     // Pan-Biota
     "8f901db5-84c1-4dc0-93ba-2300eeddf4ab": null,
 }
+
 // :KLUDGE: TimeTree has some nodes that have invalid data in the API or are difficult to look up.
 const TIMETREE_ERRATA: AgeSourceRecord = {
     // Aves
@@ -195,9 +199,11 @@ const TIMETREE_ERRATA: AgeSourceRecord = {
         ages: [163700000, 185900000],
     },
 }
+
 const PREDEFINED: AgeSourceRecord = {
     ...HOMININI,
     ...ROOT,
     ...TIMETREE_ERRATA,
 }
+
 export default PREDEFINED

@@ -1,20 +1,23 @@
-import { type Node } from "@phylopic/api-models"
+import type { Node } from "@phylopic/api-models"
 import axios from "axios"
 import { useMemo } from "react"
 import useSWRImmutable from "swr/immutable"
 import useSWRInfinite from "swr/infinite"
-import { type AgeResult } from "./AgeResult"
+import type { AgeResult } from "./AgeResult"
 import PREDEFINED from "./PREDEFINED"
 import RECENT from "./RECENT"
 import { PALEOBIOLOGY_DATABASE, TIMETREE } from "./SOURCES"
 import getObjectIDs from "./getObjectIDs"
-import { type PBDBStrataResponse } from "./paleobiodb.org/PBDBStrataResponse"
-import { type PBDBTaxonResponse } from "./paleobiodb.org/PBDBTaxonResponse"
+import type { PBDBStrataResponse } from "./paleobiodb.org/PBDBStrataResponse"
+import type { PBDBTaxonResponse } from "./paleobiodb.org/PBDBTaxonResponse"
 import getStrataUrl from "./paleobiodb.org/getStrataUrl"
 import getTaxonUrl from "./paleobiodb.org/getTaxonUrl"
 import getMrcaUrl from "./timetree.org/getAgeUrl"
+
 const MILLION = 1000000
+
 const fetcher = <T>(key: string) => axios.get<T>(key).then(({ data }) => data)
+
 const getAgeResult = (
     pbdbStrataData: PBDBStrataResponse | undefined,
     pbdbTaxonData: readonly PBDBTaxonResponse[] | undefined,
@@ -48,6 +51,7 @@ const getAgeResult = (
           }
         : null
 }
+
 const useNodeAge = (node: Node | null) => {
     const predefined = node ? PREDEFINED[node.uuid] : undefined
     const ncbiTaxIds = useMemo(() => (node ? getObjectIDs(node._links, "ncbi.nlm.nih.gov", "taxid") : []), [node])
@@ -66,4 +70,5 @@ const useNodeAge = (node: Node | null) => {
         [pbdbStrataData, pbdbTaxonData, predefined, timeTreeData],
     )
 }
+
 export default useNodeAge

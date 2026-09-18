@@ -1,12 +1,13 @@
-import { Submission } from "@phylopic/source-models"
-import { Hash, isHash } from "@phylopic/utils"
-import { ImageFile, S3ClientProvider } from "../interfaces"
-import { SourceClient } from "../interfaces/SourceClient"
+import type { Submission } from "@phylopic/source-models"
+import { type Hash, isHash } from "@phylopic/utils"
+import type { ImageFile, S3ClientProvider } from "../interfaces"
+import type { SourceClient } from "../interfaces/SourceClient"
 import { UPLOADS_BUCKET_NAME } from "./s3/constants/UPLOADS_BUCKET_NAME"
 import { readImageFile } from "./s3/io/readImageFile"
 import { readSubmission } from "./s3/readSubmission"
 import { S3Deletor } from "./s3/S3Deletor"
 import { S3TaggingPatcher } from "./s3/S3TaggingPatcher"
+
 export class SubmissionClient extends S3TaggingPatcher<Submission> implements ReturnType<SourceClient["submission"]> {
     constructor(provider: S3ClientProvider, hash: Hash) {
         if (!isHash(hash)) {

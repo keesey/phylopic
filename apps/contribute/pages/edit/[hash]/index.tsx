@@ -1,4 +1,4 @@
-import { Hash, isHash, isPublicDomainLicenseURL } from "@phylopic/utils"
+import { type Hash, isHash, isPublicDomainLicenseURL } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
 import dynamic from "next/dynamic"
 import { Suspense } from "react"
@@ -6,10 +6,13 @@ import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
 import SourceClient from "~/source/SourceClient"
+
 const Editor = dynamic(() => import("~/screens/Editor"), { ssr: false })
+
 type Props = {
     hash: Hash
 }
+
 const Page: NextPage<Props> = ({ hash }) => (
     <PageLayout
         seo={{
@@ -25,7 +28,9 @@ const Page: NextPage<Props> = ({ hash }) => (
         </AuthorizedOnly>
     </PageLayout>
 )
+
 export default Page
+
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const hash = context.params?.hash
     if (!isHash(hash)) {

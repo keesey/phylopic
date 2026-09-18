@@ -1,4 +1,5 @@
 import APIError from "../errors/APIError"
+
 const checkContentType = (contentType: string | undefined, mediaType: string) => {
     const parts = mediaType.split(/,\s*/g).map(part => part.split(";", 1)[0])
     if (!contentType || !parts.some(part => part === contentType || part === "*/*")) {
@@ -12,4 +13,5 @@ const checkContentType = (contentType: string | undefined, mediaType: string) =>
         ])
     }
 }
+
 export default checkContentType

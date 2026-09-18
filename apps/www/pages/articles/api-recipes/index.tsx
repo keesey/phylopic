@@ -3,13 +3,14 @@ import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Image from "next/image"
 import Link from "next/link"
-import { FC, useContext } from "react"
+import { type FC, useContext } from "react"
 import customEvents from "~/analytics/customEvents"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import CurlBox from "~/ui/CurlBox"
 import SiteTitle from "~/ui/SiteTitle"
+
 const PageComponent: NextPage = () => (
     <PageLayout>
         <NextSeo
@@ -42,6 +43,7 @@ const PageComponent: NextPage = () => (
         </Container>
     </PageLayout>
 )
+
 const Article: FC = () => {
     const [build] = useContext(BuildContext) ?? []
     return (
@@ -655,4 +657,5 @@ const Article: FC = () => {
         </article>
     )
 }
+
 export default PageComponent

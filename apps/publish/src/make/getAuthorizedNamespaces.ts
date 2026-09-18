@@ -1,4 +1,4 @@
-import { AuthorizedNamespace } from "@phylopic/api-models"
+import type { AuthorizedNamespace } from "@phylopic/api-models"
 import type { SourceData } from "./getSourceData.js"
 
 const compareAuthorizedNamespaces = (a: AuthorizedNamespace, b: AuthorizedNamespace) =>

@@ -1,4 +1,5 @@
 import { CloudFrontClient, CreateInvalidationCommand } from "@aws-sdk/client-cloudfront"
+
 const invalidateAPICache = async (build: number) => {
     const client = new CloudFrontClient()
     try {
@@ -23,4 +24,5 @@ const invalidateAPICache = async (build: number) => {
         client.destroy()
     }
 }
+
 export default invalidateAPICache

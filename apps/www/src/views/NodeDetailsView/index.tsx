@@ -1,15 +1,17 @@
-import { NodeWithEmbedded } from "@phylopic/api-models"
-import { FC } from "react"
+import type { NodeWithEmbedded } from "@phylopic/api-models"
+import type { FC } from "react"
 import InlineSections from "~/ui/InlineSections"
 import NodeExternalView from "~/views/NodeExternalView"
 import NodeListView from "~/views/NodeListView"
 import NomenListView from "~/views/NomenListView"
 import NomenView from "../NomenView"
 import styles from "./index.module.scss"
+
 export interface Props {
     active?: boolean
     value?: NodeWithEmbedded
 }
+
 const NodeDetailsView: FC<Props> = ({ active, value }) => {
     if (!value) {
         return null
@@ -48,4 +50,5 @@ const NodeDetailsView: FC<Props> = ({ active, value }) => {
         </section>
     )
 }
+
 export default NodeDetailsView

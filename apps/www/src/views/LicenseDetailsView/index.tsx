@@ -1,14 +1,16 @@
-import { Image } from "@phylopic/api-models"
+import type { Image } from "@phylopic/api-models"
 import { useLicenseText } from "@phylopic/client-components"
-import { extractPath, LicenseURL } from "@phylopic/utils"
+import { extractPath, type LicenseURL } from "@phylopic/utils"
 import Link from "next/link"
-import { FC, Fragment, useMemo } from "react"
+import { type FC, Fragment, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import LicenseTextView from "../LicenseTextView"
 import styles from "./index.module.scss"
+
 export interface Props {
     value: Image
 }
+
 const useFlags = (value: LicenseURL): Readonly<[boolean, boolean, boolean, boolean, boolean]> => {
     return useMemo(() => {
         switch (value) {
@@ -34,6 +36,7 @@ const useFlags = (value: LicenseURL): Readonly<[boolean, boolean, boolean, boole
         }
     }, [value])
 }
+
 const LicenseDetailsView: FC<Props> = ({ value }) => {
     const [pdm, cc0, by, nc, sa] = useFlags(value._links.license.href)
     const label = useLicenseText(value._links.license.href)
@@ -106,4 +109,5 @@ const LicenseDetailsView: FC<Props> = ({ value }) => {
         </>
     )
 }
+
 export default LicenseDetailsView

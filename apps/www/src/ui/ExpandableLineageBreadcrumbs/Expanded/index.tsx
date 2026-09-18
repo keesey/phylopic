@@ -1,15 +1,17 @@
-import { Node } from "@phylopic/api-models"
-import { FC, useMemo } from "react"
+import type { Node } from "@phylopic/api-models"
+import { type FC, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import nodeHasOwnCladeImages from "~/models/nodeHasOwnCladeImages"
 import getNodeHRef from "~/routes/getNodeHRef"
 import NomenView from "~/views/NomenView"
-import Breadcrumbs, { BreadcrumbItem } from "../../Breadcrumbs"
+import Breadcrumbs, { type BreadcrumbItem } from "../../Breadcrumbs"
+
 export interface Props {
     afterItems: readonly BreadcrumbItem[]
     beforeItems: readonly BreadcrumbItem[]
     values: readonly Node[]
 }
+
 const Expanded: FC<Props> = ({ afterItems, beforeItems, values }) => {
     const valueItems = useMemo<readonly BreadcrumbItem[]>(
         () => [
@@ -34,4 +36,5 @@ const Expanded: FC<Props> = ({ afterItems, beforeItems, values }) => {
     const items = useMemo(() => [...beforeItems, ...valueItems, ...afterItems], [afterItems, beforeItems, valueItems])
     return <Breadcrumbs items={items} />
 }
+
 export default Expanded

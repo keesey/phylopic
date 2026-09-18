@@ -1,25 +1,31 @@
-import { FaultDetector } from "@phylopic/utils"
-import { AxiosRequestConfig } from "axios"
+import type { FaultDetector } from "@phylopic/utils"
+import type { AxiosRequestConfig } from "axios"
 import { fetchData } from "./fetchData"
+
 export type SuccessfulFetchResult<T> = {
     data: T
     ok: true
     status: "success"
 }
+
 export type NotFoundFetchResult = {
     ok: false
     status: "notFound"
 }
+
 export type ForbiddenFetchResult = {
     ok: false
     status: "forbidden"
 }
+
 export type ErrorFetchResult = {
     error: unknown
     ok: false
     status: "error"
 }
+
 export type FetchResult<T> = SuccessfulFetchResult<T> | NotFoundFetchResult | ForbiddenFetchResult | ErrorFetchResult
+
 export const fetchResult = async <T>(
     url: string,
     config?: AxiosRequestConfig,

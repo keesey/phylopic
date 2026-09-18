@@ -1,4 +1,5 @@
-import { Query } from "./Query"
+import type { Query } from "./Query"
+
 export const createQueryString = (params: Query) => {
     return Object.keys(params)
         .filter(key => params[key] !== undefined)

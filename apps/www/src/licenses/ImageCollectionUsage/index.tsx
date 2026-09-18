@@ -1,14 +1,16 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
-import { UUIDish } from "@phylopic/utils"
-import { FC } from "react"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
+import type { UUIDish } from "@phylopic/utils"
+import type { FC } from "react"
 import CollectionAttribution from "./CollectionAttribution"
 import CollectionLicense from "./CollectionLicense"
 import CollectionSponsors from "./CollectionSponsors"
+
 export interface Props {
     items?: readonly ImageWithEmbedded[]
     total?: number
     uuid?: UUIDish
 }
+
 const ImageCollectionUsage: FC<Props> = ({ items, total, uuid }) => {
     const images = items?.length === total ? (items ?? []) : []
     if (!total) {
@@ -23,4 +25,5 @@ const ImageCollectionUsage: FC<Props> = ({ items, total, uuid }) => {
         </section>
     )
 }
+
 export default ImageCollectionUsage

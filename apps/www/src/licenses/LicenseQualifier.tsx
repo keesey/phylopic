@@ -1,5 +1,6 @@
-import { useContext, FC } from "react"
+import { useContext, type FC } from "react"
 import LicenseFilterTypeContext from "./LicenseFilterTypeContext"
+
 const LicenseQualifier: FC = () => {
     const [licenses] = useContext(LicenseFilterTypeContext) ?? []
     switch (licenses) {
@@ -20,4 +21,5 @@ const LicenseQualifier: FC = () => {
         }
     }
 }
+
 export default LicenseQualifier

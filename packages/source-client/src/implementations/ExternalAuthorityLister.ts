@@ -1,8 +1,9 @@
-import { Authority } from "@phylopic/utils"
-import { Listable } from "../interfaces/Listable"
-import { Page } from "../interfaces/Page"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { Authority } from "@phylopic/utils"
+import type { Listable } from "../interfaces/Listable"
+import type { Page } from "../interfaces/Page"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
 import { EXTERNAL_TABLE } from "./pg/constants/EXTERNAL_TABLE"
+
 export class ExternalAuthorityLister implements Listable<Authority, number> {
     constructor(
         protected readonly provider: PGClientProvider,

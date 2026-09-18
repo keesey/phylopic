@@ -1,23 +1,29 @@
 import { Loader } from "@phylopic/client-components"
-import { EmailAddress } from "@phylopic/utils"
-import { FC, useCallback, useState } from "react"
+import type { EmailAddress } from "@phylopic/utils"
+import { type FC, useCallback, useState } from "react"
 import useContributor from "~/profile/useContributor"
-import useContributorUUID from "~/profile/useContributorUUID"
 import Dialogue from "~/ui/Dialogue"
 import Speech from "~/ui/Speech"
 import TTLSelector from "~/ui/TTLSelector"
-import { TTL } from "~/ui/TTLSelector/TTL"
+import type { TTL } from "~/ui/TTLSelector/TTL"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 import styles from "./index.module.scss"
+
 export interface Props {
     onSubmit?: (email: EmailAddress | null, ttl?: number) => void
 }
+
 const DAY = 24 * 60 * 60 * 1000
+
 const WEEK = 7 * DAY
+
 const MONTH = 30 * DAY
+
 const QUARTER = 3 * MONTH
+
 const YEAR = 365 * DAY
+
 const TTL_VALUES = {
     DAY,
     WEEK,
@@ -25,6 +31,7 @@ const TTL_VALUES = {
     QUARTER,
     YEAR,
 }
+
 const AuthExpired: FC<Props> = ({ onSubmit }) => {
     const [ttl, setTTL] = useState<TTL>("DAY")
     const contributor = useContributor()
@@ -76,4 +83,5 @@ const AuthExpired: FC<Props> = ({ onSubmit }) => {
         </Dialogue>
     )
 }
+
 export default AuthExpired

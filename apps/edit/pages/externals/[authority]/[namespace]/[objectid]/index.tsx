@@ -1,24 +1,34 @@
-import { Entity, External, Node } from "@phylopic/source-models"
 import { Loader } from "@phylopic/client-components"
-import { Authority, isAuthority, isNamespace, isObjectID, Namespace, ObjectID, UUID } from "@phylopic/utils"
+import type { Entity, External, Node } from "@phylopic/source-models"
+import {
+    type Authority,
+    isAuthority,
+    isNamespace,
+    isObjectID,
+    type Namespace,
+    type ObjectID,
+    type UUID,
+} from "@phylopic/utils"
+import { fetchJSON } from "@phylopic/utils-api"
 import axios from "axios"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { FC, useCallback, useState } from "react"
+import { type FC, useCallback, useState } from "react"
 import useSWR, { SWRConfig } from "swr"
 import NodeSelector from "~/selectors/NodeSelector"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
-import { fetchJSON } from "@phylopic/utils-api"
+
 export type Props = {
     authority: Authority
     namespace: Namespace
     objectID: ObjectID
 }
+
 const Page: NextPage<Props> = ({ authority, namespace, objectID }) => (
     <SWRConfig>
         <Head>
@@ -55,7 +65,9 @@ const Page: NextPage<Props> = ({ authority, namespace, objectID }) => (
         </main>
     </SWRConfig>
 )
+
 export default Page
+
 export const getStaticProps: GetStaticProps<Props> = context => {
     const { authority, namespace, objectid } = context.params ?? {}
     if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectid)) {
@@ -63,12 +75,14 @@ export const getStaticProps: GetStaticProps<Props> = context => {
     }
     return { props: { authority, namespace, objectID: objectid } }
 }
+
 export const getStaticPaths: GetStaticPaths = () => {
     return {
         fallback: "blocking",
         paths: [],
     }
 }
+
 const Content: FC<Props> = ({ authority, namespace, objectID }) => {
     const [selecting, setSelecting] = useState(false)
     const key = `/api/externals/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}/${encodeURIComponent(

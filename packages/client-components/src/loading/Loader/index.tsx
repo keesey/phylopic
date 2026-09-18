@@ -2,6 +2,7 @@
 import React from "react"
 import { PropagateLoader } from "react-spinners"
 import { LoaderContext } from "../LoaderContext"
+
 export const Loader: React.FC = () => {
     const props = React.useContext(LoaderContext)
     return (

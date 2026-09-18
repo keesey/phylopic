@@ -1,7 +1,9 @@
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
+
 export interface Props {
     value?: number
 }
+
 const DimensionView: FC<Props> = ({ value }) => {
     const [text, approximate] = useMemo<[string | undefined, boolean]>(() => {
         if (typeof value === "number" && isFinite(value)) {
@@ -21,4 +23,5 @@ const DimensionView: FC<Props> = ({ value }) => {
         </>
     )
 }
+
 export default DimensionView

@@ -1,6 +1,7 @@
-import { FaultDetector, isNormalizedText, type ValidationFaultCollector } from "@phylopic/utils"
-import { TitledLink } from "../types/TitledLink"
+import { type FaultDetector, isNormalizedText, type ValidationFaultCollector } from "@phylopic/utils"
+import type { TitledLink } from "../types/TitledLink"
 import { isLink } from "./isLink"
+
 export const isTitledLink =
     <THRef extends string>(
         isHRef: (x: unknown, faultCollector?: ValidationFaultCollector) => x is THRef,

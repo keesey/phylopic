@@ -5,6 +5,7 @@ import { ICON_ARROW_LEFT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+
 const Page: NextPage = () => (
     <PageLayout seo={{ noindex: true, title: "PhyloPic: Error" }}>
         <Dialogue>
@@ -19,4 +20,5 @@ const Page: NextPage = () => (
         </Dialogue>
     </PageLayout>
 )
+
 export default Page

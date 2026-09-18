@@ -1,7 +1,7 @@
-import { Submission } from "@phylopic/source-models"
 import { Loader } from "@phylopic/client-components"
+import type { Submission } from "@phylopic/source-models"
 import Link from "next/link"
-import { FC } from "react"
+import type { FC } from "react"
 import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import Paginator from "~/pagination/Paginator"
@@ -10,6 +10,7 @@ import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 import UserSubmissionThumbnail from "~/ui/UserSubmissionThumbnail"
+
 const Submissions: FC = () => {
     const fetcher = useAuthorizedJSONFetcher<number>()
     const { data: numImages } = useSWR("/api/images?total=items", fetcher)
@@ -65,4 +66,5 @@ const Submissions: FC = () => {
         </>
     )
 }
+
 export default Submissions

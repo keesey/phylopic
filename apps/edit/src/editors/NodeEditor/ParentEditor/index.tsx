@@ -1,8 +1,8 @@
-import { Entity, Node } from "@phylopic/source-models"
+import type { Entity, Node } from "@phylopic/source-models"
+import { stringifyNomen, type UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
-import { stringifyNomen, UUID } from "@phylopic/utils"
 import Link from "next/link"
-import { FC, useCallback, useMemo, useState } from "react"
+import { type FC, useCallback, useMemo, useState } from "react"
 import useSWR from "swr"
 import Paginator from "~/pagination/Paginator"
 import NodeSelector from "~/selectors/NodeSelector"
@@ -10,9 +10,11 @@ import useModifiedPatcher from "~/swr/useModifiedPatcher"
 import BubbleList from "~/ui/BubbleList"
 import BubbleNode from "~/ui/BubbleNode"
 import NameView from "~/views/NameView"
+
 export type Props = {
     uuid: UUID
 }
+
 const ParentEditor: FC<Props> = ({ uuid }) => {
     const [selecting, setSelecting] = useState(false)
     const nodeKey = `/api/nodes/_/${encodeURIComponent(uuid)}`
@@ -69,7 +71,9 @@ const ParentEditor: FC<Props> = ({ uuid }) => {
         </section>
     )
 }
+
 export default ParentEditor
+
 const LineageEditor: FC<{
     nodes: ReadonlyArray<Node & { uuid: UUID }>
     onSelect: (value: Entity<Node>) => void

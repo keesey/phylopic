@@ -1,15 +1,15 @@
-import { ImageWithEmbedded } from "@phylopic/api-models"
+import type { ImageWithEmbedded } from "@phylopic/api-models"
 import { PaginationContainer } from "@phylopic/client-components"
 import { CountView } from "@phylopic/ui"
-import { URL } from "@phylopic/utils"
-import { type Compressed } from "compress-json"
+import type { URL } from "@phylopic/utils"
+import type { Compressed } from "compress-json"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
 import MailingListForm from "~/forms/MailingListForm"
 import SchemaScript from "~/metadata/SchemaScript"
 import ItemListSchemaScript from "~/metadata/SchemaScript/ItemListSchemaScript"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import createListStaticPropsGetter from "~/ssg/createListStaticPropsGetter"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import Container from "~/ui/Container"
@@ -19,7 +19,9 @@ import SiteTitle from "~/ui/SiteTitle"
 import ContributionCTAView from "~/views/ContributionCTAView"
 import ImageRail from "~/views/ImageRail"
 import SupportersView from "~/views/SupportersView"
+
 type Props = Omit<PageLayoutProps, "children"> & { fallback?: Compressed }
+
 const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/images`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/nodes`,
@@ -31,6 +33,7 @@ const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}`,
     "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988",
 ]
+
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
@@ -192,5 +195,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 export default PageComponent
+
 export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images")

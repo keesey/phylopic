@@ -1,13 +1,15 @@
-import { Hash, isPublicDomainLicenseURL, UUID } from "@phylopic/utils"
-import { FC, useCallback, useMemo } from "react"
+import { type Hash, isPublicDomainLicenseURL } from "@phylopic/utils"
+import { type FC, useCallback, useMemo } from "react"
 import useSubmission from "~/editing/useSubmission"
 import useSubmissionMutator from "~/editing/useSubmissionMutator"
-import UserTextForm from "~/ui/UserTextForm"
 import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
+import UserTextForm from "~/ui/UserTextForm"
+
 export interface Props {
     hash: Hash
 }
+
 const Attribution: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const mutate = useSubmissionMutator(hash)
@@ -52,4 +54,5 @@ const Attribution: FC<Props> = ({ hash }) => {
         </>
     )
 }
+
 export default Attribution

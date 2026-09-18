@@ -1,9 +1,9 @@
 import { handleAPIError } from "@phylopic/source-client"
-import { JWT, verifyJWT } from "@phylopic/source-models"
-import { EmailAddress, isEmailAddress, isUUIDv4, UUID, ValidationFaultCollector } from "@phylopic/utils"
-import { NextApiHandler } from "next"
-import issueJWT from "~/auth/jwt/issueJWT"
+import { type JWT, verifyJWT } from "@phylopic/source-models"
+import { type EmailAddress, isEmailAddress, isUUIDv4, type UUID, ValidationFaultCollector } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import { ensureContributorForEmail } from "~/auth/contributor/resolveContributorForEmail"
+import issueJWT from "~/auth/jwt/issueJWT"
 import SourceClient from "~/source/SourceClient"
 
 const index: NextApiHandler<JWT> = async (req, res) => {
@@ -60,4 +60,5 @@ const index: NextApiHandler<JWT> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

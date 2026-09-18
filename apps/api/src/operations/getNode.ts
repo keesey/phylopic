@@ -1,12 +1,12 @@
 import {
     DATA_MEDIA_TYPE,
-    EmbeddableParameters,
-    EntityParameters,
+    type EmbeddableParameters,
+    type EntityParameters,
     NODE_EMBEDDED_PARAMETERS,
-    Node,
-    NodeEmbedded,
-    NodeLinks,
-    TitledLink,
+    type Node,
+    type NodeEmbedded,
+    type NodeLinks,
+    type TitledLink,
     isNode,
     isNodeParameters,
 } from "@phylopic/api-models"
@@ -15,18 +15,18 @@ import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
 import createBuildRedirect from "../build/createBuildRedirect"
 import getEntityJSONWithEmbedded from "../entities/getEntityJSONWithEmbedded"
-import { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
+import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import checkAccept from "../mediaTypes/checkAccept"
 import createPermanentRedirect from "../results/createPermanentRedirect"
 import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
-import { PgClientService } from "../services/PgClientService"
+import type { PgClientService } from "../services/PgClientService"
 import type { S3ClientService } from "../services/S3ClientService"
 import withS3Client from "../services/withS3Client"
 import validate from "../validation/validate"
-import { Operation } from "./Operation"
+import type { Operation } from "./Operation"
 
 type GetNodeParameters = DataRequestHeaders & Partial<EntityParameters<NodeEmbedded>>
 

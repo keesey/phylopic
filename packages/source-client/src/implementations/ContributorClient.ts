@@ -1,8 +1,8 @@
-import { Contributor, isSubmission, Submission } from "@phylopic/source-models"
-import { isUUIDv4, UUID } from "@phylopic/utils"
-import { S3ClientProvider } from "../interfaces"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
-import { SourceClient } from "../interfaces/SourceClient"
+import { type Contributor, isSubmission, type Submission } from "@phylopic/source-models"
+import { isUUIDv4, type UUID } from "@phylopic/utils"
+import type { S3ClientProvider } from "../interfaces"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { SourceClient } from "../interfaces/SourceClient"
 import { ImagesClient } from "./ImagesClient"
 import { CONTRIBUTOR_FIELDS } from "./pg/constants/CONTRIBUTOR_FIELDS"
 import { CONTRIBUTOR_TABLE } from "./pg/constants/CONTRIBUTOR_TABLE"
@@ -11,6 +11,7 @@ import { PGPatcher } from "./pg/PGPatcher"
 import { UPLOADS_BUCKET_NAME } from "./s3/constants/UPLOADS_BUCKET_NAME"
 import { readSubmission } from "./s3/readSubmission"
 import { S3TaggingLister } from "./s3/S3TaggingLister"
+
 export class ContributorClient
     extends PGPatcher<Contributor & { uuid: UUID }>
     implements ReturnType<SourceClient["contributor"]>

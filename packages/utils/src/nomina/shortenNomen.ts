@@ -1,4 +1,5 @@
-import { Nomen } from "../models/types/Nomen"
+import type { Nomen } from "../models/types/Nomen"
+
 export const shortenNomen = (nomen: Nomen) =>
     nomen.filter(
         (part, index, array) =>

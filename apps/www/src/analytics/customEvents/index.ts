@@ -1,16 +1,19 @@
-import { Image, Node, TitledLink } from "@phylopic/api-models"
+import type { Image, Node, TitledLink } from "@phylopic/api-models"
 import { gtag } from "@phylopic/client-components"
-import { EmailAddress, Hash, UUIDish } from "@phylopic/utils"
-import { LicenseFilterType } from "~/models/LicenseFilterType"
+import type { EmailAddress, Hash, UUIDish } from "@phylopic/utils"
+import type { LicenseFilterType } from "~/models/LicenseFilterType"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getHRefFromAPILink from "~/routes/getHRefFromAPILink"
+
 export type LinkType = "button" | "link"
+
 const getImageOptions = (image: Image) => ({
     contributor_uuid: extractUUIDv4(image._links.contributor.href),
     contributor_name: image._links.contributor.title,
     image_title: image._links.self.title,
     image_uuid: image.uuid,
 })
+
 const customEvents = {
     clearApiResults(id: string) {
         gtag.event("clear_api_results", { id })
@@ -143,7 +146,6 @@ const customEvents = {
         gtag.event("search_direct", {
             node_title: node._links.self.title,
             node_uuid: node.uuid,
-
             query,
         })
     },
@@ -182,4 +184,5 @@ const customEvents = {
         gtag.event("uncollect_image", getImageOptions(image))
     },
 }
+
 export default customEvents

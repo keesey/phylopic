@@ -9,14 +9,15 @@ import {
     isUndefinedOr,
     isURL,
     isVectorMediaType,
-    ValidationFaultCollector,
+    type ValidationFaultCollector,
 } from "@phylopic/utils"
-import { Image } from "../types/Image"
+import type { Image } from "../types/Image"
 import { isEntity } from "./isEntity"
 import { isLink } from "./isLink"
 import { isLinks } from "./isLinks"
 import { isMediaLink } from "./isMediaLink"
 import { isTitledLink } from "./isTitledLink"
+
 const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image["_links"] =>
     isLinks(x, isTitledLink(isNormalizedText), faultCollector) &&
     isTitledLink(isNormalizedText)((x as Image["_links"]).contributor, faultCollector?.sub("contributor")) &&
@@ -35,6 +36,7 @@ const isImageLinks = (x: unknown, faultCollector?: ValidationFaultCollector): x 
         faultCollector?.sub("thumbnailFiles"),
     ) &&
     isMediaLink(isURL, isVectorMediaType)((x as Image["_links"]).vectorFile, faultCollector?.sub("vectorFile"))
+
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isEntity(x, isImageLinks, faultCollector) &&
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&

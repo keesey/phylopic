@@ -1,10 +1,10 @@
 import { handleAPIError } from "@phylopic/source-client"
 import { verifyJWT } from "@phylopic/source-models"
-import { EmailAddress, isEmailAddress, isUUIDv4, UUID } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import { type EmailAddress, isEmailAddress, isUUIDv4, type UUID } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
+import { resolveContributorUuidForEmail } from "~/auth/contributor/resolveContributorForEmail"
 import issueJWT from "~/auth/jwt/issueJWT"
 import { checkAuthorizeRateLimit, getClientIp } from "~/auth/rateLimit/checkAuthorizeRateLimit"
-import { resolveContributorUuidForEmail } from "~/auth/contributor/resolveContributorForEmail"
 import sendAuthEmail from "~/auth/smtp/sendAuthEmail"
 import getTTLFromBody from "~/auth/ttl/getTTLFromBody"
 import SourceClient from "~/source/SourceClient"
@@ -57,4 +57,5 @@ const index: NextApiHandler<void> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

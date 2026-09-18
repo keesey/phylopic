@@ -2,6 +2,7 @@ import { compareStrings } from "@phylopic/utils"
 import { useContext, useMemo } from "react"
 import { SearchContext } from "../context"
 import { getSortIndex } from "../utils/getSortIndex"
+
 export const useMatches = (maxLength = Infinity) => {
     const [state] = useContext(SearchContext) ?? []
     const { externalMatches, internalMatches, text } = state || {}

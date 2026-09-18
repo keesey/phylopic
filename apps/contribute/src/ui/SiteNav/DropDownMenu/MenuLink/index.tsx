@@ -1,7 +1,8 @@
 import clsx from "clsx"
 import Link from "next/link"
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import styles from "./index.module.scss"
+
 export type Props = {
     disabled?: boolean
     href: string
@@ -9,6 +10,7 @@ export type Props = {
     isExternal?: boolean
     label: ReactNode
 }
+
 const MenuLink: FC<Props> = ({ disabled, href, icon, isExternal, label }) => {
     return (
         <li className={clsx(styles.main, disabled && styles.disabled)} role="menuitem">
@@ -26,4 +28,5 @@ const MenuLink: FC<Props> = ({ disabled, href, icon, isExternal, label }) => {
         </li>
     )
 }
+
 export default MenuLink

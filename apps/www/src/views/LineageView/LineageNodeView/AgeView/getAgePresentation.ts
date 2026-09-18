@@ -1,14 +1,18 @@
 import RECENT from "~/external/RECENT"
 
 const BILLION = 1000000000
+
 const MILLION = 1000000
+
 const THOUSAND = 1000
+
 export type AgePresentation = Readonly<{
     text: string
     title?: string
     value: number
     years: number
 }>
+
 const getAgePresentation = (age: number): AgePresentation => {
     if (age >= BILLION) {
         return {
@@ -47,4 +51,5 @@ const getAgePresentation = (age: number): AgePresentation => {
         years: NaN,
     }
 }
+
 export default getAgePresentation

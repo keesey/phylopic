@@ -1,5 +1,6 @@
-import { Tagging } from "@aws-sdk/client-s3"
+import type { Tagging } from "@aws-sdk/client-s3"
 import { decodeTagValue } from "./decodeTagValue"
+
 export const createTaggingReader =
     <T extends Readonly<Record<string, string | null>>>(fields: ReadonlyArray<string & keyof T>) =>
     (tagging: Tagging | undefined): T => {

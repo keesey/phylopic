@@ -1,12 +1,12 @@
-import { S3Entry } from "@phylopic/source-client"
-import { Hash } from "@phylopic/utils"
-import { NextPage } from "next"
+import type { S3Entry } from "@phylopic/source-client"
+import type { Hash } from "@phylopic/utils"
+import type { NextPage } from "next"
 import Head from "next/head"
-import Link from "next/link"
 import { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SubmissionView from "~/views/SubmissionView"
+
 const Page: NextPage = () => {
     return (
         <SWRConfig>
@@ -40,4 +40,5 @@ const Page: NextPage = () => {
         </SWRConfig>
     )
 }
+
 export default Page

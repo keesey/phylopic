@@ -1,15 +1,17 @@
-import { isSubmission, Submission } from "@phylopic/source-models"
-import { Hash } from "@phylopic/utils"
+import { isSubmission, type Submission } from "@phylopic/source-models"
+import type { Hash } from "@phylopic/utils"
 import clsx from "clsx"
-import { FC, useMemo } from "react"
+import { type FC, useMemo } from "react"
 import useSubmission from "~/editing/useSubmission"
 import NameRenderer from "~/screens/Assignment/NodeForm/NameRenderer"
 import FileThumbnailView from "../FileThumbnailView"
 import IdentifierView from "../IdentifierView"
 import styles from "./index.module.scss"
+
 export type Props = {
     hash: Hash
 }
+
 const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const submittable = useMemo(
@@ -43,4 +45,5 @@ const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
         </div>
     )
 }
+
 export default UserSubmissionThumbnail

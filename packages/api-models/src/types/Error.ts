@@ -1,5 +1,6 @@
-import { URL } from "@phylopic/utils"
-import { ErrorType } from "./ErrorType"
+import type { URL } from "@phylopic/utils"
+import type { ErrorType } from "./ErrorType"
+
 export interface Error {
     readonly developerMessage: string
     readonly documentation?: URL

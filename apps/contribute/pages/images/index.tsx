@@ -5,7 +5,9 @@ import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
 import NumberAsWords from "~/ui/NumberAsWords"
+
 const Images = dynamic(() => import("~/screens/Images"), { ssr: false })
+
 const Page: NextPage = () => (
     <PageLayout
         seo={{
@@ -38,4 +40,5 @@ const Page: NextPage = () => (
         </AuthorizedOnly>
     </PageLayout>
 )
+
 export default Page

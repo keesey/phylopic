@@ -1,12 +1,21 @@
-import { Node } from "@phylopic/source-models"
-import { Authority, Identifier, Namespace, normalizeText, ObjectID, UUID } from "@phylopic/utils"
-import { PGClientProvider } from "../interfaces/PGClientProvider"
-import { SourceClient } from "../interfaces/SourceClient"
+import type { Node } from "@phylopic/source-models"
+import {
+    type Authority,
+    type Identifier,
+    type Namespace,
+    normalizeText,
+    type ObjectID,
+    type UUID,
+} from "@phylopic/utils"
+import type { PGClientProvider } from "../interfaces/PGClientProvider"
+import type { SourceClient } from "../interfaces/SourceClient"
 import { NODE_FIELDS } from "./pg/constants/NODE_FIELDS"
 import { NODE_TABLE } from "./pg/constants/NODE_TABLE"
 import { normalizeNode } from "./pg/normalization/normalizeNode"
 import { PGLister } from "./pg/PGLister"
+
 type INodesClient = SourceClient["nodes"]
+
 export class NodesClient extends PGLister<Node, { uuid: UUID }> implements INodesClient {
     constructor(protected readonly provider: PGClientProvider) {
         super(provider, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, '"names"::character varying')

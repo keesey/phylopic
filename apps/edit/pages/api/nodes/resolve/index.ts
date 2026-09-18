@@ -1,8 +1,9 @@
 import { handleAPIError } from "@phylopic/source-client"
-import { Node } from "@phylopic/source-models"
-import { Identifier } from "@phylopic/utils"
-import { NextApiHandler } from "next"
+import type { Node } from "@phylopic/source-models"
+import type { Identifier } from "@phylopic/utils"
+import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Record<Identifier, Node & { uuid: string }>> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -26,4 +27,5 @@ const index: NextApiHandler<Record<Identifier, Node & { uuid: string }>> = async
     }
     res.end()
 }
+
 export default index

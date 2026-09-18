@@ -1,12 +1,12 @@
-import { Contributor, ImageListParameters, ImageWithEmbedded, List, PageWithEmbedded } from "@phylopic/api-models"
+import type { Contributor, ImageListParameters, ImageWithEmbedded, List, PageWithEmbedded } from "@phylopic/api-models"
 import { ContributorContainer, Loader } from "@phylopic/client-components"
-import { createSearch, isUUIDv4, Query, UUID } from "@phylopic/utils"
+import { createSearch, isUUIDv4, type Query, type UUID } from "@phylopic/utils"
 import { fetchData, fetchResult } from "@phylopic/utils-api"
 import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
-import { FC, useMemo } from "react"
-import { SWRConfiguration, unstable_serialize } from "swr"
+import { type FC, useMemo } from "react"
+import { type SWRConfiguration, unstable_serialize } from "swr"
 import { unstable_serialize as unstable_serialize_infinite } from "swr/infinite"
 import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
@@ -16,10 +16,10 @@ import LicenseTypeFilterContainer from "~/licenses/LicenseFilterTypeContainer"
 import PersonSchemaScript from "~/metadata/SchemaScript/PersonSchemaScript"
 import useOpenGraphForImage from "~/metadata/useOpenGraphForImage"
 import getContributorName from "~/models/getContributorName"
-import PageLayout, { Props as PageLayoutProps } from "~/pages/PageLayout"
+import PageLayout, { type Props as PageLayoutProps } from "~/pages/PageLayout"
 import getContributorHRef from "~/routes/getContributorHRef"
 import getContributorSlug from "~/routes/getContributorSlug"
-import { EntityPageQuery } from "~/ssg/EntityPageQuery"
+import type { EntityPageQuery } from "~/ssg/EntityPageQuery"
 import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
@@ -27,10 +27,12 @@ import Container from "~/ui/Container"
 import ContributorDetailsView from "~/views/ContributorDetailsView"
 import ContributorNameView from "~/views/ContributorNameView"
 import ImageListView from "~/views/ImageListView"
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
     uuid: UUID
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
     return (
         <CompressedSWRConfig fallback={fallback}>
@@ -44,7 +46,9 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
         </CompressedSWRConfig>
     )
 }
+
 export default PageComponent
+
 const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
     const imagesQuery = useMemo(
         () => ({ filter_contributor: contributor.uuid }) as ImageListParameters & Query,
@@ -89,6 +93,7 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
         </section>
     )
 }
+
 const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }> = ({ contributor, images }) => {
     const openGraph = useOpenGraphForImage(images[0])
     const name = useMemo(() => getContributorName(contributor), [contributor])
@@ -105,12 +110,14 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
         </>
     )
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",
         paths: [],
     }
 }
+
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

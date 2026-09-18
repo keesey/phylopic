@@ -1,9 +1,11 @@
 import type { AuthorizedNamespace } from "@phylopic/utils"
 import React from "react"
+
 export interface Props {
     short?: boolean
     value: AuthorizedNamespace
 }
+
 const TITLES: Record<AuthorizedNamespace, string> = {
     ["eol.org/pages"]: "Encyclopedia of Life",
     ["gbif.org/species"]: "Global Biodiversity Information Facility",
@@ -17,6 +19,7 @@ const TITLES: Record<AuthorizedNamespace, string> = {
     ["phylopic.org/images"]: "PhyloPic: Silhouette Images",
     ["ubio.org/namebank"]: "uBio NameBank",
 }
+
 const TITLES_SHORT: Record<AuthorizedNamespace, string> = {
     ["eol.org/pages"]: "EoL",
     ["gbif.org/species"]: "GBIF",
@@ -30,6 +33,7 @@ const TITLES_SHORT: Record<AuthorizedNamespace, string> = {
     ["phylopic.org/images"]: "PhyloPic",
     ["ubio.org/namebank"]: "NameBank",
 }
+
 export const AuthorizedNamespaceView: React.FC<Props> = ({ value, short }) => {
     const title = short ? TITLES_SHORT[value] : TITLES[value]
     return title ? (

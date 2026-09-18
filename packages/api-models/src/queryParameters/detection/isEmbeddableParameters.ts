@@ -1,5 +1,6 @@
-import { FaultDetector, invalidate, ValidationFaultCollector } from "@phylopic/utils"
-import { EmbeddableParameters } from "../types/EmbeddableParameters"
+import { type FaultDetector, invalidate, type ValidationFaultCollector } from "@phylopic/utils"
+import type { EmbeddableParameters } from "../types/EmbeddableParameters"
+
 export const isEmbeddableParameters =
     <TEmbedded>(
         parameters: ReadonlyArray<string & keyof EmbeddableParameters<TEmbedded>>,

@@ -11,13 +11,13 @@ import {
     PhyloPicNodeSearch,
     SearchContainer,
 } from "@phylopic/client-components"
-import { Page } from "@phylopic/source-client"
-import { Entity, Node } from "@phylopic/source-models"
-import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import type { Page } from "@phylopic/source-client"
+import type { Entity, Node } from "@phylopic/source-models"
+import { type Nomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
 import axios from "axios"
 import { parseNomen } from "parse-nomen"
-import { FC, useCallback, useState } from "react"
+import { type FC, useCallback, useState } from "react"
 import useSWR from "swr"
 import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
@@ -25,10 +25,12 @@ import Modal from "~/ui/Modal"
 import NameView from "~/views/NameView"
 import NameSelector from "../NameSelector"
 import NodeSearch from "./NodeSearch"
+
 export interface Props {
     onSelect: (node: Entity<Node> | undefined) => void
     open?: boolean
 }
+
 const NodeSelector: FC<Props> = ({ open, onSelect }) => {
     const [searchText, setSearchText] = useState("")
     const handleNameSelect = useCallback((value: Nomen) => {
@@ -94,4 +96,5 @@ const NodeSelector: FC<Props> = ({ open, onSelect }) => {
         </Modal>
     )
 }
+
 export default NodeSelector

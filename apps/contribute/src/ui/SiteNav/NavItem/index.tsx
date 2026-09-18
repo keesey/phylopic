@@ -1,12 +1,14 @@
 import clsx from "clsx"
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import styles from "./index.module.scss"
+
 export type Props = {
     disabled?: boolean
     label: ReactNode
     onToggle?: () => void
     selected: boolean
 }
+
 const NavItem: FC<Props> = ({ disabled, label, onToggle, selected }) => {
     return (
         <div className={clsx(styles.main, selected && styles.selected)} role="menuitem">
@@ -21,4 +23,5 @@ const NavItem: FC<Props> = ({ disabled, label, onToggle, selected }) => {
         </div>
     )
 }
+
 export default NavItem

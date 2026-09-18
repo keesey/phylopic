@@ -1,15 +1,18 @@
-import { Hash, isHash, URL, UUIDish } from "@phylopic/utils"
+import { type Hash, isHash, type URL, type UUIDish } from "@phylopic/utils"
 import axios from "axios"
 import { useRouter } from "next/router"
-import { FC, ReactNode, useEffect, useState } from "react"
+import { type FC, type ReactNode, useEffect, useState } from "react"
 import useSWRImmutable from "swr/immutable"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
+
 export interface Props {
     children: ReactNode
     uuid: UUIDish
 }
+
 const fetcher = (url: URL) => axios.get<Hash>(url)
+
 const PermalinkButton: FC<Props> = ({ children, uuid }) => {
     const [requested, setRequested] = useState(false)
     const key = requested ? `/api/permalinks/collections/${encodeURIComponent(uuid)}` : null
@@ -48,4 +51,5 @@ const PermalinkButton: FC<Props> = ({ children, uuid }) => {
         </a>
     )
 }
+
 export default PermalinkButton

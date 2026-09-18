@@ -1,6 +1,7 @@
-import { FC } from "react"
+import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import SiteTitle from "~/ui/SiteTitle"
+
 const SpreadWordSection: FC = () => (
     <section>
         <h2>Spread the Word!</h2>
@@ -23,4 +24,5 @@ const SpreadWordSection: FC = () => (
         </p>
     </section>
 )
+
 export default SpreadWordSection

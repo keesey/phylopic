@@ -1,8 +1,10 @@
-import { iterateList, SourceClient } from "@phylopic/source-client"
-import { Node } from "@phylopic/source-models"
-import { createSearch, getIdentifier, isScientific, Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { iterateList, type SourceClient } from "@phylopic/source-client"
+import type { Node } from "@phylopic/source-models"
+import { createSearch, getIdentifier, isScientific, type Nomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import axios from "axios"
+
 type GBIFRank = "species" | "genus" | "family" | "order" | "class" | "phylum" | "kingdom"
+
 type GBIFNameUsage = Readonly<Partial<Record<GBIFRank, string>>> &
     Readonly<Partial<Record<`${GBIFRank}Key`, number>>> &
     Partial<
@@ -20,10 +22,12 @@ type GBIFNameUsage = Readonly<Partial<Record<GBIFRank, string>>> &
             synonym: boolean
         }>
     >
+
 type GBIFMatch = Omit<GBIFNameUsage, "key"> & {
     matchType: "EXACT" | "FUZZY" | "NONE"
     usageKey?: number
 }
+
 type GBIFPage = {
     count: number
     endOfRecords: boolean
@@ -31,7 +35,9 @@ type GBIFPage = {
     offset: number
     results: readonly GBIFNameUsage[]
 }
+
 type Ancestry = Partial<Record<GBIFRank, number>>
+
 const getScientificNames = (names: readonly Nomen[]) =>
     names.filter(isScientific).map(name =>
         name
@@ -39,8 +45,11 @@ const getScientificNames = (names: readonly Nomen[]) =>
             .map(part => part.text)
             .join(" "),
     )
+
 const EXCLUDED_IDS: readonly number[] = [0, 2, 4, 7]
+
 const sanitizeID = (x: number | undefined) => (typeof x === "number" && !EXCLUDED_IDS.includes(x) ? x : undefined)
+
 const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, ancestry: Ancestry) => {
     try {
         let mainUsage: GBIFNameUsage | undefined
@@ -105,8 +114,10 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
         console.error(`Error processing node ${node.uuid}:`, e)
     }
 }
+
 const autolinkGBIF = async (client: SourceClient): Promise<void> => {
     const node = await client.root.get()
     await processNode(client, node, {})
 }
+
 export default autolinkGBIF
