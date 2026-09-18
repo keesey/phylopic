@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New app: `games`.
-- New package: `client-components` (previously part of `ui`).
 
 ### Changed
 
