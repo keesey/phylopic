@@ -18,7 +18,6 @@
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
-        "@phylopic/utils-aws": "*",
         "@vercel/analytics": "^1.2.2",
         "@vercel/functions": "^3.0.0",
         "clsx": "^2.1.1",
@@ -73,5 +72,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.4.26"
+    "version": "2.4.27"
 }

@@ -22,6 +22,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.68] - 2026-09-17
+
+### Added
+
+- `@phylopic/client-components` `1.0.0`: client-side UI extracted from `@phylopic/ui` (analytics, search, SWR containers, pagination).
+
+### Changed
+
+- `@phylopic/www` `2.17.2`, `@phylopic/contribute` `2.4.27`, and `@phylopic/edit` `1.10.4`: import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`; viewport sizing uses `svh`/`svw` where applicable.
+- `@phylopic/ui` `1.8.0`: retain server-safe views and image utilities after the client-components split.
+- `@phylopic/utils-api` `1.0.16`: move `fetchJSON` into `src/fetch/`; SWR hooks and `BuildContainer` moved to `@phylopic/client-components`.
+- `@phylopic/styles` `1.0.2`: table `max-width` uses `svw`.
+
+### Fixed
+
+- `@phylopic/www` `2.17.2`: image usage article static props validate API responses with `fetchResult`.
+- `@phylopic/utils-aws` `1.1.5`: `objectExists()` now explicitly checks for 4xx responses.
+
+### Removed
+
+- `@phylopic/api` `2.15.2`, `@phylopic/www` `2.17.2`, `@phylopic/contribute` `2.4.27`, and `@phylopic/edit` `1.10.4`: dead code and stale dependencies after the client-components split.
+
+### Security
+
 ## [2.0.67] - 2026-09-17
 
 ### Changed

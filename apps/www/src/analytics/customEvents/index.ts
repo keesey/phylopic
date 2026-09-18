@@ -5,7 +5,6 @@ import { LicenseFilterType } from "~/models/LicenseFilterType"
 import extractUUIDv4 from "~/routes/extractUUIDv4"
 import getHRefFromAPILink from "~/routes/getHRefFromAPILink"
 export type LinkType = "button" | "link"
-export type FilterMode = "all" | "public_domain" | "no-nc" | "no-nc-sa" | "no-sa"
 const getImageOptions = (image: Image) => ({
     contributor_uuid: extractUUIDv4(image._links.contributor.href),
     contributor_name: image._links.contributor.title,

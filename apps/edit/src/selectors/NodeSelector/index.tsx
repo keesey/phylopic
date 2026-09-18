@@ -1,8 +1,5 @@
 import { normalizeQuery } from "@phylopic/api-models"
-import { Page } from "@phylopic/source-client"
-import { Entity, Node } from "@phylopic/source-models"
 import {
-    fetchJSON,
     GBIFAutocomplete,
     GBIFResolve,
     Loader,
@@ -14,7 +11,10 @@ import {
     PhyloPicNodeSearch,
     SearchContainer,
 } from "@phylopic/client-components"
+import { Page } from "@phylopic/source-client"
+import { Entity, Node } from "@phylopic/source-models"
 import { Nomen, stringifyNomen, UUID } from "@phylopic/utils"
+import { fetchJSON } from "@phylopic/utils-api"
 import axios from "axios"
 import { parseNomen } from "parse-nomen"
 import { FC, useCallback, useState } from "react"

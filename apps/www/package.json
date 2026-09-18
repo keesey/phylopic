@@ -19,7 +19,6 @@
         "@phylopic/utils-aws": "*",
         "@react-hook/debounce": "^4.0.0",
         "@vercel/analytics": "^1.2.2",
-        "@vercel/kv": "^3.0.0",
         "@vercel/functions": "^3.0.0",
         "axios": "^1.18.1",
         "clsx": "^2.1.1",
@@ -65,5 +64,5 @@
         "start": "next start",
         "unused": "next-unused"
     },
-    "version": "2.17.1"
+    "version": "2.17.2"
 }

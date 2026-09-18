@@ -1,5 +1,0 @@
-@use "@phylopic/styles/colors.scss";
-@use "@phylopic/styles/mixins/buttons.scss";
-.button {
-    @include buttons.text(colors.$cerulean, colors.$glacier);
-}

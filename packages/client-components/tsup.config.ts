@@ -10,6 +10,7 @@ export default defineConfig({
     },
     external: [
         "@phylopic/api-models",
+        "@phylopic/ui",
         "@phylopic/utils",
         "@phylopic/utils-api",
         "@types/react",

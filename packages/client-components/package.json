@@ -6,11 +6,13 @@
     "bugs": {
         "url": "https://github.com/keesey/phylopic/issues"
     },
-    "description": "General user interface components for *PhyloPic*.",
+    "description": "Client-side React components for *PhyloPic* web applications.",
     "dependencies": {
         "@phylopic/api-models": "*",
+        "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
+        "@react-hook/debounce": "^4.0.0",
         "axios": "^1.6.8",
         "clsx": "^2.1.0",
         "next": "^15.5.24",
@@ -37,7 +39,7 @@
     "files": [
         "dist/**"
     ],
-    "homepage": "https://github.com/keesey/phylopic/packages/ui#readme",
+    "homepage": "https://github.com/keesey/phylopic/tree/main/packages/client-components#readme",
     "keywords": [
         "API",
         "PhyloPic"
@@ -73,5 +75,5 @@
     },
     "sideEffects": false,
     "types": "./dist/index.d.ts",
-    "version": "1.7.2"
+    "version": "1.0.0"
 }

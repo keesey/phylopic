@@ -26,6 +26,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.8.0] - 2026-09-17
+
+### Changed
+
+- Stopped using `useMemo()` in Views.
+- Consolidate build configuration in `tsup.config.ts`.
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+- Most folders moved to `@phylopic/client-components`.
+- Unused dependencies after the client-components split.
+
+### Security
+
 ## [1.7.18] - 2026-09-11
 
 ### Changed

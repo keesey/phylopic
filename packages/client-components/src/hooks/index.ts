@@ -1,5 +1,5 @@
+export { getImageLoader } from "@phylopic/ui"
 export * from "./useClickOutside"
-export * from "../../../ui/src/images/getImageLoader"
 export * from "./useLicenseText"
 export * from "./useNomenText"
 export * from "./useStoredState"

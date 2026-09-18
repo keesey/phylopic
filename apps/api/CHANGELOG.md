@@ -19,6 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.15.2] - 2026-09-17
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+- Legacy webpack build configuration and dependencies.
+
+### Security
+
 ## [2.15.1] - 2026-09-17
 
 ### Changed
