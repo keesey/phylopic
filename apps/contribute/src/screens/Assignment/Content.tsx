@@ -15,6 +15,7 @@ import useDispatch from "./AssignmentContainer/hooks/useDispatch"
 import usePending from "./AssignmentContainer/hooks/usePending"
 import useSubmissionHash from "./AssignmentContainer/hooks/useSubmissionHash"
 import NodeForm from "./NodeForm"
+
 const Content: FC = () => {
     const changeRequested = useChangeRequested()
     const pending = usePending()
@@ -87,4 +88,5 @@ const Content: FC = () => {
         </Dialogue>
     )
 }
+
 export default Content

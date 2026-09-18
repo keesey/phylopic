@@ -1,2 +1,3 @@
 import type { VectorMediaType } from "../types/VectorMediaType"
+
 export const VECTOR_MEDIA_TYPES: ReadonlySet<VectorMediaType> = new Set<VectorMediaType>(["image/svg+xml"])

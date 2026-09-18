@@ -6,10 +6,12 @@ import Link from "next/link"
 import type { DragEvent, FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
+
 export interface Props {
     inverted?: boolean
     value: Image
 }
+
 const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
     const handleDragStart = (event: DragEvent) => {
         customEvents.dragImage("thumbnail", value)
@@ -28,4 +30,5 @@ const LinkedImageThumbnailView: FC<Props> = ({ inverted, value }) => {
         </Link>
     )
 }
+
 export default LinkedImageThumbnailView

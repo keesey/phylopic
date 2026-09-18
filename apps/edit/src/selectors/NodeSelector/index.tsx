@@ -25,10 +25,12 @@ import Modal from "~/ui/Modal"
 import NameView from "~/views/NameView"
 import NameSelector from "../NameSelector"
 import NodeSearch from "./NodeSearch"
+
 export interface Props {
     onSelect: (node: Entity<Node> | undefined) => void
     open?: boolean
 }
+
 const NodeSelector: FC<Props> = ({ open, onSelect }) => {
     const [searchText, setSearchText] = useState("")
     const handleNameSelect = useCallback((value: Nomen) => {
@@ -94,4 +96,5 @@ const NodeSelector: FC<Props> = ({ open, onSelect }) => {
         </Modal>
     )
 }
+
 export default NodeSelector

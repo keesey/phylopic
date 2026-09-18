@@ -7,9 +7,11 @@ import Controls from "./Controls"
 import styles from "./index.module.scss"
 import LicenseEditor from "./LicenseEditor"
 import SponsorEditor from "./SponsorEditor"
+
 export type Props = {
     hash: Hash
 }
+
 const SubmissionEditor: FC<Props> = ({ hash }) => {
     return (
         <section className={styles.main}>
@@ -39,4 +41,5 @@ const SubmissionEditor: FC<Props> = ({ hash }) => {
         </section>
     )
 }
+
 export default SubmissionEditor

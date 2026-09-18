@@ -7,7 +7,9 @@ import { CONTRIBUTOR_TABLE } from "./pg/constants/CONTRIBUTOR_TABLE"
 import { normalizeContributor } from "./pg/normalization/normalizeContributor"
 import { PGLister } from "./pg/PGLister"
 import { PGPatcher } from "./pg/PGPatcher"
+
 type IContributorsClient = SourceClient["contributors"]
+
 export class ContributorsClient extends PGLister<Contributor, { uuid: UUID }> implements IContributorsClient {
     constructor(provider: PGClientProvider) {
         super(provider, CONTRIBUTOR_TABLE, 128, CONTRIBUTOR_FIELDS, normalizeContributor)

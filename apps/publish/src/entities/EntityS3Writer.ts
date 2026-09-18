@@ -30,16 +30,13 @@ const getStagingDirs = (build: number): readonly string[] => {
 
 export class EntityS3Writer {
     private readonly build: number
-
     /** Parent directory paths that already exist on disk. */
     private readonly createdDirs = new Set<string>()
-
     private readonly limiter = new Bottleneck({
         maxConcurrent: WRITE_CONCURRENCY,
         highWater: WRITE_QUEUE_HIGH_WATER,
         strategy: Bottleneck.strategy.BLOCK,
     })
-
     constructor(build: number) {
         this.build = build
         for (const dir of getStagingDirs(build)) {
@@ -47,7 +44,6 @@ export class EntityS3Writer {
             this.createdDirs.add(dir)
         }
     }
-
     private async ensureDir(dir: string) {
         if (this.createdDirs.has(dir)) {
             return
@@ -55,7 +51,6 @@ export class EntityS3Writer {
         await mkdir(dir, { recursive: true })
         this.createdDirs.add(dir)
     }
-
     put(key: string, body: string): Promise<void> {
         return this.limiter.schedule(async () => {
             const path = join(ENTITIES_STAGING_ROOT, key)
@@ -66,15 +61,12 @@ export class EntityS3Writer {
             await writeFile(path, body, "utf8")
         })
     }
-
     putEntity(folder: EntityFolder, uuid: UUID, body: string): Promise<void> {
         return this.put(getEntityJSONKey(this.build, folder, uuid), body)
     }
-
     putStatic(name: StaticJSONName, body: string): Promise<void> {
         return this.put(getStaticJSONKey(this.build, name), body)
     }
-
     async flush() {
         await this.limiter.stop({ dropWaitingJobs: false })
         writeFileSync(join(ENTITIES_STAGING_ROOT, ".staging-build"), String(this.build), "utf8")

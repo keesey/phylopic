@@ -2,6 +2,7 @@ import type { FC } from "react"
 import useContributorUUID from "~/profile/useContributorUUID"
 import { ICON_HAND_POINT_RIGHT, ICON_X } from "~/ui/ICON_SYMBOLS"
 import MenuLink from "../../MenuLink"
+
 const AccountMenu: FC = () => {
     const contributorUUID = useContributorUUID()
     return (
@@ -19,4 +20,5 @@ const AccountMenu: FC = () => {
         </>
     )
 }
+
 export default AccountMenu

@@ -10,18 +10,24 @@ import { stringifyNormalized } from "@phylopic/utils"
 import { convertS3BodyToString } from "@phylopic/utils-aws"
 import "dotenv/config"
 import pg from "pg"
+
 const SAMPLE_SIZE = Number.parseInt(process.env.VERIFY_SAMPLE_SIZE ?? "20", 10)
+
 const BUILD = Number.parseInt(process.argv[2] ?? "", 10)
+
 if (Number.isNaN(BUILD)) {
     console.error("Usage: yarn verify:entities <build>")
     process.exit(1)
 }
+
 const tables: ReadonlyArray<{ folder: EntityFolder; table: string }> = [
     { folder: "contributors", table: "contributor" },
     { folder: "images", table: "image" },
     { folder: "nodes", table: "node" },
 ]
+
 const s3 = new S3Client({})
+
 const verifySample = async (client: pg.Client, folder: EntityFolder, table: string) => {
     const { rows } = await client.query<{ json: string; uuid: string }>({
         text: `SELECT uuid, json FROM ${table} WHERE build=$1::bigint ORDER BY random() LIMIT $2`,
@@ -40,6 +46,7 @@ const verifySample = async (client: pg.Client, folder: EntityFolder, table: stri
     console.info(`Verified ${rows.length} ${table} rows (${mismatches} mismatches).`)
     return mismatches
 }
+
 const verifyNamespaces = async (client: pg.Client) => {
     const { rows } = await client.query<{ authority: string; namespace: string }>(
         'SELECT authority,"namespace" FROM node_external GROUP BY authority,"namespace" ORDER BY authority,"namespace"',
@@ -55,6 +62,7 @@ const verifyNamespaces = async (client: pg.Client) => {
     console.info(`Verified namespaces.json (${rows.length} namespaces).`)
     return 0
 }
+
 const verifyListIndex = async (
     client: pg.Client,
     listName: "contributors" | "images" | "nodes",

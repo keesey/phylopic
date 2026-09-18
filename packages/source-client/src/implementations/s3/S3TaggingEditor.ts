@@ -3,6 +3,7 @@ import type { Editable } from "../../interfaces/Editable"
 import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { writeTagging } from "./io/writeTagging"
 import { S3TaggingDeletor } from "./S3TaggingDeletor"
+
 export class S3TaggingEditor<T extends Readonly<Record<string, string | null>>>
     extends S3TaggingDeletor<T>
     implements Editable<T>

@@ -1,6 +1,8 @@
 import type { URL } from "@phylopic/utils"
 import type { GetServerSideProps, NextPage } from "next"
+
 const Page: NextPage = () => null
+
 const URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/contributors`,
@@ -12,6 +14,7 @@ const URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/articles/api-recipes`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/articles/image-usage`,
 ]
+
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     const lastmod = new Date().toISOString()
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -33,4 +36,5 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
         props: {},
     }
 }
+
 export default Page

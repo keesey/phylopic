@@ -17,9 +17,11 @@ import useSWR from "swr"
 import IdentifierView from "~/views/IdentifierView"
 import NameRenderer from "~/views/NameRenderer"
 import NodeSearch from "./NodeSearch"
+
 export type Props = {
     hash: Hash
 }
+
 const IdentifierEditor: FC<Props> = ({ hash }) => {
     const { data } = useSWR<Submission>(`/api/submissions/_/${encodeURIComponent(hash)}`, fetchJSON)
     if (!data) {
@@ -55,4 +57,5 @@ const IdentifierEditor: FC<Props> = ({ hash }) => {
         </div>
     )
 }
+
 export default IdentifierEditor

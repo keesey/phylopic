@@ -5,10 +5,12 @@ import type { UUID } from "@phylopic/utils"
 import type { FC } from "react"
 import useSWRImmutable from "swr/immutable"
 import NameView from "../NameView"
+
 export type Props = {
     short?: boolean
     uuid: UUID
 }
+
 const PhyloPicNodesView: FC<Props> = ({ short, uuid }) => {
     const apiFetcher = useAPIFetcher<Node>()
     const { data } = useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/nodes/${encodeURIComponent(uuid)}`, apiFetcher)
@@ -17,4 +19,5 @@ const PhyloPicNodesView: FC<Props> = ({ short, uuid }) => {
     }
     return <NameView name={data.names[0]} short={short} />
 }
+
 export default PhyloPicNodesView

@@ -47,7 +47,6 @@ export const parseSanitizeArgs = (argv: readonly string[]): SanitizeArgs => {
 
 export const printSanitizeUsage = () => {
     console.info(`Usage: yarn sanitize:svgs [options]
-
 Options:
   --dry-run              Report without writing to S3
   --source-images        Sanitize source-images.phylopic.org (default)
@@ -56,7 +55,6 @@ Options:
   --uuid-prefix <hh>     Limit to image UUIDs starting with this hex prefix
   --limit <n>            Stop after n updates (or would-update in dry run)
   --manifest <path>      Write affected image UUIDs or upload hash rekeys (old,new)
-
 Batch workflow (recommended):
   yarn sanitize:svgs:dry-run --uuid-prefix 00
   yarn sanitize:svgs --uuid-prefix 00 --manifest batches/00.txt

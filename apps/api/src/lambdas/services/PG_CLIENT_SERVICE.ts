@@ -1,6 +1,8 @@
 import { Pool, type PoolClient } from "pg"
 import type { PgClientService } from "../../services/PgClientService"
+
 let pool: Pool | undefined
+
 const PG_CLIENT_SERVICE: PgClientService<PoolClient> = {
     createPgClient() {
         return (
@@ -18,4 +20,5 @@ const PG_CLIENT_SERVICE: PgClientService<PoolClient> = {
         client.release()
     },
 }
+
 export default PG_CLIENT_SERVICE

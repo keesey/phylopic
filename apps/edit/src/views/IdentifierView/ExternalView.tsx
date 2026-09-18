@@ -7,12 +7,14 @@ import NameView from "~/views/NameView"
 import GBIFSpeciesView from "./GBIFSpeciesView"
 import OTOLTaxonomyView from "./OTOLTaxonomyView"
 import PBDBTxnView from "./PBDBTxnView"
+
 export type Props = {
     authority: Authority
     namespace: Namespace
     objectID: ObjectID
     short?: boolean
 }
+
 const ExternalView: FC<Props> = ({ authority, namespace, objectID, short }) => {
     const fetcher = useAPIFetcher<Node>()
     const { data: node } = useSWRImmutable(
@@ -48,4 +50,5 @@ const ExternalView: FC<Props> = ({ authority, namespace, objectID, short }) => {
         </code>
     )
 }
+
 export default ExternalView

@@ -13,7 +13,6 @@ describe("campaignIdFromDate", () => {
         expect(campaignIdFromDate(new Date("2026-05-01T00:00:00Z"))).toBe("2026-05")
         expect(campaignIdFromDate(new Date("2026-10-15T12:00:00Z"))).toBe("2026-10")
     })
-
     it("returns null outside fundraiser months", () => {
         expect(campaignIdFromDate(new Date("2026-09-01T00:00:00Z"))).toBeNull()
     })

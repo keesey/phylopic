@@ -22,4 +22,5 @@ const getParameters = <T>(
         }, {})
     return result
 }
+
 export default getParameters

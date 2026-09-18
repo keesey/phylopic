@@ -27,13 +27,11 @@ const FundraiserSection: FC = () => {
     const [message, setMessage] = useState<string | null>(null)
     const [saving, setSaving] = useState(false)
     const syncedCampaign = useRef<CampaignId | null>(null)
-
     useEffect(() => {
         if (data && campaign === null) {
             setCampaign(data.campaign)
         }
     }, [campaign, data])
-
     useEffect(() => {
         if (!data || syncedCampaign.current === data.campaign) {
             return
@@ -42,7 +40,6 @@ const FundraiserSection: FC = () => {
         setGoalDollars((data.goalCents / 100).toString())
         setManualDollars((data.manualCents / 100).toString())
     }, [data])
-
     const onSubmit = async (event: FormEvent) => {
         event.preventDefault()
         if (!data) {
@@ -80,7 +77,6 @@ const FundraiserSection: FC = () => {
             setSaving(false)
         }
     }
-
     if (error) {
         return (
             <section>
@@ -89,7 +85,6 @@ const FundraiserSection: FC = () => {
             </section>
         )
     }
-
     if (!data) {
         return (
             <section>
@@ -98,7 +93,6 @@ const FundraiserSection: FC = () => {
             </section>
         )
     }
-
     return (
         <section>
             <h2>Fundraiser</h2>

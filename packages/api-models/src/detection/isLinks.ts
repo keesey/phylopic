@@ -1,6 +1,7 @@
 import { isObject, type ValidationFaultCollector } from "@phylopic/utils"
 import type { Link } from "../types"
 import type { Links } from "../types/Links"
+
 export const isLinks = <TSelfLink extends Link = Link>(
     x: unknown,
     isSelfLink: (link: TSelfLink, faultCollector?: ValidationFaultCollector) => link is TSelfLink,

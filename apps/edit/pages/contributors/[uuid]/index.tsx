@@ -13,9 +13,11 @@ import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import IdentifierView from "~/views/IdentifierView"
 import TimesView from "~/views/TimesView"
+
 export type Props = {
     uuid: UUID
 }
+
 const Page: NextPage<Props> = ({ uuid }) => {
     return (
         <SWRConfig>
@@ -23,7 +25,9 @@ const Page: NextPage<Props> = ({ uuid }) => {
         </SWRConfig>
     )
 }
+
 export default Page
+
 export const getStaticProps: GetStaticProps<Props> = context => {
     const { uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {
@@ -31,12 +35,14 @@ export const getStaticProps: GetStaticProps<Props> = context => {
     }
     return { props: { uuid } }
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",
         paths: [],
     }
 }
+
 const Content: FC<Props> = ({ uuid }) => {
     const { data: contributor, mutate: mutateNode } = useSWR<Contributor & { uuid: UUID }>(
         `/api/contributors/_/${uuid}`,

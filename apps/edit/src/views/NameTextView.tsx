@@ -5,6 +5,7 @@ export interface Props {
     name: readonly NomenPart[]
     short?: boolean
 }
+
 const NameTextView: FC<Props> = ({ name, short }) => {
     const parts = short
         ? name.filter(
@@ -26,4 +27,5 @@ const NameTextView: FC<Props> = ({ name, short }) => {
         </>
     )
 }
+
 export default NameTextView

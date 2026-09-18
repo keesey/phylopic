@@ -8,10 +8,12 @@ import { ICON_CHECK, ICON_DANGER, ICON_PLUS, ICON_X } from "~/ui/ICON_SYMBOLS"
 import MenuButton from "../../MenuButton"
 import MenuDivider from "../../MenuDivider"
 import MenuLink from "../../MenuLink"
+
 export type Props = {
     submissionHash?: Hash
     submission?: Submission
 }
+
 const FileMenu: FC<Props> = ({ submission, submissionHash }) => {
     const mutator = useSubmissionMutator(submissionHash)
     const deletor = useSubmissionDeletor(submissionHash)
@@ -58,4 +60,5 @@ const FileMenu: FC<Props> = ({ submission, submissionHash }) => {
         </>
     )
 }
+
 export default FileMenu

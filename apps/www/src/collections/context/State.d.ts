@@ -1,5 +1,6 @@
 import type { Contributor, Image, Node } from "@phylopic/api-models"
 import type { UUID } from "@phylopic/utils"
+
 export type EntityRecord =
     | Readonly<{
           entity: Contributor
@@ -13,6 +14,7 @@ export type EntityRecord =
           entity: Node
           type: "node"
       }>
+
 export type State = Readonly<{
     collections: Readonly<Record<string, ReadonlySet<UUID>>>
     currentCollection: string

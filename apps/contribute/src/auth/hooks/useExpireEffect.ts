@@ -1,6 +1,7 @@
 import { useRouter } from "next/router"
 import { useCallback } from "react"
 import useExpirationHandler from "./useExpirationHandler"
+
 const useExpireEffect = (bufferMS = 0) => {
     const router = useRouter()
     const handleExpire = useCallback(async () => {
@@ -11,4 +12,5 @@ const useExpireEffect = (bufferMS = 0) => {
     }, [router])
     useExpirationHandler(handleExpire, bufferMS)
 }
+
 export default useExpireEffect

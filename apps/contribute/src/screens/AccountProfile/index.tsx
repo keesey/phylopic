@@ -11,6 +11,7 @@ import UserOptions from "~/ui/UserOptions"
 import UserTextForm from "~/ui/UserTextForm"
 import ErrorState from "../ErrorState"
 import LoadingState from "../LoadingState"
+
 const AccountProfile: FC = () => {
     const { data: contributor, error } = useContributorSWR()
     const mutate = useContributorMutator()
@@ -112,4 +113,5 @@ const AccountProfile: FC = () => {
         </Dialogue>
     )
 }
+
 export default AccountProfile

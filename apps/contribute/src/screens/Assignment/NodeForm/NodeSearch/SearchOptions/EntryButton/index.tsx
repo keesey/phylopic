@@ -5,10 +5,12 @@ import SpeechStack from "~/ui/SpeechStack"
 import UserButton from "~/ui/UserButton"
 import type { SearchEntry } from "../../SearchEntry"
 import AuthorityIcon from "./Icon/AuthorityIcon"
+
 export type Props = {
     onClick?: () => void
     value: SearchEntry
 }
+
 const EntryButton: FC<Props> = ({ onClick, value }) => {
     return (
         <UserButton onClick={onClick}>
@@ -20,4 +22,5 @@ const EntryButton: FC<Props> = ({ onClick, value }) => {
         </UserButton>
     )
 }
+
 export default EntryButton

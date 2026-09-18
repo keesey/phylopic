@@ -1,4 +1,5 @@
 import type { Identifier, ISOTimestamp, UUID, ValidLicenseURL } from "@phylopic/utils"
+
 export type Submission = Readonly<{
     attribution: string | null
     contributor: UUID

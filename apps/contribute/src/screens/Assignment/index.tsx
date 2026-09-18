@@ -2,9 +2,11 @@ import type { Hash } from "@phylopic/utils"
 import type { FC } from "react"
 import AssignmentContainer from "./AssignmentContainer"
 import Content from "./Content"
+
 export type Props = {
     hash: Hash
 }
+
 const Assignment: FC<Props> = ({ hash }) => {
     return (
         <AssignmentContainer
@@ -14,4 +16,5 @@ const Assignment: FC<Props> = ({ hash }) => {
         </AssignmentContainer>
     )
 }
+
 export default Assignment

@@ -1,12 +1,14 @@
 import clsx from "clsx"
 import type { FC, ReactNode } from "react"
 import styles from "./index.module.scss"
+
 export type Props = {
     disabled?: boolean
     icon: ReactNode
     label: ReactNode
     onClick: () => void
 }
+
 const MenuButton: FC<Props> = ({ disabled, icon, label, onClick }) => {
     return (
         <li className={clsx(styles.main, disabled && styles.disabled)} role="menuitem">
@@ -17,4 +19,5 @@ const MenuButton: FC<Props> = ({ disabled, icon, label, onClick }) => {
         </li>
     )
 }
+
 export default MenuButton

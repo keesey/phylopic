@@ -8,6 +8,7 @@ export interface Props {
     value: NomenPart | null
     isFirst: boolean
 }
+
 const NomenPartEditor: FC<Props> = ({ isFirst, onChange, value }) => {
     if (!value) {
         return null
@@ -35,4 +36,5 @@ const NomenPartEditor: FC<Props> = ({ isFirst, onChange, value }) => {
         </section>
     )
 }
+
 export default NomenPartEditor

@@ -51,15 +51,18 @@ import NomenHeader from "~/ui/NomenHeader"
 import ImageListView from "~/views/ImageListView"
 import NodeListView from "~/views/NodeListView"
 import NomenView from "~/views/NomenView"
+
 const NODE_QUERY: Omit<NodeParameters, "uuid"> & Query = {
     embed_childNodes: "true",
     embed_parentNode: "true",
     embed_primaryImage: "true",
 }
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
     uuid: UUID
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...pageLayoutProps}>
@@ -71,6 +74,7 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...pageLayoutProps }) 
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
     const name = node.names[0]
     const nameString = useNomenText(name)
@@ -165,6 +169,7 @@ const Content: FC<{ node: NodeWithEmbedded }> = ({ node }) => {
         </LicenseTypeFilterContainer>
     )
 }
+
 const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEmbedded; totalImages: number }> = ({
     images,
     node,
@@ -222,11 +227,14 @@ const ImagesContent: FC<{ images: readonly ImageWithEmbedded[]; node: NodeWithEm
         </>
     )
 }
+
 export default PageComponent
+
 export const getStaticPaths: GetStaticPaths<{ uuid: UUID; slug: string }> = () => ({
     fallback: "blocking",
     paths: [],
 })
+
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

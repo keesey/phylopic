@@ -6,6 +6,7 @@ import Speech from "~/ui/Speech"
 import NameForm from "../../NameForm"
 import NameRenderer from "../../NameRenderer"
 import ParentOptions from "./ParentOptions"
+
 export const ParentSelector: FC = () => {
     const childNameText = useNormalizedText()
     const [parentNameText, setParentNameText] = useState("")
@@ -32,4 +33,5 @@ export const ParentSelector: FC = () => {
         </SearchContainer>
     )
 }
+
 export default ParentSelector

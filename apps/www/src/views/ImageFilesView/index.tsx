@@ -8,9 +8,11 @@ import compareMediaLinks from "~/models/compareMediaLinks"
 import getImageFileExtension from "../../files/getImageFileExtension"
 import DownLoadLink from "./DownloadLink"
 import styles from "./index.module.scss"
+
 export interface Props {
     value: Image
 }
+
 const EXTENSION_LINKS: Readonly<Record<string, string>> = {
     bmp: "//www.loc.gov/preservation/digital/formats/fdd/fdd000189.shtml",
     gif: "//www.loc.gov/preservation/digital/formats/fdd/fdd000133.shtml",
@@ -18,6 +20,7 @@ const EXTENSION_LINKS: Readonly<Record<string, string>> = {
     png: "http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html",
     svg: "//www.w3.org/TR/SVG/",
 }
+
 const EXTENSION_TITLES: Readonly<Record<string, string>> = {
     bmp: "Microsoft Windows Bitmap",
     gif: "Graphics Interchange Format",
@@ -25,6 +28,7 @@ const EXTENSION_TITLES: Readonly<Record<string, string>> = {
     png: "Portable Network Graphics",
     svg: "Scalable Vector Graphics",
 }
+
 const ImageFilesView: FC<Props> = ({ value }) => {
     const licenseShort = useLicenseText(value._links.license.href, true)
     const filenamePrefix = useMemo(
@@ -136,4 +140,5 @@ const ImageFilesView: FC<Props> = ({ value }) => {
         </table>
     )
 }
+
 export default ImageFilesView

@@ -57,4 +57,5 @@ const index: NextApiHandler<void> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

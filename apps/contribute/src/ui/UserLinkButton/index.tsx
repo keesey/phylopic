@@ -4,12 +4,14 @@ import Link from "next/link"
 import { type FC, type ReactNode } from "react"
 import SpeechStack from "../SpeechStack"
 import styles from "./index.module.scss"
+
 export type Props = {
     children: ReactNode
     danger?: boolean
     href: string
     icon?: string
 }
+
 const UserLinkButton: FC<Props> = ({ children, danger, href, icon }) => {
     if (href.startsWith("https://") || href.startsWith("http://")) {
         return (
@@ -44,4 +46,5 @@ const UserLinkButton: FC<Props> = ({ children, danger, href, icon }) => {
         </Link>
     )
 }
+
 export default UserLinkButton

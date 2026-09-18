@@ -1,4 +1,5 @@
 import { type FC, useEffect, useState } from "react"
+
 const UserScrollTo: FC = () => {
     const [element, setElement] = useState<HTMLElement | null>(null)
     useEffect(() => {
@@ -8,4 +9,5 @@ const UserScrollTo: FC = () => {
     }, [element])
     return <div ref={setElement} aria-hidden />
 }
+
 export default UserScrollTo

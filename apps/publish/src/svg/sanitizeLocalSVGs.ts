@@ -43,7 +43,6 @@ const sanitizeFile = async (path: string): Promise<"unchanged" | "updated"> => {
     await writeFile(path, sanitizeSVG(body))
     return "updated"
 }
-
 ;(async () => {
     let examined = 0
     let updated = 0

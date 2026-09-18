@@ -1,4 +1,5 @@
 import { normalizeSync } from "normalize-diacritics"
+
 export const normalizeQuery = (query: string) => {
     return normalizeSync(query ?? "")
         .toLowerCase()

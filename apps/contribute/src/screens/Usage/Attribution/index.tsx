@@ -5,9 +5,11 @@ import useSubmissionMutator from "~/editing/useSubmissionMutator"
 import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
 import UserTextForm from "~/ui/UserTextForm"
+
 export interface Props {
     hash: Hash
 }
+
 const Attribution: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const mutate = useSubmissionMutator(hash)
@@ -52,4 +54,5 @@ const Attribution: FC<Props> = ({ hash }) => {
         </>
     )
 }
+
 export default Attribution

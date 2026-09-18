@@ -6,10 +6,13 @@ export type BreadcrumbItem = Readonly<{
     children: ReactNode
     href?: string
 }>
+
 export interface Props {
     items: readonly BreadcrumbItem[]
 }
+
 const isExternalLink = (s: string) => /^(https?:)?\/\//.test(s)
+
 const Breadcrumbs: FC<Props> = ({ items }) => (
     <nav className={styles.main}>
         <ul>
@@ -29,4 +32,5 @@ const Breadcrumbs: FC<Props> = ({ items }) => (
         </ul>
     </nav>
 )
+
 export default Breadcrumbs

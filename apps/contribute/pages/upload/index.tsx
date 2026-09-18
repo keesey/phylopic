@@ -6,7 +6,9 @@ import { type FC, Suspense, useCallback } from "react"
 import AuthorizedOnly from "~/auth/AuthorizedOnly"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
+
 const Uploader = dynamic(() => import("~/screens/Uploader"), { ssr: false })
+
 const Page: NextPage = () => {
     return (
         <PageLayout
@@ -21,7 +23,9 @@ const Page: NextPage = () => {
         </PageLayout>
     )
 }
+
 export default Page
+
 const Content: FC = () => {
     const router = useRouter()
     const cancel = useCallback(() => {

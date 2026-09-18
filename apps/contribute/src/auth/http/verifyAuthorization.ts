@@ -2,6 +2,7 @@ import type { JwtPayload } from "jsonwebtoken"
 import type { NextApiRequest } from "next"
 import verifyJWT from "../jwt/verifyJWT"
 import getBearerJWT from "./getBearerJWT"
+
 const verifyAuthorization = async (
     headers: Pick<NextApiRequest["headers"], "authorization">,
     expectedFields?: Partial<JwtPayload>,
@@ -25,4 +26,5 @@ const verifyAuthorization = async (
     }
     return payload
 }
+
 export default verifyAuthorization

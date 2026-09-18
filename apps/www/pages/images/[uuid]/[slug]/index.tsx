@@ -46,15 +46,19 @@ import ImageRasterView from "~/views/ImageRasterView"
 import LicenseDetailsView from "~/views/LicenseDetailsView"
 import LicenseView from "~/views/LicenseView"
 import NomenView from "~/views/NomenView"
+
 const ContributorBanner = dynamic(() => import("~/contribute/ContributorBanner"), { ssr: false })
+
 const IMAGE_QUERY: Omit<ImageParameters, "uuid"> & Query = {
     embed_nodes: "true",
     embed_specificNode: "true",
 }
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
     uuid: UUID
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
     return (
         <CompressedSWRConfig fallback={fallback}>
@@ -66,6 +70,7 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
         </CompressedSWRConfig>
     )
 }
+
 const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
     const [, dispatch] = useContext(CollectionsContext)
     const images = useCurrentCollectionImages()
@@ -304,13 +309,16 @@ const Content: FC<{ image: ImageWithEmbedded }> = ({ image }) => {
         </>
     )
 }
+
 export default PageComponent
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",
         paths: [],
     }
 }
+
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

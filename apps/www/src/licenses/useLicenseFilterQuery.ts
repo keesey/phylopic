@@ -1,6 +1,7 @@
 import type { ImageListParameters } from "@phylopic/api-models"
 import { useContext, useMemo } from "react"
 import LicenseFilterTypeContext from "./LicenseFilterTypeContext"
+
 const useLicenseFilterQuery = () => {
     const [licenses] = useContext(LicenseFilterTypeContext) ?? []
     return useMemo<ImageListParameters>(
@@ -16,4 +17,5 @@ const useLicenseFilterQuery = () => {
         [licenses],
     )
 }
+
 export default useLicenseFilterQuery

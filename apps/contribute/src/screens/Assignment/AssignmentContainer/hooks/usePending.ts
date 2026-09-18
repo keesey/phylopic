@@ -1,5 +1,6 @@
 import { useContext } from "react"
 import AssignmentContext from "../AssignmentContext"
+
 const usePending = () => {
     const context = useContext(AssignmentContext)
     if (context && !context.length) {
@@ -7,4 +8,5 @@ const usePending = () => {
     }
     return context?.[0]?.pending ?? false
 }
+
 export default usePending

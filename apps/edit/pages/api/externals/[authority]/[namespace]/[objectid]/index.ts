@@ -3,6 +3,7 @@ import type { External } from "@phylopic/source-models"
 import { type Authority, isAuthority, isNamespace, isObjectID, type Namespace, type ObjectID } from "@phylopic/utils"
 import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }> = async (
     req,
     res,
@@ -22,4 +23,5 @@ const index: NextApiHandler<External & { authority: Authority; namespace: Namesp
     }
     res.end()
 }
+
 export default index

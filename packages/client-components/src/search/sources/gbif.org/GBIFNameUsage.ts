@@ -1,4 +1,5 @@
 export type GBIFRank = "species" | "genus" | "family" | "order" | "class" | "phylum" | "kingdom"
+
 export type GBIFNameUsage = Readonly<Partial<Record<GBIFRank, string>>> &
     Readonly<Partial<Record<`${GBIFRank}Key`, number>>> &
     Partial<

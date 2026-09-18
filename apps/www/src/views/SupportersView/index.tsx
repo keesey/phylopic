@@ -9,10 +9,12 @@ import logoIndiegogo from "../../../public/logos/indiegogo-cerulean.svg"
 import logoPatreon from "../../../public/logos/patreon-cerulean.svg"
 import logoSSB from "../../../public/logos/ssb-cerulean.svg"
 import styles from "./index.module.scss"
+
 export interface Props {
     showContributors?: boolean
     supporters?: readonly ReactNode[]
 }
+
 const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
     return (
         <div className={styles.main}>
@@ -127,4 +129,5 @@ const SupportersView: FC<Props> = ({ supporters, showContributors }) => {
         </div>
     )
 }
+
 export default SupportersView

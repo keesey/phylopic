@@ -6,9 +6,11 @@ import Container from "../Container"
 import SearchAside from "../SearchAside"
 import ExternalResolutionCaption from "./ExternalResolutionCaption"
 import styles from "./index.module.scss"
+
 export interface Props {
     maxResults?: number
 }
+
 const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
     const [state] = useContext(SearchContext) ?? []
     const nodeResults = useMemo(() => (state?.nodeResults ?? []).slice(0, maxResults), [maxResults, state?.nodeResults])
@@ -115,4 +117,5 @@ const SearchResults: FC<Props> = ({ maxResults = 32 }) => {
         </aside>
     )
 }
+
 export default SearchResults

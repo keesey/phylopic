@@ -6,6 +6,7 @@ export interface Props {
     onClose?: () => void
     title?: ReactNode
 }
+
 const Modal: FC<Props> = ({ children, onClose, title }) => {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -30,4 +31,5 @@ const Modal: FC<Props> = ({ children, onClose, title }) => {
         </div>
     )
 }
+
 export default Modal

@@ -1,6 +1,7 @@
 import { NOMEN_PART_CLASSES, type NomenPart } from "parse-nomen"
 import { normalizeText } from "../../normalization/normalizeText"
 import type { Nomen } from "../types/Nomen"
+
 const cleanCitation = (part: NomenPart) => {
     if (part.class === "citation") {
         return {
@@ -15,6 +16,7 @@ const cleanCitation = (part: NomenPart) => {
     }
     return part
 }
+
 export const normalizeNomen = (nomen: Nomen) =>
     nomen
         .map(part => ({

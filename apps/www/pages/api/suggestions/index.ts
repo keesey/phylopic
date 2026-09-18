@@ -7,6 +7,7 @@ import BUILD from "~/build/BUILD"
 import { checkProxyRateLimit, getClientIp } from "~/rateLimit/checkProxyRateLimit"
 import getString from "~/routes/getString"
 import packageJson from "../../../package.json"
+
 const index: NextApiHandler = async (req, res) => {
     if (!checkProxyRateLimit(getClientIp(req.headers["x-forwarded-for"]))) {
         res.status(429).setHeader("Content-Type", "text/plain").send("Too many requests.")
@@ -31,12 +32,15 @@ const index: NextApiHandler = async (req, res) => {
     }
     res.end()
 }
+
 export default index
+
 type Suggestion = Readonly<{
     description: string
     term: string
     url: string
 }>
+
 const getSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     const suggestionBatches: ReadonlyArray<readonly Suggestion[]> = await Promise.all([
         getPhyloPicSuggestions(prefix),
@@ -50,13 +54,16 @@ const getSuggestions = async (prefix: string): Promise<readonly Suggestion[]> =>
         .filter((value, index, array) => index === 0 || !array.slice(0, index).some(other => other.term === value.term))
         .sort(createSuggestionComparator(prefix))
 }
+
 const createSuggestionComparator = (prefix: string) => (a: Suggestion, b: Suggestion) => {
     return (
         getSortIndex(a.term, prefix) - getSortIndex(b.term, prefix) ||
         (a.description === "Illustrated" ? (b.description === "Illustrated" ? 0 : -1) : 1)
     )
 }
+
 const sanitizeUniqueName = (name: string) => name.replace(/\s*\([a-z\s+(in|with)[^)]+\)/gi, "")
+
 const getEOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     try {
         if (prefix.length >= 2) {
@@ -81,6 +88,7 @@ const getEOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]>
     }
     return []
 }
+
 const getGBIFSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     try {
         if (prefix.length >= 2) {
@@ -103,6 +111,7 @@ const getGBIFSuggestions = async (prefix: string): Promise<readonly Suggestion[]
     }
     return []
 }
+
 const getOTOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     try {
         if (prefix.length >= 2) {
@@ -125,6 +134,7 @@ const getOTOLSuggestions = async (prefix: string): Promise<readonly Suggestion[]
     }
     return []
 }
+
 const getPBDBSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     try {
         if (prefix.length >= 2) {
@@ -150,6 +160,7 @@ const getPBDBSuggestions = async (prefix: string): Promise<readonly Suggestion[]
     }
     return []
 }
+
 const getPhyloPicSuggestions = async (prefix: string): Promise<readonly Suggestion[]> => {
     try {
         if (prefix.length >= 2) {

@@ -1,5 +1,6 @@
 import type { ImageWithEmbedded, NodeWithEmbedded } from "@phylopic/api-models"
 import type { Authority, Namespace, ObjectID, UUID } from "@phylopic/utils"
+
 export type State = Readonly<{
     focused: boolean
     externalMatches: readonly string[]

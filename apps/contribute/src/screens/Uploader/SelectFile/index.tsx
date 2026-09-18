@@ -25,14 +25,17 @@ import useWindowDragHighlight from "../hooks/useWindowDragHighlight"
 import useWindowDrop from "../hooks/useWindowDrop"
 import type { FileResult } from "./FileResult"
 import styles from "./index.module.scss"
+
 const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 }
+
 export interface Props {
     onCancel: () => void
     onComplete: (result?: FileResult) => void
     value?: Hash
 }
+
 const SelectFile: FC<Props> = ({ onCancel, onComplete, value }) => {
     const [file, setFile] = useFileState()
     const highlightDrag = useWindowDragHighlight(true)
@@ -194,4 +197,5 @@ const SelectFile: FC<Props> = ({ onCancel, onComplete, value }) => {
         </section>
     )
 }
+
 export default SelectFile

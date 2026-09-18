@@ -10,6 +10,7 @@ import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import CurlBox from "~/ui/CurlBox"
 import SiteTitle from "~/ui/SiteTitle"
+
 const PageComponent: NextPage = () => (
     <PageLayout>
         <NextSeo
@@ -42,6 +43,7 @@ const PageComponent: NextPage = () => (
         </Container>
     </PageLayout>
 )
+
 const Article: FC = () => {
     const [build] = useContext(BuildContext) ?? []
     return (
@@ -655,4 +657,5 @@ const Article: FC = () => {
         </article>
     )
 }
+
 export default PageComponent

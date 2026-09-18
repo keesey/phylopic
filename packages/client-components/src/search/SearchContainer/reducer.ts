@@ -4,6 +4,7 @@ import type { Reducer } from "react"
 import type { Action } from "../context/actions"
 import type { State } from "../context/State"
 import { getSortIndex } from "../utils/getSortIndex"
+
 export const reducer: Reducer<State, Action> = (prevState, action) => {
     switch (action.type) {
         case "ADD_EXTERNAL_MATCHES": {

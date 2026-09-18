@@ -10,14 +10,17 @@ import { BuildContext } from "../../../builds"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { OTOL_URL } from "./OTOL_URL"
+
 interface OTOLLineageItem {
     // Abridged.
     readonly ott_id: number
 }
+
 interface OTOLTaxonInfo {
     // Abridged.
     readonly lineage?: readonly OTOLLineageItem[]
 }
+
 const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async ([url, ott_id, include_lineage]) => {
     const response = await fetchDataAndCheck<OTOLTaxonInfo>(url, {
         data: { include_lineage, ott_id },
@@ -26,10 +29,12 @@ const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async ([
     })
     return response.data
 }
+
 const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url, undefined, isNodeWithEmbedded)
     return response.data
 }
+
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
@@ -89,6 +94,7 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
     }, [direct.data, dispatch, indirect.data, ott_id])
     return null
 }
+
 export const OTOLResolve: React.FC = () => {
     const [state] = React.useContext(SearchContext) ?? []
     const unresolvedOTTIDs = React.useMemo(() => {

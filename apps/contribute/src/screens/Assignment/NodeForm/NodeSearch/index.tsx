@@ -14,6 +14,7 @@ import ParentSelector from "./ParentSelector"
 import type { SearchEntry } from "./SearchEntry"
 import EntryButton from "./SearchOptions/EntryButton"
 import useEntries from "./useEntries"
+
 export const NodeSearch: FC = () => {
     const text = useText()
     const [{ text: searchText }] = useContext(SearchContext) ?? [{}]
@@ -124,4 +125,5 @@ export const NodeSearch: FC = () => {
         </>
     )
 }
+
 export default NodeSearch

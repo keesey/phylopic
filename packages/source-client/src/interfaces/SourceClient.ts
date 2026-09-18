@@ -6,6 +6,7 @@ import type { ImageFile } from "./ImageFile"
 import type { Listable } from "./Listable"
 import type { Patchable } from "./Patchable"
 import type { S3Entry } from "./S3Entry"
+
 export type SourceClient = Readonly<{
     authEmails: Listable<S3Entry<EmailAddress>, string>
     authToken(emailAddress: EmailAddress): Editable<JWT>

@@ -10,6 +10,7 @@ import type { SetNodeResultsAction } from "../../context/actions"
 import { useQueryFetcher, type QueryKey } from "../../hooks/useQueryFetcher"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { getMatchingText } from "../getMatchingText"
+
 export const PhyloPicNodeSearch: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const basis = state?.text || undefined

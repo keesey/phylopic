@@ -8,10 +8,12 @@ import {
 } from "@phylopic/utils"
 import { type ChangeEvent, type FC, useCallback, useState } from "react"
 import styles from "./LicenseURLEditor.module.scss"
+
 export type Props = {
     onChange: (value: LicenseURL | null) => void
     value: LicenseURL | null
 }
+
 const LicenseURLEditor: FC<Props> = ({ onChange, value }) => {
     const [editing, setEditing] = useState(false)
     const selectChangeHandler = useCallback(
@@ -62,4 +64,5 @@ const LicenseURLEditor: FC<Props> = ({ onChange, value }) => {
         </div>
     )
 }
+
 export default LicenseURLEditor

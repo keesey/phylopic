@@ -15,6 +15,7 @@ import listDir from "../fsutils/listDir.js"
 import type { SourceData } from "./getSourceData.js"
 
 const IMAGES_URL_BASE = "https://images.phylopic.org/images/"
+
 const getNodes = (uuid: string, data: SourceData): readonly TitledLink[] => {
     const nodeUUIDs = data.illustration.get(uuid)
     if (!nodeUUIDs) {
@@ -25,16 +26,20 @@ const getNodes = (uuid: string, data: SourceData): readonly TitledLink[] => {
         title: stringifyNomen(shortenNomen(data.nodes.get(nodeUUID)?.names[0] ?? [])) || "[Unnamed]",
     }))
 }
+
 const getFileMetadata = (filename: string) => {
     const stream = createReadStream(filename)
     return probeImageSize(stream)
 }
+
 const getMediaLinkArea = ({ sizes }: Pick<MediaLink, "sizes">) =>
     sizes
         .split("x", 2)
         .map(dimension => parseInt(dimension, 10))
         .reduce((prev, dimension) => prev * dimension, 1)
+
 const sortMediaLinks = (a: MediaLink, b: MediaLink) => getMediaLinkArea(b) - getMediaLinkArea(a)
+
 const getRasterLinks = async (uuid: UUID): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
     const folder = join(".s3", "images.phylopic.org", "images", uuid, "raster")
     const files = await listDir(folder)
@@ -50,6 +55,7 @@ const getRasterLinks = async (uuid: UUID): Promise<readonly MediaLink<string, Ra
     )
     return links.sort(sortMediaLinks)
 }
+
 const getSocialLink = async (uuid: UUID): Promise<MediaLink<string, RasterMediaType>> => {
     // :TODO: Check existence?
     return {
@@ -58,6 +64,7 @@ const getSocialLink = async (uuid: UUID): Promise<MediaLink<string, RasterMediaT
         type: "image/png",
     }
 }
+
 const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
     const folder = join(".s3", "images.phylopic.org", "images", uuid)
     const files = (await listDir(folder)).filter(file => /^source\.[^.]+$/.test(file))
@@ -76,6 +83,7 @@ const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
         type: mime,
     }
 }
+
 const getThumbnailLinks = async (uuid: UUID): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
     // :TODO: Check existence?
     return [
@@ -96,6 +104,7 @@ const getThumbnailLinks = async (uuid: UUID): Promise<readonly MediaLink<string,
         },
     ]
 }
+
 const getVectorLink = async (uuid: UUID): Promise<MediaLink<string, VectorMediaType>> => {
     const path = uuid + "/vector.svg"
     const { height, width } = await getFileMetadata(".s3/images.phylopic.org/images/" + path)
@@ -105,6 +114,7 @@ const getVectorLink = async (uuid: UUID): Promise<MediaLink<string, VectorMediaT
         type: "image/svg+xml",
     }
 }
+
 const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
     uuid = normalizeUUID(uuid)
     const sourceImage = data.images.get(uuid)
@@ -163,4 +173,5 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
         uuid,
     }
 }
+
 export default getImageJSON

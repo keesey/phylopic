@@ -4,9 +4,11 @@ import { stringifyNormalized } from "@phylopic/utils"
 import type { DragEvent, FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
+
 export interface Props {
     value: Image
 }
+
 const ImageRasterView: FC<Props> = ({ value }) => {
     const handleDragStart = (event: DragEvent) => {
         customEvents.dragImage("raster_view", value)
@@ -20,4 +22,5 @@ const ImageRasterView: FC<Props> = ({ value }) => {
         </div>
     )
 }
+
 export default ImageRasterView

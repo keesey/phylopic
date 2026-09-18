@@ -2,6 +2,7 @@ import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses"
 import { type JWT, decodeJWT } from "@phylopic/source-models"
 import { type EmailAddress, isEmailAddress, isUUIDv4 } from "@phylopic/utils"
 import { createContributeSesClientConfig } from "~/aws/createAwsClientConfig"
+
 const sendAuthEmail = async (email: EmailAddress, token: JWT, now: Date) => {
     if (!isEmailAddress(email)) {
         throw new Error("Tried to use an invalid email address.")
@@ -38,11 +39,8 @@ Mike Keesey<br />
                         },
                         Text: {
                             Data: `Open this link to start uploading images to PhyloPic: ${url}
-
 This link will expire on ${expiration}.
-
 Thanks! Can't wait to see your silhouettes.
-
 Mike Keesey
 keesey+phylopic@gmail.com`,
                         },
@@ -62,7 +60,9 @@ keesey+phylopic@gmail.com`,
         client.destroy()
     }
 }
+
 export default sendAuthEmail
+
 const formatDate = (date: Date) => {
     return [
         date.getUTCFullYear(),
@@ -88,8 +88,11 @@ const formatDate = (date: Date) => {
         "UTC (Coordinated Universal Time)",
     ].join(" ")
 }
+
 const getAMPM = (hour: number) => (hour < 12 ? "AM" : "PM")
+
 const getHour = (hour: number) => (hour === 0 ? 12 : hour > 12 ? hour - 12 : hour)
+
 const padZeroes = (n: number, length: number) => {
     let s = n.toString(10)
     while (s.length < length) {
@@ -97,6 +100,7 @@ const padZeroes = (n: number, length: number) => {
     }
     return s
 }
+
 const escapeHTML = (s: string) => {
     return s
         .replace(/&/g, "&amp;")

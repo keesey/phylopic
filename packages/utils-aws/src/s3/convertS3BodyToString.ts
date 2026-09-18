@@ -1,5 +1,6 @@
 import rawBody from "raw-body"
 import { Readable } from "stream"
+
 export const convertS3BodyToString = async (
     body: Readable | ReadableStream<any> | Blob | Uint8Array | string | undefined,
 ): Promise<string> => {

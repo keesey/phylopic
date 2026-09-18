@@ -11,6 +11,7 @@ import Paginator from "~/pagination/Paginator"
 import NodeSelector from "~/selectors/NodeSelector"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import NameView from "~/views/NameView"
+
 const Page: NextPage = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const router = useRouter()
@@ -58,7 +59,9 @@ const Page: NextPage = () => {
         </>
     )
 }
+
 export default Page
+
 const NodeView: FC<{ node: Node & { uuid: UUID } }> = ({ node }) => {
     const { data: parent } = useSWR<Node & { uuid: UUID }>(
         node.parent ? `/api/nodes/_/${encodeURIComponent(node.parent)}` : null,

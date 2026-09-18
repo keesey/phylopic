@@ -5,6 +5,7 @@ import { type FC, Fragment, type ReactNode, useCallback, useEffect, useMemo } fr
 import useSWRInfinite, { type SWRInfiniteKeyLoader } from "swr/infinite"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
+
 export type Props = {
     children: (value: ReadonlyArray<unknown>, isValidating: boolean) => ReactNode
     endpoint: string
@@ -12,6 +13,7 @@ export type Props = {
     hideLoader?: boolean
     onError?: (error: Error) => void
 }
+
 const Paginator: FC<Props> = ({ children, endpoint, hideControls, hideLoader, onError }) => {
     const authorized = useAuthorized()
     const getKey = useCallback<SWRInfiniteKeyLoader>(
@@ -66,4 +68,5 @@ const Paginator: FC<Props> = ({ children, endpoint, hideControls, hideLoader, on
         </>
     )
 }
+
 export default Paginator

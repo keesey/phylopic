@@ -19,9 +19,11 @@ import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import SearchAside from "~/ui/SearchAside"
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
@@ -40,7 +42,9 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 export default PageComponent
+
 const getInitialText = (q?: string | string[]) => {
     if (Array.isArray(q)) {
         if (!q.length) {
@@ -53,6 +57,7 @@ const getInitialText = (q?: string | string[]) => {
     }
     return ""
 }
+
 export const getServerSideProps: GetServerSideProps<Props, { q?: string | string[] }> = async context => {
     const initialText = getInitialText(context.query.q)
     const fallback: NonNullable<SWRConfiguration["fallback"]> = {}

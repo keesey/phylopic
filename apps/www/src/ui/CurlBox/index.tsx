@@ -10,6 +10,7 @@ import type { CurlOptions } from "./CurlOptions"
 import styles from "./index.module.scss"
 import useCommandKey from "./useCommandKey"
 import useCommandLine from "./useCommandLine"
+
 const ReactJsonView = dynamic(() => import("react-json-view"), { ssr: false })
 
 export interface Props {
@@ -18,6 +19,7 @@ export interface Props {
     title: ReactNode
     url: string
 }
+
 const fetcher = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {
     try {
         return await axios(config)
@@ -28,8 +30,10 @@ const fetcher = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {
         throw e
     }
 }
+
 const shouldCollapse: ReactJsonViewProps["shouldCollapse"] = ({ src, name, type }) =>
     name === "_links" || name === "_embedded" || (type === "array" && (src as unknown[])?.length > 1)
+
 const THEME: ThemeObject = {
     base00: "#305860", // background
     base01: "#000",
@@ -48,6 +52,7 @@ const THEME: ThemeObject = {
     base0E: "#16aba6", // right carets
     base0F: "#fade85", // integers, copy buttons
 }
+
 const CurlBox: FC<Props> = ({ id, options, title, url }) => {
     const [requested, setRequested] = useState(false)
     const line = useCommandLine(url, options)
@@ -75,7 +80,6 @@ const CurlBox: FC<Props> = ({ id, options, title, url }) => {
                         className={styles.controlButton}
                         onClick={() => {
                             customEvents.clearApiResults(id)
-
                             setRequested(false)
                         }}
                         title="Clear"
@@ -144,4 +148,5 @@ const CurlBox: FC<Props> = ({ id, options, title, url }) => {
         </section>
     )
 }
+
 export default CurlBox

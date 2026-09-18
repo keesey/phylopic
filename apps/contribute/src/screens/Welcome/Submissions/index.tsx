@@ -10,6 +10,7 @@ import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 import UserSubmissionThumbnail from "~/ui/UserSubmissionThumbnail"
+
 const Submissions: FC = () => {
     const fetcher = useAuthorizedJSONFetcher<number>()
     const { data: numImages } = useSWR("/api/images?total=items", fetcher)
@@ -65,4 +66,5 @@ const Submissions: FC = () => {
         </>
     )
 }
+
 export default Submissions

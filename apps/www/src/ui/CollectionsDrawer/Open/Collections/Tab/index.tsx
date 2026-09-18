@@ -10,9 +10,11 @@ import useCurrentCollectionName from "~/collections/hooks/useCurrentCollectionNa
 import postCollectionPage from "~/collections/postCollectionPage"
 import Icon from "~/ui/Icon"
 import styles from "./index.module.scss"
+
 export interface Props {
     name: string
 }
+
 const Tab: FC<Props> = ({ name }) => {
     const currentName = useCurrentCollectionName()
     const currentImages = useCurrentCollectionImages()
@@ -99,4 +101,5 @@ const Tab: FC<Props> = ({ name }) => {
         </div>
     )
 }
+
 export default Tab

@@ -12,6 +12,7 @@ import {
 import type { NextApiHandler } from "next"
 import getResolver from "~/resolvers/getResolver"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -38,7 +39,9 @@ const index: NextApiHandler<Submission | { uuid: UUID }> = async (req, res) => {
     }
     res.end()
 }
+
 export default index
+
 const importNode = async (
     client: SourceClient,
     authority: Authority,

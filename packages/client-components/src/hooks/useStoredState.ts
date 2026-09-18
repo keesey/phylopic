@@ -1,5 +1,6 @@
 import { stringifyNormalized } from "@phylopic/utils"
 import { useCallback, useEffect, useMemo, useState } from "react"
+
 const safeParse = (json: string) => {
     try {
         return JSON.parse(json)
@@ -8,6 +9,7 @@ const safeParse = (json: string) => {
         return null
     }
 }
+
 export const useStoredState = <T>(key: string): Readonly<[T | null, (value: T | null) => void]> => {
     const [json, setJSON] = useState<string | null | undefined>(undefined)
     const value = useMemo<T | null>(() => (json ? safeParse(json) : null), [json])

@@ -10,11 +10,13 @@ import type { SetImageResultsAction } from "../../context/actions"
 import { useQueryFetcher, type QueryKey } from "../../hooks/useQueryFetcher"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { getMatchingText } from "../getMatchingText"
+
 export interface PhyloPicImageSearchProps {
     filter_license_by?: boolean
     filter_license_nc?: boolean
     filter_license_sa?: boolean
 }
+
 export const PhyloPicImageSearch: React.FC<PhyloPicImageSearchProps> = props => {
     const { filter_license_by, filter_license_nc, filter_license_sa } = props
     const [state, dispatch] = React.useContext(SearchContext) ?? []

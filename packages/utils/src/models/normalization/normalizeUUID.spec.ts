@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import type { UUID } from "../types/UUID"
 import { normalizeUUID } from "./normalizeUUID"
+
 describe("normalizeUUID", () => {
     const test = (value: UUID, expected: UUID) => {
         it(`should convert ${JSON.stringify(value)} to ${JSON.stringify(expected)}`, () => {

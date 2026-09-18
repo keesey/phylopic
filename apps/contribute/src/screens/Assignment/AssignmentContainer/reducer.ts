@@ -1,6 +1,7 @@
 import type { Reducer } from "react"
 import type { Action } from "./actions"
 import type { State } from "./State"
+
 const reducer: Reducer<State, Action> = (prevState, action) => {
     switch (action.type) {
         case "REQUEST_CHANGE": {
@@ -41,4 +42,5 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
         }
     }
 }
+
 export default reducer

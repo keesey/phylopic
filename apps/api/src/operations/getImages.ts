@@ -29,11 +29,17 @@ import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import type { Operation } from "./Operation"
+
 type GetImagesParameters = DataRequestHeaders & ImageListParameters
+
 type GetImagesService = PgClientService & S3ClientService
+
 const DEFAULT_TITLE = "[Untitled]"
+
 const ITEMS_PER_PAGE = 48
+
 const USER_MESSAGE = "There was a problem with a request to list silhouette images."
+
 const getQueryBuilder = (parameters: ImageListParameters, results: "total" | "href" | "json") => {
     const builder = new QueryConfigBuilder()
     const selection =
@@ -115,11 +121,13 @@ SELECT ${selection} FROM node_name
     }
     return builder
 }
+
 const getTotalItems = (parameters: ImageListParameters) => async (client: ClientBase) => {
     const query = getQueryBuilder(parameters, "total").build()
     const queryResult = await client.query<{ total: string }>(query)
     return parseInt(queryResult.rows[0].total, 10) || 0
 }
+
 const getItemLinks =
     (parameters: ImageListParameters) =>
     async (client: ClientBase, offset: number, limit: number): Promise<readonly TitledLink[]> => {
@@ -131,6 +139,7 @@ const getItemLinks =
             title: title || DEFAULT_TITLE,
         }))
     }
+
 const fetchListPageRows =
     (parameters: ImageListParameters) =>
     async (client: ClientBase, offset: number, limit: number): Promise<readonly ListPageRow[]> => {
@@ -139,6 +148,7 @@ const fetchListPageRows =
         const queryResult = await client.query<{ json: string; title: string | null; uuid: UUID }>(queryBuilder.build())
         return queryResult.rows
     }
+
 const embedListPageRows =
     (_parameters: ImageListParameters) =>
     async (
@@ -161,14 +171,18 @@ const embedListPageRows =
             }),
         )
     }
+
 const isEligible = (listQuery: Readonly<Record<string, string | number | boolean | undefined>>) =>
     isUnfilteredImagesList(listQuery as ImageListParameters)
+
 const S3_LIST = {
     getIndexKey: () => getListIndexKey(BUILD, "images"),
     getPageKey: (pageIndex: number) => getListPageKey(BUILD, "images", pageIndex),
     isEligible,
 }
+
 const VALID_EMBEDS = ["contributor", "generalNode", "nodes", "specificNode"] as const
+
 const getImages: Operation<GetImagesParameters, GetImagesService> = async ({ accept, ...queryParameters }, service) => {
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryParameters, isImageListParameters, USER_MESSAGE)
@@ -200,4 +214,5 @@ const getImages: Operation<GetImagesParameters, GetImagesService> = async ({ acc
         service,
     })
 }
+
 export default getImages

@@ -2,6 +2,7 @@ import { Loader } from "@phylopic/client-components"
 import { useRouter } from "next/router"
 import { type FC, useEffect, useState } from "react"
 import styles from "./index.module.scss"
+
 const PageLoader: FC = () => {
     const [active, setActive] = useState(false)
     const { events } = useRouter()
@@ -26,4 +27,5 @@ const PageLoader: FC = () => {
         </div>
     )
 }
+
 export default PageLoader

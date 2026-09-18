@@ -16,9 +16,7 @@ describe("deletePrefix", () => {
             })
             .mockResolvedValueOnce({})
         const client = { send } as unknown as S3Client
-
         await deletePrefix(client, "bucket", "prefix/")
-
         expect(send).toHaveBeenCalledTimes(4)
         expect(send.mock.calls[0][0]).toBeInstanceOf(ListObjectsV2Command)
         expect(send.mock.calls[0][0].input).toEqual({
@@ -45,23 +43,17 @@ describe("deletePrefix", () => {
             },
         })
     })
-
     it("skips deletion when a page has no keys", async () => {
         const send = vi.fn().mockResolvedValueOnce({ Contents: [] })
         const client = { send } as unknown as S3Client
-
         await deletePrefix(client, "bucket", "empty/")
-
         expect(send).toHaveBeenCalledOnce()
         expect(send.mock.calls[0][0]).toBeInstanceOf(ListObjectsV2Command)
     })
-
     it("skips deletion when Contents is missing", async () => {
         const send = vi.fn().mockResolvedValueOnce({})
         const client = { send } as unknown as S3Client
-
         await deletePrefix(client, "bucket", "missing/")
-
         expect(send).toHaveBeenCalledOnce()
     })
 })

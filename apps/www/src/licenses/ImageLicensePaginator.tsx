@@ -4,9 +4,11 @@ import { type FC, useContext, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
 import LicenseFilterTypeContext from "./LicenseFilterTypeContext"
 import useLicenseFilterQuery from "./useLicenseFilterQuery"
+
 export type Props = Omit<PaginationContainerProps<ImageWithEmbedded>, "endpoint" | "onPage"> & {
     query?: ImageListParameters
 }
+
 const ImageLicensePaginator: FC<Props> = props => {
     const [licenses] = useContext(LicenseFilterTypeContext) ?? []
     const licenseFilter = useLicenseFilterQuery()
@@ -26,4 +28,5 @@ const ImageLicensePaginator: FC<Props> = props => {
         />
     )
 }
+
 export default ImageLicensePaginator

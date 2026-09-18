@@ -1,9 +1,11 @@
 import type { Nomen } from "@phylopic/utils"
 import { type FC, Fragment } from "react"
 import NomenView from "~/views/NomenView"
+
 export interface Props {
     nomina: readonly Nomen[]
 }
+
 const Nomina: FC<Props> = ({ nomina }) => {
     if (!nomina.length) {
         return null
@@ -22,4 +24,5 @@ const Nomina: FC<Props> = ({ nomina }) => {
         </>
     )
 }
+
 export default Nomina

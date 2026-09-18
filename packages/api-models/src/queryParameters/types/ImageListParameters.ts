@@ -1,6 +1,7 @@
 import type { ISOTimestamp, UUID } from "@phylopic/utils"
 import type { ImageEmbedded } from "../../types/ImageWithEmbedded"
 import type { ListParameters } from "./ListParameters"
+
 export interface ImageListParameters extends ListParameters<ImageEmbedded> {
     filter_clade?: UUID
     filter_collection?: UUID

@@ -2,11 +2,13 @@ import clsx from "clsx"
 import Image from "next/image"
 import React, { useCallback, useState } from "react"
 import styles from "./index.module.scss"
+
 export interface Props {
     alt?: string
     mode: "dark" | "light"
     src?: string
 }
+
 const FileView: React.FC<Props> = ({ alt, mode, src }) => {
     const [error, setError] = useState(false)
     const [pending, setPending] = useState(true)
@@ -46,4 +48,5 @@ const FileView: React.FC<Props> = ({ alt, mode, src }) => {
         </div>
     )
 }
+
 export default FileView

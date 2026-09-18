@@ -6,6 +6,7 @@ import Speech from "~/ui/Speech"
 import UserInput from "~/ui/UserInput"
 import UserTextForm from "~/ui/UserTextForm"
 import UserVerification from "~/ui/UserVerification"
+
 const AccountDetails = () => {
     const mutate = useContributorMutator()
     const [name, setName] = useState("")
@@ -79,4 +80,5 @@ const AccountDetails = () => {
         </Dialogue>
     )
 }
+
 export default AccountDetails

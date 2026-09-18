@@ -9,6 +9,7 @@ import useSWR, { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import NameView from "~/views/NameView"
+
 const Page: NextPage = () => {
     return (
         <SWRConfig>
@@ -41,7 +42,9 @@ const Page: NextPage = () => {
         </SWRConfig>
     )
 }
+
 export default Page
+
 const ImageView: FC<{ image: Image & { uuid: UUID } }> = ({ image }) => {
     const { data: specific } = useSWR<Node & { uuid: UUID }>(
         image.specific ? `/api/nodes/_/${encodeURIComponent(image.specific)}` : null,

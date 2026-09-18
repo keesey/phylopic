@@ -5,6 +5,7 @@ import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
+
 const ContributionCTAView: FC = () => {
     return (
         <section>
@@ -150,4 +151,5 @@ const ContributionCTAView: FC = () => {
         </section>
     )
 }
+
 export default ContributionCTAView

@@ -13,8 +13,11 @@ import type { PBDBTaxonResponse } from "./paleobiodb.org/PBDBTaxonResponse"
 import getStrataUrl from "./paleobiodb.org/getStrataUrl"
 import getTaxonUrl from "./paleobiodb.org/getTaxonUrl"
 import getMrcaUrl from "./timetree.org/getAgeUrl"
+
 const MILLION = 1000000
+
 const fetcher = <T>(key: string) => axios.get<T>(key).then(({ data }) => data)
+
 const getAgeResult = (
     pbdbStrataData: PBDBStrataResponse | undefined,
     pbdbTaxonData: readonly PBDBTaxonResponse[] | undefined,
@@ -48,6 +51,7 @@ const getAgeResult = (
           }
         : null
 }
+
 const useNodeAge = (node: Node | null) => {
     const predefined = node ? PREDEFINED[node.uuid] : undefined
     const ncbiTaxIds = useMemo(() => (node ? getObjectIDs(node._links, "ncbi.nlm.nih.gov", "taxid") : []), [node])
@@ -66,4 +70,5 @@ const useNodeAge = (node: Node | null) => {
         [pbdbStrataData, pbdbTaxonData, predefined, timeTreeData],
     )
 }
+
 export default useNodeAge

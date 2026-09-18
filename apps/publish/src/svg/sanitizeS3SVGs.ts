@@ -26,7 +26,6 @@ const listKeys = async (client: S3Client, bucketName: string, prefix: string): P
     } while (continuationToken)
     return keys
 }
-
 ;(async () => {
     let args
     try {
@@ -42,13 +41,11 @@ const listKeys = async (client: S3Client, bucketName: string, prefix: string): P
     const affectedUUIDs = new Set<string>()
     const rekeyedHashes: string[] = []
     let stoppedEarly = false
-
     console.info(dryRun ? "Scanning S3 buckets for SVG objects (dry run)..." : "Scanning S3 buckets for SVG objects...")
     if (uuidPrefix) {
         console.info(`UUID prefix filter: ${uuidPrefix}`)
     }
     console.info(`Buckets: ${buckets.join(", ")}`)
-
     try {
         for (const target of getSVGBucketTargets(buckets)) {
             const keys = (await listKeys(s3, target.bucketName, target.prefix))

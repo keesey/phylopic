@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { stringifyNormalized } from "./stringifyNormalized"
+
 describe("stringifyNormalized", () => {
     const test = (value: unknown, expected: unknown) => {
         it(`should convert ${JSON.stringify(value)} to ${JSON.stringify(expected)}`, () => {

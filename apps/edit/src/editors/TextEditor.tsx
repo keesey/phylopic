@@ -1,6 +1,7 @@
 import { normalizeText } from "@phylopic/utils"
 import { type FC, type KeyboardEvent, useCallback, useEffect, useState } from "react"
 import styles from "./TextEditor.module.scss"
+
 export type Props =
     | {
           onChange: (value: string | null) => void
@@ -13,6 +14,7 @@ export type Props =
           optional: false
           value: string
       }
+
 const TextEditor: FC<Props> = props => {
     const [editing, setEditing] = useState(false)
     const [newValue, setNewValue] = useState(props.value ?? "")
@@ -67,4 +69,5 @@ const TextEditor: FC<Props> = props => {
         />
     )
 }
+
 export default TextEditor

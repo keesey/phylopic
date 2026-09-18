@@ -8,8 +8,11 @@ import useCurrentCollectionImages from "~/collections/hooks/useCurrentCollection
 import useOpen from "~/collections/hooks/useOpen"
 import getImageFromDataTransfer from "./getImageFromDataTransfer"
 import styles from "./index.module.scss"
+
 const Open = dynamic(() => import("./Open"), { ssr: false })
+
 const Closed = dynamic(() => import("./Closed"), { ssr: false })
+
 const CollectionsDrawer: FC = () => {
     const [dragging, setDragging] = useState(false)
     const [{ currentCollection }, dispatch] = useContext(CollectionsContext)
@@ -56,4 +59,5 @@ const CollectionsDrawer: FC = () => {
         </aside>
     )
 }
+
 export default CollectionsDrawer

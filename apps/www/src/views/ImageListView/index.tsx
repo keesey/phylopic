@@ -2,9 +2,11 @@ import type { ImageWithEmbedded } from "@phylopic/api-models"
 import type { FC } from "react"
 import LinkedImageThumbnailView from "../LinkedImageThumbnailView"
 import styles from "./index.module.scss"
+
 export interface Props {
     value: readonly ImageWithEmbedded[]
 }
+
 const ImageListView: FC<Props> = ({ value }) => {
     if (!value.length) {
         return null
@@ -17,4 +19,5 @@ const ImageListView: FC<Props> = ({ value }) => {
         </div>
     )
 }
+
 export default ImageListView

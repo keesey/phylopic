@@ -1,6 +1,7 @@
 import { type FaultDetector, ValidationFaultCollector } from "@phylopic/utils"
 import APIError from "../errors/APIError"
 import convertValidationFaultsToErrors from "./convertValidationFaultsToErrors"
+
 const validate = <T>(
     x: unknown,
     detector: FaultDetector<T>,
@@ -18,4 +19,5 @@ const validate = <T>(
     }
     return true
 }
+
 export default validate

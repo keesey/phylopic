@@ -3,6 +3,7 @@ import type pg from "pg"
 import type { PGClientProvider } from "../interfaces/PGClientProvider"
 import type { S3ClientProvider } from "../interfaces/S3ClientProvider"
 import { BaseClientProvider } from "./BaseClientProvider"
+
 export class PoolClientProvider extends BaseClientProvider implements PGClientProvider, S3ClientProvider {
     protected pg: pg.PoolClient | null = null
     private pgConnectPromise: Promise<pg.PoolClient> | null = null

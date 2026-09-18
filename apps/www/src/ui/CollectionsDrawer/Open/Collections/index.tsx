@@ -3,6 +3,7 @@ import useCollectionNames from "~/collections/hooks/useCollectionNames"
 import Add from "./Add"
 import styles from "./index.module.scss"
 import Tab from "./Tab"
+
 const Collections: FC = () => {
     const collectionNames = useCollectionNames()
     return (
@@ -14,4 +15,5 @@ const Collections: FC = () => {
         </nav>
     )
 }
+
 export default Collections

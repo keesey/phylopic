@@ -11,12 +11,15 @@ const toSafeRelativeRedirect = (location: string): string | null => {
 }
 
 const PageComponent: NextPage = () => null
+
 export default PageComponent
+
 interface PageQuery extends ParsedUrlQuery {
     authority: string
     namespace: string
     objectID: string
 }
+
 export const getServerSideProps: GetServerSideProps<Record<string, never>, PageQuery> = async context => {
     const { authority, namespace, objectID } = context.query
     if (!isAuthority(authority) || !isNamespace(namespace) || !isObjectID(objectID)) {

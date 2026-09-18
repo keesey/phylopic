@@ -10,9 +10,11 @@ import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
 import useEntries from "./useEntries"
+
 export type Props = {
     hash: Hash
 }
+
 export const NodeSearch: FC<Props> = ({ hash }) => {
     const [{ text }, dispatch] = useContext(SearchContext) ?? [{}]
     const [editedText, setEditedText] = useState(text ?? "")
@@ -53,4 +55,5 @@ export const NodeSearch: FC<Props> = ({ hash }) => {
         </>
     )
 }
+
 export default NodeSearch

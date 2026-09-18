@@ -10,10 +10,12 @@ import getNodeHRef from "~/routes/getNodeHRef"
 import LicenseView from "~/views/LicenseView"
 import NomenView from "~/views/NomenView"
 import styles from "./index.module.scss"
+
 export interface Props {
     url: URL
     value: readonly ImageWithEmbedded[]
 }
+
 const ImagesView: FC<Props> = ({ url, value }) => {
     if (!value.length) {
         return null
@@ -74,4 +76,5 @@ const ImagesView: FC<Props> = ({ url, value }) => {
         </section>
     )
 }
+
 export default ImagesView

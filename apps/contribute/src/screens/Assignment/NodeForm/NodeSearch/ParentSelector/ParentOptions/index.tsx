@@ -8,6 +8,7 @@ import UserScrollTo from "~/ui/UserScrollTo"
 import type { SearchEntry } from "../../SearchEntry"
 import EntryButton from "../../SearchOptions/EntryButton"
 import useEntries from "../../useEntries"
+
 export const ParentOptions: FC = () => {
     const childNameText = useNormalizedText()
     const entries = useEntries()
@@ -42,4 +43,5 @@ export const ParentOptions: FC = () => {
         </>
     )
 }
+
 export default ParentOptions

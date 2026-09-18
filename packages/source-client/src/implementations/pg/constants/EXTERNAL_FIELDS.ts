@@ -1,6 +1,7 @@
 import type { External } from "@phylopic/source-models"
 import type { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import type { EditField } from "../fields/EditField"
+
 export const EXTERNAL_FIELDS: ReadonlyArray<
     EditField<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }>
 > = [

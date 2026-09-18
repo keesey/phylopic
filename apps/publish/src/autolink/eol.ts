@@ -15,18 +15,21 @@ import {
     type UUID,
 } from "@phylopic/utils"
 import axios from "axios"
+
 interface EOLSearchResult {
     readonly content: string
     readonly id: number
     readonly link: string
     readonly title: string
 }
+
 interface EOLSearchResults {
     readonly itemsPerPage: number
     readonly results: readonly EOLSearchResult[]
     readonly startIndex: number
     readonly totalResults: number
 }
+
 interface SPARQLResponse {
     readonly head: {
         readonly vars: readonly string[]
@@ -46,6 +49,7 @@ interface SPARQLResponse {
         >
     }
 }
+
 const getPathsFromNamebank = async (namebankIDs?: ReadonlySet<number>): Promise<readonly string[]> => {
     if (!namebankIDs || !namebankIDs.size) {
         return []
@@ -74,9 +78,11 @@ const getPathsFromNamebank = async (namebankIDs?: ReadonlySet<number>): Promise<
     // console.debug(`Found ${result.length} link${result.length === 1 ? "" : "s"}.`)
     return result
 }
+
 const hasNamebankLink = async (client: SourceClient, nodeUUID: UUID): Promise<boolean> => {
     return (await client.node(nodeUUID).externals.namespace("ubio.org", "namebank").totalItems()) > 0
 }
+
 const getNamebankIDs = async (client: SourceClient, nodeUUID: UUID): Promise<readonly number[]> => {
     const externals = iterateList(client.node(nodeUUID).externals.namespace("ubio.org", "namebank"))
     const ids: number[] = []
@@ -85,6 +91,7 @@ const getNamebankIDs = async (client: SourceClient, nodeUUID: UUID): Promise<rea
     }
     return ids.sort()
 }
+
 const getParentEOLPageIDs = async (client: SourceClient, node: Node): Promise<readonly number[]> => {
     const parentUUID = node.parent
     if (!parentUUID) {
@@ -97,6 +104,7 @@ const getParentEOLPageIDs = async (client: SourceClient, node: Node): Promise<re
     const parentNode = await client.node(parentUUID).get()
     return getParentEOLPageIDs(client, parentNode)
 }
+
 const getFirstEOLSearchMatch = async (names: readonly Nomen[], parentEOLPageID?: number) => {
     const scientificNames = names.filter(isScientific)
     for (const name of scientificNames) {
@@ -117,6 +125,7 @@ const getFirstEOLSearchMatch = async (names: readonly Nomen[], parentEOLPageID?:
     }
     return []
 }
+
 const processEOLEntry = async (client: SourceClient, node: Node & { uuid: UUID }) => {
     const parentID = (await getParentEOLPageIDs(client, node))[0]
     const matches = await getFirstEOLSearchMatch(node.names, parentID)
@@ -144,6 +153,7 @@ const processEOLEntry = async (client: SourceClient, node: Node & { uuid: UUID }
         }
     }
 }
+
 const processEOL = async (client: SourceClient, nodes: ReadonlyArray<Node & { uuid: UUID }>) => {
     console.info(`Processing ${nodes.length} EoL candidates.`)
     for (const node of nodes) {
@@ -154,6 +164,7 @@ const processEOL = async (client: SourceClient, nodes: ReadonlyArray<Node & { uu
         }
     }
 }
+
 const processNamebank = async (client: SourceClient, nodes: ReadonlyArray<Node & { uuid: UUID }>) => {
     console.info(`Processing ${nodes.length} Namebank candidates.`)
     for (const node of nodes) {
@@ -193,6 +204,7 @@ const processNamebank = async (client: SourceClient, nodes: ReadonlyArray<Node &
         }
     }
 }
+
 const getCandidates = async (client: SourceClient) => {
     const alreadyLinked: UUID[] = []
     for await (const external of iterateList(client.externals("eol.org", "pages"))) {
@@ -207,6 +219,7 @@ const getCandidates = async (client: SourceClient) => {
     }
     return candidates
 }
+
 const getNamebankExterals = async (client: SourceClient) => {
     const results: Array<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }> = []
     for await (const external of iterateList(client.externals("ubio.org", "namebank"))) {
@@ -214,6 +227,7 @@ const getNamebankExterals = async (client: SourceClient) => {
     }
     return results
 }
+
 const autolinkEOL = async (client: SourceClient): Promise<void> => {
     const [candidates, namebankExternals] = await Promise.all([getCandidates(client), getNamebankExterals(client)])
     console.info(`Processing ${candidates.length} node${candidates.length === 1 ? "" : "s"}...`)
@@ -231,4 +245,5 @@ const autolinkEOL = async (client: SourceClient): Promise<void> => {
     await Promise.all([processNamebank(client, namebankCandidates), processEOL(client, otherCandidates)])
     console.info(`Processed ${candidates.length} node${candidates.length === 1 ? "" : "s"}.`)
 }
+
 export default autolinkEOL

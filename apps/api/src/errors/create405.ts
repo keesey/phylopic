@@ -1,4 +1,5 @@
 import APIError from "./APIError"
+
 const create405 = () =>
     new APIError(405, [
         {
@@ -7,4 +8,5 @@ const create405 = () =>
             userMessage: "An invalid request was made.",
         },
     ])
+
 export default create405

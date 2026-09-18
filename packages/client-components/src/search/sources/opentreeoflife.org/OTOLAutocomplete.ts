@@ -5,12 +5,14 @@ import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
 import { OTOL_URL } from "./OTOL_URL"
+
 interface OTOLAutocompleteName {
     readonly is_higher: boolean
     readonly is_suppressed: boolean
     readonly ott_id: number
     readonly unique_name: string
 }
+
 const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [string, string]> = async ([url, name]) => {
     if (name.length < 2) {
         return [[], name]
@@ -22,7 +24,9 @@ const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [str
     })
     return [response.data, name]
 }
+
 const sanitizeUniqueName = (name: string) => name.replace(/\s*\([a-z\s+(in|with)[^)]+\)/gi, "")
+
 export const OTOLAutocomplete: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const response = useSWRImmutable(state?.text ? [OTOL_URL + "/tnrs/autocomplete_name", state.text] : null, fetcher)

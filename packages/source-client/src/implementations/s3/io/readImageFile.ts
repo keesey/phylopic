@@ -2,6 +2,7 @@ import type { GetObjectOutput } from "@aws-sdk/client-s3"
 import { isImageMediaType } from "@phylopic/utils"
 import { convertS3BodyToBuffer } from "@phylopic/utils-aws"
 import type { ImageFile } from "../../../interfaces/ImageFile"
+
 export const readImageFile = async (output: GetObjectOutput): Promise<ImageFile> => {
     const type = output.ContentType
     if (!isImageMediaType(type)) {

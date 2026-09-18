@@ -11,6 +11,7 @@ import {
 } from "@phylopic/client-components"
 import type { FC } from "react"
 import NodeSearch from "./NodeSearch"
+
 const NodeForm: FC = () => {
     return (
         <SearchContainer>
@@ -28,4 +29,5 @@ const NodeForm: FC = () => {
         </SearchContainer>
     )
 }
+
 export default NodeForm

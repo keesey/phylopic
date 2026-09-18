@@ -2,6 +2,7 @@ import clsx from "clsx"
 import { type ChangeEvent, type FC, type HTMLInputTypeAttribute, useCallback } from "react"
 import { ICON_CHECK } from "../ICON_SYMBOLS"
 import styles from "./index.module.scss"
+
 export interface Props {
     autoComplete?: string
     id?: string
@@ -16,6 +17,7 @@ export interface Props {
     type?: HTMLInputTypeAttribute
     value?: string
 }
+
 const UserInput: FC<Props> = ({
     autoComplete,
     id,
@@ -56,4 +58,5 @@ const UserInput: FC<Props> = ({
         </div>
     )
 }
+
 export default UserInput

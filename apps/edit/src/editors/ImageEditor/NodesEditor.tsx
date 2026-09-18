@@ -10,9 +10,11 @@ import useModifiedPatcher from "~/swr/useModifiedPatcher"
 import BubbleList from "~/ui/BubbleList"
 import BubbleNode from "~/ui/BubbleNode"
 import NameView from "~/views/NameView"
+
 export type Props = {
     uuid: UUID
 }
+
 const NodesEditor: FC<Props> = ({ uuid }) => {
     const { data } = useSWR<Image & { uuid: UUID }>(`/api/images/_/${encodeURIComponent(uuid)}`, fetchJSON)
     if (!data) {
@@ -35,7 +37,9 @@ const NodesEditor: FC<Props> = ({ uuid }) => {
         </section>
     )
 }
+
 export default NodesEditor
+
 const LineageEditor: FC<{
     image: Image & { uuid: UUID }
     nodes: ReadonlyArray<Node & { uuid: UUID }>

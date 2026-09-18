@@ -1,6 +1,7 @@
 import { createClient, type VercelKV } from "@vercel/kv"
 
 let readClient: VercelKV | null = null
+
 let writeClient: VercelKV | null = null
 
 export const isKvReadConfigured = (): boolean =>

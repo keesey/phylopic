@@ -5,9 +5,11 @@ import { ICON_ARROW_LEFT } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
+
 export type Props = {
     children?: ReactNode
 }
+
 const ErrorState: FC<Props> = ({ children }) => {
     const router = useRouter()
     const handleUserButtonClick = useCallback(() => {
@@ -27,4 +29,5 @@ const ErrorState: FC<Props> = ({ children }) => {
         </Dialogue>
     )
 }
+
 export default ErrorState

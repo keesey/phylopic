@@ -4,9 +4,11 @@ import type { PGClientProvider } from "../../interfaces/PGClientProvider"
 import { getFields } from "./fields/getFields"
 import type { IDField } from "./fields/IDField"
 import type { ReadField } from "./fields/ReadField"
+
 export type WhereField = IDField & {
     operator?: "=" | "<" | ">" | "<=" | ">=" | "!-" | "~" | "~*" | "!~" | "!~*" | "~~" | "~~*" | "!~~" | "!~~*"
 }
+
 export class PGLister<TValue, TIdentifier> implements Listable<TValue & Readonly<TIdentifier>, number> {
     constructor(
         protected provider: PGClientProvider,

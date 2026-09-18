@@ -5,6 +5,7 @@ import type { Identifier } from "../types/Identifier"
 import { isAuthority } from "./isAuthority"
 import { isNamespace } from "./isNamespace"
 import { isObjectID } from "./isObjectID"
+
 export const isIdentifier: FaultDetector<Identifier> = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

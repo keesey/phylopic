@@ -4,6 +4,7 @@ import { isHash, ValidationError, ValidationFaultCollector } from "@phylopic/uti
 import type { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import SourceClient from "~/source/SourceClient"
+
 const SUBMISSION_KEYS: ReadonlyArray<keyof Submission> = [
     "attribution",
     "contributor",
@@ -14,6 +15,7 @@ const SUBMISSION_KEYS: ReadonlyArray<keyof Submission> = [
     "sponsor",
     "status",
 ]
+
 const index: NextApiHandler<Submission> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -75,4 +77,5 @@ const index: NextApiHandler<Submission> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

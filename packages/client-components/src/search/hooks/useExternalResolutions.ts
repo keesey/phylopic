@@ -4,6 +4,7 @@ import { useContext, useMemo } from "react"
 import { SearchContext } from "../context"
 import type { ExternalResolution } from "../models/ExternalResolution"
 import { getSortIndex } from "../utils/getSortIndex"
+
 const createResolutionComparator = (text: string) => (a: ExternalResolution, b: ExternalResolution) => {
     if (a === b) {
         return 0
@@ -15,6 +16,7 @@ const createResolutionComparator = (text: string) => (a: ExternalResolution, b: 
         compareStrings(a.uuid, b.uuid)
     )
 }
+
 export const useExternalResolutions = (maxResults = Infinity) => {
     const [state] = useContext(SearchContext) ?? []
     const nodeResultUUIDs = useMemo(

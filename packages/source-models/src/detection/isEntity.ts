@@ -1,6 +1,7 @@
 import type { ValidationFaultCollector } from "@phylopic/utils"
 import { isObject, isUUID } from "@phylopic/utils"
 import type { Entity } from "../types/Entity"
+
 export const isEntity = <T>(
     x: unknown,
     isValue: (x: unknown, faultCollector?: ValidationFaultCollector) => x is T,

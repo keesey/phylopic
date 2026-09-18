@@ -6,6 +6,7 @@ import getBearerJWT from "~/auth/http/getBearerJWT"
 import issueJWT from "~/auth/jwt/issueJWT"
 import verifyJWT from "~/auth/jwt/verifyJWT"
 import getTTLFromBody from "~/auth/ttl/getTTLFromBody"
+
 const handlePost = async (authorization: string | undefined, ttl: number): Promise<JWT> => {
     const now = new Date()
     const token = getBearerJWT(authorization)
@@ -23,6 +24,7 @@ const handlePost = async (authorization: string | undefined, ttl: number): Promi
     }
     return await issueJWT(uuid, ttl, now)
 }
+
 const index: NextApiHandler<JWT> = async (req, res) => {
     try {
         if (req.method === "OPTIONS") {
@@ -42,4 +44,5 @@ const index: NextApiHandler<JWT> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

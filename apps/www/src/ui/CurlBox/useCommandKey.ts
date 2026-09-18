@@ -1,6 +1,7 @@
 import type { AxiosRequestConfig, Method } from "axios"
 import { useMemo } from "react"
 import type { CurlOptions } from "./CurlOptions"
+
 const useCommandKey = (url: string, options?: CurlOptions): AxiosRequestConfig => {
     return useMemo(() => {
         let method: Method = "GET"
@@ -17,4 +18,5 @@ const useCommandKey = (url: string, options?: CurlOptions): AxiosRequestConfig =
         return config
     }, [options?.data, options?.headers, options?.location, url])
 }
+
 export default useCommandKey

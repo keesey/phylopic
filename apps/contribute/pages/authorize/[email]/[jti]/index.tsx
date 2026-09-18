@@ -18,10 +18,12 @@ import fetchJWT from "~/fetchers/fetchJWT"
 import PageLayout from "~/pages/PageLayout"
 import ErrorState from "~/screens/ErrorState"
 import LoadingState from "~/screens/LoadingState"
+
 export interface Props {
     email: EmailAddress
     jti: UUID
 }
+
 const Page: NextPage<Props> = ({ email, jti }) => (
     <PageLayout
         seo={{
@@ -32,7 +34,9 @@ const Page: NextPage<Props> = ({ email, jti }) => (
         <Content email={email} jti={jti} />
     </PageLayout>
 )
+
 export default Page
+
 const getAuthorizeErrorContent = (error: unknown): ReactNode => {
     const status = axios.isAxiosError(error) ? error.response?.status : undefined
     switch (status) {
@@ -73,6 +77,7 @@ const getAuthorizeErrorContent = (error: unknown): ReactNode => {
             )
     }
 }
+
 const Content: FC<Props> = ({ email, jti }) => {
     const [, setToken] = useContext(AuthContext) ?? []
     const url = useMemo(
@@ -98,6 +103,7 @@ const Content: FC<Props> = ({ email, jti }) => {
     }
     return <LoadingState>Authorizing…</LoadingState>
 }
+
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const { email, jti } = context.params ?? {}
     const faultCollector = new ValidationFaultCollector()

@@ -1,5 +1,6 @@
 import type { Deletable, ImageFile } from "@phylopic/source-client"
 import type { NextApiRequest, NextApiResponse } from "next"
+
 const handleWithImageFileDeletor = async <T>(
     req: NextApiRequest,
     res: NextApiResponse<Buffer>,
@@ -30,4 +31,5 @@ const handleWithImageFileDeletor = async <T>(
         }
     }
 }
+
 export default handleWithImageFileDeletor

@@ -1,4 +1,5 @@
 const MAX_TIMEOUT = 2147483647
+
 class ChunkedTimeout {
     private handle: NodeJS.Timeout | undefined
     constructor(
@@ -27,6 +28,7 @@ class ChunkedTimeout {
         }
     }
 }
+
 export const setChunkedTimeout = (callback: () => void, ms: number) => {
     if (ms <= 0) {
         callback()

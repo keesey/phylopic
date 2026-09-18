@@ -6,9 +6,11 @@ import type { TTL } from "~/ui/TTLSelector/TTL"
 import TTLView from "~/ui/TTLView"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+
 export type Props = {
     ttl: TTL
 }
+
 const CheckEmail: FC<Props> = ({ ttl }) => (
     <Dialogue>
         <Speech mode="system">
@@ -25,4 +27,5 @@ const CheckEmail: FC<Props> = ({ ttl }) => (
         </UserOptions>
     </Dialogue>
 )
+
 export default CheckEmail

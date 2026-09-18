@@ -7,6 +7,7 @@ import type { BreadcrumbItem } from "../Breadcrumbs"
 import Collapsed from "./Collapsed"
 import Expanded from "./Expanded"
 import Static from "./Static"
+
 export interface Props {
     afterItems: readonly BreadcrumbItem[]
     beforeItems: readonly BreadcrumbItem[]
@@ -34,4 +35,5 @@ const ExpandableLineageBreadcrumbs: FC<Props> = ({ afterItems, beforeItems, uuid
         </PaginationContainer>
     )
 }
+
 export default ExpandableLineageBreadcrumbs

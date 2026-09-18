@@ -4,6 +4,7 @@ import type { Link } from "./Link"
 import type { Links } from "./Links"
 import type { MediaLink } from "./MediaLink"
 import type { TitledLink } from "./TitledLink"
+
 export interface ImageLinks extends Links<TitledLink> {
     readonly contributor: TitledLink
     readonly generalNode: TitledLink | null
@@ -16,6 +17,7 @@ export interface ImageLinks extends Links<TitledLink> {
     readonly thumbnailFiles: readonly MediaLink<URL, RasterMediaType>[]
     readonly vectorFile: MediaLink<URL, VectorMediaType>
 }
+
 export interface Image extends Entity<ImageLinks> {
     readonly attribution: string | null
     readonly modified: ISOTimestamp

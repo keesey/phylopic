@@ -3,11 +3,13 @@ import type { Reducer } from "react"
 import type { Action } from "./Action"
 import DEFAULT_COLLECTION_NAME from "./DEFAULT_COLLECTION_NAME"
 import type { State } from "./State"
+
 const cleanEntities = (entities: State["entities"], collections: State["collections"]): State["entities"] => {
     return Object.fromEntries(
         Object.entries(entities).filter(([uuid]) => Object.values(collections).some(uuids => uuids.has(uuid))),
     )
 }
+
 const reducer: Reducer<State, Action> = (prevState, action) => {
     switch (action.type) {
         case "ADD_COLLECTION": {
@@ -124,4 +126,5 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
         }
     }
 }
+
 export default reducer

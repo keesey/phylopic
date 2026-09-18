@@ -6,6 +6,7 @@ import { SWRConfig } from "swr"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import SubmissionView from "~/views/SubmissionView"
+
 const Page: NextPage = () => {
     return (
         <SWRConfig>
@@ -39,4 +40,5 @@ const Page: NextPage = () => {
         </SWRConfig>
     )
 }
+
 export default Page

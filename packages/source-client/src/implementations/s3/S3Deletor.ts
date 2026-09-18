@@ -6,6 +6,7 @@ import { copyToTrash } from "./methods/copyToTrash"
 import { deleteObject } from "./methods/deleteObject"
 import { exists } from "./methods/exists"
 import { S3Reader } from "./S3Reader"
+
 export class S3Deletor<T> extends S3Reader<T> implements Deletable<T> {
     constructor(
         provider: S3ClientProvider,

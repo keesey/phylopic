@@ -5,7 +5,6 @@ describe("isHash", () => {
     it("accepts a 64-character SHA-256 hex digest", () => {
         expect(isHash("a".repeat(64))).toBe(true)
     })
-
     it("rejects empty, short, and non-hex strings", () => {
         expect(isHash("")).toBe(false)
         expect(isHash("a")).toBe(false)

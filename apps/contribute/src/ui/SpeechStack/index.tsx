@@ -1,12 +1,14 @@
 import clsx from "clsx"
 import type { FC, ReactNode } from "react"
 import styles from "./index.module.scss"
+
 export type Props = {
     children: ReactNode
     collapsible?: boolean
     compact?: boolean
     fullWidth?: boolean
 }
+
 const SpeechStack: FC<Props> = ({ children, collapsible, compact, fullWidth }) => {
     return (
         <section
@@ -21,4 +23,5 @@ const SpeechStack: FC<Props> = ({ children, collapsible, compact, fullWidth }) =
         </section>
     )
 }
+
 export default SpeechStack

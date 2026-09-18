@@ -14,10 +14,12 @@ import useVectorizedImageSource from "../hooks/useVectorizedImageSource"
 import ImageBox from "./ImageBox"
 import type { ReviewResult } from "./ReviewResult"
 import styles from "./index.module.scss"
+
 export type Props = FileResult & {
     onCancel?: () => void
     onComplete?: (result: ReviewResult) => void
 }
+
 const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, source }) => {
     const isVector = useFileIsVector(file)
     const vectorized = useVectorization(buffer, !isVector)
@@ -125,4 +127,5 @@ const ImageReview: FC<Props> = ({ buffer, file, onCancel, onComplete, size, sour
         </section>
     )
 }
+
 export default ImageReview

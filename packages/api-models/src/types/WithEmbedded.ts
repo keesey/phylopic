@@ -1,4 +1,5 @@
 import type { Links } from "./Links"
+
 export type WithEmbedded<
     TEntity extends { readonly _links: TLinks },
     TLinks extends Links,

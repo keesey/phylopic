@@ -23,7 +23,9 @@ import type { S3ClientService } from "../services/S3ClientService"
 import QueryConfigBuilder from "../sql/QueryConfigBuilder"
 import validate from "../validation/validate"
 import type { Operation } from "./Operation"
+
 type GetContributorsParameters = DataRequestHeaders & ContributorListParameters
+
 type GetContributorsService = PgClientService & S3ClientService
 
 const DEFAULT_TITLE = "[Anonymous]"

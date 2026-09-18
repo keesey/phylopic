@@ -3,6 +3,7 @@ import type { Contributor } from "@phylopic/source-models"
 import type { UUID } from "@phylopic/utils"
 import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Page<Contributor & { uuid: UUID }, number> | number> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -15,4 +16,5 @@ const index: NextApiHandler<Page<Contributor & { uuid: UUID }, number> | number>
     }
     res.end()
 }
+
 export default index

@@ -1,4 +1,5 @@
 import type { UUID } from "@phylopic/utils"
+
 export type QuickLinkNode = Readonly<
     {
         slug: string

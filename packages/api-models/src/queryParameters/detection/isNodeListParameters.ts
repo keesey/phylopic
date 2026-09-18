@@ -4,6 +4,7 @@ import { NODE_EMBEDDED_PARAMETERS } from "../constants/NODE_EMBEDDED_PARAMETERS"
 import type { NodeListParameters } from "../types/NodeListParameters"
 import { hasOnlyOne } from "./hasOnlyOne"
 import { isListParameters } from "./isListParameters"
+
 export const isNodeListParameters = (x: unknown, faultCollector?: ValidationFaultCollector): x is NodeListParameters =>
     isListParameters<NodeEmbedded>(NODE_EMBEDDED_PARAMETERS)(x, faultCollector) &&
     isUndefinedOr(isUUIDish)((x as NodeListParameters).filter_collection, faultCollector?.sub("filter_collection")) &&

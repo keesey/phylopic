@@ -4,8 +4,11 @@ import { type FC, Suspense } from "react"
 import useAuthorized from "~/auth/hooks/useAuthorized"
 import PageLayout from "~/pages/PageLayout"
 import LoadingState from "~/screens/LoadingState"
+
 const ConfirmLogout = dynamic(() => import("~/screens/ConfirmLogout"), { ssr: false })
+
 const Farewell = dynamic(() => import("~/screens/Farewell"), { ssr: false })
+
 const Page: NextPage = () => (
     <PageLayout
         seo={{
@@ -16,7 +19,9 @@ const Page: NextPage = () => (
         <Content />
     </PageLayout>
 )
+
 export default Page
+
 const Content: FC = () => {
     const authorized = useAuthorized()
     if (authorized) {

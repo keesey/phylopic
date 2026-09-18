@@ -2,11 +2,13 @@ import clsx from "clsx"
 import type { FC } from "react"
 import type { LicenseFilterType } from "~/models/LicenseFilterType"
 import styles from "./index.module.scss"
+
 export interface Props {
     onChange?: (value: LicenseFilterType) => void
     pending?: boolean
     value: LicenseFilterType
 }
+
 const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
     return (
         <form className={clsx(styles.main, pending && styles.pending)}>
@@ -96,4 +98,5 @@ const LicenseFilterView: FC<Props> = ({ onChange, pending, value }) => {
         </form>
     )
 }
+
 export default LicenseFilterView

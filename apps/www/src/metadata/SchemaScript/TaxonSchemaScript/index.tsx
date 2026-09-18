@@ -10,6 +10,7 @@ import SchemaScript from ".."
 export type Props = {
     node: Node
 }
+
 const TaxonSchemaScript: FC<Props> = ({ node }) => {
     const object = useMemo<WithContext<Taxon>>(() => {
         const name = stringifyNomen(node.names[0])
@@ -46,4 +47,5 @@ const TaxonSchemaScript: FC<Props> = ({ node }) => {
     }, [node])
     return <SchemaScript id="Taxon" object={object} />
 }
+
 export default TaxonSchemaScript

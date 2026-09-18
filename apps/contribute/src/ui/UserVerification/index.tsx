@@ -3,6 +3,7 @@ import Speech from "~/ui/Speech"
 import UserButton from "~/ui/UserButton"
 import UserOptions from "~/ui/UserOptions"
 import { ICON_CHECK, ICON_X } from "../ICON_SYMBOLS"
+
 export type Props = {
     affirmed: boolean | null
     affirmation: ReactNode
@@ -10,6 +11,7 @@ export type Props = {
     onAffirm: () => void
     onDeny: () => void
 }
+
 const UserVerification: FC<Props> = ({ affirmed, affirmation, denial, onAffirm, onDeny }) => {
     const respond = useCallback(
         (value: boolean) => {
@@ -35,4 +37,5 @@ const UserVerification: FC<Props> = ({ affirmed, affirmation, denial, onAffirm, 
         </Speech>
     )
 }
+
 export default UserVerification

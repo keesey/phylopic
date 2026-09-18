@@ -9,6 +9,7 @@ import SchemaScript from ".."
 export type Props = {
     image: Image
 }
+
 const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
     const object = useMemo<WithContext<VisualArtwork>>(() => {
         const url = `${process.env.NEXT_PUBLIC_WWW_URL}${getImageHRef(image._links.self)}`
@@ -70,4 +71,5 @@ const VisualArtworkSchemaScript: FC<Props> = ({ image }) => {
     }, [image])
     return <SchemaScript id="VisualArtwork" object={object} />
 }
+
 export default VisualArtworkSchemaScript

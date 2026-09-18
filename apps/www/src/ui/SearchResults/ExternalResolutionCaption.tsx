@@ -3,9 +3,11 @@ import { parseNomen } from "parse-nomen"
 import { type FC, useMemo } from "react"
 import getShortNomen from "~/models/getShortNomen"
 import NomenView from "~/views/NomenView"
+
 export interface Props {
     value: ExternalResolution
 }
+
 const ExternalResolutionCaption: FC<Props> = ({ value }) => {
     const titleName = useMemo(() => parseNomen(value.title), [value.title])
     const shortTitleName = useMemo(() => getShortNomen(titleName), [titleName])
@@ -21,4 +23,5 @@ const ExternalResolutionCaption: FC<Props> = ({ value }) => {
         </>
     )
 }
+
 export default ExternalResolutionCaption

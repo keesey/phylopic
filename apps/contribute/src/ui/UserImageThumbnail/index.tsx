@@ -12,9 +12,11 @@ import useImage from "~/editing/useImage"
 import FileThumbnailView from "../FileThumbnailView"
 import NameView from "../NameView"
 import styles from "./index.module.scss"
+
 export type Props = {
     uuid: UUID
 }
+
 const UserImageThumbnail: FC<Props> = ({ uuid }) => {
     const apiFetcher = useAPIFetcher<ImageWithEmbedded>()
     const publishedSWR = useSWRImmutable(
@@ -43,7 +45,9 @@ const UserImageThumbnail: FC<Props> = ({ uuid }) => {
     }
     return null
 }
+
 export default UserImageThumbnail
+
 const Unpublished: FC<Props> = ({ uuid }) => {
     const image = useImage(uuid)
     const fetcher = useAuthorizedJSONFetcher<Node & { uuid: UUID }>()

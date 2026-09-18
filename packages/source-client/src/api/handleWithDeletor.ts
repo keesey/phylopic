@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import type { Deletable } from "../interfaces"
+
 export const handleWithDeletor = async <T>(req: NextApiRequest, res: NextApiResponse<T>, deletor: Deletable<T>) => {
     switch (req.method) {
         case "DELETE": {

@@ -5,6 +5,7 @@ import useCurrentCollection from "~/collections/hooks/useCurrentCollection"
 import useCurrentCollectionName from "~/collections/hooks/useCurrentCollectionName"
 import Icon from "~/ui/Icon"
 import styles from "./index.module.scss"
+
 const Closed: FC = () => {
     const collection = useCurrentCollection()
     const name = useCurrentCollectionName()
@@ -39,4 +40,5 @@ const Closed: FC = () => {
         </div>
     )
 }
+
 export default Closed

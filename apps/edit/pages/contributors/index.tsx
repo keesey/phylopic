@@ -6,6 +6,7 @@ import Link from "next/link"
 import type { FC } from "react"
 import Paginator from "~/pagination/Paginator"
 import Breadcrumbs from "~/ui/Breadcrumbs"
+
 const Page: NextPage = () => {
     return (
         <>
@@ -38,7 +39,9 @@ const Page: NextPage = () => {
         </>
     )
 }
+
 export default Page
+
 const ContributorView: FC<{ contributor: Contributor & { uuid: UUID } }> = ({ contributor }) => {
     return (
         <>

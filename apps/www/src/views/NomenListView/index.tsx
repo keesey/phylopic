@@ -2,11 +2,13 @@ import type { Nomen } from "@phylopic/utils"
 import type { FC } from "react"
 import BulletList from "~/ui/BulletList"
 import NomenView from "../NomenView"
+
 export interface Props {
     defaultText?: string
     short?: boolean
     value: readonly Nomen[]
 }
+
 const NomenListView: FC<Props> = ({ defaultText, short, value }) => {
     return (
         <BulletList inline>
@@ -18,4 +20,5 @@ const NomenListView: FC<Props> = ({ defaultText, short, value }) => {
         </BulletList>
     )
 }
+
 export default NomenListView

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { EMPTY_UUID } from "../constants"
 import { isUUID } from "./isUUID"
+
 describe("isUUID", () => {
     const test = (value: unknown, expected: boolean) => {
         it(`should determine that ${JSON.stringify(value)} is${

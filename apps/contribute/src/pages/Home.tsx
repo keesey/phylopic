@@ -14,18 +14,25 @@ import AccountDetails from "~/screens/AccountDetails"
 import ErrorState from "~/screens/ErrorState"
 import getTTL from "~/ui/TTLSelector/getTTL"
 import { DAY } from "~/ui/TTLSelector/TTL_VALUES"
+
 const LoadingState = dynamic(() => import("~/screens/LoadingState"), { ssr: false })
+
 const SignIn = dynamic(() => import("~/screens/SignIn"), { ssr: false })
+
 const AuthExpired = dynamic(() => import("~/screens/AuthExpired"), { ssr: false })
+
 const Welcome = dynamic(() => import("~/screens/Welcome"), { ssr: false })
+
 type PostSWRKey = {
     data: unknown
     url: string
 }
+
 const postJSON = async (key: PostSWRKey) => {
     await axios.post(key.url, key.data)
     return true
 }
+
 const Home: FC = () => {
     const authorized = useAuthorized()
     const [, setAuthToken] = useContext(AuthContext) ?? []
@@ -84,4 +91,5 @@ const Home: FC = () => {
     }
     return <Welcome />
 }
+
 export default Home

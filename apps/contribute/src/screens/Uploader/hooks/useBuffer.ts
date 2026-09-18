@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+
 const useBuffer = (file: File | undefined, enabled: boolean) => {
     const [pending, setPending] = useState(false)
     const [error, setError] = useState<Error | undefined>()
@@ -35,4 +36,5 @@ const useBuffer = (file: File | undefined, enabled: boolean) => {
     }, [enabled, file])
     return { data: buffer, error, pending }
 }
+
 export default useBuffer

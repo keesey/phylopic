@@ -4,6 +4,7 @@ import type { PGClientProvider } from "../interfaces"
 import { EXTERNAL_FIELDS } from "./pg/constants/EXTERNAL_FIELDS"
 import { EXTERNAL_TABLE } from "./pg/constants/EXTERNAL_TABLE"
 import { PGPatcher } from "./pg/PGPatcher"
+
 export class ExternalClient extends PGPatcher<
     External & { authority: Authority; namespace: Namespace; objectID: ObjectID }
 > {

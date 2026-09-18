@@ -5,9 +5,11 @@ import type { FC } from "react"
 import useSWR from "swr"
 import useModifiedPatcher from "~/swr/useModifiedPatcher"
 import LicenseURLEditor from "../LicenseURLEditor"
+
 export type Props = {
     uuid: UUID
 }
+
 const LicenseEditor: FC<Props> = ({ uuid }) => {
     const key = `/api/images/_/${encodeURIComponent(uuid)}`
     const response = useSWR<Image & { uuid: UUID }>(key, fetchJSON)
@@ -27,4 +29,5 @@ const LicenseEditor: FC<Props> = ({ uuid }) => {
         />
     )
 }
+
 export default LicenseEditor

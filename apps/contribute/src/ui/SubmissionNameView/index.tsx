@@ -2,10 +2,12 @@ import type { Submission } from "@phylopic/source-models"
 import type { FC } from "react"
 import NameRenderer from "~/screens/Assignment/NodeForm/NameRenderer"
 import IdentifierView from "../IdentifierView"
+
 export type Props = {
     mode?: "full" | "short"
     value: Pick<Submission, "identifier" | "newTaxonName">
 }
+
 const SubmissionNameView: FC<Props> = ({ mode, value }) => {
     if (!value.identifier) {
         return null
@@ -22,4 +24,5 @@ const SubmissionNameView: FC<Props> = ({ mode, value }) => {
     }
     return <IdentifierView value={value.identifier} short={mode === "short"} />
 }
+
 export default SubmissionNameView

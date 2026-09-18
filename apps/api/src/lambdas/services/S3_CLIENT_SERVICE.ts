@@ -1,5 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import type { S3ClientService } from "../../services/S3ClientService"
+
 const S3_CLIENT_SERVICE: S3ClientService = {
     createS3Client() {
         return new S3Client({})
@@ -8,4 +9,5 @@ const S3_CLIENT_SERVICE: S3ClientService = {
         client.destroy()
     },
 }
+
 export default S3_CLIENT_SERVICE

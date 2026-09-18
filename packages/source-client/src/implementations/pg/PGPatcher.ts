@@ -4,6 +4,7 @@ import type { EditField } from "./fields/EditField"
 import type { IDField } from "./fields/IDField"
 import { PGEditor } from "./PGEditor"
 import { prepareValue } from "./preparation/prepareValue"
+
 export class PGPatcher<T> extends PGEditor<T> implements Patchable<T> {
     constructor(
         provider: PGClientProvider,

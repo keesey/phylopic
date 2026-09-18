@@ -3,6 +3,7 @@ import type { NodeEmbedded } from "../../types/NodeWithEmbedded"
 import { NODE_EMBEDDED_PARAMETERS } from "../constants/NODE_EMBEDDED_PARAMETERS"
 import type { NodeLineageParameters } from "../types/NodeLineageParameters"
 import { isListParameters } from "./isListParameters"
+
 export const isNodeLineageParameters = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

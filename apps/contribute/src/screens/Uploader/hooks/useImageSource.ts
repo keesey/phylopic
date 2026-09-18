@@ -1,4 +1,5 @@
 import { useMemo } from "react"
+
 const useImageSource = (buffer: Buffer | undefined, type: string | undefined) => {
     return useMemo(() => {
         if (buffer && type) {
@@ -8,4 +9,5 @@ const useImageSource = (buffer: Buffer | undefined, type: string | undefined) =>
         }
     }, [buffer, type])
 }
+
 export default useImageSource

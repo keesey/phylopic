@@ -6,6 +6,7 @@ import { copyToTrash } from "./methods/copyToTrash"
 import { deleteObject } from "./methods/deleteObject"
 import { exists } from "./methods/exists"
 import { S3TaggingReader } from "./S3TaggingReader"
+
 export class S3TaggingDeletor<T extends Readonly<Record<string, string | null>>>
     extends S3TaggingReader<T>
     implements Deletable<T>

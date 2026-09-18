@@ -1,4 +1,5 @@
 import { GetParameterCommand, SSMClient } from "@aws-sdk/client-ssm"
+
 const getBuild = async () => {
     const ssmClient = new SSMClient({})
     let build: number
@@ -24,4 +25,5 @@ const getBuild = async () => {
     }
     return build
 }
+
 export default getBuild

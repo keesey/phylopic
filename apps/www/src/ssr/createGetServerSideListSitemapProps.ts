@@ -55,4 +55,5 @@ const createGetServerSideListSitemapProps =
             props: {},
         }
     }
+
 export default createGetServerSideListSitemapProps

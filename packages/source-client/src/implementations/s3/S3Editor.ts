@@ -3,6 +3,7 @@ import { S3_SERVER_SIDE_ENCRYPTION_AES256 } from "@phylopic/utils-aws"
 import type { Editable } from "../../interfaces/Editable"
 import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { S3Deletor } from "./S3Deletor"
+
 export class S3Editor<T> extends S3Deletor<T> implements Editable<T> {
     constructor(
         provider: S3ClientProvider,

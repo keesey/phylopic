@@ -6,6 +6,7 @@ export interface Props {
     readonly created?: ISOTimestamp
     readonly modified?: ISOTimestamp
 }
+
 const TimesView: FC<Props> = ({ modified, created }) => {
     if (!created && !modified) {
         return null
@@ -31,4 +32,5 @@ const TimesView: FC<Props> = ({ modified, created }) => {
         </dl>
     )
 }
+
 export default TimesView

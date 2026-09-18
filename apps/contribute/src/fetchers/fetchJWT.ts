@@ -1,6 +1,7 @@
 import type { JWT } from "@phylopic/source-models"
 import axios from "axios"
 import { decode } from "jsonwebtoken"
+
 const fetchJWT = async (key: string): Promise<JWT> => {
     const response = await axios.get<JWT>(key, {
         responseType: "text",
@@ -13,4 +14,5 @@ const fetchJWT = async (key: string): Promise<JWT> => {
     }
     return response.data
 }
+
 export default fetchJWT

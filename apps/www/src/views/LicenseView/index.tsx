@@ -2,10 +2,12 @@ import { useLicenseText } from "@phylopic/client-components"
 import type { LicenseURL } from "@phylopic/utils"
 import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
+
 export interface Props {
     short?: boolean
     value: LicenseURL
 }
+
 const LicenseView: FC<Props> = ({ value, short }) => {
     const text = useLicenseText(value, short)
     return (
@@ -14,4 +16,5 @@ const LicenseView: FC<Props> = ({ value, short }) => {
         </a>
     )
 }
+
 export default LicenseView

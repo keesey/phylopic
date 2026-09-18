@@ -2,6 +2,7 @@ import type { Tagging } from "@aws-sdk/client-s3"
 import type { Patchable } from "../../interfaces"
 import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { S3TaggingEditor } from "./S3TaggingEditor"
+
 export class S3TaggingPatcher<T extends Readonly<Record<string, string | null>>>
     extends S3TaggingEditor<T>
     implements Patchable<T>

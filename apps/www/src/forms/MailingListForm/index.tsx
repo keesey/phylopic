@@ -20,4 +20,5 @@ const MailingListForm: FC = () => {
         </form>
     )
 }
+
 export default MailingListForm

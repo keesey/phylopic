@@ -3,6 +3,7 @@ import type { Listable } from "../interfaces/Listable"
 import type { Page } from "../interfaces/Page"
 import type { PGClientProvider } from "../interfaces/PGClientProvider"
 import { EXTERNAL_TABLE } from "./pg/constants/EXTERNAL_TABLE"
+
 export class ExternalNamespaceLister implements Listable<Namespace, number> {
     constructor(
         protected readonly provider: PGClientProvider,

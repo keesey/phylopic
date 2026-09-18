@@ -9,9 +9,11 @@ import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
 import UserSubmissionThumbnail from "~/ui/UserSubmissionThumbnail"
+
 export type Props = {
     children: (total: number | undefined) => ReactNode
 }
+
 const Submissions: FC<Props> = ({ children }) => {
     const fetcher = useAuthorizedJSONFetcher<number>()
     const { data: total } = useSWR("/api/submissions?total=items", fetcher)
@@ -43,4 +45,5 @@ const Submissions: FC<Props> = ({ children }) => {
         </Dialogue>
     )
 }
+
 export default Submissions

@@ -1,8 +1,10 @@
 import type { FC } from "react"
 import type { TTL } from "../TTLSelector/TTL"
+
 export type Props = {
     value: TTL
 }
+
 const TTLView: FC<Props> = ({ value }) => {
     switch (value) {
         case "DAY": {
@@ -25,4 +27,5 @@ const TTLView: FC<Props> = ({ value }) => {
         }
     }
 }
+
 export default TTLView

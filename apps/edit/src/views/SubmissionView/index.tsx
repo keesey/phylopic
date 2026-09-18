@@ -7,6 +7,7 @@ import type { FC } from "react"
 import useSWR from "swr"
 import SubmissionNameView from "~/views/SubmissionNameView"
 import styles from "./index.module.scss"
+
 const SubmissionView: FC<{ hash: Hash }> = ({ hash }) => {
     const { data: submission, error } = useSWR<Submission>(`/api/submissions/_/${encodeURIComponent(hash)}`, fetchJSON)
     const { data: contributor } = useSWR<Contributor & { uuid: UUID }>(
@@ -43,4 +44,5 @@ const SubmissionView: FC<{ hash: Hash }> = ({ hash }) => {
         </tr>
     )
 }
+
 export default SubmissionView

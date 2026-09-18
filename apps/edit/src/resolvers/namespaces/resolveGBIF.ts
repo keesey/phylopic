@@ -5,7 +5,9 @@ import { randomUUID } from "crypto"
 import { parseNomen } from "parse-nomen"
 import type SourceClient from "~/source/SourceClient"
 import type { Resolver } from "../Resolver"
+
 export type GBIFRank = "species" | "genus" | "family" | "order" | "class" | "phylum" | "kingdom"
+
 export type GBIFNameUsage = Readonly<Partial<Record<GBIFRank, string>>> &
     Readonly<Partial<Record<`${GBIFRank}Key`, number>>> &
     Partial<
@@ -23,6 +25,7 @@ export type GBIFNameUsage = Readonly<Partial<Record<GBIFRank, string>>> &
             synonym: boolean
         }>
     >
+
 const resolveParent = async (
     client: SourceClient,
     lineage: readonly number[],
@@ -37,6 +40,7 @@ const resolveParent = async (
     }
     return resolveParent(client, lineage.slice(1))
 }
+
 const resolveItem = async (client: SourceClient, item: GBIFNameUsage, lineage: readonly number[]) => {
     const externalClient = client.external("gbif.org", "species", String(item.key))
     if (await externalClient.exists()) {
@@ -64,6 +68,7 @@ const resolveItem = async (client: SourceClient, item: GBIFNameUsage, lineage: r
     })
     return newNode
 }
+
 const resolveGBIF: Resolver = async (client, objectID) => {
     const result = await axios.get<GBIFNameUsage>(`https://api.gbif.org/v1/species/${encodeURIComponent(objectID)}`, {
         responseType: "json",
@@ -85,4 +90,5 @@ const resolveGBIF: Resolver = async (client, objectID) => {
     )
     return node
 }
+
 export default resolveGBIF

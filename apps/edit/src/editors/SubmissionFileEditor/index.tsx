@@ -7,9 +7,11 @@ import useSWR from "swr"
 import fetchObjectURLAndType from "~/fetchers/fetchObjectURLAndType"
 import getSubmissionFilename from "~/files/getSubmissionFilename"
 import styles from "./index.module.scss"
+
 export interface Props {
     hash: Hash
 }
+
 const SubmissionFileEditor: FC<Props> = ({ hash }) => {
     const submissionKey = `/api/submissions/_/${encodeURIComponent(hash)}`
     const { data: submission } = useSWR<Submission>(submissionKey, fetchJSON)
@@ -65,4 +67,5 @@ const SubmissionFileEditor: FC<Props> = ({ hash }) => {
         </figure>
     )
 }
+
 export default SubmissionFileEditor

@@ -5,6 +5,7 @@ import useAuthorizedRequest from "~/auth/hooks/useAuthorizedRequest"
 import useListCountInvalidator from "./useListCountInvalidator"
 import useListInvalidator from "./useListInvalidator"
 import useSubmissionSWR from "./useSubmissionSWR"
+
 const useSubmissionDeletor = (hash: Hash | undefined) => {
     const invalidateList = useListInvalidator("/api/submissions")
     const invalidateListCount = useListCountInvalidator("/api/submissions", -1)
@@ -22,4 +23,5 @@ const useSubmissionDeletor = (hash: Hash | undefined) => {
         }
     }, [invalidateList, invalidateListCount, mutate, request, token, hash])
 }
+
 export default useSubmissionDeletor

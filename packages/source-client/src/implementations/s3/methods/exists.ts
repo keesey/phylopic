@@ -1,5 +1,6 @@
 import { HeadObjectCommand, type S3Client } from "@aws-sdk/client-s3"
 import { isAWSError } from "@phylopic/utils-aws"
+
 export const exists = async (client: S3Client, Bucket: string, Key: string): Promise<boolean> => {
     try {
         const output = await client.send(

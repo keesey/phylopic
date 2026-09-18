@@ -1,6 +1,7 @@
 import { normalizeUUID } from "@phylopic/utils"
 import type { APIGatewayProxyEventPathParameters } from "aws-lambda"
 import getParameters from "./getParameters"
+
 const getUUID = (pathParameters: APIGatewayProxyEventPathParameters | null) => {
     const { uuid } = getParameters<{ uuid: string }>(pathParameters, ["uuid"])
     if (uuid) {
@@ -8,4 +9,5 @@ const getUUID = (pathParameters: APIGatewayProxyEventPathParameters | null) => {
     }
     return {}
 }
+
 export default getUUID

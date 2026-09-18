@@ -2,7 +2,9 @@ import type { External } from "@phylopic/source-models"
 import type { Authority, Namespace, ObjectID, UUID } from "@phylopic/utils"
 import type { Listable } from "../interfaces"
 import type { PGClientProvider } from "../interfaces/PGClientProvider"
+
 const EXTERNALS_PAGE_SIZE = 1024
+
 type INodeExternalsClient = Listable<
     External & { authority: Authority; namespace: Namespace; objectID: ObjectID },
     number
@@ -12,6 +14,7 @@ type INodeExternalsClient = Listable<
         namespace: Namespace,
     ) => Listable<External & { authority: Authority; namespace: Namespace; objectID: ObjectID }, number>
 }
+
 export class NodeExternalsClient implements INodeExternalsClient {
     constructor(
         protected provider: PGClientProvider,
@@ -45,6 +48,7 @@ export class NodeExternalsClient implements INodeExternalsClient {
         return Math.ceil((await this.totalItems()) / EXTERNALS_PAGE_SIZE)
     }
 }
+
 class NodeExternalsNamespaceClient implements Listable<
     External & { authority: Authority; namespace: Namespace; objectID: ObjectID },
     number

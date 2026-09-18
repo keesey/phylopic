@@ -7,6 +7,7 @@ export type PBDBStrataRecord = Readonly<{
     lag: number
     lth: string
 }>
+
 type PBDBStrataResponse = Readonly<{
     elapsed_time: number
     records: readonly PBDBStrataRecord[]

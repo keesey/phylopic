@@ -9,6 +9,7 @@ import NameView from "./NameView"
 export type Props = {
     external: External & { authority: Authority; namespace: Namespace; objectID: ObjectID }
 }
+
 const ExternalView: FC<Props> = ({ external }) => {
     const identifier = useMemo(
         () => getIdentifier(external.authority, external.namespace, external.objectID),
@@ -28,4 +29,5 @@ const ExternalView: FC<Props> = ({ external }) => {
         </span>
     )
 }
+
 export default ExternalView

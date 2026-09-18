@@ -10,7 +10,9 @@ import logoMastodon from "../../../public/logos/mastodon.svg"
 import logoPatreon from "../../../public/logos/patreon-white.svg"
 import CollectionsDrawer from "../CollectionsDrawer"
 import styles from "./index.module.scss"
+
 const YEAR = new Date().getFullYear()
+
 const SiteFooter: FC = () => (
     <footer className={styles.main}>
         <CollectionsDrawer />
@@ -107,4 +109,5 @@ const SiteFooter: FC = () => (
         </ul>
     </footer>
 )
+
 export default SiteFooter

@@ -8,9 +8,11 @@ import { type FC, useCallback, useMemo } from "react"
 import useSWR from "swr"
 import useDeletor from "~/swr/useDeletor"
 import styles from "./Controls.module.scss"
+
 export type Props = {
     hash: Hash
 }
+
 const Controls: FC<Props> = ({ hash }) => {
     const key = `/api/submissions/_/${encodeURIComponent(hash)}`
     const response = useSWR<Submission>(key, fetchJSON)
@@ -48,4 +50,5 @@ const Controls: FC<Props> = ({ hash }) => {
         </nav>
     )
 }
+
 export default Controls

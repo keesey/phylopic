@@ -3,6 +3,7 @@ import useSWR from "swr"
 import useAuthorizedJSONFetcher from "~/auth/hooks/useAuthorizedJSONFetcher"
 import { ICON_CHECK, ICON_ELLIPSIS } from "~/ui/ICON_SYMBOLS"
 import MenuLink from "../../MenuLink"
+
 const ViewMenu: FC = () => {
     const fetcher = useAuthorizedJSONFetcher<number>()
     const { data: numImages } = useSWR("/api/images?total=items", fetcher)
@@ -14,4 +15,5 @@ const ViewMenu: FC = () => {
         </>
     )
 }
+
 export default ViewMenu

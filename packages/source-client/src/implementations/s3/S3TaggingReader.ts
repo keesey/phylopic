@@ -2,6 +2,7 @@ import { GetObjectTaggingCommand, type Tagging } from "@aws-sdk/client-s3"
 import type { Readable } from "../../interfaces/Readable"
 import type { S3ClientProvider } from "../../interfaces/S3ClientProvider"
 import { exists } from "./methods/exists"
+
 export class S3TaggingReader<T extends Readonly<Record<string, string | null>>> implements Readable<T> {
     constructor(
         protected readonly provider: S3ClientProvider,

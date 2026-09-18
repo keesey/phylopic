@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { isNormalizedText } from "./isNormalizedText"
+
 describe("isNormalizedText", () => {
     const test = (value: unknown, expected: boolean) => {
         it(`should determine that ${JSON.stringify(value)} is${expected ? "" : " not"} normalized text.`, () => {

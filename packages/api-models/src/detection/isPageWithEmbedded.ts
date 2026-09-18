@@ -1,11 +1,13 @@
 import { isArray, isObject, isUndefinedOr, type FaultDetector, type ValidationFaultCollector } from "@phylopic/utils"
 import type { PageEmbedded, PageWithEmbedded } from "../types/PageWithEmbedded"
 import { isPage } from "./isPage"
+
 const isPageEmbedded =
     <TItem>(isItem: FaultDetector<TItem>): FaultDetector<PageEmbedded<TItem>> =>
     (x: unknown, faultCollector?: ValidationFaultCollector): x is PageEmbedded<TItem> =>
         isObject(x, faultCollector) &&
         isUndefinedOr(isArray(isItem))((x as PageEmbedded<TItem>).items, faultCollector?.sub("items"))
+
 export const isPageWithEmbedded =
     <TItem>(isItem: FaultDetector<TItem>): FaultDetector<PageWithEmbedded<TItem>> =>
     (x: unknown, faultCollector?: ValidationFaultCollector): x is PageWithEmbedded<TItem> =>

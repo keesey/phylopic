@@ -10,6 +10,7 @@ import {
 import { createSearch, EMPTY_UUID, normalizeUUID, type UUIDish } from "@phylopic/utils"
 import axios from "axios"
 import type { CollectionPermalinkData } from "../types/CollectionPermalinkData"
+
 const loadList = async <T>(
     endpoint: string,
     build: number,
@@ -33,6 +34,7 @@ const loadList = async <T>(
     }
     return items
 }
+
 const checkCollectionExistence = async (uuid: UUIDish): Promise<void> => {
     const collectionResponse = await axios.get<Collection>(
         `${process.env.NEXT_PUBLIC_API_URL}/collections/${encodeURIComponent(normalizeUUID(uuid))}`,
@@ -44,6 +46,7 @@ const checkCollectionExistence = async (uuid: UUIDish): Promise<void> => {
         throw new Error("Invalid collection.")
     }
 }
+
 const loadCollection = async (uuid: UUIDish, build: number): Promise<CollectionPermalinkData> => {
     if (uuid === EMPTY_UUID) {
         return {
@@ -67,4 +70,5 @@ const loadCollection = async (uuid: UUIDish, build: number): Promise<CollectionP
         uuid,
     }
 }
+
 export default loadCollection

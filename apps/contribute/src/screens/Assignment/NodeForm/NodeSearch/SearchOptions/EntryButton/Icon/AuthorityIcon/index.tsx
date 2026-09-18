@@ -2,11 +2,13 @@ import type { Authority } from "@phylopic/utils"
 import Image from "next/image"
 import type { FC } from "react"
 import styles from "./index.module.scss"
+
 type IconInfo = Readonly<{
     alt: string
     aspectRatio: number
     src: string
 }>
+
 const ICONS: Readonly<Record<Authority, IconInfo | undefined>> = {
     "eol.org": {
         alt: "Encyclopedia of Life",
@@ -29,9 +31,11 @@ const ICONS: Readonly<Record<Authority, IconInfo | undefined>> = {
         src: "/logos/paleobiodb.svg",
     },
 }
+
 export type Props = {
     authority: Authority
 }
+
 const AuthorityIcon: FC<Props> = ({ authority }) => {
     const info = ICONS[authority]
     if (!info) {
@@ -48,4 +52,5 @@ const AuthorityIcon: FC<Props> = ({ authority }) => {
         />
     )
 }
+
 export default AuthorityIcon

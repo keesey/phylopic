@@ -9,9 +9,11 @@ import SiteTitle from "../SiteTitle"
 import DropDownMenu from "./DropDownMenu"
 import styles from "./index.module.scss"
 import NavItem from "./NavItem"
+
 export type Props = {
     submissionHash?: Hash
 }
+
 const SiteNav: FC<Props> = ({ submissionHash }) => {
     const authorized = useAuthorized()
     const contributor = useContributor()
@@ -59,4 +61,5 @@ const SiteNav: FC<Props> = ({ submissionHash }) => {
         </>
     )
 }
+
 export default SiteNav

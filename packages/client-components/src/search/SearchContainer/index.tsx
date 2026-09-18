@@ -5,6 +5,7 @@ import { BuildContext } from "../../builds"
 import { SearchContext } from "../context"
 import type { State } from "../context/State"
 import { reducer } from "./reducer"
+
 const createInitialState = (text: string): State => ({
     externalMatches: [],
     externalResults: {},
@@ -16,10 +17,12 @@ const createInitialState = (text: string): State => ({
     resolvedNodes: {},
     text,
 })
+
 export interface SearchContainerProps {
     children?: ReactNode
     initialText?: string
 }
+
 export const SearchContainer: React.FC<SearchContainerProps> = ({ children, initialText = "" }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [prevBuild, setPrevBuild] = React.useState(build)

@@ -4,6 +4,7 @@ import { isImageMediaType, type UUID } from "@phylopic/utils"
 import { convertS3BodyToBuffer } from "@phylopic/utils-aws"
 import type { NextApiRequest, NextApiResponse } from "next"
 import getImageFilename from "~/files/getImageFilename"
+
 const handleWithImageFileEditor = async (
     req: NextApiRequest,
     res: NextApiResponse<Buffer>,
@@ -58,4 +59,5 @@ const handleWithImageFileEditor = async (
         }
     }
 }
+
 export default handleWithImageFileEditor

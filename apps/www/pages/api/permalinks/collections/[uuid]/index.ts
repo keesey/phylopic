@@ -66,4 +66,5 @@ const index: NextApiHandler = async (req, res) => {
         s3Client?.destroy()
     }
 }
+
 export default index

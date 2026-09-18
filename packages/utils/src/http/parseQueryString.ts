@@ -1,4 +1,5 @@
 import type { ParsedQuery } from "./Query"
+
 export const parseQueryString = <TQuery extends ParsedQuery = ParsedQuery>(query: string) =>
     query
         .split("&")

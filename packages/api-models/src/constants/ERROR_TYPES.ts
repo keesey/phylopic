@@ -1,4 +1,5 @@
 import type { ErrorType } from "../types/ErrorType"
+
 export const ERROR_TYPES: ReadonlySet<ErrorType> = new Set<ErrorType>([
     "ACCESS_DENIED",
     "API_CONFIGURATION_ERROR",

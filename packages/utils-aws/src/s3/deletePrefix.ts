@@ -1,4 +1,5 @@
 import { DeleteObjectsCommand, ListObjectsV2Command, type S3Client } from "@aws-sdk/client-s3"
+
 export const deletePrefix = async (client: S3Client, bucket: string, prefix: string) => {
     let continuationToken: string | undefined
     do {

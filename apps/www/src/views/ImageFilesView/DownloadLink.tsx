@@ -5,12 +5,15 @@ import customEvents from "~/analytics/customEvents"
 import getImageFileExtension from "~/files/getImageFileExtension"
 import DimensionView from "./DimensionView"
 import styles from "./DownloadLink.module.scss"
+
 export interface Props {
     filenamePrefix: string
     link: MediaLink
 }
+
 const getDimensionTitle = (value: number | undefined) =>
     typeof value === "number" && isFinite(value) ? value.toLocaleString("en") + " pixels" : "?"
+
 const DownLoadLink: FC<Props> = ({ filenamePrefix, link }) => {
     const [width, height] = useMemo(() => link.sizes.split("x", 2).map(parseFloat), [link.sizes])
     const filename = useMemo(
@@ -33,4 +36,5 @@ const DownLoadLink: FC<Props> = ({ filenamePrefix, link }) => {
         </a>
     )
 }
+
 export default DownLoadLink

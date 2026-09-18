@@ -5,6 +5,7 @@ import useAuthToken from "~/auth/hooks/useAuthToken"
 import useAuthorizedRequest from "~/auth/hooks/useAuthorizedRequest"
 import useListInvalidator from "./useListInvalidator"
 import useSubmissionSWR from "./useSubmissionSWR"
+
 const useSubmissionMutator = (hash: Hash | undefined) => {
     const invalidate = useListInvalidator("/api/submissions")
     const { data, mutate } = useSubmissionSWR(hash)
@@ -27,4 +28,5 @@ const useSubmissionMutator = (hash: Hash | undefined) => {
         [data, hash, invalidate, mutate, request, token],
     )
 }
+
 export default useSubmissionMutator

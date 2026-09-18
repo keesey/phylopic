@@ -8,9 +8,11 @@ import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { PBDB_URL } from "./PBDB_URL"
+
 export type PBDBAutocompleteProps = {
     limit?: number
 }
+
 type PBDBTaxonRecord = Readonly<{
     nam: string
     noc: string
@@ -18,10 +20,12 @@ type PBDBTaxonRecord = Readonly<{
     rnk: string
     typ: "txn"
 }>
+
 type PBDBResponse = Readonly<{
     elapsed_time: number
     records: readonly PBDBTaxonRecord[]
 }>
+
 const fetcher: Fetcher<Readonly<[readonly PBDBTaxonRecord[], string]>, [string, string]> = async ([url, name]) => {
     if (name.length < 2) {
         return [[], name]
@@ -29,6 +33,7 @@ const fetcher: Fetcher<Readonly<[readonly PBDBTaxonRecord[], string]>, [string, 
     const response = await fetchDataAndCheck<PBDBResponse>(url, { headers: JSON_API_HEADERS })
     return [response.data.records, name]
 }
+
 export const PBDBAutocomplete: React.FC<PBDBAutocompleteProps> = ({ limit = 10 }) => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
     const { text } = state ?? {}

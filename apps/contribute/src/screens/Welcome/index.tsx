@@ -8,6 +8,7 @@ import Greeting from "./Greeting"
 import Images from "./Images"
 import Prompt from "./Prompt"
 import Submissions from "./Submissions"
+
 const Welcome: FC = () => {
     const fetcher = useAuthorizedJSONFetcher<number>()
     const { data: numImages } = useSWR("/api/images?total=items", fetcher)
@@ -33,4 +34,5 @@ const Welcome: FC = () => {
         </Dialogue>
     )
 }
+
 export default Welcome

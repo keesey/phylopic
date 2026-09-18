@@ -2,6 +2,7 @@ import { stringifyNormalized } from "../../json/stringifyNormalized"
 import { stringifyNomen } from "../../nomina/stringifyNomen"
 import type { Nomen } from "../types/Nomen"
 import { normalizeNomen } from "./normalizeNomen"
+
 const compare = (a: Nomen, b: Nomen) => {
     if (a === b) {
         return 0
@@ -40,6 +41,7 @@ const compare = (a: Nomen, b: Nomen) => {
     }
     return 0
 }
+
 const createCanonicalNameComparator = (canonical: Nomen | undefined) => {
     const canonicalJSON = canonical ? stringifyNormalized(normalizeNomen(canonical)) : ""
     return (a: Nomen, b: Nomen) => {
@@ -57,23 +59,29 @@ const createCanonicalNameComparator = (canonical: Nomen | undefined) => {
         return compare(a, b)
     }
 }
+
 const isUncited = (nomen: Nomen) => nomen.length === 1 && nomen[0].class === "scientific"
+
 const isCited = (nomen: Nomen) => nomen.length >= 2 && nomen[0].class === "scientific" && nomen[1].class === "citation"
+
 const isUncitedSynonymOfNomen = (scientificText: string, nomen: Nomen) => {
     if (isCited(nomen)) {
         return nomen[0].text === scientificText
     }
     return false
 }
+
 const isUncitedSynonym = (nomen: Nomen, nomina: readonly Nomen[]) => {
     if (isUncited(nomen)) {
         return nomina.some(otherNomen => isUncitedSynonymOfNomen(nomen[0].text, otherNomen))
     }
     return false
 }
+
 const findCitedSynonyms = (scientificText: string, nomina: readonly Nomen[]) => {
     return nomina.filter(nomen => isCited(nomen) && nomen[0].text === scientificText)
 }
+
 export const normalizeNomina = (nomina: readonly Nomen[]) => {
     if (nomina.length <= 1) {
         return nomina

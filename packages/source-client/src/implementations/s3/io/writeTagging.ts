@@ -1,5 +1,6 @@
 import type { Tag, Tagging } from "@aws-sdk/client-s3"
 import { encodeTagValue } from "./encodeTagValue"
+
 export const writeTagging = <T extends Readonly<Record<string, string | null>>>(value: T): Tagging => {
     return {
         TagSet: Object.entries(value)

@@ -4,6 +4,7 @@ import { normalizeUUID, type UUID, ValidationError, ValidationFaultCollector } f
 import { randomUUID } from "crypto"
 import type { NextApiHandler } from "next"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<(Node & { uuid: UUID }) | Page<Node & { uuid: UUID }, number> | number> = async (
     req,
     res,
@@ -43,4 +44,5 @@ const index: NextApiHandler<(Node & { uuid: UUID }) | Page<Node & { uuid: UUID }
     }
     res.end()
 }
+
 export default index

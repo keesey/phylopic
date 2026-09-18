@@ -10,7 +10,9 @@ import TTLSelector from "../TTLSelector"
 import type { TTL } from "../TTLSelector/TTL"
 import { TTL_VALUES } from "../TTLSelector/TTL_VALUES"
 import styles from "./index.module.scss"
+
 const MAXIMUM_TTL = 12 * 60 * 60 * 1000
+
 const AuthExpirationCountdown: FC = () => {
     const [dismissed, setDismissed] = useState(false)
     const [pending, setPending] = useState(false)
@@ -75,7 +77,9 @@ const AuthExpirationCountdown: FC = () => {
         </div>
     )
 }
+
 export default AuthExpirationCountdown
+
 const Duration: FC<{ value: number }> = ({ value }) => {
     if (value > 60 * 60 * 1000) {
         const hours = Math.floor(value / (60 * 60 * 1000))

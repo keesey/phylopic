@@ -43,7 +43,6 @@ const FundraiserBanner: FC = () => {
             exceeded ? "Click here to donate more!" : "Click here to help us reach the goal!",
             "link",
         )
-
     return (
         <a
             aria-label={exceeded ? "Donate to PhyloPic" : "Help PhyloPic reach its fundraising goal"}

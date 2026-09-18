@@ -2,11 +2,13 @@ import { type FC, useMemo } from "react"
 import NomenView from "~/views/NomenView"
 import Breadcrumbs, { type BreadcrumbItem } from "../../Breadcrumbs"
 import styles from "./index.module.scss"
+
 export interface Props {
     afterItems: readonly BreadcrumbItem[]
     beforeItems: readonly BreadcrumbItem[]
     onClick: () => void
 }
+
 const Collapsed: FC<Props> = ({ afterItems, beforeItems, onClick }) => {
     const items = useMemo<readonly BreadcrumbItem[]>(
         () => [
@@ -28,4 +30,5 @@ const Collapsed: FC<Props> = ({ afterItems, beforeItems, onClick }) => {
     )
     return <Breadcrumbs items={items} />
 }
+
 export default Collapsed

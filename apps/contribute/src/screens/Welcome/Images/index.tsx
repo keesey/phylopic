@@ -6,6 +6,7 @@ import NumberAsWords from "~/ui/NumberAsWords"
 import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+
 const Images: FC = () => {
     const fetcher = useAuthorizedJSONFetcher<number>()
     const { data: numImages } = useSWR("/api/images?total=items", fetcher)
@@ -39,4 +40,5 @@ const Images: FC = () => {
         </>
     )
 }
+
 export default Images

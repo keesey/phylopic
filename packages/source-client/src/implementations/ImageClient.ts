@@ -12,6 +12,7 @@ import { SOURCE_IMAGES_BUCKET_NAME } from "./s3/constants/SOURCE_IMAGES_BUCKET_N
 import { readImageFile } from "./s3/io/readImageFile"
 import { writeImageFile } from "./s3/io/writeImageFile"
 import { S3Editor } from "./s3/S3Editor"
+
 export class ImageClient extends PGPatcher<Image & { uuid: UUID }> implements ReturnType<SourceClient["image"]> {
     constructor(
         protected readonly provider: PGClientProvider & S3ClientProvider,

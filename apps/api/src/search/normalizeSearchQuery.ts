@@ -1,6 +1,7 @@
 import { normalizeQuery } from "@phylopic/api-models"
 import APIError from "../errors/APIError"
 import MIN_QUERY_LENGTH from "./MIN_QUERY_LENGTH"
+
 const normalizeSearchQuery = (query: string) => {
     query = normalizeQuery(query)
     if (query.length < MIN_QUERY_LENGTH) {
@@ -17,4 +18,5 @@ const normalizeSearchQuery = (query: string) => {
     }
     return query
 }
+
 export default normalizeSearchQuery

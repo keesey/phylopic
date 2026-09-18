@@ -60,4 +60,5 @@ const index: NextApiHandler<JWT> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

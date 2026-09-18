@@ -7,9 +7,11 @@ import { type FC, useMemo, useState } from "react"
 import useSWRImmutable from "swr/immutable"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
+
 export type Props = {
     imageUUID: UUID
 }
+
 const ContributorBanner: FC<Props> = ({ imageUUID }) => {
     const [dismissed, setDismissed] = useState(false)
     const fetcher = useAPIFetcher<Image>()
@@ -50,4 +52,5 @@ const ContributorBanner: FC<Props> = ({ imageUUID }) => {
         </div>
     )
 }
+
 export default ContributorBanner

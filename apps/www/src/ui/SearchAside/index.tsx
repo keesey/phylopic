@@ -2,8 +2,11 @@ import type { Nomen } from "@phylopic/utils"
 import type { FC } from "react"
 import NomenView from "~/views/NomenView"
 import Container from "../Container"
+
 const EXAMPLE_SCIENTIFIC_NAME: Nomen = [{ class: "scientific", text: "Homo sapiens" }]
+
 const EXAMPLE_VERNACULAR_NAME: Nomen = [{ class: "vernacular", text: "humans" }]
+
 const SearchAside: FC = () => {
     return (
         <aside>
@@ -18,4 +21,5 @@ const SearchAside: FC = () => {
         </aside>
     )
 }
+
 export default SearchAside

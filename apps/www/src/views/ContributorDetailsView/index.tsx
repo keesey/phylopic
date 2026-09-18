@@ -2,9 +2,11 @@ import type { Contributor } from "@phylopic/api-models"
 import { createSearch } from "@phylopic/utils"
 import { type FC, useMemo } from "react"
 import customEvents from "~/analytics/customEvents"
+
 export interface Props {
     value?: Contributor
 }
+
 const ContributorDetailsView: FC<Props> = ({ value }) => {
     const contactHRef = value?._links.contact?.href
     const emailAddress = useMemo(() => contactHRef?.replace(/^mailto:/, ""), [contactHRef])
@@ -41,4 +43,5 @@ const ContributorDetailsView: FC<Props> = ({ value }) => {
         </table>
     )
 }
+
 export default ContributorDetailsView

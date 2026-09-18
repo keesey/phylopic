@@ -12,10 +12,13 @@ import CompressedSWRConfig from "~/swr/CompressedSWRConfig"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import ImageListView from "~/views/ImageListView"
+
 export type ImageFilter = Pick<ImageListParameters, "filter_license_by" | "filter_license_nc" | "filter_license_sa">
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => {
     return (
         <CompressedSWRConfig fallback={fallback}>
@@ -51,5 +54,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => {
         </CompressedSWRConfig>
     )
 }
+
 export default PageComponent
+
 export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images")

@@ -4,6 +4,7 @@ import useAuthToken from "~/auth/hooks/useAuthToken"
 import useAuthorizedRequest from "~/auth/hooks/useAuthorizedRequest"
 import useContributorSWR from "./useContributorSWR"
 import useContributorUUID from "./useContributorUUID"
+
 const useContributorMutator = () => {
     const { data, mutate } = useContributorSWR()
     const request = useAuthorizedRequest()
@@ -36,4 +37,5 @@ const useContributorMutator = () => {
         [data, mutate, request, token, uuid],
     )
 }
+
 export default useContributorMutator

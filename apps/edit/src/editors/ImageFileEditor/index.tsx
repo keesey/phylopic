@@ -9,9 +9,11 @@ import useSWR from "swr"
 import fetchObjectURLAndType from "~/fetchers/fetchObjectURLAndType"
 import getImageFilename from "~/files/getImageFilename"
 import styles from "./index.module.scss"
+
 export interface Props {
     uuid: UUID
 }
+
 const ImageFileEditor: FC<Props> = ({ uuid }) => {
     const [pending, setPending] = useState(false)
     const imageKey = `/api/images/_/${encodeURIComponent(uuid)}`
@@ -92,4 +94,5 @@ const ImageFileEditor: FC<Props> = ({ uuid }) => {
         </figure>
     )
 }
+
 export default ImageFileEditor

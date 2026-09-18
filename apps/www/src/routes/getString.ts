@@ -7,4 +7,5 @@ const getString = (value: string | string[] | undefined) => {
     }
     return value[0]
 }
+
 export default getString

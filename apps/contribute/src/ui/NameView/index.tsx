@@ -1,12 +1,14 @@
 import type { Nomen } from "@phylopic/utils"
 import { type FC, Fragment, useMemo } from "react"
 import styles from "./index.module.scss"
+
 export interface Props {
     defaultText?: string
     illustrated?: boolean
     short?: boolean
     value?: Nomen
 }
+
 const NameView: FC<Props> = ({ defaultText = "", short, value }) => {
     const parts = useMemo(
         () =>
@@ -46,4 +48,5 @@ const NameView: FC<Props> = ({ defaultText = "", short, value }) => {
         </span>
     )
 }
+
 export default NameView

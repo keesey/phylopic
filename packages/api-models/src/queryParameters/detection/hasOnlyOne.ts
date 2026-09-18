@@ -1,4 +1,5 @@
 import { invalidate, isDefined, type ValidationFaultCollector } from "@phylopic/utils"
+
 export const hasOnlyOne = <T>(
     x: T,
     fields: ReadonlyArray<keyof T | ReadonlyArray<keyof T>>,

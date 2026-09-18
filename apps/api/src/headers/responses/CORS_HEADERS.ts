@@ -5,4 +5,5 @@ const CORS_HEADERS = {
     "access-control-expose-headers": "*,authorization,location",
     "access-control-max-age": "7200",
 }
+
 export default CORS_HEADERS

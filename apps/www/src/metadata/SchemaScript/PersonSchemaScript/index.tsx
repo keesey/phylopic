@@ -7,6 +7,7 @@ import SchemaScript from ".."
 export type Props = {
     contributor: Contributor
 }
+
 const PersonSchemaScript: FC<Props> = ({ contributor }) => {
     const object = useMemo<WithContext<Person>>(() => {
         const url = `${process.env.NEXT_PUBLIC_WWW_URL}${getContributorHRef(contributor._links.self)}`
@@ -22,4 +23,5 @@ const PersonSchemaScript: FC<Props> = ({ contributor }) => {
     }, [contributor])
     return <SchemaScript id="Person" object={object} />
 }
+
 export default PersonSchemaScript

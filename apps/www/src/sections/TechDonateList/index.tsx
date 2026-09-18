@@ -1,6 +1,7 @@
 import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import BulletList from "~/ui/BulletList"
+
 const TechDonateList: FC = () => (
     <BulletList>
         <li>
@@ -32,4 +33,5 @@ const TechDonateList: FC = () => (
         </li>
     </BulletList>
 )
+
 export default TechDonateList

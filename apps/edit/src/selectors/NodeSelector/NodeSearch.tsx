@@ -7,9 +7,11 @@ import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
 import useEntries from "./useEntries"
+
 export interface Props {
     onSelect: (node: Entity<Node> | undefined) => void
 }
+
 export const NodeSearch: FC<Props> = ({ onSelect }) => {
     const handleEntryClick = useCallback(
         async (entry: SearchEntry) => {
@@ -52,4 +54,5 @@ export const NodeSearch: FC<Props> = ({ onSelect }) => {
         </BubbleList>
     )
 }
+
 export default NodeSearch

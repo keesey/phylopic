@@ -10,6 +10,7 @@ import {
     PhyloPicNodeSearch,
 } from "@phylopic/client-components"
 import type { FC } from "react"
+
 const Search: FC = () => (
     <>
         <PhyloPicAutocomplete />
@@ -24,4 +25,5 @@ const Search: FC = () => (
         <EOLSearch />
     </>
 )
+
 export default Search

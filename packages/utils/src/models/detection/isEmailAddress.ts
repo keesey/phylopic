@@ -3,6 +3,7 @@ import type { FaultDetector } from "../../detection/FaultDetector"
 import { invalidate } from "../../validation/invalidate"
 import type { ValidationFaultCollector } from "../../validation/ValidationFaultCollector"
 import type { EmailAddress } from "../types/EmailAddress"
+
 export const isEmailAddress: FaultDetector<EmailAddress> = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

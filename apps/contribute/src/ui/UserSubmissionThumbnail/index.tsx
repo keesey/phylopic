@@ -7,9 +7,11 @@ import NameRenderer from "~/screens/Assignment/NodeForm/NameRenderer"
 import FileThumbnailView from "../FileThumbnailView"
 import IdentifierView from "../IdentifierView"
 import styles from "./index.module.scss"
+
 export type Props = {
     hash: Hash
 }
+
 const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const submittable = useMemo(
@@ -43,4 +45,5 @@ const UserSubmissionThumbnail: FC<Props> = ({ hash }) => {
         </div>
     )
 }
+
 export default UserSubmissionThumbnail

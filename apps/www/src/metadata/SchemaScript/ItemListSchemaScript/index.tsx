@@ -6,6 +6,7 @@ import SchemaScript from ".."
 export type Props = {
     urls: readonly URL[]
 }
+
 const ItemListSchemaScript: FC<Props> = ({ urls }) => {
     const object = useMemo<WithContext<ItemList>>(
         () => ({
@@ -21,4 +22,5 @@ const ItemListSchemaScript: FC<Props> = ({ urls }) => {
     )
     return <SchemaScript id="ItemList" object={object} />
 }
+
 export default ItemListSchemaScript

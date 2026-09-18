@@ -3,6 +3,7 @@ import { ICON_PLUS } from "~/ui/ICON_SYMBOLS"
 import Speech from "~/ui/Speech"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+
 const Prompt: FC = () => {
     return (
         <>
@@ -17,4 +18,5 @@ const Prompt: FC = () => {
         </>
     )
 }
+
 export default Prompt

@@ -1,4 +1,5 @@
 import { useMemo } from "react"
+
 const useImageTooSmall = (
     size: Readonly<[number, number]> | undefined,
     minLength: number,
@@ -13,4 +14,5 @@ const useImageTooSmall = (
         }
     }, [enabled, minArea, minLength, size])
 }
+
 export default useImageTooSmall

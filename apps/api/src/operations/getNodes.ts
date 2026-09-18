@@ -170,4 +170,5 @@ const getNodes: Operation<GetNodesParameters, GetNodesService> = async ({ accept
         service,
     })
 }
+
 export default getNodes

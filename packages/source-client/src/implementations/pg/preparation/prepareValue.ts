@@ -1,5 +1,6 @@
 import { prepareBoolean } from "./prepareBoolean"
 import { prepareJSON } from "./prepareJSON"
+
 export const prepareValue = (x: any) => {
     if (typeof x === "boolean") {
         return prepareBoolean(x)

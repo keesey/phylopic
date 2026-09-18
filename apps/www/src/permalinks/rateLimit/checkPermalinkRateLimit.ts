@@ -1,5 +1,7 @@
 const WINDOW_MS = 60 * 60 * 1000
+
 const IP_LIMIT = 30
+
 const COLLECTION_LIMIT = 10
 
 const buckets = new Map<string, { count: number; expiresAt: number }>()

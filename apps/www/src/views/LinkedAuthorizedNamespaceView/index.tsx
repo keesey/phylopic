@@ -1,10 +1,12 @@
 import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import AuthorizedNamespaceView from "../AuthorizedNamespaceView"
+
 export interface Props {
     short?: boolean
     value: string
 }
+
 const HREFS: Record<string, string> = {
     ["eol.org/pages"]: "https://www.eol.org/",
     ["gbif.org/species"]: "https://www.gbif.org/",
@@ -18,6 +20,7 @@ const HREFS: Record<string, string> = {
     ["phylopic.org/images"]: "/images",
     ["ubio.org/namebank"]: "http://www.ubio.org/?pagename=namebank",
 }
+
 const LinkedAuthorizedNamespaceView: FC<Props> = ({ value, short }) => {
     const href = HREFS[value]
     if (!href) {
@@ -33,4 +36,5 @@ const LinkedAuthorizedNamespaceView: FC<Props> = ({ value, short }) => {
         </a>
     )
 }
+
 export default LinkedAuthorizedNamespaceView

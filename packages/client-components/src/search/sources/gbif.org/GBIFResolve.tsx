@@ -12,6 +12,7 @@ import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { fetchNameUsage } from "./fetchNameUsage"
 import { GBIF_URL } from "./GBIF_URL"
 import type { GBIFNameUsage } from "./GBIFNameUsage"
+
 const GBIF_RANK_KEYS: ReadonlyArray<keyof GBIFNameUsage> = [
     "key",
     "speciesKey",
@@ -22,10 +23,12 @@ const GBIF_RANK_KEYS: ReadonlyArray<keyof GBIFNameUsage> = [
     "phylumKey",
     "kingdomKey",
 ]
+
 const fetchNode: Fetcher<NodeWithEmbedded, URL> = async url => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url, undefined, isNodeWithEmbedded)
     return response.data
 }
+
 const GBIFResolveObject: React.FC<{ id: number }> = ({ id }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
@@ -82,6 +85,7 @@ const GBIFResolveObject: React.FC<{ id: number }> = ({ id }) => {
     }, [direct.data, dispatch, id, indirect.data])
     return null
 }
+
 export const GBIFResolve: React.FC = () => {
     const [state] = React.useContext(SearchContext) ?? []
     const unresolvedIDs = React.useMemo(() => {

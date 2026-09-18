@@ -14,18 +14,26 @@ import {
 } from "react"
 import type { AgeResult } from "~/external/AgeResult"
 import PREDEFINED from "~/external/PREDEFINED"
+
 export type AgeEntry = Readonly<{
     ageResult: AgeResult | null
     uuid: UUID
 }>
+
 export type State = readonly AgeEntry[]
+
 export const AgesContext = createContext<{ dispatch: Dispatch<Action>; state: State } | undefined>(undefined)
+
 export type AgesProviderProps = PropsWithChildren<{
     nodes: readonly Pick<Node, "uuid">[]
 }>
+
 export type ResetAction = FSAWithPayload<"RESET", AgesProviderProps["nodes"]>
+
 export type SetAction = FSAWithPayload<"SET", AgeEntry>
+
 export type Action = ResetAction | SetAction
+
 export const AgesProvider: FC<AgesProviderProps> = ({ children, nodes }) => {
     const [state, dispatch] = useReducer<Reducer<State, Action>>(reducer, [])
     useEffect(() => {
@@ -33,6 +41,7 @@ export const AgesProvider: FC<AgesProviderProps> = ({ children, nodes }) => {
     }, [dispatch, nodes])
     return <AgesContext.Provider value={{ dispatch, state }}>{children}</AgesContext.Provider>
 }
+
 const reducer: Reducer<State, Action> = (prevState, action) => {
     switch (action.type) {
         case "RESET": {
@@ -55,6 +64,7 @@ const reducer: Reducer<State, Action> = (prevState, action) => {
         }
     }
 }
+
 export const useAgeResult = (uuid: UUID | undefined): AgeResult | null => {
     const { state } = useContext(AgesContext) ?? {}
     return useMemo<AgeResult | null>(() => {
@@ -91,6 +101,7 @@ export const useAgeResult = (uuid: UUID | undefined): AgeResult | null => {
         return existing
     }, [state, uuid])
 }
+
 export const useIsTerminal = (uuid: UUID | undefined) => {
     const { state } = useContext(AgesContext) ?? {}
     return Boolean(uuid && state?.[0]?.uuid === uuid)

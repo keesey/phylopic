@@ -23,6 +23,7 @@ import {
 import { type Arc, type Digraph, sources } from "simple-digraph"
 import getPhylogeny from "../models/getPhylogeny.js"
 import SourceClient from "../source/SourceClient.js"
+
 export type SourceData = Readonly<{
     build: number
     cladeImages: ReadonlyMap<UUID, ReadonlySet<UUID>>
@@ -38,9 +39,11 @@ export type SourceData = Readonly<{
     sortIndices: ReadonlyMap<UUID, number>
     verticesToNodeUUIDs: ReadonlyMap<number, UUID>
 }>
+
 export type Args = Readonly<{
     build: number
 }>
+
 type ProcessArgs = Args &
     Readonly<{
         client: ISourceClient
@@ -56,6 +59,7 @@ type ProcessArgs = Args &
         sortIndices: Map<UUID, number>
         verticesToNodeUUIDs: Map<number, UUID>
     }>
+
 const loadExternalObjects = async (
     authority: Authority,
     namespace: Namespace,
@@ -81,6 +85,7 @@ const loadExternalObjects = async (
     } while (pageIndex !== undefined)
     console.info(`Loaded ${total} external objects for ${authority}/${namespace}.`)
 }
+
 const loadExternalNamespaces = async (
     authority: Authority,
     args: Pick<ProcessArgs, "client" | "externals">,
@@ -101,6 +106,7 @@ const loadExternalNamespaces = async (
     } while (pageIndex !== undefined)
     console.info(`Loaded ${total} external namespace${total === 1 ? "" : "s"} for ${authority}.`)
 }
+
 const loadExternals = async (args: Pick<ProcessArgs, "client" | "externals">): Promise<void> => {
     console.info("Looking up externals...")
     const total = await args.client.externalAuthorities.totalItems()
@@ -119,6 +125,7 @@ const loadExternals = async (args: Pick<ProcessArgs, "client" | "externals">): P
     console.info(`Loaded ${total} external authorities.`)
     console.info(`Loaded ${args.externals.size} externals.`)
 }
+
 const loadImages = async (args: Pick<ProcessArgs, "client" | "images">): Promise<void> => {
     console.info("Looking up images...")
     const total = await args.client.images.totalItems()
@@ -136,6 +143,7 @@ const loadImages = async (args: Pick<ProcessArgs, "client" | "images">): Promise
     } while (pageIndex !== undefined)
     console.info(`Loaded ${args.images.size} images.`)
 }
+
 const loadImageFileMetadata = async (args: Pick<ProcessArgs, "client" | "filesModified">): Promise<void> => {
     console.info("Looking up image file metadata...")
     const total = await args.client.sourceImages.totalItems()
@@ -150,6 +158,7 @@ const loadImageFileMetadata = async (args: Pick<ProcessArgs, "client" | "filesMo
     } while (pageSpecifier !== undefined)
     console.info(`Loaded metadata for ${args.filesModified.size} image files.`)
 }
+
 const loadNodes = async (args: Pick<ProcessArgs, "client" | "nodes">): Promise<void> => {
     console.info("Looking up nodes...")
     const total = await args.client.nodes.totalItems()
@@ -167,6 +176,7 @@ const loadNodes = async (args: Pick<ProcessArgs, "client" | "nodes">): Promise<v
     } while (pageIndex !== undefined)
     console.info(`Loaded ${args.nodes.size} nodes.`)
 }
+
 const loadContributors = async (args: Pick<ProcessArgs, "client" | "contributors">): Promise<void> => {
     console.info("Looking up contributors...")
     const total = await args.client.contributors.totalItems()
@@ -184,6 +194,7 @@ const loadContributors = async (args: Pick<ProcessArgs, "client" | "contributors
     } while (pageIndex !== undefined)
     console.info(`Loaded ${args.contributors.size} contributors.`)
 }
+
 const getNodeUUIDsInLineage = (
     args: Pick<SourceData, "nodes">,
     imageUUID: UUID,
@@ -216,6 +227,7 @@ const getNodeUUIDsInLineage = (
     }
     return [specific]
 }
+
 const getImageNodeDerivedData = (
     args: Pick<SourceData, "images" | "nodes">,
 ): Pick<SourceData, "cladeImages" | "illustration"> => {
@@ -245,6 +257,7 @@ const getImageNodeDerivedData = (
     }
     return { cladeImages, illustration }
 }
+
 const processClade = (
     args: Pick<SourceData, "phylogeny" | "verticesToNodeUUIDs"> &
         Pick<ProcessArgs, "depths" | "sortIndices"> & { sizes: ReadonlyMap<number, number>; sortIndex: number },
@@ -266,6 +279,7 @@ const processClade = (
         .sort(([, aSize, aUUID], [, bSize, bUUID]) => aSize - bSize || compareStrings(aUUID, bUUID))
         .forEach(([vertex]) => processClade(args, vertex, depth + 1))
 }
+
 const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, vertex: number): number => {
     const arcs = [...phylogeny[1].values()].filter(([head]) => head === vertex)
     const size = arcs
@@ -274,6 +288,7 @@ const processCladeSizes = (sizes: Map<number, number>, phylogeny: Digraph, verte
     sizes.set(vertex, size)
     return size
 }
+
 const getPhylogenyDerivedData = (
     args: Pick<SourceData, "nodeUUIDsToVertices" | "phylogeny" | "verticesToNodeUUIDs">,
 ): Pick<SourceData, "depths" | "sortIndices"> => {
@@ -289,6 +304,7 @@ const getPhylogenyDerivedData = (
     processClade({ ...args, depths, sizes, sortIndices, sortIndex: 0 }, rootVertex, 0)
     return { depths, sortIndices }
 }
+
 const getSourceData = async (args: Args): Promise<SourceData> => {
     const client = new SourceClient()
     let result: SourceData
@@ -326,4 +342,5 @@ const getSourceData = async (args: Args): Promise<SourceData> => {
     }
     return result
 }
+
 export default getSourceData

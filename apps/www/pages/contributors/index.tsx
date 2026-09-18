@@ -14,9 +14,11 @@ import Board from "~/ui/Board"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
@@ -67,5 +69,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 export default PageComponent
+
 export const getStaticProps = createListStaticPropsGetter<Contributor>("/contributors")

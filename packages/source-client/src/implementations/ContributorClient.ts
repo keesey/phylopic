@@ -11,6 +11,7 @@ import { PGPatcher } from "./pg/PGPatcher"
 import { UPLOADS_BUCKET_NAME } from "./s3/constants/UPLOADS_BUCKET_NAME"
 import { readSubmission } from "./s3/readSubmission"
 import { S3TaggingLister } from "./s3/S3TaggingLister"
+
 export class ContributorClient
     extends PGPatcher<Contributor & { uuid: UUID }>
     implements ReturnType<SourceClient["contributor"]>

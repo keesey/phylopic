@@ -4,6 +4,7 @@ import { isUUIDv4, type UUID } from "@phylopic/utils"
 import type { NextApiHandler } from "next"
 import verifyAuthorization from "~/auth/http/verifyAuthorization"
 import SourceClient from "~/source/SourceClient"
+
 const index: NextApiHandler<Node & { uuid: UUID }> = async (req, res) => {
     let client: SourceClient | undefined
     try {
@@ -21,4 +22,5 @@ const index: NextApiHandler<Node & { uuid: UUID }> = async (req, res) => {
     }
     res.end()
 }
+
 export default index

@@ -10,10 +10,12 @@ import BubbleItem from "~/ui/BubbleItem"
 import BubbleList from "~/ui/BubbleList"
 import NameView from "~/views/NameView"
 import NameModal from "./NameModal"
+
 export interface Props {
     onSplit?: (name: Nomen) => void
     uuid: UUID
 }
+
 const NamesEditor: FC<Props> = ({ onSplit, uuid }) => {
     const key = `/api/nodes/_/${uuid}`
     const response = useSWR<Node & { uuid: UUID }>(key, fetchJSON)
@@ -142,4 +144,5 @@ const NamesEditor: FC<Props> = ({ onSplit, uuid }) => {
         </>
     )
 }
+
 export default NamesEditor

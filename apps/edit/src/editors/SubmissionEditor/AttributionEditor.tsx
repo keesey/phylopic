@@ -5,9 +5,11 @@ import type { FC } from "react"
 import useSWR from "swr"
 import TextEditor from "~/editors/TextEditor"
 import usePatcher from "~/swr/usePatcher"
+
 export type Props = {
     hash: Hash
 }
+
 const AttributionEditor: FC<Props> = ({ hash }) => {
     const key = `/api/submissions/_/${encodeURIComponent(hash)}`
     const response = useSWR<Submission>(key, fetchJSON)
@@ -25,4 +27,5 @@ const AttributionEditor: FC<Props> = ({ hash }) => {
         />
     )
 }
+
 export default AttributionEditor

@@ -1,4 +1,5 @@
 import type { ReadField } from "./ReadField"
+
 export type EditField<T> = ReadField<T> & {
     readonly insertable: boolean
     readonly type: string

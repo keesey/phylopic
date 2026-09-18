@@ -4,6 +4,7 @@ import Link from "next/link"
 import PageLayout from "~/pages/PageLayout"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import Container from "~/ui/Container"
+
 const Page: NextPage = () => (
     <PageLayout>
         <NextSeo noindex title="Incertae Sedis - PhyloPic" />
@@ -35,4 +36,5 @@ const Page: NextPage = () => (
         </Container>
     </PageLayout>
 )
+
 export default Page

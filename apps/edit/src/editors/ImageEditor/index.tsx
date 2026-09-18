@@ -8,9 +8,11 @@ import LicenseEditor from "./LicenseEditor"
 import ListedEditor from "./ListedEditor"
 import NodesEditor from "./NodesEditor"
 import SponsorEditor from "./SponsorEditor"
+
 export type Props = {
     uuid: UUID
 }
+
 const ImageEditor: FC<Props> = ({ uuid }) => {
     return (
         <section className={styles.main}>
@@ -44,4 +46,5 @@ const ImageEditor: FC<Props> = ({ uuid }) => {
         </section>
     )
 }
+
 export default ImageEditor

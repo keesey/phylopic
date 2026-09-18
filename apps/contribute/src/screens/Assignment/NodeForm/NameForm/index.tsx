@@ -3,11 +3,13 @@ import { type FC, useCallback, useContext } from "react"
 import UserTextForm, { type Props as UserTextFormProps } from "~/ui/UserTextForm"
 import NameRenderer from "../NameRenderer"
 import NameInput from "./NameInput"
+
 export type Props = Pick<UserTextFormProps, "editable" | "postfix" | "prefix"> & {
     onChange: (value: string) => void
     placeholder: string
     value: string
 }
+
 const NameForm: FC<Props> = ({ onChange, placeholder, value, ...formProps }) => {
     const [, dispatchSearch] = useContext(SearchContext) ?? [{}]
     const handleChange = useCallback(
@@ -23,4 +25,5 @@ const NameForm: FC<Props> = ({ onChange, placeholder, value, ...formProps }) => 
         </UserTextForm>
     )
 }
+
 export default NameForm

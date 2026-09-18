@@ -1,5 +1,6 @@
 const arrayBufferToString = (buffer: ArrayBufferLike | ArrayLike<number>) =>
     String.fromCharCode.apply(null, Array.from(new Uint8Array(buffer).values()))
+
 const fetchField = async (url: string): Promise<string | null> => {
     try {
         const response = await fetch(url)
@@ -15,4 +16,5 @@ const fetchField = async (url: string): Promise<string | null> => {
         throw e
     }
 }
+
 export default fetchField

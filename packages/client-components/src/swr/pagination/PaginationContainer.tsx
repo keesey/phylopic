@@ -12,6 +12,7 @@ import { BuildContext } from "../../builds"
 import { InfiniteScroll } from "../../controls"
 import { useAPIFetcher } from "../hooks"
 import { createPageKeyGetter } from "./createPageKeyGetter"
+
 export type PaginationContainerProps<T> = {
     autoLoad?: boolean
     children: (value: readonly T[], total: number, isLoading: boolean) => React.ReactNode
@@ -31,15 +32,18 @@ export type PaginationContainerProps<T> = {
         >
     }
 }
+
 const SWR_CONFIG = {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
 }
+
 const SWR_INFINITE_CONFIG = {
     ...SWR_CONFIG,
     revalidateFirstPage: false,
 }
+
 export const PaginationContainer: React.FC<PaginationContainerProps<any>> = ({
     autoLoad,
     children,

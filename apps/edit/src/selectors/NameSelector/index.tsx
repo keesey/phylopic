@@ -19,6 +19,7 @@ export type Props = Omit<
     onSelect: (value: Nomen) => void
     value?: Nomen
 }
+
 const NameSelector: FC<Props> = ({ onSelect, value, ...inputProps }) => {
     const [textValue, setTextValue] = useState("")
     const valueText = useMemo(() => value?.map(({ text }) => text).join(" "), [value])
@@ -56,4 +57,5 @@ const NameSelector: FC<Props> = ({ onSelect, value, ...inputProps }) => {
         />
     )
 }
+
 export default NameSelector

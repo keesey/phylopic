@@ -1,6 +1,7 @@
 import type { FC } from "react"
 import customEvents from "~/analytics/customEvents"
 import SiteTitle from "~/ui/SiteTitle"
+
 const EngineeringSection: FC = () => (
     <section>
         <h2>Software Engineering</h2>
@@ -33,4 +34,5 @@ const EngineeringSection: FC = () => (
         </p>
     </section>
 )
+
 export default EngineeringSection

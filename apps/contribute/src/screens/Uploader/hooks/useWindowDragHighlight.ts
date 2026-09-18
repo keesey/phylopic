@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+
 const useWindowDragHighlight = (active: boolean) => {
     const [value, setValue] = useState(false)
     useEffect(() => {
@@ -26,4 +27,5 @@ const useWindowDragHighlight = (active: boolean) => {
     }, [active])
     return value
 }
+
 export default useWindowDragHighlight

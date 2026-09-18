@@ -12,22 +12,27 @@ import {
     type UUID,
 } from "@phylopic/utils"
 import axios from "axios"
+
 interface OTOLTaxon {
     ott_id: number
     tax_sources: string[]
     unique_name: string
 }
+
 interface OTOLMatch {
     taxon: OTOLTaxon
 }
+
 interface OTOLMatchedNamesResult {
     matches: OTOLMatch[]
     name: string
 }
+
 interface OTOLMatchedNames {
     results: OTOLMatchedNamesResult[]
     unambiguous_names: string[]
 }
+
 const findContextObjectID = async (client: SourceClient, nodeUUID: UUID): Promise<ObjectID | undefined> => {
     const nodeClient = client.node(nodeUUID)
     const page = await nodeClient.externals.namespace("opentreeoflife.org", "contexts").page()
@@ -46,12 +51,14 @@ const findContextObjectID = async (client: SourceClient, nodeUUID: UUID): Promis
         }
     }
 }
+
 const AUTHORITY_ABBRS: Readonly<Record<string, Readonly<[string, string]>> | undefined> = {
     gbif: ["gbif.org", "species"],
     ncbi: ["ncbi.nlm.nih.gov", "taxid"],
     irmng: ["irmng.org", "taxname"],
     worms: ["marinespecies.org", "taxname"],
 }
+
 const getExternals = (
     taxon: OTOLTaxon,
     nodeUUID: UUID,
@@ -79,6 +86,7 @@ const getExternals = (
     }
     return result
 }
+
 const getScientificNames = (names: readonly Nomen[]) =>
     names.filter(isScientific).map(name =>
         name
@@ -86,6 +94,7 @@ const getScientificNames = (names: readonly Nomen[]) =>
             .map(part => part.text)
             .join(" "),
     )
+
 const autolinkOTOL = async (client: SourceClient): Promise<void> => {
     let nodes: Array<Node & { uuid: UUID }> = []
     for await (const node of iterateList(client.nodes)) {
@@ -146,4 +155,5 @@ const autolinkOTOL = async (client: SourceClient): Promise<void> => {
     )
     console.info(`Processed ${nodes.length} node${nodes.length === 1 ? "" : "s"}.`)
 }
+
 export default autolinkOTOL

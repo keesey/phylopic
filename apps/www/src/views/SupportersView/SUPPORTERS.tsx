@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-key */
 import type { ReactNode } from "react"
+
 const SUPPORTERS: ReadonlyArray<{ names: readonly ReactNode[] }> = [
     {
         names: ["Jesse Emrys"],
@@ -445,4 +446,5 @@ const SUPPORTERS: ReadonlyArray<{ names: readonly ReactNode[] }> = [
         ],
     },
 ]
+
 export default SUPPORTERS

@@ -4,9 +4,11 @@ import { fetchJSON } from "@phylopic/utils-api"
 import Link from "next/link"
 import type { FC } from "react"
 import useSWR from "swr"
+
 export type Props = {
     hash: Hash
 }
+
 const ContributorViewer: FC<Props> = ({ hash }) => {
     const { data: submission } = useSWR<Submission>(`/api/submissions/_/${encodeURIComponent(hash)}`, fetchJSON)
     const { data: contributor } = useSWR<Contributor & { uuid: UUID }>(
@@ -25,4 +27,5 @@ const ContributorViewer: FC<Props> = ({ hash }) => {
         </Link>
     )
 }
+
 export default ContributorViewer

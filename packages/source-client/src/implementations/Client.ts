@@ -39,6 +39,7 @@ import { writeJWT } from "./s3/io/writeJWT"
 import { S3Editor } from "./s3/S3Editor"
 import { S3Lister } from "./s3/S3Lister"
 import { SubmissionClient } from "./SubmissionClient"
+
 export class Client implements SourceClient {
     constructor(protected readonly provider: PGClientProvider & S3ClientProvider) {
         this.authEmails = new S3Lister(provider, AUTH_BUCKET_NAME, "emails/", isEmailAddress)

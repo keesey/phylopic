@@ -15,9 +15,11 @@ import UserOptions from "~/ui/UserOptions"
 import UserVerification from "../../ui/UserVerification"
 import NameRenderer from "../Assignment/NodeForm/NameRenderer"
 import LoadingState from "../LoadingState"
+
 export type Props = {
     hash: Hash
 }
+
 const Editor: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const submittable = useMemo(
@@ -188,4 +190,5 @@ const Editor: FC<Props> = ({ hash }) => {
         </Dialogue>
     )
 }
+
 export default Editor

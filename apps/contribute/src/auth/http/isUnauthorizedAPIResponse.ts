@@ -1,4 +1,5 @@
 import type { AxiosError } from "axios"
+
 /**
  * Distinguishes a rejected token from a legitimate denial for requests to the public API.
  *
@@ -15,4 +16,5 @@ const isUnauthorizedAPIResponse = (error: AxiosError) => {
     const data = error.response?.data as { errors?: unknown } | undefined
     return !Array.isArray(data?.errors)
 }
+
 export default isUnauthorizedAPIResponse

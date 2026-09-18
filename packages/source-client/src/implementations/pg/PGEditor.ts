@@ -4,6 +4,7 @@ import type { EditField } from "./fields/EditField"
 import type { IDField } from "./fields/IDField"
 import { PGReader } from "./PGReader"
 import { prepareValue } from "./preparation/prepareValue"
+
 export class PGEditor<T> extends PGReader<T> implements Editable<T> {
     constructor(
         provider: PGClientProvider,

@@ -4,6 +4,7 @@ import { createSearch, type UUID } from "@phylopic/utils"
 import { fetchJSON } from "@phylopic/utils-api"
 import { type FC, Fragment, type ReactNode, useCallback, useEffect, useMemo } from "react"
 import useSWRInfinite, { type SWRInfiniteKeyLoader } from "swr/infinite"
+
 export type Props = {
     children: (value: ReadonlyArray<unknown>, isValidating: boolean) => ReactNode
     endpoint: string
@@ -11,6 +12,7 @@ export type Props = {
     hideLoader?: boolean
     onError?: (error: Error) => void
 }
+
 const Paginator: FC<Props> = ({ children, endpoint, hideControls, hideLoader, onError }) => {
     const getKey = useCallback<SWRInfiniteKeyLoader>(
         (index, previousPageData: Page<{ uuid: UUID }, number> | null) => {
@@ -67,4 +69,5 @@ const Paginator: FC<Props> = ({ children, endpoint, hideControls, hideLoader, on
         </>
     )
 }
+
 export default Paginator

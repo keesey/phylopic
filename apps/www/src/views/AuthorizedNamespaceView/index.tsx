@@ -1,8 +1,10 @@
 import type { FC } from "react"
+
 export interface Props {
     short?: boolean
     value: string
 }
+
 const TITLES: Record<string, string> = {
     ["eol.org/pages"]: "Encyclopedia of Life",
     ["gbif.org/species"]: "Global Biodiversity Information Facility",
@@ -16,6 +18,7 @@ const TITLES: Record<string, string> = {
     ["phylopic.org/images"]: "PhyloPic: Silhouette Images",
     ["ubio.org/namebank"]: "uBio NameBank",
 }
+
 const TITLES_SHORT: Record<string, string> = {
     ["eol.org/pages"]: "EoL",
     ["gbif.org/species"]: "GBIF",
@@ -29,6 +32,7 @@ const TITLES_SHORT: Record<string, string> = {
     ["phylopic.org/images"]: "PhyloPic",
     ["ubio.org/namebank"]: "NameBank",
 }
+
 const AuthorizedNamespaceView: FC<Props> = ({ value, short }) => {
     const title = short ? TITLES_SHORT[value] : TITLES[value]
     return title ? (
@@ -43,4 +47,5 @@ const AuthorizedNamespaceView: FC<Props> = ({ value, short }) => {
         <code>{value}</code>
     )
 }
+
 export default AuthorizedNamespaceView

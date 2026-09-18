@@ -17,9 +17,11 @@ import UserOptions from "~/ui/UserOptions"
 import LoadingState from "../LoadingState"
 import Attribution from "./Attribution"
 import License from "./License"
+
 export type Props = {
     hash: Hash
 }
+
 const Usage: FC<Props> = ({ hash }) => {
     const submission = useSubmission(hash)
     const contributor = useContributor()
@@ -101,4 +103,5 @@ const Usage: FC<Props> = ({ hash }) => {
         </Dialogue>
     )
 }
+
 export default Usage

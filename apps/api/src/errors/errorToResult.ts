@@ -5,6 +5,7 @@ import BUILD from "../build/BUILD"
 import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
 import APIError from "./APIError"
+
 const fromAPIError = (e: APIError): APIGatewayProxyResult => ({
     body: stringifyNormalized({ build: BUILD, errors: e.data }),
     headers: {
@@ -14,6 +15,7 @@ const fromAPIError = (e: APIError): APIGatewayProxyResult => ({
     },
     statusCode: e.httpCode,
 })
+
 const errorToResult = (e: unknown): APIGatewayProxyResult => {
     if (e instanceof APIError) {
         return fromAPIError(e)
@@ -35,4 +37,5 @@ const errorToResult = (e: unknown): APIGatewayProxyResult => {
         statusCode: 500,
     }
 }
+
 export default errorToResult

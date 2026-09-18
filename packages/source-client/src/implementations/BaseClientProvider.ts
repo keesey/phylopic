@@ -1,5 +1,6 @@
 import { S3Client, type S3ClientConfig } from "@aws-sdk/client-s3"
 import type { S3ClientProvider } from "../interfaces/S3ClientProvider"
+
 export class BaseClientProvider implements S3ClientProvider {
     protected s3: S3Client | null = null
     constructor(protected readonly s3Config: S3ClientConfig = {}) {}

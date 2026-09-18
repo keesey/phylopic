@@ -13,12 +13,14 @@ import type { ImageListParameters } from "../types/ImageListParameters"
 import { hasOnlyOne } from "./hasOnlyOne"
 import { isListParameters } from "./isListParameters"
 import { precedes } from "./precedes"
+
 const isBoolean = (x: unknown, collector?: ValidationFaultCollector): x is "true" | "false" => {
     if (x !== "true" && x !== "false") {
         return invalidate(collector, 'Expected a value of "true" or "false".')
     }
     return true
 }
+
 export const isImageListParameters = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

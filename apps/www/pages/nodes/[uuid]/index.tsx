@@ -5,8 +5,11 @@ import type { GetServerSideProps, NextPage } from "next"
 import BUILD from "~/build/BUILD"
 import getStaticPropsResult from "~/fetch/getStaticPropsResult"
 import getNodeHRef from "~/routes/getNodeHRef"
+
 const PageComponent: NextPage = () => null
+
 export default PageComponent
+
 export const getServerSideProps: GetServerSideProps = async context => {
     const { uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

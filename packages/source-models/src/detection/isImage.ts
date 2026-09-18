@@ -11,6 +11,7 @@ import {
     type ValidationFaultCollector,
 } from "@phylopic/utils"
 import type { Image } from "../types/Image"
+
 export const isImage = (x: unknown, faultCollector?: ValidationFaultCollector): x is Image =>
     isObject(x, faultCollector) &&
     isNullOr(isNormalizedText)((x as Image).attribution, faultCollector?.sub("attribution")) &&

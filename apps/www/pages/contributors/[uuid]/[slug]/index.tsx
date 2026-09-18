@@ -27,10 +27,12 @@ import Container from "~/ui/Container"
 import ContributorDetailsView from "~/views/ContributorDetailsView"
 import ContributorNameView from "~/views/ContributorNameView"
 import ImageListView from "~/views/ImageListView"
+
 type Props = Omit<PageLayoutProps, "children"> & {
     fallback?: Compressed
     uuid: UUID
 }
+
 const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
     return (
         <CompressedSWRConfig fallback={fallback}>
@@ -44,7 +46,9 @@ const PageComponent: NextPage<Props> = ({ fallback, uuid, ...props }) => {
         </CompressedSWRConfig>
     )
 }
+
 export default PageComponent
+
 const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
     const imagesQuery = useMemo(
         () => ({ filter_contributor: contributor.uuid }) as ImageListParameters & Query,
@@ -89,6 +93,7 @@ const Content: FC<{ contributor: Contributor }> = ({ contributor }) => {
         </section>
     )
 }
+
 const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }> = ({ contributor, images }) => {
     const openGraph = useOpenGraphForImage(images[0])
     const name = useMemo(() => getContributorName(contributor), [contributor])
@@ -105,12 +110,14 @@ const Seo: FC<{ contributor: Contributor; images: readonly ImageWithEmbedded[] }
         </>
     )
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         fallback: "blocking",
         paths: [],
     }
 }
+
 export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async context => {
     const { slug, uuid } = context.params ?? {}
     if (!isUUIDv4(uuid)) {

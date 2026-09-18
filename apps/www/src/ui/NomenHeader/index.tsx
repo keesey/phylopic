@@ -6,9 +6,11 @@ import NodeDetailsView from "~/views/NodeDetailsView"
 import NomenView from "~/views/NomenView"
 import HeaderNav, { type Props as HeaderNavProps } from "../HeaderNav"
 import type { Props as HeaderNavButtonProps } from "../HeaderNav/HeaderNavButton"
+
 export type Props = {
     value?: NodeWithEmbedded
 }
+
 const NomenHeader: FC<Props> = ({ value }) => {
     const [detailsActive, setDetailsActive] = useState(false)
     const hasDetails = useMemo(() => {
@@ -59,4 +61,5 @@ const NomenHeader: FC<Props> = ({ value }) => {
         </>
     )
 }
+
 export default NomenHeader

@@ -10,6 +10,7 @@ import { BuildContext } from "../../../builds"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
 import { PBDB_URL } from "./PBDB_URL"
+
 type PBDBRecord = Readonly<{
     ext: string
     nam: string
@@ -20,18 +21,22 @@ type PBDBRecord = Readonly<{
     rnk: number
     vid: string
 }>
+
 type PBDBResponse = Readonly<{
     elapsed_time: number
     records: readonly PBDBRecord[]
 }>
+
 const fetchLineage: Fetcher<PBDBResponse, string> = async url => {
     const response = await fetchDataAndCheck<PBDBResponse>(url)
     return response.data
 }
+
 const fetchNode: Fetcher<NodeWithEmbedded, string> = async url => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url, undefined, isNodeWithEmbedded)
     return response.data
 }
+
 const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
@@ -85,6 +90,7 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
     }, [direct.data, dispatch, indirect.data, oid])
     return null
 }
+
 export const PBDBResolve: React.FC = () => {
     const [state] = React.useContext(SearchContext) ?? []
     const unresolvedOIDs = React.useMemo(() => {

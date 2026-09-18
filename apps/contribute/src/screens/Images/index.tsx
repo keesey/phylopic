@@ -10,9 +10,11 @@ import Speech from "~/ui/Speech"
 import UserImageThumbnail from "~/ui/UserImageThumbnail"
 import UserLinkButton from "~/ui/UserLinkButton"
 import UserOptions from "~/ui/UserOptions"
+
 export type Props = {
     children: (total: number | undefined) => ReactNode
 }
+
 const Images: FC<Props> = ({ children }) => {
     const fetcher = useAuthorizedJSONFetcher<number>()
     const { data: total } = useSWR("/api/images?total=items", fetcher)
@@ -41,4 +43,5 @@ const Images: FC<Props> = ({ children }) => {
         </Dialogue>
     )
 }
+
 export default Images

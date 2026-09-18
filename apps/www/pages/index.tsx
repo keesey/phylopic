@@ -19,7 +19,9 @@ import SiteTitle from "~/ui/SiteTitle"
 import ContributionCTAView from "~/views/ContributionCTAView"
 import ImageRail from "~/views/ImageRail"
 import SupportersView from "~/views/SupportersView"
+
 type Props = Omit<PageLayoutProps, "children"> & { fallback?: Compressed }
+
 const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_WWW_URL}/images`,
     `${process.env.NEXT_PUBLIC_WWW_URL}/nodes`,
@@ -31,6 +33,7 @@ const ITEM_URLS: readonly URL[] = [
     `${process.env.NEXT_PUBLIC_CONTRIBUTE_URL}`,
     "https://www.patreon.com/tmkeesey/shop/pocket-phylogenies-print-out-1429988",
 ]
+
 const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
     <CompressedSWRConfig fallback={fallback}>
         <PageLayout {...props}>
@@ -163,5 +166,7 @@ const PageComponent: NextPage<Props> = ({ fallback, ...props }) => (
         </PageLayout>
     </CompressedSWRConfig>
 )
+
 export default PageComponent
+
 export const getStaticProps = createListStaticPropsGetter<ImageWithEmbedded>("/images")

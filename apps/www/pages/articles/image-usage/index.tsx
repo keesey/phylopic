@@ -21,10 +21,13 @@ import Container from "~/ui/Container"
 import SiteTitle from "~/ui/SiteTitle"
 import ImageRail from "~/views/ImageRail"
 import LinkedImageThumbnailView from "~/views/LinkedImageThumbnailView"
+
 export interface Props {
     image: ImageModel
 }
+
 const SAMPLE_IMAGE_UUID = "045279d5-24e5-4838-bec9-0bea86812e35"
+
 export const getStaticProps: GetStaticProps<Props> = async () => {
     const result = await fetchResult<ImageModel>(
         `${process.env.NEXT_PUBLIC_API_URL}/images/${encodeURIComponent(SAMPLE_IMAGE_UUID)}${createSearch({ build: BUILD })}`,
@@ -36,6 +39,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     }
     return { props: { image: result.data } }
 }
+
 const PageComponent: NextPage<Props> = ({ image }) => (
     <PageLayout>
         <NextSeo
@@ -66,7 +70,9 @@ const PageComponent: NextPage<Props> = ({ image }) => (
         </Container>
     </PageLayout>
 )
+
 export default PageComponent
+
 const Article: FC<Props> = ({ image }: Props) => {
     const [{ currentCollection, collections, open }, dispatch] = useContext(CollectionsContext)
     const currentImages = useCurrentCollectionImages()

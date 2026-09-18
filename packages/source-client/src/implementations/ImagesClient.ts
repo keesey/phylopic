@@ -7,7 +7,9 @@ import { IMAGE_TABLE } from "./pg/constants/IMAGE_TABLE"
 import type { IDField } from "./pg/fields/IDField"
 import { normalizeImage } from "./pg/normalization/normalizeImage"
 import { PGLister } from "./pg/PGLister"
+
 type IImagesClient = SourceClient["images"]
+
 export class ImagesClient extends PGLister<Image, { uuid: UUID }> implements IImagesClient {
     constructor(
         protected readonly provider: PGClientProvider,

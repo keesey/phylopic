@@ -1,4 +1,5 @@
 import type { MediaLink } from "@phylopic/api-models"
+
 export const getMediaLinkArea = (link: Pick<MediaLink, "sizes">) =>
     link.sizes
         .split("x", 2)

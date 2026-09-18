@@ -9,9 +9,11 @@ import { TTL_VALUES } from "~/ui/TTLSelector/TTL_VALUES"
 import UserInput from "~/ui/UserInput"
 import UserOptions from "~/ui/UserOptions"
 import styles from "./index.module.scss"
+
 export interface Props {
     onSubmit?: (email: EmailAddress, ttl: number) => void
 }
+
 const SignIn: FC<Props> = ({ onSubmit }) => {
     const [email, setEmail] = useState<EmailAddress>("")
     const [ttl, setTTL] = useState<TTL>("DAY")
@@ -74,4 +76,5 @@ const SignIn: FC<Props> = ({ onSubmit }) => {
         </Dialogue>
     )
 }
+
 export default SignIn

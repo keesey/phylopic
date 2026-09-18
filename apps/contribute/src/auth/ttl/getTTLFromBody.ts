@@ -3,6 +3,7 @@ import DEFAULT_TTL from "./DEFAULT_TTL"
 import isTTLPayload from "./isTTLPayload"
 import MAX_TTL from "./MAX_TTL"
 import MIN_TTL from "./MIN_TTL"
+
 const getTTLFromBody = (body: NextApiRequest["body"]) => {
     if (!isTTLPayload(body)) {
         throw 400
@@ -19,4 +20,5 @@ const getTTLFromBody = (body: NextApiRequest["body"]) => {
     }
     return ttl
 }
+
 export default getTTLFromBody

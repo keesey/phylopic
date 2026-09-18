@@ -3,6 +3,7 @@ import type { EmbeddableParameters } from "../types/EmbeddableParameters"
 import type { ListParameters } from "../types/ListParameters"
 import { isDataParameters } from "./isDataParameters"
 import { isEmbeddableParameters } from "./isEmbeddableParameters"
+
 export const isListParameters =
     <TEmbedded>(
         parameters: ReadonlyArray<string & keyof EmbeddableParameters<TEmbedded>>,

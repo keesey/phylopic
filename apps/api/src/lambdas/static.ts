@@ -9,6 +9,7 @@ import getLicenses from "../operations/getLicenses"
 import getRoot from "../operations/getRoot"
 import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
+
 const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (event: APIGatewayProxyEvent) => {
     const { path } = event
     switch (path) {
@@ -58,6 +59,7 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
         }
     }
 }
+
 export const onAPIGatewayProxy: APIGatewayProxyHandler = async (event, _context) => {
     let result: APIGatewayProxyResult
     try {

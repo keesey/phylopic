@@ -1,11 +1,13 @@
 import { useMatches } from "@phylopic/client-components"
 import type { FC } from "react"
 import UserInput from "~/ui/UserInput"
+
 interface Props {
     onChange: (value: string) => void
     placeholder: string
     value: string
 }
+
 const NameInput: FC<Props> = ({ onChange, placeholder, value }) => {
     const matches = useMatches()
     return (
@@ -29,4 +31,5 @@ const NameInput: FC<Props> = ({ onChange, placeholder, value }) => {
         </>
     )
 }
+
 export default NameInput

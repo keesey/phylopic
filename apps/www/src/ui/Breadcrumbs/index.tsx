@@ -2,15 +2,18 @@ import Link from "next/link"
 import type { FC, ReactNode } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
+
 export type BreadcrumbItem = Readonly<{
     children: ReactNode
     href?: string
     label?: string
     onClick?: () => void
 }>
+
 export interface Props {
     items: readonly BreadcrumbItem[]
 }
+
 const Breadcrumbs: FC<Props> = ({ items }) => (
     <nav className={styles.main}>
         <ul>
@@ -40,4 +43,5 @@ const Breadcrumbs: FC<Props> = ({ items }) => (
         </ul>
     </nav>
 )
+
 export default Breadcrumbs

@@ -5,6 +5,7 @@ import { NODE_EMBEDDED_PARAMETERS } from "../constants/NODE_EMBEDDED_PARAMETERS"
 import type { ResolveObjectParameters } from "../types/ResolveObjectParameters"
 import { isDataParameters } from "./isDataParameters"
 import { isEmbeddableParameters } from "./isEmbeddableParameters"
+
 export const isResolveObjectParameters = (
     x: unknown,
     faultCollector?: ValidationFaultCollector,

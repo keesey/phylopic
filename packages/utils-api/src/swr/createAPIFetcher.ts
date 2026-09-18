@@ -6,6 +6,7 @@ import { startTransition } from "react"
 import type { Fetcher } from "swr"
 import { DEFAULT_API_HEADERS } from "../fetch/DEFAULT_API_HEADERS"
 import { APISWRError } from "./APISWRError"
+
 export const createAPIFetcher =
     <T extends Readonly<{ build: number }>>(
         build?: number,

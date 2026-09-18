@@ -8,6 +8,7 @@ export type PBDBTaxonRecord = Readonly<{
     rnk: number
     vid: string
 }>
+
 export type PBDBTaxonResponse = Readonly<{
     elapsed_time: number
     records: readonly PBDBTaxonRecord[]

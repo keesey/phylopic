@@ -4,6 +4,7 @@ import customEvents from "~/analytics/customEvents"
 import PAYPAL_DONATE_URL from "~/donate/PAYPAL_DONATE_URL"
 import SiteTitle from "~/ui/SiteTitle"
 import styles from "./index.module.scss"
+
 const DonationPromo: FC = () => {
     const [mounted, setMounted] = useState(false)
     useEffect(() => setMounted(true), [])
@@ -54,4 +55,5 @@ const DonationPromo: FC = () => {
         </aside>
     )
 }
+
 export default DonationPromo

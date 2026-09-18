@@ -22,6 +22,7 @@ import { NODE_TABLE } from "./pg/constants/NODE_TABLE"
 import { normalizeNode } from "./pg/normalization/normalizeNode"
 import { PGLister } from "./pg/PGLister"
 import { PGPatcher } from "./pg/PGPatcher"
+
 export class NodeClient extends PGPatcher<Node & { uuid: UUID }> implements ReturnType<SourceClient["node"]> {
     constructor(
         protected provider: PGClientProvider,

@@ -1,4 +1,5 @@
 import type { ISOTimestamp, Nomen, UUID } from "@phylopic/utils"
+
 export type Node = Readonly<{
     created: ISOTimestamp
     modified: ISOTimestamp

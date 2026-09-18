@@ -7,4 +7,5 @@ const replaceNormalized = (_key: string, value: unknown) => {
     }
     return value
 }
+
 export const stringifyNormalized = (o: any): string => JSON.stringify(o, replaceNormalized)

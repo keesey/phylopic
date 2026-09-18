@@ -1,11 +1,13 @@
 "use client"
 import React from "react"
 import { Loader } from "../../loading/Loader"
+
 export interface InfiniteScrollProps {
     hideLoader?: boolean
     onInViewport?: () => void
     pending?: boolean
 }
+
 const STYLE: React.CSSProperties = {
     alignItems: "center",
     display: "flex",
@@ -16,6 +18,7 @@ const STYLE: React.CSSProperties = {
     textAlign: "center",
     width: "100%",
 }
+
 export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({ hideLoader, onInViewport, pending }) => {
     pending = Boolean(pending)
     const [inViewport, setInViewport] = React.useState(false)

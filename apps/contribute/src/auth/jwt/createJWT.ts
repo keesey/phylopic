@@ -1,12 +1,14 @@
 import { JWT_AUDIENCE, JWT_ISSUER } from "@phylopic/source-models"
 import type { UUID } from "@phylopic/utils"
 import { sign } from "jsonwebtoken"
+
 export interface Args {
     expiration: Date
     issuedAt: Date
     jti: UUID
     subject: UUID
 }
+
 const createJWT = (args: Args) =>
     new Promise<string | undefined>((resolve, reject) => {
         if (!process.env.AUTH_SECRET_KEY) {
@@ -27,4 +29,5 @@ const createJWT = (args: Args) =>
             (err, encoded) => (err ? reject(err) : resolve(encoded)),
         )
     })
+
 export default createJWT

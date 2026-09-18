@@ -6,8 +6,11 @@ import { useRouter } from "next/router"
 import { type ChangeEvent, type FC, type FocusEvent, type FormEvent, useContext, useEffect, useState } from "react"
 import customEvents from "~/analytics/customEvents"
 import styles from "./index.module.scss"
+
 const MAX_MATCHES = 16
+
 const DATALIST_DEBOUNCE_MS = 500
+
 const SearchBar: FC = () => {
     const [state, dispatch] = useContext(SearchContext) ?? []
     const [value, setValue] = useState(state?.text ?? "")
@@ -83,4 +86,5 @@ const SearchBar: FC = () => {
         </form>
     )
 }
+
 export default SearchBar

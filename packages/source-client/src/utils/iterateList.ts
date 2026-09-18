@@ -1,4 +1,5 @@
 import type { Listable, Page } from "../interfaces"
+
 export const iterateList = <TValue, TPageSpecifier>(list: Listable<TValue, TPageSpecifier>): AsyncIterable<TValue> => {
     let page: Page<TValue, TPageSpecifier> | undefined
     let currentIndex = -1

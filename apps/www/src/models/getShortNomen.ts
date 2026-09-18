@@ -1,4 +1,5 @@
 import type { Nomen } from "@phylopic/utils"
+
 const getShortNomen = (name?: Nomen) =>
     name
         ?.filter(
@@ -10,4 +11,5 @@ const getShortNomen = (name?: Nomen) =>
         )
         .map(part => part.text)
         .join(" ") || "[Unnamed]"
+
 export default getShortNomen

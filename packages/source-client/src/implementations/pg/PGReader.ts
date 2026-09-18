@@ -4,6 +4,7 @@ import type { Readable } from "../../interfaces/Readable"
 import { getFields } from "./fields/getFields"
 import type { IDField } from "./fields/IDField"
 import type { ReadField } from "./fields/ReadField"
+
 export class PGReader<T> implements Readable<T> {
     constructor(
         protected provider: PGClientProvider,

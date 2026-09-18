@@ -3,9 +3,11 @@ import { type FC, Fragment, useMemo } from "react"
 import getNodeSlug from "~/routes/getNodeSlug"
 import type { QuickLinkNode } from "../QuickLinkNode"
 import styles from "./index.module.scss"
+
 export interface Props {
     node: QuickLinkNode
 }
+
 const QuickLinkNodeView: FC<Props> = ({ node }) => {
     const href = `/nodes/${encodeURIComponent(node.uuid)}/${encodeURIComponent(getNodeSlug(node.slug))}`
     const title = deslugify(node.slug)
@@ -45,7 +47,9 @@ const QuickLinkNodeView: FC<Props> = ({ node }) => {
         </>
     )
 }
+
 export default QuickLinkNodeView
+
 const compareChildren = (a: QuickLinkNode, b: QuickLinkNode) => {
     return (
         getLabelCount(a) - getLabelCount(b) ||
@@ -53,13 +57,17 @@ const compareChildren = (a: QuickLinkNode, b: QuickLinkNode) => {
         ((a.label ?? a.slug) < (b.label ?? b.slug) ? -1 : (a.label ?? a.slug) > (b.label ?? b.slug) ? 1 : 0)
     )
 }
+
 const deslugify = (s: string) => capitalize(s.replaceAll("-", " "))
+
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 const getLabelCount = (node: QuickLinkNode): number => {
     const self = node.label ? 1 : 0
     const children = node.children?.reduce<number>((prev, child) => prev + getLabelCount(child), 0) ?? 0
     return self + children
 }
+
 const getDepth = (node: QuickLinkNode, parentDepth = 0): number => {
     if (!node.children?.length) {
         return parentDepth + 1

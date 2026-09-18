@@ -3,10 +3,12 @@ import type { FC } from "react"
 import { AgesProvider } from "./AgesProvider"
 import styles from "./index.module.scss"
 import LineageNodeView from "./LineageNodeView"
+
 export interface Props {
     short?: boolean
     value: readonly Node[]
 }
+
 const LineageView: FC<Props> = ({ short, value }) => {
     return (
         <AgesProvider nodes={value}>
@@ -20,4 +22,5 @@ const LineageView: FC<Props> = ({ short, value }) => {
         </AgesProvider>
     )
 }
+
 export default LineageView

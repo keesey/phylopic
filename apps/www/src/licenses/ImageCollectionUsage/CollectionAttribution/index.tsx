@@ -4,14 +4,17 @@ import { type FC, Fragment, useMemo } from "react"
 import styles from "./index.module.scss"
 import Nomina from "./Nomina"
 import PermalinkButton from "./PermalinkButton"
+
 export interface Props {
     images: readonly ImageWithEmbedded[]
     uuid?: UUIDish
 }
+
 const contains = (nomina: readonly Nomen[], nomen: Nomen) => {
     const json = JSON.stringify(nomen)
     return nomina.some(n => JSON.stringify(n) === json)
 }
+
 const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
     const attributionRequired = useMemo(
         () => images.some(image => !isPublicDomainLicenseURL(image._links.license.href)),
@@ -93,4 +96,5 @@ const CollectionAttribution: FC<Props> = ({ images, uuid }) => {
         </div>
     )
 }
+
 export default CollectionAttribution

@@ -1,6 +1,7 @@
 import type { Image, ImageWithEmbedded } from "@phylopic/api-models"
 import type { OpenGraph } from "next-seo/lib/types"
 import { useMemo } from "react"
+
 const useOpenGraphForImage = (image: Image | ImageWithEmbedded | null | undefined): OpenGraph | undefined => {
     return useMemo(() => {
         if (!image) {
@@ -22,4 +23,5 @@ const useOpenGraphForImage = (image: Image | ImageWithEmbedded | null | undefine
         } as OpenGraph
     }, [image])
 }
+
 export default useOpenGraphForImage

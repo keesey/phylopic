@@ -1,5 +1,6 @@
 import type { LicenseURL } from "./LicenseURL"
 import type { URL } from "./URL"
+
 export type ExtendedLicenseURL =
     | LicenseURL
     | (URL &

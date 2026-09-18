@@ -13,16 +13,20 @@ import {
 import axios from "axios"
 import axiosRetry from "axios-retry"
 import Bottleneck from "bottleneck"
+
 type Identifier = Readonly<{ authority: Authority; namespace: Namespace; objectID: ObjectID }>
+
 const limiter = new Bottleneck({
     maxConcurrent: 5,
     minTime: 250,
 })
+
 const AxiosInstance = axios.create({
     headers: {
         "api-key": process.env.NCBI_API_KEY,
     },
 })
+
 axiosRetry(AxiosInstance, {
     onMaxRetryTimesExceeded: (error, retryCount) => {
         console.warn(
@@ -36,24 +40,30 @@ axiosRetry(AxiosInstance, {
     retryCondition: error => axiosRetry.isIdempotentRequestError(error) || error.response?.status === 429,
     retryDelay: (count, error) => axiosRetry.exponentialDelay(count, error, error.response?.status === 429 ? 1000 : 0),
 })
+
 const IGNORED = new Set(["1", "131567"])
+
 type NCBITaxonomyNodes = Readonly<{
     taxonomy_nodes: readonly NCBITaxonomyNode[]
 }>
+
 type NCBITaxonomyNode = Readonly<{
     query: readonly string[]
     taxonomy: NCBITaxonomy
 }>
+
 type NCBITaxonomy = Readonly<{
     lineage: readonly number[]
     organism_name: string
     tax_id: number
 }>
+
 type NCBITaxonLinks = Readonly<{
     encyclopedia_of_life?: string
     global_biodiversity_information_facility?: string
     tax_id: string
 }>
+
 const getScientificNames = (names: readonly Nomen[]) =>
     names.filter(isScientific).map(name =>
         name
@@ -61,6 +71,7 @@ const getScientificNames = (names: readonly Nomen[]) =>
             .map(part => part.text)
             .join(" "),
     )
+
 const getTaxonomies = async (
     queries: ReadonlyArray<string | number>,
     chunkSize = 20,
@@ -92,9 +103,11 @@ const getTaxonomies = async (
         ),
     ).sort((a, b) => a.tax_id - b.tax_id)
 }
+
 const getLineageMatchIndex = (ancestorIds: readonly string[], lineage: NCBITaxonomy["lineage"]) => {
     return lineage.filter(lineageId => ancestorIds.includes(String(lineageId))).length
 }
+
 const findMatches = async (
     ancestorIds: readonly string[],
     candidates: readonly NCBITaxonomy[],
@@ -142,6 +155,7 @@ const findMatches = async (
         return bestMatches
     }
 }
+
 const getIdentifiers = (links: NCBITaxonLinks): readonly Identifier[] => {
     const results: Identifier[] = []
     if (links.encyclopedia_of_life) {
@@ -160,6 +174,7 @@ const getIdentifiers = (links: NCBITaxonLinks): readonly Identifier[] => {
     }
     return results
 }
+
 const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, ancestorIds: readonly string[]) => {
     const page = await client.node(node.uuid).externals.namespace("ncbi.nlm.nih.gov", "taxid").page()
     if (page.items.length) {
@@ -234,8 +249,10 @@ const processNode = async (client: SourceClient, node: Node & { uuid: UUID }, an
     }
     await Promise.all(childPromises)
 }
+
 const autolinkNCBI = async (client: SourceClient): Promise<void> => {
     const node = await client.root.get()
     await processNode(client, node, [])
 }
+
 export default autolinkNCBI

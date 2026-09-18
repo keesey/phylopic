@@ -13,7 +13,9 @@ import { NODE_FIELDS } from "./pg/constants/NODE_FIELDS"
 import { NODE_TABLE } from "./pg/constants/NODE_TABLE"
 import { normalizeNode } from "./pg/normalization/normalizeNode"
 import { PGLister } from "./pg/PGLister"
+
 type INodesClient = SourceClient["nodes"]
+
 export class NodesClient extends PGLister<Node, { uuid: UUID }> implements INodesClient {
     constructor(protected readonly provider: PGClientProvider) {
         super(provider, NODE_TABLE, 128, NODE_FIELDS, normalizeNode, '"names"::character varying')

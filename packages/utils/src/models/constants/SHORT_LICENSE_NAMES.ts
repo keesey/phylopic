@@ -1,4 +1,5 @@
 import type { ExtendedLicenseURL } from "../types"
+
 export const SHORT_LICENSE_NAMES: Readonly<Record<ExtendedLicenseURL, string>> = {
     "https://creativecommons.org/licenses/by-nc-sa/3.0/": "CC BY-NC-SA 3.0",
     "https://creativecommons.org/licenses/by-nc-sa/4.0/": "CC BY-NC-SA 4.0",

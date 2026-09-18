@@ -5,11 +5,13 @@ import type { ReviewResult } from "./ImageReview/ReviewResult"
 import SelectFile from "./SelectFile"
 import type { FileResult } from "./SelectFile/FileResult"
 import UploadProgress from "./UploadProgress"
+
 export type Props = {
     onCancel: () => void
     onComplete: (hash: Hash) => void
     value?: Hash
 }
+
 const Uploader: FC<Props> = ({ onCancel, onComplete, value }) => {
     const [fileResult, setFileResult] = useState<FileResult | undefined>()
     const [reviewResult, setReviewResult] = useState<ReviewResult | undefined>()
@@ -36,4 +38,5 @@ const Uploader: FC<Props> = ({ onCancel, onComplete, value }) => {
         />
     )
 }
+
 export default Uploader
