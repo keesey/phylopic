@@ -1,0 +1,115 @@
+"use client"
+import type { UUID } from "@phylopic/utils"
+import { usePathname } from "next/navigation"
+import { PropsWithChildren, createContext, useEffect, useMemo, useReducer, useRef } from "react"
+import { CalendarDate, toPath } from "~/lib/datetime"
+import { BoardState } from "./BoardState"
+import { Action, InitializeAction } from "./actions"
+import reducer from "./reducer"
+import { select } from "./select"
+import { trimImage } from "./trimImage"
+import { Game } from "../models"
+import { submitGame } from "./submitGame"
+export type Submission = {
+    uuids: ReadonlySet<UUID>
+    mistakes: number
+}
+export type BoardContainerProps = PropsWithChildren<{
+    data: InitializeAction["payload"] | null
+    game?: Game
+    gameDate?: CalendarDate
+    onNewGame?: () => void
+    onSubmit?: (submission: Submission) => Promise<Action>
+}>
+export const BoardContext = createContext<Readonly<[BoardState, React.Dispatch<Action>]> | undefined>(undefined)
+const DEFAULT_STATE: BoardState = {
+    answers: [],
+    discrepancy: null,
+    images: {},
+    imageUUIDs: [],
+    lastSubmission: [],
+    mistakes: 0,
+    totalAnswers: 0,
+}
+export const BoardContainer: React.FC<BoardContainerProps> = ({
+    children,
+    data,
+    game,
+    gameDate,
+    onNewGame,
+    onSubmit,
+}) => {
+    const contextValue = useReducer(reducer, DEFAULT_STATE)
+    const pathname = usePathname()
+    const [state, dispatch] = contextValue
+    const gameCode = pathname.match(/\/games\/([^/]+)/)?.[1]
+    const localStorageKey = gameCode && gameDate ? `@phylopic/games/${gameCode}${toPath(gameDate)}` : null
+    const submitting = useRef(false)
+    useEffect(() => {
+        if (localStorageKey) {
+            const saved = localStorage.getItem(localStorageKey)
+            if (saved) {
+                try {
+                    const payload = JSON.parse(saved)
+                    dispatch({ type: "RESTORE", payload })
+                    return
+                } catch {
+                    // Must be corrupt.
+                    localStorage.removeItem(localStorageKey)
+                }
+            }
+        }
+        if (data) {
+            dispatch({ type: "INITIALIZE", payload: { ...data, images: data.images.map(image => trimImage(image)) } })
+        } else {
+            onNewGame?.()
+        }
+    }, [data, dispatch, localStorageKey, onNewGame])
+    useEffect(() => {
+        if (localStorageKey && state.totalAnswers > 0) {
+            localStorage.setItem(localStorageKey, JSON.stringify(state))
+        }
+    }, [localStorageKey, state])
+    const submissionJSON = useMemo(
+        () =>
+            JSON.stringify({
+                mistakes: state.mistakes,
+                uuids: Object.values(state.images)
+                    .filter(value => value.mode === "submitted")
+                    .map(value => value.image.uuid)
+                    .sort(),
+            }),
+        [state.images, state.mistakes],
+    )
+    const imagesPerAnswer = select.imagesPerAnswer(state)
+    useEffect(() => {
+        const submissionRaw = JSON.parse(submissionJSON) as Readonly<{ mistakes: number; uuids: readonly UUID[] }>
+        const submission: Submission = {
+            ...submissionRaw,
+            uuids: new Set(submissionRaw.uuids),
+        }
+        if (submission.uuids.size !== imagesPerAnswer || submitting.current) {
+            return
+        }
+        submitting.current = true
+        ;(async () => {
+            try {
+                const action = game
+                    ? await submitGame(game, {
+                          mistakes: submission.mistakes,
+                          uuids: Array.from(submission.uuids),
+                      })
+                    : await onSubmit?.(submission)
+                if (action) {
+                    dispatch(action)
+                }
+            } catch (e) {
+                dispatch({ type: "SUBMIT_CANCEL" })
+                alert(String(e))
+            } finally {
+                submitting.current = false
+            }
+        })()
+    }, [dispatch, game, imagesPerAnswer, onSubmit, submissionJSON])
+    return <BoardContext.Provider value={contextValue}>{children}</BoardContext.Provider>
+}

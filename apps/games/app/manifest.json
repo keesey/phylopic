@@ -1,0 +1,6 @@
+{
+    "name": "PhyloPic: Games",
+    "short_name": "PhyloPic: Games",
+    "description": "Games that use organism silhouette images from PhyloPic, the open database.",
+    "start_url": "/"
+}

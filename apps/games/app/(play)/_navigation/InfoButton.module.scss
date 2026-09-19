@@ -1,0 +1,24 @@
+@use "@phylopic/styles/colors.scss";
+
+.button {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: colors.$white;
+    font-size: larger;
+    font-weight: bold;
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: colors.$white;
+        color: colors.$deep;
+    }
+
+    &:active {
+        opacity: 0.67;
+    }
+
+    &:disabled {
+        opacity: 0.33;
+    }
+}

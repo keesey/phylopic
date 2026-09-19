@@ -1,6 +1,5 @@
 "use client"
-import { useRouter } from "next/router"
-import React, { type ReactNode } from "react"
+import { type FC, type ReactNode, useContext, useEffect, useReducer, useState } from "react"
 import { BuildContext } from "../../builds"
 import { SearchContext } from "../context"
 import type { State } from "../context/State"
@@ -23,18 +22,15 @@ export interface SearchContainerProps {
     initialText?: string
 }
 
-export const SearchContainer: React.FC<SearchContainerProps> = ({ children, initialText = "" }) => {
-    const [build] = React.useContext(BuildContext) ?? []
-    const [prevBuild, setPrevBuild] = React.useState(build)
-    const contextValue = React.useReducer(reducer, [initialText], () => createInitialState(initialText))
+export const SearchContainer: FC<SearchContainerProps> = ({ children, initialText = "" }) => {
+    const [build] = useContext(BuildContext) ?? []
+    const [prevBuild, setPrevBuild] = useState(build)
+    const contextValue = useReducer(reducer, [initialText], () => createInitialState(initialText))
     const [, dispatch] = contextValue
-    const { events } = useRouter()
-    React.useEffect(() => {
-        const handler = () => dispatch({ type: "RESET" })
-        events.on("routeChangeStart", handler)
-        return () => events.off("routeChangeStart", handler)
-    }, [dispatch, events])
-    React.useEffect(() => {
+    useEffect(() => {
+        return () => dispatch({ type: "RESET" })
+    }, [dispatch])
+    useEffect(() => {
         if (prevBuild !== build) {
             setPrevBuild(build)
             dispatch({ type: "RESET_INTERNAL" })

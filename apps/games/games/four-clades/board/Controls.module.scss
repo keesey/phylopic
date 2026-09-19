@@ -1,0 +1,63 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    align-items: center;
+    display: flex;
+    gap: 4px;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.secondary {
+    background-color: colors.$white;
+    border: 2pt solid colors.$black;
+    border-radius: 24px;
+    color: colors.$black;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px;
+    transition: all 0.3s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:disabled {
+        background-color: colors.$wash;
+        border-color: colors.$inkFade;
+        color: colors.$inkFade;
+        cursor: not-allowed;
+
+        &:hover {
+            opacity: initial;
+        }
+    }
+}
+
+.primary {
+    background-color: colors.$dandelion;
+    border: 2pt solid colors.$black;
+    border-radius: 24px;
+    color: colors.$black;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px;
+    transition: all 0.3s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:disabled {
+        background-color: colors.$sunshine;
+        border-color: colors.$inkFade;
+        color: colors.$inkFade;
+        cursor: not-allowed;
+
+        &:hover {
+            opacity: initial;
+        }
+    }
+}

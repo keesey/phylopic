@@ -1,0 +1,45 @@
+@use "@phylopic/styles/colors.scss";
+
+.main {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.row {
+    background-color: colors.$white;
+    border-radius: 2em;
+    border: 1.5pt solid colors.$black;
+    color: colors.$black;
+    padding: 1em;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.node {
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+.images {
+    display: flex;
+    justify-content: space-around;
+}
+
+.imageEditButton {
+    background: none;
+    border: none;
+    border-radius: 2em;
+    padding: 1em;
+    transition: all 0.3s;
+
+    &:hover:not(:disabled) {
+        background-color: colors.$wash;
+
+        img {
+            filter: invert(100%);
+            mix-blend-mode: lighten;
+        }
+    }
+}

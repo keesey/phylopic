@@ -1,0 +1,27 @@
+@use "@phylopic/styles/colors.scss";
+
+.heading {
+    flex-grow: 1;
+    font-size: x-large;
+    font-weight: normal;
+}
+
+.main {
+    padding: 24px;
+    width: 100svw;
+}
+
+.nav {
+    align-items: center;
+    background-color: colors.$dandelion;
+    color: colors.$black;
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+}
+
+.games {
+    display: inline-flex;
+    gap: 1em;
+    justify-content: flex-end;
+}

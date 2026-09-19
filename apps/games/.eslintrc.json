@@ -1,0 +1,7 @@
+{
+    "extends": ["phylopic", "next/core-web-vitals"],
+    "root": true,
+    "rules": {
+        "import/no-unused-modules": 1
+    }
+}

@@ -1,0 +1,71 @@
+@use "@phylopic/styles/colors.scss";
+
+.container {
+    padding: 12px 24px;
+    text-align: center;
+}
+
+.heading {
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 2;
+}
+
+.games {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.game {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+}
+
+.gameHeading {
+    background-color: colors.$white;
+    border: 2px solid colors.$black;
+    border-top-left-radius: 36px;
+    border-top-right-radius: 36px;
+    padding: 12px;
+
+    h3 {
+        color: colors.$black;
+        font-weight: normal;
+        font-size: 20px;
+    }
+
+    h4 {
+        color: colors.$wash;
+        font-weight: normal;
+        font-size: 16px;
+    }
+}
+
+.gameContent {
+    background-color: colors.$cerulean;
+    border: 2px solid colors.$black;
+    border-bottom-left-radius: 36px;
+    border-bottom-right-radius: 36px;
+    border-top: none;
+    padding: 12px;
+}
+
+.cta {
+    background-color: colors.$dandelion;
+    border: 2px solid colors.$black;
+    border-radius: 24px;
+    color: colors.$black;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    width: 100%;
+
+    &:hover {
+        background-color: colors.$sunshine;
+    }
+}
