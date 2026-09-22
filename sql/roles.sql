@@ -14,9 +14,9 @@
 --   phylopic_source   apps/contribute and apps/edit. Read/write on
 --                     phylopic-source. No DELETE: source deletion is a soft
 --                     delete (`UPDATE ... SET disabled=1::bit` in PGEditor).
---   phylopic_publish  apps/publish. Reads phylopic-source, and writes
---                     phylopic-entities (INSERT in make/insertEntities.ts,
---                     DELETE in make/cleanEntities.ts).
+--   phylopic_publish  apps/publish. Reads phylopic-source, INSERT/UPDATE on
+--                     external only (autolink/*.ts), and writes phylopic-entities
+--                     (INSERT in make/insertEntities.ts, DELETE in make/cleanEntities.ts).
 --
 -- Run as a superuser or the database owner. Sections 2 and 3 must run against
 -- their respective databases, hence the \connect lines; run this whole file with
@@ -105,8 +105,9 @@ REVOKE CREATE ON SCHEMA public FROM phylopic_source, phylopic_publish;
 
 GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO phylopic_source;
 
--- Publish only reads the system of record.
+-- Publish reads the system of record; autolink writes external links only.
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO phylopic_publish;
+GRANT INSERT, UPDATE ON TABLE public.external TO phylopic_publish;
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE ON TABLES TO phylopic_source;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO phylopic_publish;

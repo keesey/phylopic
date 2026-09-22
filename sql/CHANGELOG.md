@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.4.1] - 2026-09-22
+
+### Fixed
+
+- `roles.sql`: grant `phylopic_publish` `INSERT`/`UPDATE` on `external` so `yarn autolink` can write GBIF/EOL/NCBI links.
+
 ## [2.4.0] - 2025-08-07
 
 ### Added
