@@ -178,8 +178,15 @@ These commands will pull data from external APIs and try to match them to nodes 
 ```sh
 yarn autolink eol
 yarn autolink gbif
+yarn autolink ncbi
 yarn autolink otol
 yarn autolink pbdb
+```
+
+They can also be run serially in a single command:
+
+```sh
+yarn autolink eol gbif ncbi otol pbdb
 ```
 
 ### Normalize names
