@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.69] - 2026-09-22
+
+### Fixed
+
+- `@phylopic/publish` `1.15.2`: PBDB autolink imports `package.json` with a JSON import attribute so
+  `yarn autolink pbdb` runs on Node 24.
+
 ## [2.0.68] - 2026-09-17
 
 ### Added

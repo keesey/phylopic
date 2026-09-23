@@ -48,7 +48,7 @@
         "make": "turbo run make --filter=@phylopic/publish",
         "test": "turbo run test"
     },
-    "version": "2.0.68",
+    "version": "2.0.69",
     "workspaces": [
         "apps/*",
         "packages/*"

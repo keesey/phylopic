@@ -2,7 +2,7 @@ import { iterateList, type SourceClient } from "@phylopic/source-client"
 import type { Node } from "@phylopic/source-models"
 import { getIdentifier, isScientific, type Nomen, stringifyNomen, type UUID } from "@phylopic/utils"
 import axios from "axios"
-import packageJson from "../../package.json"
+import packageJson from "../../package.json" with { type: "json" }
 
 type PBDBRecord = Readonly<{
     ext: string

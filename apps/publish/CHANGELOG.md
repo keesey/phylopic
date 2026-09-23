@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.15.2] - 2026-09-22
+
+### Fixed
+
+- PBDB autolink imports `package.json` with a JSON import attribute so `yarn autolink pbdb` runs on Node 24.
+
 ## [1.15.1] - 2026-09-14
 
 ### Changed
