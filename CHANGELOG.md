@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.70] - 2026-10-01
+
+### Fixed
+
+- `@phylopic/www` `2.17.3`: Fundraiser PayPal webhook records net donation amounts (gross minus PayPal fee)
+  instead of gross.
+
 ## [2.0.69] - 2026-09-22
 
 ### Fixed

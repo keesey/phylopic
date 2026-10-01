@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.17.3] - 2026-10-01
+
+### Fixed
+
+- Fundraiser PayPal webhook records net donation amounts (gross minus PayPal fee) instead of gross.
+
 ## [2.17.2] - 2026-09-17
 
 ### Added

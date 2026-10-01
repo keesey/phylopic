@@ -33,7 +33,7 @@ const index: NextApiHandler = async (req, res) => {
             return
         }
         const txnId = fields.txn_id
-        const amountCents = dollarsToCents(fields.mc_gross ?? "")
+        const amountCents = dollarsToCents(fields.mc_gross ?? "") - dollarsToCents(fields.mc_fee ?? "0")
         const campaignId =
             (fields.payment_date && campaignIdFromPaymentDate(fields.payment_date)) || campaignIdFromDate(new Date())
         if (!campaignId || !txnId || amountCents <= 0) {
