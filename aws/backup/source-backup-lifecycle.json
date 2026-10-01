@@ -1,0 +1,34 @@
+{
+    "Rules": [
+        {
+            "ID": "abort-incomplete-mpu",
+            "Status": "Enabled",
+            "Filter": { "Prefix": "" },
+            "AbortIncompleteMultipartUpload": {
+                "DaysAfterInitiation": 7
+            }
+        },
+        {
+            "ID": "expire-dumps",
+            "Status": "Enabled",
+            "Filter": { "Prefix": "dumps/" },
+            "Expiration": {
+                "Days": 90
+            },
+            "NoncurrentVersionExpiration": {
+                "NoncurrentDays": 30
+            }
+        },
+        {
+            "ID": "expire-monthly",
+            "Status": "Enabled",
+            "Filter": { "Prefix": "monthly/" },
+            "Expiration": {
+                "Days": 365
+            },
+            "NoncurrentVersionExpiration": {
+                "NoncurrentDays": 30
+            }
+        }
+    ]
+}

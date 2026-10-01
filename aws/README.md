@@ -12,13 +12,13 @@ policies in [`policies/`](./policies). It does not create access keys; see
 
 ## The principals
 
-| User                  | Key goes in                                            | Can do                                                                              |
-| --------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| `phylopic-ses-sender` | `SES_*` in `apps/contribute` (local; Vercel uses OIDC) | Send mail as `keesey+phylopic@gmail.com`, nothing else                              |
-| `phylopic-contribute` | `S3_*` in `apps/contribute` (local; Vercel uses OIDC)  | Auth tokens, submission metadata, read source images                                |
-| `phylopic-www`        | `S3_*` in `apps/www` (local; Vercel uses OIDC)         | Read and write `permalinks.phylopic.org/data/*`                                     |
-| `phylopic-editorial`  | `apps/edit` (local only)                               | Full read/write on submissions and source images                                    |
-| `phylopic-publish`    | `AWS_PROFILE` for `apps/publish` `yarn make` (local)   | Release pipeline: S3 sync, entities build, SSM, Lambda env, CloudFront invalidation |
+| User                  | Key goes in                                            | Can do                                                                                                           |
+| --------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `phylopic-ses-sender` | `SES_*` in `apps/contribute` (local; Vercel uses OIDC) | Send mail as `keesey+phylopic@gmail.com`, nothing else                                                           |
+| `phylopic-contribute` | `S3_*` in `apps/contribute` (local; Vercel uses OIDC)  | Auth tokens, submission metadata, read source images                                                             |
+| `phylopic-www`        | `S3_*` in `apps/www` (local; Vercel uses OIDC)         | Read and write `permalinks.phylopic.org/data/*`                                                                  |
+| `phylopic-editorial`  | `apps/edit` (local only)                               | Full read/write on submissions and source images                                                                 |
+| `phylopic-publish`    | `AWS_PROFILE` for `apps/publish` `yarn make` (local)   | Release pipeline: source DB dump (write-only), S3 sync, entities build, SSM, Lambda env, CloudFront invalidation |
 
 Splitting `SES_*` from `S3_*` makes the existing variable names honest: until now both name
 pairs held the same credential, so the apparent separation of mail from storage did not exist.
@@ -249,4 +249,5 @@ with `distribution/YOUR_API_CLOUDFRONT_DISTRIBUTION_ID` (same value as `API_CLOU
 Routine backups of Postgres `phylopic-source` (RDS instance `phylopic`),
 `source-images.phylopic.org`, and `permalinks.phylopic.org` are documented in
 [`BACKUP.md`](./BACKUP.md). Apply with [`backup/enable-backups.sh`](./backup/enable-backups.sh).
-App principals in this folder are not granted the replica buckets.
+App principals in this folder are not granted the replica buckets or the dump bucket
+`source-backup.phylopic.org`, except `phylopic-publish`, which may only write dumps.

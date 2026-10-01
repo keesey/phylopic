@@ -4,8 +4,13 @@
 # source-images.phylopic.org, and permalinks.phylopic.org. Safe to re-run:
 # existing resources are updated in place rather than duplicated.
 #
-# Does not set PreferredBackupWindow. Raises BackupRetentionPeriod to 14 only
-# when the current value is lower, so a longer window already chosen is kept.
+# Long-term phylopic-source backups are pg_dump files written by
+# `yarn backup:source` (apps/publish) to source-backup.phylopic.org. RDS
+# snapshots cover the whole instance, including the rebuildable
+# phylopic-entities, so the AWS Backup plan is retired and PITR retention is
+# set to 1 day. Existing recovery points are left for the operator to delete.
+#
+# Does not set PreferredBackupWindow.
 #
 # Run with a credential that can manage RDS, IAM, S3, AWS Backup, SNS, and
 # CloudWatch (the Administrator profile). See ../BACKUP.md.
@@ -28,16 +33,16 @@ IMAGES_LIVE=source-images.phylopic.org
 IMAGES_REPLICA=source-images-backup.phylopic.org
 PERMALINKS_LIVE=permalinks.phylopic.org
 PERMALINKS_REPLICA=permalinks-backup.phylopic.org
+SOURCE_BACKUP=source-backup.phylopic.org
 VAULT_NAME=phylopic-source
 PLAN_NAME=phylopic-source
-SELECTION_NAME=phylopic-rds
 BACKUP_ROLE=phylopic-backup
 REPLICATION_ROLE=phylopic-s3-replication
 SNS_TOPIC=phylopic-backup
 IMAGES_ALARM=phylopic-source-images-object-count-drop
 PERMALINKS_ALARM=phylopic-permalinks-object-count-drop
 NOTIFY_EMAIL=${BACKUP_NOTIFY_EMAIL:-keesey+phylopic@gmail.com}
-MIN_RETENTION=14
+PITR_RETENTION=1
 
 TAGS="Key=Project,Value=PhyloPic Key=ManagedBy,Value=aws/backup/enable-backups.sh"
 
@@ -58,7 +63,8 @@ usage() {
 Usage: ./enable-backups.sh [inspect|enable|seed-replica]
 
   inspect        Print live RDS, S3, AWS Backup, SNS, and alarm settings (default).
-  enable         Apply PITR, AWS Backup, S3 image CRR, permalink replica bucket, SNS, alarms.
+  enable         Apply 1-day PITR, retire the AWS Backup plan, create the pg_dump bucket,
+                 S3 image CRR, permalink replica bucket, SNS, alarms.
   seed-replica   Sync current source-images and permalinks objects to us-east-1.
 
 See ../BACKUP.md.
@@ -129,11 +135,9 @@ inspect_backup() {
     if is_blank "$plan_id"; then
         echo "  plan $PLAN_NAME: (none)"
     else
-        echo "  plan $PLAN_NAME: $plan_id"
-        aws backup list-backup-jobs --region "$LIVE_REGION" --by-backup-vault-name "$VAULT_NAME" --max-results 3 \
-            --query 'BackupJobs[].{Created:CreationDate,Status:State,Resource:ResourceType}' \
-            --output table 2>/dev/null || echo "  (no recent jobs)"
+        echo "  plan $PLAN_NAME: $plan_id (retired by enable)"
     fi
+    inspect_recovery_points "$LIVE_REGION"
     echo
     echo "== AWS Backup ($REPLICA_REGION) =="
     if aws backup get-backup-vault --backup-vault-name "$VAULT_NAME" --region "$REPLICA_REGION" >/dev/null 2>&1; then
@@ -141,7 +145,29 @@ inspect_backup() {
     else
         echo "  vault $VAULT_NAME: (none)"
     fi
+    inspect_recovery_points "$REPLICA_REGION"
     echo
+}
+
+inspect_recovery_points() {
+    local region=$1
+    if ! aws backup get-backup-vault --backup-vault-name "$VAULT_NAME" --region "$region" >/dev/null 2>&1; then
+        return
+    fi
+    echo "  recovery points: $(aws backup list-recovery-points-by-backup-vault \
+        --backup-vault-name "$VAULT_NAME" --region "$region" \
+        --query 'length(RecoveryPoints)' --output text) (see BACKUP.md to delete)"
+}
+
+inspect_source_backup() {
+    inspect_s3_bucket "$SOURCE_BACKUP" "$REPLICA_REGION"
+    if aws s3api head-bucket --bucket "$SOURCE_BACKUP" --region "$REPLICA_REGION" >/dev/null 2>&1; then
+        echo "  latest dumps:"
+        aws s3api list-objects-v2 --bucket "$SOURCE_BACKUP" --region "$REPLICA_REGION" --prefix dumps/ \
+            --query 'reverse(sort_by(Contents || `[]`, &LastModified))[:3].{Key:Key,Size:Size,Modified:LastModified}' \
+            --output table
+        echo
+    fi
 }
 
 inspect_sns_alarm() {
@@ -182,6 +208,7 @@ cmd_inspect() {
     inspect_s3_bucket "$IMAGES_REPLICA" "$REPLICA_REGION"
     inspect_s3_bucket "$PERMALINKS_LIVE" "$LIVE_REGION"
     inspect_s3_bucket "$PERMALINKS_REPLICA" "$REPLICA_REGION"
+    inspect_source_backup
     inspect_backup
     inspect_sns_alarm
 }
@@ -237,12 +264,12 @@ enable_rds() {
 
     local args=(--db-instance-identifier "$DB_INSTANCE" --region "$LIVE_REGION" --apply-immediately)
     local change=0
-    if ((retention < MIN_RETENTION)); then
-        args+=(--backup-retention-period "$MIN_RETENTION")
+    if ((retention != PITR_RETENTION)); then
+        args+=(--backup-retention-period "$PITR_RETENTION")
         change=1
-        echo "RDS $DB_INSTANCE: BackupRetentionPeriod $retention -> $MIN_RETENTION (PreferredBackupWindow left unchanged)"
+        echo "RDS $DB_INSTANCE: BackupRetentionPeriod $retention -> $PITR_RETENTION (PreferredBackupWindow left unchanged)"
     else
-        echo "RDS $DB_INSTANCE: BackupRetentionPeriod $retention (kept; already >= $MIN_RETENTION)"
+        echo "RDS $DB_INSTANCE: BackupRetentionPeriod $retention (already $PITR_RETENTION)"
     fi
     if [[ "$protection" != "True" && "$protection" != "true" ]]; then
         args+=(--deletion-protection)
@@ -257,79 +284,25 @@ enable_rds() {
     fi
 }
 
-enable_backup_opt_in() {
-    local region=$1
-    aws backup update-region-settings --region "$region" \
-        --resource-type-opt-in-preference RDS=true
-    echo "AWS Backup: RDS opted in ($region)"
-}
-
-ensure_vault() {
-    local region=$1
-    if aws backup get-backup-vault --backup-vault-name "$VAULT_NAME" --region "$region" >/dev/null 2>&1; then
-        echo "vault $VAULT_NAME ($region): exists"
-    else
-        aws backup create-backup-vault \
-            --backup-vault-name "$VAULT_NAME" \
-            --region "$region" \
-            --backup-vault-tags Project=PhyloPic,ManagedBy=aws/backup/enable-backups.sh \
-            >/dev/null
-        echo "vault $VAULT_NAME ($region): created"
-    fi
-}
-
-enable_backup_plan() {
-    local dest_arn="arn:aws:backup:${REPLICA_REGION}:${ACCOUNT_ID}:backup-vault:${VAULT_NAME}"
-    local plan_json
-    plan_json=$(jq --arg dest "$dest_arn" '
-        .Rules[].CopyActions[]?.DestinationBackupVaultArn = $dest
-    ' backup-plan.json)
-
+retire_backup_plan() {
     local plan_id
     plan_id=$(aws backup list-backup-plans --region "$LIVE_REGION" \
         --query "BackupPlansList[?BackupPlanName=='$PLAN_NAME'].BackupPlanId | [0]" --output text)
-
     if is_blank "$plan_id"; then
-        plan_id=$(aws backup create-backup-plan --region "$LIVE_REGION" \
-            --backup-plan "$plan_json" \
-            --backup-plan-tags Project=PhyloPic,ManagedBy=aws/backup/enable-backups.sh \
-            --query BackupPlanId --output text)
-        echo "plan $PLAN_NAME: created ($plan_id)"
-    else
-        aws backup update-backup-plan --region "$LIVE_REGION" \
-            --backup-plan-id "$plan_id" \
-            --backup-plan "$plan_json" \
-            >/dev/null
-        echo "plan $PLAN_NAME: updated ($plan_id)"
+        echo "plan $PLAN_NAME: (none)"
+        return
     fi
-
-    local role_arn="arn:aws:iam::${ACCOUNT_ID}:role/${BACKUP_ROLE}"
-    local resource_arn="arn:aws:rds:${LIVE_REGION}:${ACCOUNT_ID}:db:${DB_INSTANCE}"
-    local selection
-    selection=$(jq -n \
-        --arg name "$SELECTION_NAME" \
-        --arg role "$role_arn" \
-        --arg resource "$resource_arn" \
-        '{SelectionName:$name,IamRoleArn:$role,Resources:[$resource]}')
 
     local selection_id
-    selection_id=$(aws backup list-backup-selections --backup-plan-id "$plan_id" --region "$LIVE_REGION" \
-        --query "BackupSelectionsList[?SelectionName=='$SELECTION_NAME'].SelectionId | [0]" --output text)
-
-    if is_blank "$selection_id"; then
-        aws backup create-backup-selection --region "$LIVE_REGION" \
+    for selection_id in $(aws backup list-backup-selections --backup-plan-id "$plan_id" --region "$LIVE_REGION" \
+        --query 'BackupSelectionsList[].SelectionId' --output text); do
+        aws backup delete-backup-selection --region "$LIVE_REGION" \
             --backup-plan-id "$plan_id" \
-            --backup-selection "$selection" \
-            >/dev/null
-        echo "selection $SELECTION_NAME: created"
-    else
-        aws backup update-backup-selection --region "$LIVE_REGION" \
-            --backup-plan-id "$plan_id" \
-            --selection-id "$selection_id" \
-            --backup-selection "$selection" \
-            >/dev/null
-        echo "selection $SELECTION_NAME: updated"
-    fi
+            --selection-id "$selection_id"
+        echo "selection $selection_id: deleted"
+    done
+    aws backup delete-backup-plan --region "$LIVE_REGION" --backup-plan-id "$plan_id" >/dev/null
+    echo "plan $PLAN_NAME: deleted (existing recovery points kept; see BACKUP.md)"
 }
 
 enable_sns() {
@@ -384,11 +357,13 @@ enable_sns() {
         echo "SNS: $NOTIFY_EMAIL already subscribed ($existing)"
     fi
 
-    aws backup put-backup-vault-notifications --region "$LIVE_REGION" \
-        --backup-vault-name "$VAULT_NAME" \
-        --sns-topic-arn "$topic_arn" \
-        --backup-vault-events BACKUP_JOB_FAILED COPY_JOB_FAILED RESTORE_JOB_FAILED
-    echo "SNS: vault notifications set"
+    if aws backup get-backup-vault --backup-vault-name "$VAULT_NAME" --region "$LIVE_REGION" >/dev/null 2>&1; then
+        aws backup put-backup-vault-notifications --region "$LIVE_REGION" \
+            --backup-vault-name "$VAULT_NAME" \
+            --sns-topic-arn "$topic_arn" \
+            --backup-vault-events BACKUP_JOB_FAILED COPY_JOB_FAILED RESTORE_JOB_FAILED
+        echo "SNS: vault notifications set"
+    fi
 
     TOPIC_ARN=$topic_arn
 }
@@ -468,6 +443,93 @@ ensure_replica_bucket() {
     echo "S3 $replica: lifecycle applied"
 }
 
+ensure_source_backup_bucket() {
+    local bucket=$SOURCE_BACKUP
+
+    if aws s3api head-bucket --bucket "$bucket" --region "$REPLICA_REGION" >/dev/null 2>&1; then
+        echo "S3 $bucket: exists"
+    else
+        aws s3api create-bucket \
+            --bucket "$bucket" \
+            --region "$REPLICA_REGION" \
+            >/dev/null
+        echo "S3 $bucket: created"
+    fi
+
+    aws s3api put-public-access-block \
+        --bucket "$bucket" \
+        --region "$REPLICA_REGION" \
+        --public-access-block-configuration \
+        BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+    aws s3api put-bucket-ownership-controls \
+        --bucket "$bucket" \
+        --region "$REPLICA_REGION" \
+        --ownership-controls 'Rules=[{ObjectOwnership=BucketOwnerEnforced}]'
+    aws s3api put-bucket-versioning \
+        --bucket "$bucket" \
+        --region "$REPLICA_REGION" \
+        --versioning-configuration Status=Enabled
+    aws s3api put-bucket-encryption \
+        --bucket "$bucket" \
+        --region "$REPLICA_REGION" \
+        --server-side-encryption-configuration '{
+            "Rules": [{
+                "ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"},
+                "BucketKeyEnabled": true
+            }]
+        }'
+    aws s3api put-bucket-tagging \
+        --bucket "$bucket" \
+        --region "$REPLICA_REGION" \
+        --tagging 'TagSet=[{Key=Project,Value=PhyloPic},{Key=ManagedBy,Value=aws/backup/enable-backups.sh}]'
+    echo "S3 $bucket: private, versioned, AES256"
+
+    # phylopic-publish may only add dumps; it can never read, list, or delete them.
+    local policy
+    policy=$(jq -n --arg account "$ACCOUNT_ID" --arg bucket "$bucket" '{
+        Version: "2012-10-17",
+        Statement: [
+            {
+                Sid: "DenyAppPrincipals",
+                Effect: "Deny",
+                Principal: {AWS: [
+                    ("arn:aws:iam::" + $account + ":user/phylopic-ses-sender"),
+                    ("arn:aws:iam::" + $account + ":user/phylopic-contribute"),
+                    ("arn:aws:iam::" + $account + ":user/phylopic-www"),
+                    ("arn:aws:iam::" + $account + ":user/phylopic-editorial"),
+                    ("arn:aws:iam::" + $account + ":role/phylopic-api-executor")
+                ]},
+                Action: "s3:*",
+                Resource: [
+                    ("arn:aws:s3:::" + $bucket),
+                    ("arn:aws:s3:::" + $bucket + "/*")
+                ]
+            },
+            {
+                Sid: "PublishPutOnly",
+                Effect: "Deny",
+                Principal: {AWS: ("arn:aws:iam::" + $account + ":user/phylopic-publish")},
+                NotAction: "s3:PutObject",
+                Resource: [
+                    ("arn:aws:s3:::" + $bucket),
+                    ("arn:aws:s3:::" + $bucket + "/*")
+                ]
+            }
+        ]
+    }')
+    aws s3api put-bucket-policy \
+        --bucket "$bucket" \
+        --region "$REPLICA_REGION" \
+        --policy "$policy"
+    echo "S3 $bucket: app principals denied; phylopic-publish limited to PutObject"
+
+    aws s3api put-bucket-lifecycle-configuration \
+        --bucket "$bucket" \
+        --region "$REPLICA_REGION" \
+        --lifecycle-configuration file://source-backup-lifecycle.json
+    echo "S3 $bucket: lifecycle applied (dumps/ 90 days, monthly/ 365 days)"
+}
+
 enable_s3_pair() {
     local live=$1
     local replica=$2
@@ -540,22 +602,22 @@ cmd_enable() {
     inspect_s3_bucket "$IMAGES_REPLICA" "$REPLICA_REGION"
     inspect_s3_bucket "$PERMALINKS_LIVE" "$LIVE_REGION"
     inspect_s3_bucket "$PERMALINKS_REPLICA" "$REPLICA_REGION"
+    inspect_source_backup
     echo "applying..."
     echo
     ensure_backup_role
     ensure_replication_role
     enable_rds
-    enable_backup_opt_in "$LIVE_REGION"
-    enable_backup_opt_in "$REPLICA_REGION"
-    ensure_vault "$LIVE_REGION"
-    ensure_vault "$REPLICA_REGION"
-    enable_backup_plan
+    retire_backup_plan
     enable_sns
+    ensure_source_backup_bucket
     enable_s3
     enable_alarm "$IMAGES_LIVE" "$IMAGES_ALARM"
     enable_alarm "$PERMALINKS_LIVE" "$PERMALINKS_ALARM"
     echo
     echo "Done. Confirm the SNS email. Seed current objects with: ./enable-backups.sh seed-replica"
+    echo "Run \`yarn backup:source\` in apps/publish, test-restore the dump, then delete old"
+    echo "AWS Backup recovery points (BACKUP.md)."
     echo "Permalinks have no live versioning or CRR; re-run seed-replica to refresh that replica."
     echo "See ../BACKUP.md for restore and verification."
 }
