@@ -344,6 +344,6 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             }),
             uuid,
         },
-        revalidate: 3600,
+        revalidate: false,
     }
 }

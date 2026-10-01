@@ -142,6 +142,6 @@ export const getStaticProps: GetStaticProps<Props, EntityPageQuery> = async cont
             fallback: compressFallback(fallback),
             uuid,
         },
-        revalidate: 3600,
+        revalidate: false,
     }
 }

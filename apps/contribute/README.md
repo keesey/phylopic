@@ -96,7 +96,8 @@ To deploy to `contribute.phylopic.org`, use [Git](https://git-scm.com/) to set t
 git push origin @phylopic/contribute/prod
 ```
 
-The app will deploy through [Vercel](https://vercel.com/keesey/phylopic-contribute).
+The app will deploy through [Vercel](https://vercel.com/keesey/phylopic-contribute). Pushes to any
+other branch do not deploy ([`vercel.json`](./vercel.json)); there are no preview deployments.
 
 ## Authors
 

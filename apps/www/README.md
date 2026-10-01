@@ -109,7 +109,8 @@ To deploy to `www.phylopic.org`, use [Git](https://git-scm.com/) to set the `@ph
 git push origin @phylopic/www/prod
 ```
 
-The app will deploy through [Vercel](https://vercel.com/keesey/phylopic-www).
+The app will deploy through [Vercel](https://vercel.com/keesey/phylopic-www). Pushes to any other
+branch do not deploy ([`vercel.json`](./vercel.json)); there are no preview deployments.
 
 ## Authors
 

@@ -1,5 +1,4 @@
 import { GTagAnalytics } from "@phylopic/client-components"
-import { Analytics as VercelAnalytics } from "@vercel/analytics/react"
 import { DefaultSeo } from "next-seo"
 import type { AppProps } from "next/app"
 import "../src/styles/globals.scss"
@@ -37,7 +36,6 @@ const App = ({ Component, pageProps }: AppProps) => {
             />
             <GTagAnalytics gaMeasurementId={process.env.NEXT_PUBLIC_GOOGLE_MEASUREMENT_ID} />
             <Component {...pageProps} />
-            <VercelAnalytics />
         </>
     )
 }
