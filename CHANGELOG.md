@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.71] - 2026-10-01
+
+### Changed
+
+- `@phylopic/www` `2.18.0`: Git deployments limited to `@phylopic/www/prod` (no preview deployments); node, image,
+  contributor, and lineage pages render once per build (`revalidate: false`); Vercel Web Analytics removed.
+- `@phylopic/contribute` `2.5.0`: Git deployments limited to `@phylopic/contribute/prod` (no preview deployments);
+  Vercel Web Analytics removed.
+
 ## [2.0.70] - 2026-10-01
 
 ### Fixed
