@@ -1,5 +1,4 @@
 import { GTagAnalytics, LoaderContext } from "@phylopic/client-components"
-import { Analytics as VercelAnalytics } from "@vercel/analytics/react"
 import { DefaultSeo } from "next-seo"
 import type { AppProps } from "next/app"
 import "../src/styles/globals.scss"
@@ -45,7 +44,6 @@ const App = ({ Component, pageProps }: AppProps) => {
             <LoaderContext.Provider value={{ color: "#00809f" }}>
                 <Component {...pageProps} />
             </LoaderContext.Provider>
-            <VercelAnalytics />
         </>
     )
 }

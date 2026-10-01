@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `vercel.json` limiting Git deployments to `@phylopic/contribute/prod`. Other branches (including `main`) no longer create preview deployments.
+
 ### Changed
 
 ### Deprecated
@@ -16,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Removed
+
+- Vercel Web Analytics (`@vercel/analytics`). Google Analytics remains.
 
 ### Security
 

@@ -9,13 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `vercel.json` limiting Git deployments to `@phylopic/www/prod`. Other branches (including `main`) no longer create preview deployments.
+
 ### Changed
+
+- Node, image, contributor, and lineage pages use `revalidate: false` instead of hourly. Their data is pinned to `NEXT_PUBLIC_BUILD`, and each publish redeploys, so pages are rendered once per build.
 
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+- Vercel Web Analytics (`@vercel/analytics`). Google Analytics remains.
 
 ### Security
 
