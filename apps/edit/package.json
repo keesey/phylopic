@@ -14,7 +14,7 @@
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",
-        "axios": "^1.18.1",
+        "axios": "^1.20.0",
         "clsx": "^2.1.1",
         "flux-standard-action": "^2.1.2",
         "next": "^15.5.24",

@@ -19,7 +19,7 @@
         "@phylopic/utils-aws": "*",
         "@react-hook/debounce": "^4.0.0",
         "@vercel/functions": "^3.0.0",
-        "axios": "^1.18.1",
+        "axios": "^1.20.0",
         "clsx": "^2.1.1",
         "compress-json": "3.4.0",
         "flux-standard-action": "^2.1.2",
