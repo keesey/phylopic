@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.76] - 2026-10-02
+
+### Changed
+
+- `eslint-config-phylopic` `1.1.0`: require `type` in imports used only as types.
+
 ## [2.0.75] - 2026-10-02
 
 ### Changed

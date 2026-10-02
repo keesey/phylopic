@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Require `type` in imports used only as types (`@typescript-eslint/consistent-type-imports`).
-
 ### Deprecated
 
 ### Fixed
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.1.0] - 2026-10-02
+
+### Changed
+
+- Require `type` in imports used only as types (`@typescript-eslint/consistent-type-imports`).
 
 ## [1.0.6] - 2026-08-09
 
