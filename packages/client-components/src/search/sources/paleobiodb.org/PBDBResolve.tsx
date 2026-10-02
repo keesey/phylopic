@@ -40,29 +40,19 @@ const fetchNode: Fetcher<NodeWithEmbedded, string> = async url => {
 const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
-    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
-    React.useEffect(
-        () =>
-            setDirectKey(
-                oid
-                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/paleobiodb.org/txn/${encodeURIComponent(
-                          oid,
-                      )}?embed_primaryImage=true`
-                    : null,
-            ),
-        [oid, setDirectKey],
-    )
-    const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchNode)
     const lineageKey = React.useMemo(() => {
         return PBDB_URL + "/taxa/list.json" + createSearch({ id: "txn:" + oid, rel: "all_parents" })
     }, [oid])
     const lineage = useSWRImmutable(lineageKey, fetchLineage)
     const lineageOIDs = React.useMemo(() => {
-        if (!lineage.data?.records) {
+        if (lineage.isLoading) {
             return []
         }
+        if (!lineage.data?.records?.length) {
+            return [String(oid)]
+        }
         return lineage.data.records.map(({ oid }) => oid.replace(/^txn:/, "")).reverse()
-    }, [lineage.data?.records])
+    }, [lineage.data?.records, lineage.isLoading, oid])
     const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
@@ -75,19 +65,18 @@ const PBDBResolveObject: React.FC<{ oid: number }> = ({ oid }) => {
                       })}`
                     : null,
             ),
-        [lineageOIDs, setIndirectKey],
+        [build, lineageOIDs, setIndirectKey],
     )
     const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchNode)
     React.useEffect(() => {
-        const node = direct.data ?? indirect.data
-        if (node && dispatch) {
+        if (indirect.data && dispatch) {
             dispatch({
                 type: "RESOLVE_EXTERNAL",
-                payload: node,
+                payload: indirect.data,
                 meta: { authority: "paleobiodb.org", namespace: "txn", objectID: String(oid) },
             })
         }
-    }, [direct.data, dispatch, indirect.data, oid])
+    }, [dispatch, indirect.data, oid])
     return null
 }
 

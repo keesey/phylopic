@@ -11,9 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Search resolves each Open Tree of Life, GBIF, and Paleobiology Database suggestion with one
+  `GET /resolve/{authority}/{namespace}?objectIDs=...` request (the suggestion's ID followed by its lineage) instead of
+  up to three. Falls back to the suggestion's ID alone if the external lineage request fails.
+
 ### Deprecated
 
 ### Fixed
+
+- Paleobiology Database resolution includes the `build` query parameter and updates when the build changes.
 
 ### Removed
 

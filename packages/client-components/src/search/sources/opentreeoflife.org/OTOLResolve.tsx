@@ -38,32 +38,16 @@ const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
-    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
-    React.useEffect(
-        () =>
-            setDirectKey(
-                ott_id
-                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/opentreeoflife.org/taxonomy/${encodeURIComponent(
-                          ott_id,
-                      )}${createSearch({
-                          build,
-                          embed_primaryImage: true,
-                      })}`
-                    : null,
-            ),
-        [build, ott_id, setDirectKey],
-    )
-    const direct = useSWRImmutable<NodeWithEmbedded, unknown, [string] | null>(
-        directKey ? [directKey] : null,
-        fetchNode,
-    )
     const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
     const lineageIDs = React.useMemo(() => {
+        if (lineage.isLoading) {
+            return []
+        }
         if (!lineage.data?.lineage) {
             return [String(ott_id)]
         }
         return [String(ott_id), ...lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))]
-    }, [lineage.data?.lineage, ott_id])
+    }, [lineage.data?.lineage, lineage.isLoading, ott_id])
     const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
@@ -83,15 +67,14 @@ const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
         fetchNode,
     )
     React.useEffect(() => {
-        const node = direct.data ?? indirect.data
-        if (node && dispatch) {
+        if (indirect.data && dispatch) {
             dispatch({
                 type: "RESOLVE_EXTERNAL",
-                payload: node,
+                payload: indirect.data,
                 meta: { authority: "opentreeoflife.org", namespace: "taxonomy", objectID: String(ott_id) },
             })
         }
-    }, [direct.data, dispatch, indirect.data, ott_id])
+    }, [dispatch, indirect.data, ott_id])
     return null
 }
 

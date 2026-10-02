@@ -32,32 +32,19 @@ const fetchNode: Fetcher<NodeWithEmbedded, URL> = async url => {
 const GBIFResolveObject: React.FC<{ id: number }> = ({ id }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
-    const [directKey, setDirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
-    React.useEffect(
-        () =>
-            setDirectKey(
-                id
-                    ? `${process.env.NEXT_PUBLIC_API_URL}/resolve/gbif.org/species/${encodeURIComponent(
-                          id,
-                      )}${createSearch({
-                          build,
-                          embed_primaryImage: true,
-                      })}`
-                    : null,
-            ),
-        [build, id, setDirectKey],
-    )
-    const direct = useSWRImmutable<NodeWithEmbedded>(directKey, fetchNode)
-    const usageKey = direct.isLoading || direct.data ? null : `${GBIF_URL}species/${encodeURIComponent(id)}`
-    const usage = useSWRImmutable(usageKey, fetchNameUsage)
-    const lineageIDs = React.useMemo(
-        () =>
-            GBIF_RANK_KEYS.map(key => usage.data?.[key])
-                .filter(value => isFiniteNumber(value))
-                .filter((value, index, array) => !array.slice(0, index).includes(value))
-                .map(value => String(value)),
-        [usage.data],
-    )
+    const usage = useSWRImmutable(`${GBIF_URL}species/${encodeURIComponent(id)}`, fetchNameUsage)
+    const lineageIDs = React.useMemo(() => {
+        if (usage.isLoading) {
+            return []
+        }
+        if (!usage.data) {
+            return [String(id)]
+        }
+        return GBIF_RANK_KEYS.map(key => usage.data?.[key])
+            .filter(value => isFiniteNumber(value))
+            .filter((value, index, array) => !array.slice(0, index).includes(value))
+            .map(value => String(value))
+    }, [id, usage.data, usage.isLoading])
     const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
@@ -74,15 +61,14 @@ const GBIFResolveObject: React.FC<{ id: number }> = ({ id }) => {
     )
     const indirect = useSWRImmutable<NodeWithEmbedded>(indirectKey, fetchNode)
     React.useEffect(() => {
-        const node = direct.data ?? indirect.data
-        if (node && dispatch) {
+        if (indirect.data && dispatch) {
             dispatch({
                 type: "RESOLVE_EXTERNAL",
-                payload: node,
+                payload: indirect.data,
                 meta: { authority: "gbif.org", namespace: "species", objectID: String(id) },
             })
         }
-    }, [direct.data, dispatch, id, indirect.data])
+    }, [dispatch, id, indirect.data])
     return null
 }
 
