@@ -19,8 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.74] - 2026-10-02
+
+### Security
+
 - Resolutions for `brace-expansion` `2.1.7`, `js-yaml` `4.3.2`, and `sharp` `0.35.5` (Dependabot: brace-expansion
   denial of service, js-yaml merge-key CPU use, libheif vulnerabilities in sharp).
+- `@phylopic/ui` `1.8.1`, `@phylopic/client-components` `1.0.1`, `@phylopic/www` `2.18.1`, `@phylopic/edit` `1.10.5`,
+  and `@phylopic/contribute` `2.5.1`: patch bumps for the transitive `sharp` upgrade via Next.js.
 
 ## [2.0.73] - 2026-10-02
 

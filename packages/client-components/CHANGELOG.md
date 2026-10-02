@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.1] - 2026-10-02
+
+### Security
+
+- Upgraded `@phylopic/ui` to `1.8.1`.
+- Patch upgrade for `sharp`, fixing `libheif` vulnerabilities.
+
 ## [1.0.0] - 2026-09-17
 
 ### Added
