@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.18.3] - 2026-10-02
+
+### Changed
+
+- Hid the fundraiser banner for the October 2026 campaign, which reached its goal in under a day (via
+  `@phylopic/fundraiser`). PayPal donations are still recorded. The May 2027 campaign is unaffected.
+
 ## [2.18.2] - 2026-10-02
 
 ### Changed

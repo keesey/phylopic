@@ -6,6 +6,7 @@ import {
     getPublicCampaignId,
     getSelectableCampaignIds,
     getUpcomingCampaignId,
+    isFundraiserBannerActive,
 } from "./campaign"
 
 describe("campaignIdFromDate", () => {
@@ -52,6 +53,16 @@ describe("getPublicCampaignId", () => {
         const previous = process.env.NEXT_PUBLIC_FUNDRAISER_PREVIEW
         delete process.env.NEXT_PUBLIC_FUNDRAISER_PREVIEW
         expect(getPublicCampaignId(new Date("2026-09-01T00:00:00Z"))).toBeNull()
+        process.env.NEXT_PUBLIC_FUNDRAISER_PREVIEW = previous
+    })
+})
+
+describe("isFundraiserBannerActive", () => {
+    it("is inactive during a hidden campaign and active during the next one", () => {
+        const previous = process.env.NEXT_PUBLIC_FUNDRAISER_PREVIEW
+        delete process.env.NEXT_PUBLIC_FUNDRAISER_PREVIEW
+        expect(isFundraiserBannerActive(new Date("2026-10-02T00:00:00Z"))).toBe(false)
+        expect(isFundraiserBannerActive(new Date("2027-05-01T00:00:00Z"))).toBe(true)
         process.env.NEXT_PUBLIC_FUNDRAISER_PREVIEW = previous
     })
 })

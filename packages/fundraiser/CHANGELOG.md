@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.0.2] - 2026-10-02
+
+### Added
+
+- `HIDDEN_CAMPAIGN_IDS` and `isCampaignHidden`: campaigns listed there report as inactive, so the public banner is
+  hidden. Donations are still recorded. The October 2026 campaign is hidden.
+
 ## [1.0.1] - 2026-09-11
 
 ### Changed

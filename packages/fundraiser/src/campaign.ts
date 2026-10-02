@@ -1,4 +1,4 @@
-import { FUNDRAISER_MONTHS_UTC } from "./constants"
+import { FUNDRAISER_MONTHS_UTC, HIDDEN_CAMPAIGN_IDS } from "./constants"
 
 export type CampaignId = `${number}-${"05" | "10"}`
 
@@ -68,8 +68,15 @@ export const getSelectableCampaignIds = (now = new Date()): CampaignId[] => {
 
 export const isFundraiserPreviewEnabled = (): boolean => process.env.NEXT_PUBLIC_FUNDRAISER_PREVIEW === "true"
 
-export const isFundraiserBannerActive = (now = new Date()): boolean =>
-    isFundraiserPreviewEnabled() || campaignIdFromDate(now) !== null
+export const isCampaignHidden = (campaignId: CampaignId): boolean => HIDDEN_CAMPAIGN_IDS.includes(campaignId)
+
+export const isFundraiserBannerActive = (now = new Date()): boolean => {
+    if (isFundraiserPreviewEnabled()) {
+        return true
+    }
+    const active = campaignIdFromDate(now)
+    return active !== null && !isCampaignHidden(active)
+}
 
 /** Campaign to show on the public site (active window, or next when previewing). */
 export const getPublicCampaignId = (now = new Date()): CampaignId | null => {
