@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.73] - 2026-10-02
+
+### Changed
+
+- `@phylopic/api` `2.16.0`: `GET /robots.txt`; build-pinned 404s and build redirects are cached at CloudFront;
+  `GET /resolve/{authority}/{namespace}?objectIDs=...` uses one query; `GET /resolve/{authority}/{namespace}/{objectID}`
+  without `build` redirects to add it before resolving.
+- `@phylopic/publish` `1.16.1`: `yarn release` waits for API Lambda configuration updates before invalidating the API
+  cache.
+
 ## [2.0.72] - 2026-10-01
 
 ### Changed

@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [2.16.0] - 2026-10-02
+
+### Added
+
 - `GET /robots.txt` disallowing all crawling (previously a 404 from API Gateway), documented in the OpenAPI spec.
 
 ### Changed
@@ -18,14 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Temporary responses (build redirects and invalid-path 404s) add `s-maxage` of one day, so CloudFront caches them for a day while browsers keep five minutes. Every publish invalidates CloudFront.
 - `GET /resolve/{authority}/{namespace}?objectIDs=...` looks up all IDs in one Postgres query instead of one query per ID, still returning the first match in list order.
 - `GET /resolve/{authority}/{namespace}/{objectID}` without a `build` query parameter now redirects to add that parameter (307 with an empty body), like other endpoints, before resolving. Previously it resolved immediately and returned a 307 to the node with a `TitledLink` body. Clients that follow redirects are unaffected; clients that read the 307 body instead of following it must follow the redirect or pass `build`.
-
-### Deprecated
-
-### Fixed
-
-### Removed
-
-### Security
 
 ## [2.15.2] - 2026-09-17
 
