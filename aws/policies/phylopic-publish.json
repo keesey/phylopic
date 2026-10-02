@@ -20,6 +20,12 @@
             "Resource": ["arn:aws:s3:::entities.phylopic.org", "arn:aws:s3:::entities.phylopic.org/*"]
         },
         {
+            "Sid": "SourceDatabaseBackup",
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::source-backup.phylopic.org/*"
+        },
+        {
             "Sid": "BuildParameters",
             "Effect": "Allow",
             "Action": ["ssm:GetParameter", "ssm:PutParameter"],

@@ -14,6 +14,8 @@ Make sure you have the following installed on your system and reachable via the 
 - [Image Magick](https://imagemagick.org/script/download.php) (v7.1 or higher)
 - [Inkscape](https://inkscape.org/release/inkscape-1.1.2/) (v1.1 or higher)
 - [Node.js](https://nodejs.org/en/download/) (v24 or higher)
+- [PostgreSQL client tools](https://www.postgresql.org/download/) (`pg_dump`, `pg_restore`; same
+  major version as RDS or newer, e.g. `brew install libpq`)
 - [potrace](http://potrace.sourceforge.net/#downloading) (v1.16 or higher)
 - [Vercel CLI](https://vercel.com/docs/cli) (for `yarn release` www deploys)
 - [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) (v1.22 or higher)
@@ -21,7 +23,7 @@ Make sure you have the following installed on your system and reachable via the 
 ### Environment variables
 
 These live in `.env` in the root of this project, loaded by `import "dotenv/config"` at the top of
-each entry script (`insert.ts`, `release.ts`, `autolink.ts`, `normalize.ts`, `coverage.ts`,
+each entry script (`backupSource.ts`, `insert.ts`, `release.ts`, `autolink.ts`, `normalize.ts`, `coverage.ts`,
 `uploadEntitiesCli.ts`, `verifyEntitiesS3.ts`).
 
 This project uses **one operator credential** for all AWS calls in `yarn make`. **`AWS_PROFILE`
@@ -96,15 +98,17 @@ yarn make
 
 `yarn make` runs, in order:
 
-1. `yarn download` — sync source images and source data from S3
-2. `yarn process` — rasterize/vectorize new silhouettes (`process.sh`)
-3. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
+1. `yarn backup:source` — dump `phylopic-source` to `source-backup.phylopic.org` (see
+   [Back up source data](#back-up-source-data))
+2. `yarn download` — sync source images and source data from S3
+3. `yarn process` — rasterize/vectorize new silhouettes (`process.sh`)
+4. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
    `yarn upload:images` (sync processed images to `images.phylopic.org`)
-4. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront, set
+5. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront, set
    `NEXT_PUBLIC_BUILD` on Vercel (production, preview, and development), redeploy the latest
    production `www` deployment (Git-connected; no local source upload), and update
    `apps/www/.env.local`
-5. `yarn sync:images` — final public image bucket sync
+6. `yarn sync:images` — final public image bucket sync
 
 If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
 `NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
@@ -129,7 +133,23 @@ For a data-only release (no image download/process/upload):
 yarn make:data
 ```
 
-(`yarn insert && yarn release`)
+(`yarn backup:source && yarn insert && yarn release`)
+
+### Back up source data
+
+```sh
+yarn backup:source
+```
+
+Runs `pg_dump --format=custom` of `phylopic-source` with the `PG*` variables above, checks that the
+dump contains table data, and uploads it to `source-backup.phylopic.org` (`us-east-1`) twice:
+`dumps/phylopic-source-{timestamp}.dump` (kept 90 days) and `monthly/phylopic-source-{YYYY-MM}.dump`
+(overwritten within the month, kept 365 days). A failure stops `yarn make` before anything is
+published. `phylopic-publish` can write to the bucket but not read or delete; restore steps are in
+[`aws/BACKUP.md`](../../aws/BACKUP.md).
+
+Run it on its own after significant editorial work if a publish is not due; RDS point-in-time
+recovery only covers the last day.
 
 ### Entity JSON on S3
 

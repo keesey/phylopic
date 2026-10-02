@@ -9,13 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Bucket `source-backup.phylopic.org` (`us-east-1`) for `phylopic-source` dumps: versioned, encrypted, public access blocked, lifecycle in `backup/source-backup-lifecycle.json` (`dumps/` 90 days, `monthly/` 365 days, noncurrent versions 30 days).
+- `enable-backups.sh inspect` reports the dump bucket, latest dumps, and remaining AWS Backup recovery points per region.
+- `BACKUP.md`: restore from a dump, and steps to delete legacy recovery points and manual snapshots.
+
 ### Changed
 
-### Deprecated
-
-### Fixed
+- RDS `phylopic` automated backup retention is set to 1 day (was at least 14). Long-term database backups are dumps of `phylopic-source` only, since instance snapshots also stored the rebuildable `phylopic-entities`.
+- `phylopic-publish` may `s3:PutObject` into `source-backup.phylopic.org`; the bucket policy denies it every other action and denies the app users entirely.
 
 ### Removed
+
+- AWS Backup plan `phylopic-source` (weekly and monthly snapshots copied to `us-east-1`). `enable` deletes the plan and its selections; existing recovery points are kept until deleted by hand. `backup/backup-plan.json` is gone.
 
 ### Security
 

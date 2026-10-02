@@ -7,8 +7,8 @@ Routine backups of irreplaceable stores: Postgres `phylopic-source` on RDS insta
 `entities.phylopic.org`, `phylopic-entities`) are rebuilt by `yarn make` and are not
 backed up separately. Pending uploads in `uploads.phylopic.org` are out of scope.
 
-Same AWS account (`960039257217`). Protection is versioning, snapshots, and replica
-buckets — not a second account.
+Same AWS account (`960039257217`). Protection is database dumps, short-term PITR,
+versioning, and replica buckets — not a second account.
 
 Apply with [`backup/enable-backups.sh`](./backup/enable-backups.sh). Run with a
 credential that can manage RDS, IAM, S3, AWS Backup, SNS, and CloudWatch (the
@@ -16,26 +16,35 @@ credential that can manage RDS, IAM, S3, AWS Backup, SNS, and CloudWatch (the
 
 ## What gets enabled
 
-| Layer                              | What                                                                                      | Retention                                                            |
-| ---------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| RDS automated backups + PITR       | Instance `phylopic` (both databases)                                                      | 14 days, or keep a longer value already set                          |
-| AWS Backup vault `phylopic-source` | Weekly snapshot                                                                           | 90 days, copied to `us-east-1`                                       |
-| Same vault                         | Monthly snapshot                                                                          | 365 days, copied to `us-east-1`                                      |
-| S3 versioning                      | `source-images.phylopic.org` only                                                         | Noncurrent versions: Glacier IR after 90 days, expire after 365 days |
-| S3 CRR                             | Replica `source-images-backup.phylopic.org` in `us-east-1`                                | Same lifecycle                                                       |
-| S3 replica (sync)                  | `permalinks-backup.phylopic.org` in `us-east-1` (live permalinks bucket is not versioned) | Replica versioning + same noncurrent lifecycle                       |
+| Layer                          | What                                                                                                                     | Retention                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `pg_dump` of `phylopic-source` | Written by `yarn backup:source` (first step of `yarn make` / `make:data`) to `source-backup.phylopic.org` in `us-east-1` | `dumps/`: every dump, 90 days. `monthly/`: last dump of each month, 365 days |
+| RDS automated backups + PITR   | Instance `phylopic` (both databases)                                                                                     | 1 day                                                                        |
+| S3 versioning                  | `source-images.phylopic.org` only                                                                                        | Noncurrent versions: Glacier IR after 90 days, expire after 365 days         |
+| S3 CRR                         | Replica `source-images-backup.phylopic.org` in `us-east-1`                                                               | Same lifecycle                                                               |
+| S3 replica (sync)              | `permalinks-backup.phylopic.org` in `us-east-1` (live permalinks bucket is not versioned)                                | Replica versioning + same noncurrent lifecycle                               |
 
-RDS cannot snapshot one database. A restore always brings up a throwaway instance, then
-`pg_dump` of `phylopic-source` only. `phylopic-entities` on that instance can be ignored
-or rebuilt later.
+RDS backups and snapshots always cover the whole instance, including `phylopic-entities`,
+which is rewritten on every publish and fully rebuildable by `yarn make`. Backing it up made
+snapshot storage the largest RDS cost, so long-term backups are logical dumps of
+`phylopic-source` only, and PITR is kept at 1 day for recent mistakes. The AWS Backup plan
+(weekly and monthly instance snapshots copied to `us-east-1`) is retired; see
+[Retire AWS Backup recovery points](#retire-aws-backup-recovery-points).
+
+Dumps are taken when you publish, not on a schedule. Between publishes, the 1-day PITR window is
+the only protection for recent edits; run `yarn backup:source` on its own if a publish is not due.
+
+`phylopic-publish` may only `PutObject` into `source-backup.phylopic.org` (bucket policy denies
+every other action), so a leaked publish credential cannot read or delete dumps. Versioning keeps
+overwritten `monthly/` objects for 30 days.
 
 The script never writes `PreferredBackupWindow`. App IAM users
 ([`policies/`](./policies)) are not granted the replica buckets; each replica policy
 explicitly denies them.
 
 SNS topic `phylopic-backup` emails `keesey+phylopic@gmail.com` (override with
-`BACKUP_NOTIFY_EMAIL`) on AWS Backup job failures and on a sharp drop in source-image
-or permalink object count. Confirm the subscription email after the first `enable`.
+`BACKUP_NOTIFY_EMAIL`) on a sharp drop in source-image or permalink object count. Confirm the
+subscription email after the first `enable`. A failed `yarn backup:source` stops `yarn make`.
 
 ## Inspect first
 
@@ -50,9 +59,9 @@ cd aws/backup
 Confirm:
 
 1. **RDS `phylopic`:** `BackupRetentionPeriod`, `PreferredBackupWindow`,
-   `DeletionProtection`, `StorageEncrypted`, `LatestRestorableTime`. If retention is
-   already greater than 14 days, leave it. If it is `0`, the first enable starts a full
-   backup and PITR is unavailable until that backup finishes.
+   `DeletionProtection`, `StorageEncrypted`, `LatestRestorableTime`. Enable sets retention to
+   exactly 1 day. If it is `0`, the first enable starts a full backup and PITR is unavailable
+   until that backup finishes.
 2. **`source-images.phylopic.org`:** versioning, replication, lifecycle. Enabling
    versioning cannot be fully undone (only suspended). Replacing lifecycle overwrites
    any existing rules on that bucket.
@@ -62,7 +71,9 @@ Confirm:
    `aws s3api put-bucket-versioning --bucket permalinks.phylopic.org --versioning-configuration Status=Suspended`
 4. **Replica buckets** `source-images-backup.phylopic.org` and
    `permalinks-backup.phylopic.org` — whether they already exist in `us-east-1`.
-5. **AWS Backup** vaults and plan named `phylopic-source`.
+5. **`source-backup.phylopic.org`** in `us-east-1` and its latest dumps.
+6. **AWS Backup** vaults and plan named `phylopic-source`, and how many recovery points remain.
+   Enable deletes the plan; it does not delete recovery points.
 
 Then apply (idempotent):
 
@@ -85,14 +96,49 @@ pass `--delete` on that sync, or live deletes would drop the replica copy.
 
 ## Restore
 
-Do not restore onto the live instance. Always restore to a throwaway RDS instance,
-dump `phylopic-source`, and only then load into live. `phylopic_source` cannot run
-`pg_restore --clean` (no `DELETE`, not the owner). Use the database owner (`master`
-in [sql/phylopic-source.sql](../sql/phylopic-source.sql)).
+Always inspect a dump in a scratch database before loading it into live.
+`phylopic_source` cannot run `pg_restore --clean` (no `DELETE`, not the owner). Use the
+database owner (`master` in [sql/phylopic-source.sql](../sql/phylopic-source.sql)).
 
 Before any load into live: take a fresh RDS snapshot of `phylopic`, stop editorial
-writes (`apps/edit`, `apps/contribute`) if you can, and verify the dump against the
-throwaway instance.
+writes (`apps/edit`, `apps/contribute`) if you can, and verify the dump in the scratch
+database.
+
+### Database — from a dump (normal path)
+
+Download a dump with the operator (`Administrator`) profile; `phylopic-publish` cannot read
+the bucket:
+
+```sh
+aws s3 ls s3://source-backup.phylopic.org/dumps/ --region us-east-1
+aws s3 ls s3://source-backup.phylopic.org/monthly/ --region us-east-1
+
+aws s3 cp s3://source-backup.phylopic.org/dumps/phylopic-source-2026-10-01T22-30-00Z.dump \
+  phylopic-source.dump --region us-east-1
+```
+
+Restore into a scratch local database (any Postgres at least as new as RDS) and inspect:
+
+```sh
+createdb phylopic-source-scratch
+pg_restore --no-owner --no-privileges -d phylopic-source-scratch phylopic-source.dump
+psql -d phylopic-source-scratch -c 'SELECT count(*) FROM image'
+```
+
+Then replace live `phylopic-source` only:
+
+```sh
+pg_restore -h "$PGHOST" -U master -d phylopic-source --clean --if-exists --no-owner phylopic-source.dump
+```
+
+Add `-t public.image` (and related tables) to restore only some tables. Run `yarn make`
+afterward if the public site and API must match the restored source.
+
+### Database — within the last day (PITR)
+
+Use this for a bad `UPDATE` since the latest dump, while `LatestRestorableTime` still
+covers the moment you need. PITR always restores the whole instance, so restore to a
+throwaway instance and dump `phylopic-source` from it.
 
 Copy subnet group, VPC security groups, and public-accessibility from live:
 
@@ -100,11 +146,6 @@ Copy subnet group, VPC security groups, and public-accessibility from live:
 aws rds describe-db-instances --db-instance-identifier phylopic \
   --query 'DBInstances[0].{Subnet:DBSubnetGroup.DBSubnetGroupName,SGs:VpcSecurityGroups[*].VpcSecurityGroupId,Public:PubliclyAccessible,Encrypted:StorageEncrypted}'
 ```
-
-### Database — last 14 days (PITR)
-
-Use this for a bad `UPDATE` or similar when `LatestRestorableTime` still covers the
-moment you need.
 
 ```sh
 RESTORE_ID="phylopic-restore-$(date -u +%Y%m%d%H%M)"
@@ -132,21 +173,17 @@ ENDPOINT=$(aws rds describe-db-instances --db-instance-identifier "$RESTORE_ID" 
 pg_dump -h "$ENDPOINT" -U master -d phylopic-source -Fc -f phylopic-source.dump
 ```
 
-Inspect, then replace live `phylopic-source` only:
-
-```sh
-pg_restore -h "$PGHOST" -U master -d phylopic-source --clean --if-exists phylopic-source.dump
-```
-
-For a few tables, add `-t public.image` (and related tables) to `pg_dump` / `pg_restore`
-instead of dumping the whole database.
+Then restore that dump as in [from a dump](#database--from-a-dump-normal-path), and drop the
+throwaway instance:
 
 ```sh
 aws rds delete-db-instance --db-instance-identifier "$RESTORE_ID" --skip-final-snapshot
 aws rds wait db-instance-deleted --db-instance-identifier "$RESTORE_ID"
 ```
 
-### Database — older than PITR (AWS Backup snapshot)
+### Database — legacy AWS Backup snapshot (until retired)
+
+Only while old recovery points still exist (taken 2026-08-30 to the plan's retirement).
 
 ```sh
 aws backup list-recovery-points-by-backup-vault \
@@ -171,6 +208,35 @@ aws backup list-copy-jobs --by-resource-type RDS   # if the only copy is in us-e
 
 Then the same `pg_dump` / `pg_restore` / delete-throwaway path as PITR. Copies in
 `us-east-1` use `--region us-east-1` on `list-recovery-points-by-backup-vault`.
+
+### Retire AWS Backup recovery points
+
+Destructive; operator only. Do this **after** `yarn backup:source` has written a dump and that
+dump has restored cleanly into a scratch database. Recovery points in both regions, plus any
+manual RDS snapshots, are billed as RDS backup storage until deleted.
+
+```sh
+for region in us-west-2 us-east-1; do
+  for arn in $(aws backup list-recovery-points-by-backup-vault \
+      --backup-vault-name phylopic-source --region "$region" \
+      --query 'RecoveryPoints[].RecoveryPointArn' --output text); do
+    echo "deleting $arn"
+    aws backup delete-recovery-point --backup-vault-name phylopic-source \
+      --recovery-point-arn "$arn" --region "$region"
+  done
+done
+
+# Manual snapshots outside AWS Backup (e.g. an old one in us-west-1):
+for region in us-west-1 us-west-2 us-east-1; do
+  aws rds describe-db-snapshots --snapshot-type manual --region "$region" \
+    --query 'DBSnapshots[].[DBSnapshotIdentifier,SnapshotCreateTime,AllocatedStorage]' --output table
+done
+aws rds delete-db-snapshot --db-snapshot-identifier SNAPSHOT_ID --region us-west-1
+```
+
+Once both vaults are empty, they can be deleted
+(`aws backup delete-backup-vault --backup-vault-name phylopic-source --region ...`), along with
+the `phylopic-backup` IAM role.
 
 ### One image
 
@@ -255,12 +321,11 @@ replica. Permalinks do not require `yarn make`.
 
 Do not load into live.
 
-1. `./enable-backups.sh inspect` — latest restorable time is recent; last AWS Backup
-   job is `COMPLETED`; source-images replication is `Enabled`; permalinks live
-   versioning is not `Enabled`.
-2. Restore the newest weekly recovery point to a throwaway instance. `pg_dump`
-   `phylopic-source` only; confirm the dump restores into a local or throwaway
-   database. Drop the throwaway RDS instance.
+1. `./enable-backups.sh inspect` — latest restorable time is recent; the newest dump in
+   `source-backup.phylopic.org` matches the last publish; source-images replication is
+   `Enabled`; permalinks live versioning is not `Enabled`.
+2. Download the newest dump and restore it into a scratch database (see
+   [from a dump](#database--from-a-dump-normal-path)); spot-check row counts against live.
 3. Put a tiny object at `backup-probe/drill.txt` on `source-images.phylopic.org`, wait
    for CRR, delete on live, confirm the prior version remains. Put another at
    `backup-probe/drill.txt` on `permalinks.phylopic.org`, run `seed-replica`, delete on
@@ -277,7 +342,12 @@ never used by the apps.
 aws rds describe-db-instances --db-instance-identifier phylopic \
   --query 'DBInstances[0].{Retention:BackupRetentionPeriod,PITR:LatestRestorableTime,DeletionProtection:DeletionProtection}'
 
-aws backup list-backup-jobs --by-resource-type RDS --max-results 5
+aws s3api get-bucket-policy --bucket source-backup.phylopic.org --region us-east-1
+
+aws iam simulate-principal-policy \
+  --policy-source-arn arn:aws:iam::960039257217:user/phylopic-publish \
+  --action-names s3:PutObject s3:GetObject s3:DeleteObject \
+  --resource-arns arn:aws:s3:::source-backup.phylopic.org/dumps/probe.dump
 
 aws s3api get-bucket-versioning --bucket source-images.phylopic.org
 aws s3api get-bucket-replication --bucket source-images.phylopic.org
@@ -295,7 +365,10 @@ aws iam simulate-principal-policy \
   --resource-arns arn:aws:s3:::permalinks-backup.phylopic.org/data/probe.json
 ```
 
-`phylopic-editorial` and `phylopic-publish` must be `implicitDeny` or `explicitDeny` on
+`phylopic-publish` should be `allowed` for `s3:PutObject` and denied for `s3:GetObject` and
+`s3:DeleteObject` on `source-backup.phylopic.org` (`simulate-principal-policy` evaluates the IAM
+policy only; the bucket policy adds the explicit deny). `phylopic-editorial` and
+`phylopic-publish` must be `implicitDeny` or `explicitDeny` on
 `source-images-backup.phylopic.org`. `phylopic-www` must be denied on
 `permalinks-backup.phylopic.org`. Live `permalinks.phylopic.org` versioning should be
 empty or `Suspended`, not `Enabled`. Confirm the SNS email and, once S3 daily metrics

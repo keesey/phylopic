@@ -35,6 +35,7 @@
     "private": true,
     "scripts": {
         "autolink": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/autolink.ts",
+        "backup:source": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/backupSource.ts",
         "clean": "rm -rf .turbo && rm -rf node_modules",
         "coverage": "node --loader ts-node/esm ./src/coverage.ts",
         "download": "concurrently \"yarn download:images\" \"yarn download:source\"",
@@ -42,8 +43,8 @@
         "download:source": "AWS_PROFILE=phylopic-publish aws s3 sync --delete s3://source-images.phylopic.org/ ./.s3/source-images.phylopic.org && find .s3/source-images.phylopic.org -type d -empty -delete",
         "insert": "AWS_PROFILE=phylopic-publish UV_THREADPOOL_SIZE=32 node --loader ts-node/esm ./src/insert.ts 2> insert-error.log",
         "lint": "TIMING=1 eslint --fix ./**/*.[jt]s",
-        "make": "yarn download && yarn process && concurrently \"yarn insert\" \"yarn upload:images\" && yarn release && yarn sync",
-        "make:data": "yarn insert && yarn release",
+        "make": "yarn backup:source && yarn download && yarn process && concurrently \"yarn insert\" \"yarn upload:images\" && yarn release && yarn sync",
+        "make:data": "yarn backup:source && yarn insert && yarn release",
         "normalize": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/normalize.ts",
         "process": "./process.sh 2> process-error.log",
         "release": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/release.ts 2> release-error.log",

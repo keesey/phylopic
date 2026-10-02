@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `yarn backup:source`: `pg_dump` of `phylopic-source` to `source-backup.phylopic.org` (`dumps/` and `monthly/`), with a check that the dump contains table data.
+
 ### Changed
+
+- `yarn make` and `yarn make:data` run `yarn backup:source` first, so every publish starts with a fresh source backup. Requires `pg_dump` and `pg_restore` on the path.
 
 ### Deprecated
 
