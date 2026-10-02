@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.75] - 2026-10-02
+
+### Changed
+
+- `@phylopic/client-components` `1.0.2`, `@phylopic/www` `2.18.2`, `@phylopic/contribute` `2.5.2`, and
+  `@phylopic/edit` `1.10.6`: search sends one PhyloPic API request per external taxon suggestion instead of up to three.
+- Removed empty sections from released versions in all changelogs.
+
 ## [2.0.74] - 2026-10-02
 
 ### Security
@@ -92,8 +100,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `@phylopic/api` `2.15.2`, `@phylopic/www` `2.17.2`, `@phylopic/contribute` `2.4.27`, and `@phylopic/edit` `1.10.4`: dead code and stale dependencies after the client-components split.
 
-### Security
-
 ## [2.0.67] - 2026-09-17
 
 ### Changed
@@ -105,23 +111,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.66] - 2026-09-16
 
-### Added
-
 ### Changed
 
 - `@phylopic/www` `2.17.0`: search `<datalist>` suggestions debounce for 500ms after typing pauses.
 - `@phylopic/www` `2.17.0`: search input uses `readOnly`-until-interaction and `type="text"` with search keyboard hints instead of a hidden focus-stealer decoy.
 
-### Deprecated
-
 ### Fixed
 
 - `@phylopic/www` `2.17.0`: iOS Safari no longer autofocuses the search field on page load.
 - `@phylopic/www` `2.17.0`: iOS Safari search typing is no longer disrupted by autocomplete suggestions updating mid-keystroke.
-
-### Removed
-
-### Security
 
 ## [2.0.65] - 2026-09-14
 
@@ -162,18 +160,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `apps/www/.env.local`, sets Vercel `NEXT_PUBLIC_BUILD`, and deploys `www`, but exits with an
   error afterward.
 
-### Deprecated
-
-### Fixed
-
 ### Removed
 
 - `@phylopic/www` `2.16.0`: `BuildChecker`, `POST /api/revalidate`, `getBuildStaticProps()`, the
   `PageLayout` `build` prop, and server-side `GET /` build lookup.
 - `@phylopic/publish` `1.15.0`: `yarn revalidate`, `revalidate.ts`, and required `REVALIDATE_TOKEN` /
   `WWW_URL`.
-
-### Security
 
 ## [2.0.63] - 2026-09-12
 

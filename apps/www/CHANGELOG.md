@@ -11,10 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Search sends one PhyloPic API request per external taxon suggestion instead of up to three (via
-  `@phylopic/client-components`). About half of all API origin traffic was these requests, and bursts of them were
-  throttled by the API's Lambda concurrency limit.
-
 ### Deprecated
 
 ### Fixed
@@ -22,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.18.2] - 2026-10-02
+
+### Changed
+
+- Search sends one PhyloPic API request per external taxon suggestion instead of up to three (via
+  `@phylopic/client-components`). About half of all API origin traffic was these requests, and bursts of them were
+  throttled by the API's Lambda concurrency limit.
 
 ## [2.18.1] - 2026-10-02
 
@@ -49,14 +53,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.17.2] - 2026-09-17
 
-### Added
-
 ### Changed
 
 - Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
 - Use `svh`/`svw` viewport units for layout sizing.
-
-### Deprecated
 
 ### Fixed
 
@@ -67,8 +67,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pocket Phylogenies materials, orphan service worker files, unused `FilterMode` analytics export, and orphan ExpandableLineageBreadcrumbs stylesheet.
 - Redundant `@vercel/kv` dependency.
 
-### Security
-
 ## [2.17.1] - 2026-09-17
 
 ### Changed
@@ -77,23 +75,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.17.0] - 2026-09-16
 
-### Added
-
 ### Changed
 
 - Search `<datalist>` suggestions debounce for 500ms after typing pauses.
 - Search input uses `readOnly`-until-interaction and `type="text"` with search keyboard hints instead of a hidden focus-stealer decoy.
 
-### Deprecated
-
 ### Fixed
 
 - iOS Safari no longer autofocuses the search field on page load.
 - iOS Safari search typing is no longer disrupted by autocomplete suggestions updating mid-keystroke.
-
-### Removed
-
-### Security
 
 ## [2.16.0] - 2026-09-13
 
@@ -105,18 +95,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Server-side PhyloPic API calls include `build` to avoid 307 redirect round-trips.
 
-### Deprecated
-
-### Fixed
-
 ### Removed
 
 - `BuildChecker` client component that cache-busted `GET /` on every page load.
 - `POST /api/revalidate` on-demand revalidation endpoint.
 - `getBuildStaticProps()` and the `PageLayout` `build` prop.
 - Server-side `GET /` lookup for the current build number (`getBuild.ts`).
-
-### Security
 
 ## [2.15.3] - 2026-09-11
 

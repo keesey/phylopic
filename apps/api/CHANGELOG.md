@@ -39,8 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Legacy webpack build configuration and dependencies.
 
-### Security
-
 ## [2.15.1] - 2026-09-17
 
 ### Changed
@@ -403,8 +401,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Validations were always of type `BAD_REQUEST_BODY` even when the field was in the parameters.
-
-### Security
 
 ## [2.4.1] - 2023-04-30
 

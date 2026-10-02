@@ -11,9 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Node search sends one PhyloPic API request per external taxon suggestion instead of up to three (via
-  `@phylopic/client-components`).
-
 ### Deprecated
 
 ### Fixed
@@ -21,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.5.2] - 2026-10-02
+
+### Changed
+
+- Node search sends one PhyloPic API request per external taxon suggestion instead of up to three (via
+  `@phylopic/client-components`).
 
 ## [2.5.1] - 2026-10-02
 

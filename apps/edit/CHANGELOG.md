@@ -11,9 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Node selector and identifier editor searches send one PhyloPic API request per external taxon suggestion instead of
-  up to three (via `@phylopic/client-components`).
-
 ### Deprecated
 
 ### Fixed
@@ -21,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [1.10.6] - 2026-10-02
+
+### Changed
+
+- Node selector and identifier editor searches send one PhyloPic API request per external taxon suggestion instead of
+  up to three (via `@phylopic/client-components`).
 
 ## [1.10.5] - 2026-10-02
 
@@ -31,24 +35,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.10.4] - 2026-09-17
 
-### Added
-
 ### Changed
 
 - Import client-side UI from `@phylopic/client-components` instead of `@phylopic/ui`.
 - Modal max height uses `svh` instead of `vh`.
 - Add explicit `@phylopic/utils-api` dependency.
 
-### Deprecated
-
-### Fixed
-
 ### Removed
 
 - Unused editor context containers, views, and legacy webpack globals stylesheet.
 - Redundant `@vercel/kv` dependency.
-
-### Security
 
 ## [1.10.3] - 2026-09-17
 
