@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Resolutions for `brace-expansion` `2.1.7`, `js-yaml` `4.3.2`, and `sharp` `0.35.5` (Dependabot: brace-expansion
+  denial of service, js-yaml merge-key CPU use, libheif vulnerabilities in sharp).
+
 ## [2.0.73] - 2026-10-02
 
 ### Changed
