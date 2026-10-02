@@ -2,6 +2,7 @@ import {
     GetFunctionConfigurationCommand,
     LambdaClient,
     UpdateFunctionConfigurationCommand,
+    waitUntilFunctionUpdated,
 } from "@aws-sdk/client-lambda"
 import { PutParameterCommand, SSMClient } from "@aws-sdk/client-ssm"
 
@@ -25,6 +26,8 @@ const updateLambdaEnvironmentVariables = async (
             },
         }),
     )
+    // The API cache is invalidated next; until the update finishes, Lambda still serves the old build.
+    await waitUntilFunctionUpdated({ client, maxWaitTime: 120 }, { FunctionName })
 }
 
 // :TODO: Implement updating the root

@@ -35,6 +35,7 @@ const selectResolveLinkJSON = async (
     objectIDs: readonly ObjectID[],
     queryParameters: Readonly<Record<string, string | number | boolean | undefined>>,
     notFoundHeaders: Readonly<Record<string, string | number | boolean>> = {},
+    notFoundField = "objectID",
 ): Promise<string> => {
     const body = await withPgClient(service, client =>
         selectResolveLinkJSONFromPostgres(client, authority, namespace, objectIDs),
@@ -45,7 +46,7 @@ const selectResolveLinkJSON = async (
             [
                 {
                     developerMessage: "Could not resolve.",
-                    field: objectIDs.length === 1 ? "objectID" : "objectIDs",
+                    field: notFoundField,
                     type: "RESOURCE_NOT_FOUND",
                     userMessage: USER_MESSAGE,
                 },

@@ -1677,14 +1677,7 @@ paths:
         - $ref: "#/components/parameters/objectid"
       responses:
         "307":
-          description: The node was found, but the request did not specify the current `build` value.
-          headers:
-            Location:
-              $ref: "#/components/headers/Location"
-          content:
-            application/vnd.phylopic.v2+json:
-              schema:
-                $ref: "#/components/schemas/TitledLink"
+          $ref: "#/components/responses/307"
         "308":
           description: The node was found.
           headers:

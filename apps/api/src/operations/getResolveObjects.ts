@@ -52,7 +52,15 @@ const selectResolveLinkJSONFromObjectIDs = async (
             },
         ])
     }
-    return selectResolveLinkJSON(service, authority, namespace, objectIDs, queryParameters, PERMANENT_HEADERS)
+    return selectResolveLinkJSON(
+        service,
+        authority,
+        namespace,
+        objectIDs,
+        queryParameters,
+        PERMANENT_HEADERS,
+        "objectIDs",
+    )
 }
 
 const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (
