@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Search sends one PhyloPic API request per external taxon suggestion instead of up to three (via
+  `@phylopic/client-components`). About half of all API origin traffic was these requests, and bursts of them were
+  throttled by the API's Lambda concurrency limit.
+
 ### Deprecated
 
 ### Fixed

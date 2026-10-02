@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Node selector and identifier editor searches send one PhyloPic API request per external taxon suggestion instead of
+  up to three (via `@phylopic/client-components`).
+
 ### Deprecated
 
 ### Fixed
