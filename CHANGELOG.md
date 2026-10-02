@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.72] - 2026-10-01
+
+### Changed
+
+- `@phylopic/publish` `1.16.0`: `yarn make` and `yarn make:data` start with `yarn backup:source`, a `pg_dump` of
+  `phylopic-source` to `source-backup.phylopic.org`.
+- `aws` `1.5.0`: long-term database backups are `phylopic-source` dumps only; RDS PITR is 1 day; the AWS Backup plan is
+  retired.
+
 ## [2.0.71] - 2026-10-01
 
 ### Changed

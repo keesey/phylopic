@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.5.0] - 2026-10-01
+
+### Added
+
 - Bucket `source-backup.phylopic.org` (`us-east-1`) for `phylopic-source` dumps: versioned, encrypted, public access blocked, lifecycle in `backup/source-backup-lifecycle.json` (`dumps/` 90 days, `monthly/` 365 days, noncurrent versions 30 days).
 - `enable-backups.sh inspect` reports the dump bucket, latest dumps, and remaining AWS Backup recovery points per region.
 - `BACKUP.md`: restore from a dump, and steps to delete legacy recovery points and manual snapshots.
@@ -21,8 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - AWS Backup plan `phylopic-source` (weekly and monthly snapshots copied to `us-east-1`). `enable` deletes the plan and its selections; existing recovery points are kept until deleted by hand. `backup/backup-plan.json` is gone.
-
-### Security
 
 ## [1.4.0] - 2026-08-30
 
