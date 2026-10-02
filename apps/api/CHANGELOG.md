@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `GET /robots.txt` disallowing all crawling (previously a 404 from API Gateway).
+- `GET /robots.txt` disallowing all crawling (previously a 404 from API Gateway), documented in the OpenAPI spec.
 
 ### Changed
 
