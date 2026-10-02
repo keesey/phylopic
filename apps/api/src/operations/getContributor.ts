@@ -44,14 +44,18 @@ const getContributor: Operation<GetContributorParameters, GetContributorService>
             (await getS3EntityJSON(client, getEntityJSONKey(BUILD, "contributors", normalizedUUID))) ?? "null",
     )
     if (body === "null") {
-        throw new APIError(404, [
-            {
-                developerMessage: "Cannot find entity.",
-                field: "uuid",
-                type: "RESOURCE_NOT_FOUND",
-                userMessage: "That contributor account could not be found.",
-            },
-        ])
+        throw new APIError(
+            404,
+            [
+                {
+                    developerMessage: "Cannot find entity.",
+                    field: "uuid",
+                    type: "RESOURCE_NOT_FOUND",
+                    userMessage: "That contributor account could not be found.",
+                },
+            ],
+            PERMANENT_HEADERS,
+        )
     }
     return {
         body,

@@ -58,6 +58,9 @@ functions:
                   path: /licenses
                   method: get
             - httpApi:
+                  path: /robots.txt
+                  method: get
+            - httpApi:
                   path: /root
                   method: get
     dynamic:

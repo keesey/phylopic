@@ -12,6 +12,7 @@ import APIError from "../errors/APIError"
 import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
+import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
 import type { PgClientService } from "../services/PgClientService"
@@ -51,24 +52,7 @@ const selectResolveLinkJSONFromObjectIDs = async (
             },
         ])
     }
-    for (const objectID of objectIDs) {
-        try {
-            return await selectResolveLinkJSON(service, authority, namespace, objectID, queryParameters)
-        } catch (e) {
-            if (e instanceof APIError && e.httpCode === 404) {
-                continue
-            }
-            throw e
-        }
-    }
-    throw new APIError(404, [
-        {
-            developerMessage: "Object could not be found.",
-            field: "objectIDs",
-            type: "RESOURCE_NOT_FOUND",
-            userMessage: USER_MESSAGE,
-        },
-    ])
+    return selectResolveLinkJSON(service, authority, namespace, objectIDs, queryParameters, PERMANENT_HEADERS)
 }
 
 const GetResolveObjects: Operation<GetResolveObjectsParameters, GetResolveObjectsService> = async (

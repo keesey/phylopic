@@ -60,10 +60,17 @@ const getNode: Operation<GetNodeParameters, GetNodeService> = async (
         getEntityJSONWithEmbedded<Node, NodeLinks>(client, "nodes", normalizedUUID, embeds, isNode, "taxonomic group"),
     )
     if (body === "null") {
-        const redirectBody = await selectResolveLinkJSON(service, "phylopic.org", "nodes", normalizedUUID, {
-            ...queryParameters,
-            build: BUILD,
-        })
+        const redirectBody = await selectResolveLinkJSON(
+            service,
+            "phylopic.org",
+            "nodes",
+            [normalizedUUID],
+            {
+                ...queryParameters,
+                build: BUILD,
+            },
+            PERMANENT_HEADERS,
+        )
         const link = JSON.parse(redirectBody) as TitledLink
         return {
             body: redirectBody,

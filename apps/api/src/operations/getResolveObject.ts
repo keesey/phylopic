@@ -12,6 +12,8 @@ import APIError from "../errors/APIError"
 import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
+import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
+import TEMPORARY_HEADERS from "../headers/responses/TEMPORARY_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
 import type { PgClientService } from "../services/PgClientService"
@@ -62,10 +64,17 @@ const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectSe
         checkBuild(queryParameters.build, USER_MESSAGE)
     }
     assertResolvable(authority, namespace, objectID)
-    const body = await selectResolveLinkJSON(service, authority, namespace, objectID, {
-        ...queryParameters,
-        build: BUILD,
-    })
+    const body = await selectResolveLinkJSON(
+        service,
+        authority,
+        namespace,
+        [objectID],
+        {
+            ...queryParameters,
+            build: BUILD,
+        },
+        queryParameters.build ? PERMANENT_HEADERS : TEMPORARY_HEADERS,
+    )
     const link = JSON.parse(body) as TitledLink
     const permanent = queryParameters.build === BUILD.toString(10)
     return {
