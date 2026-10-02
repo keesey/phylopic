@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 404s for a build-pinned request (`GET /images/{uuid}`, `/contributors/{uuid}`, `/nodes/{uuid}`, `/resolve/...` with `build`) are cached like successful responses instead of not at all. CloudFront previously refetched them every 10 seconds.
 - Temporary responses (build redirects, `/resolve/...` without `build`) add `s-maxage` of one day, so CloudFront caches them for a day while browsers keep five minutes. Every publish invalidates CloudFront.
 - `GET /resolve/{authority}/{namespace}?objectIDs=...` looks up all IDs in one Postgres query instead of one query per ID, still returning the first match in list order.
+- `GET /resolve{authority}/{namespace}/{objectID}` without a `build` query parameter now redirects to add that parameter.
 
 ### Deprecated
 
