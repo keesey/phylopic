@@ -78,14 +78,13 @@ const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectSe
         PERMANENT_HEADERS,
     )
     const link = JSON.parse(body) as TitledLink
-    const permanent = queryParameters.build === BUILD.toString(10)
     return {
         body,
         headers: {
             ...DATA_HEADERS,
-            ...createRedirectHeaders(link.href, permanent),
+            ...createRedirectHeaders(link.href, true),
         },
-        statusCode: permanent ? 308 : 307,
+        statusCode: 308,
     } as APIGatewayProxyResult
 }
 
