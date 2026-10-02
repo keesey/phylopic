@@ -9,10 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `GET /robots.txt` disallowing all crawling (previously a 404 from API Gateway), documented in the OpenAPI spec and listed in the `resources` links of `GET /`.
+- `GET /robots.txt` disallowing all crawling (previously a 404 from API Gateway), documented in the OpenAPI spec.
 
 ### Changed
 
+- `GET /` lists `/robots.txt` ("Crawler Instructions") in `_links.resources`.
 - 404s for a build-pinned request (`GET /images/{uuid}`, `/contributors/{uuid}`, `/nodes/{uuid}`, `/resolve/...` with `build`) are cached like successful responses instead of not at all. CloudFront previously refetched them every 10 seconds.
 - Temporary responses (build redirects, `/resolve/...` without `build`) add `s-maxage` of one day, so CloudFront caches them for a day while browsers keep five minutes. Every publish invalidates CloudFront.
 - `GET /resolve/{authority}/{namespace}?objectIDs=...` looks up all IDs in one Postgres query instead of one query per ID, still returning the first match in list order.
