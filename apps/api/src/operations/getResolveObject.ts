@@ -8,10 +8,12 @@ import type { Authority, Namespace, ObjectID } from "@phylopic/utils"
 import type { APIGatewayProxyResult } from "aws-lambda"
 import BUILD from "../build/BUILD"
 import checkBuild from "../build/checkBuild"
+import createBuildRedirect from "../build/createBuildRedirect"
 import APIError from "../errors/APIError"
 import type { DataRequestHeaders } from "../headers/requests/DataRequestHeaders"
 import createRedirectHeaders from "../headers/responses/createRedirectHeaders"
 import DATA_HEADERS from "../headers/responses/DATA_HEADERS"
+import PERMANENT_HEADERS from "../headers/responses/PERMANENT_HEADERS"
 import checkAccept from "../mediaTypes/checkAccept"
 import selectResolveLinkJSON from "../search/selectResolveLinkJSON"
 import type { PgClientService } from "../services/PgClientService"
@@ -58,23 +60,31 @@ const getResolveObject: Operation<GetResolveObjectParameters, GetResolveObjectSe
     checkAccept(accept, DATA_MEDIA_TYPE)
     validate(queryAndPathParameters, isResolveObjectParameters, USER_MESSAGE)
     const { authority, namespace, objectID, ...queryParameters } = queryAndPathParameters as ResolveObjectParameters
-    if (queryParameters.build) {
-        checkBuild(queryParameters.build, USER_MESSAGE)
+    const path = `/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}/${encodeURIComponent(objectID)}`
+    if (!queryParameters.build) {
+        return createBuildRedirect(path, { ...queryParameters })
     }
+    checkBuild(queryParameters.build, USER_MESSAGE)
     assertResolvable(authority, namespace, objectID)
-    const body = await selectResolveLinkJSON(service, authority, namespace, objectID, {
-        ...queryParameters,
-        build: BUILD,
-    })
+    const body = await selectResolveLinkJSON(
+        service,
+        authority,
+        namespace,
+        [objectID],
+        {
+            ...queryParameters,
+            build: BUILD,
+        },
+        PERMANENT_HEADERS,
+    )
     const link = JSON.parse(body) as TitledLink
-    const permanent = queryParameters.build === BUILD.toString(10)
     return {
         body,
         headers: {
             ...DATA_HEADERS,
-            ...createRedirectHeaders(link.href, permanent),
+            ...createRedirectHeaders(link.href, true),
         },
-        statusCode: permanent ? 308 : 307,
+        statusCode: 308,
     } as APIGatewayProxyResult
 }
 

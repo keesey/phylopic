@@ -6,6 +6,7 @@ import CORS_HEADERS from "../headers/responses/CORS_HEADERS"
 import TEMPORARY_HEADERS from "../headers/responses/TEMPORARY_HEADERS"
 import getIndex from "../operations/getIndex"
 import getLicenses from "../operations/getLicenses"
+import getRobots from "../operations/getRobots"
 import getRoot from "../operations/getRoot"
 import getEmbedParameters from "./parameters/getEmbedParameters"
 import getParameters from "./parameters/getParameters"
@@ -32,6 +33,9 @@ const route: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> = (
                 },
                 undefined,
             )
+        }
+        case "/robots.txt": {
+            return Promise.resolve(getRobots())
         }
         case "/root":
         case "/root/": {

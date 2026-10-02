@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `yarn release` waits for each API Lambda configuration update to finish before invalidating the API cache, so CloudFront can't cache a redirect to the previous build (the API now caches build redirects at CloudFront for a day).
+
 ### Removed
 
 ### Security

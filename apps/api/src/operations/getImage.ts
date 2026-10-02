@@ -63,14 +63,18 @@ const getImage: Operation<GetImageParameters, GetImageService> = async (
         ),
     )
     if (body === "null") {
-        throw new APIError(404, [
-            {
-                developerMessage: "Cannot find entity.",
-                field: "uuid",
-                type: "RESOURCE_NOT_FOUND",
-                userMessage: "That silhouette image could not be found.",
-            },
-        ])
+        throw new APIError(
+            404,
+            [
+                {
+                    developerMessage: "Cannot find entity.",
+                    field: "uuid",
+                    type: "RESOURCE_NOT_FOUND",
+                    userMessage: "That silhouette image could not be found.",
+                },
+            ],
+            PERMANENT_HEADERS,
+        )
     }
     return {
         body,

@@ -1677,14 +1677,7 @@ paths:
         - $ref: "#/components/parameters/objectid"
       responses:
         "307":
-          description: The node was found, but the request did not specify the current `build` value.
-          headers:
-            Location:
-              $ref: "#/components/headers/Location"
-          content:
-            application/vnd.phylopic.v2+json:
-              schema:
-                $ref: "#/components/schemas/TitledLink"
+          $ref: "#/components/responses/307"
         "308":
           description: The node was found.
           headers:
@@ -1702,6 +1695,34 @@ paths:
           $ref: "#/components/responses/406"
         "410":
           $ref: "#/components/responses/410"
+  /robots.txt:
+    get:
+      operationId: getRobots
+      summary: Returns crawler instructions.
+      tags:
+        - general
+      description:
+        Returns a [robots.txt](https://www.rfc-editor.org/rfc/rfc9309) file that disallows crawling of the entire API.
+        The API is meant for applications, not search engines; the website is at [www.phylopic.org](https://www.phylopic.org).
+      responses:
+        "200":
+          description: Crawler instructions.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                example: public, max-age=86400
+            Content-Type:
+              schema:
+                type: string
+                example: text/plain; charset=utf-8
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: |
+                  User-agent: *
+                  Disallow: /
   /root:
     get:
       operationId: getRoot
