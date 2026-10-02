@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.8.1] - 2026-10-02
+
+### Security
+
+- Patch upgrade for `sharp`, fixing `libheif` vulnerabilities.
+
 ## [1.8.0] - 2026-09-17
 
 ### Changed
