@@ -9,13 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1, reports to `keesey+phylopic@gmail.com`), linked from the README and
-  `CONTRIBUTING.md`.
-
 ### Changed
-
-- `CONTRIBUTING.md` links to `CODE_OF_CONDUCT.md` instead of embedding Contributor Covenant 1.4, which had no reporting
-  address.
 
 ### Deprecated
 

@@ -128,7 +128,7 @@ To contribute to the development of _PhyloPic_, please read the guidelines in [`
 
 ## Further documentation
 
-- [Contributing](./CONTRIBUTING.md)
 - [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Contributing](./CONTRIBUTING.md)
 - [AWS S3 Bucket Structure](./S3.md)
 - [Subdomains](./SUBDOMAINS.md)
