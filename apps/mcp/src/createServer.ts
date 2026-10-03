@@ -86,7 +86,7 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             "2a. Unlabeled internal nodes: resolve labeled subclade root UUIDs in each child branch, then pick_image with descendant_node_uuids only (MRCA + image pick).",
                             "2b. If pick_image returns no image, omit the silhouette (label and branches only) and note the gap. Do not retry with a narrower subtaxon—filter_clade already includes subtaxa.",
                             "3. If the user asked for typical/iconic images, use search_nodes to pick a subtaxon node first, then pick_image on that UUID—not model memory.",
-                            "4. Read phylopic://docs/cladogram-guide for layout and exact name match (optional phylopic://docs/cladogram-template.svg).",
+                            "4. Read phylopic://docs/cladogram-styles and phylopic://docs/cladogram-guide (basic phylogram; measure label sizes). Optional phylopic://docs/cladogram-template.svg.",
                             "5. You layout the tree and write the SVG (branches, linked <image href=\"vectorUrl\"> to https://www.phylopic.org/images/{uuid}, labels in <a href=\"https://www.phylopic.org/nodes/{nodeUuid}\">, attribution as needed). MCP does not compute coordinates or return SVG.",
                         ]
                             .filter(Boolean)

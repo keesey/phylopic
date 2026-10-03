@@ -20,6 +20,22 @@ export const registerResources = (server: McpServer, client: PhyloPicClient) => 
     )
 
     server.registerResource(
+        "cladogram-styles",
+        "phylopic://docs/cladogram-styles",
+        {
+            description:
+                "Catalog of cladogram layout styles (basic rectangular phylogram supported; radial etc. planned). Markdown.",
+            mimeType: "text/markdown",
+        },
+        async () => {
+            const text = await readPackageDoc("cladogram-styles.md")
+            return {
+                contents: [{ uri: "phylopic://docs/cladogram-styles", mimeType: "text/markdown", text }],
+            }
+        },
+    )
+
+    server.registerResource(
         "cladogram-template",
         "phylopic://docs/cladogram-template.svg",
         {
