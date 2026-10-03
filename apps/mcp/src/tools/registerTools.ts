@@ -34,7 +34,12 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
                 const results = await Promise.all(
                     matches.slice(0, 10).map(async name => {
                         const list = await client.getJson<{
-                            _embedded?: { items?: readonly { uuid?: string; _links?: { self?: { title?: string; href?: string } } }[] }
+                            _embedded?: {
+                                items?: readonly {
+                                    uuid?: string
+                                    _links?: { self?: { title?: string; href?: string } }
+                                }[]
+                            }
                         }>("/nodes", {
                             filter_name: name,
                             embed_items: "true",

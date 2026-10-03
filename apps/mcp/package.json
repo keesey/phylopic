@@ -27,7 +27,8 @@
         "build": "tsup",
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
         "dev": "tsup --watch --onSuccess \"node dist/http.js\"",
-        "lint": "eslint --fix src/**/*.ts",
+        "format": "prettier --write --ignore-path ../../.prettierignore \"**/*.{js,json,md,ts,tsx}\"",
+        "lint": "TIMING=1 eslint --fix ./**/*.[jt]s",
         "start": "node dist/http.js",
         "start:stdio": "node dist/stdio.js",
         "test": "vitest run"

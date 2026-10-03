@@ -1,9 +1,4 @@
-import {
-    DATA_MEDIA_TYPE,
-    type API,
-    type ErrorResponse,
-    type TitledLink,
-} from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, type API, type ErrorResponse, type TitledLink } from "@phylopic/api-models"
 import { addBuildToURL, joinPath, toSearchParams } from "./url.js"
 
 export type FetchFn = typeof fetch

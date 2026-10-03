@@ -15,6 +15,8 @@ export const joinPath = (baseUrl: string, path: string) => {
 export const toSearchParams = (query: Readonly<Record<string, string | number | boolean | undefined>>) =>
     createSearch(
         Object.fromEntries(
-            Object.entries(query).filter((entry): entry is [string, string | number | boolean] => entry[1] !== undefined),
+            Object.entries(query).filter(
+                (entry): entry is [string, string | number | boolean] => entry[1] !== undefined,
+            ),
         ),
     )
