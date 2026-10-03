@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Structural template only — not a real cladogram.
+  Structural template only  not a real cladogram.
   Fetch via MCP resource phylopic://docs/cladogram-template.svg
   See docs/cladogram-for-agents.md for workflow.
 -->
@@ -13,7 +13,8 @@
   <polyline fill="none" stroke="#333" stroke-width="1.5" points="44,110 72,110 72,70 90,70"/>
   <g id="root">
     <a href="https://www.phylopic.org/images/00000000-0000-4000-8000-000000000001" xlink:href="https://www.phylopic.org/images/00000000-0000-4000-8000-000000000001">
-      <image href="https://example.invalid/vector.svg" x="0" y="62" width="44" height="44"/>
+      <!-- Square slot 4444; image sized from vector viewBox, bottom-aligned inside (see silhouetteViewBox.ts) -->
+      <image href="https://example.invalid/vector.svg" x="0" y="72" width="44" height="34"/>
     </a>
     <a href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000010" xlink:href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000010">
       <text x="0" y="126" font-family="Georgia, serif" font-size="13" font-style="italic">Clade</text>
@@ -21,7 +22,7 @@
   </g>
   <g id="tip-a">
     <a href="https://www.phylopic.org/images/00000000-0000-4000-8000-000000000002" xlink:href="https://www.phylopic.org/images/00000000-0000-4000-8000-000000000002">
-      <image href="https://example.invalid/vector.svg" x="98" y="94" width="52" height="52"/>
+      <image href="https://example.invalid/vector.svg" x="98" y="104" width="52" height="42"/>
     </a>
     <a href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000020" xlink:href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000020">
       <text x="98" y="166" font-family="Georgia, serif" font-size="13" font-style="italic">Taxon A</text>

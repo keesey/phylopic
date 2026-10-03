@@ -3,6 +3,8 @@
  * All spacing uses measured element sizes passed per node — not character estimates.
  */
 
+import { bottomAlignArtInSquareSlot, type ViewBoxSize } from "./silhouetteViewBox.js"
+
 export type LayoutTreeShape = Readonly<{
     label?: string
     children: readonly LayoutTreeShape[]
@@ -267,6 +269,12 @@ export const verticalGutterOffset = (m: BasicNodeMeasures, theme: BasicPhylogram
     }
     return inner + (m.hasLabel ? theme.gutterMargin : 0)
 }
+
+/** Place vector artwork bottom-center inside a square layout slot (slot coords → SVG coords). */
+export const silhouettePlacementInSlot = (
+    slotSize: number,
+    artViewBox: ViewBoxSize,
+): ReturnType<typeof bottomAlignArtInSquareSlot> => bottomAlignArtInSquareSlot(slotSize, artViewBox)
 
 export const silhouetteTopY = (
     railY: number,

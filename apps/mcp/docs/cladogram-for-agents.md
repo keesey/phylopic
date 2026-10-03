@@ -129,7 +129,7 @@ Do **not** guess label width from character count. Measure each label with the s
 
 1. Pick font family and size (e.g. Georgia 12px).
 2. For each labeled node, render invisible `<text>` (or off-screen) with the final string and font; read **width and height** from `getBBox()`.
-3. Set `<image width="…" height="…">` from your chosen display size (often smaller for internal nodes than tips).
+3. **Square slots, bottom-aligned:** Use a **fixed square** for each tier (e.g. 48×48 tips, 40×40 internals). Fetch each **`vectorFile`** and read its SVG `viewBox`. Scale uniformly to fit inside the square (meet), center horizontally, and place the `<image>` so its **bottom** matches the square’s bottom (`bottomAlignArtInSquareSlot` in `silhouetteViewBox.ts`). Do **not** stretch the vector to the full square—external SVG refs often ignore `preserveAspectRatio` on a full-slot `<image>`. Position the square with its bottom just above the rail (`silhouetteTopY`). Layout uses the **slot size**, not the artwork’s aspect ratio.
 4. Run layout with those measured widths/heights, then emit final SVG.
 
 **Reference template:** `cladogram-template.svg` / `phylopic://docs/cladogram-template.svg`.
