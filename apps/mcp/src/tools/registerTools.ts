@@ -156,7 +156,7 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
         "find_images",
         {
             description:
-                "List silhouette images. Use filter_clade with a node UUID from search_nodes/get_node (_links.cladeImages) to include all silhouettes under that taxon; filter_node is narrower (images for that node only). filter_name uses exact normalized names from autocomplete. License filters: filter_license_nc=false excludes NonCommercial-licensed images. Pages are 0-based (page=0 is the first page). Workflow: search_nodes → get_node if needed → find_images with filter_clade.",
+                "List silhouette images. Use filter_clade with a node UUID from search_nodes/get_node. Clade lists are sorted by phylogenetic proximity to the node (same order as the silhouettes page on phylopic.org). If the user did not ask for a specific species or image, use the first item on page 0—do not pick a subjectively typical species. filter_node is narrower than filter_clade. License filters only when the user requires them (e.g. filter_license_nc=false). Pages are 0-based (page=0 first).",
             inputSchema: {
                 filter_name: z.string().optional(),
                 filter_node: uuidSchema.optional(),
