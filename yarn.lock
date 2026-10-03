@@ -7357,6 +7357,11 @@ negotiator@^1.0.0:
   dependencies:
     content-type "^2.1.0"
 
+newick-js@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/newick-js/-/newick-js-1.2.4.tgz#2809b3566f035ef7eb1a40bca69aa0133d4c38d5"
+  integrity sha512-gAw5AhRL5fJDrxvsN++SlOOicmRd02pFztnhqlF3j81t/EbEG+zPTYiOBcblk4jmc4mdhhZNFxNuf+iJ7x9uhA==
+
 next-seo@^6.8.0:
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/next-seo/-/next-seo-6.8.0.tgz#0265ec75ad5ddca3d2a11dd86534a15065043651"

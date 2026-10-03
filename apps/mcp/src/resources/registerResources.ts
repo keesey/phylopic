@@ -1,7 +1,39 @@
 import { ResourceTemplate, type McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
+import { readPackageDoc } from "./packageDocs.js"
 
 export const registerResources = (server: McpServer, client: PhyloPicClient) => {
+    server.registerResource(
+        "cladogram-guide",
+        "phylopic://docs/cladogram-guide",
+        {
+            description:
+                "Living agent guide: Newick → parse_newick → pick_image → SVG layout, exact name match, label-only nodes without images, attribution. Markdown.",
+            mimeType: "text/markdown",
+        },
+        async () => {
+            const text = await readPackageDoc("cladogram-for-agents.md")
+            return {
+                contents: [{ uri: "phylopic://docs/cladogram-guide", mimeType: "text/markdown", text }],
+            }
+        },
+    )
+
+    server.registerResource(
+        "cladogram-template",
+        "phylopic://docs/cladogram-template.svg",
+        {
+            description: "Minimal rectangular phylogram SVG skeleton (placeholder URLs). Not a real tree.",
+            mimeType: "image/svg+xml",
+        },
+        async () => {
+            const text = await readPackageDoc("cladogram-template.svg")
+            return {
+                contents: [{ uri: "phylopic://docs/cladogram-template.svg", mimeType: "image/svg+xml", text }],
+            }
+        },
+    )
+
     server.registerResource(
         "licenses",
         "phylopic://licenses",

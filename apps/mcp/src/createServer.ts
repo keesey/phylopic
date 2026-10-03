@@ -48,9 +48,45 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             "Steps:",
                             "1. Use search_nodes with the user's exact taxon wording (do not substitute scientific names from memory). Pick a node UUID from the tool results; prefer the broadest match that fits the request.",
                             "1b. If needed, use resolve_external_ids (with list_namespaces) per https://www.phylopic.org/articles/api-recipes .",
-                            "2. Use find_images with filter_clade (node UUID). Apply license filters only if license_notes require them. List pages are 0-based (page=0 first).",
-                            "3. Default: first result on page 0 (PhyloPic clade order). If the user asked for a typical/iconic/representative silhouette, that default may be overridden with a narrower taxon still found via search_nodes/find_images.",
+                            "2. Use find_images with filter_clade (node UUID; includes subtaxa). Apply license filters only if license_notes require them. List pages are 0-based (page=0 first).",
+                            "3. Default: first result on page 0 (PhyloPic clade order). If empty, do not retry a narrower subtaxon—subtaxa were already included. If the user asked for a typical/iconic/representative silhouette, pick a narrower node via search_nodes first (deliberate choice, not recovery).",
                             "4. Use get_image for the chosen UUID and provide exact attribution text and file URLs.",
+                        ]
+                            .filter(Boolean)
+                            .join("\n"),
+                    },
+                },
+            ],
+        }),
+    )
+
+    server.registerPrompt(
+        "cladogram_from_newick",
+        {
+            description:
+                "Build an illustrated SVG cladogram from a Newick string using parse_newick, pick_image per node, and agent-side layout.",
+            argsSchema: {
+                newick: z.string().describe("Newick tree string."),
+                license_notes: z.string().optional().describe("License constraints (e.g. no NonCommercial)."),
+            },
+        },
+        async ({ newick, license_notes }) => ({
+            messages: [
+                {
+                    role: "user",
+                    content: {
+                        type: "text",
+                        text: [
+                            "Create an illustrated SVG cladogram for this Newick tree:",
+                            newick,
+                            license_notes ? `License constraints: ${license_notes}.` : "",
+                            "Steps:",
+                            "1. parse_newick with the Newick string.",
+                            "2. For each labeled node to illustrate (including internal nodes unless told otherwise): pick_image with that node's label or resolved UUID; apply license filters from the constraints (e.g. filter_license_nc=false).",
+                            "2b. If pick_image returns no image, omit the silhouette (label and branches only) and note the gap. Do not retry with a narrower subtaxon—filter_clade already includes subtaxa.",
+                            "3. If the user asked for typical/iconic images, use search_nodes to pick a subtaxon node first, then pick_image on that UUID—not model memory.",
+                            "4. Read phylopic://docs/cladogram-guide for layout and exact name match (optional phylopic://docs/cladogram-template.svg).",
+                            "5. You layout the tree and write the SVG (branches, <image href=\"vectorUrl\">, labels, attribution as needed). MCP does not compute coordinates or return SVG.",
                         ]
                             .filter(Boolean)
                             .join("\n"),

@@ -3,7 +3,9 @@ import { searchExternalTaxa, type ExternalAuthority } from "@phylopic/search"
 import { z } from "zod"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { SEARCH_NODES_QUERY_HINT } from "../agentInstructions.js"
+import { findExactPhylopicNodeMatch, nodeTitle, sortNodesByTitleMatch } from "../search/phylopicNameMatch.js"
 import { createResolveToPhylopic } from "../search/resolveExternalToPhylopic.js"
+import { registerCladogramTools } from "./registerCladogramTools.js"
 import { toolFromError, toolSuccess } from "./toolResult.js"
 
 const READ_ONLY = { readOnlyHint: true } as const
@@ -26,7 +28,7 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
         "search_nodes",
         {
             description:
-                "Required first step to map a taxon to a PhyloPic node UUID. Searches PhyloPic (autocomplete + nodes) and, by default, GBIF, Open Tree of Life, and PBDB with resolve to PhyloPic (see https://www.phylopic.org/articles/api-recipes ). Do not guess scientific names or UUIDs from general knowledge—use the user's wording in query and only use UUIDs from this response. Then find_images with filter_clade. Prefer the broadest matching node returned when the user asked for a group.",
+                "Required first step to map a taxon to a PhyloPic node UUID. Searches PhyloPic (autocomplete + nodes) and, by default, GBIF, Open Tree of Life, and PBDB with resolve to PhyloPic (see https://www.phylopic.org/articles/api-recipes ). Prefer phylopic.exactMatch or a node whose title exactly matches query (case-insensitive)—e.g. Homo sapiens not Homo (sapiens). Use external[].phylopic only when PhyloPic name search has no exact title match. Do not guess UUIDs from general knowledge. Then find_images with filter_clade. Prefer the broadest exact match when the user asked for a group.",
             inputSchema: {
                 query: z.string().min(2).describe(SEARCH_NODES_QUERY_HINT),
                 include_external: z
@@ -44,28 +46,43 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
             try {
                 const autocomplete = await client.getJson<{ matches: readonly string[] }>("/autocomplete", { query })
                 const matches = autocomplete.matches
+                const nameQueries = [
+                    query,
+                    ...(query.toLowerCase() !== query ? [query.toLowerCase()] : []),
+                    ...matches,
+                ].filter((name, index, all) => all.findIndex(n => n.toLowerCase() === name.toLowerCase()) === index)
+
                 const results = await Promise.all(
-                    matches.slice(0, 10).map(async name => {
-                        const list = await client.getJson<{
-                            _embedded?: {
-                                items?: readonly {
-                                    uuid?: string
-                                    _links?: { self?: { title?: string; href?: string } }
-                                }[]
-                            }
-                        }>("/nodes", {
-                            filter_name: name,
-                            embed_items: "true",
-                            page: 0,
-                        })
-                        const items = (list._embedded?.items ?? []).map(item => ({
-                            title: item._links?.self?.title,
-                            uuid: item.uuid,
-                            href: item._links?.self?.href,
-                        }))
-                        return { name, items }
+                    nameQueries.slice(0, 10).map(async name => {
+                        try {
+                            const list = await client.getJson<{
+                                _embedded?: {
+                                    items?: readonly {
+                                        uuid?: string
+                                        _links?: { self?: { title?: string; href?: string } }
+                                    }[]
+                                }
+                            }>("/nodes", {
+                                filter_name: name,
+                                embed_items: "true",
+                                page: 0,
+                            })
+                            const items = sortNodesByTitleMatch(
+                                (list._embedded?.items ?? []).map(item => ({
+                                    title: nodeTitle(item),
+                                    uuid: item.uuid,
+                                    href: item._links?.self?.href,
+                                })),
+                                query,
+                            )
+                            return { name, items }
+                        } catch {
+                            return { name, items: [] as const }
+                        }
                     }),
                 )
+
+                const exactMatch = findExactPhylopicNodeMatch(results, query)
 
                 const external =
                     include_external === false
@@ -84,9 +101,14 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
                     )
                 }
 
-                return toolSuccess(`Found ${summaryParts.join("; ")} for "${query}".`, {
+                const summary =
+                    exactMatch?.uuid ?
+                        `Found ${summaryParts.join("; ")} for "${query}". Exact PhyloPic title match: ${exactMatch.title ?? exactMatch.uuid}.`
+                    :   `Found ${summaryParts.join("; ")} for "${query}". No exact PhyloPic title match—use external phylopic only as fallback.`
+
+                return toolSuccess(summary, {
                     query,
-                    phylopic: { matches, results },
+                    phylopic: { matches, results, exactMatch },
                     external,
                 })
             } catch (error) {
@@ -156,11 +178,13 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
         "find_images",
         {
             description:
-                "List silhouette images. Use filter_clade with a node UUID from search_nodes/get_node. Clade lists are sorted by phylogenetic proximity to the node (same order as the silhouettes page on phylopic.org). Default: first item on page 0 when no specific image is requested. Override when the user asks for a "typical", "iconic", or "representative" silhouette—then a narrower taxon or chosen image is allowed, still via these tools. filter_node is narrower than filter_clade. License filters only when the user requires them (e.g. filter_license_nc=false). Pages are 0-based (page=0 first).",
+                'List silhouette images. Use filter_clade with a node UUID from search_nodes/get_node; filter_clade includes images on that taxon and its subtaxa (descendants). Clade lists are sorted by phylogenetic proximity to the node (same order as the silhouettes page on phylopic.org). Default: first item on page 0 when no specific image is requested. Override when the user asks for a typical, iconic, or representative silhouette—then a narrower node UUID is a deliberate choice via search_nodes, not a retry after an empty list (subtaxa were already included). filter_node matches only that node, not descendants. License filters only when the user requires them (e.g. filter_license_nc=false). Pages are 0-based (page=0 first).',
             inputSchema: {
                 filter_name: z.string().optional(),
                 filter_node: uuidSchema.optional(),
-                filter_clade: uuidSchema.optional(),
+                filter_clade: uuidSchema
+                    .optional()
+                    .describe("Node UUID: images on this taxon and all subtaxa (descendants)."),
                 filter_license_by: licenseFilterSchema.describe(
                     '"true" or "false" — require or exclude attribution (BY) licenses.',
                 ),
@@ -371,4 +395,6 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
             }
         },
     )
+
+    registerCladogramTools(server, client)
 }

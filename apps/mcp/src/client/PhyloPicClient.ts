@@ -64,6 +64,20 @@ export class PhyloPicClient {
         return await this.#fetchJson<T>(url, {}, build)
     }
 
+    /** Image list where an empty result set returns `{ _embedded: { items: [] } }` instead of 404. */
+    async listImages(
+        query: Readonly<Record<string, string | number | boolean | undefined>>,
+    ): Promise<{ _embedded?: { items?: readonly unknown[] } }> {
+        try {
+            return await this.getJson("/images", query)
+        } catch (error) {
+            if (error instanceof PhyloPicApiError && error.status === 404) {
+                return { _embedded: { items: [] } }
+            }
+            throw error
+        }
+    }
+
     async getJsonAtUrl<T>(href: string): Promise<T> {
         const url = href.startsWith("http") ? href : joinPath(this.#baseUrl, href)
         const build = await this.getBuild()

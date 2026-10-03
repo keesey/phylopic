@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Structural template only  not a real cladogram.
+  Fetch via MCP resource phylopic://docs/cladogram-template.svg
+  See docs/cladogram-for-agents.md for workflow.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 200" width="330" height="200">
+  <title>Cladogram layout template (example)</title>
+  <desc>Silhouettes above the rail; labels below (or centered for image-free tips). Tip left margin 8px; tip with image: horizontal to silhouette right edge.</desc>
+  <rect x="0" y="0" width="330" height="200" fill="#ffffff"/>
+  <line x1="0" y1="110" x2="44" y2="110" stroke="#333" stroke-width="1.5"/>
+  <polyline fill="none" stroke="#333" stroke-width="1.5" points="44,110 72,110 72,70 98,70 150,70"/>
+  <polyline fill="none" stroke="#333" stroke-width="1.5" points="44,110 72,110 72,150 90,150"/>
+  <g id="root">
+    <image href="https://example.invalid/vector.svg" x="0" y="62" width="44" height="44"/>
+    <text x="0" y="126" font-family="Georgia, serif" font-size="13" font-style="italic">Clade</text>
+  </g>
+  <g id="tip-a">
+    <image href="https://example.invalid/vector.svg" x="98" y="14" width="52" height="52"/>
+    <text x="98" y="86" font-family="Georgia, serif" font-size="13" font-style="italic">Taxon A</text>
+  </g>
+  <g id="tip-b">
+    <text x="98" y="150" dominant-baseline="middle" font-family="Georgia, serif" font-size="13" font-style="italic">Taxon B</text>
+  </g>
+</svg>

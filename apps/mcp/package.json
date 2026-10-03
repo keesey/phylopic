@@ -11,6 +11,7 @@
         "@phylopic/api-models": "*",
         "@phylopic/search": "*",
         "@phylopic/utils": "*",
+        "newick-js": "^1.2.4",
         "zod": "^3.24.2"
     },
     "description": "Model Context Protocol server for the PhyloPic API.",
