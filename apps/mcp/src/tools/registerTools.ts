@@ -9,13 +9,19 @@ const uuidSchema = z.string().uuid()
 
 const licenseFilterSchema = z.enum(["true", "false"]).optional()
 
-const pageSchema = z.number().int().min(1).optional()
+const pageSchema = z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("0-based page index (first page is 0). Required by the API when using embed_items on lists.")
 
 export const registerTools = (server: McpServer, client: PhyloPicClient) => {
     server.registerTool(
         "search_nodes",
         {
-            description: "Search PhyloPic phylogenetic nodes by name (autocomplete + node lookup).",
+            description:
+                "Search PhyloPic phylogenetic nodes by name (autocomplete, then node lookup). Returns node UUIDs; use get_node for cladeImages / images links, then find_images with filter_clade for silhouettes under that taxon. Prefer the broadest matching node for informal groups (e.g. Apiformes for bees, not only Apidae).",
             inputSchema: {
                 query: z.string().min(2).describe("Taxonomic name fragment to search for."),
             },
@@ -23,20 +29,29 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
         },
         async ({ query }) => {
             try {
-                const matches = await client.getJson<readonly string[]>("/autocomplete", { query })
-                const nodes = await Promise.all(
+                const autocomplete = await client.getJson<{ matches: readonly string[] }>("/autocomplete", { query })
+                const matches = autocomplete.matches
+                const results = await Promise.all(
                     matches.slice(0, 10).map(async name => {
-                        const page = await client.getJson<{ items?: readonly unknown[] }>("/nodes", {
+                        const list = await client.getJson<{
+                            _embedded?: { items?: readonly { uuid?: string; _links?: { self?: { title?: string; href?: string } } }[] }
+                        }>("/nodes", {
                             filter_name: name,
                             embed_items: "true",
+                            page: 0,
                         })
-                        return { name, nodes: page }
+                        const items = (list._embedded?.items ?? []).map(item => ({
+                            title: item._links?.self?.title,
+                            uuid: item.uuid,
+                            href: item._links?.self?.href,
+                        }))
+                        return { name, items }
                     }),
                 )
                 return toolSuccess(`Found ${matches.length} name match(es) for "${query}".`, {
                     query,
                     matches,
-                    results: nodes,
+                    results,
                 })
             } catch (error) {
                 return toolFromError(error)
@@ -91,7 +106,7 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
         async ({ uuid, page }) => {
             try {
                 const lineage = await client.getJson(`/nodes/${uuid}/lineage`, {
-                    ...(page === undefined ? {} : { page }),
+                    page: page ?? 0,
                     embed_items: "true",
                 })
                 return toolSuccess(`Lineage for node ${uuid}.`, { lineage })
@@ -105,14 +120,20 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
         "find_images",
         {
             description:
-                "List silhouette images filtered by taxonomic name, node UUID, or clade UUID, with optional license filters.",
+                "List silhouette images. Use filter_clade with a node UUID from search_nodes/get_node (_links.cladeImages) to include all silhouettes under that taxon; filter_node is narrower (images for that node only). filter_name uses exact normalized names from autocomplete. License filters: filter_license_nc=false excludes NonCommercial-licensed images. Pages are 0-based (page=0 is the first page). Workflow: search_nodes → get_node if needed → find_images with filter_clade.",
             inputSchema: {
                 filter_name: z.string().optional(),
                 filter_node: uuidSchema.optional(),
                 filter_clade: uuidSchema.optional(),
-                filter_license_by: licenseFilterSchema,
-                filter_license_nc: licenseFilterSchema,
-                filter_license_sa: licenseFilterSchema,
+                filter_license_by: licenseFilterSchema.describe(
+                    '"true" or "false" — require or exclude attribution (BY) licenses.',
+                ),
+                filter_license_nc: licenseFilterSchema.describe(
+                    '"false" excludes NonCommercial (NC) licenses; use for commercial-friendly results.',
+                ),
+                filter_license_sa: licenseFilterSchema.describe(
+                    '"true" or "false" — require or exclude ShareAlike (SA) licenses.',
+                ),
                 page: pageSchema,
             },
             annotations: READ_ONLY,
@@ -137,7 +158,7 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
                     ...(filter_license_by === undefined ? {} : { filter_license_by }),
                     ...(filter_license_nc === undefined ? {} : { filter_license_nc }),
                     ...(filter_license_sa === undefined ? {} : { filter_license_sa }),
-                    ...(page === undefined ? {} : { page }),
+                    page: page ?? 0,
                     embed_items: "true",
                     embed_contributor: "true",
                     embed_specificNode: "true",
@@ -252,7 +273,7 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
             try {
                 const images = await client.getJson("/images", {
                     filter_contributor: uuid,
-                    ...(page === undefined ? {} : { page }),
+                    page: page ?? 0,
                     embed_items: "true",
                     embed_contributor: "true",
                     embed_specificNode: "true",

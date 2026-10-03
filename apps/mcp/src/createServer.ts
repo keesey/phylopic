@@ -42,8 +42,8 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             `Find a PhyloPic silhouette for: ${taxon}.`,
                             license_notes ? `License constraints: ${license_notes}.` : "",
                             "Steps:",
-                            "1. Use search_nodes or resolve_external_ids (with list_namespaces) to identify the best PhyloPic node.",
-                            "2. Use find_images with appropriate filter_name, filter_node, or filter_clade and license filters.",
+                            "1. Use search_nodes or resolve_external_ids (with list_namespaces) to identify the best PhyloPic node; pick the broadest node that fits (e.g. Apiformes for bees).",
+                            "2. Use find_images with filter_clade (node UUID) and license filters (e.g. filter_license_nc=false to avoid NonCommercial). List pages are 0-based (page=0 first).",
                             "3. Use get_image for the chosen UUID and provide exact attribution text and file URLs.",
                         ]
                             .filter(Boolean)

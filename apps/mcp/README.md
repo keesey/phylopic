@@ -49,3 +49,5 @@ Start the server, then add to `.cursor/mcp.json`:
 Read-only tools wrap API endpoints: `search_nodes`, `get_node`, `get_root_node`, `get_lineage`, `find_images`, `get_image`, `resolve_external_id`, `resolve_external_ids`, `get_contributor`, `list_contributor_images`, `get_collection`, `list_licenses`, and `list_namespaces`.
 
 See the [API Recipes](https://www.phylopic.org/articles/api-recipes) article for external hierarchy resolution with `resolve_external_ids`.
+
+For taxon silhouettes, prefer `search_nodes` → `find_images` with `filter_clade` (node UUID). List `page` is **0-based** (`0` = first page). Use `filter_license_nc=false` to exclude NonCommercial licenses.
