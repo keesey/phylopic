@@ -73,14 +73,9 @@ export const columnInnerEnd = (m: BasicNodeMeasures, theme: BasicPhylogramTheme)
     return Math.max(contentEnd, branchEnd)
 }
 
-/** Horizontal extent from column left to child column start (0 if empty node). */
-export const nodeColumnExtent = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
-    const inner = columnInnerEnd(m, theme)
-    if (inner === 0) {
-        return 0
-    }
-    return verticalGutterOffset(m, theme) + theme.gutterMargin
-}
+/** Horizontal extent from column left to child column start; empty nodes still clear their own connector. */
+export const nodeColumnExtent = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number =>
+    verticalGutterOffset(m, theme) + theme.gutterMargin
 
 /** Distance from rail up to top of node content. */
 export const extentAboveRail = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {

@@ -8,6 +8,7 @@ export type LineageEntry = Readonly<{
 
 type LineageList = Readonly<{
     _embedded?: { items?: readonly { uuid?: string; _links?: { self?: { title?: string } }; title?: string }[] }
+    _links?: { next?: { href?: string } | null }
 }>
 
 /** Tip-to-root UUID order (node first, then ancestors). Follows lineage pagination. */
@@ -32,7 +33,7 @@ export const fetchLineageEntries = async (
             }
         }
         page += 1
-        if (items.length < 48) {
+        if (!list._links?.next) {
             break
         }
     }

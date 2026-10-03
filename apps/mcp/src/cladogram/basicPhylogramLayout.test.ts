@@ -49,21 +49,17 @@ describe("nodeColumnExtent", () => {
         expect(verticalGutterOffset(m, theme)).toBe(48 + theme.gutterMargin)
     })
 
-    it("returns 0 for empty nodes", () => {
-        expect(
-            nodeColumnExtent(
-                {
-                    hasImage: false,
-                    imageWidth: 0,
-                    imageHeight: 0,
-                    hasLabel: false,
-                    labelWidth: 0,
-                    labelHeight: 0,
-                    isTip: false,
-                },
-                theme,
-            ),
-        ).toBe(0)
+    it("starts an empty node's children past its vertical connector", () => {
+        const empty = {
+            hasImage: false,
+            imageWidth: 0,
+            imageHeight: 0,
+            hasLabel: false,
+            labelWidth: 0,
+            labelHeight: 0,
+            isTip: false,
+        }
+        expect(nodeColumnExtent(empty, theme)).toBe(verticalGutterOffset(empty, theme) + theme.gutterMargin)
     })
 })
 
@@ -130,5 +126,33 @@ describe("assignBasicPhylogramColumnsFromTree", () => {
         const narrowTip = root.children[1]!.children[0]!
         expect(narrowTip.x!).toBeLessThan(wideTip.x! + 200)
         expect(narrowTip.x!).toBeGreaterThan(root.children[1]!.x!)
+    })
+
+    it("places children of an unlabeled, unillustrated root past the root's vertical connector", () => {
+        type N = { x?: number; label?: string; children: N[] }
+        const root: N = {
+            children: [
+                { label: "Bovine", children: [] },
+                { children: [{ label: "Hylobates", children: [] }, { label: "Pongo", children: [] }] },
+                { label: "Rodent", children: [] },
+            ],
+        }
+        const measures = (n: N): BasicNodeMeasures => {
+            const tip = n.children.length === 0
+            return {
+                hasImage: tip,
+                imageWidth: tip ? 52 : 0,
+                imageHeight: tip ? 52 : 0,
+                hasLabel: Boolean(n.label),
+                labelWidth: n.label ? 60 : 0,
+                labelHeight: 14,
+                isTip: tip,
+            }
+        }
+        assignBasicPhylogramColumnsFromTree(root, measures, theme)
+        const rootGutter = root.x! + verticalGutterOffset(measures(root), theme)
+        for (const child of root.children) {
+            expect(child.x!).toBeGreaterThan(rootGutter)
+        }
     })
 })
