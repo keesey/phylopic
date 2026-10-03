@@ -40,4 +40,6 @@ export type PickImageOptions = LicenseFilters &
         image_uuid?: string
         clade_index?: number
         clade_page?: number
+        /** For unlabeled Newick nodes: PhyloPic UUIDs of labeled subclade roots beneath that node. */
+        descendant_node_uuids?: readonly string[]
     }>

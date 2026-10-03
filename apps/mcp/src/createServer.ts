@@ -83,6 +83,7 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             "Steps:",
                             "1. parse_newick with the Newick string.",
                             "2. For each labeled node to illustrate (including internal nodes unless told otherwise): pick_image with that node's label or resolved UUID; apply license filters from the constraints (e.g. filter_license_nc=false).",
+                            "2a. Unlabeled internal nodes: resolve labeled subclade root UUIDs in each child branch, then pick_image with descendant_node_uuids only (MRCA + image pick).",
                             "2b. If pick_image returns no image, omit the silhouette (label and branches only) and note the gap. Do not retry with a narrower subtaxon—filter_clade already includes subtaxa.",
                             "3. If the user asked for typical/iconic images, use search_nodes to pick a subtaxon node first, then pick_image on that UUID—not model memory.",
                             "4. Read phylopic://docs/cladogram-guide for layout and exact name match (optional phylopic://docs/cladogram-template.svg).",

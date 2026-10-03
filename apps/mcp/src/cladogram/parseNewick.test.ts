@@ -20,4 +20,15 @@ describe("parseNewickToTree", () => {
         expect(a.root.id).toBe(b.root.id)
         expect(a.root.children[0]?.id).toBe(b.root.children[0]?.id)
     })
+
+    it("preserves Newick left-to-right sibling order", () => {
+        const { root } = parseNewickToTree("(A,B)Root")
+        expect(root.children.map(c => c.label)).toEqual(["A", "B"])
+        const hominidae = parseNewickToTree(HOMINIDAE).root
+        expect(hominidae.children.map(c => c.label)).toEqual(["Pongo", "Homininae"])
+        const homininae = hominidae.children.find(c => c.label === "Homininae")!
+        expect(homininae.children.map(c => c.label)).toEqual(["Gorilla", undefined])
+        const homoPan = homininae.children.find(c => !c.label)!
+        expect(homoPan.children.map(c => c.label)).toEqual(["Homo sapiens", "Pan"])
+    })
 })

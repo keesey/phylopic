@@ -49,7 +49,8 @@ export const parseNewickToTree = (
             idByVertex.set(vertex, id)
         }
         const childLinks = childrenByParent.get(vertex) ?? []
-        const children = childLinks.map(({ branchLength, child }) => {
+        // newick-js arc iteration is reverse of left-to-right Newick sibling order
+        const children = [...childLinks].reverse().map(({ branchLength, child }) => {
             const built = buildNode(child)
             return branchLength === undefined ? built : { ...built, branchLength }
         })
