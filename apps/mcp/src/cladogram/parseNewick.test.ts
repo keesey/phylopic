@@ -21,6 +21,12 @@ describe("parseNewickToTree", () => {
         expect(a.root.children[0]?.id).toBe(b.root.children[0]?.id)
     })
 
+    it("reads underscores in unquoted labels as spaces", () => {
+        const { root } = parseNewickToTree("(G._Gorilla:0.17,'Homo_sapiens',(P._paniscus,H._sapiens):0.08);")
+        expect(root.children.map(c => c.label)).toEqual(["G. Gorilla", "Homo_sapiens", undefined])
+        expect(root.children[2]!.children.map(c => c.label)).toEqual(["P. paniscus", "H. sapiens"])
+    })
+
     it("preserves Newick left-to-right sibling order", () => {
         const { root } = parseNewickToTree("(A,B)Root")
         expect(root.children.map(c => c.label)).toEqual(["A", "B"])

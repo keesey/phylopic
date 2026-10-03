@@ -70,6 +70,12 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                     .describe(
                         "Without label: unlabeled clade—MRCA of these UUIDs, then pick. With label: disambiguate homonyms—MRCA of children, walk lineage for most leafward node whose title matches label, then pick. Do not combine with node_uuid.",
                     ),
+                context_labels: z
+                    .array(z.string().min(1))
+                    .optional()
+                    .describe(
+                        "Other labels from the same tree. With an abbreviated label such as P. paniscus, genera from these labels (e.g. Pan troglodytes) are tried before GBIF.",
+                    ),
                 filter_license_by: licenseFilterSchema,
                 filter_license_nc: licenseFilterSchema,
                 filter_license_sa: licenseFilterSchema,
@@ -79,6 +85,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
         async ({
             node_uuid,
             label,
+            context_labels,
             image_uuid,
             clade_index,
             clade_page,
@@ -108,8 +115,14 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                 }
                 let nodeUuid = node_uuid
                 const warnings: string[] = []
+                const resolveOptions = context_labels ? { contextLabels: context_labels } : {}
                 if (hasDescendants && label) {
-                    const resolved = await resolveLabelViaDescendantPhylogeny(client, label, descendant_node_uuids!)
+                    const resolved = await resolveLabelViaDescendantPhylogeny(
+                        client,
+                        label,
+                        descendant_node_uuids!,
+                        resolveOptions,
+                    )
                     nodeUuid = resolved.nodeUuid
                     warnings.push(...resolved.warnings)
                 } else if (hasDescendants) {
@@ -124,7 +137,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                     }
                     nodeUuid = mrca.mrcaUuid
                 } else if (!nodeUuid && label) {
-                    const resolved = await resolveLabelToNode(client, label)
+                    const resolved = await resolveLabelToNode(client, label, resolveOptions)
                     nodeUuid = resolved.nodeUuid
                     warnings.push(...resolved.warnings)
                 }

@@ -2,7 +2,7 @@ import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { isExactNodeTitleMatch } from "../search/phylopicNameMatch.js"
 import { fetchLineageEntries } from "./fetchLineageUuids.js"
 import { resolveMrcaFromDescendants } from "./resolveMrcaFromDescendants.js"
-import type { ResolveLabelResult } from "./resolveLabelToNode.js"
+import type { ResolveLabelOptions, ResolveLabelResult } from "./resolveLabelToNode.js"
 import { resolveLabelToNode } from "./resolveLabelToNode.js"
 
 /** Most leafward lineage node whose title matches label (walk from child MRCA toward root). */
@@ -10,6 +10,7 @@ export const resolveLabelViaDescendantPhylogeny = async (
     client: PhyloPicClient,
     label: string,
     descendantNodeUuids: readonly string[],
+    options: ResolveLabelOptions = {},
 ): Promise<ResolveLabelResult> => {
     const warnings: string[] = []
     const query = label.trim()
@@ -19,14 +20,14 @@ export const resolveLabelViaDescendantPhylogeny = async (
     const unique = [...new Set(descendantNodeUuids.filter(Boolean))]
     if (unique.length < 2) {
         warnings.push("Need at least two descendant UUIDs for phylogeny disambiguation; falling back to name search.")
-        return resolveLabelToNode(client, query)
+        return resolveLabelToNode(client, query, options)
     }
 
     const mrca = await resolveMrcaFromDescendants(client, unique)
     warnings.push(...mrca.warnings)
     if (!mrca.mrcaUuid) {
         warnings.push("No MRCA from descendants; falling back to name search.")
-        return resolveLabelToNode(client, query)
+        return resolveLabelToNode(client, query, options)
     }
 
     const lineage = await fetchLineageEntries(client, mrca.mrcaUuid)
@@ -43,16 +44,17 @@ export const resolveLabelViaDescendantPhylogeny = async (
     warnings.push(
         `No title match for "${query}" on lineage from descendant MRCA ${mrca.mrcaUuid}; falling back to name search.`,
     )
-    return resolveLabelToNode(client, query)
+    return resolveLabelToNode(client, query, options)
 }
 
 export const resolveLabelForCladogramNode = async (
     client: PhyloPicClient,
     label: string,
     descendantNodeUuids: readonly string[],
+    options: ResolveLabelOptions = {},
 ): Promise<ResolveLabelResult> => {
     if (descendantNodeUuids.length >= 2) {
-        return resolveLabelViaDescendantPhylogeny(client, label, descendantNodeUuids)
+        return resolveLabelViaDescendantPhylogeny(client, label, descendantNodeUuids, options)
     }
-    return resolveLabelToNode(client, label)
+    return resolveLabelToNode(client, label, options)
 }

@@ -26,6 +26,19 @@ const countTips = (node: CladogramTreeNode): number => {
     return node.children.reduce((sum, child) => sum + countTips(child), 0)
 }
 
+/** In Newick, underscores in unquoted labels stand for spaces; quoted labels are verbatim. */
+const unquotedUnderscoresToSpaces = (newick: string) => {
+    let quoted = false
+    let out = ""
+    for (const char of newick) {
+        if (char === "'") {
+            quoted = !quoted
+        }
+        out += !quoted && char === "_" ? " " : char
+    }
+    return out
+}
+
 export const parseNewickToTree = (
     newick: string,
     options: { maxTips?: number; maxLength?: number } = {},
@@ -36,7 +49,7 @@ export const parseNewickToTree = (
         throw new Error(`Newick string exceeds maximum length (${maxLength}).`)
     }
 
-    const { graph, root } = parse(newick.trim())
+    const { graph, root } = parse(unquotedUnderscoresToSpaces(newick.trim()))
     const [, arcs] = graph
     const childrenByParent = indexChildren(arcs)
     const idByVertex = new WeakMap<Vertex, string>()
