@@ -68,7 +68,7 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
             argsSchema: {
                 labels: z
                     .string()
-                    .describe("Comma-separated terminal taxa in top-to-bottom tip order (e.g. humans, rice, seahorses)."),
+                    .describe("Comma-separated terminal taxa (e.g. humans, rice, seahorses)."),
                 license_notes: z.string().optional().describe("License constraints (e.g. no NonCommercial)."),
             },
         },

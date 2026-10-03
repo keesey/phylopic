@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
     buildTreeFromTerminalLineages,
     childTowardTip,
+    compareTerminalBranches,
     concestorNodeUuid,
 } from "./buildTreeFromTerminals.js"
 import { cladogramTreeToNewick } from "./cladogramTreeToNewick.js"
@@ -60,7 +61,10 @@ describe("buildTreeFromTerminalLineages", () => {
         expect(cladogramTreeToNewick(root)).toBe("(A,B)")
     })
 
-    it("preserves terminal input order among siblings", () => {
+    it("orders siblings by terminal count then alphabetically", () => {
+        expect(
+            compareTerminalBranches([{ label: "Z", nodeUuid: "z" }], [{ label: "Y", nodeUuid: "y" }]),
+        ).toBeGreaterThan(0)
         const terminals = [
             { label: "Z", nodeUuid: "z" },
             { label: "Y", nodeUuid: "y" },
@@ -70,6 +74,23 @@ describe("buildTreeFromTerminalLineages", () => {
             ["y", ["y", "r"]],
         ])
         const { root } = buildTreeFromTerminalLineages([...terminals], lineages)
-        expect(root.children.map(c => c.label)).toEqual(["Z", "Y"])
+        expect(root.children.map(c => c.label)).toEqual(["Y", "Z"])
+    })
+
+    it("places smaller terminal subtrees before larger ones", () => {
+        const terminals = [
+            { label: "solo", nodeUuid: "s" },
+            { label: "a", nodeUuid: "a" },
+            { label: "b", nodeUuid: "b" },
+        ] as const
+        const lineages = new Map<string, readonly string[]>([
+            ["s", ["s", "root"]],
+            ["a", ["a", "pair", "root"]],
+            ["b", ["b", "pair", "root"]],
+        ])
+        const { root } = buildTreeFromTerminalLineages([...terminals], lineages)
+        expect(root.children).toHaveLength(2)
+        expect(root.children[0]!.label).toBe("solo")
+        expect(root.children[1]!.children.map(c => c.label).sort()).toEqual(["a", "b"])
     })
 })

@@ -74,6 +74,22 @@ export const concestorNodeUuid = (
     return nodeUuid
 }
 
+/** Smallest terminal count first; ties broken by lexicographic min label in the branch. */
+export const compareTerminalBranches = (
+    a: readonly TerminalTaxon[],
+    b: readonly TerminalTaxon[],
+): number => {
+    const countDiff = a.length - b.length
+    if (countDiff !== 0) {
+        return countDiff
+    }
+    const alpha = (tips: readonly TerminalTaxon[]) =>
+        [...tips]
+            .map(t => t.label)
+            .sort((x, y) => x.localeCompare(y, undefined, { sensitivity: "base" }))[0] ?? ""
+    return alpha(a).localeCompare(alpha(b), undefined, { sensitivity: "base" })
+}
+
 export const buildTreeFromTerminalLineages = (
     terminals: readonly TerminalTaxon[],
     lineagesByTipUuid: ReadonlyMap<string, readonly string[]>,
@@ -88,7 +104,6 @@ export const buildTreeFromTerminalLineages = (
         }
         return lineage
     })
-    const tipOrder = new Map(terminals.map((t, i) => [t.nodeUuid, i]))
     const nodeUuidByTreeId: Record<string, string> = {}
     let nextId = 0
 
@@ -112,11 +127,9 @@ export const buildTreeFromTerminalLineages = (
             throw new Error("Expected a concestor split among terminal taxa.")
         }
 
-        const childUuids = [...buckets.keys()].sort((a, b) => {
-            const minIndex = (uuid: string) =>
-                Math.min(...(buckets.get(uuid) ?? []).map(t => tipOrder.get(t.nodeUuid) ?? 0))
-            return minIndex(a) - minIndex(b)
-        })
+        const childUuids = [...buckets.keys()].sort((a, b) =>
+            compareTerminalBranches(buckets.get(a)!, buckets.get(b)!),
+        )
 
         const children = childUuids.map(childUuid => buildAt(buckets.get(childUuid)!))
         const id = `n${nextId++}`
