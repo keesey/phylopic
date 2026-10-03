@@ -16,6 +16,6 @@ PhyloPic MCP does **not** render cladograms. It provides taxonomy, images, and t
 | `phylopic://docs/cladogram-styles` | This catalog |
 | `phylopic://docs/cladogram-template.svg` | Minimal basic-style SVG skeleton |
 
-**Reference layout code (optional):** `apps/mcp/src/cladogram/basicPhylogramLayout.ts` implements basic-style rail/column assignment from **measured** node sizes (used in unit tests). Agents may port the same rules to their SVG pipeline.
+**Reference layout code (optional):** `apps/mcp/src/cladogram/basicCladogramLayout.ts` implements basic-style rail/column assignment from **measured** node sizes (used in unit tests). Agents may port the same rules to their SVG pipeline.
 
 **Not in the repo:** one-off local render scripts and full illustrated outputs from experiments — keep those outside git unless we add a deliberate gallery later.

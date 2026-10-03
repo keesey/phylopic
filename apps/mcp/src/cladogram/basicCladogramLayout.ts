@@ -1,5 +1,5 @@
 /**
- * Basic rectangular phylogram layout (reference for agents and unit tests).
+ * Basic rectangular cladogram layout (reference for agents and unit tests).
  * All spacing uses measured element sizes passed per node — not character estimates.
  */
 
@@ -10,7 +10,7 @@ export type LayoutTreeShape = Readonly<{
     children: readonly LayoutTreeShape[]
 }>
 
-export type BasicPhylogramTheme = Readonly<{
+export type BasicCladogramTheme = Readonly<{
     /** Gap between silhouette bottom and horizontal rail */
     lineGap: number
     /** Gap between rail and top of label (illustrated nodes) */
@@ -27,7 +27,7 @@ export type BasicPhylogramTheme = Readonly<{
     minColumnPitch: number
 }>
 
-export const DEFAULT_BASIC_PHYLOGRAM_THEME: BasicPhylogramTheme = {
+export const DEFAULT_BASIC_CLADOGRAM_THEME: BasicCladogramTheme = {
     lineGap: 4,
     labelGap: 4,
     nodeClearGap: 8,
@@ -58,11 +58,11 @@ export const emptyNodeMeasures = (): BasicNodeMeasures => ({
     isTip: false,
 })
 
-const contentInset = (m: BasicNodeMeasures, theme: BasicPhylogramTheme) =>
+const contentInset = (m: BasicNodeMeasures, theme: BasicCladogramTheme) =>
     m.isTip ? theme.tipContentInset : 0
 
 /** Right edge of silhouettes/labels/stub before the gutter margin. */
-export const columnInnerEnd = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
+export const columnInnerEnd = (m: BasicNodeMeasures, theme: BasicCladogramTheme): number => {
     if (!m.hasImage && !m.hasLabel) {
         return 0
     }
@@ -76,11 +76,11 @@ export const columnInnerEnd = (m: BasicNodeMeasures, theme: BasicPhylogramTheme)
 }
 
 /** Horizontal extent from column left to child column start; empty nodes still clear their own connector. */
-export const nodeColumnExtent = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number =>
+export const nodeColumnExtent = (m: BasicNodeMeasures, theme: BasicCladogramTheme): number =>
     verticalGutterOffset(m, theme) + theme.gutterMargin
 
 /** Distance from rail up to top of node content. */
-export const extentAboveRail = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
+export const extentAboveRail = (m: BasicNodeMeasures, theme: BasicCladogramTheme): number => {
     if (!m.hasImage) {
         return 0
     }
@@ -88,7 +88,7 @@ export const extentAboveRail = (m: BasicNodeMeasures, theme: BasicPhylogramTheme
 }
 
 /** Distance from rail down to bottom of node content. */
-export const extentBelowRail = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
+export const extentBelowRail = (m: BasicNodeMeasures, theme: BasicCladogramTheme): number => {
     if (!m.hasLabel) {
         return 0
     }
@@ -135,7 +135,7 @@ export const minTipRailSeparation = <T extends RailLayoutNode>(
     prev: T,
     next: T,
     measures: (n: T) => BasicNodeMeasures,
-    theme: BasicPhylogramTheme,
+    theme: BasicCladogramTheme,
 ) => {
     const a = measures(prev)
     const b = measures(next)
@@ -145,7 +145,7 @@ export const minTipRailSeparation = <T extends RailLayoutNode>(
 const minSpanForInternal = <T extends RailLayoutNode>(
     n: T,
     measures: (node: T) => BasicNodeMeasures,
-    theme: BasicPhylogramTheme,
+    theme: BasicCladogramTheme,
 ) => {
     const m = measures(n)
     return (
@@ -168,10 +168,10 @@ const collectLabeledInternals = <T extends RailLayoutNode>(n: T, out: T[] = []):
 /**
  * Assign railY: tips packed in Newick order; internal nodes at the mean railY of immediate children.
  */
-export const assignBasicPhylogramRails = <T extends RailLayoutNode>(
+export const assignBasicCladogramRails = <T extends RailLayoutNode>(
     root: T,
     measures: (n: T) => BasicNodeMeasures,
-    theme: BasicPhylogramTheme = DEFAULT_BASIC_PHYLOGRAM_THEME,
+    theme: BasicCladogramTheme = DEFAULT_BASIC_CLADOGRAM_THEME,
 ): void => {
     const tips = collectTipsInOrder(root)
     if (!tips.length) {
@@ -243,10 +243,10 @@ export type ColumnLayoutTree = Readonly<{
  * Each child column starts immediately after its parent's column extent.
  * Siblings share the same x; unrelated branches do not widen each other.
  */
-export const assignBasicPhylogramColumnsFromTree = <T extends ColumnLayoutTree>(
+export const assignBasicCladogramColumnsFromTree = <T extends ColumnLayoutTree>(
     root: T,
     measures: (n: T) => BasicNodeMeasures,
-    theme: BasicPhylogramTheme = DEFAULT_BASIC_PHYLOGRAM_THEME,
+    theme: BasicCladogramTheme = DEFAULT_BASIC_CLADOGRAM_THEME,
 ): void => {
     root.x = 0
     const walk = (n: T) => {
@@ -262,7 +262,7 @@ export const assignBasicPhylogramColumnsFromTree = <T extends ColumnLayoutTree>(
 }
 
 /** Vertical connector x offset from column left (after label/image + margin). */
-export const verticalGutterOffset = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
+export const verticalGutterOffset = (m: BasicNodeMeasures, theme: BasicCladogramTheme): number => {
     const inner = columnInnerEnd(m, theme)
     if (inner === 0) {
         return theme.branchStubMin
@@ -279,7 +279,7 @@ export const silhouettePlacementInSlot = (
 export const silhouetteTopY = (
     railY: number,
     m: BasicNodeMeasures,
-    theme: BasicPhylogramTheme,
+    theme: BasicCladogramTheme,
 ): number => {
     if (!m.hasImage) {
         return railY
@@ -290,7 +290,7 @@ export const silhouetteTopY = (
 export const contentBottomY = (
     railY: number,
     m: BasicNodeMeasures,
-    theme: BasicPhylogramTheme,
+    theme: BasicCladogramTheme,
 ): number => {
     if (!m.hasLabel) {
         return railY

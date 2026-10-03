@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest"
 import {
-    assignBasicPhylogramColumnsFromTree,
-    assignBasicPhylogramRails,
-    DEFAULT_BASIC_PHYLOGRAM_THEME,
+    assignBasicCladogramColumnsFromTree,
+    assignBasicCladogramRails,
+    DEFAULT_BASIC_CLADOGRAM_THEME,
     minTipRailSeparation,
     nodeColumnExtent,
     verticalGutterOffset,
     type BasicNodeMeasures,
     type RailLayoutNode,
-} from "./basicPhylogramLayout.js"
+} from "./basicCladogramLayout.js"
 
-const theme = DEFAULT_BASIC_PHYLOGRAM_THEME
+const theme = DEFAULT_BASIC_CLADOGRAM_THEME
 
 const tipWithImage = (label: string, labelW: number): BasicNodeMeasures => ({
     hasImage: true,
@@ -63,7 +63,7 @@ describe("nodeColumnExtent", () => {
     })
 })
 
-describe("assignBasicPhylogramRails", () => {
+describe("assignBasicCladogramRails", () => {
     it("packs consecutive tips using measured footprints", () => {
         const root: RailLayoutNode = {
             children: [
@@ -72,7 +72,7 @@ describe("assignBasicPhylogramRails", () => {
             ],
         }
         const measures = (n: RailLayoutNode) => tipWithImage(n.label ?? "", 40)
-        assignBasicPhylogramRails(root, measures, theme)
+        assignBasicCladogramRails(root, measures, theme)
         const gap = root.children[1]!.railY! - root.children[0]!.railY!
         expect(gap).toBe(minTipRailSeparation(root.children[0]!, root.children[1]!, measures, theme))
         expect(gap).toBeLessThan(120)
@@ -86,14 +86,14 @@ describe("assignBasicPhylogramRails", () => {
                 { label: "B", children: [] },
             ],
         }
-        assignBasicPhylogramRails(root, n => tipWithImage(n.label ?? "", 40), theme)
+        assignBasicCladogramRails(root, n => tipWithImage(n.label ?? "", 40), theme)
         const mean =
             (root.children[0]!.railY! + root.children[1]!.railY!) / 2
         expect(root.railY).toBe(mean)
     })
 })
 
-describe("assignBasicPhylogramColumnsFromTree", () => {
+describe("assignBasicCladogramColumnsFromTree", () => {
     it("does not widen a cousin branch for a long sibling subtree label", () => {
         type N = { x?: number; label?: string; children: N[] }
         const root: N = {
@@ -121,7 +121,7 @@ describe("assignBasicPhylogramColumnsFromTree", () => {
                 isTip: tip,
             }
         }
-        assignBasicPhylogramColumnsFromTree(root, measures, theme)
+        assignBasicCladogramColumnsFromTree(root, measures, theme)
         const wideTip = root.children[0]!.children[0]!
         const narrowTip = root.children[1]!.children[0]!
         expect(narrowTip.x!).toBeLessThan(wideTip.x! + 200)
@@ -149,7 +149,7 @@ describe("assignBasicPhylogramColumnsFromTree", () => {
                 isTip: tip,
             }
         }
-        assignBasicPhylogramColumnsFromTree(root, measures, theme)
+        assignBasicCladogramColumnsFromTree(root, measures, theme)
         const rootGutter = root.x! + verticalGutterOffset(measures(root), theme)
         for (const child of root.children) {
             expect(child.x!).toBeGreaterThan(rootGutter)

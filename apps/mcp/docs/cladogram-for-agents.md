@@ -24,7 +24,7 @@
 | Exact-name resolution policy for labels | Label-only nodes when `image` is null (no placeholder graphic) |
 | Style catalog + basic layout conventions (this doc) | Measuring text/images and iterating on design |
 
-There is **no** `render_cladogram_svg` tool. Optional reference logic for the **basic** style lives in `src/cladogram/basicPhylogramLayout.ts` (unit-tested; uses measured sizes you supply).
+There is **no** `render_cladogram_svg` tool. Optional reference logic for the **basic** style lives in `src/cladogram/basicCladogramLayout.ts` (unit-tested; uses measured sizes you supply).
 
 ---
 
@@ -105,13 +105,13 @@ Do **not** guess label width from character count. Measure each label with the s
 
 - **Tips:** assign rail `y` in **Newick left-to-right order** (same as `parse_newick` siblings and depth-first tips). First tip at the **top** of the figure (smaller SVG `y`); do **not** mirror rails after `parse_newick`.
 - **Internal nodes:** rail `y` = **arithmetic mean** of the rail `y` values of **immediate children**.
-- Pack tips so each node’s content clears the next (below-rail extent of one + above-rail extent of the next + clearance). Widen locally when a labeled internal sits between two tips so its midpoint has room (`assignBasicPhylogramRails` in `basicPhylogramLayout.ts`).
+- Pack tips so each node’s content clears the next (below-rail extent of one + above-rail extent of the next + clearance). Widen locally when a labeled internal sits between two tips so its midpoint has room (`assignBasicCladogramRails` in `basicCladogramLayout.ts`).
 
 **Horizontal placement**
 
 - Each **child column** starts immediately after its **parent’s** measured column extent (silhouette, label, stub, gutter margin). **Siblings** share the same `x`; **cousin** branches do not widen each other (do not use a single global x per tree depth).
 - Draw the **vertical connector** one **gutter margin** past the right edge of the label (and past silhouette/stub when present), so text is never flush on the line.
-- Reference: `assignBasicPhylogramColumnsFromTree` in `basicPhylogramLayout.ts`.
+- Reference: `assignBasicCladogramColumnsFromTree` in `basicCladogramLayout.ts`.
 
 **Rail geometry (per node)**
 
