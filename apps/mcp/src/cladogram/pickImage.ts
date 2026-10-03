@@ -1,7 +1,7 @@
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { nodeUuidFromSpecificNodeLink, toPickedImage, type ApiImageRecord } from "./imageRecord.js"
 import { imageMatchesLicenseFilters } from "./licenseFilters.js"
-import type { LicenseFilters, PickImageResult } from "./types.js"
+import type { PickImageOptions, PickImageResult } from "./types.js"
 
 type EmbeddedNode = Readonly<{
     uuid?: string
@@ -10,20 +10,39 @@ type EmbeddedNode = Readonly<{
     }>
 }>
 
-const firstCladeImage = async (
+const cladeListImages = async (
     client: PhyloPicClient,
     nodeUuid: string,
-    filters: LicenseFilters,
-): Promise<ApiImageRecord | null> => {
+    filters: PickImageOptions,
+    page: number,
+): Promise<readonly ApiImageRecord[]> => {
     const list = await client.listImages({
         filter_clade: nodeUuid,
-        page: 0,
+        page,
         embed_items: true,
         embed_specificNode: true,
         ...filters,
     })
-    const items = list._embedded?.items as ApiImageRecord[] | undefined
-    return items?.[0] ?? null
+    return (list._embedded?.items as ApiImageRecord[] | undefined) ?? []
+}
+
+const imageFromUuid = async (
+    client: PhyloPicClient,
+    imageUuid: string,
+    filters: PickImageOptions,
+): Promise<{ image: ApiImageRecord | null; warnings: string[] }> => {
+    const warnings: string[] = []
+    const full = await client.getJson<ApiImageRecord>(`/images/${imageUuid}`, {
+        embed_specificNode: true,
+    })
+    if (!full.uuid) {
+        return { image: null, warnings: ["Image record missing uuid."] }
+    }
+    if (!imageMatchesLicenseFilters(full._links?.license?.href, filters)) {
+        warnings.push("Image does not pass the requested license filters.")
+        return { image: null, warnings }
+    }
+    return { image: full, warnings }
 }
 
 const primaryForNode = async (client: PhyloPicClient, nodeUuid: string): Promise<ApiImageRecord | null> => {
@@ -43,9 +62,39 @@ const primaryForNode = async (client: PhyloPicClient, nodeUuid: string): Promise
 export const pickImage = async (
     client: PhyloPicClient,
     nodeUuid: string,
-    filters: LicenseFilters = {},
+    options: PickImageOptions = {},
 ): Promise<PickImageResult> => {
     const warnings: string[] = []
+    const { image_uuid, clade_index, clade_page, ...filters } = options
+
+    if (image_uuid) {
+        const { image, warnings: loadWarnings } = await imageFromUuid(client, image_uuid, filters)
+        warnings.push(...loadWarnings)
+        if (image) {
+            const picked = toPickedImage(image)
+            if (picked) {
+                warnings.push("Using image_uuid override (default primary/clade order skipped).")
+                return { image: picked, nodeUuid, warnings }
+            }
+        }
+        return { image: null, nodeUuid, warnings }
+    }
+
+    if (clade_index !== undefined) {
+        const page = clade_page ?? 0
+        const items = await cladeListImages(client, nodeUuid, filters, page)
+        const hit = items[clade_index]
+        if (!hit) {
+            warnings.push(`No clade list item at page ${page} index ${clade_index}. Use find_images to browse.`)
+            return { image: null, nodeUuid, warnings }
+        }
+        const picked = toPickedImage(hit)
+        if (picked) {
+            warnings.push(`Using clade list page ${page} index ${clade_index} (default primary/clade order skipped).`)
+            return { image: picked, nodeUuid, warnings }
+        }
+        return { image: null, nodeUuid, warnings }
+    }
 
     const primary = await primaryForNode(client, nodeUuid)
     if (primary) {
@@ -60,7 +109,7 @@ export const pickImage = async (
         }
     }
 
-    const cladeHit = await firstCladeImage(client, nodeUuid, filters)
+    const cladeHit = (await cladeListImages(client, nodeUuid, filters, 0))[0]
     if (cladeHit) {
         const image = toPickedImage(cladeHit)
         if (image) {

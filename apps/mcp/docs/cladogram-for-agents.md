@@ -37,6 +37,21 @@ There is **no** `render_cladogram_svg` tool and no layout package in this repo.
 5. **Layout** the tree (see below) and write SVG.
 6. Collect **attribution** from pick/get_image results; include in `<desc>` and/or visible credits if the user wants.
 
+### Choosing alternate silhouettes
+
+Default `pick_image` is the same as PhyloPic’s clade page order (primary when node-accurate, else first on page 0). Users may want a different illustration on the same node.
+
+1. Resolve the node UUID (`search_nodes` / exact match).
+2. **`find_images`** with `filter_clade` set to that UUID and the same license filters as the cladogram. Pages are 0-based; each item includes UUID and (with embed) **specificNode** title.
+3. Pick one:
+   - **`pick_image`** with `node_uuid` + **`clade_index`** (and optional **`clade_page`**), or
+   - **`pick_image`** with **`image_uuid`** after choosing from the list, or
+   - **`get_image`** for URLs/attribution if you already have the UUID from `find_images`.
+
+Overrides skip the default primary / first-on-page policy. Document which nodes used alternates.
+
+**Example:** Hominidae node `f96400c5-cab0-4a39-a878-62097ad2e620` — index `0` is the default clade sort; index `1` is another hominid silhouette (e.g. *Dryopithecus brancoi*) under the same filters.
+
 ### When `pick_image` returns `image: null`
 
 - **Omit the `<image>`** for that node; keep the **label** (and branch geometry). Do not draw a placeholder box or icon substitute.

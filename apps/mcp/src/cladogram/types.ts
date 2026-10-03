@@ -29,3 +29,11 @@ export type LicenseFilters = Readonly<{
     filter_license_nc?: "true" | "false"
     filter_license_sa?: "true" | "false"
 }>
+
+/** Default pick uses primary (when node-accurate) then clade page 0 index 0. Overrides skip that policy. */
+export type PickImageOptions = LicenseFilters &
+    Readonly<{
+        image_uuid?: string
+        clade_index?: number
+        clade_page?: number
+    }>

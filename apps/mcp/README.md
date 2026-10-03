@@ -54,7 +54,7 @@ The registered prompt **`illustrate_taxon`** repeats the same workflow for clien
 
 Read-only tools wrap API endpoints: `search_nodes`, `get_node`, `get_root_node`, `get_lineage`, `find_images`, `get_image`, `resolve_external_id`, `resolve_external_ids`, `get_contributor`, `list_contributor_images`, `get_collection`, `list_licenses`, and `list_namespaces`.
 
-Cladogram helpers (Newick via [`newick-js`](https://www.npmjs.com/package/newick-js)): **`parse_newick`** (hierarchy JSON only) and **`pick_image`** (primary when node-accurate, else first `filter_clade` on page 0). The agent lays out and writes SVG; prompt **`cladogram_from_newick`** describes the workflow. Typical vs default image choice is agent strategy (which node UUID to pass to `pick_image`), not an MCP mode.
+Cladogram helpers (Newick via [`newick-js`](https://www.npmjs.com/package/newick-js)): **`parse_newick`** (hierarchy JSON only) and **`pick_image`** (primary when node-accurate, else first `filter_clade` on page 0). Browse alternates with **`find_images`** (`filter_clade`, 0-based `page`), then **`pick_image`** with **`clade_index`** / **`clade_page`** or **`image_uuid`**. The agent lays out and writes SVG; prompt **`cladogram_from_newick`** describes the workflow.
 
 **Agent cladogram guide (living doc):** [`docs/cladogram-for-agents.md`](docs/cladogram-for-agents.md) — workflow, layout, exact-name pitfalls, label-only nodes when no image. Exposed as MCP resources `phylopic://docs/cladogram-guide` and `phylopic://docs/cladogram-template.svg` (minimal SVG skeleton). Iteration backlog lives in that file.
 

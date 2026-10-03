@@ -8,7 +8,7 @@ export const MCP_AGENT_INSTRUCTIONS = `PhyloPic node and image workflow:
 5. Use find_images with filter_clade set to that UUID. filter_clade includes images tagged on that node and on any subtaxon (descendants)—not only exact matches. List page is 0-based (page=0 is first). Apply license filters only when the user asks.
 6. Default: when the user does not specify a particular species or image, choose the first image on page 0 of that clade list. PhyloPic sorts clade images by phylogenetic proximity to the node (ancestral/default), matching the order on the node silhouettes page.
 7. Override: if the user asks for a "typical", "iconic", "representative", or similar image, choose a narrower node via search_nodes first, then pick_image or find_images on that UUID—do not invent UUIDs from memory. That narrower UUID is a deliberate illustration choice, not a way to recover from null.
-8. pick_image applies PhyloPic policy for a node: primaryImage when its specificNode matches, else first filter_clade hit on page 0, else no image.
+8. pick_image default: primaryImage when its specificNode matches, else first filter_clade hit on page 0, else no image. To use another silhouette on the same node, find_images (filter_clade) then pick_image with clade_index/clade_page or image_uuid.
 9. When pick_image or find_images returns no image for a node, do not retry with a narrower subtaxon name or UUID to fill the gap—filter_clade on that node already searched subtaxa. Omit the silhouette (label-only in cladograms), tell the user, or relax license filters only if they allow; do not substitute a parent/ancestor silhouette unless the user asks for that policy.
 10. Use get_image on the chosen image UUID for file URLs and attribution.
 

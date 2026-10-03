@@ -36,7 +36,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
         "pick_image",
         {
             description:
-                "Pick the PhyloPic image for a node UUID: use primaryImage when its specificNode matches, else the first image on filter_clade page 0 (PhyloPic clade order; filter_clade already includes images on subtaxa). Returns null when no suitable image (e.g. none in clade under license filters, or placeholder primary only). Do not retry with a narrower subtaxon when null—that does not expand the clade search. For user-requested typical/iconic art, resolve the preferred subtaxon via search_nodes first, then call pick_image on that UUID. License filters match find_images.",
+                "Pick a PhyloPic silhouette for a node. Default: primaryImage when its specificNode matches, else filter_clade page 0 index 0 (includes subtaxa). To explore alternates, call find_images with the same filter_clade and license filters, then pick_image with clade_index/clade_page or image_uuid. Overrides skip the default policy. Returns null when none match. Do not retry a narrower subtaxon when null. License filters match find_images.",
             inputSchema: {
                 node_uuid: uuidSchema.optional(),
                 label: z
@@ -46,21 +46,48 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                     .describe(
                         "Resolve a PhyloPic node from a name (exact title match preferred), then pick an image. Pass node_uuid when search must be precise.",
                     ),
+                image_uuid: uuidSchema
+                    .optional()
+                    .describe("Use this image UUID (must pass license filters). Skips default pick."),
+                clade_index: z
+                    .number()
+                    .int()
+                    .min(0)
+                    .optional()
+                    .describe("0-based index on filter_clade list (use find_images to preview). With clade_page."),
+                clade_page: z
+                    .number()
+                    .int()
+                    .min(0)
+                    .optional()
+                    .describe("0-based page for clade_index (default 0). Same as find_images page."),
                 filter_license_by: licenseFilterSchema,
                 filter_license_nc: licenseFilterSchema,
                 filter_license_sa: licenseFilterSchema,
             },
             annotations: READ_ONLY,
         },
-        async ({ node_uuid, label, filter_license_by, filter_license_nc, filter_license_sa }) => {
+        async ({
+            node_uuid,
+            label,
+            image_uuid,
+            clade_index,
+            clade_page,
+            filter_license_by,
+            filter_license_nc,
+            filter_license_sa,
+        }) => {
             try {
                 if (!node_uuid && !label) {
                     return toolFromError(new Error("Provide node_uuid or label."))
                 }
-                const filters = {
+                const options = {
                     ...(filter_license_by === undefined ? {} : { filter_license_by }),
                     ...(filter_license_nc === undefined ? {} : { filter_license_nc }),
                     ...(filter_license_sa === undefined ? {} : { filter_license_sa }),
+                    ...(image_uuid === undefined ? {} : { image_uuid }),
+                    ...(clade_index === undefined ? {} : { clade_index }),
+                    ...(clade_page === undefined ? {} : { clade_page }),
                 }
                 let nodeUuid = node_uuid
                 const warnings: string[] = []
@@ -69,7 +96,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                     nodeUuid = resolved.nodeUuid
                     warnings.push(...resolved.warnings)
                 }
-                const result = await pickImage(client, nodeUuid!, filters)
+                const result = await pickImage(client, nodeUuid!, options)
                 return toolSuccess(result.image ? `Image ${result.image.uuid} for node ${result.nodeUuid}.` : `No image for node ${result.nodeUuid}.`, {
                     ...result,
                     warnings: [...warnings, ...(result.warnings ?? [])],

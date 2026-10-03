@@ -59,4 +59,30 @@ describe("pickImage", () => {
         const result = await pickImage(client, NODE)
         expect(result.image?.uuid).toBe("img-1")
     })
+
+    it("uses clade_index override instead of primary", async () => {
+        const client = mockClient({
+            getJson: vi.fn(async () => {
+                throw new Error("getJson should not run for clade_index override")
+            }),
+            listImages: vi.fn(async () => ({
+                _embedded: {
+                    items: [
+                        { uuid: "first", _links: { license: { href: "https://creativecommons.org/publicdomain/zero/1.0/" } } },
+                        {
+                            uuid: "second",
+                            _links: {
+                                license: { href: "https://creativecommons.org/publicdomain/zero/1.0/" },
+                                vectorFile: { href: "https://example/second.svg" },
+                            },
+                        },
+                    ],
+                },
+            })),
+        })
+
+        const result = await pickImage(client, NODE, { clade_index: 1 })
+        expect(result.image?.uuid).toBe("second")
+        expect(result.warnings?.some(w => w.includes("clade list"))).toBe(true)
+    })
 })
