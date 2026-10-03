@@ -11,6 +11,7 @@ export default defineConfig({
     },
     external: [
         "@phylopic/api-models",
+        "@phylopic/search",
         "@phylopic/ui",
         "@phylopic/utils",
         "@phylopic/utils-api",

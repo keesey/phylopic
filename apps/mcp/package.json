@@ -9,6 +9,7 @@
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.32.0",
         "@phylopic/api-models": "*",
+        "@phylopic/search": "*",
         "@phylopic/utils": "*",
         "zod": "^3.24.2"
     },

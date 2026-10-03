@@ -1,6 +1,7 @@
 "use client"
 import { type NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
-import { type URL, createSearch, isFiniteNumber } from "@phylopic/utils"
+import { gbifResolveObjectIDs } from "@phylopic/search"
+import { type URL, createSearch } from "@phylopic/utils"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
 import React from "react"
@@ -9,20 +10,6 @@ import useSWRImmutable from "swr/immutable"
 import { BuildContext } from "../../../builds"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
-import { fetchNameUsage } from "./fetchNameUsage"
-import { GBIF_URL } from "./GBIF_URL"
-import type { GBIFNameUsage } from "./GBIFNameUsage"
-
-const GBIF_RANK_KEYS: ReadonlyArray<keyof GBIFNameUsage> = [
-    "key",
-    "speciesKey",
-    "genusKey",
-    "familyKey",
-    "orderKey",
-    "classKey",
-    "phylumKey",
-    "kingdomKey",
-]
 
 const fetchNode: Fetcher<NodeWithEmbedded, URL> = async url => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url, undefined, isNodeWithEmbedded)
@@ -32,19 +19,15 @@ const fetchNode: Fetcher<NodeWithEmbedded, URL> = async url => {
 const GBIFResolveObject: React.FC<{ id: number }> = ({ id }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
-    const usage = useSWRImmutable(`${GBIF_URL}species/${encodeURIComponent(id)}`, fetchNameUsage)
+    const lineage = useSWRImmutable(["gbifResolveObjectIDs", id] as const, ([, speciesKey]) =>
+        gbifResolveObjectIDs(speciesKey),
+    )
     const lineageIDs = React.useMemo(() => {
-        if (usage.isLoading) {
+        if (lineage.isLoading) {
             return []
         }
-        if (!usage.data) {
-            return [String(id)]
-        }
-        return GBIF_RANK_KEYS.map(key => usage.data?.[key])
-            .filter(value => isFiniteNumber(value))
-            .filter((value, index, array) => !array.slice(0, index).includes(value))
-            .map(value => String(value))
-    }, [id, usage.data, usage.isLoading])
+        return lineage.data ?? [String(id)]
+    }, [id, lineage.data, lineage.isLoading])
     const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
@@ -79,7 +62,7 @@ export const GBIFResolve: React.FC = () => {
         return ids
             .filter(id => !state?.resolutions["gbif.org"]?.species?.[id])
             .map(id => parseInt(id, 10))
-            .filter(isFinite)
+            .filter(id => Number.isFinite(id))
             .sort()
     }, [state?.externalResults, state?.resolutions])
     return (

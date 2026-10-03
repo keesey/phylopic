@@ -1,6 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import { searchExternalTaxa, type ExternalAuthority } from "@phylopic/search"
 import { z } from "zod"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
+import { createResolveToPhylopic } from "../search/resolveExternalToPhylopic.js"
 import { toolFromError, toolSuccess } from "./toolResult.js"
 
 const READ_ONLY = { readOnlyHint: true } as const
@@ -16,18 +18,28 @@ const pageSchema = z
     .optional()
     .describe("0-based page index (first page is 0). Required by the API when using embed_items on lists.")
 
+const externalAuthoritySchema = z.enum(["gbif.org", "opentreeoflife.org", "paleobiodb.org"])
+
 export const registerTools = (server: McpServer, client: PhyloPicClient) => {
     server.registerTool(
         "search_nodes",
         {
             description:
-                "Search PhyloPic phylogenetic nodes by name (autocomplete, then node lookup). Returns node UUIDs; use get_node for cladeImages / images links, then find_images with filter_clade for silhouettes under that taxon. Prefer the broadest matching node for informal groups (e.g. Apiformes for bees, not only Apidae).",
+                "Search for taxonomic names in PhyloPic and, by default, in GBIF, Open Tree of Life, and the Paleobiology Database (see https://www.phylopic.org/articles/api-recipes ). PhyloPic hits use autocomplete plus node lookup. External hits are resolved to the closest PhyloPic node when possible. Use returned UUIDs with get_node and find_images (filter_clade). Prefer the broadest matching node for informal groups (e.g. Apiformes for bees).",
             inputSchema: {
                 query: z.string().min(2).describe("Taxonomic name fragment to search for."),
+                include_external: z
+                    .boolean()
+                    .optional()
+                    .describe("When true (default), also search GBIF, Open Tree of Life, and PBDB and resolve to PhyloPic nodes."),
+                external_sources: z
+                    .array(externalAuthoritySchema)
+                    .optional()
+                    .describe("Subset of external authorities to query. Defaults to all three."),
             },
             annotations: READ_ONLY,
         },
-        async ({ query }) => {
+        async ({ query, include_external, external_sources }) => {
             try {
                 const autocomplete = await client.getJson<{ matches: readonly string[] }>("/autocomplete", { query })
                 const matches = autocomplete.matches
@@ -53,10 +65,28 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
                         return { name, items }
                     }),
                 )
-                return toolSuccess(`Found ${matches.length} name match(es) for "${query}".`, {
+
+                const external =
+                    include_external === false
+                        ? []
+                        : await searchExternalTaxa(query, {
+                              limitPerSource: 8,
+                              resolve: createResolveToPhylopic(client),
+                              sources: external_sources as ExternalAuthority[] | undefined,
+                          })
+
+                const externalResolved = external.filter(hit => hit.phylopic?.uuid).length
+                const summaryParts = [`${matches.length} PhyloPic name match(es)`]
+                if (include_external !== false) {
+                    summaryParts.push(
+                        `${external.length} external suggestion(s), ${externalResolved} resolved to PhyloPic node(s)`,
+                    )
+                }
+
+                return toolSuccess(`Found ${summaryParts.join("; ")} for "${query}".`, {
                     query,
-                    matches,
-                    results,
+                    phylopic: { matches, results },
+                    external,
                 })
             } catch (error) {
                 return toolFromError(error)

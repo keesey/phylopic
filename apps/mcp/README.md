@@ -50,5 +50,5 @@ Read-only tools wrap API endpoints: `search_nodes`, `get_node`, `get_root_node`,
 
 See the [API Recipes](https://www.phylopic.org/articles/api-recipes) article for external hierarchy resolution with `resolve_external_ids`.
 
-For taxon silhouettes, prefer `search_nodes` → `find_images` with `filter_clade` (node UUID). List `page` is **0-based** (`0` = first page). Use `filter_license_nc=false` to exclude NonCommercial licenses. Use `filter_license_sa=false` to exclude ShareAlike licenses. Use `filter_license_by=false` to exclude everything but public domain licenses.
+For taxon silhouettes, prefer `search_nodes` → `find_images` with `filter_clade` (node UUID). By default, `search_nodes` also queries GBIF, Open Tree of Life, and the Paleobiology Database and resolves hits to PhyloPic nodes (see [API Recipes](https://www.phylopic.org/articles/api-recipes)). Set `include_external: false` for PhyloPic-only search. List `page` is **0-based** (`0` = first page). Use `filter_license_nc=false` to exclude NonCommercial licenses. Use `filter_license_sa=false` to exclude ShareAlike licenses. Use `filter_license_by=false` to exclude everything but public domain licenses.
 
