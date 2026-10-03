@@ -61,6 +61,41 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
     )
 
     server.registerPrompt(
+        "cladogram_from_terminals",
+        {
+            description:
+                "Build an illustrated SVG cladogram from a list of terminal taxa using build_tree_from_terminals, pick_image, and agent-side layout.",
+            argsSchema: {
+                labels: z
+                    .string()
+                    .describe("Comma-separated terminal taxa in top-to-bottom tip order (e.g. humans, rice, seahorses)."),
+                license_notes: z.string().optional().describe("License constraints (e.g. no NonCommercial)."),
+            },
+        },
+        async ({ labels, license_notes }) => ({
+            messages: [
+                {
+                    role: "user",
+                    content: {
+                        type: "text",
+                        text: [
+                            "Create an illustrated SVG cladogram for these terminal taxa:",
+                            labels,
+                            license_notes ? `License constraints: ${license_notes}.` : "",
+                            "Steps:",
+                            "1. build_tree_from_terminals with labels split from the list (preserve order). Use returned newick with parse_newick if you want the usual Newick pipeline.",
+                            "2. pick_image per node using nodeUuidByTreeId; unlabeled internals use descendant_node_uuids from child UUIDs in nodeUuidByTreeId.",
+                            "3. Read phylopic://docs/cladogram-guide and layout basic rectangular phylogram SVG with measured labels and bottom-aligned silhouettes in square slots.",
+                        ]
+                            .filter(Boolean)
+                            .join("\n"),
+                    },
+                },
+            ],
+        }),
+    )
+
+    server.registerPrompt(
         "cladogram_from_newick",
         {
             description:

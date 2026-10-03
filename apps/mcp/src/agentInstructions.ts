@@ -13,7 +13,7 @@ export const MCP_AGENT_INSTRUCTIONS = `PhyloPic node and image workflow:
 10. Use get_image on the chosen image UUID for file URLs and attribution.
 
 Cladograms from Newick:
-- parse_newick for hierarchy only (no layout from MCP). Use each node’s label string exactly as returned (same as the Newick); sibling order is left-to-right as in the Newick.
+- parse_newick for hierarchy from Newick, or build_tree_from_terminals for a list of tip names (lineages → tree + nodeUuidByTreeId). No layout from MCP. Use each node’s label exactly as returned; sibling order matches Newick left-to-right or the terminal list top-to-bottom.
 - pick_image per labeled node (label or node_uuid). If a label is ambiguous (e.g. homonym clades), pass descendant_node_uuids of resolved child nodes: MCP MRCA-walks lineage to disambiguate, then picks. Unlabeled internal nodes: descendant_node_uuids only (MRCA + pick). Link silhouettes to the chosen image; node page link may use the MRCA UUID when there is no tree label.
 - image: null → no <image> element (label-only where a label exists); do not subtaxon-retry.
 - Typical vs default illustration is your strategy (which node UUID to pass to pick_image), not an MCP mode.

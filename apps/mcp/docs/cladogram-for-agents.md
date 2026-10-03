@@ -10,7 +10,7 @@
 | `phylopic://docs/cladogram-styles` | Style catalog (basic vs future variants) |
 | `phylopic://docs/cladogram-template.svg` | Minimal basic-style SVG skeleton |
 
-**Related:** prompt `cladogram_from_newick`, tools `parse_newick` and `pick_image`, server instructions in `src/agentInstructions.ts`.
+**Related:** prompts `cladogram_from_newick` / `cladogram_from_terminals`, tools `parse_newick`, `build_tree_from_terminals`, and `pick_image`, server instructions in `src/agentInstructions.ts`.
 
 ---
 
@@ -18,7 +18,7 @@
 
 | MCP provides | Agent provides |
 |--------------|----------------|
-| Tree hierarchy JSON (`parse_newick`) | Layout (x/y or equivalent) |
+| Tree hierarchy JSON (`parse_newick` or `build_tree_from_terminals`) | Layout (x/y or equivalent) |
 | Per-node image pick (`pick_image`) or UUID from `search_nodes` | Branch geometry |
 | License-filtered `vectorUrl`, attribution via `get_image` | Final SVG file |
 | Exact-name resolution policy for labels | Label-only nodes when `image` is null (no placeholder graphic) |
@@ -30,7 +30,16 @@ There is **no** `render_cladogram_svg` tool. Optional reference logic for the **
 
 ## Recommended workflow
 
+### From a Newick string
+
 1. **`parse_newick`** with the user’s Newick string (semicolon optional). **`label` strings and sibling order match the Newick** (left-to-right); use those labels verbatim for SVG text and for `pick_image` / `search_nodes`.
+
+### From a list of terminal taxa (no Newick)
+
+When the user names **tips only** (e.g. “humans, rice, seahorses”), use **`build_tree_from_terminals`** with **`labels`** in the desired top-to-bottom tip order. MCP resolves each name, loads **`get_lineage`** for every tip, and builds a **concestor-only** tree—the internal nodes where those terminals diverge, not every node on the full PhyloPic paths (e.g. five tips may yield `((hops,rice),(seahorses,(humans,toucans)))`, not hundreds of ranks). The response includes **`newick`** (optional: **`parse_newick`** on that string for the usual pipeline), hierarchy JSON, and **`nodeUuidByTreeId`**. Internal nodes are **unlabeled concestors**. Then continue with **`pick_image`** as below—use **`node_uuid`** from **`nodeUuidByTreeId`** for labeled tips; for unlabeled internals use **`descendant_node_uuids`** from child UUIDs in **`nodeUuidByTreeId`**.
+
+### Shared steps (Newick or terminals)
+
 2. Read **`phylopic://docs/cladogram-styles`** and choose a style (default: **basic rectangular phylogram**).
 3. Decide which nodes to illustrate (default: every **labeled** node, including internal clades, unless the user says tips-only). **Unlabeled** internal nodes can still get silhouettes when the user wants full illustration.
 4. For each **labeled** node:
@@ -43,7 +52,7 @@ There is **no** `render_cladogram_svg` tool. Optional reference logic for the **
 6. Apply **license filters** only when the user requires them (e.g. `filter_license_nc=false` for commercial-friendly output).
 7. **Measure** silhouettes and labels (see [Basic rectangular phylogram](#basic-rectangular-phylogram)), **layout**, write SVG.
 8. Collect **attribution** from pick/get_image results; include in `<desc>` and/or visible credits if the user wants.
-9. **Links:** wrap each label in `<a href="https://www.phylopic.org/nodes/{nodeUuid}">`. Wrap each silhouette in `<a href="https://www.phylopic.org/images/{imageUuid}">`. **SVG text must be the Newick `label` only** — never substitute PhyloPic node titles.
+9. **Links:** wrap each label in `<a href="https://www.phylopic.org/nodes/{nodeUuid}">`. Wrap each silhouette in `<a href="https://www.phylopic.org/images/{imageUuid}">`. **SVG text must be the tree `label` only** (Newick or terminal list) — never substitute PhyloPic node titles.
 
 ### Choosing alternate silhouettes
 

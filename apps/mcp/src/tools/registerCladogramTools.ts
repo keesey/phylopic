@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
+import { buildTreeFromTerminalLabels } from "../cladogram/buildTreeFromTerminals.js"
 import { parseNewickToTree } from "../cladogram/parseNewick.js"
 import { pickImage } from "../cladogram/pickImage.js"
 import { resolveMrcaFromDescendants } from "../cladogram/resolveMrcaFromDescendants.js"
@@ -28,6 +29,33 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
             try {
                 const tree = parseNewickToTree(newick)
                 return toolSuccess(`Parsed Newick tree with ${tree.tipCount} tip(s).`, { tree })
+            } catch (error) {
+                return toolFromError(error)
+            }
+        },
+    )
+
+    server.registerTool(
+        "build_tree_from_terminals",
+        {
+            description:
+                "Build a cladogram hierarchy from terminal taxa only. Resolves labels, loads lineages, and returns a concestor-only tree (not every PhyloPic node on the paths): same JSON as parse_newick, a Newick string (parse_newick for the normal pipeline), and nodeUuidByTreeId. Internal nodes are unlabeled concestors; sibling order follows the input list.",
+            inputSchema: {
+                labels: z
+                    .array(z.string().min(1))
+                    .min(1)
+                    .max(500)
+                    .describe("Terminal taxa only, in desired top-to-bottom tip order (e.g. humans, rice, seahorses)."),
+            },
+            annotations: READ_ONLY,
+        },
+        async ({ labels }) => {
+            try {
+                const result = await buildTreeFromTerminalLabels(client, labels)
+                return toolSuccess(
+                    `Built tree from ${result.terminals.length} terminal taxa (${result.tree.tipCount} tips).`,
+                    result,
+                )
             } catch (error) {
                 return toolFromError(error)
             }
