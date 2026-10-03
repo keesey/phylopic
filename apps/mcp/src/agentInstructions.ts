@@ -17,6 +17,7 @@ Cladograms from Newick:
 - pick_image per node (or label); you write the SVG. image: null → no <image> element (label only); do not subtaxon-retry.
 - Typical vs default illustration is your strategy (which node UUID to pass to pick_image), not an MCP mode.
 - Read phylopic://docs/cladogram-guide (and optional phylopic://docs/cladogram-template.svg) for layout and taxonomy pitfalls; file also at apps/mcp/docs/cladogram-for-agents.md.
+- Link labels to https://www.phylopic.org/nodes/{nodeUuid} and silhouettes to https://www.phylopic.org/images/{imageUuid} in SVG <a> elements.
 
 If PhyloPic has no match, search_nodes external hits (GBIF, Open Tree of Life, PBDB) include resolved PhyloPic nodes when possible; otherwise use resolve_external_ids per list_namespaces and https://www.phylopic.org/articles/api-recipes .`
 

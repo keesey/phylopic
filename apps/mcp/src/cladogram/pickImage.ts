@@ -1,7 +1,13 @@
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { nodeUuidFromSpecificNodeLink, toPickedImage, type ApiImageRecord } from "./imageRecord.js"
 import { imageMatchesLicenseFilters } from "./licenseFilters.js"
+import { phylopicNodePageUrl } from "./phylopicWebUrls.js"
 import type { PickImageOptions, PickImageResult } from "./types.js"
+
+const withPageUrls = (nodeUuid: string, result: Omit<PickImageResult, "nodePageUrl">): PickImageResult => ({
+    ...result,
+    nodePageUrl: phylopicNodePageUrl(nodeUuid),
+})
 
 type EmbeddedNode = Readonly<{
     uuid?: string
@@ -74,10 +80,10 @@ export const pickImage = async (
             const picked = toPickedImage(image)
             if (picked) {
                 warnings.push("Using image_uuid override (default primary/clade order skipped).")
-                return { image: picked, nodeUuid, warnings }
+                return withPageUrls(nodeUuid, { image: picked, nodeUuid, warnings })
             }
         }
-        return { image: null, nodeUuid, warnings }
+        return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
     }
 
     if (clade_index !== undefined) {
@@ -86,14 +92,14 @@ export const pickImage = async (
         const hit = items[clade_index]
         if (!hit) {
             warnings.push(`No clade list item at page ${page} index ${clade_index}. Use find_images to browse.`)
-            return { image: null, nodeUuid, warnings }
+            return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
         }
         const picked = toPickedImage(hit)
         if (picked) {
             warnings.push(`Using clade list page ${page} index ${clade_index} (default primary/clade order skipped).`)
-            return { image: picked, nodeUuid, warnings }
+            return withPageUrls(nodeUuid, { image: picked, nodeUuid, warnings })
         }
-        return { image: null, nodeUuid, warnings }
+        return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
     }
 
     const primary = await primaryForNode(client, nodeUuid)
@@ -102,7 +108,7 @@ export const pickImage = async (
         if (specificUuid === nodeUuid && imageMatchesLicenseFilters(primary._links?.license?.href, filters)) {
             const image = toPickedImage(primary)
             if (image) {
-                return { image, nodeUuid, warnings }
+                return withPageUrls(nodeUuid, { image, nodeUuid, warnings })
             }
         } else if (specificUuid && specificUuid !== nodeUuid) {
             warnings.push("Skipped primaryImage: specificNode does not match this node.")
@@ -113,9 +119,9 @@ export const pickImage = async (
     if (cladeHit) {
         const image = toPickedImage(cladeHit)
         if (image) {
-            return { image, nodeUuid, warnings }
+            return withPageUrls(nodeUuid, { image, nodeUuid, warnings })
         }
     }
 
-    return { image: null, nodeUuid, warnings }
+    return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
 }

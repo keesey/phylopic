@@ -1,3 +1,4 @@
+import { phylopicImagePageUrl } from "./phylopicWebUrls.js"
 import type { PickedImage } from "./types.js"
 
 type ImageLinks = Readonly<{
@@ -37,6 +38,7 @@ export const toPickedImage = (image: ApiImageRecord): PickedImage | null => {
     return {
         attribution: image.attribution ?? null,
         license: image._links?.license?.href,
+        pageUrl: phylopicImagePageUrl(uuid),
         sourceUrl: image._links?.sourceFile?.href,
         uuid,
         vectorUrl: image._links?.vectorFile?.href,

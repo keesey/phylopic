@@ -9,6 +9,7 @@ import { parseNewickToTree } from "../src/cladogram/parseNewick.js"
 import { pickImage } from "../src/cladogram/pickImage.js"
 import { resolveLabelToNode } from "../src/cladogram/resolveLabelToNode.js"
 import { PhyloPicClient } from "../src/client/PhyloPicClient.js"
+import { phylopicImagePageUrl, phylopicNodePageUrl } from "../src/cladogram/phylopicWebUrls.js"
 import type { PickImageOptions } from "../src/cladogram/types.js"
 
 const NEWICK =
@@ -63,11 +64,6 @@ const assignRail = (n: LayoutNode): number => {
     return n.railY
 }
 assignRail(tree)
-const assignX = (n: LayoutNode) => {
-    n.x = n.depth * DX
-    for (const c of n.children) assignX(c)
-}
-assignX(tree)
 
 const all: LayoutNode[] = []
 const collect = (n: LayoutNode) => {
@@ -76,11 +72,25 @@ const collect = (n: LayoutNode) => {
 }
 collect(tree)
 
+/** Flip rails so the first tip in parse order is at the bottom (SVG y increases downward). */
+const maxRail = Math.max(...all.map(n => n.railY!))
+for (const n of all) {
+    n.railY = maxRail - n.railY!
+}
+
+const assignX = (n: LayoutNode) => {
+    n.x = n.depth * DX
+    for (const c of n.children) assignX(c)
+}
+assignX(tree)
+
 const images: Record<string, { vectorUrl?: string; attribution?: string | null; uuid?: string } | null> = {}
+const nodeUuids: Record<string, string> = {}
 for (const n of all) {
     if (!n.label) continue
     try {
         const { nodeUuid } = await resolveLabelToNode(client, n.label)
+        nodeUuids[n.id] = nodeUuid
         const opts = { ...filters, ...(IMAGE_OVERRIDES[n.label] ?? {}) }
         const pick = await pickImage(client, nodeUuid, opts)
         images[n.id] = pick.image
@@ -91,6 +101,9 @@ for (const n of all) {
         images[n.id] = null
     }
 }
+
+const link = (href: string, inner: string) =>
+    `<a href="${href}" xlink:href="${href}">${inner}</a>`
 
 const padX = 36
 const maxS = 52
@@ -138,14 +151,21 @@ const nodesSvg = all
         const rail = n.railY! + offsetY
         const img = images[n.id]
         const label = esc(n.label!)
+        const nodeUuid = nodeUuids[n.id]
         let g = `<g id="${n.id}">`
-        if (img?.vectorUrl) {
-            g += `<image href="${img.vectorUrl}" x="${x}" y="${rail - LINE_GAP - s}" width="${s}" height="${s}"/>`
+        if (img?.vectorUrl && img.uuid) {
+            const imageMarkup = `<image href="${img.vectorUrl}" x="${x}" y="${rail - LINE_GAP - s}" width="${s}" height="${s}"/>`
+            g += link(phylopicImagePageUrl(img.uuid), imageMarkup)
         }
-        if (isTip(n) && !img?.vectorUrl) {
-            g += `<text x="${x}" y="${rail}" dominant-baseline="middle" ${FONT}>${label}</text>`
+        const textY = isTip(n) && !img?.vectorUrl ? rail : rail + LABEL_OFFSET
+        const textInner =
+            isTip(n) && !img?.vectorUrl ?
+                `<text x="${x}" y="${textY}" dominant-baseline="middle" ${FONT}>${label}</text>`
+            :   `<text x="${x}" y="${textY}" ${FONT}>${label}</text>`
+        if (nodeUuid) {
+            g += link(phylopicNodePageUrl(nodeUuid), textInner)
         } else {
-            g += `<text x="${x}" y="${rail + LABEL_OFFSET}" ${FONT}>${label}</text>`
+            g += textInner
         }
         return `${g}</g>`
     })

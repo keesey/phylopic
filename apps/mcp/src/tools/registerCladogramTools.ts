@@ -36,7 +36,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
         "pick_image",
         {
             description:
-                "Pick a PhyloPic silhouette for a node. Default: primaryImage when its specificNode matches, else filter_clade page 0 index 0 (includes subtaxa). To explore alternates, call find_images with the same filter_clade and license filters, then pick_image with clade_index/clade_page or image_uuid. Overrides skip the default policy. Returns null when none match. Do not retry a narrower subtaxon when null. License filters match find_images.",
+                "Pick a PhyloPic silhouette for a node. Default: primaryImage when its specificNode matches, else filter_clade page 0 index 0 (includes subtaxa). Response includes nodePageUrl and image.pageUrl for SVG links (www.phylopic.org). To explore alternates, call find_images then clade_index/clade_page or image_uuid. Overrides skip the default policy. License filters match find_images.",
             inputSchema: {
                 node_uuid: uuidSchema.optional(),
                 label: z

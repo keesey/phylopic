@@ -36,6 +36,7 @@ There is **no** `render_cladogram_svg` tool and no layout package in this repo.
 4. Apply **license filters** only when the user requires them (e.g. `filter_license_nc=false` for commercial-friendly output).
 5. **Layout** the tree (see below) and write SVG.
 6. Collect **attribution** from pick/get_image results; include in `<desc>` and/or visible credits if the user wants.
+7. **Links:** wrap each label in `<a href="https://www.phylopic.org/nodes/{nodeUuid}">` (PhyloPic node page). Wrap each silhouette in `<a href="https://www.phylopic.org/images/{imageUuid}">` (image page). Use the resolved node UUID from `search_nodes` / `pick_image`; use the chosen image UUID from `pick_image` or `find_images`.
 
 ### Choosing alternate silhouettes
 
@@ -97,7 +98,7 @@ Each labeled node has a horizontal **rail** y (`railY`):
 ```
 
 1. Assign **depth** → x (constant column pitch, e.g. 90px per level).
-2. Assign **tips** to spaced rail y values; **internal** nodes at the midpoint of their children’s rails.
+2. Assign **tips** to spaced rail y values (document which end is “first tip in tree order”—e.g. first tip at the **bottom**, last at the **top**, by mirroring rails after layout: `railY = maxRail - railY`). **Internal** nodes at the midpoint of their children’s rails (after mirroring).
 3. **Silhouette:** `<image>` with bottom edge above the rail (leave a few px gap). **Tips:** inset a small left margin from the column x (e.g. 8px). Ancestral nodes use the column x with no extra inset.
 4. **Label:** With a silhouette, `<text>` below the rail (e.g. baseline `railY + 16`), at `columnX + tipMargin`. **Terminal node with no image:** place the label at `columnX + tipMargin`, vertically centered on the rail (`dominant-baseline="middle"`). The branch must **not** run under the text.
 5. **Edges:** horizontal segments on **rails** only. From parent `(x + slotWidth, parentRail)` → vertical in the gutter → child rail; for **ancestral (internal) children**, continue the horizontal **unbroken** from `x_child` through the slot to `(x_child + slotWidth, childRail)` before descending to their children. **Root (and any ancestral node without an incoming branch):** draw the rail horizontal from **`columnX` through the slot to `(columnX + slotWidth)`** so the line reaches the left edge of the silhouette, not only the outgoing stub from the right. **Tips with an image:** extend the incoming horizontal to the **right edge** of the silhouette (`tipX + width`). **Tips without an image:** stop the horizontal at **`columnX`** (before the tip margin); leave the margin gap, then the label. Do not run lines through images or labels (draw branches first, then images and text).
@@ -121,11 +122,17 @@ Scale spacing for large trees; there is no single canonical aspect ratio.
   <rect x="0" y="0" width="W" height="H" fill="#ffffff"/>
   <!-- polylines, then groups per node -->
   <g id="with-image">
-    <image href="{vectorUrl}" x="…" y="{railY - gap - height}" width="…" height="…"/>
-    <text x="…" y="{railY + labelOffset}" font-style="italic">{label}</text>
+    <a href="https://www.phylopic.org/images/{imageUuid}" xlink:href="https://www.phylopic.org/images/{imageUuid}">
+      <image href="{vectorUrl}" x="…" y="{railY - gap - height}" width="…" height="…"/>
+    </a>
+    <a href="https://www.phylopic.org/nodes/{nodeUuid}" xlink:href="https://www.phylopic.org/nodes/{nodeUuid}">
+      <text x="…" y="{railY + labelOffset}" font-style="italic">{label}</text>
+    </a>
   </g>
   <g id="no-image-tip">
-    <text x="…" y="{railY}" dominant-baseline="middle" font-style="italic">{label}</text>
+    <a href="https://www.phylopic.org/nodes/{nodeUuid}" xlink:href="https://www.phylopic.org/nodes/{nodeUuid}">
+      <text x="…" y="{railY}" dominant-baseline="middle" font-style="italic">{label}</text>
+    </a>
   </g>
 </svg>
 ```

@@ -16,10 +16,14 @@ export type PickedImage = Readonly<{
     sourceUrl?: string
     license?: string
     attribution?: string | null
+    /** https://www.phylopic.org/images/{uuid} */
+    pageUrl?: string
 }>
 
 export type PickImageResult = Readonly<{
     nodeUuid: string
+    /** https://www.phylopic.org/nodes/{nodeUuid} */
+    nodePageUrl?: string
     image: PickedImage | null
     warnings?: readonly string[]
 }>
