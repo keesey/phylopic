@@ -17,9 +17,9 @@ Point at a local API while developing:
 PHYLOPIC_API_URL=http://127.0.0.1:3003 yarn workspace @phylopic/mcp start
 ```
 
-## Cursor
+## Streamable HTTP
 
-Start the server, then add to `.cursor/mcp.json`:
+Start the server, then point your MCP client at the endpoint (exact config file location depends on the client):
 
 ```json
 {
@@ -43,6 +43,12 @@ Start the server, then add to `.cursor/mcp.json`:
     }
 }
 ```
+
+## Agent guidance
+
+MCP clients that support **server instructions** receive workflow rules at connect time (see `src/agentInstructions.ts`): use `search_nodes` with the **user's exact words** first, never substitute taxa from model memory, and only use node UUIDs returned by the tools.
+
+The registered prompt **`illustrate_taxon`** repeats the same workflow for clients that expose MCP prompts.
 
 ## Tools
 

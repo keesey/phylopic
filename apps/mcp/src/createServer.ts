@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
+import { MCP_AGENT_INSTRUCTIONS } from "./agentInstructions.js"
 import { PhyloPicClient, type PhyloPicClientOptions } from "./client/PhyloPicClient.js"
 import { registerResources } from "./resources/registerResources.js"
 import { registerTools } from "./tools/registerTools.js"
@@ -13,6 +14,7 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
         },
         {
             capabilities: {},
+            instructions: MCP_AGENT_INSTRUCTIONS,
         },
     )
 
@@ -25,7 +27,9 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
             description:
                 "Workflow for finding a PhyloPic silhouette for a taxon, respecting license requirements and attribution.",
             argsSchema: {
-                taxon: z.string().describe("Scientific or common name, or external ID context."),
+                taxon: z
+                    .string()
+                    .describe("User's taxon wording (common or scientific); pass verbatim to search_nodes, do not translate from memory."),
                 license_notes: z
                     .string()
                     .optional()
@@ -42,7 +46,8 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             `Find a PhyloPic silhouette for: ${taxon}.`,
                             license_notes ? `License constraints: ${license_notes}.` : "",
                             "Steps:",
-                            "1. Use search_nodes or resolve_external_ids (with list_namespaces) to identify the best PhyloPic node; pick the broadest node that fits (e.g. Apiformes for bees).",
+                            "1. Use search_nodes with the user's exact taxon wording (do not substitute scientific names from memory). Pick a node UUID from the tool results; prefer the broadest match that fits the request.",
+                            "1b. If needed, use resolve_external_ids (with list_namespaces) per https://www.phylopic.org/articles/api-recipes .",
                             "2. Use find_images with filter_clade (node UUID) and license filters (e.g. filter_license_nc=false to avoid NonCommercial). List pages are 0-based (page=0 first).",
                             "3. Use get_image for the chosen UUID and provide exact attribution text and file URLs.",
                         ]

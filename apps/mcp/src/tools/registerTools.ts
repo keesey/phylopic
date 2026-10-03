@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { searchExternalTaxa, type ExternalAuthority } from "@phylopic/search"
 import { z } from "zod"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
+import { SEARCH_NODES_QUERY_HINT } from "../agentInstructions.js"
 import { createResolveToPhylopic } from "../search/resolveExternalToPhylopic.js"
 import { toolFromError, toolSuccess } from "./toolResult.js"
 
@@ -25,9 +26,9 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
         "search_nodes",
         {
             description:
-                "Search for taxonomic names in PhyloPic and, by default, in GBIF, Open Tree of Life, and the Paleobiology Database (see https://www.phylopic.org/articles/api-recipes ). PhyloPic hits use autocomplete plus node lookup. External hits are resolved to the closest PhyloPic node when possible. Use returned UUIDs with get_node and find_images (filter_clade). Prefer the broadest matching node for informal groups (e.g. Apiformes for bees).",
+                "Required first step to map a taxon to a PhyloPic node UUID. Searches PhyloPic (autocomplete + nodes) and, by default, GBIF, Open Tree of Life, and PBDB with resolve to PhyloPic (see https://www.phylopic.org/articles/api-recipes ). Do not guess scientific names or UUIDs from general knowledge—use the user's wording in query and only use UUIDs from this response. Then find_images with filter_clade. Prefer the broadest matching node returned when the user asked for a group.",
             inputSchema: {
-                query: z.string().min(2).describe("Taxonomic name fragment to search for."),
+                query: z.string().min(2).describe(SEARCH_NODES_QUERY_HINT),
                 include_external: z
                     .boolean()
                     .optional()
