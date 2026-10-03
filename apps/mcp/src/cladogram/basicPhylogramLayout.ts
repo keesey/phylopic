@@ -59,8 +59,8 @@ export const emptyNodeMeasures = (): BasicNodeMeasures => ({
 const contentInset = (m: BasicNodeMeasures, theme: BasicPhylogramTheme) =>
     m.isTip ? theme.tipContentInset : 0
 
-/** Horizontal extent from column edge to vertical gutter (0 if unillustrated and unlabelled). */
-export const nodeColumnExtent = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
+/** Right edge of silhouettes/labels/stub before the gutter margin. */
+export const columnInnerEnd = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
     if (!m.hasImage && !m.hasLabel) {
         return 0
     }
@@ -70,7 +70,16 @@ export const nodeColumnExtent = (m: BasicNodeMeasures, theme: BasicPhylogramThem
     const contentEnd = Math.max(imageEnd, labelEnd)
     const branchEnd =
         m.hasImage ? inset + m.imageWidth + theme.branchStubMin : theme.branchStubMin
-    return Math.max(contentEnd, branchEnd) + theme.gutterMargin
+    return Math.max(contentEnd, branchEnd)
+}
+
+/** Horizontal extent from column left to child column start (0 if empty node). */
+export const nodeColumnExtent = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
+    const inner = columnInnerEnd(m, theme)
+    if (inner === 0) {
+        return 0
+    }
+    return verticalGutterOffset(m, theme) + theme.gutterMargin
 }
 
 /** Distance from rail up to top of node content. */
@@ -255,10 +264,13 @@ export const assignBasicPhylogramColumnsFromTree = <T extends ColumnLayoutTree>(
     walk(root)
 }
 
-/** Vertical connector x offset from column left (same as nodeColumnExtent before gutter margin). */
+/** Vertical connector x offset from column left (after label/image + margin). */
 export const verticalGutterOffset = (m: BasicNodeMeasures, theme: BasicPhylogramTheme): number => {
-    const full = nodeColumnExtent(m, theme)
-    return full > 0 ? full - theme.gutterMargin : theme.branchStubMin
+    const inner = columnInnerEnd(m, theme)
+    if (inner === 0) {
+        return theme.branchStubMin
+    }
+    return inner + (m.hasLabel ? theme.gutterMargin : 0)
 }
 
 export const silhouetteTopY = (

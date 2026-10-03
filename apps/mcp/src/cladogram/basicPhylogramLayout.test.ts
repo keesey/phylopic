@@ -5,6 +5,7 @@ import {
     DEFAULT_BASIC_PHYLOGRAM_THEME,
     minTipRailSeparation,
     nodeColumnExtent,
+    verticalGutterOffset,
     type BasicNodeMeasures,
     type RailLayoutNode,
 } from "./basicPhylogramLayout.js"
@@ -32,7 +33,20 @@ describe("nodeColumnExtent", () => {
             labelHeight: 14,
             isTip: false,
         }
-        expect(nodeColumnExtent(m, theme)).toBeGreaterThanOrEqual(132 + theme.gutterMargin)
+        expect(nodeColumnExtent(m, theme)).toBeGreaterThanOrEqual(132 + 2 * theme.gutterMargin)
+    })
+
+    it("leaves gutter margin after label-only internal nodes", () => {
+        const m: BasicNodeMeasures = {
+            hasImage: false,
+            imageWidth: 0,
+            imageHeight: 0,
+            hasLabel: true,
+            labelWidth: 48,
+            labelHeight: 14,
+            isTip: false,
+        }
+        expect(verticalGutterOffset(m, theme)).toBe(48 + theme.gutterMargin)
     })
 
     it("returns 0 for empty nodes", () => {

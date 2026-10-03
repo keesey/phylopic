@@ -101,7 +101,7 @@ Do **not** guess label width from character count. Measure each label with the s
 **Horizontal placement**
 
 - Each **child column** starts immediately after its **parent’s** measured column extent (silhouette, label, stub, gutter margin). **Siblings** share the same `x`; **cousin** branches do not widen each other (do not use a single global x per tree depth).
-- Draw the **vertical connector** at the end of the parent column (before the gutter margin) so long labels end before the line.
+- Draw the **vertical connector** one **gutter margin** past the right edge of the label (and past silhouette/stub when present), so text is never flush on the line.
 - Reference: `assignBasicPhylogramColumnsFromTree` in `basicPhylogramLayout.ts`.
 
 **Rail geometry (per node)**
