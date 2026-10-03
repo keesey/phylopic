@@ -14,7 +14,7 @@ export const MCP_AGENT_INSTRUCTIONS = `PhyloPic node and image workflow:
 
 Cladograms from Newick:
 - parse_newick for hierarchy only (no layout from MCP). Use each node’s label string exactly as returned (same as the Newick); sibling order is left-to-right as in the Newick.
-- pick_image per labeled node (label or node_uuid). Unlabeled internal nodes: resolve each labeled subclade root under that node to UUIDs, then pick_image with descendant_node_uuids (MCP loads lineages, MRCA, then picks). Link silhouettes to the chosen image; node page link may use the MRCA UUID when there is no tree label.
+- pick_image per labeled node (label or node_uuid). If a label is ambiguous (e.g. homonym clades), pass descendant_node_uuids of resolved child nodes: MCP MRCA-walks lineage to disambiguate, then picks. Unlabeled internal nodes: descendant_node_uuids only (MRCA + pick). Link silhouettes to the chosen image; node page link may use the MRCA UUID when there is no tree label.
 - image: null → no <image> element (label-only where a label exists); do not subtaxon-retry.
 - Typical vs default illustration is your strategy (which node UUID to pass to pick_image), not an MCP mode.
 - Read phylopic://docs/cladogram-guide (and optional phylopic://docs/cladogram-template.svg) for layout and taxonomy pitfalls; file also at apps/mcp/docs/cladogram-for-agents.md.

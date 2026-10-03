@@ -4,6 +4,7 @@ import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { parseNewickToTree } from "../cladogram/parseNewick.js"
 import { pickImage } from "../cladogram/pickImage.js"
 import { resolveMrcaFromDescendants } from "../cladogram/resolveMrcaFromDescendants.js"
+import { resolveLabelViaDescendantPhylogeny } from "../cladogram/resolveLabelViaDescendantPhylogeny.js"
 import { resolveLabelToNode } from "../cladogram/resolveLabelToNode.js"
 import { toolFromError, toolSuccess } from "./toolResult.js"
 
@@ -67,7 +68,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                     .min(1)
                     .optional()
                     .describe(
-                        "Unlabeled clade: UUIDs of labeled subclade roots beneath this node (resolve labels first). Computes MRCA from get_lineage data, then picks for that node. Do not combine with label or node_uuid.",
+                        "Without label: unlabeled clade—MRCA of these UUIDs, then pick. With label: disambiguate homonyms—MRCA of children, walk lineage for most leafward node whose title matches label, then pick. Do not combine with node_uuid.",
                     ),
                 filter_license_by: licenseFilterSchema,
                 filter_license_nc: licenseFilterSchema,
@@ -91,10 +92,11 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                 if (!node_uuid && !label && !hasDescendants) {
                     return toolFromError(new Error("Provide node_uuid, label, or descendant_node_uuids."))
                 }
-                if (hasDescendants && (node_uuid || label)) {
-                    return toolFromError(
-                        new Error("Use either descendant_node_uuids (unlabeled clade) or node_uuid/label, not both."),
-                    )
+                if (hasDescendants && node_uuid) {
+                    return toolFromError(new Error("Do not combine descendant_node_uuids with node_uuid."))
+                }
+                if (label && node_uuid) {
+                    return toolFromError(new Error("Provide label or node_uuid, not both."))
                 }
                 const options = {
                     ...(filter_license_by === undefined ? {} : { filter_license_by }),
@@ -106,7 +108,11 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                 }
                 let nodeUuid = node_uuid
                 const warnings: string[] = []
-                if (hasDescendants) {
+                if (hasDescendants && label) {
+                    const resolved = await resolveLabelViaDescendantPhylogeny(client, label, descendant_node_uuids!)
+                    nodeUuid = resolved.nodeUuid
+                    warnings.push(...resolved.warnings)
+                } else if (hasDescendants) {
                     const mrca = await resolveMrcaFromDescendants(client, descendant_node_uuids!)
                     warnings.push(...mrca.warnings)
                     if (!mrca.mrcaUuid) {
@@ -125,7 +131,8 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                 const result = await pickImage(client, nodeUuid!, options)
                 return toolSuccess(result.image ? `Image ${result.image.uuid} for node ${result.nodeUuid}.` : `No image for node ${result.nodeUuid}.`, {
                     ...result,
-                    ...(hasDescendants ? { resolvedFromDescendants: true } : {}),
+                    ...(hasDescendants && !label ? { resolvedFromDescendants: true } : {}),
+                    ...(hasDescendants && label ? { disambiguatedViaDescendants: true } : {}),
                     warnings: [...warnings, ...(result.warnings ?? [])],
                 })
             } catch (error) {

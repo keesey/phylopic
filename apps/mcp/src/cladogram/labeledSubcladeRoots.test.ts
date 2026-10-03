@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { collectLabeledSubcladeRootLabels } from "./labeledSubcladeRoots.js"
+import { collectLabeledSubcladeRootIds, collectLabeledSubcladeRootLabels } from "./labeledSubcladeRoots.js"
 import type { CladogramTreeNode } from "./types.js"
 
 describe("collectLabeledSubcladeRootLabels", () => {
@@ -18,5 +18,6 @@ describe("collectLabeledSubcladeRootLabels", () => {
             ],
         }
         expect(collectLabeledSubcladeRootLabels(node)).toEqual(["Gorilla", "Homo sapiens", "Pan"])
+        expect(collectLabeledSubcladeRootIds(node)).toEqual(["a", "c", "d"])
     })
 })

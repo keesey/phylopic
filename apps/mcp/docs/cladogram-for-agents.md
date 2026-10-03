@@ -33,10 +33,11 @@ There is **no** `render_cladogram_svg` tool and no layout package in this repo.
 3. For each **labeled** node:
    - **Preferred:** `search_nodes` on the label → use **`phylopic.exactMatch`** or a node whose **title exactly matches** the label (case-insensitive) → `pick_image` with **`node_uuid`**.
    - **Shortcut:** `pick_image` with **`label`** (uses PhyloPic name search with exact-title priority). Use when labels are trusted scientific names from the tree.
+   - **Homonyms / wrong clade:** when the node has **two or more resolved child UUIDs** in the tree, use **`pick_image`** with **`label`** plus **`descendant_node_uuids`** (child node UUIDs). MCP takes the MRCA of those children (e.g. *Ankylosaurus* + *Stegosaurus* → Eurypoda), walks **`get_lineage`** toward the root, and picks the **most leafward** node whose title matches the Newick label (e.g. **Thyreophora** → [3bb8f314…](https://www.phylopic.org/nodes/3bb8f314-6bd9-4449-8fda-ece09603c1e5/thyreophora-silhouettes), not unrelated homonyms).
 4. For each **unlabeled internal** node to illustrate:
    - In each child branch, find the **labeled subclade root** (first labeled node on the path from this node down—often the child’s own label, or deeper if the child is unlabeled).
-   - Resolve those labels to node UUIDs (`search_nodes` / exact match).
-   - **`pick_image`** with **`descendant_node_uuids`** only (do not pass `label` or `node_uuid`). MCP fetches **`get_lineage`** for each UUID, finds the **most leafward common ancestor**, and picks an image for that taxon (response may include `resolvedFromDescendants: true`).
+   - Resolve those labels to node UUIDs first (with disambiguation on labeled nodes—see step 3). Pass those **resolved child UUIDs**, not a fresh name search on the labels, into **`pick_image`** with **`descendant_node_uuids`** only.
+   - MCP fetches **`get_lineage`** for each UUID, finds the **most leafward common ancestor**, and picks an image for that taxon (response may include `resolvedFromDescendants: true`).
    - Example: unlabeled bifurcation above *Homo* and *Pan* → pass UUIDs for those labeled clades → MRCA is typically **Homininae** (or the narrowest shared ancestor PhyloPic returns).
 5. Apply **license filters** only when the user requires them (e.g. `filter_license_nc=false` for commercial-friendly output).
 6. **Layout** the tree (see below) and write SVG.
@@ -144,6 +145,7 @@ Scale spacing for large trees; there is no single canonical aspect ratio.
 
 - Use **`href`** on `<image>` (SVG2); `xlink:href` is optional for older viewers.
 - Escape `&`, `<` in text labels.
+- **Typography:** italicize scientific names (typical Newick labels: capitalized genus/clade or binomials). Do **not** italicize vernacular labels written in the Newick as plain lowercase (e.g. `birds`).
 - Prefer **`vectorUrl`** from pick results for crisp scaling.
 
 ---

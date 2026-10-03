@@ -1,6 +1,7 @@
 /**
- * One-off experiment renderer (not part of MCP build). Writes ~/Desktop/hominidae-cladogram.svg
- * Set HOMINIDAE_CLADE_INDEX to try alternates (see find_images on Hominidae).
+ * One-off experiment renderer (not part of MCP build).
+ * NEWICK=... OUTPUT=dinosauria-cladogram.svg npx tsx scripts/render-newick-desktop.mts
+ * Optional: CLADE_INDEX_<LabelWithUnderscores>=N (e.g. CLADE_INDEX_Dinosauria=1)
  */
 import { writeFileSync } from "node:fs"
 import { homedir } from "node:os"
@@ -15,28 +16,48 @@ import { pickImage } from "../src/cladogram/pickImage.js"
 import { resolveMrcaFromDescendants } from "../src/cladogram/resolveMrcaFromDescendants.js"
 import { resolveLabelViaDescendantPhylogeny } from "../src/cladogram/resolveLabelViaDescendantPhylogeny.js"
 import { resolveLabelToNode } from "../src/cladogram/resolveLabelToNode.js"
-import type { CladogramTreeNode } from "../src/cladogram/types.js"
+import type { CladogramTreeNode, PickImageOptions } from "../src/cladogram/types.js"
 import { PhyloPicClient } from "../src/client/PhyloPicClient.js"
 import { phylopicImagePageUrl, phylopicNodePageUrl } from "../src/cladogram/phylopicWebUrls.js"
-import type { PickImageOptions } from "../src/cladogram/types.js"
 
-const NEWICK =
-    "((Pongo abelii,Pongo tapanuliensis,Pongo pygmaeus)Pongo,((Gorilla gorilla,Gorilla beringei)Gorilla,(Homo sapiens,(Pan troglodytes,Pan paniscus)Pan))Homininae)Hominidae"
-
-const hominidaeIndex = Number(process.env.HOMINIDAE_CLADE_INDEX ?? "0")
-const IMAGE_OVERRIDES: Record<string, PickImageOptions> = {
-    Hominidae: { filter_license_nc: "false", clade_index: hominidaeIndex },
+const NEWICK = process.env.NEWICK?.trim()
+if (!NEWICK) {
+    console.error("Set NEWICK to a tree string.")
+    process.exit(1)
 }
 
-const DX = 90
-const BAND = 82
+const outputName = process.env.OUTPUT?.trim() || "cladogram.svg"
+const rootLabel = parseNewickToTree(NEWICK).root.label ?? "cladogram"
+
+const cladeIndexEnv = (label: string): number | undefined => {
+    const key = `CLADE_INDEX_${label.replace(/\s+/g, "_")}`
+    const raw = process.env[key]
+    if (raw === undefined) return undefined
+    const n = Number(raw)
+    return Number.isFinite(n) ? n : undefined
+}
+
+const IMAGE_OVERRIDES: Record<string, PickImageOptions> = {}
+for (const key of Object.keys(process.env)) {
+    if (!key.startsWith("CLADE_INDEX_")) continue
+    const suffix = key.slice("CLADE_INDEX_".length)
+    const label = suffix.replace(/_/g, " ")
+    const idx = Number(process.env[key])
+    if (Number.isFinite(idx)) {
+        IMAGE_OVERRIDES[label] = { filter_license_nc: "false", clade_index: idx }
+    }
+}
+
+const DX = Number(process.env.DX ?? "85")
+const BAND = Number(process.env.BAND ?? "52")
 const LINE_GAP = 4
 const LABEL_OFFSET = 16
 const TIP_LEFT_MARGIN = 8
-const FONT_BASE = 'font-family="Georgia, serif" font-size="13"'
+const FONT_BASE = 'font-family="Georgia, serif" font-size="12"'
+/** Vernacular Newick labels (e.g. birds) are lowercase; scientific names are italic. */
 const labelFontAttrs = (label: string) =>
     label === label.toLowerCase() && /[a-z]/.test(label) ? FONT_BASE : `${FONT_BASE} font-style="italic"`
-const H_STUB = 28
+const H_STUB = 26
 const filters = { filter_license_nc: "false" as const }
 
 type LayoutNode = {
@@ -58,7 +79,7 @@ const clone = (n: ReturnType<typeof parseNewickToTree>["root"], depth: number, p
     return node
 }
 
-const imgSize = (n: LayoutNode) => (n.children.length ? 44 : 52)
+const imgSize = (n: LayoutNode) => (n.children.length ? 40 : 48)
 const isAncestral = (n: LayoutNode) => n.children.length > 0
 const isTip = (n: LayoutNode) => n.children.length === 0
 
@@ -82,9 +103,6 @@ const collect = (n: LayoutNode) => {
 }
 collect(tree)
 
-// Tips are assigned in Newick left-to-right order (see parseNewick sibling order).
-// Do not mirror rails: that flip compensated for reversed newick-js order before parseNewick was fixed.
-
 const assignX = (n: LayoutNode) => {
     n.x = n.depth * DX
     for (const c of n.children) assignX(c)
@@ -99,28 +117,33 @@ const toTreeNode = (n: LayoutNode): CladogramTreeNode => ({
 
 const images: Record<string, { vectorUrl?: string; attribution?: string | null; uuid?: string } | null> = {}
 const nodeUuids: Record<string, string> = {}
+const gaps: string[] = []
+
 const byDepthDesc = [...all].sort((a, b) => b.depth - a.depth)
 
 for (const n of byDepthDesc) {
     try {
         if (n.label) {
             const childUuids = n.children.map(c => nodeUuids[c.id]).filter((u): u is string => Boolean(u))
-            const { nodeUuid } =
+            const resolved =
                 childUuids.length >= 2 ?
                     await resolveLabelViaDescendantPhylogeny(client, n.label, childUuids)
                 :   await resolveLabelToNode(client, n.label)
+            const { nodeUuid, warnings } = resolved
             nodeUuids[n.id] = nodeUuid
-            const opts = { ...filters, ...(IMAGE_OVERRIDES[n.label] ?? {}) }
+            if (warnings.length) console.error(`${n.label}: ${warnings.join("; ")}`)
+            const idx = cladeIndexEnv(n.label)
+            const opts = {
+                ...filters,
+                ...(IMAGE_OVERRIDES[n.label] ?? {}),
+                ...(idx === undefined ? {} : { clade_index: idx }),
+            }
             const pick = await pickImage(client, nodeUuid, opts)
             images[n.id] = pick.image
-            if (n.label === "Hominidae") {
-                console.error(`Hominidae clade_index=${hominidaeIndex} → ${pick.image?.uuid ?? "null"}`)
-            }
+            if (!pick.image) gaps.push(n.label)
             continue
         }
-        if (!isUnlabeledInternalNode(toTreeNode(n))) {
-            continue
-        }
+        if (!isUnlabeledInternalNode(toTreeNode(n))) continue
         const treeNode = toTreeNode(n)
         const subcladeRootIds = collectLabeledSubcladeRootIds(treeNode)
         const subcladeLabels = collectLabeledSubcladeRootLabels(treeNode)
@@ -142,19 +165,20 @@ for (const n of byDepthDesc) {
         nodeUuids[n.id] = mrca.mrcaUuid
         const pick = await pickImage(client, mrca.mrcaUuid, filters)
         images[n.id] = pick.image
-        console.error(
-            `Unlabeled ${n.id} MRCA of [${subcladeLabels.join(", ")}] → node ${mrca.mrcaUuid}, image ${pick.image?.uuid ?? "null"}`,
-        )
-    } catch {
+        console.error(`Unlabeled ${n.id} MRCA [${subcladeLabels.join(", ")}] → ${pick.image?.uuid ?? "null"}`)
+    } catch (e) {
         images[n.id] = null
+        if (n.label) gaps.push(n.label)
+        console.error(`Failed ${n.label ?? n.id}: ${e instanceof Error ? e.message : e}`)
     }
 }
 
-const link = (href: string, inner: string) =>
-    `<a href="${href}" xlink:href="${href}">${inner}</a>`
+if (gaps.length) console.error("No image:", gaps.join(", "))
 
-const padX = 36
-const maxS = 52
+const link = (href: string, inner: string) => `<a href="${href}" xlink:href="${href}">${inner}</a>`
+
+const padX = 32
+const maxS = 48
 const padY = maxS + LINE_GAP + 8
 const offsetY = padY - Math.min(...all.map(n => n.railY!))
 
@@ -212,11 +236,8 @@ const nodesSvg = all
                 isTip(n) && !img?.vectorUrl ?
                     `<text x="${x}" y="${textY}" dominant-baseline="middle" ${font}>${label}</text>`
                 :   `<text x="${x}" y="${textY}" ${font}>${label}</text>`
-            if (nodeUuid) {
-                g += link(phylopicNodePageUrl(nodeUuid), textInner)
-            } else {
-                g += textInner
-            }
+            if (nodeUuid) g += link(phylopicNodePageUrl(nodeUuid), textInner)
+            else g += textInner
         }
         return `${g}</g>`
     })
@@ -242,7 +263,7 @@ const boundsRight =
     Math.max(
         ...all.map(n => {
             const x = tipX(n)
-            const len = (n.label?.length ?? 0) * 7
+            const len = (n.label?.length ?? 0) * 6.5
             const right =
                 isTip(n) && images[n.id]?.vectorUrl ? tipSilhouetteRight(n) : Math.max(nodeSlotRight(n), x + len)
             return Math.max(right + H_STUB, x + len)
@@ -278,13 +299,13 @@ const attributions = all
 
 const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
-  <title>Hominidae cladogram</title>
-  <desc>Illustrated cladogram from Newick. NonCommercial licenses excluded. Hominidae clade_index ${hominidaeIndex}.${attributions ? ` Attribution: ${attributions}` : ""}</desc>
+  <title>${esc(rootLabel)} cladogram</title>
+  <desc>Illustrated cladogram from Newick. NonCommercial licenses excluded.${gaps.length ? ` No image: ${gaps.join(", ")}.` : ""}${attributions ? ` Attribution: ${attributions}` : ""}</desc>
   <rect x="0" y="0" width="${w}" height="${h}" fill="#ffffff"/>
   ${shiftedLines.join("\n  ")}
   ${shiftedNodes}
 </svg>`
 
-const out = join(homedir(), "Desktop", "hominidae-cladogram.svg")
+const out = join(homedir(), "Desktop", outputName)
 writeFileSync(out, svg)
-console.error(`Wrote ${out}`)
+console.error(`Wrote ${out} (${all.filter(n => n.label).length} labeled nodes, ${all.filter(n => isTip(n)).length} tips)`)
