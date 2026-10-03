@@ -17,7 +17,7 @@ Cladograms from Newick:
 - pick_image per labeled node (label or node_uuid). If a label is ambiguous (e.g. homonym clades), pass descendant_node_uuids of resolved child nodes: MCP MRCA-walks lineage to disambiguate, then picks. Unlabeled internal nodes: descendant_node_uuids only (MRCA + pick). Link silhouettes to the chosen image; node page link may use the MRCA UUID when there is no tree label.
 - image: null → no <image> element (label-only where a label exists); do not subtaxon-retry.
 - Typical vs default illustration is your strategy (which node UUID to pass to pick_image), not an MCP mode.
-- Read phylopic://docs/cladogram-styles then phylopic://docs/cladogram-guide for the basic phylogram approach (measured label/image sizes, not character estimates). Optional phylopic://docs/cladogram-template.svg.
+- Read phylopic://docs/cladogram-guide for workflow and phylopic://docs/cladogram-styles for layout (basic rectangular cladogram; measured label/image sizes, not character estimates). Optional phylopic://docs/cladogram-template.svg.
 - Link labels to https://www.phylopic.org/nodes/{nodeUuid} and silhouettes to https://www.phylopic.org/images/{imageUuid} in SVG <a> elements.
 
 If PhyloPic has no match, search_nodes external hits (GBIF, Open Tree of Life, PBDB) include resolved PhyloPic nodes when possible; otherwise use resolve_external_ids per list_namespaces and https://www.phylopic.org/articles/api-recipes .`

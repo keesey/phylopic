@@ -8,7 +8,7 @@ export const registerResources = (server: McpServer, client: PhyloPicClient) => 
         "phylopic://docs/cladogram-guide",
         {
             description:
-                "Living agent guide: Newick → parse_newick → pick_image → SVG layout, exact name match, label-only nodes without images, attribution. Markdown.",
+                "Living agent guide: Newick/terminals → parse_newick / build_tree_from_terminals → pick_image → SVG; exact name match, attribution. Layout rules in cladogram-styles. Markdown.",
             mimeType: "text/markdown",
         },
         async () => {
@@ -24,7 +24,7 @@ export const registerResources = (server: McpServer, client: PhyloPicClient) => 
         "phylopic://docs/cladogram-styles",
         {
             description:
-                "Catalog of cladogram layout styles (basic rectangular phylogram supported; radial etc. planned). Markdown.",
+                "Catalog of cladogram layout styles (basic rectangular cladogram spec; radial etc. planned). Markdown.",
             mimeType: "text/markdown",
         },
         async () => {
@@ -39,7 +39,7 @@ export const registerResources = (server: McpServer, client: PhyloPicClient) => 
         "cladogram-template",
         "phylopic://docs/cladogram-template.svg",
         {
-            description: "Minimal rectangular phylogram SVG skeleton (placeholder URLs). Not a real tree.",
+            description: "Minimal basic rectangular cladogram SVG skeleton (placeholder URLs). Not a real tree.",
             mimeType: "image/svg+xml",
         },
         async () => {

@@ -6,7 +6,7 @@
 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 200" width="330" height="200">
   <title>Cladogram layout template (example)</title>
-  <desc>Basic rectangular phylogram skeleton. Silhouettes above the rail; labels below (or centered for image-free tips). First tip in Newick order at top.</desc>
+  <desc>Basic rectangular cladogram skeleton. Silhouettes above the rail; labels below (or centered for image-free tips). First tip in Newick order at top.</desc>
   <rect x="0" y="0" width="330" height="200" fill="#ffffff"/>
   <line x1="0" y1="110" x2="44" y2="110" stroke="#333" stroke-width="1.5"/>
   <polyline fill="none" stroke="#333" stroke-width="1.5" points="44,110 72,110 72,150 98,150 150,150"/>

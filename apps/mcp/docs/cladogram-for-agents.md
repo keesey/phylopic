@@ -22,9 +22,9 @@
 | Per-node image pick (`pick_image`) or UUID from `search_nodes` | Branch geometry |
 | License-filtered `vectorUrl`, attribution via `get_image` | Final SVG file |
 | Exact-name resolution policy for labels | Label-only nodes when `image` is null (no placeholder graphic) |
-| Style catalog + basic layout conventions (this doc) | Measuring text/images and iterating on design |
+| Style catalog + basic layout rules (`phylopic://docs/cladogram-styles`) | Measuring text/images and iterating on design |
 
-There is **no** `render_cladogram_svg` tool. Optional reference logic for the **basic** style lives in `src/cladogram/basicCladogramLayout.ts` (unit-tested; uses measured sizes you supply).
+There is **no** `render_cladogram_svg` tool. Optional reference logic for the **basic rectangular cladogram** lives in `src/cladogram/basicCladogramLayout.ts` (unit-tested; uses measured sizes you supply). Layout conventions are in **`cladogram-styles.md`**, not this workflow guide.
 
 ---
 
@@ -40,7 +40,7 @@ When the user names **tips only** (e.g. “humans, rice, seahorses”), use **`b
 
 ### Shared steps (Newick or terminals)
 
-2. Read **`phylopic://docs/cladogram-styles`** and choose a style (default: **basic rectangular phylogram**).
+2. Read **`phylopic://docs/cladogram-styles`** and choose a style (default: **basic rectangular cladogram**).
 3. Decide which nodes to illustrate (default: every **labeled** node, including internal clades, unless the user says tips-only). **Unlabeled** internal nodes can still get silhouettes when the user wants full illustration.
 4. For each **labeled** node:
    - **Preferred:** `search_nodes` on the label → use **`phylopic.exactMatch`** or a node whose **title exactly matches** the label (case-insensitive) → `pick_image` with **`node_uuid`**.
@@ -50,7 +50,7 @@ When the user names **tips only** (e.g. “humans, rice, seahorses”), use **`b
    - In each child branch, find the **labeled subclade root** (first labeled node on the path from this node down).
    - Resolve those labels to node UUIDs first (with disambiguation on labeled nodes). Pass those **resolved child UUIDs** into **`pick_image`** with **`descendant_node_uuids`** only.
 6. Apply **license filters** only when the user requires them (e.g. `filter_license_nc=false` for commercial-friendly output).
-7. **Measure** silhouettes and labels (see [Basic rectangular phylogram](#basic-rectangular-phylogram)), **layout**, write SVG.
+7. **Measure** silhouettes and labels (see **`phylopic://docs/cladogram-styles`** → [Basic rectangular cladogram](cladogram-styles.md#basic-rectangular-cladogram)), **layout**, write SVG.
 8. Collect **attribution** from pick/get_image results; include in `<desc>` and/or visible credits if the user wants.
 9. **Links:** wrap each label in `<a href="https://www.phylopic.org/nodes/{nodeUuid}">`. Wrap each silhouette in `<a href="https://www.phylopic.org/images/{imageUuid}">`. **SVG text must be the tree `label` only** (Newick or terminal list) — never substitute PhyloPic node titles.
 
@@ -80,68 +80,6 @@ Prefer **`search_nodes` → `phylopic.exactMatch`** for Newick labels that must 
 
 - Images are included for the node **and all descendant taxa**.
 - Default illustration = **first item on page 0** of that clade list.
-
----
-
-## Basic rectangular phylogram
-
-Default **out-of-the-box** style: root on the left, tips stacked vertically, horizontal **rails** per node, vertical connectors in **gutters** between depth columns.
-
-Users and agents should treat this as a **starting layout** — tweak spacing, fonts, and styling for publication-quality figures.
-
-### Layout principles (use real sizes)
-
-Do **not** guess label width from character count. Measure each label with the same font you will render (`getBBox()` on SVG `<text>`, `CanvasRenderingContext2D.measureText`, etc.) and pass those numbers into layout.
-
-| Node | Width / height |
-|------|----------------|
-| Illustrated | At least the chosen `<image>` width and height |
-| Labelled | At least the measured label width and height |
-| Illustrated + labelled | Tall enough for image + gap + rail + gap + label |
-| Unillustrated, unlabelled | **Zero** content width and height (still a branch point; no box) |
-| Margins | Keep images and labels **off** vertical connectors (`gutterMargin` in reference code) |
-
-**Vertical placement**
-
-- **Tips:** assign rail `y` in **Newick left-to-right order** (same as `parse_newick` siblings and depth-first tips). First tip at the **top** of the figure (smaller SVG `y`); do **not** mirror rails after `parse_newick`.
-- **Internal nodes:** rail `y` = **arithmetic mean** of the rail `y` values of **immediate children**.
-- Pack tips so each node’s content clears the next (below-rail extent of one + above-rail extent of the next + clearance). Widen locally when a labeled internal sits between two tips so its midpoint has room (`assignBasicCladogramRails` in `basicCladogramLayout.ts`).
-
-**Horizontal placement**
-
-- Each **child column** starts immediately after its **parent’s** measured column extent (silhouette, label, stub, gutter margin). **Siblings** share the same `x`; **cousin** branches do not widen each other (do not use a single global x per tree depth).
-- Draw the **vertical connector** one **gutter margin** past the right edge of the label (and past silhouette/stub when present), so text is never flush on the line.
-- Reference: `assignBasicCladogramColumnsFromTree` in `basicCladogramLayout.ts`.
-
-**Rail geometry (per node)**
-
-```
-  [silhouette]     ← above the rail
-  ─────────────    ← horizontal branch segments on the rail
-  label            ← below the rail (or centered on rail for label-only tips)
-```
-
-- **Edges:** polylines on rails only; do not run lines through images or labels (draw branches first, then images and text).
-- **Ancestral nodes:** the horizontal rail is **continuous** — from the column left (`nodeX`) through the silhouette to its **right edge**, then (when descending to children) horizontally to the vertical gutter, never skipping the silhouette segment.
-- **Tips with image:** incoming branch horizontal ends at the **right edge** of the silhouette (after tip inset).
-- **Tips without image:** stop horizontal at column edge; label centered on rail with tip inset.
-- **Root (no incoming branch):** draw the same ancestral rail segment from column left through the silhouette right edge.
-
-**Typography (Newick labels only)**
-
-- Use the **`label` from `parse_newick` verbatim**.
-- **Scientific** names (typical Newick: capitalized genus/clade, binomials) → italic.
-- **Vernacular** names written as plain lowercase in Newick (e.g. `birds`) → upright, not italic.
-- Reference helper: `isVernacularNewickLabel` in `src/cladogram/newickLabelStyle.ts`.
-
-**Measuring workflow (two-pass SVG)**
-
-1. Pick font family and size (e.g. Georgia 12px).
-2. For each labeled node, render invisible `<text>` (or off-screen) with the final string and font; read **width and height** from `getBBox()`.
-3. **Square slots, bottom-aligned:** Use a **fixed square** for each tier (e.g. 48×48 tips, 40×40 internals). Fetch each **`vectorFile`** and read its SVG `viewBox`. Scale uniformly to fit inside the square (meet), center horizontally, and place the `<image>` so its **bottom** matches the square’s bottom (`bottomAlignArtInSquareSlot` in `silhouetteViewBox.ts`). Do **not** stretch the vector to the full square—external SVG refs often ignore `preserveAspectRatio` on a full-slot `<image>`. Position the square with its bottom just above the rail (`silhouetteTopY`). Layout uses the **slot size**, not the artwork’s aspect ratio.
-4. Run layout with those measured widths/heights, then emit final SVG.
-
-**Reference template:** `cladogram-template.svg` / `phylopic://docs/cladogram-template.svg`.
 
 ---
 

@@ -56,7 +56,7 @@ Read-only tools wrap API endpoints: `search_nodes`, `get_node`, `get_root_node`,
 
 Cladogram helpers: **`parse_newick`** (Newick via [`newick-js`](https://www.npmjs.com/package/newick-js)), **`build_tree_from_terminals`** (lineage-inferred hierarchy from tip names), and **`pick_image`** (primary when node-accurate, else first `filter_clade` on page 0). Unlabeled internal nodes: **`descendant_node_uuids`** (lineages → MRCA → pick). Browse alternates with **`find_images`** (`filter_clade`, 0-based `page`), then **`pick_image`** with **`clade_index`** / **`clade_page`** or **`image_uuid`**. The agent lays out and writes SVG; prompt **`cladogram_from_newick`** describes the workflow.
 
-**Agent cladograms:** [`docs/cladogram-for-agents.md`](docs/cladogram-for-agents.md) (workflow + **basic rectangular phylogram** layout from measured sizes), [`docs/cladogram-styles.md`](docs/cladogram-styles.md) (style catalog). MCP resources: `phylopic://docs/cladogram-guide`, `phylopic://docs/cladogram-styles`, `phylopic://docs/cladogram-template.svg`. Reference layout: `src/cladogram/basicCladogramLayout.ts`.
+**Agent cladograms:** [`docs/cladogram-for-agents.md`](docs/cladogram-for-agents.md) (workflow), [`docs/cladogram-styles.md`](docs/cladogram-styles.md) (style catalog + **basic rectangular cladogram** layout rules). MCP resources: `phylopic://docs/cladogram-guide`, `phylopic://docs/cladogram-styles`, `phylopic://docs/cladogram-template.svg`. Reference layout: `src/cladogram/basicCladogramLayout.ts`.
 
 See the [API Recipes](https://www.phylopic.org/articles/api-recipes) article for external hierarchy resolution with `resolve_external_ids`.
 
