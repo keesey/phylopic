@@ -49,7 +49,7 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             "1. Use search_nodes with the user's exact taxon wording (do not substitute scientific names from memory). Pick a node UUID from the tool results; prefer the broadest match that fits the request.",
                             "1b. If needed, use resolve_external_ids (with list_namespaces) per https://www.phylopic.org/articles/api-recipes .",
                             "2. Use find_images with filter_clade (node UUID). Apply license filters only if license_notes require them. List pages are 0-based (page=0 first).",
-                            "3. If no specific image was requested, take the first result on page 0 (PhyloPic clade order), not a subjectively typical species.",
+                            "3. Default: first result on page 0 (PhyloPic clade order). If the user asked for a typical/iconic/representative silhouette, that default may be overridden with a narrower taxon still found via search_nodes/find_images.",
                             "4. Use get_image for the chosen UUID and provide exact attribution text and file URLs.",
                         ]
                             .filter(Boolean)

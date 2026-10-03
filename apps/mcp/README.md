@@ -46,7 +46,7 @@ Start the server, then point your MCP client at the endpoint (exact config file 
 
 ## Agent guidance
 
-MCP clients that support **server instructions** receive workflow rules at connect time (see `src/agentInstructions.ts`): use `search_nodes` with the **user's exact words** first, never substitute taxa from model memory, and only use node UUIDs returned by the tools.
+MCP clients that support **server instructions** receive workflow rules at connect time (see `src/agentInstructions.ts`): use `search_nodes` with the **user's exact words** first, never substitute taxa from model memory, and only use node UUIDs returned by the tools. By default, pick the **first** `find_images` result on the clade (PhyloPic sort order); users may override that by asking for a **typical**, **iconic**, or **representative** silhouette.
 
 The registered prompt **`illustrate_taxon`** repeats the same workflow for clients that expose MCP prompts.
 
