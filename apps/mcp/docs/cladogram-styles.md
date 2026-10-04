@@ -62,7 +62,7 @@ Do **not** guess label width from character count. Measure each label with the s
 
 - **Edges:** polylines on rails only; do not run lines through images or labels (draw branches first, then images and text).
 - **Ancestral nodes:** the horizontal rail is **continuous** — from the column left (`nodeX`) through the silhouette to its **right edge**, then (when descending to children) horizontally to the vertical gutter, never skipping the silhouette segment.
-- **Tips with image:** incoming branch horizontal ends at the **right edge** of the silhouette (after tip inset).
+- **Tips with image:** incoming branch runs **horizontally on the child’s rail** (`y` = tip rail), from the vertical gutter to the **right edge** of the silhouette (after tip inset). Do **not** aim the last segment at the bottom of the `<image>` (that angles the rail upward in SVG coordinates).
 - **Tips without image:** stop horizontal at column edge; label centered on rail with tip inset.
 - **Root (no incoming branch):** draw the same ancestral rail segment from column left through the silhouette right edge.
 
@@ -81,6 +81,56 @@ Do **not** guess label width from character count. Measure each label with the s
 4. Run layout with those measured widths/heights, then emit final SVG.
 
 **Reference template:** `cladogram-template.svg` / `phylopic://docs/cladogram-template.svg`.
+
+### SVG emission (reference pipeline)
+
+After **`assignBasicCladogramRails`** and **`assignBasicCladogramColumnsFromTree`**, map layout coordinates to SVG with a fixed **page padding** (e.g. 24px horizontal, 16px vertical) and optional **vertical shift** so silhouettes above the topmost rail are not clipped (see [ViewBox](#viewbox-and-footer-height) below).
+
+**Coordinate helpers** (names match experiment renderers; all `y` values add the same vertical offset before writing SVG):
+
+| Helper | Meaning |
+|--------|---------|
+| `nodeX` | Column left + horizontal padding |
+| `contentX` | `nodeX` + tip inset (`tipContentInset`) on tips only |
+| `imgRight` | `contentX` + silhouette slot width when illustrated |
+| `gutterX` | `nodeX` + `verticalGutterOffset(measures, theme)` — x of the vertical connector |
+| `railExitX` | Right end of a node’s **own** horizontal rail: silhouette right edge if illustrated, else `nodeX` |
+
+Rails use each node’s layout **`railY`** (from reference layout), not the top or bottom of the silhouette.
+
+**Draw order:** polylines and root rail **first**, then per-node `<g>` groups (images and labels on top). Stroke e.g. `#333`, width ~1.5.
+
+**Root rail (no parent):** for the root if it has children, one horizontal `<line>` on the root rail from `nodeX` to `railExitX` at `railY + offset`.
+
+**Child branch polylines** (recursive from each internal node `n` to each child `c`):
+
+Let `y1 = n.railY`, `y2 = c.railY`, `xOut = railExitX(n)`, `mid = gutterX(n)`. Build points in order (orthogonal segments only):
+
+1. `(xOut, y1)` — along parent rail to the gutter  
+2. `(mid, y1)` — into the gutter column  
+3. `(mid, y2)` — vertical to child rail height  
+4. **If `c` is internal (has children):** `(nodeX(c), y2)`, then `(railExitX(c), y2)` — child’s full ancestral rail segment  
+5. **If `c` is a tip with silhouette:** `(imgRight(c), y2)` — horizontal **on `y2`**, not at image bottom  
+6. **If `c` is a label-only tip:** `(nodeX(c), y2)` or `(contentX(c), y2)` consistent with tip inset  
+
+Do not add extra points through label baselines or image boxes.
+
+**Per-node groups:** one `<g id="{treeId}">` per illustrated or labeled node (unlabeled internals with only a silhouette still get a group). Wrap silhouettes in `<a href="https://www.phylopic.org/images/{uuid}">` (also `xlink:href`). Wrap labels in `<a href="https://www.phylopic.org/nodes/{nodeUuid}">`. Label text = tree **`label` verbatim**; escape `&` and `<` in XML.
+
+| Node | `<image>` | `<text>` |
+|------|-----------|----------|
+| Illustrated (tip or internal) | Slot from `silhouetteTopY(railY, …)`; artwork via `bottomAlignArtInSquareSlot` inside the square slot | Baseline below rail: `railY + labelGap + ~0.85× label height` |
+| Tip, no silhouette | — | `dominant-baseline="middle"` on **`railY`** (label centered on rail) |
+
+Use the same font attributes as [Typography](#typography-newick-labels-only).
+
+#### ViewBox and footer height
+
+1. **Content bounds** before footer: min `y` = top of highest silhouette (or label-only tip box); max `y` = `contentBottomY(railY, measures, theme)` over all nodes; max `x` = max of silhouette right, label right, and `gutterX` over nodes, plus horizontal padding.  
+2. **Normalize:** subtract a constant from all drawn `y` so the top content sits ~8px below `y=0` (apply the same shift to polylines and node groups). Initial `viewBox` height = content span + bottom padding.  
+3. **Footer:** append `format_diagram_publication` footer fragment below the diagram with a gap (~16px). Expand `viewBox` height and set width to at least **`diagramWidthForPublication`** when the permalink line needs it. White background `<rect>` covering the full final `viewBox`.
+
+Workflow details (picking images, permalinks) stay in **`cladogram-for-agents.md`**.
 
 ### License and attribution footer
 
