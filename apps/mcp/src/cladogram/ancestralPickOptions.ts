@@ -4,7 +4,7 @@ type TreeNodeWithParent = Readonly<{
     parent?: Readonly<{ id: string }> | undefined
 }>
 
-/** PhyloPic UUID for the cladogram parent node, if any (for ancestral silhouette exclusion). */
+/** PhyloPic UUID for the cladogram parent node, if any (ancestral walk stops here; no image above). */
 export const cladogramParentPhyloUuid = (
     node: TreeNodeWithParent,
     phyloUuidByTreeId: Readonly<Record<string, string>>,

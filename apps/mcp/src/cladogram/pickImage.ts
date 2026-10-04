@@ -99,7 +99,10 @@ const pickAncestralSilhouette = async (
             continue
         }
         if (excluded.has(normalizeUUID(candidateUuid))) {
-            continue
+            warnings.push(
+                `Stopped ancestral search at cladogram parent PhyloPic node ${candidateUuid} (no silhouette from ancestors above).`,
+            )
+            break
         }
         const attempt = await tryPickAtPhyloNode(client, candidateUuid, filters)
         warnings.push(...attempt.warnings)

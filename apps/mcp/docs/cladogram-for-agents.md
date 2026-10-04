@@ -44,7 +44,7 @@ Use **`build_tree_from_collection`** with **`collection_uuid`** or **`permalink_
 
 ### From a PhyloPic node hierarchy (not concestors)
 
-When the user wants **PhyloPic’s parent/child links** (e.g. Dinosauria → Ornithischia/Saurischia → … through great-grandchildren), use **`build_tree_from_phylopic_subtree`** with **`root_label`** or **`root_node_uuid`**. Default **`max_tip_depth`** is **3** (tips at great-grandchild rank). Every node is **labeled**; **`nodeUuidByTreeId`** is authoritative—use **`pick_image`** with **`node_uuid`** (tips: default **`filter_clade`**; internal nodes: **`image_list: ancestral`** and **`exclude_node_uuids`** for the cladogram parent). This is **not** the same as **`build_tree_from_terminals`** (concestor-only) or hand-written Newick.
+When the user wants **PhyloPic’s parent/child links** (e.g. Dinosauria → Ornithischia/Saurischia → … through great-grandchildren), use **`build_tree_from_phylopic_subtree`** with **`root_label`** or **`root_node_uuid`**. Default **`max_tip_depth`** is **3** (tips at great-grandchild rank). Every node is **labeled**; **`nodeUuidByTreeId`** is authoritative—use **`pick_image`** with **`node_uuid`** (tips: default **`filter_clade`**; internal nodes: **`image_list: ancestral`** and **`exclude_node_uuids`** for the cladogram parent to cap the ancestral walk). This is **not** the same as **`build_tree_from_terminals`** (concestor-only) or hand-written Newick.
 
 ### Shared steps (Newick or terminals)
 
@@ -53,7 +53,7 @@ When the user wants **PhyloPic’s parent/child links** (e.g. Dinosauria → Orn
 4. For each **labeled** node:
    - **Preferred:** `search_nodes` on the label → use **`phylopic.exactMatch`** or a node whose **title exactly matches** the label (case-insensitive) → `pick_image` with **`node_uuid`**.
    - **Shortcut:** `pick_image` with **`label`** (uses PhyloPic name search with exact-title priority). Use when labels are trusted scientific names from the tree.
-   - **Terminal tips:** default list fallback uses **`filter_clade`**. **Ancestral nodes:** **`image_list: ancestral`** — **`filter_node`** on this PhyloPic node, then each ancestor in lineage until a silhouette is found; pass **`exclude_node_uuids`** with the **cladogram parent's** PhyloPic UUID so that node is never used.
+   - **Terminal tips:** default list fallback uses **`filter_clade`**. **Ancestral nodes:** **`image_list: ancestral`** — **`filter_node`** on this PhyloPic node, then each ancestor in lineage until a silhouette is found; pass **`exclude_node_uuids`** with the **cladogram parent's** PhyloPic UUID to **stop** the walk there (no silhouette from the parent or from any ancestor above it).
    - **Homonyms / wrong clade:** when the node has **two or more resolved child UUIDs** in the tree, use **`pick_image`** with **`label`** plus **`descendant_node_uuids`** (child node UUIDs). MCP takes the MRCA of those children, walks **`get_lineage`** toward the root, and picks the **most leafward** node whose title matches the Newick label.
 5. For each **unlabeled internal** node to illustrate:
    - In each child branch, find the **labeled subclade root** (first labeled node on the path from this node down).

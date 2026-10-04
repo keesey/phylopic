@@ -160,7 +160,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
         "pick_image",
         {
             description:
-                "Pick a PhyloPic silhouette for a node. Terminal taxa: primary when node-accurate, else filter_clade page 0 (default). Ancestral/internal: image_list ancestral walks filter_node on this node then each PhyloPic ancestor until a hit; pass exclude_node_uuids with the cladogram parent's PhyloPic UUID so that taxon is never used. Unlabeled Newick: descendant_node_uuids → MRCA with image_list ancestral. Alternates: find_images then clade_index or image_uuid.",
+                "Pick a PhyloPic silhouette for a node. Terminal taxa: primary when node-accurate, else filter_clade page 0 (default). Ancestral/internal: image_list ancestral walks filter_node on this node then ancestors until a hit or exclude_node_uuids (cladogram parent)—stop there with no image, do not search above the parent. Unlabeled Newick: descendant_node_uuids → MRCA with image_list ancestral. Alternates: find_images then clade_index or image_uuid.",
             inputSchema: {
                 node_uuid: uuidSchema.optional(),
                 label: z
@@ -192,7 +192,9 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                 exclude_node_uuids: z
                     .array(uuidSchema)
                     .optional()
-                    .describe("Never use silhouettes from these PhyloPic nodes (e.g. cladogram parent UUID)."),
+                    .describe(
+                        "Cladogram parent PhyloPic UUID: ancestral walk stops here (no image from this node or any ancestor above).",
+                    ),
                 descendant_node_uuids: z
                     .array(uuidSchema)
                     .min(1)

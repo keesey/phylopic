@@ -43,10 +43,10 @@ export type PickImageOptions = LicenseFilters &
         /**
          * `clade` (default): fallback list uses filter_clade (node + subtaxa)—typical for terminal taxa.
          * `node`: filter_node on this PhyloPic node only.
-         * `ancestral`: filter_node on this node, then each ancestor in lineage until a hit (exclude cladogram parent).
+         * `ancestral`: filter_node on this node, then each ancestor in lineage until a hit; stop at exclude_node_uuids (cladogram parent)—no image above that rank.
          */
         image_list?: "clade" | "node" | "ancestral"
-        /** PhyloPic node UUIDs that must not supply a silhouette (e.g. cladogram parent). */
+        /** Cladogram parent PhyloPic UUID: do not use its silhouette; stop the ancestral walk here (no picks from higher ancestors). */
         exclude_node_uuids?: readonly string[]
         /** For unlabeled Newick nodes: PhyloPic UUIDs of labeled subclade roots beneath that node. */
         descendant_node_uuids?: readonly string[]

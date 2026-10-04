@@ -60,7 +60,7 @@ describe("pickImage", () => {
         expect(result.image?.uuid).toBe("img-1")
     })
 
-    it("walks lineage for ancestral pick and skips excluded cladogram parent", async () => {
+    it("stops ancestral pick at excluded cladogram parent without searching above", async () => {
         const PARENT = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
         const CHILD = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
         const GRAND = "cccccccc-cccc-cccc-cccc-cccccccccccc"
@@ -116,8 +116,9 @@ describe("pickImage", () => {
             image_list: "ancestral",
             exclude_node_uuids: [PARENT],
         })
-        expect(result.image?.uuid).toBe("from-grandparent")
-        expect(result.warnings?.some(w => w.includes("ancestor"))).toBe(true)
+        expect(result.image).toBeNull()
+        expect(listImages).not.toHaveBeenCalledWith(expect.objectContaining({ filter_node: GRAND }))
+        expect(result.warnings?.some(w => w.includes("Stopped ancestral search"))).toBe(true)
     })
 
     it("uses filter_node when image_list is node", async () => {

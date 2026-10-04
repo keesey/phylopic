@@ -18,7 +18,7 @@ Collections and permalinks (multi-image work):
 
 Cladograms from Newick:
 - parse_newick for hierarchy from Newick, build_tree_from_terminals for tip names, or build_tree_from_collection for a collection UUID or permalink (uses each collection image’s specific node as a tip; imageUuidByTreeId fixes silhouettes). No layout from MCP. Use each node’s label exactly as returned; Newick sibling order is left-to-right; build_tree_from_terminals orders branches by terminal count (smallest first), then alphabetically.
-- pick_image: terminals use default filter_clade fallback. Ancestral/internal nodes: image_list ancestral (filter_node on this node, then each PhyloPic ancestor; never use exclude_node_uuids, especially the cladogram parent's PhyloPic UUID). Unlabeled internal: descendant_node_uuids → MRCA + ancestral pick. Link silhouettes to the chosen image.
+- pick_image: terminals use default filter_clade fallback. Ancestral/internal nodes: image_list ancestral (filter_node on this node, then ancestors until a hit or exclude_node_uuids—the cladogram parent's PhyloPic UUID stops the walk with no image above that rank). Unlabeled internal: descendant_node_uuids → MRCA + ancestral pick. Link silhouettes to the chosen image.
 - image: null → no <image> element (label-only where a label exists); do not subtaxon-retry.
 - Typical vs default illustration is your strategy (which node UUID to pass to pick_image), not an MCP mode.
 - Read phylopic://docs/cladogram-guide for workflow and phylopic://docs/cladogram-styles for layout (basic rectangular cladogram; measured label/image sizes, not character estimates). Optional phylopic://docs/cladogram-template.svg.
