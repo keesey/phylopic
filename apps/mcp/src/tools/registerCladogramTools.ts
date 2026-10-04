@@ -5,6 +5,10 @@ import {
     buildTreeFromCollectionUuid,
     buildTreeFromPermalink,
 } from "../cladogram/buildTreeFromCollection.js"
+import {
+    buildTreeFromPhyloPicLabel,
+    buildTreeFromPhyloPicNodeUuid,
+} from "../cladogram/buildTreeFromPhyloPicSubtree.js"
 import { buildTreeFromTerminalLabels } from "../cladogram/buildTreeFromTerminals.js"
 import { parseNewickToTree } from "../cladogram/parseNewick.js"
 import { pickImage } from "../cladogram/pickImage.js"
@@ -58,6 +62,53 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                 const result = await buildTreeFromTerminalLabels(client, labels)
                 return toolSuccess(
                     `Built tree from ${result.terminals.length} terminal taxa (${result.tree.tipCount} tips).`,
+                    result,
+                )
+            } catch (error) {
+                return toolFromError(error)
+            }
+        },
+    )
+
+    server.registerTool(
+        "build_tree_from_phylopic_subtree",
+        {
+            description:
+                "Build a cladogram from PhyloPic’s parent/child node hierarchy (embed_childNodes), not a concestor-only tree. Expands from a root node through children, grandchildren, and great-grandchildren by default (max_tip_depth 3). Every node is labeled; nodeUuidByTreeId maps each tree id to the PhyloPic UUID. Use pick_image with image_list ancestral on internal nodes (exclude cladogram parent). Provide root_node_uuid or root_label (not both).",
+            inputSchema: {
+                root_node_uuid: uuidSchema
+                    .optional()
+                    .describe("PhyloPic node UUID for the subtree root (e.g. Dinosauria)."),
+                root_label: z
+                    .string()
+                    .min(1)
+                    .optional()
+                    .describe("Resolve root from a taxon name (exact title match preferred)."),
+                max_tip_depth: z
+                    .number()
+                    .int()
+                    .min(0)
+                    .max(6)
+                    .optional()
+                    .describe("Deepest tip depth below root (default 3 = great-grandchildren)."),
+            },
+            annotations: READ_ONLY,
+        },
+        async ({ root_node_uuid, root_label, max_tip_depth }) => {
+            try {
+                if (root_node_uuid && root_label) {
+                    return toolFromError(new Error("Provide root_node_uuid or root_label, not both."))
+                }
+                if (!root_node_uuid && !root_label) {
+                    return toolFromError(new Error("Provide root_node_uuid or root_label."))
+                }
+                const options = max_tip_depth === undefined ? {} : { maxTipDepth: max_tip_depth }
+                const result =
+                    root_label ?
+                        await buildTreeFromPhyloPicLabel(client, root_label, options)
+                    :   await buildTreeFromPhyloPicNodeUuid(client, root_node_uuid!, options)
+                return toolSuccess(
+                    `Built PhyloPic subtree (${result.tree.tipCount} tips, ${Object.keys(result.nodeUuidByTreeId).length} nodes).`,
                     result,
                 )
             } catch (error) {

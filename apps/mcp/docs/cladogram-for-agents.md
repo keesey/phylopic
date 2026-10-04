@@ -10,7 +10,7 @@
 | `phylopic://docs/cladogram-styles` | Style catalog (basic vs future variants) |
 | `phylopic://docs/cladogram-template.svg` | Minimal basic-style SVG skeleton |
 
-**Related:** prompts `cladogram_from_newick` / `cladogram_from_terminals`, tools `parse_newick`, `build_tree_from_terminals`, and `pick_image`, server instructions in `src/agentInstructions.ts`.
+**Related:** prompts `cladogram_from_newick` / `cladogram_from_terminals`, tools `parse_newick`, `build_tree_from_terminals`, `build_tree_from_phylopic_subtree`, and `pick_image`, server instructions in `src/agentInstructions.ts`.
 
 ---
 
@@ -41,6 +41,10 @@ When the user names **tips only** (e.g. “humans, rice, seahorses”), use **`b
 ### From a collection or permalink
 
 Use **`build_tree_from_collection`** with **`collection_uuid`** or **`permalink_url`**. Each collection image’s **specific node** becomes a terminal (tip labels omit author/year citations); **`imageUuidByTreeId`** keeps the exact silhouettes. Cite **`sourcePermalinkUrl`** in **`format_diagram_publication`** when republishing (`attribution_mode: permalink`). **`pick_image`** on tips with **`image_uuid`** from **`imageUuidByTreeId`**; unlabeled internals as in [Shared steps](#shared-steps-newick-or-terminals).
+
+### From a PhyloPic node hierarchy (not concestors)
+
+When the user wants **PhyloPic’s parent/child links** (e.g. Dinosauria → Ornithischia/Saurischia → … through great-grandchildren), use **`build_tree_from_phylopic_subtree`** with **`root_label`** or **`root_node_uuid`**. Default **`max_tip_depth`** is **3** (tips at great-grandchild rank). Every node is **labeled**; **`nodeUuidByTreeId`** is authoritative—use **`pick_image`** with **`node_uuid`** (tips: default **`filter_clade`**; internal nodes: **`image_list: ancestral`** and **`exclude_node_uuids`** for the cladogram parent). This is **not** the same as **`build_tree_from_terminals`** (concestor-only) or hand-written Newick.
 
 ### Shared steps (Newick or terminals)
 
