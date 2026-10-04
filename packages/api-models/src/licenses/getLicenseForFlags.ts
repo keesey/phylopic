@@ -1,17 +1,16 @@
-import { getLicenseFlags, type ImageWithLicenseLink, type LicenseFlags } from "@phylopic/api-models"
 import type { ExtendedLicenseURL } from "@phylopic/utils"
+import { getLicenseFlags, type ImageWithLicenseLink } from "./getLicenseFlags.js"
+import type { LicenseFlags } from "./LicenseFlags.js"
 
-/** Mirrors www CollectionLicense/getLicenseForFlags. */
-export const combinedLicenseUrl = (images: readonly ImageWithLicenseLink[]): ExtendedLicenseURL => {
-    return getLicenseForFlags(getLicenseFlags(images))
-}
-
-const getLicenseForFlags = ({ by, nc, sa, v4 }: LicenseFlags): ExtendedLicenseURL => {
+export const getLicenseForFlags = ({ by, nc, sa, v4 }: LicenseFlags): ExtendedLicenseURL => {
     if (by) {
         return getLicenseForByFlags({ nc, sa, v4 })
     }
     return "https://creativecommons.org/publicdomain/mark/1.0/"
 }
+
+export const getCombinedLicenseUrl = (images: readonly ImageWithLicenseLink[]): ExtendedLicenseURL =>
+    getLicenseForFlags(getLicenseFlags(images))
 
 const getLicenseForByFlags = ({ nc, sa, v4 }: Omit<LicenseFlags, "by">): ExtendedLicenseURL => {
     if (nc) {

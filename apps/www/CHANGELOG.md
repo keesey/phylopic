@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Collection combined license flags use `getLicenseFlags` from `@phylopic/api-models` instead of a local copy.
+- Collection combined license uses `getCombinedLicenseUrl` from `@phylopic/api-models` instead of local helpers.
 
 ### Deprecated
 

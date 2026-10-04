@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `getLicenseFlags`, `LicenseFlags`, and `ImageWithLicenseLink` under `licenses/` for aggregating CC terms across silhouette images in a collection.
+- `getLicenseFlags`, `getLicenseForFlags`, `getCombinedLicenseUrl`, `LicenseFlags`, and `ImageWithLicenseLink` under `licenses/` for aggregating CC terms and combined collection license URLs across silhouette images.
 
 ### Changed
 

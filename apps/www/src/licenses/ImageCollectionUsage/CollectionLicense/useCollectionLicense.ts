@@ -1,12 +1,10 @@
-import type { Image } from "@phylopic/api-models"
+import { getCombinedLicenseUrl, type Image } from "@phylopic/api-models"
 import type { ExtendedLicenseURL } from "@phylopic/utils"
 import { useMemo } from "react"
-import { getLicenseFlags } from "@phylopic/api-models"
-import getLicenseForFlags from "./getLicenseForFlags"
 
 const useCollectionLicense = (images: readonly Image[]): ExtendedLicenseURL => {
     return useMemo(() => {
-        return getLicenseForFlags(getLicenseFlags(images))
+        return getCombinedLicenseUrl(images)
     }, [images])
 }
 

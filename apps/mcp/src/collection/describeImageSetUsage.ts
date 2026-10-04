@@ -1,4 +1,4 @@
-import { combinedLicenseUrl } from "./combinedLicense.js"
+import { getCombinedLicenseUrl } from "@phylopic/api-models"
 import {
     formatCollectionAttribution,
     imageSetAttributionRequired,
@@ -15,6 +15,6 @@ export type ImageSetUsage = {
 export const describeImageSetUsage = (images: readonly ImageForAttribution[]): ImageSetUsage => ({
     attributionRequired: imageSetAttributionRequired(images),
     attributionText: formatCollectionAttribution(images),
-    combinedLicenseUrl: combinedLicenseUrl(images),
+    combinedLicenseUrl: getCombinedLicenseUrl(images),
     imageCount: images.length,
 })
