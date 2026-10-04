@@ -1,4 +1,6 @@
-import { DATA_MEDIA_TYPE, type API, type ErrorResponse, type TitledLink } from "@phylopic/api-models"
+import { DATA_MEDIA_TYPE, type API, type ErrorResponse, type Link, type TitledLink } from "@phylopic/api-models"
+import { isHash, type UUID } from "@phylopic/utils"
+import { PHYLOPIC_WWW_ORIGIN } from "../cladogram/phylopicWebUrls.js"
 import { addBuildToURL, joinPath, toSearchParams } from "./url.js"
 
 export type FetchFn = typeof fetch
@@ -18,6 +20,8 @@ export type PhyloPicClientOptions = {
     baseUrl?: string
     fetch?: FetchFn
     buildTtlMs?: number
+    /** Public www origin for collection permalinks (default PHYLOPIC_WWW_URL or https://www.phylopic.org). */
+    wwwOrigin?: string
 }
 
 const DEFAULT_BASE_URL = "https://api.phylopic.org"
@@ -30,6 +34,8 @@ export class PhyloPicClient {
 
     readonly #buildTtlMs: number
 
+    readonly #wwwOrigin: string
+
     #build: number | undefined
 
     #buildFetchedAt = 0
@@ -38,6 +44,14 @@ export class PhyloPicClient {
         this.#baseUrl = (options.baseUrl ?? process.env.PHYLOPIC_API_URL ?? DEFAULT_BASE_URL).replace(/\/$/, "")
         this.#fetch = options.fetch ?? fetch
         this.#buildTtlMs = options.buildTtlMs ?? DEFAULT_BUILD_TTL_MS
+        this.#wwwOrigin = (options.wwwOrigin ?? process.env.PHYLOPIC_WWW_URL ?? PHYLOPIC_WWW_ORIGIN).replace(
+            /\/$/,
+            "",
+        )
+    }
+
+    get wwwOrigin() {
+        return this.#wwwOrigin
     }
 
     get baseUrl() {
@@ -113,6 +127,53 @@ export class PhyloPicClient {
         return { link, node }
     }
 
+    /** Register image UUIDs as a collection (POST /collections). Returns the collection UUID from the redirect body. */
+    async createCollection(imageUuids: readonly UUID[]): Promise<{ collectionUuid: string; href: string }> {
+        const build = await this.getBuild()
+        const url = joinPath(this.#baseUrl, "/collections") + toSearchParams({ build })
+        const response = await this.#fetch(url, {
+            body: JSON.stringify([...imageUuids]),
+            headers: {
+                Accept: DATA_MEDIA_TYPE,
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            redirect: "manual",
+        })
+        if (response.status === 429) {
+            await this.#throwApiError(response)
+        }
+        if (response.status !== 303) {
+            throw new PhyloPicApiError(`Unexpected create collection status ${response.status}`, response.status)
+        }
+        const link = (await response.json()) as Link
+        const href = link.href
+        const segment = href.split("/").pop()
+        if (!segment) {
+            throw new PhyloPicApiError("Collection response missing UUID.", 502)
+        }
+        return { collectionUuid: decodeURIComponent(segment.split("?")[0] ?? segment), href }
+    }
+
+    /**
+     * Mint a stable attribution permalink via the www API (rate-limited; not part of api.phylopic.org).
+     */
+    async createCollectionPermalink(collectionUuid: string): Promise<{ hash: string; permalinkUrl: string }> {
+        const url = `${this.#wwwOrigin}/api/permalinks/collections/${encodeURIComponent(collectionUuid)}`
+        const response = await this.#fetch(url, {
+            headers: { Accept: "application/json" },
+            method: "GET",
+        })
+        if (!response.ok) {
+            await this.#throwPermalinkError(response)
+        }
+        const hash = (await response.json()) as unknown
+        if (!isHash(hash)) {
+            throw new PhyloPicApiError("Invalid permalink hash from www.", 502)
+        }
+        return { hash, permalinkUrl: `${this.#wwwOrigin}/permalinks/${encodeURIComponent(hash)}` }
+    }
+
     async resolveExternalSingle(
         authority: string,
         namespace: string,
@@ -169,6 +230,19 @@ export class PhyloPicClient {
             await this.#throwApiError(response)
         }
         return (await response.json()) as T
+    }
+
+    async #throwPermalinkError(response: Response): Promise<never> {
+        let message = response.statusText || `HTTP ${response.status}`
+        try {
+            const body = (await response.json()) as { error?: string }
+            if (body.error) {
+                message = body.error
+            }
+        } catch {
+            // ignore JSON parse errors
+        }
+        throw new PhyloPicApiError(message, response.status)
     }
 
     async #throwApiError(response: Response): Promise<never> {

@@ -6,3 +6,12 @@ export const phylopicNodePageUrl = (nodeUuid: string) =>
 
 export const phylopicImagePageUrl = (imageUuid: string) =>
     `${PHYLOPIC_WWW_ORIGIN}/images/${encodeURIComponent(imageUuid)}`
+
+export const phylopicCollectionPageUrl = (collectionUuid: string) =>
+    `${PHYLOPIC_WWW_ORIGIN}/collections/${encodeURIComponent(collectionUuid)}`
+
+export const phylopicPermalinkPageUrl = (hash: string) =>
+    `${PHYLOPIC_WWW_ORIGIN}/permalinks/${encodeURIComponent(hash)}`
+
+export const phylopicCollectionPermalinkRequestUrl = (collectionUuid: string) =>
+    `${PHYLOPIC_WWW_ORIGIN}/api/permalinks/collections/${encodeURIComponent(collectionUuid)}`

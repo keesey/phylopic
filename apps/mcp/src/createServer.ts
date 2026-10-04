@@ -122,7 +122,8 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             "2b. If pick_image returns no image, omit the silhouette (label and branches only) and note the gap. Do not retry with a narrower subtaxon—filter_clade already includes subtaxa.",
                             "3. If the user asked for typical/iconic images, use search_nodes to pick a subtaxon node first, then pick_image on that UUID—not model memory.",
                             "4. Read phylopic://docs/cladogram-styles (basic rectangular cladogram; measure label sizes) and phylopic://docs/cladogram-guide. Optional phylopic://docs/cladogram-template.svg.",
-                            "5. You layout the tree and write the SVG (branches, linked <image href=\"vectorUrl\"> to https://www.phylopic.org/images/{uuid}, labels in <a href=\"https://www.phylopic.org/nodes/{nodeUuid}\">, attribution as needed). MCP does not compute coordinates or return SVG.",
+                            "5. You layout the tree and write the SVG (branches, linked <image href=\"vectorUrl\"> to https://www.phylopic.org/images/{uuid}, labels in <a href=\"https://www.phylopic.org/nodes/{nodeUuid}\">). MCP does not compute coordinates or return SVG.",
+                            "6. describe_image_set_usage on all image UUIDs; create_collection and create_collection_permalink when publishing (see agent instructions).",
                         ]
                             .filter(Boolean)
                             .join("\n"),

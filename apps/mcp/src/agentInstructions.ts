@@ -12,6 +12,11 @@ export const MCP_AGENT_INSTRUCTIONS = `PhyloPic node and image workflow:
 9. When pick_image or find_images returns no image for a node, do not retry with a narrower subtaxon name or UUID to fill the gap—filter_clade on that node already searched subtaxa. Omit the silhouette (label-only in cladograms), tell the user, or relax license filters only if they allow; do not substitute a parent/ancestor silhouette unless the user asks for that policy.
 10. Use get_image on the chosen image UUID for file URLs and attribution.
 
+Collections and permalinks (multi-image work):
+- describe_image_set_usage on all image UUIDs used (e.g. cladogram silhouettes) for combined license URL and attribution text.
+- create_collection with the same UUIDs to register a PhyloPic collection page (https://www.phylopic.org/collections/{uuid}).
+- When attribution is required, create_collection_permalink returns a short stable credit link (www API; rate-limited). Otherwise link individual images or the collection page.
+
 Cladograms from Newick:
 - parse_newick for hierarchy from Newick, or build_tree_from_terminals for a list of tip names (lineages → tree + nodeUuidByTreeId). No layout from MCP. Use each node’s label exactly as returned; Newick sibling order is left-to-right; build_tree_from_terminals orders branches by terminal count (smallest first), then alphabetically.
 - pick_image per labeled node (label or node_uuid). If a label is ambiguous (e.g. homonym clades), pass descendant_node_uuids of resolved child nodes: MCP MRCA-walks lineage to disambiguate, then picks. Unlabeled internal nodes: descendant_node_uuids only (MRCA + pick). Link silhouettes to the chosen image; node page link may use the MRCA UUID when there is no tree label.
@@ -19,6 +24,7 @@ Cladograms from Newick:
 - Typical vs default illustration is your strategy (which node UUID to pass to pick_image), not an MCP mode.
 - Read phylopic://docs/cladogram-guide for workflow and phylopic://docs/cladogram-styles for layout (basic rectangular cladogram; measured label/image sizes, not character estimates). Optional phylopic://docs/cladogram-template.svg.
 - Link labels to https://www.phylopic.org/nodes/{nodeUuid} and silhouettes to https://www.phylopic.org/images/{imageUuid} in SVG <a> elements.
+- After picking all silhouettes, run describe_image_set_usage; include attribution in SVG <desc> or caption; create_collection (+ create_collection_permalink when required) for publication.
 
 If PhyloPic has no match, search_nodes external hits (GBIF, Open Tree of Life, PBDB) include resolved PhyloPic nodes when possible; otherwise use resolve_external_ids per list_namespaces and https://www.phylopic.org/articles/api-recipes .`
 

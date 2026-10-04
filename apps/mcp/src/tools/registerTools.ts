@@ -6,6 +6,7 @@ import { SEARCH_NODES_QUERY_HINT } from "../agentInstructions.js"
 import { findExactPhylopicNodeMatch, nodeTitle, sortNodesByTitleMatch } from "../search/phylopicNameMatch.js"
 import { createResolveToPhylopic } from "../search/resolveExternalToPhylopic.js"
 import { registerCladogramTools } from "./registerCladogramTools.js"
+import { registerCollectionTools } from "./registerCollectionTools.js"
 import { toolFromError, toolSuccess } from "./toolResult.js"
 
 const READ_ONLY = { readOnlyHint: true } as const
@@ -348,7 +349,8 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
     server.registerTool(
         "get_collection",
         {
-            description: "Get an entity collection by UUID.",
+            description:
+                "Get a collection record by UUID (image UUID list). For license/attribution text use describe_image_set_usage; for a www usage page use create_collection.",
             inputSchema: { uuid: uuidSchema },
             annotations: READ_ONLY,
         },
@@ -397,4 +399,5 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
     )
 
     registerCladogramTools(server, client)
+    registerCollectionTools(server, client)
 }

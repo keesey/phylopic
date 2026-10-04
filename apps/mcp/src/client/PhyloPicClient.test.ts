@@ -60,6 +60,48 @@ describe("PhyloPicClient", () => {
         expect(resolved.node).toEqual({ build: 42, uuid: "abc" })
     })
 
+    it("creates a collection from POST 303", async () => {
+        const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+            const url = String(input)
+            if (url === "https://api.example/") {
+                return new Response(JSON.stringify(indexBody), { status: 200 })
+            }
+            if (url.includes("/collections?build=42") && init?.method === "POST") {
+                return new Response(JSON.stringify({ href: "/collections/abc-def?build=42" }), {
+                    headers: { "content-type": DATA_MEDIA_TYPE },
+                    status: 303,
+                })
+            }
+            throw new Error(`Unexpected fetch: ${url}`)
+        })
+        const client = new PhyloPicClient({ baseUrl: "https://api.example", fetch: fetchMock })
+        const created = await client.createCollection(["060f03a9-fafd-4d08-81d1-b8f82080573f"])
+        expect(created.collectionUuid).toBe("abc-def")
+        expect(created.href).toContain("/collections/abc-def")
+    })
+
+    it("mints a collection permalink from www", async () => {
+        const hash = "a".repeat(64)
+        const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+            const url = String(input)
+            if (url.includes("/api/permalinks/collections/")) {
+                return new Response(JSON.stringify(hash), {
+                    headers: { "content-type": "application/json" },
+                    status: 200,
+                })
+            }
+            throw new Error(`Unexpected fetch: ${url}`)
+        })
+        const client = new PhyloPicClient({
+            baseUrl: "https://api.example",
+            fetch: fetchMock,
+            wwwOrigin: "https://www.example.org",
+        })
+        const permalink = await client.createCollectionPermalink("abc-def")
+        expect(permalink.hash).toBe(hash)
+        expect(permalink.permalinkUrl).toBe(`https://www.example.org/permalinks/${hash}`)
+    })
+
     it("throws PhyloPicApiError on 404", async () => {
         const fetchMock = vi.fn(async () => {
             return new Response(JSON.stringify({ build: 42, errors: [{ userMessage: "Not found." }] }), {

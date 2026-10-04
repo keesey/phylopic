@@ -98,6 +98,14 @@ Prefer **`search_nodes` → `phylopic.exactMatch`** for Newick labels that must 
 - Prefer **`vectorUrl`** from pick results for crisp scaling.
 - Pad **viewBox** for space above the top silhouette and below the lowest label.
 
+### Attribution and collections
+
+1. Collect every **image UUID** used in the SVG.
+2. Call **`describe_image_set_usage`** for combined license URL and attribution copy (same rules as a PhyloPic collection usage page).
+3. Put attribution in `<desc>`, a caption, or adjacent credits; link silhouettes to `https://www.phylopic.org/images/{uuid}` as usual.
+4. Call **`create_collection`** with the same UUIDs when you want a collection page (`https://www.phylopic.org/collections/{uuid}`).
+5. When attribution is **required**, call **`create_collection_permalink`** and cite the permalink URL for a short stable credit (www API; rate-limited).
+
 ---
 
 ## Example Newick (smoke test)
@@ -115,6 +123,7 @@ Do **not** treat any one rendered SVG of this tree as canonical — it is a stre
 - [ ] Radial / circular style spec
 - [ ] Time-scaled branches when Newick has lengths
 - [ ] Tip-only vs all-labeled-nodes policy wording for prompts
+- [x] Attribution via MCP collection tools (see above)
 - [ ] Attribution presentation (footer vs credits file)
 
 ---
