@@ -109,7 +109,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
         "pick_image",
         {
             description:
-                "Pick a PhyloPic silhouette for a node. Use label or node_uuid for labeled taxa. For unlabeled Newick nodes, pass descendant_node_uuids (resolved UUIDs of labeled subclade roots under that node): MCP loads each lineage, finds the most leafward common ancestor, then picks an image for that node. Default pick: primary when node-accurate, else filter_clade page 0 index 0. Response includes nodePageUrl and image.pageUrl. Alternates: find_images then clade_index or image_uuid.",
+                "Pick a PhyloPic silhouette for a node. Terminal taxa: primary when node-accurate, else filter_clade page 0 (default). Ancestral/internal: image_list ancestral walks filter_node on this node then each PhyloPic ancestor until a hit; pass exclude_node_uuids with the cladogram parent's PhyloPic UUID so that taxon is never used. Unlabeled Newick: descendant_node_uuids → MRCA with image_list ancestral. Alternates: find_images then clade_index or image_uuid.",
             inputSchema: {
                 node_uuid: uuidSchema.optional(),
                 label: z
@@ -134,6 +134,14 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                     .min(0)
                     .optional()
                     .describe("0-based page for clade_index (default 0). Same as find_images page."),
+                image_list: z
+                    .enum(["clade", "node", "ancestral"])
+                    .optional()
+                    .describe("ancestral for internal nodes; clade for terminals (default); node for exact-node only."),
+                exclude_node_uuids: z
+                    .array(uuidSchema)
+                    .optional()
+                    .describe("Never use silhouettes from these PhyloPic nodes (e.g. cladogram parent UUID)."),
                 descendant_node_uuids: z
                     .array(uuidSchema)
                     .min(1)
@@ -160,6 +168,8 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
             image_uuid,
             clade_index,
             clade_page,
+            image_list,
+            exclude_node_uuids,
             descendant_node_uuids,
             filter_license_by,
             filter_license_nc,
@@ -183,6 +193,12 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                     ...(image_uuid === undefined ? {} : { image_uuid }),
                     ...(clade_index === undefined ? {} : { clade_index }),
                     ...(clade_page === undefined ? {} : { clade_page }),
+                    ...(image_list === undefined ?
+                        hasDescendants && !label ?
+                            { image_list: "ancestral" as const }
+                        :   {}
+                    :   { image_list }),
+                    ...(exclude_node_uuids === undefined ? {} : { exclude_node_uuids }),
                 }
                 let nodeUuid = node_uuid
                 const warnings: string[] = []

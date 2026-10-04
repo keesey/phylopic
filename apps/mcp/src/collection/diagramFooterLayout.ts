@@ -7,6 +7,21 @@ const LINE_HEIGHT = 14
 
 const primaryFont = () => FOOTER_FONT_FAMILY
 
+const measureWithFont = (text: string, italic = false) => {
+    const canvas = createCanvas(1, 1)
+    const ctx = canvas.getContext("2d")
+    ctx.font = `${italic ? "italic " : ""}${FOOTER_FONT_SIZE}px ${primaryFont()}`
+    return ctx.measureText(text).width
+}
+
+export const measureFooterPlainTextWidth = (text: string, italic = false) => measureWithFont(text, italic)
+
+export const measureLicenseFooterLineWidth = (licenseName: string) =>
+    measureFooterPlainTextWidth(`This image is available under the ${licenseName} license.`)
+
+export const measurePermalinkAttributionLineWidth = (permalinkUrl: string) =>
+    measureFooterPlainTextWidth(`For attribution, see ${permalinkUrl}.`)
+
 const measureSegment = (segment: AttributionTextSegment) => {
     const canvas = createCanvas(1, 1)
     const ctx = canvas.getContext("2d")

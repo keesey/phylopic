@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { describeImageSetUsage } from "./describeImageSetUsage.js"
 import {
     buildDiagramPublication,
+    diagramWidthForPublication,
     resolveDiagramLicenseUrl,
 } from "./diagramPublication.js"
 
@@ -73,5 +74,25 @@ describe("buildDiagramPublication", () => {
         })
         expect(pub.attributionPlain).toBe(`For attribution, see ${url}.`)
         expect(pub.footerSvgFragment).toContain("For attribution, see")
+        expect(pub.footerMinWidth).toBeGreaterThan(400)
+    })
+
+    it("diagramWidthForPublication expands narrow layouts for long permalinks", () => {
+        const url = "https://www.phylopic.org/permalinks/" + "a".repeat(64)
+        const usage = describeImageSetUsage([
+            {
+                attribution: "Artist",
+                _links: { license: { href: "https://creativecommons.org/licenses/by/4.0/" } },
+            },
+        ])
+        const pub = buildDiagramPublication({
+            usage,
+            attributionMode: "permalink",
+            attributionUrl: url,
+            footerWidth: 200,
+            imageUuids: ["060f03a9-fafd-4d08-81d1-b8f82080573f"],
+        })
+        expect(diagramWidthForPublication(300, 24, pub)).toBeGreaterThan(300)
+        expect(diagramWidthForPublication(300, 24, pub)).toBe(pub.footerMinWidth + 48)
     })
 })

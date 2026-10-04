@@ -49,10 +49,11 @@ Use **`build_tree_from_collection`** with **`collection_uuid`** or **`permalink_
 4. For each **labeled** node:
    - **Preferred:** `search_nodes` on the label → use **`phylopic.exactMatch`** or a node whose **title exactly matches** the label (case-insensitive) → `pick_image` with **`node_uuid`**.
    - **Shortcut:** `pick_image` with **`label`** (uses PhyloPic name search with exact-title priority). Use when labels are trusted scientific names from the tree.
+   - **Terminal tips:** default list fallback uses **`filter_clade`**. **Ancestral nodes:** **`image_list: ancestral`** — **`filter_node`** on this PhyloPic node, then each ancestor in lineage until a silhouette is found; pass **`exclude_node_uuids`** with the **cladogram parent's** PhyloPic UUID so that node is never used.
    - **Homonyms / wrong clade:** when the node has **two or more resolved child UUIDs** in the tree, use **`pick_image`** with **`label`** plus **`descendant_node_uuids`** (child node UUIDs). MCP takes the MRCA of those children, walks **`get_lineage`** toward the root, and picks the **most leafward** node whose title matches the Newick label.
 5. For each **unlabeled internal** node to illustrate:
    - In each child branch, find the **labeled subclade root** (first labeled node on the path from this node down).
-   - Resolve those labels to node UUIDs first (with disambiguation on labeled nodes). Pass those **resolved child UUIDs** into **`pick_image`** with **`descendant_node_uuids`** only.
+   - Resolve those labels to node UUIDs first (with disambiguation on labeled nodes). Pass those **resolved child UUIDs** into **`pick_image`** with **`descendant_node_uuids`** and **`exclude_node_uuids`** set to the cladogram parent's PhyloPic UUID when known (uses **`image_list: ancestral`**).
 6. Apply **license filters** only when the user requires them (e.g. `filter_license_nc=false` for commercial-friendly output).
 7. **Measure** silhouettes and labels (see **`phylopic://docs/cladogram-styles`** → [Basic rectangular cladogram](cladogram-styles.md#basic-rectangular-cladogram)), **layout**, write SVG.
 8. **`format_diagram_publication`** on all silhouette image UUIDs (see [License and attribution footer](#license-and-attribution-footer)).
@@ -117,7 +118,7 @@ Required on **every** diagram that includes PhyloPic silhouettes.
    - If attribution is required, add the attribution line(s) as above.
 4. **`<desc>`:** include `publication.descText` from **`format_diagram_publication`**.
 5. **`<metadata>`:** insert `publication.metadataXml` (structured license, attribution, **`dc:source`** links to `https://www.phylopic.org/images/{uuid}` for each silhouette, **`dc:creator`** PhyloPic.org).
-6. Merge `publication.footerSvgFragment` (includes Roboto `@import` in `<defs>`) and translate the `#phylopic-diagram-footer` group to the bottom-left of the figure.
+6. Merge `publication.footerSvgFragment` (includes Roboto `@import` in `<defs>`) and translate the `#phylopic-diagram-footer` group to the bottom-left of the figure. Set SVG width to at least **`diagramWidthForPublication(contentWidth, horizontalPadding, publication)`** (or `max(contentWidth, publication.footerMinWidth + 2×padding)`) so single-line permalink footers are not clipped.
 
 **`create_collection`** registers the UUID set (required before permalink minting). **`create_collection_permalink`** mints the credit URL to cite on published diagrams (www API; rate-limited). Do not link `https://www.phylopic.org/collections/{uuid}` on diagram footers.
 

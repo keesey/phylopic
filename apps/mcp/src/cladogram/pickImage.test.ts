@@ -60,6 +60,100 @@ describe("pickImage", () => {
         expect(result.image?.uuid).toBe("img-1")
     })
 
+    it("walks lineage for ancestral pick and skips excluded cladogram parent", async () => {
+        const PARENT = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+        const CHILD = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+        const GRAND = "cccccccc-cccc-cccc-cccc-cccccccccccc"
+        const listImages = vi.fn(async (query: Record<string, unknown>) => {
+            const node = query.filter_node as string
+            if (node === CHILD) {
+                return { _embedded: { items: [] } }
+            }
+            if (node === PARENT) {
+                return { _embedded: { items: [] } }
+            }
+            if (node === GRAND) {
+                return {
+                    _embedded: {
+                        items: [
+                            {
+                                uuid: "from-grandparent",
+                                _links: {
+                                    license: { href: "https://creativecommons.org/publicdomain/zero/1.0/" },
+                                    specificNode: { href: `/nodes/${GRAND}` },
+                                },
+                                _embedded: { specificNode: { uuid: GRAND } },
+                            },
+                        ],
+                    },
+                }
+            }
+            return { _embedded: { items: [] } }
+        })
+        const client = mockClient({
+            getJson: vi.fn(async (path: string) => {
+                if (path === `/nodes/${CHILD}`) {
+                    return { _embedded: { primaryImage: null } }
+                }
+                if (path === `/nodes/${PARENT}`) {
+                    return { _embedded: { primaryImage: null } }
+                }
+                if (path === `/nodes/${GRAND}`) {
+                    return { _embedded: { primaryImage: null } }
+                }
+                if (path === `/nodes/${CHILD}/lineage`) {
+                    return {
+                        _embedded: { items: [{ uuid: CHILD }, { uuid: PARENT }, { uuid: GRAND }] },
+                        _links: {},
+                    }
+                }
+                throw new Error(`unexpected getJson ${path}`)
+            }),
+            listImages,
+        })
+
+        const result = await pickImage(client, CHILD, {
+            image_list: "ancestral",
+            exclude_node_uuids: [PARENT],
+        })
+        expect(result.image?.uuid).toBe("from-grandparent")
+        expect(result.warnings?.some(w => w.includes("ancestor"))).toBe(true)
+    })
+
+    it("uses filter_node when image_list is node", async () => {
+        const listImages = vi.fn(async (query: Record<string, unknown>) => {
+            expect(query.filter_node).toBe(NODE)
+            expect(query.filter_clade).toBeUndefined()
+            return {
+                _embedded: {
+                    items: [
+                        {
+                            uuid: "node-only",
+                            _links: {
+                                license: { href: "https://creativecommons.org/publicdomain/zero/1.0/" },
+                                vectorFile: { href: "https://example/node-only.svg" },
+                                specificNode: { href: `/nodes/${NODE}` },
+                            },
+                            _embedded: { specificNode: { uuid: NODE } },
+                        },
+                    ],
+                },
+            }
+        })
+        const client = mockClient({
+            getJson: vi.fn(async (path: string) => {
+                if (path === `/nodes/${NODE}`) {
+                    return { _embedded: { primaryImage: null } }
+                }
+                throw new Error(`unexpected getJson ${path}`)
+            }),
+            listImages,
+        })
+
+        const result = await pickImage(client, NODE, { image_list: "node" })
+        expect(result.image?.uuid).toBe("node-only")
+    })
+
     it("uses clade_index override instead of primary", async () => {
         const client = mockClient({
             getJson: vi.fn(async () => {

@@ -96,7 +96,10 @@ export const registerCollectionTools = (server: McpServer, client: PhyloPicClien
                     diagramTitle: diagram_title,
                     imageUuids: image_uuids,
                 })
-                return toolSuccess("Diagram publication text and SVG fragments.", { usage, publication })
+                return toolSuccess(
+                    "Diagram publication text and SVG fragments. Expand diagram width to at least publication.footerMinWidth plus twice footer horizontal padding.",
+                    { usage, publication },
+                )
             } catch (error) {
                 return toolFromError(error)
             }

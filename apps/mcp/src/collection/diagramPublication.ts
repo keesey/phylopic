@@ -5,6 +5,8 @@ import { buildAttributionDisplaySegments } from "./attributionDisplaySegments.js
 import type { ImageForAttribution } from "./formatAttributionAggregate.js"
 import {
     estimateWrappedFooterHeight,
+    measureLicenseFooterLineWidth,
+    measurePermalinkAttributionLineWidth,
     wrapAttributionSegments,
     wrapPlainTextLines,
     wrappedAttributionTextSvg,
@@ -47,9 +49,18 @@ export type DiagramPublication = {
     footerSvgFragment: string
     /** Approximate footer block height including license line. */
     footerBlockHeight: number
+    /** Minimum footer content width in px (single-line license + permalink rows). */
+    footerMinWidth: number
     metadataXml: string
     descText: string
 }
+
+/** Widen diagram content width so unwrapped footer lines (e.g. permalinks) fit inside horizontal padding. */
+export const diagramWidthForPublication = (
+    contentWidth: number,
+    horizontalPadding: number,
+    publication: Pick<DiagramPublication, "footerMinWidth">,
+) => Math.max(contentWidth, publication.footerMinWidth + horizontalPadding * 2)
 
 export const licenseFlagsFromUrl = (href: string): LicenseFlags => {
     switch (href) {
@@ -195,6 +206,11 @@ export const buildDiagramPublication = (input: DiagramPublicationInput): Diagram
     const footerBlockHeight =
         14 + (attributionLineCount > 0 ? 4 + estimateWrappedFooterHeight(attributionLineCount) : 0)
 
+    let footerMinWidth = measureLicenseFooterLineWidth(licenseName)
+    if (input.usage.attributionRequired && mode === "permalink" && input.attributionUrl) {
+        footerMinWidth = Math.max(footerMinWidth, measurePermalinkAttributionLineWidth(input.attributionUrl))
+    }
+
     const footerSvgFragment = `<defs><style type="text/css"><![CDATA[${DIAGRAM_FOOTER_STYLE}]]></style></defs><g id="phylopic-diagram-footer">${footerParts.join("")}</g>`
 
     const imageSources = input.imageUuids.map(uuid => phylopicImagePageUrl(uuid))
@@ -220,6 +236,7 @@ export const buildDiagramPublication = (input: DiagramPublicationInput): Diagram
         footerStyleCss: DIAGRAM_FOOTER_STYLE,
         footerSvgFragment,
         footerBlockHeight,
+        footerMinWidth,
         metadataXml,
         descText: descParts.join("\n\n"),
     }

@@ -13,6 +13,7 @@ export const loadCollectionImages = async (
         const pageData = await client.getJson<{ _embedded?: { items?: readonly ImageWithEmbedded[] } }>("/images", {
             filter_collection: collectionUuid,
             page,
+            embed_items: "true",
             embed_specificNode: "true",
         })
         images.push(...(pageData._embedded?.items ?? []))
