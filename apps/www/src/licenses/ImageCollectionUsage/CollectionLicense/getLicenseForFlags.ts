@@ -1,5 +1,5 @@
 import type { ExtendedLicenseURL } from "@phylopic/utils"
-import type { LicenseFlags } from "./LicenseFlags"
+import type { LicenseFlags } from "@phylopic/api-models"
 
 const getLicenseForFlags = ({ by, nc, sa, v4 }: LicenseFlags): ExtendedLicenseURL => {
     if (by) {

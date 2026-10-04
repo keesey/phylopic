@@ -1,5 +1,5 @@
+import type { ImageWithLicenseLink } from "@phylopic/api-models"
 import { compareStrings, isPublicDomainLicenseURL, stringifyNomen, type Nomen } from "@phylopic/utils"
-import type { ImageWithLicenseLink } from "./licenseFlags.js"
 
 export type ImageForAttribution = ImageWithLicenseLink & {
     attribution?: string
