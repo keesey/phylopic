@@ -81,3 +81,14 @@ Do **not** guess label width from character count. Measure each label with the s
 4. Run layout with those measured widths/heights, then emit final SVG.
 
 **Reference template:** `cladogram-template.svg` / `phylopic://docs/cladogram-template.svg`.
+
+### License and attribution footer
+
+Reserve **~40–80px** below the lowest label for the publication footer. Use **`format_diagram_publication`** for copy and SVG fragments.
+
+| Element | Font |
+|---------|------|
+| Taxon labels on branches | Georgia, italic (scientific names) |
+| License + attribution footer | **Roboto**, 12px (PhyloPic default body text) |
+
+Place `#phylopic-diagram-footer` at the bottom of the `viewBox`. Include RDF **`metadata`** from the tool output. See **`cladogram-for-agents.md`** → License and attribution footer.

@@ -14,8 +14,7 @@ export const MCP_AGENT_INSTRUCTIONS = `PhyloPic node and image workflow:
 
 Collections and permalinks (multi-image work):
 - describe_image_set_usage on all image UUIDs used (e.g. cladogram silhouettes) for combined license URL and attribution text.
-- create_collection with the same UUIDs to register a PhyloPic collection page (https://www.phylopic.org/collections/{uuid}).
-- When attribution is required, create_collection_permalink returns a short stable credit link (www API; rate-limited). Otherwise link individual images or the collection page.
+- create_collection with the same UUIDs, then create_collection_permalink when attribution is required on published diagrams. Cite the permalink URL in the footer—not the collection page (www API; rate-limited).
 
 Cladograms from Newick:
 - parse_newick for hierarchy from Newick, or build_tree_from_terminals for a list of tip names (lineages → tree + nodeUuidByTreeId). No layout from MCP. Use each node’s label exactly as returned; Newick sibling order is left-to-right; build_tree_from_terminals orders branches by terminal count (smallest first), then alphabetically.
@@ -24,7 +23,7 @@ Cladograms from Newick:
 - Typical vs default illustration is your strategy (which node UUID to pass to pick_image), not an MCP mode.
 - Read phylopic://docs/cladogram-guide for workflow and phylopic://docs/cladogram-styles for layout (basic rectangular cladogram; measured label/image sizes, not character estimates). Optional phylopic://docs/cladogram-template.svg.
 - Link labels to https://www.phylopic.org/nodes/{nodeUuid} and silhouettes to https://www.phylopic.org/images/{imageUuid} in SVG <a> elements.
-- After picking all silhouettes, run describe_image_set_usage; include attribution in SVG <desc> or caption; create_collection (+ create_collection_permalink when required) for publication.
+- Every published diagram must include license and required attribution for its silhouettes. Call format_diagram_publication (or describe_image_set_usage then build footer yourself): license defaults to combinedLicenseUrl (user may choose a more restrictive license only); attribution is null when not required; on published diagrams use a permalink ("For attribution, see …") after create_collection_permalink, not full_text or collection URLs. Render license at the bottom: "This image is available under the … license." with LICENSE_NAMES link text (Roboto, not Georgia). Include metadataXml (license, attribution, PhyloPic image source links, generator PhyloPic.org) and expand viewBox for the footer.
 
 If PhyloPic has no match, search_nodes external hits (GBIF, Open Tree of Life, PBDB) include resolved PhyloPic nodes when possible; otherwise use resolve_external_ids per list_namespaces and https://www.phylopic.org/articles/api-recipes .`
 

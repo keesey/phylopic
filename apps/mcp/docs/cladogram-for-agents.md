@@ -1,6 +1,6 @@
 # Illustrated cladograms from Newick (agent guide)
 
-**Status:** living document — extend as cladogram experiments teach us more. MCP tools stay read-only; **you** produce SVG.
+**Status:** living document — extend as cladogram experiments teach us more. MCP supplies taxonomy, images, and publication helpers; **you** produce SVG.
 
 **MCP resources**
 
@@ -20,7 +20,7 @@
 |--------------|----------------|
 | Tree hierarchy JSON (`parse_newick` or `build_tree_from_terminals`) | Layout (x/y or equivalent) |
 | Per-node image pick (`pick_image`) or UUID from `search_nodes` | Branch geometry |
-| License-filtered `vectorUrl`, attribution via `get_image` | Final SVG file |
+| License-filtered `vectorUrl`, `describe_image_set_usage`, `format_diagram_publication` | Final SVG file with license footer and metadata |
 | Exact-name resolution policy for labels | Label-only nodes when `image` is null (no placeholder graphic) |
 | Style catalog + basic layout rules (`phylopic://docs/cladogram-styles`) | Measuring text/images and iterating on design |
 
@@ -51,7 +51,7 @@ When the user names **tips only** (e.g. “humans, rice, seahorses”), use **`b
    - Resolve those labels to node UUIDs first (with disambiguation on labeled nodes). Pass those **resolved child UUIDs** into **`pick_image`** with **`descendant_node_uuids`** only.
 6. Apply **license filters** only when the user requires them (e.g. `filter_license_nc=false` for commercial-friendly output).
 7. **Measure** silhouettes and labels (see **`phylopic://docs/cladogram-styles`** → [Basic rectangular cladogram](cladogram-styles.md#basic-rectangular-cladogram)), **layout**, write SVG.
-8. Collect **attribution** from pick/get_image results; include in `<desc>` and/or visible credits if the user wants.
+8. **`format_diagram_publication`** on all silhouette image UUIDs (see [License and attribution footer](#license-and-attribution-footer)).
 9. **Links:** wrap each label in `<a href="https://www.phylopic.org/nodes/{nodeUuid}">`. Wrap each silhouette in `<a href="https://www.phylopic.org/images/{imageUuid}">`. **SVG text must be the tree `label` only** (Newick or terminal list) — never substitute PhyloPic node titles.
 
 ### Choosing alternate silhouettes
@@ -96,15 +96,26 @@ Prefer **`search_nodes` → `phylopic.exactMatch`** for Newick labels that must 
 
 - Escape `&`, `<` in text labels.
 - Prefer **`vectorUrl`** from pick results for crisp scaling.
-- Pad **viewBox** for space above the top silhouette and below the lowest label.
+- Pad **viewBox** for space above the top silhouette, below the lowest label, and for the **license footer** (Roboto body text).
+- Taxon **labels** use **Georgia** (italic); license and attribution footer use **Roboto** (same as default PhyloPic www body text).
 
-### Attribution and collections
+### License and attribution footer
+
+Required on **every** diagram that includes PhyloPic silhouettes.
 
 1. Collect every **image UUID** used in the SVG.
-2. Call **`describe_image_set_usage`** for combined license URL and attribution copy (same rules as a PhyloPic collection usage page).
-3. Put attribution in `<desc>`, a caption, or adjacent credits; link silhouettes to `https://www.phylopic.org/images/{uuid}` as usual.
-4. Call **`create_collection`** with the same UUIDs when you want a collection page (`https://www.phylopic.org/collections/{uuid}`).
-5. When attribution is **required**, call **`create_collection_permalink`** and cite the permalink URL for a short stable credit (www API; rate-limited).
+2. Call **`format_diagram_publication`** (or **`describe_image_set_usage`** plus manual layout). Defaults:
+   - **License:** `combinedLicenseUrl` from usage. The user may set **`license_url`** to a **more restrictive** license only (never more permissive than the combined license of the silhouettes).
+   - **Attribution:** when `attributionRequired` is false, omit the attribution block (`null`). When true on **published** diagrams, use a **permalink** only (not collection page URLs): **`create_collection`** → **`create_collection_permalink`** → **`format_diagram_publication`** with **`attribution_mode: permalink`** and **`attribution_url`** set to `permalinkUrl`. Footer: "For attribution, see …" with a hyperlink. **`full_text`** is for drafts/previews only.
+   - Optional **`user_attribution_note`** for the user's own work on the diagram (layout, synthesis, etc.).
+3. **Visible footer** at the bottom of the SVG (inside expanded `viewBox`):
+   - License line: **"This image is available under the \<license name\> license."** Use **`LICENSE_NAMES`** from `@phylopic/utils` for the link text; hyperlink to the license URL.
+   - If attribution is required, add the attribution line(s) as above.
+4. **`<desc>`:** include `publication.descText` from **`format_diagram_publication`**.
+5. **`<metadata>`:** insert `publication.metadataXml` (structured license, attribution, **`dc:source`** links to `https://www.phylopic.org/images/{uuid}` for each silhouette, **`dc:creator`** PhyloPic.org).
+6. Merge `publication.footerSvgFragment` (includes Roboto `@import` in `<defs>`) and translate the `#phylopic-diagram-footer` group to the bottom-left of the figure.
+
+**`create_collection`** registers the UUID set (required before permalink minting). **`create_collection_permalink`** mints the credit URL to cite on published diagrams (www API; rate-limited). Do not link `https://www.phylopic.org/collections/{uuid}` on diagram footers.
 
 ---
 
@@ -124,11 +135,11 @@ Do **not** treat any one rendered SVG of this tree as canonical — it is a stre
 - [ ] Time-scaled branches when Newick has lengths
 - [ ] Tip-only vs all-labeled-nodes policy wording for prompts
 - [x] Attribution via MCP collection tools (see above)
-- [ ] Attribution presentation (footer vs credits file)
+- [x] License and attribution footer (`format_diagram_publication`)
 
 ---
 
 ## What not to commit
 
 - Full illustrated cladograms from experiments (outputs, not source of truth).
-- Local **`apps/mcp/scripts/`** render helpers (gitignored) — use this guide and MCP resources instead.
+- Local **`apps/mcp/scripts/`** render helpers (gitignored) write experiment SVGs to **`~/Downloads/experiments/`** — use this guide and MCP resources instead.

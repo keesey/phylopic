@@ -86,6 +86,7 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             "1. build_tree_from_terminals with labels split from the list (preserve order). Use returned newick with parse_newick if you want the usual Newick pipeline.",
                             "2. pick_image per node using nodeUuidByTreeId; unlabeled internals use descendant_node_uuids from child UUIDs in nodeUuidByTreeId.",
                             "3. Read phylopic://docs/cladogram-styles (basic rectangular cladogram) and layout SVG with measured labels and bottom-aligned silhouettes in square slots.",
+                            "4. format_diagram_publication on all silhouette UUIDs; embed license footer (Roboto), metadata, and desc per cladogram guide.",
                         ]
                             .filter(Boolean)
                             .join("\n"),
@@ -123,7 +124,7 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
                             "3. If the user asked for typical/iconic images, use search_nodes to pick a subtaxon node first, then pick_image on that UUID—not model memory.",
                             "4. Read phylopic://docs/cladogram-styles (basic rectangular cladogram; measure label sizes) and phylopic://docs/cladogram-guide. Optional phylopic://docs/cladogram-template.svg.",
                             "5. You layout the tree and write the SVG (branches, linked <image href=\"vectorUrl\"> to https://www.phylopic.org/images/{uuid}, labels in <a href=\"https://www.phylopic.org/nodes/{nodeUuid}\">). MCP does not compute coordinates or return SVG.",
-                            "6. describe_image_set_usage on all image UUIDs; create_collection and create_collection_permalink when publishing (see agent instructions).",
+                            "6. format_diagram_publication on all image UUIDs: Roboto license footer at bottom, required attribution (full text, collection URL, or permalink), metadata and desc (see cladogram guide).",
                         ]
                             .filter(Boolean)
                             .join("\n"),

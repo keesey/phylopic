@@ -54,7 +54,7 @@ The registered prompt **`illustrate_taxon`** repeats the same workflow for clien
 
 Most tools are read-only wrappers around API endpoints: `search_nodes`, `get_node`, `get_root_node`, `get_lineage`, `find_images`, `get_image`, `resolve_external_id`, `resolve_external_ids`, `get_contributor`, `list_contributor_images`, `get_collection`, `list_licenses`, and `list_namespaces`.
 
-**Collections and attribution:** `describe_image_set_usage` (license + attribution text for image UUIDs), `create_collection` (POST `api.phylopic.org/collections`), and `create_collection_permalink` (www-only stable credit link; optional `PHYLOPIC_WWW_URL` when not using production www).
+**Collections and attribution:** `describe_image_set_usage`, `format_diagram_publication` (license footer + SVG metadata for diagrams), `create_collection`, and `create_collection_permalink` (optional `PHYLOPIC_WWW_URL` for www).
 
 Cladogram helpers: **`parse_newick`** (Newick via [`newick-js`](https://www.npmjs.com/package/newick-js)), **`build_tree_from_terminals`** (lineage-inferred hierarchy from tip names), and **`pick_image`** (primary when node-accurate, else first `filter_clade` on page 0). Unlabeled internal nodes: **`descendant_node_uuids`** (lineages → MRCA → pick). Browse alternates with **`find_images`** (`filter_clade`, 0-based `page`), then **`pick_image`** with **`clade_index`** / **`clade_page`** or **`image_uuid`**. The agent lays out and writes SVG; prompt **`cladogram_from_newick`** describes the workflow.
 
