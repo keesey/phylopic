@@ -17,7 +17,7 @@ Collections and permalinks (multi-image work):
 - create_collection with the same UUIDs, then create_collection_permalink when attribution is required on published diagrams. Cite the permalink URL in the footer—not the collection page (www API; rate-limited).
 
 Cladograms from Newick:
-- parse_newick for hierarchy from Newick, or build_tree_from_terminals for a list of tip names (lineages → tree + nodeUuidByTreeId). No layout from MCP. Use each node’s label exactly as returned; Newick sibling order is left-to-right; build_tree_from_terminals orders branches by terminal count (smallest first), then alphabetically.
+- parse_newick for hierarchy from Newick, build_tree_from_terminals for tip names, or build_tree_from_collection for a collection UUID or permalink (uses each collection image’s specific node as a tip; imageUuidByTreeId fixes silhouettes). No layout from MCP. Use each node’s label exactly as returned; Newick sibling order is left-to-right; build_tree_from_terminals orders branches by terminal count (smallest first), then alphabetically.
 - pick_image per labeled node (label or node_uuid). If a label is ambiguous (e.g. homonym clades), pass descendant_node_uuids of resolved child nodes: MCP MRCA-walks lineage to disambiguate, then picks. Unlabeled internal nodes: descendant_node_uuids only (MRCA + pick). Link silhouettes to the chosen image; node page link may use the MRCA UUID when there is no tree label.
 - image: null → no <image> element (label-only where a label exists); do not subtaxon-retry.
 - Typical vs default illustration is your strategy (which node UUID to pass to pick_image), not an MCP mode.

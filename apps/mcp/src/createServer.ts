@@ -97,6 +97,41 @@ export const createMcpServer = (clientOptions?: PhyloPicClientOptions) => {
     )
 
     server.registerPrompt(
+        "cladogram_from_collection",
+        {
+            description:
+                "Build an illustrated SVG cladogram from a PhyloPic collection UUID or permalink using build_tree_from_collection.",
+            argsSchema: {
+                collection_or_permalink: z
+                    .string()
+                    .describe("Collection UUID or https://www.phylopic.org/permalinks/{hash} URL."),
+            },
+        },
+        async ({ collection_or_permalink }) => {
+            const isPermalink = /permalinks\/[0-9a-f]{64}/i.test(collection_or_permalink)
+            return {
+                messages: [
+                    {
+                        role: "user",
+                        content: {
+                            type: "text",
+                            text: [
+                                "Create an illustrated SVG cladogram from this PhyloPic image set:",
+                                collection_or_permalink,
+                                "Steps:",
+                                `1. build_tree_from_collection with ${isPermalink ? "permalink_url" : "collection_uuid"}.`,
+                                "2. pick_image for tips using image_uuid from imageUuidByTreeId; unlabeled internals use descendant_node_uuids or node UUID from nodeUuidByTreeId.",
+                                "3. Read phylopic://docs/cladogram-styles and layout SVG.",
+                                "4. format_diagram_publication on every silhouette UUID in the figure; when sourcePermalinkUrl is set, cite it (attribution_mode permalink)—do not mint a new permalink for the same image set.",
+                            ].join("\n"),
+                        },
+                    },
+                ],
+            }
+        },
+    )
+
+    server.registerPrompt(
         "cladogram_from_newick",
         {
             description:

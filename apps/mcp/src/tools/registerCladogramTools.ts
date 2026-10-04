@@ -1,6 +1,10 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
+import {
+    buildTreeFromCollectionUuid,
+    buildTreeFromPermalink,
+} from "../cladogram/buildTreeFromCollection.js"
 import { buildTreeFromTerminalLabels } from "../cladogram/buildTreeFromTerminals.js"
 import { parseNewickToTree } from "../cladogram/parseNewick.js"
 import { pickImage } from "../cladogram/pickImage.js"
@@ -54,6 +58,45 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                 const result = await buildTreeFromTerminalLabels(client, labels)
                 return toolSuccess(
                     `Built tree from ${result.terminals.length} terminal taxa (${result.tree.tipCount} tips).`,
+                    result,
+                )
+            } catch (error) {
+                return toolFromError(error)
+            }
+        },
+    )
+
+    server.registerTool(
+        "build_tree_from_collection",
+        {
+            description:
+                "Build a cladogram hierarchy from a PhyloPic collection or permalink. Uses each collection image’s specific node as a terminal taxon (same concestor-only tree as build_tree_from_terminals). Returns imageUuidByTreeId so tips use the collection silhouettes, not a fresh pick_image default. Provide collection_uuid or permalink_url (not both).",
+            inputSchema: {
+                collection_uuid: uuidSchema
+                    .optional()
+                    .describe("Collection UUID from get_collection or create_collection."),
+                permalink_url: z
+                    .string()
+                    .min(1)
+                    .optional()
+                    .describe("www.phylopic.org/permalinks/{hash} or 64-char hash."),
+            },
+            annotations: READ_ONLY,
+        },
+        async ({ collection_uuid, permalink_url }) => {
+            try {
+                if (collection_uuid && permalink_url) {
+                    return toolFromError(new Error("Provide collection_uuid or permalink_url, not both."))
+                }
+                if (!collection_uuid && !permalink_url) {
+                    return toolFromError(new Error("Provide collection_uuid or permalink_url."))
+                }
+                const result =
+                    permalink_url ?
+                        await buildTreeFromPermalink(client, permalink_url)
+                    :   await buildTreeFromCollectionUuid(client, collection_uuid!)
+                return toolSuccess(
+                    `Built tree from collection (${result.terminals.length} terminals, ${result.tree.tipCount} tips).`,
                     result,
                 )
             } catch (error) {

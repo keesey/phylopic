@@ -38,6 +38,10 @@ There is **no** `render_cladogram_svg` tool. Optional reference logic for the **
 
 When the user names **tips only** (e.g. “humans, rice, seahorses”), use **`build_tree_from_terminals`** with **`labels`**. MCP resolves each name, loads **`get_lineage`** for every tip, and builds a **concestor-only** tree—the internal nodes where those terminals diverge, not every node on the full PhyloPic paths (e.g. five tips may yield `((hops,rice),(seahorses,(humans,toucans)))`, not hundreds of ranks). **Sibling order in the Newick:** branches with **fewer** terminals first; **alphabetical** (min tip label in the branch) breaks ties. The response includes **`newick`** (optional: **`parse_newick`** on that string for the usual pipeline), hierarchy JSON, and **`nodeUuidByTreeId`**. Internal nodes are **unlabeled concestors**. Then continue with **`pick_image`** as below—use **`node_uuid`** from **`nodeUuidByTreeId`** for labeled tips; for unlabeled internals use **`descendant_node_uuids`** from child UUIDs in **`nodeUuidByTreeId`**.
 
+### From a collection or permalink
+
+Use **`build_tree_from_collection`** with **`collection_uuid`** or **`permalink_url`**. Each collection image’s **specific node** becomes a terminal (tip labels omit author/year citations); **`imageUuidByTreeId`** keeps the exact silhouettes. Cite **`sourcePermalinkUrl`** in **`format_diagram_publication`** when republishing (`attribution_mode: permalink`). **`pick_image`** on tips with **`image_uuid`** from **`imageUuidByTreeId`**; unlabeled internals as in [Shared steps](#shared-steps-newick-or-terminals).
+
 ### Shared steps (Newick or terminals)
 
 2. Read **`phylopic://docs/cladogram-styles`** and choose a style (default: **basic rectangular cladogram**).
