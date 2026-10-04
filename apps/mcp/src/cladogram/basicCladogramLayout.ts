@@ -98,7 +98,8 @@ export const extentBelowRail = (m: BasicNodeMeasures, theme: BasicCladogramTheme
     return theme.labelGap + m.labelHeight
 }
 
-export type RailLayoutNode = LayoutTreeShape & {
+export type RailLayoutNode = {
+    label?: string
     railY?: number
     children: RailLayoutNode[]
 }
@@ -234,10 +235,10 @@ export type ColumnLayoutNode = Readonly<{
     children: readonly unknown[]
 }>
 
-export type ColumnLayoutTree = Readonly<{
+export type ColumnLayoutTree = {
     x?: number
-    children: readonly ColumnLayoutTree[]
-}>
+    children: ColumnLayoutTree[]
+}
 
 /**
  * Each child column starts immediately after its parent's column extent.

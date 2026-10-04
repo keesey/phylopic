@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest"
-import { ancestralPickOptions, cladogramParentPhyloUuid } from "./ancestralPickOptions.js"
+import { ancestralPickOptions, cladogramParentPhyloUUID } from "./ancestralPickOptions.js"
 
 describe("cladogramParentPhyloUuid", () => {
     it("returns parent tree id phylo uuid when present", () => {
         expect(
-            cladogramParentPhyloUuid({ parent: { id: "p1" } }, { p1: "uuid-parent", c1: "uuid-child" }),
+            cladogramParentPhyloUUID({ parent: { id: "p1" } }, { p1: "uuid-parent", c1: "uuid-child" }),
         ).toBe("uuid-parent")
     })
 })

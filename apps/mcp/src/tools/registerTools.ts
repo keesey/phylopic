@@ -25,6 +25,7 @@ const pageSchema = z
 const externalAuthoritySchema = z.enum(["gbif.org", "opentreeoflife.org", "paleobiodb.org"])
 
 export const registerTools = (server: McpServer, client: PhyloPicClient) => {
+    // @ts-expect-error TS2589 — Zod tool inputSchema exceeds TypeScript inference depth
     server.registerTool(
         "search_nodes",
         {

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { attributionTestImage } from "../testFixtures/attributionImage.js"
 import { buildAttributionDisplaySegments } from "./attributionDisplaySegments.js"
 import { formatCollectionAttribution, formatImageSetAttributionQuote } from "./formatAttribution.js"
 
@@ -6,20 +7,17 @@ describe("formatCollectionAttribution", () => {
     it("states when attribution is not required", () => {
         expect(
             formatCollectionAttribution([
-                {
-                    _links: { license: { href: "https://creativecommons.org/publicdomain/mark/1.0/" } },
-                },
+                attributionTestImage("https://creativecommons.org/publicdomain/mark/1.0/"),
             ]),
         ).toBe("Attribution is not required.")
     })
 
     it("formats a single attributed image", () => {
         const text = formatCollectionAttribution([
-            {
+            attributionTestImage("https://creativecommons.org/licenses/by/4.0/", {
                 attribution: "Jane Doe",
-                _links: { license: { href: "https://creativecommons.org/licenses/by/4.0/" } },
-                _embedded: { specificNode: { names: [[{ text: "Homo sapiens" }]] } },
-            },
+                _embedded: { specificNode: { names: [[{ class: "scientific", text: "Homo sapiens" }]] } },
+            }),
         ])
         expect(text).toContain("Attribution is required")
         expect(text).toContain("Jane Doe")
@@ -28,10 +26,9 @@ describe("formatCollectionAttribution", () => {
 
     it("diagram quote omits required preamble", () => {
         const quote = formatImageSetAttributionQuote([
-            {
+            attributionTestImage("https://creativecommons.org/licenses/by/4.0/", {
                 attribution: "Jane Doe",
-                _links: { license: { href: "https://creativecommons.org/licenses/by/4.0/" } },
-            },
+            }),
         ])
         expect(quote).toBe("Silhouette image is by Jane Doe.")
         expect(quote).not.toContain("Attribution is required")
@@ -39,9 +36,8 @@ describe("formatCollectionAttribution", () => {
 
     it("display segments use short nomina and italic scientific", () => {
         const segments = buildAttributionDisplaySegments([
-            {
+            attributionTestImage("https://creativecommons.org/licenses/by/4.0/", {
                 attribution: "Jane Doe",
-                _links: { license: { href: "https://creativecommons.org/licenses/by/4.0/" } },
                 _embedded: {
                     specificNode: {
                         names: [
@@ -53,10 +49,9 @@ describe("formatCollectionAttribution", () => {
                         ],
                     },
                 },
-            },
-            {
+            }),
+            attributionTestImage("https://creativecommons.org/licenses/by/4.0/", {
                 attribution: "John Smith",
-                _links: { license: { href: "https://creativecommons.org/licenses/by/4.0/" } },
                 _embedded: {
                     specificNode: {
                         names: [
@@ -68,7 +63,7 @@ describe("formatCollectionAttribution", () => {
                         ],
                     },
                 },
-            },
+            }),
         ])
         expect(segments?.some(s => s.italic && s.text === "Homo")).toBe(true)
         expect(JSON.stringify(segments)).not.toContain("Linnaeus")
@@ -77,9 +72,7 @@ describe("formatCollectionAttribution", () => {
     it("diagram quote is null when attribution is optional", () => {
         expect(
             formatImageSetAttributionQuote([
-                {
-                    _links: { license: { href: "https://creativecommons.org/publicdomain/mark/1.0/" } },
-                },
+                attributionTestImage("https://creativecommons.org/publicdomain/mark/1.0/"),
             ]),
         ).toBeNull()
     })

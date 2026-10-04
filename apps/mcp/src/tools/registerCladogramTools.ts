@@ -23,6 +23,7 @@ const uuidSchema = z.string().uuid()
 const licenseFilterSchema = z.enum(["true", "false"]).optional()
 
 export const registerCladogramTools = (server: McpServer, client: PhyloPicClient) => {
+    // @ts-expect-error TS2589 — Zod tool inputSchema exceeds TypeScript inference depth
     server.registerTool(
         "parse_newick",
         {
@@ -156,6 +157,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
         },
     )
 
+    // @ts-expect-error TS2589 — Zod tool inputSchema exceeds TypeScript inference depth
     server.registerTool(
         "pick_image",
         {

@@ -4,6 +4,7 @@ import { z } from "zod"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { buildDiagramPublication, type DiagramAttributionMode } from "../collection/diagramPublication.js"
 import { describeImageSetUsage } from "../collection/describeImageSetUsage.js"
+import type { ImageForAttribution } from "../collection/formatAttribution.js"
 import {
     phylopicCollectionPageUrl,
     phylopicCollectionPermalinkRequestUrl,
@@ -17,6 +18,9 @@ const imageUuidsSchema = z
     .min(1)
     .max(512)
     .describe("Image UUIDv4s to include in the collection or usage summary.")
+
+const apiImagesForAttribution = (images: readonly ImageWithEmbedded[]): readonly ImageForAttribution[] =>
+    images as readonly ImageForAttribution[]
 
 export const registerCollectionTools = (server: McpServer, client: PhyloPicClient) => {
     server.registerTool(
@@ -34,7 +38,7 @@ export const registerCollectionTools = (server: McpServer, client: PhyloPicClien
                         client.getJson<ImageWithEmbedded>(`/images/${uuid}`, { embed_specificNode: "true" }),
                     ),
                 )
-                const usage = describeImageSetUsage(images)
+                const usage = describeImageSetUsage(apiImagesForAttribution(images))
                 return toolSuccess(`Usage for ${images.length} image(s).`, usage)
             } catch (error) {
                 return toolFromError(error)
@@ -84,10 +88,11 @@ export const registerCollectionTools = (server: McpServer, client: PhyloPicClien
                         client.getJson<ImageWithEmbedded>(`/images/${uuid}`, { embed_specificNode: "true" }),
                     ),
                 )
-                const usage = describeImageSetUsage(images)
+                const attributionImages = apiImagesForAttribution(images)
+                const usage = describeImageSetUsage(attributionImages)
                 const publication = buildDiagramPublication({
                     usage,
-                    images,
+                    images: attributionImages,
                     footerWidth: footer_width,
                     licenseUrl: license_url,
                     attributionMode: attribution_mode as DiagramAttributionMode | undefined,

@@ -5,10 +5,10 @@ type TreeNodeWithParent = Readonly<{
 }>
 
 /** PhyloPic UUID for the cladogram parent node, if any (ancestral walk stops here; no image above). */
-export const cladogramParentPhyloUuid = (
+export const cladogramParentPhyloUUID = (
     node: TreeNodeWithParent,
-    phyloUuidByTreeId: Readonly<Record<string, string>>,
-): string | undefined => (node.parent ? phyloUuidByTreeId[node.parent.id] : undefined)
+    phyloUUUIDByTreeId: Readonly<Record<string, string>>,
+): string | undefined => (node.parent ? phyloUUUIDByTreeId[node.parent.id] : undefined)
 
 export const ancestralPickOptions = (
     filters: PickImageOptions,
@@ -16,7 +16,7 @@ export const ancestralPickOptions = (
     phyloUuidByTreeId: Readonly<Record<string, string>>,
     extra?: PickImageOptions,
 ): PickImageOptions => {
-    const parentUuid = cladogramParentPhyloUuid(node, phyloUuidByTreeId)
+    const parentUuid = cladogramParentPhyloUUID(node, phyloUuidByTreeId)
     return {
         ...filters,
         image_list: "ancestral",

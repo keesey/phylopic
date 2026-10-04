@@ -14,7 +14,7 @@ const mockClient = (handlers: Record<string, unknown>): PhyloPicClient =>
             }
             throw new Error(`unexpected ${key}`)
         }),
-    }) as PhyloPicClient
+    }) as unknown as PhyloPicClient
 
 describe("resolveLabelToNode", () => {
     it("picks exact title Homo sapiens over Homo (sapiens) for mixed-case label", async () => {

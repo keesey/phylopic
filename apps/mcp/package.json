@@ -17,6 +17,7 @@
     "description": "Model Context Protocol server for the PhyloPic API.",
     "devDependencies": {
         "@phylopic/tsconfig": "*",
+        "@types/node": "^22.15.0",
         "canvas": "^3.1.0",
         "eslint-config-phylopic": "*",
         "typescript": "^5.4.5",
@@ -34,7 +35,8 @@
         "lint": "TIMING=1 eslint --fix ./**/*.[jt]s",
         "start": "node dist/http.js",
         "start:stdio": "node dist/stdio.js",
-        "test": "vitest run"
+        "test": "vitest run",
+        "typecheck": "NODE_OPTIONS='--max-old-space-size=8192' tsc --noEmit -p tsconfig.json"
     },
     "type": "module",
     "version": "0.1.0"

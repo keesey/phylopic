@@ -12,7 +12,7 @@ import {
 
 const theme = DEFAULT_BASIC_CLADOGRAM_THEME
 
-const tipWithImage = (label: string, labelW: number): BasicNodeMeasures => ({
+const tipWithImage = (labelW: number): BasicNodeMeasures => ({
     hasImage: true,
     imageWidth: 48,
     imageHeight: 48,
@@ -71,7 +71,7 @@ describe("assignBasicCladogramRails", () => {
                 { label: "B", children: [] },
             ],
         }
-        const measures = (n: RailLayoutNode) => tipWithImage(n.label ?? "", 40)
+        const measures = (n: RailLayoutNode) => tipWithImage(40)
         assignBasicCladogramRails(root, measures, theme)
         const gap = root.children[1]!.railY! - root.children[0]!.railY!
         expect(gap).toBe(minTipRailSeparation(root.children[0]!, root.children[1]!, measures, theme))
@@ -86,7 +86,7 @@ describe("assignBasicCladogramRails", () => {
                 { label: "B", children: [] },
             ],
         }
-        assignBasicCladogramRails(root, n => tipWithImage(n.label ?? "", 40), theme)
+        assignBasicCladogramRails(root, n => tipWithImage(40), theme)
         const mean =
             (root.children[0]!.railY! + root.children[1]!.railY!) / 2
         expect(root.railY).toBe(mean)

@@ -21,7 +21,7 @@ describe("labelFromPhylopicNode", () => {
                 uuid: "a",
                 names: [[{ class: "scientific", text: "Tyrannosaurus" }, { class: "author", text: "Osborn 1905" }]],
                 _links: { childNodes: [] },
-            } as Node),
+            } as unknown as Node),
         ).toBe("Tyrannosaurus")
     })
 })

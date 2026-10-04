@@ -5,7 +5,7 @@ import { pickImage } from "./pickImage.js"
 const NODE = "67382596-44bb-4e5d-b070-1c0788b622cf"
 const OTHER = "d67d3bf6-3509-4ab6-819a-cd409985347e"
 
-const mockClient = (overrides: Partial<PhyloPicClient>): PhyloPicClient => overrides as PhyloPicClient
+const mockClient = (overrides: Record<string, unknown>): PhyloPicClient => overrides as unknown as PhyloPicClient
 
 describe("pickImage", () => {
     it("returns null when primary specificNode mismatches and clade list is empty", async () => {

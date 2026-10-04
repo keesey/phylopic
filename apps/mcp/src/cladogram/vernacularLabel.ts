@@ -4,10 +4,12 @@ import { searchGbifBackbone } from "./gbifBackbone.js"
 
 /** First matching rule wins, so `-oid` is checked before `-id`. */
 const GROUP_NAME_DERIVATIONS: readonly (readonly [RegExp, string])[] = [
-    [/^([a-z]+)ines?$/, "inae"],
+    [/^([a-z]+)iforms?$/, "iformes"],
     [/^([a-z]+)oids?$/, "oidea"],
     [/^([a-z]+)ids?$/, "idae"],
+    [/^([a-z]+)ines?$/, "inae"],
     [/^([a-z]+)ins?$/, "ini"],
+    [/^([a-z]+)morphs?$/, "morpha"],
 ]
 
 /** Group names built on the same stem, e.g. bovine → Bovinae, hominid → Hominidae, hominoid → Hominoidea. */

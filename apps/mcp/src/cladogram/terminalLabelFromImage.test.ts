@@ -16,7 +16,7 @@ describe("terminalLabelFromImage", () => {
                     ],
                 },
             },
-        } as ImageWithEmbedded
+        } as unknown as ImageWithEmbedded
         expect(terminalLabelFromImage(image)).toBe("Tachyglossus aculeatus")
     })
 })

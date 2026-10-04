@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { attributionTestImage } from "../testFixtures/attributionImage.js"
 import { describeImageSetUsage } from "./describeImageSetUsage.js"
 import {
     buildDiagramPublication,
@@ -35,10 +36,7 @@ describe("resolveDiagramLicenseUrl", () => {
 describe("buildDiagramPublication", () => {
     it("includes license line and full attribution text when required", () => {
         const images = [
-            {
-                attribution: "Artist",
-                _links: { license: { href: "https://creativecommons.org/licenses/by/4.0/" } },
-            },
+            attributionTestImage("https://creativecommons.org/licenses/by/4.0/", { attribution: "Artist" }),
         ]
         const usage = describeImageSetUsage(images)
         const pub = buildDiagramPublication({
@@ -60,10 +58,7 @@ describe("buildDiagramPublication", () => {
 
     it("uses short attribution URL for permalink mode", () => {
         const usage = describeImageSetUsage([
-            {
-                attribution: "Artist",
-                _links: { license: { href: "https://creativecommons.org/licenses/by/4.0/" } },
-            },
+            attributionTestImage("https://creativecommons.org/licenses/by/4.0/", { attribution: "Artist" }),
         ])
         const url = "https://www.phylopic.org/permalinks/" + "a".repeat(64)
         const pub = buildDiagramPublication({
@@ -80,10 +75,7 @@ describe("buildDiagramPublication", () => {
     it("diagramWidthForPublication expands narrow layouts for long permalinks", () => {
         const url = "https://www.phylopic.org/permalinks/" + "a".repeat(64)
         const usage = describeImageSetUsage([
-            {
-                attribution: "Artist",
-                _links: { license: { href: "https://creativecommons.org/licenses/by/4.0/" } },
-            },
+            attributionTestImage("https://creativecommons.org/licenses/by/4.0/", { attribution: "Artist" }),
         ])
         const pub = buildDiagramPublication({
             usage,

@@ -4,7 +4,15 @@ import { fetchLineageUuids } from "./fetchLineageUuids.js"
 import { nodeUuidFromSpecificNodeLink, toPickedImage, type ApiImageRecord } from "./imageRecord.js"
 import { imageMatchesLicenseFilters } from "./licenseFilters.js"
 import { phylopicNodePageUrl } from "./phylopicWebUrls.js"
-import type { PickImageOptions, PickImageResult } from "./types.js"
+import type { LicenseFilters, PickImageOptions, PickImageResult } from "./types.js"
+
+const licenseFiltersOnly = (options: PickImageOptions): LicenseFilters => ({
+    ...(options.filter_license_by === undefined ? {} : { filter_license_by: options.filter_license_by }),
+    ...(options.filter_license_nc === undefined ? {} : { filter_license_nc: options.filter_license_nc }),
+    ...(options.filter_license_sa === undefined ? {} : { filter_license_sa: options.filter_license_sa }),
+})
+
+type ImageListQuery = "clade" | "node"
 
 const withPageUrls = (nodeUuid: string, result: Omit<PickImageResult, "nodePageUrl">): PickImageResult => ({
     ...result,
@@ -21,9 +29,9 @@ type EmbeddedNode = Readonly<{
 const listImagesForNode = async (
     client: PhyloPicClient,
     nodeUuid: string,
-    filters: PickImageOptions,
+    filters: LicenseFilters,
     page: number,
-    imageList: "clade" | "node",
+    imageList: ImageListQuery,
 ): Promise<readonly ApiImageRecord[]> => {
     const list = await client.listImages({
         ...(imageList === "node" ? { filter_node: nodeUuid } : { filter_clade: nodeUuid }),
@@ -38,7 +46,7 @@ const listImagesForNode = async (
 const imageFromUuid = async (
     client: PhyloPicClient,
     imageUuid: string,
-    filters: PickImageOptions,
+    filters: LicenseFilters,
 ): Promise<{ image: ApiImageRecord | null; warnings: string[] }> => {
     const warnings: string[] = []
     const full = await client.getJson<ApiImageRecord>(`/images/${imageUuid}`, {
@@ -60,7 +68,7 @@ const excludedPhyloNodes = (exclude?: readonly string[]) =>
 const tryPickAtPhyloNode = async (
     client: PhyloPicClient,
     candidateUuid: string,
-    filters: PickImageOptions,
+    filters: LicenseFilters,
 ): Promise<{ image: ReturnType<typeof toPickedImage>; warnings: string[] }> => {
     const warnings: string[] = []
     const primary = await primaryForNode(client, candidateUuid)
@@ -88,7 +96,7 @@ const tryPickAtPhyloNode = async (
 const pickAncestralSilhouette = async (
     client: PhyloPicClient,
     nodeUuid: string,
-    filters: PickImageOptions,
+    filters: LicenseFilters,
     exclude?: readonly string[],
 ): Promise<{ image: ReturnType<typeof toPickedImage>; warnings: string[] }> => {
     const warnings: string[] = []
@@ -138,16 +146,11 @@ export const pickImage = async (
     options: PickImageOptions = {},
 ): Promise<PickImageResult> => {
     const warnings: string[] = []
-    const {
-        image_uuid,
-        clade_index,
-        clade_page,
-        image_list,
-        exclude_node_uuids,
-        descendant_node_uuids: _desc,
-        ...filters
-    } = options
+    const { image_uuid, clade_index, clade_page, image_list, exclude_node_uuids, descendant_node_uuids: _desc } =
+        options
+    const filters = licenseFiltersOnly(options)
     const imageList = image_list ?? "clade"
+    const listQueryKind: ImageListQuery = imageList === "node" ? "node" : "clade"
 
     if (image_uuid) {
         const { image, warnings: loadWarnings } = await imageFromUuid(client, image_uuid, filters)
@@ -164,7 +167,7 @@ export const pickImage = async (
 
     if (clade_index !== undefined) {
         const page = clade_page ?? 0
-        const items = await listImagesForNode(client, nodeUuid, filters, page, imageList)
+        const items = await listImagesForNode(client, nodeUuid, filters, page, listQueryKind)
         const hit = items[clade_index]
         if (!hit) {
             const listKind = imageList === "node" ? "node" : "clade"

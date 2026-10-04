@@ -9,20 +9,33 @@ const port = Number.parseInt(process.env.PORT ?? String(DEFAULT_PORT), 10)
 
 const app = createMcpExpressApp({ host: HOST })
 
+/** Minimal types for MCP Express routes (avoid coupling to @types/express in this package). */
+type McpHttpRequest = Readonly<{ body: unknown }>
+type McpHttpResponse = {
+    headersSent: boolean
+    on(event: "close", listener: () => void): void
+    status(code: number): McpHttpResponse
+    json(body: unknown): void
+}
+
 const methodNotAllowed = (message: string) => ({
     jsonrpc: "2.0" as const,
     error: { code: -32_000, message },
     id: null,
 })
 
-app.post("/mcp", async (request, response) => {
+app.post("/mcp", async (request: McpHttpRequest, response: McpHttpResponse) => {
     const server = createMcpServer()
     try {
         const transport = new StreamableHTTPServerTransport({
             sessionIdGenerator: undefined,
         })
         await server.connect(transport)
-        await transport.handleRequest(request, response, request.body)
+        await transport.handleRequest(
+            request as unknown as Parameters<StreamableHTTPServerTransport["handleRequest"]>[0],
+            response as unknown as Parameters<StreamableHTTPServerTransport["handleRequest"]>[1],
+            request.body,
+        )
         response.on("close", () => {
             void transport.close()
             void server.close()
@@ -39,15 +52,15 @@ app.post("/mcp", async (request, response) => {
     }
 })
 
-app.get("/mcp", (_request, response) => {
+app.get("/mcp", (_request: McpHttpRequest, response: McpHttpResponse) => {
     response.status(405).json(methodNotAllowed("Method not allowed."))
 })
 
-app.delete("/mcp", (_request, response) => {
+app.delete("/mcp", (_request: McpHttpRequest, response: McpHttpResponse) => {
     response.status(405).json(methodNotAllowed("Method not allowed."))
 })
 
-app.listen(port, HOST, error => {
+app.listen(port, HOST, (error?: Error) => {
     if (error) {
         console.error("Failed to start MCP HTTP server:", error)
         process.exit(1)
