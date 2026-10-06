@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Document S3/CloudFront CORS for `images.phylopic.org` (`IMAGES_CORS.md`, `images-bucket-cors.json`); cross-link from `S3.md` and `aws/README.md`.
+
 ### Changed
 
 ### Deprecated

@@ -55,9 +55,13 @@ export const fetchSvgViewBoxSize = async (
     vectorUrl: string,
     fetchFn: typeof fetch = fetch,
 ): Promise<ViewBoxSize | null> => {
-    const res = await fetchFn(vectorUrl)
-    if (!res.ok) {
+    try {
+        const res = await fetchFn(vectorUrl)
+        if (!res.ok) {
+            return null
+        }
+        return parseSvgViewBox(await res.text())
+    } catch {
         return null
     }
-    return parseSvgViewBox(await res.text())
 }

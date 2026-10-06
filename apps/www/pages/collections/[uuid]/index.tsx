@@ -71,15 +71,13 @@ const COLLECTION_LABELS_SHORT: Readonly<Record<CollectionType, string>> = {
 const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
     const type = getCollectionType(has.contributors, has.images, has.nodes)
     const [cladogramBusy, setCladogramBusy] = useState(false)
-    const [cladogramError, setCladogramError] = useState<string | null>(null)
     const onGenerateCladogram = useCallback(async () => {
-        setCladogramError(null)
         setCladogramBusy(true)
         customEvents.clickLink("generate_cladogram", "", "Generate Cladogram →", "button")
         try {
             await downloadCollectionCladogramSvg(uuid)
-        } catch (error) {
-            setCladogramError(error instanceof Error ? error.message : "Could not generate cladogram.")
+        } catch {
+            window.alert("Could not generate cladogram. Please try again, or report the isssue.")
         } finally {
             setCladogramBusy(false)
         }
@@ -119,7 +117,6 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                             header={COLLECTION_LABELS[type]}
                             headerLevel={1}
                         />
-                        {cladogramError && <p role="alert">{cladogramError}</p>}
                     </header>
                     {!has.contributors && !has.images && !has.nodes && <p>This collection is empty.</p>}
                     {has.contributors && (
