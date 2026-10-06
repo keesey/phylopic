@@ -1,6 +1,6 @@
 import type { ImageWithEmbedded } from "@phylopic/api-models"
 import { describe, expect, it } from "vitest"
-import { terminalLabelFromImage } from "./terminalLabelFromImage.js"
+import { terminalLabelFromImage } from "@phylopic/diagrams"
 
 describe("terminalLabelFromImage", () => {
     it("omits citation parts from the specific node nomen", () => {

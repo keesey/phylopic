@@ -1,9 +1,6 @@
-import { nodeUuidFromGeneralNodeLink, nodeUuidFromSpecificNodeLink, type ApiImageRecord } from "@phylopic/diagrams"
+import type { ApiImageRecord } from "@phylopic/diagrams"
 import { phylopicImagePageUrl } from "./phylopicWebUrls.js"
 import type { PickedImage } from "./types.js"
-
-export type { ApiImageRecord }
-export { nodeUuidFromGeneralNodeLink, nodeUuidFromSpecificNodeLink }
 
 export const toPickedImage = (image: ApiImageRecord): PickedImage | null => {
     const uuid = image.uuid

@@ -1,5 +1,5 @@
 import { createCanvas } from "canvas"
-import { isVernacularNewickLabel, type SvgLabelFont } from "./newickLabelStyle.js"
+import { isVernacularNewickLabel, type SvgLabelFont } from "@phylopic/diagrams"
 
 export type MeasuredLabel = Readonly<{ width: number; height: number }>
 

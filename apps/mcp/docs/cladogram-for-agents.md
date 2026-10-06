@@ -24,7 +24,7 @@
 | Exact-name resolution policy for labels | Label-only nodes when `image` is null (no placeholder graphic) |
 | Style catalog + basic layout rules (`phylopic://docs/cladogram-styles`) | Measuring text/images and iterating on design |
 
-There is **no** `render_cladogram_svg` tool. Optional reference logic for the **basic rectangular cladogram** lives in `src/cladogram/basicCladogramLayout.ts` (unit-tested; uses measured sizes you supply). Layout conventions are in **`cladogram-styles.md`**, not this workflow guide.
+There is **no** `render_cladogram_svg` tool. Optional reference logic for the **basic rectangular cladogram** lives in the shared [`@phylopic/diagrams`](../../../packages/diagrams) package (`basicCladogramLayout.ts`, unit-tested; uses measured sizes you supply). Layout conventions are in **`cladogram-styles.md`**, not this workflow guide.
 
 ---
 

@@ -1,6 +1,6 @@
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { fetchLineageUuids } from "./fetchLineageUuids.js"
-import { mostLeafwardCommonAncestor } from "./mostLeafwardCommonAncestor.js"
+import { mostLeafwardCommonAncestor } from "@phylopic/diagrams"
 
 export type ResolveMrcaResult = Readonly<{
     mrcaUuid: string | null

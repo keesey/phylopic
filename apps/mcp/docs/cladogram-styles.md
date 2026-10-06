@@ -16,7 +16,7 @@ PhyloPic MCP does **not** render cladograms. It provides taxonomy, images, and t
 | `phylopic://docs/cladogram-styles` | This catalog + basic layout rules |
 | `phylopic://docs/cladogram-template.svg` | Minimal basic-style SVG skeleton |
 
-**Reference layout code (optional):** `apps/mcp/src/cladogram/basicCladogramLayout.ts` implements basic-style rail/column assignment from **measured** node sizes (used in unit tests). Agents may port the same rules to their SVG pipeline.
+**Reference layout code (optional):** `packages/diagrams/src/basicCladogramLayout.ts` (`@phylopic/diagrams`) implements basic-style rail/column assignment from **measured** node sizes (used in unit tests). Agents may port the same rules to their SVG pipeline.
 
 **Not in the repo:** one-off local render scripts and full illustrated outputs from experiments — keep those outside git unless we add a deliberate gallery later.
 
@@ -71,13 +71,13 @@ Do **not** guess label width from character count. Measure each label with the s
 - Use the tree **`label` verbatim** (from `parse_newick` or terminal list).
 - **Scientific** names (typical Newick: capitalized genus/clade, binomials) → italic.
 - **Vernacular** names written as plain lowercase in Newick (e.g. `birds`) → upright, not italic.
-- Reference helper: `isVernacularNewickLabel` in `src/cladogram/newickLabelStyle.ts`.
+- Reference helper: `isVernacularNewickLabel` in `@phylopic/diagrams` (`newickLabelStyle.ts`).
 
 **Measuring workflow (two-pass SVG)**
 
 1. Pick font family and size (e.g. Georgia 12px).
 2. For each labeled node, render invisible `<text>` (or off-screen) with the final string and font; read **width and height** from `getBBox()`.
-3. **Square slots, bottom-aligned:** Use a **fixed square** for each tier (e.g. 48×48 tips, 40×40 internals). Fetch each **`vectorFile`** and read its SVG `viewBox`. Scale uniformly to fit inside the square (meet), center horizontally, and place the `<image>` so its **bottom** matches the square’s bottom (`bottomAlignArtInSquareSlot` in `silhouetteViewBox.ts`). Do **not** stretch the vector to the full square—external SVG refs often ignore `preserveAspectRatio` on a full-slot `<image>`. Position the square with its bottom just above the rail (`silhouetteTopY`). Layout uses the **slot size**, not the artwork’s aspect ratio.
+3. **Square slots, bottom-aligned:** Use a **fixed square** for each tier (e.g. 48×48 tips, 40×40 internals). Fetch each **`vectorFile`** and read its SVG `viewBox`. Scale uniformly to fit inside the square (meet), center horizontally, and place the `<image>` so its **bottom** matches the square’s bottom (`bottomAlignArtInSquareSlot` in `@phylopic/diagrams`). Do **not** stretch the vector to the full square—external SVG refs often ignore `preserveAspectRatio` on a full-slot `<image>`. Position the square with its bottom just above the rail (`silhouetteTopY`). Layout uses the **slot size**, not the artwork’s aspect ratio.
 4. Run layout with those measured widths/heights, then emit final SVG.
 
 **Reference template:** `cladogram-template.svg` / `phylopic://docs/cladogram-template.svg`.

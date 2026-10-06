@@ -3,7 +3,7 @@ import {
     bottomAlignArtInSquareSlot,
     parseSvgViewBox,
     silhouetteSquareSlot,
-} from "./silhouetteViewBox.js"
+} from "@phylopic/diagrams"
 
 describe("parseSvgViewBox", () => {
     it("reads width and height from viewBox", () => {

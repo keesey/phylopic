@@ -1,7 +1,11 @@
 import { normalizeUUID } from "@phylopic/utils"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { fetchLineageUuids } from "./fetchLineageUuids.js"
-import { nodeUuidFromGeneralNodeLink, nodeUuidFromSpecificNodeLink, type ApiImageRecord } from "./imageRecord.js"
+import {
+    nodeUuidFromGeneralNodeLink,
+    nodeUuidFromSpecificNodeLink,
+    type ApiImageRecord,
+} from "@phylopic/diagrams"
 
 /**
  * True when `targetUuid` is on the image's general→specific tagged lineage (same rule as GET /images?filter_node=).
