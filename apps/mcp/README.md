@@ -2,6 +2,8 @@
 
 Local [Model Context Protocol](https://modelcontextprotocol.io) server for the public [PhyloPic API](https://api.phylopic.org).
 
+Cladogram layout and collection SVG rendering live in [`@phylopic/diagrams`](../../packages/diagrams); this app re-exports those modules and adds MCP-specific resolution, `pick_image`, and server tools.
+
 ## Development
 
 ```bash

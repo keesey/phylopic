@@ -1,3 +1,4 @@
+import { fetchLineageUuids as fetchLineageUuidsGeneric, type LineageFetcher } from "@phylopic/diagrams"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { nodeTitle } from "../search/phylopicNameMatch.js"
 
@@ -11,6 +12,12 @@ type LineageList = Readonly<{
     _links?: { next?: { href?: string } | null }
 }>
 
+const lineageFetcher = (client: PhyloPicClient): LineageFetcher => (nodeUuid, page) =>
+    client.getJson<LineageList>(`/nodes/${nodeUuid}/lineage`, {
+        embed_items: "true",
+        page,
+    })
+
 /** Tip-to-root UUID order (node first, then ancestors). Follows lineage pagination. */
 export const fetchLineageEntries = async (
     client: PhyloPicClient,
@@ -19,17 +26,14 @@ export const fetchLineageEntries = async (
     const entries: LineageEntry[] = []
     let page = 0
     while (page < 64) {
-        const list = await client.getJson<LineageList>(`/nodes/${nodeUuid}/lineage`, {
-            embed_items: "true",
-            page,
-        })
+        const list = await lineageFetcher(client)(nodeUuid, page)
         const items = list._embedded?.items ?? []
         if (!items.length) {
             break
         }
         for (const item of items) {
             if (item.uuid) {
-                entries.push({ uuid: item.uuid, title: nodeTitle(item) })
+                entries.push({ uuid: item.uuid, title: nodeTitle(item as Parameters<typeof nodeTitle>[0]) })
             }
         }
         page += 1
@@ -41,4 +45,4 @@ export const fetchLineageEntries = async (
 }
 
 export const fetchLineageUuids = async (client: PhyloPicClient, nodeUuid: string): Promise<readonly string[]> =>
-    (await fetchLineageEntries(client, nodeUuid)).map(entry => entry.uuid)
+    fetchLineageUuidsGeneric(lineageFetcher(client), nodeUuid)

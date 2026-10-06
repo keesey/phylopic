@@ -8,6 +8,7 @@ const PAYPAL_DONATE_URL = "https://www.paypal.com/donate/?hosted_button_id=9GL69
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
+    transpilePackages: ["@phylopic/diagrams"],
     serverExternalPackages: ["@aws-sdk/credential-provider-web-identity", "@vercel/functions", "@vercel/oidc"],
     webpack: (config, { dev, isServer }) => {
         if (!dev && !isServer) {
