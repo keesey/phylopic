@@ -73,7 +73,7 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
     const [cladogramBusy, setCladogramBusy] = useState(false)
     const onGenerateCladogram = useCallback(async () => {
         setCladogramBusy(true)
-        customEvents.clickLink("generate_cladogram", "", "Generate Cladogram →", "button")
+        customEvents.clickLink("download_cladogram", "", "Download Cladogram ↓", "button")
         try {
             await downloadCollectionCladogramSvg(uuid)
         } catch {
@@ -105,7 +105,7 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                                 has.images
                                     ? [
                                           {
-                                              children: cladogramBusy ? "Generating…" : "Generate Cladogram →",
+                                              children: cladogramBusy ? "Generating…" : "Download Cladogram ↓",
                                               disabled: cladogramBusy,
                                               key: "cladogram",
                                               onClick: () => void onGenerateCladogram(),
