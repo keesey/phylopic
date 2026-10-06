@@ -13,8 +13,7 @@ import { buildTreeFromTerminalLabels } from "../cladogram/buildTreeFromTerminals
 import { parseNewickToTree } from "../cladogram/parseNewick.js"
 import { pickImage } from "../cladogram/pickImage.js"
 import { resolveMrcaFromDescendants } from "../cladogram/resolveMrcaFromDescendants.js"
-import { resolveLabelViaDescendantPhylogeny } from "../cladogram/resolveLabelViaDescendantPhylogeny.js"
-import { resolveLabelToNode } from "../cladogram/resolveLabelToNode.js"
+import { resolveLabelForCladogramNode } from "../cladogram/resolveLabelViaDescendantPhylogeny.js"
 import { toolFromError, toolSuccess } from "./toolResult.js"
 
 const READ_ONLY = { readOnlyHint: true } as const
@@ -259,7 +258,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                 const warnings: string[] = []
                 const resolveOptions = context_labels ? { contextLabels: context_labels } : {}
                 if (hasDescendants && label) {
-                    const resolved = await resolveLabelViaDescendantPhylogeny(
+                    const resolved = await resolveLabelForCladogramNode(
                         client,
                         label,
                         descendant_node_uuids!,
@@ -279,7 +278,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
                     }
                     nodeUuid = mrca.mrcaUuid
                 } else if (!nodeUuid && label) {
-                    const resolved = await resolveLabelToNode(client, label, resolveOptions)
+                    const resolved = await resolveLabelForCladogramNode(client, label, [], resolveOptions)
                     nodeUuid = resolved.nodeUuid
                     warnings.push(...resolved.warnings)
                 }

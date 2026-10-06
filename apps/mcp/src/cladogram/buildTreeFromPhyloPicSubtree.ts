@@ -3,7 +3,7 @@ import { shortenNomen, stringifyNomen } from "@phylopic/utils"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { nodeTitle } from "../search/phylopicNameMatch.js"
 import { cladogramTreeToNewick } from "./cladogramTreeToNewick.js"
-import { resolveLabelToNode } from "./resolveLabelToNode.js"
+import { resolveLabelForCladogramNode } from "./resolveLabelViaDescendantPhylogeny.js"
 import type { BuildTreeFromTerminalsResult, TerminalTaxon } from "./buildTreeFromTerminals.js"
 import type { CladogramTreeNode } from "./types.js"
 
@@ -122,7 +122,7 @@ export const buildTreeFromPhyloPicLabel = async (
     label: string,
     options: BuildTreeFromPhyloPicSubtreeOptions = {},
 ): Promise<BuildTreeFromTerminalsResult> => {
-    const resolved = await resolveLabelToNode(client, label.trim())
+    const resolved = await resolveLabelForCladogramNode(client, label.trim(), [])
     const result = await buildTreeFromPhyloPicNodeUuid(client, resolved.nodeUuid, options)
     return {
         ...result,

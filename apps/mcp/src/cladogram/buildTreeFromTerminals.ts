@@ -1,7 +1,7 @@
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { fetchLineageUuids } from "./fetchLineageUuids.js"
 import { mostLeafwardCommonAncestor } from "./mostLeafwardCommonAncestor.js"
-import { resolveLabelToNode } from "./resolveLabelToNode.js"
+import { resolveLabelForCladogramNode } from "./resolveLabelViaDescendantPhylogeny.js"
 import { cladogramTreeToNewick } from "./cladogramTreeToNewick.js"
 import type { CladogramTree, CladogramTreeNode } from "./types.js"
 
@@ -151,7 +151,7 @@ export const buildTreeFromTerminalLabels = async (
     const warnings: string[] = []
     const terminals: TerminalTaxon[] = []
     for (const label of trimmed) {
-        const resolved = await resolveLabelToNode(client, label, { contextLabels: trimmed })
+        const resolved = await resolveLabelForCladogramNode(client, label, [], { contextLabels: trimmed })
         terminals.push({ label, nodeUuid: resolved.nodeUuid })
         warnings.push(...resolved.warnings)
     }

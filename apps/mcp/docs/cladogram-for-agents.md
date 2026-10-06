@@ -83,7 +83,7 @@ Default `pick_image` is the same as PhyloPic’s clade page order (primary when 
 
 ### Exact title match beats API list order
 
-Prefer **`search_nodes` → `phylopic.exactMatch`** for Newick labels that must be precise. **`Homo sapiens` ≠ `Homo (sapiens)`**. PhyloPic **`filter_name` is case-sensitive**; lowercase variants may work when mixed case 404s.
+Prefer **`search_nodes` → `phylopic.exactMatch`** for Newick labels that must be precise. **`Homo sapiens` ≠ `Homo (sapiens)`**. PhyloPic **`filter_name` is case-sensitive**; lowercase variants may work when mixed case 404s. **`pick_image` with `label`** accepts PhyloPic **synonym** matches (e.g. **Stomiiformes** → node titled **Stomiatiformes**) but rejects **`filter_name` fallbacks** that are not synonyms (e.g. **Alestidae** → **Trialestidae**). With resolved child UUIDs in the tree, resolutions must also be **ancestors of those children** (blocks cross-clade homonyms). Pass **`node_uuid`** when in doubt.
 
 ### `filter_clade` semantics
 
