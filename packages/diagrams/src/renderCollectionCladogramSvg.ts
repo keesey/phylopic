@@ -67,11 +67,7 @@ export const renderCollectionCladogramSvg = async ({
     }
     collect(tree)
 
-    /** Collection silhouettes on tips only; ancestral nodes are label-only. */
-    const tipImage = (n: LayoutNode) => {
-        if (n.children.length > 0) {
-            return null
-        }
+    const collectionNodeImage = (n: LayoutNode) => {
         const imageUuid = built.imageUuidByTreeId[n.id]
         if (!imageUuid) return null
         const image = imagesByUuid.get(imageUuid)
@@ -82,7 +78,7 @@ export const renderCollectionCladogramSvg = async ({
 
     const artViewBox: Record<string, ViewBoxSize> = {}
     for (const n of all) {
-        const img = tipImage(n)
+        const img = collectionNodeImage(n)
         if (!img) continue
         const vb = await fetchSvgViewBoxSize(img.vectorUrl, fetchFn)
         if (vb) artViewBox[n.id] = vb
@@ -90,7 +86,7 @@ export const renderCollectionCladogramSvg = async ({
 
     const nodeMeasures = (n: LayoutNode): BasicNodeMeasures => {
         const isTip = n.children.length === 0
-        const img = tipImage(n)
+        const img = collectionNodeImage(n)
         const hasImage = Boolean(img)
         const slot = hasImage ? silhouetteSquareSlot(TIP_IMG) : null
         const hasLabel = Boolean(n.label)
@@ -141,7 +137,7 @@ export const renderCollectionCladogramSvg = async ({
             const pts: string[] = [`${xOut},${y1}`, `${mid},${y1}`, `${mid},${y2}`]
             if (isAncestral(c)) {
                 pts.push(`${nodeX(c)},${y2}`, `${railExitX(c)},${y2}`)
-            } else if (tipImage(c)) {
+            } else if (collectionNodeImage(c)) {
                 pts.push(`${imgRight(c)},${y2}`)
             } else {
                 pts.push(`${nodeX(c)},${y2}`)
@@ -164,7 +160,7 @@ export const renderCollectionCladogramSvg = async ({
             const m = nodeMeasures(n)
             const rail = n.railY! + offsetY
             const x = labelX(n)
-            const img = tipImage(n)
+            const img = collectionNodeImage(n)
             const nodeUuid = built.nodeUuidByTreeId[n.id]
             let g = `<g id="${n.id}">`
             if (img) {
