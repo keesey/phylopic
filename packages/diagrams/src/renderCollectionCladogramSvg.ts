@@ -117,6 +117,7 @@ export const renderCollectionCladogramSvg = async ({
     const isAncestral = (n: LayoutNode) => n.children.length > 0
     const nodeX = (n: LayoutNode) => n.x! + padX
     const contentX = (n: LayoutNode) => nodeX(n) + theme.tipContentInset
+    const labelX = (n: LayoutNode) => (isTip(n) ? contentX(n) : nodeX(n))
     const imgRight = (n: LayoutNode) => contentX(n) + nodeMeasures(n).imageWidth
     const gutterX = (n: LayoutNode) => nodeX(n) + verticalGutterOffset(nodeMeasures(n), theme)
     const railExitX = (n: LayoutNode) => {
@@ -162,18 +163,19 @@ export const renderCollectionCladogramSvg = async ({
         .map(n => {
             const m = nodeMeasures(n)
             const rail = n.railY! + offsetY
-            const x = contentX(n)
+            const x = labelX(n)
             const img = tipImage(n)
             const nodeUuid = built.nodeUuidByTreeId[n.id]
             let g = `<g id="${n.id}">`
             if (img) {
                 const slotY = silhouetteTopY(rail, m, theme)
                 const slotSize = m.imageWidth
+                const imageX = contentX(n)
                 const vb = artViewBox[n.id] ?? { width: slotSize, height: slotSize }
                 const p = bottomAlignArtInSquareSlot(slotSize, vb)
                 g += link(
                     phylopicImagePageUrl(wwwOrigin, img.uuid),
-                    `<image href="${esc(img.vectorUrl)}" x="${x + p.x}" y="${slotY + p.y}" width="${p.width}" height="${p.height}"/>`,
+                    `<image href="${esc(img.vectorUrl)}" x="${imageX + p.x}" y="${slotY + p.y}" width="${p.width}" height="${p.height}"/>`,
                 )
             }
             if (n.label) {
@@ -207,9 +209,9 @@ export const renderCollectionCladogramSvg = async ({
     const boundsRight =
         Math.max(
             ...all.map(n => {
-                const x = contentX(n)
+                const lx = labelX(n)
                 const m = nodeMeasures(n)
-                return Math.max(m.hasImage ? imgRight(n) : 0, m.hasLabel ? x + m.labelWidth : 0, gutterX(n))
+                return Math.max(m.hasImage ? imgRight(n) : 0, m.hasLabel ? lx + m.labelWidth : 0, gutterX(n))
             }),
         ) + padX
 
