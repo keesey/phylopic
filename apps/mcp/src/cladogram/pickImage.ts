@@ -1,7 +1,8 @@
 import { EMPTY_UUID, normalizeUUID } from "@phylopic/utils"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
 import { fetchLineageUuids } from "./fetchLineageUuids.js"
-import { nodeUuidFromSpecificNodeLink, toPickedImage, type ApiImageRecord } from "./imageRecord.js"
+import { isTargetOnImageTaggedLineage } from "./imageTaggedLineage.js"
+import { toPickedImage, type ApiImageRecord } from "./imageRecord.js"
 import { imageMatchesLicenseFilters } from "./licenseFilters.js"
 import { phylopicNodePageUrl } from "./phylopicWebUrls.js"
 import type { LicenseFilters, PickImageOptions, PickImageResult } from "./types.js"
@@ -65,27 +66,65 @@ const imageFromUuid = async (
 const excludedPhyloNodes = (exclude?: readonly string[]) =>
     new Set((exclude ?? []).map(uuid => normalizeUUID(uuid)))
 
+const firstLicensedListHit = (
+    items: readonly ApiImageRecord[],
+    filters: LicenseFilters,
+): ApiImageRecord | undefined =>
+    items.find(hit => hit.uuid && imageMatchesLicenseFilters(hit._links?.license?.href, filters))
+
+const tryPrimaryForTarget = async (
+    client: PhyloPicClient,
+    targetUuid: string,
+    filters: LicenseFilters,
+): Promise<{ image: ReturnType<typeof toPickedImage>; warnings: string[] }> => {
+    const warnings: string[] = []
+    const primary = await primaryForNode(client, targetUuid)
+    if (!primary) {
+        return { image: null, warnings }
+    }
+    if (!imageMatchesLicenseFilters(primary._links?.license?.href, filters)) {
+        return { image: null, warnings }
+    }
+    if (await isTargetOnImageTaggedLineage(client, targetUuid, primary)) {
+        const image = toPickedImage(primary)
+        if (image) {
+            return { image, warnings }
+        }
+    } else {
+        warnings.push(
+            "Skipped primaryImage: this node is not on the image general→specific lineage (filter_node / list picks may still apply).",
+        )
+    }
+    return { image: null, warnings }
+}
+
 const tryPickAtPhyloNode = async (
     client: PhyloPicClient,
     candidateUuid: string,
     filters: LicenseFilters,
 ): Promise<{ image: ReturnType<typeof toPickedImage>; warnings: string[] }> => {
     const warnings: string[] = []
-    const primary = await primaryForNode(client, candidateUuid)
-    if (primary) {
-        const specificUuid = nodeUuidFromSpecificNodeLink(primary)
-        if (specificUuid === candidateUuid && imageMatchesLicenseFilters(primary._links?.license?.href, filters)) {
-            const image = toPickedImage(primary)
-            if (image) {
-                return { image, warnings }
-            }
-        } else if (specificUuid && specificUuid !== candidateUuid) {
-            warnings.push("Skipped primaryImage: specificNode does not match this node.")
+    const primaryAttempt = await tryPrimaryForTarget(client, candidateUuid, filters)
+    warnings.push(...primaryAttempt.warnings)
+    if (primaryAttempt.image) {
+        return { image: primaryAttempt.image, warnings }
+    }
+    const nodeHit = firstLicensedListHit(
+        await listImagesForNode(client, candidateUuid, filters, 0, "node"),
+        filters,
+    )
+    if (nodeHit) {
+        const image = toPickedImage(nodeHit)
+        if (image) {
+            return { image, warnings }
         }
     }
-    const listHit = (await listImagesForNode(client, candidateUuid, filters, 0, "node"))[0]
-    if (listHit) {
-        const image = toPickedImage(listHit)
+    const cladeHit = firstLicensedListHit(
+        await listImagesForNode(client, candidateUuid, filters, 0, "clade"),
+        filters,
+    )
+    if (cladeHit) {
+        const image = toPickedImage(cladeHit)
         if (image) {
             return { image, warnings }
         }
@@ -135,6 +174,7 @@ const primaryForNode = async (client: PhyloPicClient, nodeUuid: string): Promise
         return null
     }
     const full = await client.getJson<ApiImageRecord>(`/images/${primary.uuid}`, {
+        embed_generalNode: true,
         embed_specificNode: true,
     })
     return full
@@ -190,17 +230,10 @@ export const pickImage = async (
         return withPageUrls(nodeUuid, { image: ancestral.image, nodeUuid, warnings })
     }
 
-    const primary = await primaryForNode(client, nodeUuid)
-    if (primary) {
-        const specificUuid = nodeUuidFromSpecificNodeLink(primary)
-        if (specificUuid === nodeUuid && imageMatchesLicenseFilters(primary._links?.license?.href, filters)) {
-            const image = toPickedImage(primary)
-            if (image) {
-                return withPageUrls(nodeUuid, { image, nodeUuid, warnings })
-            }
-        } else if (specificUuid && specificUuid !== nodeUuid) {
-            warnings.push("Skipped primaryImage: specificNode does not match this node.")
-        }
+    const primaryAttempt = await tryPrimaryForTarget(client, nodeUuid, filters)
+    warnings.push(...primaryAttempt.warnings)
+    if (primaryAttempt.image) {
+        return withPageUrls(nodeUuid, { image: primaryAttempt.image, nodeUuid, warnings })
     }
 
     if (imageList === "node") {

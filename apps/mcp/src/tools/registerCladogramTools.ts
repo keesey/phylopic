@@ -162,7 +162,7 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
         "pick_image",
         {
             description:
-                "Pick a PhyloPic silhouette for a node. Terminal taxa: primary when node-accurate, else filter_clade page 0 (default). Ancestral/internal: image_list ancestral walks filter_node on this node then ancestors until a hit or exclude_node_uuids (cladogram parent)—stop there with no image, do not search above the parent. Unlabeled Newick: descendant_node_uuids → MRCA with image_list ancestral. Alternates: find_images then clade_index or image_uuid.",
+                "Pick a PhyloPic silhouette for a node. Terminal taxa: primary when on the image general→specific lineage (same rule as filter_node), else filter_clade page 0 (default). Ancestral/internal: image_list ancestral tries filter_node then filter_clade on this node then ancestors until a hit or exclude_node_uuids (cladogram parent)—stop there with no image, do not search above the parent. Unlabeled Newick: descendant_node_uuids → MRCA with image_list ancestral. Alternates: find_images then clade_index or image_uuid.",
             inputSchema: {
                 node_uuid: uuidSchema.optional(),
                 label: z

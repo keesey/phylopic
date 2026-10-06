@@ -155,6 +155,61 @@ describe("pickImage", () => {
         expect(result.image?.uuid).toBe("node-only")
     })
 
+    it("ancestral pick uses filter_clade on the node when primary mismatches and filter_node is empty", async () => {
+        const HOLOSTEI = "61b8aa98-f25f-4eaa-933d-9c2879cd99b0"
+        const CALAMO = "e758c2e6-b703-41ed-a7e8-60eaa2744e63"
+        const CALAMO_NODE = "88c0878a-51c0-4d62-8377-65839e899215"
+        const listImages = vi.fn(async (query: Record<string, unknown>) => {
+            if (query.filter_node === HOLOSTEI) {
+                return { _embedded: { items: [] } }
+            }
+            if (query.filter_clade === HOLOSTEI) {
+                return {
+                    _embedded: {
+                        items: [
+                            {
+                                uuid: CALAMO,
+                                _links: {
+                                    license: { href: "https://creativecommons.org/publicdomain/zero/1.0/" },
+                                    vectorFile: { href: "https://example/calamopleurus.svg" },
+                                    specificNode: { href: `/nodes/${CALAMO_NODE}` },
+                                },
+                                _embedded: { specificNode: { uuid: CALAMO_NODE } },
+                            },
+                        ],
+                    },
+                }
+            }
+            return { _embedded: { items: [] } }
+        })
+        const client = mockClient({
+            getJson: vi.fn(async (path: string) => {
+                if (path === `/nodes/${HOLOSTEI}`) {
+                    return { _embedded: { primaryImage: { uuid: "wrong-primary" } } }
+                }
+                if (path === "/images/wrong-primary") {
+                    return {
+                        uuid: "wrong-primary",
+                        _links: {
+                            license: { href: "https://creativecommons.org/publicdomain/zero/1.0/" },
+                            specificNode: { href: `/nodes/${CALAMO_NODE}` },
+                        },
+                        _embedded: { specificNode: { uuid: CALAMO_NODE } },
+                    }
+                }
+                if (path === `/nodes/${HOLOSTEI}/lineage`) {
+                    return { _embedded: { items: [{ uuid: HOLOSTEI }] }, _links: {} }
+                }
+                throw new Error(`unexpected getJson ${path}`)
+            }),
+            listImages,
+        })
+
+        const result = await pickImage(client, HOLOSTEI, { image_list: "ancestral" })
+        expect(result.image?.uuid).toBe(CALAMO)
+        expect(listImages).toHaveBeenCalledWith(expect.objectContaining({ filter_clade: HOLOSTEI }))
+    })
+
     it("uses clade_index override instead of primary", async () => {
         const client = mockClient({
             getJson: vi.fn(async () => {

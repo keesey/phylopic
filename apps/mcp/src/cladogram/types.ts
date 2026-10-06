@@ -34,7 +34,7 @@ export type LicenseFilters = Readonly<{
     filter_license_sa?: "true" | "false"
 }>
 
-/** Default pick uses primary (when node-accurate) then list page 0 index 0. Overrides skip that policy. */
+/** Default pick uses primary (when on image general→specific lineage, same rule as filter_node) then list page 0. Overrides skip that policy. */
 export type PickImageOptions = LicenseFilters &
     Readonly<{
         image_uuid?: string
@@ -42,7 +42,7 @@ export type PickImageOptions = LicenseFilters &
         clade_page?: number
         /**
          * `clade` (default): fallback list uses filter_clade (node + subtaxa)—typical for terminal taxa.
-         * `node`: filter_node on this PhyloPic node only.
+         * `node`: filter_node (images whose general→specific tagged lineage includes this node).
          * `ancestral`: filter_node on this node, then each ancestor in lineage until a hit; stop at exclude_node_uuids (cladogram parent)—no image above that rank.
          */
         image_list?: "clade" | "node" | "ancestral"
