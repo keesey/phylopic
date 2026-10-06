@@ -204,7 +204,15 @@ export const assignBasicCladogramRails = <T extends RailLayoutNode>(
             const span = tips[k]!.railY! - tips[j]!.railY!
             if (span < need) {
                 const delta = need - span
-                tips[k]!.railY = tips[k]!.railY! + delta
+                const tipSpan = k - j
+                if (tipSpan > 0) {
+                    const step = delta / tipSpan
+                    for (let i = j + 1; i <= k; i++) {
+                        tips[i]!.railY = tips[i]!.railY! + step * (i - j)
+                    }
+                } else {
+                    tips[k]!.railY = tips[k]!.railY! + delta
+                }
                 for (let i = k + 1; i < tips.length; i++) {
                     tips[i]!.railY = tips[i]!.railY! + delta
                 }

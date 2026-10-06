@@ -78,6 +78,51 @@ describe("assignBasicCladogramRails", () => {
         expect(gap).toBeLessThan(120)
     })
 
+    it("spreads internal silhouette clearance across tip gaps in the clade", () => {
+        const root: RailLayoutNode = {
+            label: "Clade",
+            children: [
+                {
+                    children: [
+                        { label: "A", children: [] },
+                        { label: "B", children: [] },
+                    ],
+                },
+                {
+                    children: [
+                        { label: "C", children: [] },
+                        { label: "D", children: [] },
+                    ],
+                },
+            ],
+        }
+        const internalMeasures: BasicNodeMeasures = {
+            hasImage: true,
+            imageWidth: 40,
+            imageHeight: 40,
+            hasLabel: true,
+            labelWidth: 40,
+            labelHeight: 14,
+            isTip: false,
+        }
+        const tipMeasures = (): BasicNodeMeasures => ({
+            hasImage: false,
+            imageWidth: 0,
+            imageHeight: 0,
+            hasLabel: true,
+            labelWidth: 20,
+            labelHeight: 14,
+            isTip: true,
+        })
+        assignBasicCladogramRails(root, n => (n.label === "Clade" ? internalMeasures : tipMeasures()), theme)
+        const tips = root.children.flatMap(b => b.children)
+        const gapAB = tips[1]!.railY! - tips[0]!.railY!
+        const gapBC = tips[2]!.railY! - tips[1]!.railY!
+        const gapCD = tips[3]!.railY! - tips[2]!.railY!
+        expect(Math.abs(gapAB - gapBC)).toBeLessThan(0.01)
+        expect(Math.abs(gapBC - gapCD)).toBeLessThan(0.01)
+    })
+
     it("places internal rail at mean of child rails", () => {
         const root: RailLayoutNode = {
             label: "Root",

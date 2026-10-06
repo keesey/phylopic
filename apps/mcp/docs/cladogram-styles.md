@@ -44,7 +44,7 @@ Do **not** guess label width from character count. Measure each label with the s
 
 - **Tips:** assign rail `y` in **Newick left-to-right order** (same as `parse_newick` siblings and depth-first tips). First tip at the **top** of the figure (smaller SVG `y`); do **not** mirror rails after `parse_newick`.
 - **Internal nodes:** rail `y` = **arithmetic mean** of the rail `y` values of **immediate children**.
-- Pack tips so each node’s content clears the next (below-rail extent of one + above-rail extent of the next + clearance). Widen locally when a labeled internal sits between two tips so its midpoint has room (`assignBasicCladogramRails` in `basicCladogramLayout.ts`).
+- Pack tips so each node’s content clears the next (below-rail extent of one + above-rail extent of the next + clearance). When a **labeled** internal with a silhouette spans multiple tips, widen **evenly across those tip gaps** so its rail midpoint has room (`assignBasicCladogramRails` in `basicCladogramLayout.ts`). Unlabeled internals do not trigger this pass.
 
 **Horizontal placement**
 
