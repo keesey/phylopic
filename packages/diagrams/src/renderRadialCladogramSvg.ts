@@ -3,6 +3,7 @@ import {
     type BuildRadialCladogramLayoutOptions,
     type RadialCladogramTreeInput,
 } from "./buildRadialCladogramLayout.js"
+import { radialSilhouetteOutwardOffset } from "./radialCladogramLayout.js"
 import { bottomAlignArtInSquareSlot } from "./silhouetteViewBox.js"
 import { svgLabelFontAttrs, type SvgLabelFont } from "./newickLabelStyle.js"
 import { phylopicImagePageUrl, phylopicNodePageUrl } from "./phylopicUrls.js"
@@ -93,10 +94,11 @@ export const renderRadialCladogramSvg = async ({
 
     for (const tip of geometry.tipSilhouettes) {
         const art = nodeArtById[tip.nodeId]
-        const sp = toSvg(tip.x, tip.y)
         if (art?.vectorUrl && art.imageUuid) {
             const vb = artViewBox[tip.nodeId] ?? { width: tip.slotSize, height: tip.slotSize }
             const p = bottomAlignArtInSquareSlot(tip.slotSize, vb)
+            const outward = radialSilhouetteOutwardOffset(tip.bearingRad, p.height)
+            const sp = toSvg(tip.x + outward.dx, tip.y + outward.dy)
             let g = `<g id="${tip.nodeId}" transform="translate(${sp.x},${sp.y}) rotate(${tip.rotationDeg})">`
             g += link(
                 phylopicImagePageUrl(wwwOrigin, art.imageUuid),
@@ -117,21 +119,22 @@ export const renderRadialCladogramSvg = async ({
     }
 
     for (const leg of geometry.legendSilhouettes) {
-        const sp = toSvg(leg.x, leg.y)
         const art = nodeArtById[leg.nodeId]
-        let g = `<g id="clade-${leg.nodeId}" transform="translate(${sp.x},${sp.y}) rotate(${leg.rotationDeg})">`
         if (art?.vectorUrl && art.imageUuid && leg.tintColor) {
             const filterId = svgFilterId(leg.filterId ?? leg.nodeId)
             svgFilterDefs.push(svgAlphaTintFilterDef(filterId, leg.tintColor))
             const vb = artViewBox[leg.nodeId] ?? { width: leg.slotSize, height: leg.slotSize }
             const p = bottomAlignArtInSquareSlot(leg.slotSize, vb)
+            const outward = radialSilhouetteOutwardOffset(leg.bearingRad, p.height)
+            const sp = toSvg(leg.x + outward.dx, leg.y + outward.dy)
+            let g = `<g id="clade-${leg.nodeId}" transform="translate(${sp.x},${sp.y}) rotate(${leg.rotationDeg})">`
             g += link(
                 phylopicImagePageUrl(wwwOrigin, art.imageUuid),
                 `<image href="${art.vectorUrl}" x="${-leg.slotSize / 2 + p.x}" y="${-leg.slotSize + p.y}" width="${p.width}" height="${p.height}" filter="${svgAlphaTintFilterRef(filterId)}"/>`,
             )
+            g += `</g>`
+            nodeGroups.push(g)
         }
-        g += `</g>`
-        nodeGroups.push(g)
     }
 
     for (const leg of geometry.legendLabels) {

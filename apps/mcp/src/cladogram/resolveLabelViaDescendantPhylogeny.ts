@@ -8,6 +8,11 @@ import {
 } from "./cladogramResolutionTrust.js"
 import type { ResolveLabelOptions, ResolveLabelResult } from "./resolveLabelToNode.js"
 import { resolveLabelToNode } from "./resolveLabelToNode.js"
+export type ResolveCladogramNodeOptions = ResolveLabelOptions &
+    Readonly<{
+        /** Labeled internal nodes from root toward the immediate parent (Newick hierarchy). */
+        labeledAncestorLabels?: readonly string[]
+    }>
 
 const finalizeCladogramResolution = async (
     client: PhyloPicClient,
@@ -81,7 +86,7 @@ export const resolveLabelForCladogramNode = async (
     client: PhyloPicClient,
     label: string,
     descendantNodeUuids: readonly string[],
-    options: ResolveLabelOptions = {},
+    options: ResolveCladogramNodeOptions = {},
 ): Promise<ResolveLabelResult> => {
     const descendants = [...new Set(descendantNodeUuids.filter(Boolean))]
     if (descendants.length >= 2) {

@@ -11,6 +11,7 @@ import {
     radialInnerRingLabelTextPlacement,
     radialInnerRingSilhouetteRotationDeg,
     radialSilhouetteRotationDeg,
+    radialSilhouetteOutwardOffset,
     radialLabelTextPlacement,
     radialBranchTipRadiusForLabels,
     radialMaxTipLabelWidth,
@@ -150,12 +151,26 @@ describe("radialInnerRingLabelTextPlacement", () => {
     })
 })
 
-describe("radialInnerRingSilhouetteRotationDeg", () => {
-    it("matches inner-ring label rotation on the bottom half", () => {
-        expect(radialInnerRingSilhouetteRotationDeg(0)).toBe(radialSilhouetteRotationDeg(0))
-        expect(radialInnerRingSilhouetteRotationDeg(Math.PI / 2)).toBe(
+describe("radialSilhouetteOutwardOffset", () => {
+    it("shifts bottom-half silhouettes outward along the spoke by artwork height", () => {
+        const h = 40
+        expect(radialSilhouetteOutwardOffset(-Math.PI / 2, h)).toEqual({ dx: 0, dy: 0 })
+        expect(radialSilhouetteOutwardOffset(0, h)).toEqual({ dx: 0, dy: 0 })
+        const theta = Math.PI / 2
+        const o = radialSilhouetteOutwardOffset(theta, h)
+        expect(o.dx).toBeCloseTo(0)
+        expect(o.dy).toBeCloseTo(h)
+    })
+})
+
+describe("radialSilhouetteRotationDeg", () => {
+    it("flips silhouettes on the bottom half like inner-ring clade labels", () => {
+        expect(radialSilhouetteRotationDeg(0)).toBe(90)
+        expect(radialSilhouetteRotationDeg(-Math.PI / 2)).toBe(0)
+        expect(radialSilhouetteRotationDeg(Math.PI / 2)).toBe(
             radialInnerRingLabelTextPlacement(Math.PI / 2).rotationDeg,
         )
+        expect(radialInnerRingSilhouetteRotationDeg(Math.PI / 2)).toBe(radialSilhouetteRotationDeg(Math.PI / 2))
     })
 })
 

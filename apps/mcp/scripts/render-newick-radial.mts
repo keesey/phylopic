@@ -13,9 +13,15 @@ import {
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { homedir } from "node:os"
 import { join } from "node:path"
+import type { CladogramTreeNode } from "../src/cladogram/types.js"
 import { parseNewickToTree } from "../src/cladogram/parseNewick.js"
 import { pickImage } from "../src/cladogram/pickImage.js"
-import { resolveLabelToNode } from "../src/cladogram/resolveLabelToNode.js"
+import { planRadialCladeRimSilhouetteNodeIds } from "../src/cladogram/planRadialCladeRimSilhouettes.js"
+import {
+    buildResolvableCladeCatalog,
+    formatSmallestResolvableSupercladeReport,
+} from "../src/cladogram/resolvableCladeCatalog.js"
+import { resolveCladogramTreeNodeUuids } from "../src/cladogram/resolveCladogramTreeNodeUuids.js"
 import { PhyloPicClient } from "../src/client/PhyloPicClient.js"
 import { buildDiagramPublication, diagramWidthForPublication } from "../src/collection/diagramPublication.js"
 import { describeImageSetUsage } from "../src/collection/describeImageSetUsage.js"
@@ -58,71 +64,113 @@ const radialRadiusMode = (): RadialRadiusMode => {
 const radiusMode = radialRadiusMode()
 const outerLayoutRadius = Number(process.env.TIP_RADIUS ?? String(Math.max(420, parsed.tipCount * 0.95)))
 
-const layoutPreview = buildRadialCladogramLayout(root, {
-    tipCount: parsed.tipCount,
+const client = new PhyloPicClient()
+
+const collectTips = (n: CladogramTreeNode): CladogramTreeNode[] =>
+    n.children.length === 0 ? (n.label ? [n] : []) : n.children.flatMap(collectTips)
+
+const pickForUuid = async (
+    nodeId: string,
+    phylopicUuid: string,
+    options: { cladeListOnly?: boolean } = {},
+) => {
+    try {
+        const pick = await pickImage(client, phylopicUuid, {
+            ...filters,
+            ...(options.cladeListOnly ? { clade_list_only: true } : {}),
+        })
+        if (pick.image?.vectorUrl) {
+            nodeArtById[nodeId] = {
+                vectorUrl: pick.image.vectorUrl,
+                imageUuid: pick.image.uuid,
+                nodeUuid: phylopicUuid,
+            }
+        } else {
+            nodeArtById[nodeId] = { nodeUuid: phylopicUuid }
+        }
+    } catch {
+        nodeArtById[nodeId] = { nodeUuid: phylopicUuid }
+    }
+}
+
+const nodeArtById: Record<string, RadialNodeArt | null> = {}
+let nodeUuids: Record<string, string> = {}
+let cladeRimSilhouetteNodeIds: readonly string[] = []
+let directTipSilhouetteNodeIds: readonly string[] = []
+
+const silhouetteLayoutOptions = () => ({
     radiusMode,
     outerLayoutRadius,
     forceTipLabels,
     ...(MAX_LEGEND_SPAN_DEG ? { maxLegendSpanDeg: Number(MAX_LEGEND_SPAN_DEG) } : {}),
     tolScheme: (process.env.TOL_SCHEME?.trim() || "darkRainbow") as TolColorScheme,
+    ...(directTipSilhouetteNodeIds.length ? { directTipSilhouetteNodeIds } : {}),
+    ...(cladeRimSilhouetteNodeIds.length ? { cladeRimSilhouetteNodeIds } : {}),
+})
+
+if (!skipResolve) {
+    const catalog = await buildResolvableCladeCatalog(client, root)
+    for (const line of formatSmallestResolvableSupercladeReport(catalog.assignments)) {
+        console.error(line)
+    }
+
+    nodeUuids = await resolveCladogramTreeNodeUuids(client, root, {
+        onWarning: msg => console.error(msg),
+    })
+
+    // Per-tip silhouettes only for trusted PhyloPic title matches (not SRC fallbacks on the tip spoke).
+    for (const tip of collectTips(root)) {
+        const phylopicUuid = nodeUuids[tip.id]
+        if (!phylopicUuid) continue
+        await pickForUuid(tip.id, phylopicUuid)
+    }
+
+    for (const [nodeId, phylopicUuid] of Object.entries(catalog.nodeAssignment)) {
+        nodeUuids[nodeId] = phylopicUuid
+        if (nodeArtById[nodeId]?.vectorUrl) continue
+        await pickForUuid(nodeId, phylopicUuid, { cladeListOnly: true })
+    }
+
+    directTipSilhouetteNodeIds = collectTips(root)
+        .filter(t => Boolean(nodeArtById[t.id]?.vectorUrl))
+        .map(t => t.id)
+
+    cladeRimSilhouetteNodeIds = planRadialCladeRimSilhouetteNodeIds(
+        root,
+        id => Boolean(nodeArtById[id]?.vectorUrl),
+        { tipsWithDirectSilhouettes: directTipSilhouetteNodeIds },
+    )
+    console.error(
+        `Silhouettes: ${directTipSilhouetteNodeIds.length} tip(s), ${cladeRimSilhouetteNodeIds.length} clade rim`,
+    )
+}
+
+const layoutPreview = buildRadialCladogramLayout(root, {
+    tipCount: parsed.tipCount,
+    ...silhouetteLayoutOptions(),
 })
 
 console.error(
     `Parsed ${parsed.tipCount} tips; radial${layoutPreview.cladeKeyMode ? " (clade key — no tip labels)" : ""}${radiusMode === "branchLength" ? " (Newick branch lengths)" : ""}${labelOnly ? " label-only" : ""}`,
 )
 
-const nodeArtById: Record<string, RadialNodeArt | null> = {}
-const nodeUuids: Record<string, string> = {}
-const allLabels: string[] = []
-const collectLabels = (n: typeof root) => {
-    if (n.label) allLabels.push(n.label)
-    for (const c of n.children) collectLabels(c)
-}
-collectLabels(root)
-
-const client = new PhyloPicClient()
-
-if (!skipResolve) {
-    const labelsToResolve = new Set<string>()
-    if (layoutPreview.showTipLabels) {
-        for (const tip of layoutPreview.tipLabels) labelsToResolve.add(tip.label)
-    }
-    for (const leg of layoutPreview.legendLabels) labelsToResolve.add(leg.label)
-    for (const label of labelsToResolve) {
-        try {
-            const { nodeUuid } = await resolveLabelToNode(client, label, { contextLabels: allLabels })
-            const walk = (n: typeof root) => {
-                if (n.label === label) nodeUuids[n.id] = nodeUuid
-                for (const c of n.children) walk(c)
-            }
-            walk(root)
-        } catch (e) {
-            console.error(`Resolve ${label}: ${e instanceof Error ? e.message : e}`)
-        }
-    }
-}
-
-if (!labelOnly && !skipResolve) {
-    const pickFor = async (nodeId: string) => {
-        const uuid = nodeUuids[nodeId]
-        if (!uuid) return
+if (!labelOnly && !skipResolve && layoutPreview.cladeKeyMode) {
+    for (const leg of layoutPreview.legendSilhouettes) {
+        const uuid = nodeUuids[leg.nodeId]
+        if (!uuid) continue
         try {
             const pick = await pickImage(client, uuid, filters)
             if (pick.image) {
-                nodeArtById[nodeId] = {
+                nodeArtById[leg.nodeId] = {
                     vectorUrl: pick.image.vectorUrl,
                     imageUuid: pick.image.uuid,
                     nodeUuid: uuid,
                 }
-            } else {
-                nodeArtById[nodeId] = null
             }
         } catch {
-            nodeArtById[nodeId] = null
+            /* gap */
         }
     }
-    for (const tip of layoutPreview.tipSilhouettes) await pickFor(tip.nodeId)
-    for (const leg of layoutPreview.legendSilhouettes) await pickFor(leg.nodeId)
 }
 
 for (const [id, uuid] of Object.entries(nodeUuids)) {
@@ -170,6 +218,7 @@ if (usedUuids.length > 0) {
     let w = diagramWidthForPublication(layoutPreview.contentPad * 2, 24, publicationBuilt)
     if (w > layoutPreview.contentPad * 2) {
         footerWidth = w - 48
+        attributionMode = attributionMode
         publicationBuilt = buildDiagramPublication({
             usage,
             images: embedded,
@@ -193,18 +242,12 @@ const svg = await renderRadialCladogramSvg({
     root,
     tipCount: parsed.tipCount,
     diagramTitle,
-    layoutOptions: {
-        radiusMode,
-        outerLayoutRadius,
-        forceTipLabels,
-        ...(MAX_LEGEND_SPAN_DEG ? { maxLegendSpanDeg: Number(MAX_LEGEND_SPAN_DEG) } : {}),
-        tolScheme: (process.env.TOL_SCHEME?.trim() || "darkRainbow") as TolColorScheme,
-    },
+    layoutOptions: silhouetteLayoutOptions(),
     nodeArtById,
     publication,
 })
 
 writeFileSync(outPath, svg)
 console.error(
-    `Wrote ${outPath} (${layoutPreview.legendCladeIds.length} clade silhouettes on outer ring)`,
+    `Wrote ${outPath} (${layoutPreview.tipSilhouettes.length} silhouette placement(s) on outer ring)`,
 )

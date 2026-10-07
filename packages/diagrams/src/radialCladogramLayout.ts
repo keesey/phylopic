@@ -401,18 +401,35 @@ export const radialBranchEdgePath = (
 }
 
 /**
- * SVG rotation (degrees) for a silhouette on the outer rim: slot bottom points toward the origin.
- * Use with `translate(cx,cy) rotate(deg)` then bottom-align art in a square slot above the origin.
+ * SVG rotation (degrees) for a radial silhouette: slot bottom points toward the origin on the top
+ * half-plane; **+180° on the bottom half** (`sin θ > 0`) so figures stay upright (same rule as
+ * {@link radialInnerRingLabelTextPlacement}). Use with `translate(cx,cy) rotate(deg)` and
+ * bottom-aligned art in a square slot above the origin.
  */
-export const radialSilhouetteRotationDeg = (angleRad: number): number => (angleRad * 180) / Math.PI + 90
-
-/** Same bottom-half +180° as {@link radialInnerRingLabelTextPlacement} (e.g. clade-key rim silhouettes). */
-export const radialInnerRingSilhouetteRotationDeg = (angleRad: number): number => {
-    let deg = radialSilhouetteRotationDeg(angleRad)
+export const radialSilhouetteRotationDeg = (angleRad: number): number => {
+    let deg = (angleRad * 180) / Math.PI + 90
     if (Math.sin(angleRad) > 0) {
         deg += 180
     }
     return deg
+}
+
+/** @deprecated Alias for {@link radialSilhouetteRotationDeg} (all radial silhouettes use bottom-half flip). */
+export const radialInnerRingSilhouetteRotationDeg = (angleRad: number): number =>
+    radialSilhouetteRotationDeg(angleRad)
+
+/** Bottom-half silhouettes (+180°) shift outward along the spoke by artwork height so the slot clears the rim. */
+export const radialSilhouetteOutwardOffset = (
+    bearingRad: number,
+    artHeightPx: number,
+): Readonly<{ dx: number; dy: number }> => {
+    if (!(artHeightPx > 0) || Math.sin(bearingRad) <= 0) {
+        return { dx: 0, dy: 0 }
+    }
+    return {
+        dx: Math.cos(bearingRad) * artHeightPx,
+        dy: Math.sin(bearingRad) * artHeightPx,
+    }
 }
 
 /** @deprecated Use radialBranchEdgePath (radial spokes + concentric arcs). */

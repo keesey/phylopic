@@ -57,6 +57,10 @@ export type BuildRadialCladogramLayoutOptions = Readonly<{
     tipImageSlotSize?: number
     cladeLegendImageSlotSize?: number
     viewBoxTailPad?: number
+    /** Tips with successful picks: silhouette on the tip spoke at the outer layout radius. */
+    directTipSilhouetteNodeIds?: readonly string[]
+    /** Internal nodes: silhouette on the rim at the descendant arc center (clade illustration). */
+    cladeRimSilhouetteNodeIds?: readonly string[]
 }>
 
 export type RadialStrokePath = Readonly<{ d: string; stroke: string }>
@@ -74,6 +78,8 @@ export type RadialSilhouettePlacement = Readonly<{
     nodeId: string
     x: number
     y: number
+    /** Tip / clade bearing (radians); used for bottom-half outward rim offset when rendering. */
+    bearingRad: number
     rotationDeg: number
     slotSize: number
     tintColor?: string
@@ -278,6 +284,11 @@ export const buildRadialCladogramLayout = (
                 rotationDeg: labelPlace.rotationDeg,
                 textAnchor: labelPlace.textAnchor,
             })
+        }
+
+        const directTipIds = new Set(options.directTipSilhouetteNodeIds ?? [])
+        for (const n of all) {
+            if (!isTip(n) || !directTipIds.has(n.id)) continue
             const theta = n.angle ?? 0
             const tipR =
                 radiusScale !== undefined
@@ -289,6 +300,25 @@ export const buildRadialCladogramLayout = (
                 nodeId: n.id,
                 x: rim.x,
                 y: rim.y,
+                bearingRad: theta,
+                rotationDeg: radialSilhouetteRotationDeg(theta),
+                slotSize: tipSlot,
+            })
+        }
+
+        const rimIds = options.cladeRimSilhouetteNodeIds ?? []
+        const rimIdSet = new Set(rimIds)
+        for (const n of all) {
+            if (!rimIdSet.has(n.id)) continue
+            const tips = tipsUnder(n)
+            if (!tips.length) continue
+            const theta = meanAngleRad(tips.map(t => t.angle ?? 0))
+            const rim = polarToCartesian(silhouetteRadius, theta)
+            tipSilhouettes.push({
+                nodeId: n.id,
+                x: rim.x,
+                y: rim.y,
+                bearingRad: theta,
                 rotationDeg: radialSilhouetteRotationDeg(theta),
                 slotSize: tipSlot,
             })
@@ -307,6 +337,7 @@ export const buildRadialCladogramLayout = (
                 nodeId: clade.id,
                 x: rim.x,
                 y: rim.y,
+                bearingRad: theta,
                 rotationDeg: radialInnerRingSilhouetteRotationDeg(theta),
                 slotSize: cladeSlot,
                 tintColor: color,

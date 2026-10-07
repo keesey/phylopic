@@ -187,8 +187,15 @@ export const pickImage = async (
     options: PickImageOptions = {},
 ): Promise<PickImageResult> => {
     const warnings: string[] = []
-    const { image_uuid, clade_index, clade_page, image_list, exclude_node_uuids, descendant_node_uuids: _desc } =
-        options
+    const {
+        image_uuid,
+        clade_index,
+        clade_page,
+        image_list,
+        clade_list_only,
+        exclude_node_uuids,
+        descendant_node_uuids: _desc,
+    } = options
     const filters = licenseFiltersOnly(options)
     const imageList = image_list ?? "clade"
     const listQueryKind: ImageListQuery = imageList === "node" ? "node" : "clade"
@@ -229,6 +236,21 @@ export const pickImage = async (
         const ancestral = await pickAncestralSilhouette(client, nodeUuid, filters, exclude_node_uuids)
         warnings.push(...ancestral.warnings)
         return withPageUrls(nodeUuid, { image: ancestral.image, nodeUuid, warnings })
+    }
+
+    if (clade_list_only) {
+        const cladeHit = firstLicensedListHit(
+            await listImagesForNode(client, nodeUuid, filters, 0, "clade"),
+            filters,
+        )
+        if (cladeHit) {
+            const image = toPickedImage(cladeHit)
+            if (image) {
+                warnings.push("Using filter_clade list only (primary and ancestral picks skipped).")
+                return withPageUrls(nodeUuid, { image, nodeUuid, warnings })
+            }
+        }
+        return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
     }
 
     const primaryAttempt = await tryPrimaryForTarget(client, nodeUuid, filters)
