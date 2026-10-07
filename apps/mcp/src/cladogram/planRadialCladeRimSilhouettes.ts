@@ -1,6 +1,6 @@
 import type { CladogramTreeNode } from "./types.js"
 
-type MutableTreeNode = CladogramTreeNode & {
+type MutableTreeNode = Omit<CladogramTreeNode, "children"> & {
     parent?: MutableTreeNode
     children: MutableTreeNode[]
 }

@@ -67,7 +67,7 @@ export const formatSmallestResolvableSupercladeReport = (
     return lines
 }
 
-type MutableTreeNode = CladogramTreeNode & {
+type MutableTreeNode = Omit<CladogramTreeNode, "children"> & {
     parent?: MutableTreeNode
     children: MutableTreeNode[]
 }
@@ -179,7 +179,7 @@ export const buildTipResolvableClades = async (
             const key = normalizeUUID(fallback.nodeUuid)
             if (usedSrcUuids.has(key)) continue
             usedSrcUuids.add(key)
-            out[n.id] = toClade(fallback, n.label, "smallest_resolvable_superclade", fallback.rank)
+            out[n.id] = toClade(fallback, n.label, "smallest_resolvable_superclade", "other")
         }
     }
     return out
@@ -235,7 +235,7 @@ export const assignResolvableCladesToNewickNodes = async (
                     usedSrcUuids.add(srcKey)
                     candidateUuid = fb.nodeUuid
                     candidateTitle = fb.title
-                    candidateRank = fb.rank
+                    candidateRank = "other"
                     method = "smallest_resolvable_superclade"
                     warnings = fb.warnings
                 }

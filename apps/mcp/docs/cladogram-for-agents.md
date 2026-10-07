@@ -23,7 +23,7 @@
 | License-filtered `vectorUrl`, `describe_image_set_usage`, `format_diagram_publication` | Final SVG file with license footer and metadata |
 | Exact-name resolution policy for labels | Label-only nodes when `image` is null (no placeholder graphic) |
 | Style catalog + layout rules (`phylopic://docs/cladogram-styles`) — basic rectangular or radial | Measuring text/images and iterating on design |
-| **`layout_radial_cladogram`** (paths, legend, anchors) and **`extract_newick_subclade`** (weighted subclade Newick) | **`renderRadialCladogramSvg`** in `@phylopic/diagrams` or hand-built SVG from layout JSON |
+| **`layout_radial_cladogram`** (paths, legend, anchors), **`extract_newick_subclade`** (weighted subclade Newick), and (in MCP) **`renderRadialCladogramFromTree`** / **`resolveLabeledTipRadialSilhouettes`** for labeled-tip resolve + SVG | **`renderRadialCladogramSvg`** in `@phylopic/diagrams` or hand-built SVG from layout JSON |
 
 There is **no** single MCP tool that returns finished SVG for arbitrary Newick. Reference logic lives in [`@phylopic/diagrams`](../../../packages/diagrams): **basic** (`basicCladogramLayout.ts`, `renderCollectionCladogramSvg`), **radial** (`buildRadialCladogramLayout`, `renderRadialCladogramSvg`, `radialCladogramLayout.ts`). Layout conventions are in **`cladogram-styles.md`**, not this workflow guide.
 

@@ -18,7 +18,7 @@ PhyloPic MCP does **not** render cladograms. It provides taxonomy, images, and t
 
 **Reference layout code (optional):** `@phylopic/diagrams` implements **basic** rail/column layout (`basicCladogramLayout.ts`, `renderCollectionCladogramSvg`) and **radial** layout (`radialCladogramLayout.ts`, **`buildRadialCladogramLayout`**, **`renderRadialCladogramSvg`**, unit-tested). MCP **`layout_radial_cladogram`** returns the same geometry JSON; **`extract_newick_subclade`** cuts weighted subclades from a parent Newick string.
 
-**Local radial CLI:** tracked **`apps/mcp/scripts/render-newick-radial.mts`** (PhyloPic resolve + SVG). Other one-off render scripts and experiment outputs stay outside git unless we add a gallery later.
+**Local radial CLI:** thin **`apps/mcp/scripts/render-newick-radial.mts`** (env + write file); pipeline in **`renderRadialCladogramFromTree`** and **`resolveLabeledTipRadialSilhouettes`**. Other experiment outputs stay outside git unless we add a gallery later.
 
 ---
 

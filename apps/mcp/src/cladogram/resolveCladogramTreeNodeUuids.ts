@@ -3,8 +3,9 @@ import type { ResolveCladogramNodeOptions } from "./resolveLabelViaDescendantPhy
 import { resolveLabelForCladogramNode } from "./resolveLabelViaDescendantPhylogeny.js"
 import type { CladogramTreeNode } from "./types.js"
 
-type MutableTreeNode = CladogramTreeNode & {
+type MutableTreeNode = Omit<CladogramTreeNode, "children"> & {
     parent?: MutableTreeNode
+    children: MutableTreeNode[]
 }
 
 const cloneWithParent = (n: CladogramTreeNode, parent?: MutableTreeNode): MutableTreeNode => {
