@@ -25,8 +25,10 @@ export type SelectRadialLegendCladesOptions = Readonly<{
     longestLegendLabelWidth?: number
     /** Override minimum angular span (radians); default from slot width ÷ ring radius. */
     minLegendSpanRad?: number
-    /** Maximum clades on the rim. Default 28. */
-    maxLegendClades?: number
+    /** Maximum angular span (radians) for one legend clade. Default {@link DEFAULT_RADIAL_LEGEND_MAX_CLADE_SPAN_DEG}. */
+    maxLegendSpanRad?: number
+    /** Same as {@link maxLegendSpanRad}, in degrees (overrides rad when both set). */
+    maxLegendSpanDeg?: number
     /** Skip shallow internals (default 2 — not immediate children of the root). */
     minDepth?: number
     /** Total tip count; computed from the root when omitted. */
@@ -34,8 +36,11 @@ export type SelectRadialLegendCladesOptions = Readonly<{
 }>
 
 export const DEFAULT_RADIAL_LEGEND_SILHOUETTE_WIDTH = 44
-export const DEFAULT_RADIAL_LEGEND_MAX_CLADES = 28
+/** Widest wedge (degrees) a labeled clade may occupy and still appear on the rim. */
+export const DEFAULT_RADIAL_LEGEND_MAX_CLADE_SPAN_DEG = 45
 export const DEFAULT_RADIAL_LEGEND_MIN_DEPTH = 2
+
+export const radialLegendSpanRadFromDegrees = (degrees: number): number => (degrees * Math.PI) / 180
 
 /** Central angle (radians) for an arc of length `arcLengthPx` on a circle of radius `radiusPx`. */
 export const radialLegendMinSpanRadFromSlotWidth = (
@@ -104,7 +109,8 @@ const isDescendantOf = <T>(ancestor: T, node: T, parentMap: Map<T, T | undefined
  * its descendant tips span at least the angular width of one legend slot on the rim—slot width is
  * **max(silhouette width, longest internal clade label width)**, converted to radians at
  * {@link SelectRadialLegendCladesOptions.legendRingRadius}. Prefer **deeper** clades, exclude the
- * whole-tree root, avoid nested legend entries, and cap count for legibility.
+ * whole-tree root, avoid nested legend entries, and omit clades wider than
+ * {@link DEFAULT_RADIAL_LEGEND_MAX_CLADE_SPAN_DEG} on the tip circle.
  */
 export const selectRadialLegendClades = <T extends MutableLegendNode & Pick<RadialLayoutNode, "angle">>(
     root: T,
@@ -122,8 +128,12 @@ export const selectRadialLegendClades = <T extends MutableLegendNode & Pick<Radi
     const slotWidth = radialLegendMinSlotWidthPx(silhouetteWidth, longestLabel)
     const minLegendSpanRad =
         options.minLegendSpanRad ?? radialLegendMinSpanRadFromSlotWidth(slotWidth, legendRingRadius)
+    const maxLegendSpanRad =
+        options.maxLegendSpanDeg !== undefined
+            ? radialLegendSpanRadFromDegrees(options.maxLegendSpanDeg)
+            : (options.maxLegendSpanRad ??
+              radialLegendSpanRadFromDegrees(DEFAULT_RADIAL_LEGEND_MAX_CLADE_SPAN_DEG))
 
-    const maxLegendClades = options.maxLegendClades ?? DEFAULT_RADIAL_LEGEND_MAX_CLADES
     const minDepth = options.minDepth ?? DEFAULT_RADIAL_LEGEND_MIN_DEPTH
     const totalTips = options.totalTipCount ?? countTipsUnderLegendNode(root)
 
@@ -132,7 +142,7 @@ export const selectRadialLegendClades = <T extends MutableLegendNode & Pick<Radi
     const visit = (n: T, depth: number) => {
         const tips = countTipsUnderLegendNode(n)
         const spanRad = radialDescendantAngleSpanRad(n)
-        if (!isTip(n) && n.label && spanRad >= minLegendSpanRad) {
+        if (!isTip(n) && n.label && spanRad >= minLegendSpanRad && spanRad <= maxLegendSpanRad) {
             candidates.push({ node: n, depth, tips, spanRad })
         }
         for (const c of n.children as T[]) visit(c, depth + 1)
@@ -146,7 +156,6 @@ export const selectRadialLegendClades = <T extends MutableLegendNode & Pick<Radi
 
     const legend: T[] = []
     for (const c of pool) {
-        if (legend.length >= maxLegendClades) break
         if (legend.some(existing => isDescendantOf(c.node, existing, parentMap))) continue
         legend.push(c.node)
     }

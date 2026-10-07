@@ -42,7 +42,7 @@ const selectOptions = (legendRingRadius: number) => ({
     legendRingRadius,
     legendSilhouetteWidth: 44,
     minLegendSpanRad: 0,
-    maxLegendClades: 10,
+    maxLegendSpanDeg: 180,
     minDepth: 2,
 })
 
@@ -97,11 +97,32 @@ describe("selectRadialLegendClades", () => {
             legendSilhouetteWidth: 44,
             longestLegendLabelWidth: 0,
             minDepth: 1,
-            maxLegendClades: 10,
+            maxLegendSpanDeg: 360,
         })
         expect(legend.some(n => n.label === "Tiny")).toBe(false)
         expect(legend.some(n => n.label === "Big")).toBe(true)
         expect(minSpan).toBeGreaterThan((1 / 100) * 2 * Math.PI)
+    })
+
+    it("excludes clades wider than maxLegendSpanDeg", () => {
+        const mixed = {
+            label: "Root",
+            children: [
+                { label: "Wide", children: tips(Array.from({ length: 90 }, (_, i) => `w${i}`)) },
+                { label: "Narrow", children: tips(["a", "b", "c", "d", "e"]) },
+            ],
+        }
+        const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 280, silhouetteOutset: 52 }
+        assignRadialCladogramLayout(mixed, theme)
+        const ringR = radialLegendRingRadius(theme)
+        const legend = selectRadialLegendClades(mixed, {
+            legendRingRadius: ringR,
+            minLegendSpanRad: 0,
+            maxLegendSpanDeg: 45,
+            minDepth: 1,
+        })
+        expect(legend.some(n => n.label === "Wide")).toBe(false)
+        expect(legend.some(n => n.label === "Narrow")).toBe(true)
     })
 
     it("counts tips under a node", () => {
