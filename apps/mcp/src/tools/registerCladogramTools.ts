@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
+import { newickSubcladeByLabel } from "../cladogram/extractNewickSubclade.js"
 import {
     buildTreeFromCollectionUuid,
     buildTreeFromPermalink,
@@ -37,6 +38,48 @@ export const registerCladogramTools = (server: McpServer, client: PhyloPicClient
             try {
                 const tree = parseNewickToTree(newick)
                 return toolSuccess(`Parsed Newick tree with ${tree.tipCount} tip(s).`, { tree })
+            } catch (error) {
+                return toolFromError(error)
+            }
+        },
+    )
+
+    server.registerTool(
+        "extract_newick_subclade",
+        {
+            description:
+                "Carve a labeled subclade from a Newick string, preserving branch lengths on internal edges. Returns weighted Newick for the subclade root (incoming root edge omitted).",
+            inputSchema: {
+                newick: z.string().min(1).describe("Full or partial Newick tree."),
+                clade_label: z.string().min(1).describe("Exact label of the internal node to use as the new root."),
+                max_tips: z
+                    .number()
+                    .int()
+                    .positive()
+                    .optional()
+                    .describe("Optional tip limit when parsing (default 500)."),
+            },
+            annotations: READ_ONLY,
+        },
+        async ({ newick, clade_label, max_tips }) => {
+            try {
+                const normalized = newick.replace(/\s*,\s*/g, ",")
+                const { root, tipCount } = parseNewickToTree(normalized, {
+                    maxTips: max_tips ?? 500,
+                })
+                const subcladeNewick = newickSubcladeByLabel(root, clade_label)
+                const subParsed = parseNewickToTree(subcladeNewick, {
+                    maxTips: max_tips ?? 500,
+                })
+                return toolSuccess(
+                    `Extracted "${clade_label}" (${subParsed.tipCount} tips, branch lengths preserved).`,
+                    {
+                        newick: subcladeNewick,
+                        tipCount: subParsed.tipCount,
+                        sourceTipCount: tipCount,
+                        rootLabel: clade_label,
+                    },
+                )
             } catch (error) {
                 return toolFromError(error)
             }

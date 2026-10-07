@@ -22,6 +22,7 @@ public/dist
 **/.webpack
 **/node_modules
 *-AUDIT.md
-apps/mcp/scripts/
+apps/mcp/scripts/*
+!apps/mcp/scripts/render-newick-radial.mts
 .vercel
 .env*

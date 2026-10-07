@@ -1,5 +1,7 @@
 export * from "./basicCladogramLayout.js"
+export * from "./buildRadialCladogramLayout.js"
 export * from "./radialCladogramLayout.js"
+export * from "./renderRadialCladogramSvg.js"
 export * from "./buildCollectionCladogramTree.js"
 export * from "./buildTreeFromTerminalLineages.js"
 export * from "./diagramFooter.js"

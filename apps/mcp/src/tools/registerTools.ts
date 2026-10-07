@@ -6,6 +6,7 @@ import { SEARCH_NODES_QUERY_HINT } from "../agentInstructions.js"
 import { findExactPhylopicNodeMatch, nodeTitle, sortNodesByTitleMatch } from "../search/phylopicNameMatch.js"
 import { createResolveToPhylopic } from "../search/resolveExternalToPhylopic.js"
 import { registerCladogramTools } from "./registerCladogramTools.js"
+import { registerLayoutRadialCladogramTool } from "./layoutRadialCladogramMcpTool.js"
 import { registerCollectionTools } from "./registerCollectionTools.js"
 import { toolFromError, toolSuccess } from "./toolResult.js"
 
@@ -25,7 +26,6 @@ const pageSchema = z
 const externalAuthoritySchema = z.enum(["gbif.org", "opentreeoflife.org", "paleobiodb.org"])
 
 export const registerTools = (server: McpServer, client: PhyloPicClient) => {
-    // @ts-expect-error TS2589 — Zod tool inputSchema exceeds TypeScript inference depth
     server.registerTool(
         "search_nodes",
         {
@@ -400,5 +400,6 @@ export const registerTools = (server: McpServer, client: PhyloPicClient) => {
     )
 
     registerCladogramTools(server, client)
+    registerLayoutRadialCladogramTool(server)
     registerCollectionTools(server, client)
 }

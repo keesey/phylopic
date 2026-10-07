@@ -23,8 +23,9 @@
 | License-filtered `vectorUrl`, `describe_image_set_usage`, `format_diagram_publication` | Final SVG file with license footer and metadata |
 | Exact-name resolution policy for labels | Label-only nodes when `image` is null (no placeholder graphic) |
 | Style catalog + layout rules (`phylopic://docs/cladogram-styles`) — basic rectangular or radial | Measuring text/images and iterating on design |
+| **`layout_radial_cladogram`** (paths, legend, anchors) and **`extract_newick_subclade`** (weighted subclade Newick) | **`renderRadialCladogramSvg`** in `@phylopic/diagrams` or hand-built SVG from layout JSON |
 
-There is **no** `render_cladogram_svg` tool. Optional reference logic lives in [`@phylopic/diagrams`](../../../packages/diagrams): **basic** (`basicCladogramLayout.ts`) and **radial** (`radialCladogramLayout.ts`), unit-tested; basic layout uses measured sizes you supply. Layout conventions are in **`cladogram-styles.md`**, not this workflow guide.
+There is **no** single MCP tool that returns finished SVG for arbitrary Newick. Reference logic lives in [`@phylopic/diagrams`](../../../packages/diagrams): **basic** (`basicCladogramLayout.ts`, `renderCollectionCladogramSvg`), **radial** (`buildRadialCladogramLayout`, `renderRadialCladogramSvg`, `radialCladogramLayout.ts`). Layout conventions are in **`cladogram-styles.md`**, not this workflow guide.
 
 ---
 
@@ -59,7 +60,7 @@ When the user wants **PhyloPic’s parent/child links** (e.g. Dinosauria → Orn
    - In each child branch, find the **labeled subclade root** (first labeled node on the path from this node down).
    - Resolve those labels to node UUIDs first (with disambiguation on labeled nodes). Pass those **resolved child UUIDs** into **`pick_image`** with **`descendant_node_uuids`** and **`exclude_node_uuids`** set to the cladogram parent's PhyloPic UUID when known (uses **`image_list: ancestral`**).
 6. Apply **license filters** only when the user requires them (e.g. `filter_license_nc=false` for commercial-friendly output).
-7. **Measure** silhouettes and labels (see **`phylopic://docs/cladogram-styles`** → [Basic rectangular cladogram](cladogram-styles.md#basic-rectangular-cladogram)), **layout**, write SVG.
+7. **Measure** silhouettes and labels (see **`phylopic://docs/cladogram-styles`**). For **radial** figures: **`layout_radial_cladogram`** on the parsed tree (set `radius_mode: branchLength` when Newick has weights), **`pick_image`** for tips and legend clades, then **`renderRadialCladogramSvg`** (or assemble from returned paths). To carve a weighted subclade (e.g. Acanthuriformes from Actinopterygii), **`extract_newick_subclade`** then parse and layout again.
 8. **`format_diagram_publication`** on all silhouette image UUIDs (see [License and attribution footer](#license-and-attribution-footer)).
 9. **Links:** wrap each label in `<a href="https://www.phylopic.org/nodes/{nodeUuid}">`. Wrap each silhouette in `<a href="https://www.phylopic.org/images/{imageUuid}">`. **SVG text must be the tree `label` only** (Newick or terminal list) — never substitute PhyloPic node titles.
 
