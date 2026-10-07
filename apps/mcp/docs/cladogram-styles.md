@@ -73,6 +73,10 @@ Do **not** guess label width from character count. Measure each label with the s
 - **Vernacular** names written as plain lowercase in Newick (e.g. `birds`) → upright, not italic.
 - Reference helper: `isVernacularNewickLabel` in `@phylopic/diagrams` (`newickLabelStyle.ts`).
 
+**Optional SRS silhouettes (experiment CLI only)**
+
+Collection-page cladograms use **`renderCollectionCladogramSvg`** and do **not** run this path. For local **`render-newick.mts`**, set **`SRC_SILHOUETTES=1`**: build the same **smallest resolvable superclade** catalog as radial figures (`buildResolvableCladeCatalog`), assign at most one PhyloPic UUID per Newick node, prefer the **finest** clade when several SRS apply to one node (`chooseFinestPhylopicClade`), and **`pick_image`** with **`clade_list_only`** for nodes still lacking art after normal resolve (includes unlabeled internals via catalog **descendant MRCA** when needed).
+
 **Measuring workflow (two-pass SVG)**
 
 1. Pick font family and size (e.g. Georgia 12px).

@@ -24,11 +24,14 @@ export type SupercladeCandidate = Readonly<{
     warnings: readonly string[]
 }>
 
-const rankScore = (rank: SupercladeRank): number => {
+/** Lower score = finer (more specific) clade rank. */
+export const supercladeRankScore = (rank: SupercladeRank): number => {
     const order: SupercladeRank[] = ["species", "genus", "family", "order", "class", "phylum", "kingdom", "other"]
     const i = order.indexOf(rank)
     return i === -1 ? 50 : i
 }
+
+const rankScore = supercladeRankScore
 
 const sourceTieBreak = (source: SupercladeCandidate["source"]): number => {
     switch (source) {
