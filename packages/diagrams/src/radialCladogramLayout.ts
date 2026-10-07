@@ -8,17 +8,33 @@ import { DEFAULT_SVG_LABEL_FONT, type SvgLabelFont } from "./newickLabelStyle.js
 
 export type RadialLayoutTreeShape = Readonly<{
     label?: string
+    /** Newick branch length from parent to this node. */
+    branchLength?: number
     children: readonly RadialLayoutTreeShape[]
 }>
 
 export type RadialLayoutNode = {
     label?: string
+    branchLength?: number
     children: RadialLayoutNode[]
     /** Tree depth from root (root = 0). */
     depth?: number
+    /** Sum of branch lengths from root (root = 0); set in branch-length radius mode. */
+    pathLengthFromRoot?: number
     /** Bearing in radians; tips in contiguous sibling sectors, internals = mean of children. */
     angle?: number
 }
+
+export type RadialRadiusMode = "equalDepth" | "branchLength"
+
+export type RadialRadiusScale = Readonly<{
+    mode: "branchLength"
+    maxRootToTipPathLength: number
+}>
+
+export type AssignRadialCladogramLayoutOptions = Readonly<{
+    radiusMode?: RadialRadiusMode
+}>
 
 export type RadialCladogramTheme = Readonly<{
     /** Radius of the tip branch anchor (circle where edges meet tips). */
@@ -46,6 +62,9 @@ export type RadialLayoutResult = Readonly<{
     tipCount: number
     maxDepth: number
     theme: RadialCladogramTheme
+    radiusMode: RadialRadiusMode
+    /** Longest root-to-tip path length in tree units (branch-length mode). */
+    maxRootToTipPathLength: number
 }>
 
 const isTipShape = (n: { children: readonly unknown[] }) => n.children.length === 0
@@ -129,11 +148,34 @@ const assignAngularSectors = (n: RadialLayoutNode, angleStart: number, angleEnd:
     n.angle = sum / n.children.length
 }
 
-/** Clone tree shape into mutable layout nodes (labels preserved). */
+/** Clone tree shape into mutable layout nodes (labels and branch lengths preserved). */
 export const cloneRadialLayoutTree = (shape: RadialLayoutTreeShape): RadialLayoutNode => ({
     label: shape.label,
+    branchLength: shape.branchLength,
     children: shape.children.map(cloneRadialLayoutTree),
 })
+
+/** Longest root-to-tip sum of {@link RadialLayoutNode.branchLength}; assigns {@link RadialLayoutNode.pathLengthFromRoot}. */
+export const assignRadialPathLengthsFromRoot = (root: RadialLayoutNode): number => {
+    let maxPath = 0
+    const walk = (n: RadialLayoutNode, pathFromRoot: number) => {
+        n.pathLengthFromRoot = pathFromRoot
+        if (isTipShape(n)) {
+            maxPath = Math.max(maxPath, pathFromRoot)
+            return
+        }
+        for (const child of n.children) {
+            walk(child, pathFromRoot + (child.branchLength ?? 0))
+        }
+    }
+    walk(root, 0)
+    return maxPath
+}
+
+export const radialRadiusScaleFromLayout = (layout: RadialLayoutResult): RadialRadiusScale | undefined =>
+    layout.radiusMode === "branchLength" && layout.maxRootToTipPathLength > 0
+        ? { mode: "branchLength", maxRootToTipPathLength: layout.maxRootToTipPathLength }
+        : undefined
 
 /**
  * Assign depth and bearings: tips in Newick DFS order around the circle without interleaving clades.
@@ -141,19 +183,40 @@ export const cloneRadialLayoutTree = (shape: RadialLayoutTreeShape): RadialLayou
 export const assignRadialCladogramLayout = (
     root: RadialLayoutNode,
     theme: RadialCladogramTheme = DEFAULT_RADIAL_CLADOGRAM_THEME,
+    options: AssignRadialCladogramLayoutOptions = {},
 ): RadialLayoutResult => {
     const maxDepth = setDepth(root, 0)
     assignAngularSectors(root, theme.startAngle, theme.startAngle + theme.sweepAngle)
     const tips = collectRadialTipsInOrder(root)
-    return { root, tipCount: tips.length, maxDepth, theme }
+    let radiusMode: RadialRadiusMode = options.radiusMode ?? "equalDepth"
+    let maxRootToTipPathLength = 0
+    if (radiusMode === "branchLength") {
+        maxRootToTipPathLength = assignRadialPathLengthsFromRoot(root)
+        if (maxRootToTipPathLength <= 0) {
+            radiusMode = "equalDepth"
+        }
+    }
+    return {
+        root,
+        tipCount: tips.length,
+        maxDepth,
+        theme,
+        radiusMode,
+        maxRootToTipPathLength,
+    }
 }
 
-/** Radial distance for a node on its branch (root at center). Tips always sit on the tip circle. */
+/** Radial distance for a node on its branch (root at center). */
 export const radialNodeRadius = (
-    node: Pick<RadialLayoutNode, "depth" | "children">,
+    node: Pick<RadialLayoutNode, "depth" | "children" | "pathLengthFromRoot">,
     maxDepth: number,
     theme: RadialCladogramTheme,
+    scale?: RadialRadiusScale,
 ): number => {
+    if (scale && scale.maxRootToTipPathLength > 0) {
+        const path = node.pathLengthFromRoot ?? 0
+        return (path / scale.maxRootToTipPathLength) * theme.tipRadius
+    }
     if (isTipShape(node)) {
         return theme.tipRadius
     }
@@ -174,8 +237,9 @@ export const radialBranchPoint = (
     node: RadialLayoutNode,
     maxDepth: number,
     theme: RadialCladogramTheme,
+    scale?: RadialRadiusScale,
 ): { x: number; y: number } => {
-    const r = radialNodeRadius(node, maxDepth, theme)
+    const r = radialNodeRadius(node, maxDepth, theme, scale)
     const theta = node.angle ?? 0
     return polarToCartesian(r, theta)
 }
@@ -185,8 +249,9 @@ export const radialSilhouettePoint = (
     node: RadialLayoutNode,
     maxDepth: number,
     theme: RadialCladogramTheme,
+    scale?: RadialRadiusScale,
 ): { x: number; y: number } => {
-    const r = radialNodeRadius(node, maxDepth, theme) + theme.silhouetteOutset
+    const r = radialNodeRadius(node, maxDepth, theme, scale) + theme.silhouetteOutset
     const theta = node.angle ?? 0
     return polarToCartesian(r, theta)
 }
@@ -196,8 +261,9 @@ export const radialLabelPoint = (
     node: RadialLayoutNode,
     maxDepth: number,
     theme: RadialCladogramTheme,
+    scale?: RadialRadiusScale,
 ): { x: number; y: number } => {
-    const r = radialNodeRadius(node, maxDepth, theme) + theme.labelOutset
+    const r = radialNodeRadius(node, maxDepth, theme, scale) + theme.labelOutset
     const theta = node.angle ?? 0
     return polarToCartesian(r, theta)
 }
@@ -264,8 +330,9 @@ export const radialNodePolar = (
     node: RadialLayoutNode,
     maxDepth: number,
     theme: RadialCladogramTheme,
+    scale?: RadialRadiusScale,
 ): RadialPolarPoint => ({
-    r: radialNodeRadius(node, maxDepth, theme),
+    r: radialNodeRadius(node, maxDepth, theme, scale),
     theta: node.angle ?? 0,
 })
 
@@ -277,11 +344,12 @@ export const radialAncestralArcPath = (
     node: RadialLayoutNode,
     maxDepth: number,
     theme: RadialCladogramTheme,
+    scale?: RadialRadiusScale,
 ): string | null => {
     if (isTipShape(node)) {
         return null
     }
-    const r = radialNodeRadius(node, maxDepth, theme)
+    const r = radialNodeRadius(node, maxDepth, theme, scale)
     if (r <= 0) {
         return null
     }
@@ -306,12 +374,11 @@ export const radialBranchEdgePath = (
     child: RadialLayoutNode,
     maxDepth: number,
     theme: RadialCladogramTheme,
+    scale?: RadialRadiusScale,
 ): string => {
     const tC = child.angle ?? 0
-    const rP = radialNodeRadius(parent, maxDepth, theme)
-    const rEnd = isTipShape(child)
-        ? theme.tipRadius
-        : radialNodeRadius(child, maxDepth, theme)
+    const rP = radialNodeRadius(parent, maxDepth, theme, scale)
+    const rEnd = radialNodeRadius(child, maxDepth, theme, scale)
 
     if (rP <= 0) {
         const end = polarToCartesian(rEnd, tC)
@@ -344,9 +411,10 @@ export const radialBranchSegment = (
     child: RadialLayoutNode,
     maxDepth: number,
     theme: RadialCladogramTheme,
+    scale?: RadialRadiusScale,
 ): { x1: number; y1: number; x2: number; y2: number } => {
-    const p = radialBranchPoint(parent, maxDepth, theme)
-    const c = radialBranchPoint(child, maxDepth, theme)
+    const p = radialBranchPoint(parent, maxDepth, theme, scale)
+    const c = radialBranchPoint(child, maxDepth, theme, scale)
     return { x1: p.x, y1: p.y, x2: c.x, y2: c.y }
 }
 

@@ -18,6 +18,7 @@ import {
     radialNodeShowsLabel,
     radialNodeShowsSilhouette,
     DEFAULT_RADIAL_CLADOGRAM_THEME,
+    radialRadiusScaleFromLayout,
 } from "./radialCladogramLayout.js"
 
 describe("assignRadialCladogramLayout", () => {
@@ -155,6 +156,23 @@ describe("radialInnerRingSilhouetteRotationDeg", () => {
         expect(radialInnerRingSilhouetteRotationDeg(Math.PI / 2)).toBe(
             radialInnerRingLabelTextPlacement(Math.PI / 2).rotationDeg,
         )
+    })
+})
+
+describe("branch-length radius mode", () => {
+    it("scales the longest root-to-tip path to tipRadius", () => {
+        const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 100 }
+        const root = cloneRadialLayoutTree({
+            children: [
+                { label: "short", branchLength: 1, children: [] },
+                { label: "long", branchLength: 3, children: [] },
+            ],
+        })
+        const layout = assignRadialCladogramLayout(root, theme, { radiusMode: "branchLength" })
+        const scale = radialRadiusScaleFromLayout(layout)
+        expect(layout.maxRootToTipPathLength).toBe(3)
+        expect(radialNodeRadius(root.children[0]!, layout.maxDepth, theme, scale)).toBeCloseTo(100 / 3)
+        expect(radialNodeRadius(root.children[1]!, layout.maxDepth, theme, scale)).toBeCloseTo(100)
     })
 })
 
