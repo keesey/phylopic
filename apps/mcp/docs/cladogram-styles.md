@@ -5,7 +5,7 @@ PhyloPic MCP does **not** render cladograms. It provides taxonomy, images, and t
 | Style | Status | Reference |
 |-------|--------|-----------|
 | **Basic rectangular cladogram** | Supported — default starting point | [Below](#basic-rectangular-cladogram) |
-| Radial / circular | Not specified yet | Experiment freely; share patterns in the guide backlog |
+| **Radial cladogram** | Supported — large tip counts | [Below](#radial-cladogram) |
 | Time-scaled (branch lengths) | Not specified yet | Requires Newick with lengths and a chosen scale |
 
 **MCP resources**
@@ -16,7 +16,7 @@ PhyloPic MCP does **not** render cladograms. It provides taxonomy, images, and t
 | `phylopic://docs/cladogram-styles` | This catalog + basic layout rules |
 | `phylopic://docs/cladogram-template.svg` | Minimal basic-style SVG skeleton |
 
-**Reference layout code (optional):** `packages/diagrams/src/basicCladogramLayout.ts` (`@phylopic/diagrams`) implements basic-style rail/column assignment from **measured** node sizes (used in unit tests). Agents may port the same rules to their SVG pipeline.
+**Reference layout code (optional):** `@phylopic/diagrams` implements **basic** rail/column layout (`basicCladogramLayout.ts`, measured node sizes) and **radial** tip angles and polar coordinates (`radialCladogramLayout.ts`, unit-tested). Agents port the same rules to their SVG pipeline.
 
 **Not in the repo:** one-off local render scripts and full illustrated outputs from experiments — keep those outside git unless we add a deliberate gallery later.
 
@@ -142,3 +142,50 @@ Reserve **~40–80px** below the lowest label for the publication footer. Use **
 | License + attribution footer | **Roboto**, 12px (PhyloPic default body text) |
 
 Place `#phylopic-diagram-footer` at the bottom of the `viewBox`. Include RDF **`metadata`** from the tool output. See **`cladogram-for-agents.md`** → License and attribution footer.
+
+---
+
+## Radial cladogram
+
+**Circular layout** for phylogenies with many terminal nodes: the **root** sits at the **center**, **tips** lie on a **circle**, and branches are straight segments in the plane from parent to child anchor (equal-angle / fan tree). Good when a tall rectangular stack would be unreadable.
+
+Reference: `radialCladogramLayout.ts` in `@phylopic/diagrams` (`assignRadialCladogramLayout`, `radialBranchEdgePath`, `radialBranchPoint`, `radialSilhouettePoint`, `radialLabelPoint`, `radialLabelRotationDeg`, `radialSilhouetteRotationDeg`).
+
+### Layout principles
+
+| Element | Rule |
+|---------|------|
+| Tip order | Same as basic style: depth-first, left-to-right siblings (`parse_newick` order) |
+| Tip angles | **Contiguous sectors** per subtree (wedge width ∝ tip count), in **Newick DFS order**—same ordering as basic tips top-to-bottom, so clades do not interleave on the circle. Span `sweepAngle` (default **360°**) from **12 o'clock** (`startAngle = −π/2`). Each tip at the center of its leaf sector. |
+| Internal angles | **Arithmetic mean** of immediate children’s angles |
+| Depth / radius | Root at **r = 0**; **every terminal** on the main circle **r = tipRadius** (even if its path is short); internal nodes on **concentric circles** **r = (depth / maxDepth) × tipRadius** |
+| **Ancestral nodes** | **Never** labeled and **never** illustrated (no silhouettes on internals) |
+| Tips | **Labels** and **silhouettes** on tips only |
+
+**Placement on the rim**
+
+- **Branch anchor** (`radialBranchPoint`): where the edge meets the tip on the tip circle.
+- **Silhouette** (`radialSilhouettePoint` at **r = tipRadius + silhouetteOutset**): on a **larger circle** outside the tip circle, aligned with the tip or clade bearing. Use square slot + `bottomAlignArtInSquareSlot`; **`translate(rim) rotate(radialSilhouetteRotationDeg(θ))`** so the silhouette’s **bottom points toward the center**.
+- **Label** (`radialLabelPoint`): on the **same spoke** as the tip, just **outside** the tip circle (`tipRadius + labelOutset`). Rotate with `radialLabelRotationDeg(θ)` so text runs **along the line from the center** (`text-anchor="start"`, `dominant-baseline="middle"`, text extending outward).
+
+**Edges (polar):** every **straight** segment is a **spoke** (fixed θ, passes through the center): `radialBranchEdgePath` draws `M… L…` from the parent’s depth circle to the child (or tip circle) on the **child’s bearing**. **Ancestral rails** are separate **arcs** on each internal node’s depth circle spanning **immediate children only** (`radialAncestralArcPath`, `radialImmediateChildAngleRange`). Draw arcs, then radials, then labels and images.
+
+**Typography:** same Newick label rules as [basic](#typography-newick-labels-only) (`isVernacularNewickLabel`, Georgia, italic for scientific names).
+
+### Large tip counts (clade key mode)
+
+When there are **many** tips (rough guide: **> 48**, see `RADIAL_CLADE_KEY_TIP_THRESHOLD` in reference code):
+
+1. **Omit** per-tip text labels on the figure.
+2. Color **branches** by **major clade** (monochrome under each clade when possible).
+3. Place **silhouettes only for major clades** on the **outer circle** at each clade’s mean tip bearing, with the **same clade color** (e.g. tinted backing circle behind the art). No per-tip silhouettes.
+
+Use `assignRadialTipClades` when you have a stable tip id → clade id map. Agents choose clade boundaries (e.g. kingdom, phylum, order) from the user’s question.
+
+### SVG viewBox
+
+1. Content is roughly **square**: `viewBox` centered on the origin or shifted so the circle plus outer silhouettes and labels fit with padding (~24px).
+2. **Footer:** radial figures often place the publication footer **below** the circle (same `format_diagram_publication` rules as basic). Expand `viewBox` height for footer + gap (~16px).
+3. White background `<rect>` over the final `viewBox`.
+
+Workflow (Newick, `pick_image`, attribution) unchanged — see **`cladogram-for-agents.md`**.

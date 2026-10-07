@@ -24,7 +24,7 @@ export const registerResources = (server: McpServer, client: PhyloPicClient) => 
         "phylopic://docs/cladogram-styles",
         {
             description:
-                "Catalog of cladogram layout styles (basic rectangular cladogram spec; radial etc. planned). Markdown.",
+                "Catalog of cladogram layout styles (basic rectangular and radial cladogram specs). Markdown.",
             mimeType: "text/markdown",
         },
         async () => {

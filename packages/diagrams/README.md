@@ -1,9 +1,10 @@
 # @phylopic/diagrams
 
-Shared **basic rectangular cladogram** layout and **collection cladogram** SVG generation for `@phylopic/mcp` and `@phylopic/www`.
+Shared cladogram layout and **collection cladogram** SVG generation for `@phylopic/mcp` and `@phylopic/www`.
 
 - Tree from collection images (specific-node tips + PhyloPic lineages)
-- Rail/column layout (`basicCladogramLayout`)
+- Rectangular rail/column layout (`basicCladogramLayout`)
+- Radial tip angles and polar coordinates (`radialCladogramLayout`) for MCP agent SVG
 - Browser-safe label measurement and client-side SVG download helpers
 
 Consumers import **`dist/`** (not committed). After changing this package’s `src/`, rebuild:

@@ -22,9 +22,9 @@
 | Per-node image pick (`pick_image`) or UUID from `search_nodes` | Branch geometry |
 | License-filtered `vectorUrl`, `describe_image_set_usage`, `format_diagram_publication` | Final SVG file with license footer and metadata |
 | Exact-name resolution policy for labels | Label-only nodes when `image` is null (no placeholder graphic) |
-| Style catalog + basic layout rules (`phylopic://docs/cladogram-styles`) | Measuring text/images and iterating on design |
+| Style catalog + layout rules (`phylopic://docs/cladogram-styles`) — basic rectangular or radial | Measuring text/images and iterating on design |
 
-There is **no** `render_cladogram_svg` tool. Optional reference logic for the **basic rectangular cladogram** lives in the shared [`@phylopic/diagrams`](../../../packages/diagrams) package (`basicCladogramLayout.ts`, unit-tested; uses measured sizes you supply). Layout conventions are in **`cladogram-styles.md`**, not this workflow guide.
+There is **no** `render_cladogram_svg` tool. Optional reference logic lives in [`@phylopic/diagrams`](../../../packages/diagrams): **basic** (`basicCladogramLayout.ts`) and **radial** (`radialCladogramLayout.ts`), unit-tested; basic layout uses measured sizes you supply. Layout conventions are in **`cladogram-styles.md`**, not this workflow guide.
 
 ---
 

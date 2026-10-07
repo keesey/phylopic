@@ -1,0 +1,183 @@
+import { describe, expect, it } from "vitest"
+import {
+    assignRadialCladogramLayout,
+    cloneRadialLayoutTree,
+    collectRadialTipsInOrder,
+    polarToCartesian,
+    radialAncestralArcPath,
+    radialBranchEdgePath,
+    radialBranchPoint,
+    radialNodeRadius,
+    radialLabelRotationDeg,
+    radialNodeShowsLabel,
+    radialNodeShowsSilhouette,
+    DEFAULT_RADIAL_CLADOGRAM_THEME,
+} from "./radialCladogramLayout.js"
+
+describe("assignRadialCladogramLayout", () => {
+    it("places three tip siblings in contiguous sectors on a full circle", () => {
+        const theme = {
+            ...DEFAULT_RADIAL_CLADOGRAM_THEME,
+            sweepAngle: 2 * Math.PI,
+            startAngle: -Math.PI / 2,
+        }
+        const root = cloneRadialLayoutTree({
+            children: [{ label: "a", children: [] }, { label: "b", children: [] }, { label: "c", children: [] }],
+        })
+        const { root: laid, maxDepth, tipCount } = assignRadialCladogramLayout(root, theme)
+        expect(tipCount).toBe(3)
+        expect(maxDepth).toBe(1)
+        const third = theme.sweepAngle / 3
+        expect(laid.children[0]!.angle).toBeCloseTo(theme.startAngle + third / 2)
+        expect(laid.children[1]!.angle).toBeCloseTo(theme.startAngle + third + third / 2)
+        expect(laid.children[2]!.angle).toBeCloseTo(theme.startAngle + 2 * third + third / 2)
+    })
+
+    it("keeps each clade in one contiguous arc (angular order matches Newick tip order)", () => {
+        const root = cloneRadialLayoutTree({
+            children: [
+                {
+                    label: "G1",
+                    children: [{ label: "a", children: [] }, { label: "b", children: [] }],
+                },
+                {
+                    label: "G2",
+                    children: [{ label: "c", children: [] }, { label: "d", children: [] }],
+                },
+            ],
+        })
+        const { root: laid } = assignRadialCladogramLayout(root)
+        const dfsTips = collectRadialTipsInOrder(laid)
+        const byAngle = [...dfsTips].sort((x, y) => x.angle! - y.angle!)
+        expect(byAngle.map(t => t.label)).toEqual(["a", "b", "c", "d"])
+    })
+
+    it("places internal node angle at mean of child bearings", () => {
+        const root = cloneRadialLayoutTree({
+            children: [
+                {
+                    children: [{ label: "left", children: [] }, { label: "left2", children: [] }],
+                },
+                { label: "right", children: [] },
+            ],
+        })
+        const { root: laid } = assignRadialCladogramLayout(root)
+        const internal = laid.children[0]!
+        const left = internal.children[0]!.angle!
+        const left2 = internal.children[1]!.angle!
+        expect(internal.angle).toBeCloseTo((left + left2) / 2)
+    })
+
+    it("scales branch radius by depth", () => {
+        const root = cloneRadialLayoutTree({
+            children: [
+                {
+                    children: [{ label: "tip", children: [] }],
+                },
+            ],
+        })
+        const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 100 }
+        const { root: laid, maxDepth } = assignRadialCladogramLayout(root, theme)
+        const tip = laid.children[0]!.children[0]!
+        const internal = laid.children[0]!
+        expect(radialBranchPoint(laid, maxDepth, theme).x).toBeCloseTo(0)
+        expect(radialBranchPoint(laid, maxDepth, theme).y).toBeCloseTo(0)
+        expect(radialBranchPoint(internal, maxDepth, theme).y).toBeCloseTo(50)
+        expect(radialBranchPoint(tip, maxDepth, theme).y).toBeCloseTo(100)
+    })
+
+    it("places shallow tips on the full tip circle, not at depth-scaled radius", () => {
+        const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 200 }
+        const root = cloneRadialLayoutTree({
+            children: [
+                { label: "short", children: [] },
+                {
+                    children: [
+                        {
+                            children: [{ label: "deep", children: [] }],
+                        },
+                    ],
+                },
+            ],
+        })
+        const { root: laid, maxDepth } = assignRadialCladogramLayout(root, theme)
+        const shortTip = laid.children[0]!
+        const deepTip = laid.children[1]!.children[0]!.children[0]!
+        expect(maxDepth).toBeGreaterThan(1)
+        expect(shortTip.depth).toBe(1)
+        expect(radialNodeRadius(shortTip, maxDepth, theme)).toBe(200)
+        expect(radialNodeRadius(deepTip, maxDepth, theme)).toBe(200)
+    })
+})
+
+describe("radial display rules", () => {
+    it("only tips show labels and silhouettes", () => {
+        const internal: { children: { children: [] }[] } = { children: [{ children: [] }] }
+        expect(radialNodeShowsLabel(internal)).toBe(false)
+        expect(radialNodeShowsSilhouette(internal)).toBe(false)
+        const tip = { children: [] as { children: [] }[] }
+        expect(radialNodeShowsLabel(tip)).toBe(true)
+        expect(radialNodeShowsSilhouette(tip)).toBe(true)
+    })
+})
+
+describe("radialLabelRotationDeg", () => {
+    it("aligns label rotation with the spoke bearing", () => {
+        expect(radialLabelRotationDeg(0)).toBeCloseTo(0)
+        expect(radialLabelRotationDeg(Math.PI / 2)).toBeCloseTo(90)
+        expect(radialLabelRotationDeg(-Math.PI / 2)).toBeCloseTo(-90)
+    })
+})
+
+describe("radialBranchEdgePath", () => {
+    it("uses only radial segments (constant θ) for parent→child links", () => {
+        const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 100 }
+        const root = cloneRadialLayoutTree({
+            children: [
+                {
+                    children: [
+                        { label: "a", children: [] },
+                        {
+                            children: [{ label: "b", children: [] }],
+                        },
+                    ],
+                },
+            ],
+        })
+        const { root: laid, maxDepth } = assignRadialCladogramLayout(root, theme)
+        const fork = laid.children[0]!
+        const tipA = fork.children[0]!
+        const sub = fork.children[1]!
+        const tipB = sub.children[0]!
+        for (const d of [
+            radialBranchEdgePath(laid, fork, maxDepth, theme),
+            radialBranchEdgePath(fork, tipA, maxDepth, theme),
+            radialBranchEdgePath(fork, sub, maxDepth, theme),
+            radialBranchEdgePath(sub, tipB, maxDepth, theme),
+        ]) {
+            expect(d).not.toContain(" A ")
+            expect(d).toMatch(/^M .* L .*$/)
+        }
+        const tipPath = radialBranchEdgePath(fork, tipA, maxDepth, theme)
+        const end = polarToCartesian(100, tipA.angle!)
+        expect(tipPath).toContain(`L ${end.x} ${end.y}`)
+    })
+})
+
+describe("radialAncestralArcPath", () => {
+    it("spans immediate child bearings on the node circle", () => {
+        const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 100 }
+        const root = cloneRadialLayoutTree({
+            children: [
+                {
+                    children: [{ label: "a", children: [] }, { label: "b", children: [] }],
+                },
+            ],
+        })
+        const { root: laid, maxDepth } = assignRadialCladogramLayout(root, theme)
+        const fork = laid.children[0]!
+        const arc = radialAncestralArcPath(fork, maxDepth, theme)
+        expect(arc).toContain(" A ")
+        expect(radialAncestralArcPath(laid, maxDepth, theme)).toBeNull()
+    })
+})
