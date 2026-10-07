@@ -3,6 +3,9 @@
  * Reference for MCP agents and unit tests — no SVG emission here.
  */
 
+import { measureLabel } from "./measureLabel.js"
+import { DEFAULT_SVG_LABEL_FONT, type SvgLabelFont } from "./newickLabelStyle.js"
+
 export type RadialLayoutTreeShape = Readonly<{
     label?: string
     children: readonly RadialLayoutTreeShape[]
@@ -326,6 +329,42 @@ export const meanAngleRad = (angles: readonly number[]): number => {
     }
     return Math.atan2(sin, cos)
 }
+
+/** Widest tip label (px), for viewBox padding when tips are labeled. */
+export const radialMaxTipLabelWidth = (
+    tips: readonly Pick<RadialLayoutNode, "label">[],
+    font: SvgLabelFont = DEFAULT_SVG_LABEL_FONT,
+): number => {
+    let max = 0
+    for (const tip of tips) {
+        if (!tip.label) continue
+        max = Math.max(max, measureLabel(tip.label, font).width)
+    }
+    return max
+}
+
+/**
+ * {@link RadialCladogramTheme.tipRadius} for labeled-tip figures: inset the **branch circle**
+ * from {@link outerLayoutRadius} so the radial band outside branches fits labels
+ * ({@link RadialCladogramTheme.labelOutset} + {@link maxLabelWidth}) before silhouettes on the outer ring.
+ * Set `silhouetteOutset` to `outerLayoutRadius −` this return value so {@link radialSilhouettePoint} sits on the outer radius.
+ */
+export const radialBranchTipRadiusForLabels = (
+    outerLayoutRadius: number,
+    theme: Pick<RadialCladogramTheme, "labelOutset">,
+    maxLabelWidth: number,
+    minTipRadius = 48,
+): number => {
+    const labelBand = theme.labelOutset + maxLabelWidth
+    return Math.max(minTipRadius, outerLayoutRadius - labelBand)
+}
+
+/** Square viewBox half-extent from layout origin when silhouettes sit at `outerLayoutRadius`. */
+export const radialOuterLayoutViewBoxHalfExtent = (
+    outerLayoutRadius: number,
+    silhouetteSlotSize: number,
+    viewBoxTailPad = 40,
+): number => outerLayoutRadius + silhouetteSlotSize + viewBoxTailPad
 
 /** Suggested tip count above which agents may omit per-tip labels and use a clade color key. */
 export const RADIAL_CLADE_KEY_TIP_THRESHOLD = 48

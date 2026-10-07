@@ -9,6 +9,9 @@ import {
     radialBranchPoint,
     radialNodeRadius,
     radialLabelTextPlacement,
+    radialBranchTipRadiusForLabels,
+    radialMaxTipLabelWidth,
+    radialOuterLayoutViewBoxHalfExtent,
     radialNodeShowsLabel,
     radialNodeShowsSilhouette,
     DEFAULT_RADIAL_CLADOGRAM_THEME,
@@ -126,6 +129,29 @@ describe("radialLabelTextPlacement", () => {
         expect(radialLabelTextPlacement(0)).toEqual({ rotationDeg: 0, textAnchor: "start" })
         expect(radialLabelTextPlacement(Math.PI / 2)).toEqual({ rotationDeg: 90, textAnchor: "start" })
         expect(radialLabelTextPlacement(Math.PI)).toEqual({ rotationDeg: 360, textAnchor: "end" })
+    })
+})
+
+describe("radialBranchTipRadiusForLabels", () => {
+    it("insets the branch circle by label band width inside the outer layout radius", () => {
+        const outer = 500
+        const labelW = 120
+        const branchR = radialBranchTipRadiusForLabels(outer, DEFAULT_RADIAL_CLADOGRAM_THEME, labelW)
+        const labelBand = DEFAULT_RADIAL_CLADOGRAM_THEME.labelOutset + labelW
+        expect(branchR).toBe(outer - labelBand)
+        expect(branchR + labelBand).toBe(outer)
+    })
+})
+
+describe("radialOuterLayoutViewBoxHalfExtent", () => {
+    it("pads beyond the outer silhouette ring", () => {
+        expect(radialOuterLayoutViewBoxHalfExtent(300, 40, 24)).toBe(364)
+    })
+})
+
+describe("radialMaxTipLabelWidth", () => {
+    it("returns zero when no labels", () => {
+        expect(radialMaxTipLabelWidth([{ label: undefined }, { label: "" }])).toBe(0)
     })
 })
 

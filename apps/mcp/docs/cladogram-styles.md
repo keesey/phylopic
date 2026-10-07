@@ -158,7 +158,7 @@ Reference: `radialCladogramLayout.ts` in `@phylopic/diagrams` (`assignRadialClad
 | Tip order | Same as basic style: depth-first, left-to-right siblings (`parse_newick` order) |
 | Tip angles | **Contiguous sectors** per subtree (wedge width ∝ tip count), in **Newick DFS order**—same ordering as basic tips top-to-bottom, so clades do not interleave on the circle. Span `sweepAngle` (default **360°**) from **12 o'clock** (`startAngle = −π/2`). Each tip at the center of its leaf sector. |
 | Internal angles | **Arithmetic mean** of immediate children’s angles |
-| Depth / radius | Root at **r = 0**; **every terminal** on the main circle **r = tipRadius** (even if its path is short); internal nodes on **concentric circles** **r = (depth / maxDepth) × tipRadius** |
+| Depth / radius | Root at **r = 0**; **every terminal** on the branch circle **r = tipRadius** (even if its path is short); internal nodes on **concentric circles** **r = (depth / maxDepth) × tipRadius**. With **labeled tips**, choose an **outer layout radius** (silhouette ring), then set **`tipRadius`** with `radialBranchTipRadiusForLabels` so the radial band outside the branch circle is at least as wide as the **longest label** (`labelOutset + maxLabelWidth`) before silhouettes at the outer radius. |
 | **Ancestral nodes** | **Never** labeled and **never** illustrated (no silhouettes on internals) |
 | Tips | **Labels** and **silhouettes** on tips only |
 
@@ -184,7 +184,7 @@ Use `assignRadialTipClades` when you have a stable tip id → clade id map. Agen
 
 ### SVG viewBox
 
-1. Content is roughly **square**: `viewBox` centered on the origin or shifted so the circle plus outer silhouettes and labels fit with padding (~24px).
+1. Content is roughly **square**: shift the layout origin to the center of the `viewBox`. Size the **branch circle** inset from the outer silhouette radius when tips are labeled (see depth/radius row); use `radialOuterLayoutViewBoxHalfExtent` for modest padding beyond the outer ring. Clade-key mode (no tip labels) uses the branch circle at the full layout radius.
 2. **Footer:** radial figures often place the publication footer **below** the circle (same `format_diagram_publication` rules as basic). Expand `viewBox` height for footer + gap (~16px).
 3. White background `<rect>` over the final `viewBox`.
 
