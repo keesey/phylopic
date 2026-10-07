@@ -4,7 +4,11 @@ import { assertResolvedAncestorOfDescendants } from "./cladogramResolutionTrust.
 import { fetchLineageUuids } from "./fetchLineageUuids.js"
 import { resolveMrcaFromDescendants } from "./resolveMrcaFromDescendants.js"
 import { resolveLabelForCladogramNode } from "./resolveLabelViaDescendantPhylogeny.js"
-import { resolveSmallestSuperclade, type SupercladeRank } from "./resolveSmallestSuperclade.js"
+import {
+    isPhylopicSupercladeOfScope,
+    resolveSmallestSuperclade,
+    type SupercladeRank,
+} from "./resolveSmallestSuperclade.js"
 import type { CladogramTreeNode } from "./types.js"
 
 export type CladeAssignmentMethod =
@@ -146,12 +150,42 @@ const isAncestorOfAll = async (
     return true
 }
 
+const isWithinTreeRootScope = async (
+    client: PhyloPicClient,
+    candidateUuid: string,
+    treeRootPhylopicUuid: string | undefined,
+): Promise<boolean> => {
+    if (!treeRootPhylopicUuid) return true
+    return !(await isPhylopicSupercladeOfScope(client, candidateUuid, treeRootPhylopicUuid))
+}
+
+/** PhyloPic clade for the labeled Newick root (subtree scope for SRC). */
+export const resolveTreeRootPhylopicScope = async (
+    client: PhyloPicClient,
+    root: CladogramTreeNode,
+    contextLabels: readonly string[],
+): Promise<string | undefined> => {
+    const label = root.label?.trim()
+    if (!label) return undefined
+    try {
+        const resolved = await resolveLabelForCladogramNode(client, label, [], {
+            contextLabels,
+            labeledAncestorLabels: [],
+        })
+        return resolved.nodeUuid
+    } catch {
+        const fb = await resolveSmallestSuperclade(client, label, { contextLabels, labeledAncestorLabels: [] })
+        return fb?.nodeUuid
+    }
+}
+
 /** Smallest resolvable PhyloPic clade for each tip label (external + Newick context). */
 export const buildTipResolvableClades = async (
     client: PhyloPicClient,
     root: CladogramTreeNode,
     contextLabels: readonly string[],
     usedSrcUuids: Set<string> = new Set(),
+    treeRootPhylopicUuid?: string,
 ): Promise<Readonly<Record<string, ResolvableClade>>> => {
     const tree = cloneWithParent(root)
     const all: MutableTreeNode[] = []
@@ -174,8 +208,12 @@ export const buildTipResolvableClades = async (
         const fallback = await resolveSmallestSuperclade(client, n.label, {
             contextLabels,
             labeledAncestorLabels: ancestors,
+            treeRootPhylopicUuid,
         })
-        if (fallback) {
+        if (
+            fallback &&
+            (await isWithinTreeRootScope(client, fallback.nodeUuid, treeRootPhylopicUuid))
+        ) {
             const key = normalizeUUID(fallback.nodeUuid)
             if (usedSrcUuids.has(key)) continue
             usedSrcUuids.add(key)
@@ -192,6 +230,7 @@ export const assignResolvableCladesToNewickNodes = async (
     tipClades: Readonly<Record<string, ResolvableClade>>,
     contextLabels: readonly string[],
     usedSrcUuids: Set<string> = new Set(),
+    treeRootPhylopicUuid?: string,
 ): Promise<readonly NewickNodeCladeAssignment[]> => {
     const tree = cloneWithParent(root)
     const all: MutableTreeNode[] = []
@@ -224,12 +263,14 @@ export const assignResolvableCladesToNewickNodes = async (
                 const fb = await resolveSmallestSuperclade(client, n.label, {
                     contextLabels,
                     labeledAncestorLabels: labeledAncestorsRootToParent(n),
+                    treeRootPhylopicUuid,
                 })
                 const srcKey = fb ? normalizeUUID(fb.nodeUuid) : undefined
                 if (
                     fb &&
                     srcKey &&
                     !usedSrcUuids.has(srcKey) &&
+                    (await isWithinTreeRootScope(client, fb.nodeUuid, treeRootPhylopicUuid)) &&
                     (await isAncestorOfAll(client, fb.nodeUuid, tipUuids))
                 ) {
                     usedSrcUuids.add(srcKey)
@@ -244,7 +285,11 @@ export const assignResolvableCladesToNewickNodes = async (
 
         if (!candidateUuid) {
             const mrca = await resolveMrcaFromDescendants(client, tipUuids)
-            if (mrca.mrcaUuid && (await isAncestorOfAll(client, mrca.mrcaUuid, tipUuids))) {
+            if (
+                mrca.mrcaUuid &&
+                (await isWithinTreeRootScope(client, mrca.mrcaUuid, treeRootPhylopicUuid)) &&
+                (await isAncestorOfAll(client, mrca.mrcaUuid, tipUuids))
+            ) {
                 candidateUuid = mrca.mrcaUuid
                 method = "descendant_mrca"
                 warnings = mrca.warnings
@@ -286,14 +331,22 @@ export const buildResolvableCladeCatalog = async (
     walk(root)
 
     const labelsById = labelByNodeId(root)
+    const treeRootPhylopicUuid = await resolveTreeRootPhylopicScope(client, root, allLabels)
     const usedSrcUuids = new Set<string>()
-    const tipClades = await buildTipResolvableClades(client, root, allLabels, usedSrcUuids)
+    const tipClades = await buildTipResolvableClades(
+        client,
+        root,
+        allLabels,
+        usedSrcUuids,
+        treeRootPhylopicUuid,
+    )
     const internalAssignments = await assignResolvableCladesToNewickNodes(
         client,
         root,
         tipClades,
         allLabels,
         usedSrcUuids,
+        treeRootPhylopicUuid,
     )
     const nodeAssignment = Object.fromEntries(internalAssignments.map(a => [a.nodeId, a.phylopicUuid]))
 

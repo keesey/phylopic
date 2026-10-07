@@ -4,7 +4,9 @@ import {
     suggestGbifSpecies,
     type GBIFRank,
 } from "@phylopic/search"
+import { normalizeUUID } from "@phylopic/utils"
 import type { PhyloPicClient } from "../client/PhyloPicClient.js"
+import { fetchLineageUuids } from "./fetchLineageUuids.js"
 import { createResolveToPhylopic } from "../search/resolveExternalToPhylopic.js"
 import { normalizeTaxonLabel } from "../search/phylopicNameMatch.js"
 import { assertTrustedCladogramLabelResolution } from "./cladogramResolutionTrust.js"
@@ -77,6 +79,34 @@ export const pickFinestSupercladeCandidate = (
     })[0]
 }
 
+/** True when `candidateUuid` is a strict PhyloPic ancestor of the tree-root scope clade. */
+export const isPhylopicSupercladeOfScope = async (
+    client: PhyloPicClient,
+    candidateUuid: string,
+    treeRootScopeUuid: string,
+): Promise<boolean> => {
+    if (normalizeUUID(candidateUuid) === normalizeUUID(treeRootScopeUuid)) return false
+    const lineage = await fetchLineageUuids(client, treeRootScopeUuid)
+    const norm = normalizeUUID(candidateUuid)
+    return lineage.some(u => normalizeUUID(u) === norm)
+}
+
+/** Drop SRC candidates above the Newick root (e.g. Bilateria on a Siluriformes subtree). */
+export const filterSupercladeCandidatesWithinTreeRoot = async (
+    client: PhyloPicClient,
+    candidates: readonly SupercladeCandidate[],
+    treeRootPhylopicUuid: string | undefined,
+): Promise<SupercladeCandidate[]> => {
+    if (!treeRootPhylopicUuid) return [...candidates]
+    const out: SupercladeCandidate[] = []
+    for (const c of candidates) {
+        if (!(await isPhylopicSupercladeOfScope(client, c.nodeUuid, treeRootPhylopicUuid))) {
+            out.push(c)
+        }
+    }
+    return out
+}
+
 const tryTrustedNameResolve = async (
     client: PhyloPicClient,
     label: string,
@@ -138,6 +168,8 @@ export type ResolveSmallestSupercladeOptions = ResolveLabelOptions &
     Readonly<{
         /** Labeled internal nodes from root toward the immediate parent. */
         labeledAncestorLabels?: readonly string[]
+        /** Reject candidates that are PhyloPic ancestors of this clade (the Newick root). */
+        treeRootPhylopicUuid?: string
     }>
 
 /**
@@ -188,7 +220,12 @@ export const resolveSmallestSuperclade = async (
         candidates.push(...(await gbifRankCandidates(resolve, gbifPick.key, query)))
     }
 
-    const best = pickFinestSupercladeCandidate(candidates)
+    const scoped = await filterSupercladeCandidatesWithinTreeRoot(
+        client,
+        candidates,
+        options.treeRootPhylopicUuid,
+    )
+    const best = pickFinestSupercladeCandidate(scoped)
     if (!best) return null
 
     return {

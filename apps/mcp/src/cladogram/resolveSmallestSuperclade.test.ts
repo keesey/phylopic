@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest"
 import {
+    filterSupercladeCandidatesWithinTreeRoot,
     isExternalPhylopicMismatch,
+    isPhylopicSupercladeOfScope,
     pickFinestSupercladeCandidate,
     type SupercladeCandidate,
 } from "./resolveSmallestSuperclade.js"
@@ -24,5 +26,37 @@ describe("resolveSmallestSuperclade helpers", () => {
             cand({ nodeUuid: "c", rank: "order", source: "tree_ancestor", matchedLabel: "Acanthuriformes" }),
         ])
         expect(best?.nodeUuid).toBe("b")
+    })
+
+    it("drops candidates above the Newick root scope before picking finest", async () => {
+        const siluriformes = "11111111-1111-4111-8111-111111111111"
+        const bilateria = "22222222-2222-4222-8222-222222222222"
+        const akysidae = "33333333-3333-4333-8333-333333333333"
+        const client = {
+            getJson: async (path: string) => {
+                if (path === `/nodes/${siluriformes}/lineage`) {
+                    return {
+                        _embedded: { items: [{ uuid: siluriformes }, { uuid: bilateria }] },
+                        _links: { next: null },
+                    }
+                }
+                throw new Error(`unexpected ${path}`)
+            },
+        } as unknown as Parameters<typeof isPhylopicSupercladeOfScope>[0]
+
+        expect(await isPhylopicSupercladeOfScope(client, bilateria, siluriformes)).toBe(true)
+        expect(await isPhylopicSupercladeOfScope(client, akysidae, siluriformes)).toBe(false)
+        expect(await isPhylopicSupercladeOfScope(client, siluriformes, siluriformes)).toBe(false)
+
+        const scoped = await filterSupercladeCandidatesWithinTreeRoot(
+            client,
+            [
+                cand({ nodeUuid: bilateria, rank: "phylum", source: "external_search" }),
+                cand({ nodeUuid: akysidae, rank: "family", source: "external_gbif" }),
+            ],
+            siluriformes,
+        )
+        const best = pickFinestSupercladeCandidate(scoped)
+        expect(best?.nodeUuid).toBe(akysidae)
     })
 })
