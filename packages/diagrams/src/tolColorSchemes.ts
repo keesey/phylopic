@@ -1,6 +1,6 @@
 /**
  * Paul Tol qualitative and discrete-rainbow palettes for diagrams.
- * @see https://personal.sron.nl/~pault/ (Colour schemes, 2021)
+ * @see https://personal.sron.nl/~pault/ (Paul Tol color schemes, 2021)
  */
 
 /** Named Tol palettes exposed for categorical / multi-series diagrams. */
@@ -16,7 +16,7 @@ export type TolColorScheme =
     | "dark"
     | "light"
 
-/** Discrete rainbow (23 map colours); do not interpolate. */
+/** Discrete rainbow (23 map colors); do not interpolate. */
 export const TOL_DISCRETE_RAINBOW_23 = [
     "#E8ECFB",
     "#D9CCE3",
@@ -137,11 +137,11 @@ const SCHEME_COLORS: Record<TolColorScheme, readonly string[]> = {
     light: TOL_LIGHT,
 }
 
-/** Hex colours for a Tol scheme (fixed order; cycle with {@link tolColorAtIndex}). */
+/** Hex colors for a Tol scheme (fixed order; cycle with {@link tolColorAtIndex}). */
 export const tolColorPalette = (scheme: TolColorScheme = "darkRainbow"): readonly string[] =>
     SCHEME_COLORS[scheme]
 
-/** Pick a colour by series index; wraps when index exceeds palette length. */
+/** Pick a color by series index; wraps when index exceeds palette length. */
 export const tolColorAtIndex = (index: number, scheme: TolColorScheme = "darkRainbow"): string => {
     const palette = tolColorPalette(scheme)
     if (palette.length === 0) {
@@ -163,7 +163,7 @@ const gcd = (a: number, b: number): number => {
 }
 
 /**
- * Stride through a Tol palette so consecutive **angular** slots (neighbours on the rim) land on
+ * Stride through a Tol palette so consecutive **angular** slots (neighbors on the rim) land on
  * distant swatches. For gradient palettes (e.g. darkRainbow), sequential indices look alike.
  */
 export const tolPaletteStrideForCount = (slotCount: number, paletteLength: number): number => {
@@ -214,7 +214,7 @@ export type TolColorByAngleItem = Readonly<{
     angleRad: number
 }>
 
-/** Assign Tol colours sorted by rim angle so adjacent clades on the circle stay visually distinct. */
+/** Assign Tol colors sorted by rim angle so adjacent clades on the circle stay visually distinct. */
 export const assignTolColorsByAngle = (
     items: readonly TolColorByAngleItem[],
     scheme: TolColorScheme = "darkRainbow",

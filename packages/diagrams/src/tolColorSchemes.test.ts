@@ -16,7 +16,7 @@ describe("tolColorPalette", () => {
         expect(tolColorPalette("rainbow")).toEqual(TOL_DISCRETE_RAINBOW_ON_WHITE)
     })
 
-    it("returns bright qualitative colours", () => {
+    it("returns bright qualitative colors", () => {
         expect(tolColorPalette("bright")).toContain("#4477AA")
         expect(tolColorPalette("bright").length).toBe(7)
     })
@@ -30,13 +30,13 @@ describe("tolColorAtIndex", () => {
         expect(tolColorAtIndex(-1, "bright")).toBe(palette[palette.length - 1])
     })
 
-    it("keeps full discrete rainbow list at 23 colours", () => {
+    it("keeps full discrete rainbow list at 23 colors", () => {
         expect(TOL_DISCRETE_RAINBOW_23.length).toBe(23)
     })
 })
 
 describe("assignTolColorsByAngle", () => {
-    it("separates consecutive rim neighbours in the darkRainbow palette", () => {
+    it("separates consecutive rim neighbors in the darkRainbow palette", () => {
         const m = TOL_DISCRETE_RAINBOW_DARK.length
         const n = 11
         for (let i = 0; i < n - 1; i++) {
@@ -47,7 +47,7 @@ describe("assignTolColorsByAngle", () => {
         }
     })
 
-    it("gives different colours to two clades that would share adjacent palette indices", () => {
+    it("gives different colors to two clades that would share adjacent palette indices", () => {
         const colors = assignTolColorsByAngle(
             [
                 { id: "a", angleRad: 0 },
