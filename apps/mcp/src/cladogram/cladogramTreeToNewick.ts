@@ -8,14 +8,27 @@ const newickAtom = (label: string): string => {
     return `'${trimmed.replace(/'/g, "''")}'`
 }
 
-/** Unlabeled internal nodes become bare `(…)` groups; tips use their tree labels. */
-export const cladogramTreeToNewick = (node: CladogramTreeNode): string => {
+const branchLengthSuffix = (node: CladogramTreeNode, emitIncomingLength: boolean): string => {
+    if (!emitIncomingLength || node.branchLength === undefined) {
+        return ""
+    }
+    return `:${node.branchLength}`
+}
+
+const cladogramNodeToNewick = (node: CladogramTreeNode, isTreeRoot: boolean): string => {
+    const emitIncoming = !isTreeRoot
     if (node.children.length === 0) {
         if (!node.label) {
             throw new Error(`Tip node ${node.id} has no label.`)
         }
-        return newickAtom(node.label)
+        return `${newickAtom(node.label)}${branchLengthSuffix(node, emitIncoming)}`
     }
-    const inner = node.children.map(cladogramTreeToNewick).join(",")
-    return node.label ? `(${inner})${newickAtom(node.label)}` : `(${inner})`
+    const inner = node.children.map(c => cladogramNodeToNewick(c, false)).join(",")
+    if (node.label) {
+        return `(${inner})${newickAtom(node.label)}${branchLengthSuffix(node, emitIncoming)}`
+    }
+    return `(${inner})${branchLengthSuffix(node, emitIncoming)}`
 }
+
+/** Unlabeled internal nodes become bare `(…)` groups; tips use their tree labels. */
+export const cladogramTreeToNewick = (node: CladogramTreeNode): string => cladogramNodeToNewick(node, true)

@@ -477,7 +477,7 @@ export const radialOuterLayoutViewBoxHalfExtent = (
 ): number => outerLayoutRadius + silhouetteSlotSize + viewBoxTailPad
 
 /** Suggested tip count above which agents may omit per-tip labels and use a clade color key. */
-export const RADIAL_CLADE_KEY_TIP_THRESHOLD = 48
+export const RADIAL_CLADE_KEY_TIP_THRESHOLD = 72
 
 export type RadialCladeKeyEntry = Readonly<{
     cladeId: string

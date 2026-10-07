@@ -174,10 +174,10 @@ Reference: `radialCladogramLayout.ts` in `@phylopic/diagrams` (`assignRadialClad
 
 ### Large tip counts (clade key mode)
 
-When there are **many** tips (rough guide: **> 48**, see `RADIAL_CLADE_KEY_TIP_THRESHOLD` in reference code):
+When there are **many** tips (rough guide: **> 72**, see `RADIAL_CLADE_KEY_TIP_THRESHOLD` in reference code):
 
 1. **Omit** per-tip text labels on the figure.
-2. Color **branches** by **major clade** (monochrome under each clade when possible). Assign colours with `tolColorAtIndex` / `tolColorPalette` from `@phylopic/diagrams` (Paul Tol schemes; default **`darkRainbow`**, or **`rainbow`** / **`muted`** via scheme name).
+2. Color **branches** by **major clade** (monochrome under each clade when possible). Assign rim colours with **`assignTolColorsByAngle`** (sort clades by mean tip bearing, stride through the Tol palette so **neighbours on the circle** stay distinct—avoid alphabetical `tolColorAtIndex` on gradient palettes). Schemes: `tolColorPalette` / Paul Tol names; default **`darkRainbow`**, or **`rainbow`** / **`muted`**.
 3. Place **silhouettes only for major clades** on the **outer circle** at each clade’s mean tip bearing, tinted to the **same clade colour** as the branches (`svgAlphaTintFilterDef` / SourceAlpha flood on the image). No per-tip silhouettes.
 4. **Clade names** on the inner ring at the clade bearing (`radialInnerRingLabelRadius` + mean tip angle): **black**, **`text-anchor="middle"`** so the label center lies on the spoke, **`radialInnerRingLabelTextPlacement`** (tangent, +90° from tip-label bearing; flip on the **bottom** half so 6 o’clock stays upright). Link each label to the resolved taxon’s PhyloPic node page when `resolveLabelToNode` succeeds (same as tip labels).
 

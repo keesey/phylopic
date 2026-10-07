@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { cladogramTreeToNewick } from "./cladogramTreeToNewick.js"
+import { parseNewickToTree } from "./parseNewick.js"
 
 describe("cladogramTreeToNewick", () => {
     it("emits unlabeled internal groups and labeled tips", () => {
@@ -29,5 +30,11 @@ describe("cladogramTreeToNewick", () => {
             ],
         })
         expect(newick).toBe("((hops,rice),(seahorses,(humans,toucans)))")
+    })
+
+    it("round-trips branch lengths", () => {
+        const source = "((a:0.5,b:0.25)Clade:1.5);"
+        const { root } = parseNewickToTree(source)
+        expect(cladogramTreeToNewick(root)).toBe("((a:0.5,b:0.25)Clade:1.5)")
     })
 })

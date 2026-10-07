@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest"
 import {
+    assignTolColorsByAngle,
     tolColorAtIndex,
     tolColorPalette,
+    tolPaletteIndexAtAngularSlot,
     TOL_DISCRETE_RAINBOW_23,
     TOL_DISCRETE_RAINBOW_DARK,
     TOL_DISCRETE_RAINBOW_ON_WHITE,
@@ -30,5 +32,31 @@ describe("tolColorAtIndex", () => {
 
     it("keeps full discrete rainbow list at 23 colours", () => {
         expect(TOL_DISCRETE_RAINBOW_23.length).toBe(23)
+    })
+})
+
+describe("assignTolColorsByAngle", () => {
+    it("separates consecutive rim neighbours in the darkRainbow palette", () => {
+        const m = TOL_DISCRETE_RAINBOW_DARK.length
+        const n = 11
+        for (let i = 0; i < n - 1; i++) {
+            const a = tolPaletteIndexAtAngularSlot(i, n, m)
+            const b = tolPaletteIndexAtAngularSlot(i + 1, n, m)
+            expect(Math.abs(a - b)).toBeGreaterThan(1)
+            expect(a).not.toBe(b)
+        }
+    })
+
+    it("gives different colours to two clades that would share adjacent palette indices", () => {
+        const colors = assignTolColorsByAngle(
+            [
+                { id: "a", angleRad: 0 },
+                { id: "b", angleRad: 0.5 },
+            ],
+            "darkRainbow",
+        )
+        expect(colors.get("a")).not.toBe(colors.get("b"))
+        expect(colors.get("a")).toBe(TOL_DISCRETE_RAINBOW_DARK[0])
+        expect(colors.get("b")).not.toBe(TOL_DISCRETE_RAINBOW_DARK[1])
     })
 })

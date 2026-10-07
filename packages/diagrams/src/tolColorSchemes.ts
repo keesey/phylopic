@@ -150,3 +150,79 @@ export const tolColorAtIndex = (index: number, scheme: TolColorScheme = "darkRai
     const i = ((index % palette.length) + palette.length) % palette.length
     return palette[i]!
 }
+
+const gcd = (a: number, b: number): number => {
+    let x = Math.abs(a)
+    let y = Math.abs(b)
+    while (y) {
+        const t = y
+        y = x % y
+        x = t
+    }
+    return x
+}
+
+/**
+ * Stride through a Tol palette so consecutive **angular** slots (neighbours on the rim) land on
+ * distant swatches. For gradient palettes (e.g. darkRainbow), sequential indices look alike.
+ */
+export const tolPaletteStrideForCount = (slotCount: number, paletteLength: number): number => {
+    if (paletteLength <= 1 || slotCount <= 1) {
+        return 1
+    }
+    const target = Math.floor(paletteLength / 2) || 1
+    for (let delta = 0; delta < paletteLength; delta++) {
+        for (const sign of [1, -1] as const) {
+            const s = ((target + sign * delta) % paletteLength + paletteLength) % paletteLength
+            if (s === 0) {
+                continue
+            }
+            if (gcd(s, paletteLength) === 1) {
+                return s
+            }
+        }
+    }
+    return 1
+}
+
+/** Palette index for the `angularSlotIndex`-th clade when walking the rim with {@link tolPaletteStrideForCount}. */
+export const tolPaletteIndexAtAngularSlot = (
+    angularSlotIndex: number,
+    slotCount: number,
+    paletteLength: number,
+): number => {
+    if (paletteLength <= 0) {
+        return 0
+    }
+    const stride = tolPaletteStrideForCount(slotCount, paletteLength)
+    return ((angularSlotIndex * stride) % paletteLength + paletteLength) % paletteLength
+}
+
+export const tolColorAtAngularSlot = (
+    angularSlotIndex: number,
+    slotCount: number,
+    scheme: TolColorScheme = "darkRainbow",
+): string => {
+    const palette = tolColorPalette(scheme)
+    const idx = tolPaletteIndexAtAngularSlot(angularSlotIndex, slotCount, palette.length)
+    return palette[idx] ?? "#888888"
+}
+
+export type TolColorByAngleItem = Readonly<{
+    id: string
+    /** Mean bearing on the tip circle (radians). */
+    angleRad: number
+}>
+
+/** Assign Tol colours sorted by rim angle so adjacent clades on the circle stay visually distinct. */
+export const assignTolColorsByAngle = (
+    items: readonly TolColorByAngleItem[],
+    scheme: TolColorScheme = "darkRainbow",
+): Map<string, string> => {
+    const sorted = [...items].sort((a, b) => a.angleRad - b.angleRad)
+    const out = new Map<string, string>()
+    sorted.forEach((item, i) => {
+        out.set(item.id, tolColorAtAngularSlot(i, sorted.length, scheme))
+    })
+    return out
+}
