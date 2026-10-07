@@ -8,7 +8,7 @@ import {
     radialBranchEdgePath,
     radialBranchPoint,
     radialNodeRadius,
-    radialLabelRotationDeg,
+    radialLabelTextPlacement,
     radialNodeShowsLabel,
     radialNodeShowsSilhouette,
     DEFAULT_RADIAL_CLADOGRAM_THEME,
@@ -121,11 +121,11 @@ describe("radial display rules", () => {
     })
 })
 
-describe("radialLabelRotationDeg", () => {
-    it("aligns label rotation with the spoke bearing", () => {
-        expect(radialLabelRotationDeg(0)).toBeCloseTo(0)
-        expect(radialLabelRotationDeg(Math.PI / 2)).toBeCloseTo(90)
-        expect(radialLabelRotationDeg(-Math.PI / 2)).toBeCloseTo(-90)
+describe("radialLabelTextPlacement", () => {
+    it("uses start anchor on the right and flipped end anchor on the left", () => {
+        expect(radialLabelTextPlacement(0)).toEqual({ rotationDeg: 0, textAnchor: "start" })
+        expect(radialLabelTextPlacement(Math.PI / 2)).toEqual({ rotationDeg: 90, textAnchor: "start" })
+        expect(radialLabelTextPlacement(Math.PI)).toEqual({ rotationDeg: 360, textAnchor: "end" })
     })
 })
 

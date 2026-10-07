@@ -199,11 +199,25 @@ export const radialLabelPoint = (
     return polarToCartesian(r, theta)
 }
 
+export type RadialLabelTextPlacement = Readonly<{
+    rotationDeg: number
+    textAnchor: "start" | "end"
+}>
+
 /**
- * SVG `rotate` degrees so label text runs **along the spoke** (same line from the center).
- * Use with `text-anchor="start"` and `dominant-baseline="middle"` at {@link radialLabelPoint}.
+ * Label along the spoke at {@link radialLabelPoint}: outward from center, upright on the left half-plane.
  */
-export const radialLabelRotationDeg = (angleRad: number): number => (angleRad * 180) / Math.PI
+export const radialLabelTextPlacement = (angleRad: number): RadialLabelTextPlacement => {
+    const rotationDeg = (angleRad * 180) / Math.PI
+    if (Math.cos(angleRad) < 0) {
+        return { rotationDeg: rotationDeg + 180, textAnchor: "end" }
+    }
+    return { rotationDeg, textAnchor: "start" }
+}
+
+/** @deprecated Prefer {@link radialLabelTextPlacement} (left-side labels use `text-anchor="end"` and +180°). */
+export const radialLabelRotationDeg = (angleRad: number): number =>
+    radialLabelTextPlacement(angleRad).rotationDeg
 
 /** Ancestral (internal) nodes are never labeled or illustrated in radial style. */
 export const radialNodeShowsLabel = (node: RadialLayoutNode): boolean => isTipShape(node)

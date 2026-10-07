@@ -166,7 +166,7 @@ Reference: `radialCladogramLayout.ts` in `@phylopic/diagrams` (`assignRadialClad
 
 - **Branch anchor** (`radialBranchPoint`): where the edge meets the tip on the tip circle.
 - **Silhouette** (`radialSilhouettePoint` at **r = tipRadius + silhouetteOutset**): on a **larger circle** outside the tip circle, aligned with the tip or clade bearing. Use square slot + `bottomAlignArtInSquareSlot`; **`translate(rim) rotate(radialSilhouetteRotationDeg(θ))`** so the silhouette’s **bottom points toward the center**.
-- **Label** (`radialLabelPoint`): on the **same spoke** as the tip, just **outside** the tip circle (`tipRadius + labelOutset`). Rotate with `radialLabelRotationDeg(θ)` so text runs **along the line from the center** (`text-anchor="start"`, `dominant-baseline="middle"`, text extending outward).
+- **Label** (`radialLabelPoint`): on the **same spoke** as the tip, just **outside** the tip circle (`tipRadius + labelOutset`). Use `radialLabelTextPlacement(θ)` for rotation and `text-anchor` ( **`start`** on the right half, **`end`** with **+180°** on the left so labels stay upright). `dominant-baseline="middle"`; text extends outward from the center.
 
 **Edges (polar):** every **straight** segment is a **spoke** (fixed θ, passes through the center): `radialBranchEdgePath` draws `M… L…` from the parent’s depth circle to the child (or tip circle) on the **child’s bearing**. **Ancestral rails** are separate **arcs** on each internal node’s depth circle spanning **immediate children only** (`radialAncestralArcPath`, `radialImmediateChildAngleRange`). Draw arcs, then radials, then labels and images.
 
