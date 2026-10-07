@@ -2,14 +2,29 @@
  * Pick named internal nodes to label on radial clade-key figures (rim silhouettes + inner ring).
  */
 
+import { measureLabel } from "./measureLabel.js"
+import { DEFAULT_SVG_LABEL_FONT, type SvgLabelFont } from "./newickLabelStyle.js"
+import { radialDescendantAngleSpanRad, type RadialLayoutNode } from "./radialCladogramLayout.js"
+
 export type RadialLegendTreeNode = Readonly<{
     label?: string
     children: readonly RadialLegendTreeNode[]
 }>
 
 export type SelectRadialLegendCladesOptions = Readonly<{
-    /** Minimum descendant tips for a labeled internal to qualify. Default 12. */
-    minTipsUnder?: number
+    /**
+     * Radius (px) of the legend ring used to convert minimum slot width → radians
+     * ({@link radialLegendRingRadius} = tipRadius + silhouetteOutset).
+     */
+    legendRingRadius: number
+    /** Silhouette slot width in px. Default {@link DEFAULT_RADIAL_LEGEND_SILHOUETTE_WIDTH}. */
+    legendSilhouetteWidth?: number
+    /** Font for measuring clade labels when {@link longestLegendLabelWidth} is omitted. */
+    labelFont?: SvgLabelFont
+    /** Widest labeled-internal clade name (px); measured from the tree when omitted. */
+    longestLegendLabelWidth?: number
+    /** Override minimum angular span (radians); default from slot width ÷ ring radius. */
+    minLegendSpanRad?: number
     /** Maximum clades on the rim. Default 28. */
     maxLegendClades?: number
     /** Skip shallow internals (default 2 — not immediate children of the root). */
@@ -18,9 +33,21 @@ export type SelectRadialLegendCladesOptions = Readonly<{
     totalTipCount?: number
 }>
 
-export const DEFAULT_RADIAL_LEGEND_MIN_TIPS = 12
+export const DEFAULT_RADIAL_LEGEND_SILHOUETTE_WIDTH = 44
 export const DEFAULT_RADIAL_LEGEND_MAX_CLADES = 28
 export const DEFAULT_RADIAL_LEGEND_MIN_DEPTH = 2
+
+/** Central angle (radians) for an arc of length `arcLengthPx` on a circle of radius `radiusPx`. */
+export const radialLegendMinSpanRadFromSlotWidth = (
+    slotWidthPx: number,
+    legendRingRadiusPx: number,
+): number => (legendRingRadiusPx > 0 ? slotWidthPx / legendRingRadiusPx : 0)
+
+/** Minimum rim slot width: the larger of silhouette and longest clade label. */
+export const radialLegendMinSlotWidthPx = (
+    silhouetteWidthPx: number,
+    longestLabelWidthPx: number,
+): number => Math.max(silhouetteWidthPx, longestLabelWidthPx)
 
 const isTip = (n: RadialLegendTreeNode): boolean => n.children.length === 0
 
@@ -28,6 +55,22 @@ const isTip = (n: RadialLegendTreeNode): boolean => n.children.length === 0
 export const countTipsUnderLegendNode = (n: RadialLegendTreeNode): number => {
     if (isTip(n)) return 1
     return n.children.reduce((sum, c) => sum + countTipsUnderLegendNode(c), 0)
+}
+
+/** Widest clade label among labeled internal nodes (for legend slot sizing). */
+export const maxInternalCladeLabelWidth = (
+    root: RadialLegendTreeNode,
+    font: SvgLabelFont = DEFAULT_SVG_LABEL_FONT,
+): number => {
+    let max = 0
+    const visit = (n: RadialLegendTreeNode) => {
+        if (!isTip(n) && n.label) {
+            max = Math.max(max, measureLabel(n.label, font).width)
+        }
+        for (const c of n.children) visit(c)
+    }
+    visit(root)
+    return max
 }
 
 type MutableLegendNode = {
@@ -57,26 +100,40 @@ const isDescendantOf = <T>(ancestor: T, node: T, parentMap: Map<T, T | undefined
 /**
  * Greedy selection of **major** labeled clades for radial clade-key mode.
  *
- * Rationale (tuned on large actinopterygian trees): use **named internal nodes** from the
- * hierarchy, require a **minimum subtree size**, prefer **deeper / more specific** clades,
- * exclude the **whole-tree** root clade, avoid **nested** legend entries, and cap count for
- * legibility on the outer ring.
+ * Call after {@link assignRadialCladogramLayout} so each node has bearings. A clade qualifies when
+ * its descendant tips span at least the angular width of one legend slot on the rim—slot width is
+ * **max(silhouette width, longest internal clade label width)**, converted to radians at
+ * {@link SelectRadialLegendCladesOptions.legendRingRadius}. Prefer **deeper** clades, exclude the
+ * whole-tree root, avoid nested legend entries, and cap count for legibility.
  */
-export const selectRadialLegendClades = <T extends MutableLegendNode>(
+export const selectRadialLegendClades = <T extends MutableLegendNode & Pick<RadialLayoutNode, "angle">>(
     root: T,
-    options: SelectRadialLegendCladesOptions = {},
+    options: SelectRadialLegendCladesOptions,
 ): T[] => {
-    const minTipsUnder = options.minTipsUnder ?? DEFAULT_RADIAL_LEGEND_MIN_TIPS
+    const legendRingRadius = options.legendRingRadius
+    if (!Number.isFinite(legendRingRadius) || legendRingRadius <= 0) {
+        throw new Error("selectRadialLegendClades requires legendRingRadius > 0")
+    }
+
+    const font = options.labelFont ?? DEFAULT_SVG_LABEL_FONT
+    const silhouetteWidth = options.legendSilhouetteWidth ?? DEFAULT_RADIAL_LEGEND_SILHOUETTE_WIDTH
+    const longestLabel =
+        options.longestLegendLabelWidth ?? maxInternalCladeLabelWidth(root, font)
+    const slotWidth = radialLegendMinSlotWidthPx(silhouetteWidth, longestLabel)
+    const minLegendSpanRad =
+        options.minLegendSpanRad ?? radialLegendMinSpanRadFromSlotWidth(slotWidth, legendRingRadius)
+
     const maxLegendClades = options.maxLegendClades ?? DEFAULT_RADIAL_LEGEND_MAX_CLADES
     const minDepth = options.minDepth ?? DEFAULT_RADIAL_LEGEND_MIN_DEPTH
     const totalTips = options.totalTipCount ?? countTipsUnderLegendNode(root)
 
-    type Candidate = { node: T; depth: number; tips: number }
+    type Candidate = { node: T; depth: number; tips: number; spanRad: number }
     const candidates: Candidate[] = []
     const visit = (n: T, depth: number) => {
         const tips = countTipsUnderLegendNode(n)
-        if (!isTip(n) && n.label && tips >= minTipsUnder) {
-            candidates.push({ node: n, depth, tips })
+        const spanRad = radialDescendantAngleSpanRad(n)
+        if (!isTip(n) && n.label && spanRad >= minLegendSpanRad) {
+            candidates.push({ node: n, depth, tips, spanRad })
         }
         for (const c of n.children as T[]) visit(c, depth + 1)
     }

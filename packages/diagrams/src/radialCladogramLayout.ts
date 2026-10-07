@@ -97,6 +97,16 @@ export const radialDescendantAngleRange = (n: RadialLayoutNode): RadialAngleRang
     return { min: Math.min(...angles), max: Math.max(...angles) }
 }
 
+/** Contiguous angular span (radians) of all descendant tips on the tip circle. */
+export const radialDescendantAngleSpanRad = (n: RadialLayoutNode): number => {
+    const { min, max } = radialDescendantAngleRange(n)
+    return Math.max(0, max - min)
+}
+
+/** Outer radius where clade-key silhouettes sit (`tipRadius + silhouetteOutset`). */
+export const radialLegendRingRadius = (theme: RadialCladogramTheme): number =>
+    theme.tipRadius + theme.silhouetteOutset
+
 /** Angular span of **immediate children** only (ancestral arc on the node’s circle). */
 export const radialImmediateChildAngleRange = (n: RadialLayoutNode): RadialAngleRange => {
     if (isTipShape(n) || n.children.length === 0) {

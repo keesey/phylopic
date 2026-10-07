@@ -1,8 +1,18 @@
 import { describe, expect, it } from "vitest"
-import { countTipsUnderLegendNode, selectRadialLegendClades } from "./selectRadialLegendClades.js"
+import {
+    assignRadialCladogramLayout,
+    DEFAULT_RADIAL_CLADOGRAM_THEME,
+    radialLegendRingRadius,
+} from "./radialCladogramLayout.js"
+import {
+    countTipsUnderLegendNode,
+    radialLegendMinSpanRadFromSlotWidth,
+    selectRadialLegendClades,
+} from "./selectRadialLegendClades.js"
+
+const tips = (labels: string[]) => labels.map(label => ({ label, children: [] as const }))
 
 const tree = () => {
-    const tips = (labels: string[]) => labels.map(label => ({ label, children: [] as const }))
     return {
         label: "Root",
         children: [
@@ -21,10 +31,31 @@ const tree = () => {
     }
 }
 
+const layoutTree = () => {
+    const root = tree()
+    const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 280, silhouetteOutset: 52 }
+    assignRadialCladogramLayout(root, theme)
+    return { root, legendRingRadius: radialLegendRingRadius(theme) }
+}
+
+const selectOptions = (legendRingRadius: number) => ({
+    legendRingRadius,
+    legendSilhouetteWidth: 44,
+    minLegendSpanRad: 0,
+    maxLegendClades: 10,
+    minDepth: 2,
+})
+
+describe("radialLegendMinSpanRadFromSlotWidth", () => {
+    it("converts arc length to central angle", () => {
+        expect(radialLegendMinSpanRadFromSlotWidth(44, 332)).toBeCloseTo(44 / 332)
+    })
+})
+
 describe("selectRadialLegendClades", () => {
     it("prefers deeper clades and skips nested selections", () => {
-        const root = tree()
-        const legend = selectRadialLegendClades(root, { minTipsUnder: 6, maxLegendClades: 10, minDepth: 2 })
+        const { root, legendRingRadius } = layoutTree()
+        const legend = selectRadialLegendClades(root, selectOptions(legendRingRadius))
         const labels = legend.map(n => n.label)
         expect(labels).toContain("SubA1")
         expect(labels).toContain("SubA2")
@@ -34,10 +65,43 @@ describe("selectRadialLegendClades", () => {
     })
 
     it("excludes the whole tree and shallow nodes when minDepth is 2", () => {
-        const root = tree()
-        const legend = selectRadialLegendClades(root, { minTipsUnder: 4, minDepth: 2 })
+        const { root, legendRingRadius } = layoutTree()
+        const legend = selectRadialLegendClades(root, {
+            ...selectOptions(legendRingRadius),
+            minLegendSpanRad: 0,
+        })
         expect(legend.some(n => n.label === "Root")).toBe(false)
         expect(legend.some(n => n.label === "CladeA")).toBe(false)
+    })
+
+    it("drops clades whose angular span is narrower than one legend slot", () => {
+        const big: ReturnType<typeof tree> = {
+            label: "Root",
+            children: [
+                {
+                    label: "Tiny",
+                    children: tips(["only"]),
+                },
+                {
+                    label: "Big",
+                    children: tips(Array.from({ length: 99 }, (_, i) => `x${i}`)),
+                },
+            ],
+        }
+        const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 280, silhouetteOutset: 52 }
+        assignRadialCladogramLayout(big, theme)
+        const ringR = radialLegendRingRadius(theme)
+        const minSpan = radialLegendMinSpanRadFromSlotWidth(44, ringR)
+        const legend = selectRadialLegendClades(big, {
+            legendRingRadius: ringR,
+            legendSilhouetteWidth: 44,
+            longestLegendLabelWidth: 0,
+            minDepth: 1,
+            maxLegendClades: 10,
+        })
+        expect(legend.some(n => n.label === "Tiny")).toBe(false)
+        expect(legend.some(n => n.label === "Big")).toBe(true)
+        expect(minSpan).toBeGreaterThan((1 / 100) * 2 * Math.PI)
     })
 
     it("counts tips under a node", () => {
