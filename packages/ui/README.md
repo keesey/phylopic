@@ -32,7 +32,7 @@ proxy — `apps/www/pages/api/suggestions` already does exactly that for the sam
 pattern to follow.
 
 **`NEXT_PUBLIC_VERCEL_ENV` will be absent outside Vercel,** which means analytics are silently
-disabled in local development. That is the intended behaviour, not a misconfiguration.
+disabled in local development. That is the intended behavior, not a misconfiguration.
 
 Consuming apps: see [`apps/www`](../../apps/www/README.md#environment-variables) and
 [`apps/contribute`](../../apps/contribute/README.md#environment-variables).
