@@ -8,6 +8,9 @@ import {
     radialBranchEdgePath,
     radialBranchPoint,
     radialNodeRadius,
+    radialInnerRingLabelTextPlacement,
+    radialInnerRingSilhouetteRotationDeg,
+    radialSilhouetteRotationDeg,
     radialLabelTextPlacement,
     radialBranchTipRadiusForLabels,
     radialMaxTipLabelWidth,
@@ -129,6 +132,29 @@ describe("radialLabelTextPlacement", () => {
         expect(radialLabelTextPlacement(0)).toEqual({ rotationDeg: 0, textAnchor: "start" })
         expect(radialLabelTextPlacement(Math.PI / 2)).toEqual({ rotationDeg: 90, textAnchor: "start" })
         expect(radialLabelTextPlacement(Math.PI)).toEqual({ rotationDeg: 360, textAnchor: "end" })
+    })
+})
+
+describe("radialInnerRingLabelTextPlacement", () => {
+    it("centers on the spoke, 90° clockwise from tip labels, bottom half flipped", () => {
+        expect(radialInnerRingLabelTextPlacement(0)).toEqual({ rotationDeg: 90, textAnchor: "middle" })
+        expect(radialInnerRingLabelTextPlacement(Math.PI / 2)).toEqual({
+            rotationDeg: 360,
+            textAnchor: "middle",
+        })
+        expect(radialInnerRingLabelTextPlacement(-Math.PI / 2)).toEqual({
+            rotationDeg: 0,
+            textAnchor: "middle",
+        })
+    })
+})
+
+describe("radialInnerRingSilhouetteRotationDeg", () => {
+    it("matches inner-ring label rotation on the bottom half", () => {
+        expect(radialInnerRingSilhouetteRotationDeg(0)).toBe(radialSilhouetteRotationDeg(0))
+        expect(radialInnerRingSilhouetteRotationDeg(Math.PI / 2)).toBe(
+            radialInnerRingLabelTextPlacement(Math.PI / 2).rotationDeg,
+        )
     })
 })
 

@@ -222,6 +222,29 @@ export const radialLabelTextPlacement = (angleRad: number): RadialLabelTextPlace
 export const radialLabelRotationDeg = (angleRad: number): number =>
     radialLabelTextPlacement(angleRad).rotationDeg
 
+export type RadialInnerRingLabelTextPlacement = Readonly<{
+    rotationDeg: number
+    /** Center of the label sits on the clade spoke (`text-anchor="middle"`). */
+    textAnchor: "middle"
+}>
+
+/**
+ * Clade / inner-ring labels (e.g. clade-key mode): place the **center** on the spoke at θ;
+ * tangent orientation (**90° clockwise** from {@link radialLabelTextPlacement}), flipped on the
+ * **bottom** half-plane (`sin θ > 0`) so the label at 6 o'clock stays upright.
+ */
+export const radialInnerRingLabelTextPlacement = (angleRad: number): RadialInnerRingLabelTextPlacement => {
+    let rotationDeg = (angleRad * 180) / Math.PI + 90
+    if (Math.sin(angleRad) > 0) {
+        rotationDeg += 180
+    }
+    return { rotationDeg, textAnchor: "middle" }
+}
+
+/** Label radius inside the silhouette ring (midway between branch circle and outer rim). */
+export const radialInnerRingLabelRadius = (theme: RadialCladogramTheme): number =>
+    theme.tipRadius + theme.silhouetteOutset / 2
+
 /** Ancestral (internal) nodes are never labeled or illustrated in radial style. */
 export const radialNodeShowsLabel = (node: RadialLayoutNode): boolean => isTipShape(node)
 
@@ -305,6 +328,15 @@ export const radialBranchEdgePath = (
  * Use with `translate(cx,cy) rotate(deg)` then bottom-align art in a square slot above the origin.
  */
 export const radialSilhouetteRotationDeg = (angleRad: number): number => (angleRad * 180) / Math.PI + 90
+
+/** Same bottom-half +180° as {@link radialInnerRingLabelTextPlacement} (e.g. clade-key rim silhouettes). */
+export const radialInnerRingSilhouetteRotationDeg = (angleRad: number): number => {
+    let deg = radialSilhouetteRotationDeg(angleRad)
+    if (Math.sin(angleRad) > 0) {
+        deg += 180
+    }
+    return deg
+}
 
 /** @deprecated Use radialBranchEdgePath (radial spokes + concentric arcs). */
 export const radialBranchSegment = (

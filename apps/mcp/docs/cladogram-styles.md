@@ -165,10 +165,10 @@ Reference: `radialCladogramLayout.ts` in `@phylopic/diagrams` (`assignRadialClad
 **Placement on the rim**
 
 - **Branch anchor** (`radialBranchPoint`): where the edge meets the tip on the tip circle.
-- **Silhouette** (`radialSilhouettePoint` at **r = tipRadius + silhouetteOutset**): on a **larger circle** outside the tip circle, aligned with the tip or clade bearing. Use square slot + `bottomAlignArtInSquareSlot`; **`translate(rim) rotate(radialSilhouetteRotationDeg(θ))`** so the silhouette’s **bottom points toward the center**.
+- **Silhouette** (`radialSilhouettePoint` at **r = tipRadius + silhouetteOutset**): on a **larger circle** outside the tip circle, aligned with the tip or clade bearing. Use square slot + `bottomAlignArtInSquareSlot`; **`translate(rim) rotate(…)`** with `radialSilhouetteRotationDeg(θ)` (tip labels) or **`radialInnerRingSilhouetteRotationDeg(θ)`** in clade-key mode (same bottom-half flip as inner-ring clade labels).
 - **Label** (`radialLabelPoint`): on the **same spoke** as the tip, just **outside** the tip circle (`tipRadius + labelOutset`). Use `radialLabelTextPlacement(θ)` for rotation and `text-anchor` ( **`start`** on the right half, **`end`** with **+180°** on the left so labels stay upright). `dominant-baseline="middle"`; text extends outward from the center.
 
-**Edges (polar):** every **straight** segment is a **spoke** (fixed θ, passes through the center): `radialBranchEdgePath` draws `M… L…` from the parent’s depth circle to the child (or tip circle) on the **child’s bearing**. **Ancestral rails** are separate **arcs** on each internal node’s depth circle spanning **immediate children only** (`radialAncestralArcPath`, `radialImmediateChildAngleRange`). Draw arcs, then radials, then labels and images.
+**Edges (polar):** every **straight** segment is a **spoke** (fixed θ, passes through the center): `radialBranchEdgePath` draws `M… L…` from the parent’s depth circle to the child (or tip circle) on the **child’s bearing**. **Ancestral rails** are separate **arcs** on each internal node’s depth circle spanning **immediate children only** (`radialAncestralArcPath`, `radialImmediateChildAngleRange`). In clade-key mode, colour **both** spokes and arcs from the same rule: one clade colour when all descendant tips share a clade, neutral grey when subtrees mix clades. Draw arcs, then radials, then labels and images.
 
 **Typography:** same Newick label rules as [basic](#typography-newick-labels-only) (`isVernacularNewickLabel`, Georgia, italic for scientific names).
 
@@ -177,8 +177,9 @@ Reference: `radialCladogramLayout.ts` in `@phylopic/diagrams` (`assignRadialClad
 When there are **many** tips (rough guide: **> 48**, see `RADIAL_CLADE_KEY_TIP_THRESHOLD` in reference code):
 
 1. **Omit** per-tip text labels on the figure.
-2. Color **branches** by **major clade** (monochrome under each clade when possible).
-3. Place **silhouettes only for major clades** on the **outer circle** at each clade’s mean tip bearing, with the **same clade color** (e.g. tinted backing circle behind the art). No per-tip silhouettes.
+2. Color **branches** by **major clade** (monochrome under each clade when possible). Assign colours with `tolColorAtIndex` / `tolColorPalette` from `@phylopic/diagrams` (Paul Tol schemes; default **`darkRainbow`**, or **`rainbow`** / **`muted`** via scheme name).
+3. Place **silhouettes only for major clades** on the **outer circle** at each clade’s mean tip bearing, tinted to the **same clade colour** as the branches (`svgAlphaTintFilterDef` / SourceAlpha flood on the image). No per-tip silhouettes.
+4. **Clade names** on the inner ring at the clade bearing (`radialInnerRingLabelRadius` + mean tip angle): **black**, **`text-anchor="middle"`** so the label center lies on the spoke, **`radialInnerRingLabelTextPlacement`** (tangent, +90° from tip-label bearing; flip on the **bottom** half so 6 o’clock stays upright).
 
 Use `assignRadialTipClades` when you have a stable tip id → clade id map. Agents choose clade boundaries (e.g. kingdom, phylum, order) from the user’s question.
 
