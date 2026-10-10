@@ -1,0 +1,282 @@
+import { EMPTY_UUID, normalizeUUID } from "@phylopic/utils"
+import type { PhyloPicClient } from "../client/PhyloPicClient.js"
+import { fetchLineageUuids } from "./fetchLineageUuids.js"
+import { isTargetOnImageTaggedLineage } from "./imageTaggedLineage.js"
+import type { ApiImageRecord } from "@phylopic/diagrams"
+import { toPickedImage } from "./imageRecord.js"
+import { imageMatchesLicenseFilters } from "./licenseFilters.js"
+import { phylopicNodePageUrl } from "./phylopicWebUrls.js"
+import type { LicenseFilters, PickImageOptions, PickImageResult } from "./types.js"
+
+const licenseFiltersOnly = (options: PickImageOptions): LicenseFilters => ({
+    ...(options.filter_license_by === undefined ? {} : { filter_license_by: options.filter_license_by }),
+    ...(options.filter_license_nc === undefined ? {} : { filter_license_nc: options.filter_license_nc }),
+    ...(options.filter_license_sa === undefined ? {} : { filter_license_sa: options.filter_license_sa }),
+})
+
+type ImageListQuery = "clade" | "node"
+
+const withPageUrls = (nodeUuid: string, result: Omit<PickImageResult, "nodePageUrl">): PickImageResult => ({
+    ...result,
+    nodePageUrl: phylopicNodePageUrl(nodeUuid),
+})
+
+type EmbeddedNode = Readonly<{
+    uuid?: string
+    _embedded?: Readonly<{
+        primaryImage?: ApiImageRecord | null
+    }>
+}>
+
+const listImagesForNode = async (
+    client: PhyloPicClient,
+    nodeUuid: string,
+    filters: LicenseFilters,
+    page: number,
+    imageList: ImageListQuery,
+): Promise<readonly ApiImageRecord[]> => {
+    const list = await client.listImages({
+        ...(imageList === "node" ? { filter_node: nodeUuid } : { filter_clade: nodeUuid }),
+        page,
+        embed_items: true,
+        embed_specificNode: true,
+        ...filters,
+    })
+    return (list._embedded?.items as ApiImageRecord[] | undefined) ?? []
+}
+
+const imageFromUuid = async (
+    client: PhyloPicClient,
+    imageUuid: string,
+    filters: LicenseFilters,
+): Promise<{ image: ApiImageRecord | null; warnings: string[] }> => {
+    const warnings: string[] = []
+    const full = await client.getJson<ApiImageRecord>(`/images/${imageUuid}`, {
+        embed_specificNode: true,
+    })
+    if (!full.uuid) {
+        return { image: null, warnings: ["Image record missing uuid."] }
+    }
+    if (!imageMatchesLicenseFilters(full._links?.license?.href, filters)) {
+        warnings.push("Image does not pass the requested license filters.")
+        return { image: null, warnings }
+    }
+    return { image: full, warnings }
+}
+
+const excludedPhyloNodes = (exclude?: readonly string[]) =>
+    new Set((exclude ?? []).map(uuid => normalizeUUID(uuid)))
+
+const firstLicensedListHit = (
+    items: readonly ApiImageRecord[],
+    filters: LicenseFilters,
+): ApiImageRecord | undefined =>
+    items.find(hit => hit.uuid && imageMatchesLicenseFilters(hit._links?.license?.href, filters))
+
+const tryPrimaryForTarget = async (
+    client: PhyloPicClient,
+    targetUuid: string,
+    filters: LicenseFilters,
+): Promise<{ image: ReturnType<typeof toPickedImage>; warnings: string[] }> => {
+    const warnings: string[] = []
+    const primary = await primaryForNode(client, targetUuid)
+    if (!primary) {
+        return { image: null, warnings }
+    }
+    if (!imageMatchesLicenseFilters(primary._links?.license?.href, filters)) {
+        return { image: null, warnings }
+    }
+    if (await isTargetOnImageTaggedLineage(client, targetUuid, primary)) {
+        const image = toPickedImage(primary)
+        if (image) {
+            return { image, warnings }
+        }
+    } else {
+        warnings.push(
+            "Skipped primaryImage: this node is not on the image general→specific lineage (filter_node / list picks may still apply).",
+        )
+    }
+    return { image: null, warnings }
+}
+
+const tryPickAtPhyloNode = async (
+    client: PhyloPicClient,
+    candidateUuid: string,
+    filters: LicenseFilters,
+): Promise<{ image: ReturnType<typeof toPickedImage>; warnings: string[] }> => {
+    const warnings: string[] = []
+    const primaryAttempt = await tryPrimaryForTarget(client, candidateUuid, filters)
+    warnings.push(...primaryAttempt.warnings)
+    if (primaryAttempt.image) {
+        return { image: primaryAttempt.image, warnings }
+    }
+    const nodeHit = firstLicensedListHit(
+        await listImagesForNode(client, candidateUuid, filters, 0, "node"),
+        filters,
+    )
+    if (nodeHit) {
+        const image = toPickedImage(nodeHit)
+        if (image) {
+            return { image, warnings }
+        }
+    }
+    const cladeHit = firstLicensedListHit(
+        await listImagesForNode(client, candidateUuid, filters, 0, "clade"),
+        filters,
+    )
+    if (cladeHit) {
+        const image = toPickedImage(cladeHit)
+        if (image) {
+            return { image, warnings }
+        }
+    }
+    return { image: null, warnings }
+}
+
+const pickAncestralSilhouette = async (
+    client: PhyloPicClient,
+    nodeUuid: string,
+    filters: LicenseFilters,
+    exclude?: readonly string[],
+): Promise<{ image: ReturnType<typeof toPickedImage>; warnings: string[] }> => {
+    const warnings: string[] = []
+    const excluded = excludedPhyloNodes(exclude)
+    const lineage = await fetchLineageUuids(client, nodeUuid)
+    for (const candidateUuid of lineage) {
+        if (!candidateUuid || candidateUuid === EMPTY_UUID) {
+            continue
+        }
+        if (excluded.has(normalizeUUID(candidateUuid))) {
+            warnings.push(
+                `Stopped ancestral search at cladogram parent PhyloPic node ${candidateUuid} (no silhouette from ancestors above).`,
+            )
+            break
+        }
+        const attempt = await tryPickAtPhyloNode(client, candidateUuid, filters)
+        warnings.push(...attempt.warnings)
+        if (attempt.image) {
+            if (normalizeUUID(candidateUuid) !== normalizeUUID(nodeUuid)) {
+                warnings.push(
+                    `Silhouette from PhyloPic node ${candidateUuid} (ancestor of cladogram node ${nodeUuid}).`,
+                )
+            }
+            return { image: attempt.image, warnings }
+        }
+    }
+    return { image: null, warnings }
+}
+
+const primaryForNode = async (client: PhyloPicClient, nodeUuid: string): Promise<ApiImageRecord | null> => {
+    const node = await client.getJson<EmbeddedNode>(`/nodes/${nodeUuid}`, {
+        embed_primaryImage: true,
+    })
+    const primary = node._embedded?.primaryImage
+    if (!primary?.uuid) {
+        return null
+    }
+    const full = await client.getJson<ApiImageRecord>(`/images/${primary.uuid}`, {
+        embed_generalNode: true,
+        embed_specificNode: true,
+    })
+    return full
+}
+
+export const pickImage = async (
+    client: PhyloPicClient,
+    nodeUuid: string,
+    options: PickImageOptions = {},
+): Promise<PickImageResult> => {
+    const warnings: string[] = []
+    const {
+        image_uuid,
+        clade_index,
+        clade_page,
+        image_list,
+        clade_list_only,
+        exclude_node_uuids,
+        descendant_node_uuids: _desc,
+    } = options
+    const filters = licenseFiltersOnly(options)
+    const imageList = image_list ?? "clade"
+    const listQueryKind: ImageListQuery = imageList === "node" ? "node" : "clade"
+
+    if (image_uuid) {
+        const { image, warnings: loadWarnings } = await imageFromUuid(client, image_uuid, filters)
+        warnings.push(...loadWarnings)
+        if (image) {
+            const picked = toPickedImage(image)
+            if (picked) {
+                warnings.push("Using image_uuid override (default primary/clade order skipped).")
+                return withPageUrls(nodeUuid, { image: picked, nodeUuid, warnings })
+            }
+        }
+        return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
+    }
+
+    if (clade_index !== undefined) {
+        const page = clade_page ?? 0
+        const items = await listImagesForNode(client, nodeUuid, filters, page, listQueryKind)
+        const hit = items[clade_index]
+        if (!hit) {
+            const listKind = imageList === "node" ? "node" : "clade"
+            warnings.push(`No ${listKind} list item at page ${page} index ${clade_index}. Use find_images to browse.`)
+            return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
+        }
+        const picked = toPickedImage(hit)
+        if (picked) {
+            warnings.push(
+                `Using ${imageList === "node" ? "node" : "clade"} list page ${page} index ${clade_index} (default primary/list order skipped).`,
+            )
+            return withPageUrls(nodeUuid, { image: picked, nodeUuid, warnings })
+        }
+        return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
+    }
+
+    if (imageList === "ancestral") {
+        const ancestral = await pickAncestralSilhouette(client, nodeUuid, filters, exclude_node_uuids)
+        warnings.push(...ancestral.warnings)
+        return withPageUrls(nodeUuid, { image: ancestral.image, nodeUuid, warnings })
+    }
+
+    if (clade_list_only) {
+        const cladeHit = firstLicensedListHit(
+            await listImagesForNode(client, nodeUuid, filters, 0, "clade"),
+            filters,
+        )
+        if (cladeHit) {
+            const image = toPickedImage(cladeHit)
+            if (image) {
+                warnings.push("Using filter_clade list only (primary and ancestral picks skipped).")
+                return withPageUrls(nodeUuid, { image, nodeUuid, warnings })
+            }
+        }
+        return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
+    }
+
+    const primaryAttempt = await tryPrimaryForTarget(client, nodeUuid, filters)
+    warnings.push(...primaryAttempt.warnings)
+    if (primaryAttempt.image) {
+        return withPageUrls(nodeUuid, { image: primaryAttempt.image, nodeUuid, warnings })
+    }
+
+    if (imageList === "node") {
+        const listHit = (await listImagesForNode(client, nodeUuid, filters, 0, "node"))[0]
+        if (listHit) {
+            const image = toPickedImage(listHit)
+            if (image) {
+                return withPageUrls(nodeUuid, { image, nodeUuid, warnings })
+            }
+        }
+        return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
+    }
+
+    const cladeHit = (await listImagesForNode(client, nodeUuid, filters, 0, "clade"))[0]
+    if (cladeHit) {
+        const image = toPickedImage(cladeHit)
+        if (image) {
+            return withPageUrls(nodeUuid, { image, nodeUuid, warnings })
+        }
+    }
+
+    return withPageUrls(nodeUuid, { image: null, nodeUuid, warnings })
+}

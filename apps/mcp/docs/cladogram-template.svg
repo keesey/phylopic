@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Structural template only  not a real cladogram.
+  Fetch via MCP resource phylopic://docs/cladogram-template.svg
+  See docs/cladogram-for-agents.md for workflow.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 200" width="330" height="200">
+  <title>Cladogram layout template (example)</title>
+  <desc>Basic rectangular cladogram skeleton. Silhouettes above the rail; labels below (or centered for image-free tips). First tip in Newick order at top.</desc>
+  <rect x="0" y="0" width="330" height="200" fill="#ffffff"/>
+  <line x1="0" y1="110" x2="44" y2="110" stroke="#333" stroke-width="1.5"/>
+  <polyline fill="none" stroke="#333" stroke-width="1.5" points="44,110 72,110 72,150 98,150 150,150"/>
+  <polyline fill="none" stroke="#333" stroke-width="1.5" points="44,110 72,110 72,70 90,70"/>
+  <g id="root">
+    <a href="https://www.phylopic.org/images/00000000-0000-4000-8000-000000000001" xlink:href="https://www.phylopic.org/images/00000000-0000-4000-8000-000000000001">
+      <!-- Square slot 4444; image sized from vector viewBox, bottom-aligned inside (see silhouetteViewBox.ts) -->
+      <image href="https://example.invalid/vector.svg" x="0" y="72" width="44" height="34"/>
+    </a>
+    <a href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000010" xlink:href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000010">
+      <text x="0" y="126" font-family="Georgia, serif" font-size="13" font-style="italic">Clade</text>
+    </a>
+  </g>
+  <g id="tip-a">
+    <a href="https://www.phylopic.org/images/00000000-0000-4000-8000-000000000002" xlink:href="https://www.phylopic.org/images/00000000-0000-4000-8000-000000000002">
+      <image href="https://example.invalid/vector.svg" x="98" y="104" width="52" height="42"/>
+    </a>
+    <a href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000020" xlink:href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000020">
+      <text x="98" y="166" font-family="Georgia, serif" font-size="13" font-style="italic">Taxon A</text>
+    </a>
+  </g>
+  <g id="tip-b">
+    <a href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000021" xlink:href="https://www.phylopic.org/nodes/00000000-0000-4000-8000-000000000021">
+      <text x="98" y="70" dominant-baseline="middle" font-family="Georgia, serif" font-size="13" font-style="italic">Taxon B</text>
+    </a>
+  </g>
+</svg>

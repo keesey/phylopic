@@ -1,5 +1,6 @@
 "use client"
 import { type NodeWithEmbedded, isNodeWithEmbedded } from "@phylopic/api-models"
+import { otolResolveObjectIDs } from "@phylopic/search"
 import { createSearch } from "@phylopic/utils"
 import { fetchDataAndCheck } from "@phylopic/utils-api"
 import { useDebounce } from "@react-hook/debounce"
@@ -9,26 +10,6 @@ import useSWRImmutable from "swr/immutable"
 import { BuildContext } from "../../../builds"
 import { SearchContext } from "../../context"
 import { DEBOUNCE_WAIT } from "../DEBOUNCE_WAIT"
-import { OTOL_URL } from "./OTOL_URL"
-
-interface OTOLLineageItem {
-    // Abridged.
-    readonly ott_id: number
-}
-
-interface OTOLTaxonInfo {
-    // Abridged.
-    readonly lineage?: readonly OTOLLineageItem[]
-}
-
-const fetchLineage: Fetcher<OTOLTaxonInfo, [string, number, boolean]> = async ([url, ott_id, include_lineage]) => {
-    const response = await fetchDataAndCheck<OTOLTaxonInfo>(url, {
-        data: { include_lineage, ott_id },
-        headers: { "content-type": "application/json" },
-        method: "POST",
-    })
-    return response.data
-}
 
 const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
     const response = await fetchDataAndCheck<NodeWithEmbedded>(url, undefined, isNodeWithEmbedded)
@@ -38,16 +19,15 @@ const fetchNode: Fetcher<NodeWithEmbedded, [string]> = async ([url]) => {
 const OTOLResolveObject: React.FC<{ ott_id: number }> = ({ ott_id }) => {
     const [build] = React.useContext(BuildContext) ?? []
     const [, dispatch] = React.useContext(SearchContext) ?? []
-    const lineage = useSWRImmutable([OTOL_URL + "/taxonomy/taxon_info", ott_id, true], fetchLineage)
+    const lineage = useSWRImmutable(["otolResolveObjectIDs", ott_id] as const, ([, taxonID]) =>
+        otolResolveObjectIDs(taxonID),
+    )
     const lineageIDs = React.useMemo(() => {
         if (lineage.isLoading) {
             return []
         }
-        if (!lineage.data?.lineage) {
-            return [String(ott_id)]
-        }
-        return [String(ott_id), ...lineage.data.lineage.map(({ ott_id: lineageID }) => String(lineageID))]
-    }, [lineage.data?.lineage, lineage.isLoading, ott_id])
+        return lineage.data ?? [String(ott_id)]
+    }, [lineage.data, lineage.isLoading, ott_id])
     const [indirectKey, setIndirectKey] = useDebounce<string | null>(null, DEBOUNCE_WAIT, true)
     React.useEffect(
         () =>
@@ -85,7 +65,7 @@ export const OTOLResolve: React.FC = () => {
         return ott_ids
             .filter(id => !state?.resolutions["opentreeoflife.org"]?.taxonomy?.[id])
             .map(id => parseInt(id, 10))
-            .filter(isFinite)
+            .filter(id => Number.isFinite(id))
             .sort()
     }, [state?.externalResults, state?.resolutions])
     return (

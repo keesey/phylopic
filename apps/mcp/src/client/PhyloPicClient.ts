@@ -1,0 +1,260 @@
+import { DATA_MEDIA_TYPE, type API, type ErrorResponse, type Link, type TitledLink } from "@phylopic/api-models"
+import { isHash, type UUID } from "@phylopic/utils"
+import { PHYLOPIC_WWW_ORIGIN } from "../cladogram/phylopicWebUrls.js"
+import { addBuildToURL, joinPath, toSearchParams } from "./url.js"
+
+export type FetchFn = typeof fetch
+
+export class PhyloPicApiError extends Error {
+    constructor(
+        message: string,
+        readonly status: number,
+        readonly errors?: ErrorResponse["errors"],
+    ) {
+        super(message)
+        this.name = "PhyloPicApiError"
+    }
+}
+
+export type PhyloPicClientOptions = {
+    baseUrl?: string
+    fetch?: FetchFn
+    buildTtlMs?: number
+    /** Public www origin for collection permalinks (default PHYLOPIC_WWW_URL or https://www.phylopic.org). */
+    wwwOrigin?: string
+}
+
+const DEFAULT_BASE_URL = "https://api.phylopic.org"
+const DEFAULT_BUILD_TTL_MS = 60_000
+
+export class PhyloPicClient {
+    readonly #baseUrl: string
+
+    readonly #fetch: FetchFn
+
+    readonly #buildTtlMs: number
+
+    readonly #wwwOrigin: string
+
+    #build: number | undefined
+
+    #buildFetchedAt = 0
+
+    constructor(options: PhyloPicClientOptions = {}) {
+        this.#baseUrl = (options.baseUrl ?? process.env.PHYLOPIC_API_URL ?? DEFAULT_BASE_URL).replace(/\/$/, "")
+        this.#fetch = options.fetch ?? fetch
+        this.#buildTtlMs = options.buildTtlMs ?? DEFAULT_BUILD_TTL_MS
+        this.#wwwOrigin = (options.wwwOrigin ?? process.env.PHYLOPIC_WWW_URL ?? PHYLOPIC_WWW_ORIGIN).replace(
+            /\/$/,
+            "",
+        )
+    }
+
+    get wwwOrigin() {
+        return this.#wwwOrigin
+    }
+
+    get baseUrl() {
+        return this.#baseUrl
+    }
+
+    async getBuild(force = false): Promise<number> {
+        const now = Date.now()
+        if (!force && this.#build !== undefined && now - this.#buildFetchedAt < this.#buildTtlMs) {
+            return this.#build
+        }
+        const index = await this.#fetchJson<API>("/", {})
+        this.#build = index.build
+        this.#buildFetchedAt = now
+        return index.build
+    }
+
+    async getJson<T>(
+        path: string,
+        query: Readonly<Record<string, string | number | boolean | undefined>> = {},
+    ): Promise<T> {
+        const build = await this.getBuild()
+        const url = joinPath(this.#baseUrl, path) + toSearchParams({ ...query, build })
+        return await this.#fetchJson<T>(url, {}, build)
+    }
+
+    /** Image list where an empty result set returns `{ _embedded: { items: [] } }` instead of 404. */
+    async listImages(
+        query: Readonly<Record<string, string | number | boolean | undefined>>,
+    ): Promise<{ _embedded?: { items?: readonly unknown[] } }> {
+        try {
+            return await this.getJson("/images", query)
+        } catch (error) {
+            if (error instanceof PhyloPicApiError && error.status === 404) {
+                return { _embedded: { items: [] } }
+            }
+            throw error
+        }
+    }
+
+    async getJsonAtUrl<T>(href: string): Promise<T> {
+        const url = href.startsWith("http") ? href : joinPath(this.#baseUrl, href)
+        const build = await this.getBuild()
+        return await this.#fetchJson<T>(url, {}, build)
+    }
+
+    async resolveExternal(
+        authority: string,
+        namespace: string,
+        objectIDs: readonly string[],
+        embedPrimaryImage = true,
+    ): Promise<{ link: TitledLink; node: unknown }> {
+        const build = await this.getBuild()
+        const path = `/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}`
+        const query = {
+            build,
+            objectIDs: objectIDs.join(","),
+            ...(embedPrimaryImage ? { embed_primaryImage: "true" as const } : {}),
+        }
+        const url = joinPath(this.#baseUrl, path) + toSearchParams(query)
+        const response = await this.#fetch(url, {
+            headers: { Accept: DATA_MEDIA_TYPE },
+            redirect: "manual",
+        })
+        if (response.status === 404) {
+            await this.#throwApiError(response)
+        }
+        if (response.status !== 308 && response.status !== 307) {
+            throw new PhyloPicApiError(`Unexpected resolve status ${response.status}`, response.status)
+        }
+        const link = (await response.json()) as TitledLink
+        const node = await this.getJsonAtUrl<unknown>(link.href)
+        return { link, node }
+    }
+
+    /** Register image UUIDs as a collection (POST /collections). Returns the collection UUID from the redirect body. */
+    async createCollection(imageUuids: readonly UUID[]): Promise<{ collectionUuid: string; href: string }> {
+        const build = await this.getBuild()
+        const url = joinPath(this.#baseUrl, "/collections") + toSearchParams({ build })
+        const response = await this.#fetch(url, {
+            body: JSON.stringify([...imageUuids]),
+            headers: {
+                Accept: DATA_MEDIA_TYPE,
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            redirect: "manual",
+        })
+        if (response.status === 429) {
+            await this.#throwApiError(response)
+        }
+        if (response.status !== 303) {
+            throw new PhyloPicApiError(`Unexpected create collection status ${response.status}`, response.status)
+        }
+        const link = (await response.json()) as Link
+        const href = link.href
+        const segment = href.split("/").pop()
+        if (!segment) {
+            throw new PhyloPicApiError("Collection response missing UUID.", 502)
+        }
+        return { collectionUuid: decodeURIComponent(segment.split("?")[0] ?? segment), href }
+    }
+
+    /**
+     * Mint a stable attribution permalink via the www API (rate-limited; not part of api.phylopic.org).
+     */
+    async createCollectionPermalink(collectionUuid: string): Promise<{ hash: string; permalinkUrl: string }> {
+        const url = `${this.#wwwOrigin}/api/permalinks/collections/${encodeURIComponent(collectionUuid)}`
+        const response = await this.#fetch(url, {
+            headers: { Accept: "application/json" },
+            method: "GET",
+        })
+        if (!response.ok) {
+            await this.#throwPermalinkError(response)
+        }
+        const hash = (await response.json()) as unknown
+        if (!isHash(hash)) {
+            throw new PhyloPicApiError("Invalid permalink hash from www.", 502)
+        }
+        return { hash, permalinkUrl: `${this.#wwwOrigin}/permalinks/${encodeURIComponent(hash)}` }
+    }
+
+    async resolveExternalSingle(
+        authority: string,
+        namespace: string,
+        objectID: string,
+        embedPrimaryImage = true,
+    ): Promise<{ link: TitledLink; node: unknown }> {
+        const build = await this.getBuild()
+        const path = `/resolve/${encodeURIComponent(authority)}/${encodeURIComponent(namespace)}/${encodeURIComponent(objectID)}`
+        const query = {
+            build,
+            ...(embedPrimaryImage ? { embed_primaryImage: "true" as const } : {}),
+        }
+        const url = joinPath(this.#baseUrl, path) + toSearchParams(query)
+        const response = await this.#fetch(url, {
+            headers: { Accept: DATA_MEDIA_TYPE },
+            redirect: "manual",
+        })
+        if (response.status === 404) {
+            await this.#throwApiError(response)
+        }
+        if (response.status !== 308 && response.status !== 307) {
+            throw new PhyloPicApiError(`Unexpected resolve status ${response.status}`, response.status)
+        }
+        const link = (await response.json()) as TitledLink
+        const node = await this.getJsonAtUrl<unknown>(link.href)
+        return { link, node }
+    }
+
+    async #fetchJson<T>(
+        pathOrUrl: string,
+        query: Readonly<Record<string, string | number | boolean | undefined>>,
+        build?: number,
+    ): Promise<T> {
+        const isAbsolute = pathOrUrl.startsWith("http")
+        let url = isAbsolute ? pathOrUrl : joinPath(this.#baseUrl, pathOrUrl)
+        if (!isAbsolute && Object.keys(query).length > 0) {
+            url += toSearchParams(query)
+        }
+        let response = await this.#fetch(url, { headers: { Accept: DATA_MEDIA_TYPE } })
+        if ((response.status === 307 || response.status === 308) && build !== undefined) {
+            const location = response.headers.get("location")
+            if (location?.includes("build=") && !location.includes(`build=${build}`)) {
+                const redirected = addBuildToURL(location, build)
+                response = await this.#fetch(joinPath(this.#baseUrl, redirected), {
+                    headers: { Accept: DATA_MEDIA_TYPE },
+                })
+            } else if (location) {
+                response = await this.#fetch(joinPath(this.#baseUrl, location), {
+                    headers: { Accept: DATA_MEDIA_TYPE },
+                })
+            }
+        }
+        if (!response.ok) {
+            await this.#throwApiError(response)
+        }
+        return (await response.json()) as T
+    }
+
+    async #throwPermalinkError(response: Response): Promise<never> {
+        let message = response.statusText || `HTTP ${response.status}`
+        try {
+            const body = (await response.json()) as { error?: string }
+            if (body.error) {
+                message = body.error
+            }
+        } catch {
+            // ignore JSON parse errors
+        }
+        throw new PhyloPicApiError(message, response.status)
+    }
+
+    async #throwApiError(response: Response): Promise<never> {
+        let message = response.statusText || `HTTP ${response.status}`
+        try {
+            const body = (await response.json()) as ErrorResponse
+            if (body.errors?.length) {
+                message = body.errors.map(error => error.userMessage ?? error.developerMessage).join("; ")
+            }
+        } catch {
+            // ignore JSON parse errors
+        }
+        throw new PhyloPicApiError(message, response.status)
+    }
+}

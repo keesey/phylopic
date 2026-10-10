@@ -6,8 +6,10 @@ import type { Compressed } from "compress-json"
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { NextSeo } from "next-seo"
 import Link from "next/link"
+import { useCallback, useState } from "react"
 import { unstable_serialize } from "swr"
 import customEvents from "~/analytics/customEvents"
+import { downloadCollectionCladogramSvg } from "~/collections/generateCollectionCladogram"
 import BUILD from "~/build/BUILD"
 import ImageCollectionUsage from "~/licenses/ImageCollectionUsage"
 import ImageLicensePaginator from "~/licenses/ImageLicensePaginator"
@@ -21,6 +23,7 @@ import compressFallback from "~/swr/compressFallback"
 import Breadcrumbs from "~/ui/Breadcrumbs"
 import BulletList from "~/ui/BulletList"
 import Container from "~/ui/Container"
+import HeaderNav from "~/ui/HeaderNav"
 import ImageListView from "~/views/ImageListView"
 import NomenView from "~/views/NomenView"
 
@@ -67,6 +70,18 @@ const COLLECTION_LABELS_SHORT: Readonly<Record<CollectionType, string>> = {
 
 const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
     const type = getCollectionType(has.contributors, has.images, has.nodes)
+    const [cladogramBusy, setCladogramBusy] = useState(false)
+    const onGenerateCladogram = useCallback(async () => {
+        setCladogramBusy(true)
+        customEvents.clickLink("download_cladogram", "", "Download Cladogram ↓", "button")
+        try {
+            await downloadCollectionCladogramSvg(uuid)
+        } catch {
+            window.alert("Could not generate cladogram. Please try again, or report the isssue.")
+        } finally {
+            setCladogramBusy(false)
+        }
+    }, [uuid])
     return (
         <CompressedSWRConfig fallback={fallback}>
             <PageLayout {...props}>
@@ -85,7 +100,23 @@ const PageComponent: NextPage<Props> = ({ fallback, has, uuid, ...props }) => {
                                 { children: <strong>{COLLECTION_LABELS_SHORT[type]}</strong> },
                             ]}
                         />
-                        <h1>{COLLECTION_LABELS[type]}</h1>
+                        <HeaderNav
+                            buttons={
+                                has.images
+                                    ? [
+                                          {
+                                              children: cladogramBusy ? "Generating…" : "Download Cladogram ↓",
+                                              disabled: cladogramBusy,
+                                              key: "cladogram",
+                                              onClick: () => void onGenerateCladogram(),
+                                              type: "button" as const,
+                                          },
+                                      ]
+                                    : []
+                            }
+                            header={COLLECTION_LABELS[type]}
+                            headerLevel={1}
+                        />
                     </header>
                     {!has.contributors && !has.images && !has.nodes && <p>This collection is empty.</p>}
                     {has.contributors && (

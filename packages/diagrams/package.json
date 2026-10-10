@@ -1,0 +1,41 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "dependencies": {
+        "@phylopic/api-models": "*",
+        "@phylopic/utils": "*"
+    },
+    "description": "PhyloPic cladogram layout and client-side SVG generation.",
+    "devDependencies": {
+        "@phylopic/tsconfig": "*",
+        "eslint-config-phylopic": "*",
+        "tsup": "^8.5.1",
+        "typescript": "^5.4.5",
+        "vitest": "^5.0.0"
+    },
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs",
+        "default": "./dist/index.js"
+    },
+    "files": [
+        "dist/**"
+    ],
+    "license": "MIT",
+    "name": "@phylopic/diagrams",
+    "private": true,
+    "scripts": {
+        "build": "tsup src/index.ts --format esm,cjs --dts",
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+        "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+        "lint": "TIMING=1 eslint --fix src/**/*.ts",
+        "test": "vitest --watch=false"
+    },
+    "sideEffects": false,
+    "type": "module",
+    "types": "./dist/index.d.ts",
+    "version": "0.1.0"
+}

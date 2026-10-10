@@ -10,6 +10,7 @@
         "@aws-sdk/client-s3": "^3.1093.0",
         "@phylopic/api-models": "*",
         "@phylopic/client-components": "*",
+        "@phylopic/diagrams": "*",
         "@phylopic/fundraiser": "*",
         "@phylopic/source-models": "*",
         "@phylopic/styles": "*",
@@ -59,6 +60,7 @@
         "build": "next build && node scripts/verify-production-css.mjs",
         "clean": "rm -rf .next && rm -rf .swc && rm -rf .turbo && rm -rf node_modules",
         "dev": "next dev -p 3000",
+        "predev": "yarn workspace @phylopic/diagrams build",
         "lint": "TIMING=1 eslint --fix ./**/*.[jt]s",
         "start": "next start",
         "unused": "next-unused"

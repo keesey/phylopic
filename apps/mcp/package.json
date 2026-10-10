@@ -1,0 +1,44 @@
+{
+    "author": {
+        "email": "keesey+phylopic@gmail.com",
+        "name": "T. Michael Keesey"
+    },
+    "bugs": {
+        "url": "https://github.com/keesey/phylopic/issues"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.32.0",
+        "@phylopic/api-models": "*",
+        "@phylopic/diagrams": "*",
+        "@phylopic/search": "*",
+        "@phylopic/utils": "*",
+        "newick-js": "^1.2.4",
+        "zod": "^3.24.2"
+    },
+    "description": "Model Context Protocol server for the PhyloPic API.",
+    "devDependencies": {
+        "@phylopic/tsconfig": "*",
+        "@types/node": "^22.15.0",
+        "canvas": "^3.1.0",
+        "eslint-config-phylopic": "*",
+        "typescript": "^5.4.5",
+        "tsup": "^8.4.0",
+        "vitest": "^5.0.0"
+    },
+    "license": "MIT",
+    "name": "@phylopic/mcp",
+    "private": true,
+    "scripts": {
+        "build": "tsup",
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+        "dev": "tsup --watch --onSuccess \"node dist/http.js\"",
+        "format": "prettier --write --ignore-path ../../.prettierignore \"**/*.{js,json,md,ts,tsx}\"",
+        "lint": "TIMING=1 eslint --fix ./**/*.[jt]s",
+        "start": "node dist/http.js",
+        "start:stdio": "node dist/stdio.js",
+        "test": "vitest run",
+        "typecheck": "NODE_OPTIONS='--max-old-space-size=8192' tsc --noEmit -p tsconfig.json"
+    },
+    "type": "module",
+    "version": "0.1.0"
+}
