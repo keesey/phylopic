@@ -35,6 +35,7 @@
     "private": true,
     "scripts": {
         "autolink": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/autolink.ts",
+        "backfill:derivatives": "node --loader ts-node/esm ./src/process/backfillDerivatives.ts",
         "backup:source": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/backupSource.ts",
         "clean": "rm -rf .turbo && rm -rf node_modules",
         "coverage": "node --loader ts-node/esm ./src/coverage.ts",

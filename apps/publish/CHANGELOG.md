@@ -10,10 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Each image folder on `images.phylopic.org` has a `derivatives.json` listing its raster, social, and thumbnail PNGs. `yarn process` writes it for rebuilt images and prunes unlisted derivative PNGs from the publish mirror; `yarn insert` builds image entity JSON from it ([#88](https://github.com/keesey/phylopic/issues/88)).
+- `yarn backfill:derivatives [--write]` writes `derivatives.json` for existing images whose derivative filenames are consistent, leaving inconsistent ones to be reprocessed.
 
 ### Changed
 
-- `preprocess.sh` queues images without a `derivatives.json` for reprocessing, including raster-sourced images. The first `yarn make` after upgrading reprocesses every image.
+- `preprocess.sh` queues images without a `derivatives.json` for reprocessing, including raster-sourced images. Run `yarn backfill:derivatives --write` once before the first `yarn make` so only inconsistent images are reprocessed.
 - Image entity JSON lists social and thumbnail files from `derivatives.json` instead of hardcoded sizes; `yarn insert` fails if an image has no manifest or doesn't have exactly one social image.
 
 ### Deprecated

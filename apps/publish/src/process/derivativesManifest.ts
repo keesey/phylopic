@@ -25,7 +25,7 @@ const isDerivativesManifest = (x: unknown): x is DerivativesManifest =>
         return Array.isArray(files) && files.every(file => typeof file === "string")
     })
 
-const listPngs = async (folder: string): Promise<string[]> => {
+export const listPngs = async (folder: string): Promise<string[]> => {
     try {
         return (await listDir(folder)).filter(file => file.endsWith(".png")).sort()
     } catch (error) {

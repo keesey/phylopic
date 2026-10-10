@@ -118,9 +118,17 @@ these manifests, never from a folder scan, so orphans that `upload:images` leave
 cutover (and that `yarn download` copies back into the mirror) are never advertised, and the final
 `yarn sync:images` removes them from S3.
 
-`preprocess.sh` queues any image without a `derivatives.json` for reprocessing, so the first
-`yarn make` after this change reprocesses every image. Until that has run, `yarn make:data` fails
-for images that have no manifest.
+`preprocess.sh` queues any image without a `derivatives.json` for reprocessing. To add manifests to
+existing images without reprocessing them all, run a one-time backfill after `yarn download`:
+
+```sh
+yarn backfill:derivatives          # dry run: report images with inconsistent derivative files
+yarn backfill:derivatives --write  # write derivatives.json for every consistent image
+```
+
+The backfill checks the `{width}x{height}.png` filenames: the raster variants must share one aspect
+ratio and have the long sides `process` produces, and there must be one social image and the three
+thumbnails. Images that fail get no manifest, so the next `yarn make` reprocesses only those.
 
 If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
 `NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
