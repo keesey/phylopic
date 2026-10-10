@@ -9,6 +9,7 @@ import {
     type VectorMediaType,
 } from "@phylopic/utils"
 import { createReadStream } from "fs"
+import { join } from "path"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir.js"
 import resolvePublishPath from "../fsutils/resolvePublishPath.js"
@@ -65,9 +66,9 @@ const getPngMediaLinksFromMirrorFolder = async (
             : (await listDir(folder)).filter(file => file.endsWith(".png"))
     const links = await Promise.all(
         files.map<Promise<MediaLink<string, RasterMediaType>>>(async file => {
-            const { height, width } = await getFileMetadata(`${folder}/${file}`)
+            const { height, width } = await getFileMetadata(join(folder, file))
             return {
-                href: `${IMAGES_URL_BASE}${uuid}/${folderName}/${file}`,
+                href: IMAGES_URL_BASE + join(uuid, folderName, file),
                 sizes: `${width}x${height}`,
                 type: "image/png",
             }
@@ -97,8 +98,8 @@ const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
         throw new Error(`Could not find source for image <${uuid}>.`)
     }
     const filename = files[0]
-    const path = `${folder}/${filename}`
-    const { height, mime, width } = await getFileMetadata(path)
+    const sourcePath = join(folder, filename)
+    const { height, mime, width } = await getFileMetadata(sourcePath)
     if (!isImageMediaType(mime)) {
         throw new Error(`Unrecognized MIME type (${mime}) for image. <${uuid}>`)
     }
