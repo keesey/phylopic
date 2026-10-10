@@ -124,6 +124,7 @@ existing images without reprocessing them all, run a one-time backfill after `ya
 ```sh
 yarn backfill:derivatives          # dry run: report images with inconsistent derivative files
 yarn backfill:derivatives --write  # write derivatives.json for every consistent image
+yarn upload:images                 # push the manifests, or the next `yarn download` deletes them
 ```
 
 The backfill checks the `{width}x{height}.png` filenames: the raster variants must share one aspect
