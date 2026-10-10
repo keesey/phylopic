@@ -9,13 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Process queue (`.scratch/process-queue.json`) and manifest (`.process-manifest.json`) record derivative PNGs for images processed in the current `yarn process` run; entity JSON uses the manifest and prunes stale mirror files for those images ([#88](https://github.com/keesey/phylopic/issues/88)).
+
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
-- Image entity JSON lists raster, thumbnail, and social files by scanning the local publish mirror (`.s3/images.phylopic.org`), i.e. the tree `yarn process` writes and `yarn sync:images --delete` eventually enforces—not the superset of keys left on S3 while `yarn upload:images` runs without `--delete` during cutover ([#88](https://github.com/keesey/phylopic/issues/88)).
+- Image entity JSON no longer advertises orphan derivative PNGs for reprocessed images when the publish mirror still contained files downloaded from S3 ([#88](https://github.com/keesey/phylopic/issues/88)).
 
 ### Removed
 

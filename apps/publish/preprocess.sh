@@ -2,6 +2,8 @@
 
 echo "Preprocessing image files..."
 
+rm -f .process-manifest.json
+
 if [ ! -d .s3/source-images.phylopic.org/images ]; then
     echo "No folder for source images!" 1>&2
     exit 1
@@ -79,5 +81,8 @@ for file in .s3/source-images.phylopic.org/images/**/source; do
 done
 
 echo "Copied source images to scratch."
+
+echo "Writing process queue..."
+node --loader ts-node/esm ./src/process/writeProcessQueue.ts
 
 echo "Preprocessed image files."

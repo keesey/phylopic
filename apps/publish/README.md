@@ -111,9 +111,11 @@ yarn make
    `apps/www/.env.local`
 6. `yarn sync:images` — final image sync with `--delete` (S3 matches the local publish mirror)
 
-During `yarn insert`, raster/thumbnail/social links in image entity JSON are built from the local
-`.s3/images.phylopic.org` publish mirror (the tree `yarn process` writes), not from a live bucket
-listing. That mirror is what `yarn sync:images` enforces on S3 after release.
+During `yarn insert`, raster/thumbnail/social links in image entity JSON come from the local publish
+mirror. Images processed in the current `yarn process` run are listed from `.process-manifest.json`
+(derivative filenames recorded at the end of `process`, with stale PNGs pruned from the mirror).
+Unprocessed images fall back to scanning their mirror folders. The mirror is what `yarn sync:images`
+enforces on S3 after release—not the superset left on S3 during cutover `upload:images`.
 
 If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
 `NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the

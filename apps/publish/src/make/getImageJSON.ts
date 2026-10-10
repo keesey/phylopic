@@ -12,6 +12,7 @@ import { createReadStream } from "fs"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir.js"
 import resolvePublishPath from "../fsutils/resolvePublishPath.js"
+import { getProcessedDerivativeFiles, readProcessManifest, type ProcessManifest } from "../process/processManifest.js"
 import { imagePublishMirrorPath } from "./imagesPublishMirror.js"
 import type { SourceData } from "./getSourceData.js"
 
@@ -41,13 +42,27 @@ const getMediaLinkArea = ({ sizes }: Pick<MediaLink, "sizes">) =>
 
 const sortMediaLinks = (a: MediaLink, b: MediaLink) => getMediaLinkArea(b) - getMediaLinkArea(a)
 
+let cachedProcessManifest: ProcessManifest | null | undefined
+
+const loadProcessManifest = async (): Promise<ProcessManifest | null> => {
+    if (cachedProcessManifest === undefined) {
+        cachedProcessManifest = await readProcessManifest()
+    }
+    return cachedProcessManifest
+}
+
 /** Lists PNG variants under the local publish mirror (not live S3 during cutover). */
 const getPngMediaLinksFromMirrorFolder = async (
     uuid: UUID,
     folderName: "raster" | "thumbnail" | "social",
+    manifest: ProcessManifest | null,
 ): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
     const folder = imagePublishMirrorPath(uuid, folderName)
-    const files = (await listDir(folder)).filter(file => file.endsWith(".png"))
+    const processed = getProcessedDerivativeFiles(manifest, uuid)
+    const files =
+        processed !== null
+            ? [...processed[folderName]]
+            : (await listDir(folder)).filter(file => file.endsWith(".png"))
     const links = await Promise.all(
         files.map<Promise<MediaLink<string, RasterMediaType>>>(async file => {
             const { height, width } = await getFileMetadata(`${folder}/${file}`)
@@ -61,10 +76,14 @@ const getPngMediaLinksFromMirrorFolder = async (
     return links.sort(sortMediaLinks)
 }
 
-const getRasterLinks = (uuid: UUID) => getPngMediaLinksFromMirrorFolder(uuid, "raster")
+const getRasterLinks = (uuid: UUID, manifest: ProcessManifest | null) =>
+    getPngMediaLinksFromMirrorFolder(uuid, "raster", manifest)
 
-const getSocialLink = async (uuid: UUID): Promise<MediaLink<string, RasterMediaType>> => {
-    const links = await getPngMediaLinksFromMirrorFolder(uuid, "social")
+const getSocialLink = async (
+    uuid: UUID,
+    manifest: ProcessManifest | null,
+): Promise<MediaLink<string, RasterMediaType>> => {
+    const links = await getPngMediaLinksFromMirrorFolder(uuid, "social", manifest)
     if (links.length === 0) {
         throw new Error(`Could not find social image for image <${uuid}>.`)
     }
@@ -90,7 +109,8 @@ const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
     }
 }
 
-const getThumbnailLinks = (uuid: UUID) => getPngMediaLinksFromMirrorFolder(uuid, "thumbnail")
+const getThumbnailLinks = (uuid: UUID, manifest: ProcessManifest | null) =>
+    getPngMediaLinksFromMirrorFolder(uuid, "thumbnail", manifest)
 
 const getVectorLink = async (uuid: UUID): Promise<MediaLink<string, VectorMediaType>> => {
     const path = imagePublishMirrorPath(uuid, "vector.svg")
@@ -109,11 +129,12 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
         throw new Error(`Source image not found! <${uuid}>`)
     }
     const modifiedFile = data.filesModified.get(uuid) ?? sourceImage.modified
+    const processManifest = await loadProcessManifest()
     const [rasterFiles, socialFile, sourceFile, thumbnailFiles, vectorFile] = await Promise.all([
-        getRasterLinks(uuid),
-        getSocialLink(uuid),
+        getRasterLinks(uuid, processManifest),
+        getSocialLink(uuid, processManifest),
         getSourceLink(uuid),
-        getThumbnailLinks(uuid),
+        getThumbnailLinks(uuid, processManifest),
         getVectorLink(uuid),
     ])
     const specificTitle =
