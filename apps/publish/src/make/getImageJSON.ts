@@ -9,9 +9,10 @@ import {
     type VectorMediaType,
 } from "@phylopic/utils"
 import { createReadStream } from "fs"
-import { join } from "path"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir.js"
+import resolvePublishPath from "../fsutils/resolvePublishPath.js"
+import { imagePublishMirrorPath } from "./imagesPublishMirror.js"
 import type { SourceData } from "./getSourceData.js"
 
 const IMAGES_URL_BASE = "https://images.phylopic.org/images/"
@@ -27,8 +28,8 @@ const getNodes = (uuid: string, data: SourceData): readonly TitledLink[] => {
     }))
 }
 
-const getFileMetadata = (filename: string) => {
-    const stream = createReadStream(filename)
+const getFileMetadata = (relativePath: string) => {
+    const stream = createReadStream(resolvePublishPath(relativePath))
     return probeImageSize(stream)
 }
 
@@ -40,14 +41,18 @@ const getMediaLinkArea = ({ sizes }: Pick<MediaLink, "sizes">) =>
 
 const sortMediaLinks = (a: MediaLink, b: MediaLink) => getMediaLinkArea(b) - getMediaLinkArea(a)
 
-const getRasterLinks = async (uuid: UUID): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
-    const folder = join(".s3", "images.phylopic.org", "images", uuid, "raster")
-    const files = await listDir(folder)
+/** Lists PNG variants under the local publish mirror (not live S3 during cutover). */
+const getPngMediaLinksFromMirrorFolder = async (
+    uuid: UUID,
+    folderName: "raster" | "thumbnail" | "social",
+): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
+    const folder = imagePublishMirrorPath(uuid, folderName)
+    const files = (await listDir(folder)).filter(file => file.endsWith(".png"))
     const links = await Promise.all(
         files.map<Promise<MediaLink<string, RasterMediaType>>>(async file => {
-            const { height, width } = await getFileMetadata(join(folder, file))
+            const { height, width } = await getFileMetadata(`${folder}/${file}`)
             return {
-                href: IMAGES_URL_BASE + uuid + "/raster/" + file,
+                href: `${IMAGES_URL_BASE}${uuid}/${folderName}/${file}`,
                 sizes: `${width}x${height}`,
                 type: "image/png",
             }
@@ -56,23 +61,24 @@ const getRasterLinks = async (uuid: UUID): Promise<readonly MediaLink<string, Ra
     return links.sort(sortMediaLinks)
 }
 
+const getRasterLinks = (uuid: UUID) => getPngMediaLinksFromMirrorFolder(uuid, "raster")
+
 const getSocialLink = async (uuid: UUID): Promise<MediaLink<string, RasterMediaType>> => {
-    // :TODO: Check existence?
-    return {
-        href: IMAGES_URL_BASE + uuid + "/social/1200x628.png",
-        sizes: "1200x628",
-        type: "image/png",
+    const links = await getPngMediaLinksFromMirrorFolder(uuid, "social")
+    if (links.length === 0) {
+        throw new Error(`Could not find social image for image <${uuid}>.`)
     }
+    return links[0]
 }
 
 const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
-    const folder = join(".s3", "images.phylopic.org", "images", uuid)
+    const folder = imagePublishMirrorPath(uuid)
     const files = (await listDir(folder)).filter(file => /^source\.[^.]+$/.test(file))
     if (files.length !== 1) {
         throw new Error(`Could not find source for image <${uuid}>.`)
     }
     const filename = files[0]
-    const path = join(folder, filename)
+    const path = `${folder}/${filename}`
     const { height, mime, width } = await getFileMetadata(path)
     if (!isImageMediaType(mime)) {
         throw new Error(`Unrecognized MIME type (${mime}) for image. <${uuid}>`)
@@ -84,32 +90,13 @@ const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
     }
 }
 
-const getThumbnailLinks = async (uuid: UUID): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
-    // :TODO: Check existence?
-    return [
-        {
-            href: IMAGES_URL_BASE + uuid + "/thumbnail/192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-        },
-        {
-            href: IMAGES_URL_BASE + uuid + "/thumbnail/128x128.png",
-            sizes: "128x128",
-            type: "image/png",
-        },
-        {
-            href: IMAGES_URL_BASE + uuid + "/thumbnail/64x64.png",
-            sizes: "64x64",
-            type: "image/png",
-        },
-    ]
-}
+const getThumbnailLinks = (uuid: UUID) => getPngMediaLinksFromMirrorFolder(uuid, "thumbnail")
 
 const getVectorLink = async (uuid: UUID): Promise<MediaLink<string, VectorMediaType>> => {
-    const path = uuid + "/vector.svg"
-    const { height, width } = await getFileMetadata(".s3/images.phylopic.org/images/" + path)
+    const path = imagePublishMirrorPath(uuid, "vector.svg")
+    const { height, width } = await getFileMetadata(path)
     return {
-        href: IMAGES_URL_BASE + path,
+        href: IMAGES_URL_BASE + uuid + "/vector.svg",
         sizes: `${width}x${height}`,
         type: "image/svg+xml",
     }

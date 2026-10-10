@@ -15,11 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Orphan raster/thumbnail/social objects could remain on `images.phylopic.org` after reprocessing when image sync omitted `aws s3 sync --delete`, causing the API to advertise blank stale PNGs alongside current variants ([#88](https://github.com/keesey/phylopic/issues/88)).
+- Image entity JSON lists raster, thumbnail, and social files by scanning the local publish mirror (`.s3/images.phylopic.org`), i.e. the tree `yarn process` writes and `yarn sync:images --delete` eventually enforces—not the superset of keys left on S3 while `yarn upload:images` runs without `--delete` during cutover ([#88](https://github.com/keesey/phylopic/issues/88)).
 
 ### Removed
-
-- `yarn upload:images` — use `yarn sync:images` instead (`make` and SVG sanitize docs updated).
 
 ### Security
 

@@ -124,7 +124,7 @@ const listKeys = async (client: S3Client, bucketName: string, prefix: string): P
             console.info("Re-run without --dry-run to write sanitized objects.")
         }
         if (summary.updated > 0 && buckets.includes("source-images") && !dryRun) {
-            console.info("Next: yarn download:source && yarn process && yarn sync:images")
+            console.info("Next: yarn download:source && yarn process && yarn upload:images")
         }
     } catch (e) {
         console.error(e)

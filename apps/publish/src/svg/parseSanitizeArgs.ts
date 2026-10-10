@@ -58,6 +58,6 @@ Options:
 Batch workflow (recommended):
   yarn sanitize:svgs:dry-run --uuid-prefix 00
   yarn sanitize:svgs --uuid-prefix 00 --manifest batches/00.txt
-  yarn download:source && yarn process && yarn sync:images
+  yarn download:source && yarn process && yarn upload:images
   # repeat for 01, 02, … ff`)
 }
