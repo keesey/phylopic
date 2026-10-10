@@ -104,7 +104,7 @@ const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
         throw new Error(`Unrecognized MIME type (${mime}) for image. <${uuid}>`)
     }
     return {
-        href: IMAGES_URL_BASE + uuid + "/" + filename,
+        href: IMAGES_URL_BASE + join(uuid, filename),
         sizes: `${width}x${height}`,
         type: mime,
     }
@@ -117,7 +117,7 @@ const getVectorLink = async (uuid: UUID): Promise<MediaLink<string, VectorMediaT
     const path = imagePublishMirrorPath(uuid, "vector.svg")
     const { height, width } = await getFileMetadata(path)
     return {
-        href: IMAGES_URL_BASE + uuid + "/vector.svg",
+        href: IMAGES_URL_BASE + join(uuid, "vector.svg"),
         sizes: `${width}x${height}`,
         type: "image/svg+xml",
     }
