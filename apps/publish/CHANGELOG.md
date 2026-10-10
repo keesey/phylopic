@@ -11,9 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `yarn upload:images` delegates to `yarn sync:images` so every image upload pass uses `aws s3 sync --delete`.
+
 ### Deprecated
 
 ### Fixed
+
+- Orphan raster/thumbnail/social objects could remain on `images.phylopic.org` after reprocessing when workflows ran `upload:images` without `--delete` (for example SVG sanitize → process → upload), causing the API to advertise blank stale PNGs alongside current variants ([#88](https://github.com/keesey/phylopic/issues/88)).
 
 ### Removed
 
