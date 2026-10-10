@@ -2,8 +2,6 @@
 
 echo "Preprocessing image files..."
 
-rm -f .process-manifest.json
-
 if [ ! -d .s3/source-images.phylopic.org/images ]; then
     echo "No folder for source images!" 1>&2
     exit 1
@@ -26,9 +24,9 @@ echo "Setting up scratch and destination..."
     if [ ! -d .s3/images.phylopic.org/images ]; then
         mkdir .s3/images.phylopic.org/images
     else
-        for file in .s3/images.phylopic.org/images; do
-            if [ ! -d '.s3/source-images.phylopic.org/images/'$file ]; then
-                rm -rf '.s3/images.phylopic.org/images/'$file
+        for dir in .s3/images.phylopic.org/images/*(/N); do
+            if [ ! -d '.s3/source-images.phylopic.org/images/'${dir:t} ]; then
+                rm -rf $dir
             fi
         done
     fi
@@ -41,6 +39,9 @@ node --loader ts-node/esm ./src/svg/sanitizeLocalSVGs.ts
 echo "Copying source images to scratch..."
 for file in .s3/source-images.phylopic.org/images/**/source; do
     type=$(file --mime-type --brief $file 2>&1)
+    derivatives=$(echo $file |
+        sed 's/^\.s3\/source-images\.phylopic\.org\/images\//.s3\/images\.phylopic\.org\/images\//' |
+        sed 's/\/source$/\/derivatives.json/')
     if [ "$type" = "image/svg+xml" ]; then
         comparison=$(echo $file |
             sed 's/^\.s3\/source-images\.phylopic\.org\//.s3\/images.phylopic.org\//' |
@@ -55,7 +56,7 @@ for file in .s3/source-images.phylopic.org/images/**/source; do
         thumbnail=$(echo $file |
             sed 's/^\.s3\/source-images\.phylopic\.org\/images\//.s3\/images\.phylopic\.org\/images\//' |
             sed 's/\/source$/\/thumbnail/')
-        if [[ $changed -eq 1 ]] || [ ! -d $raster ] || [ ! -d $social ] || [ ! -d $thumbnail ]; then
+        if [[ $changed -eq 1 ]] || [ ! -d $raster ] || [ ! -d $social ] || [ ! -d $thumbnail ] || [ ! -f $derivatives ]; then
             dest=$(echo $file |
                 sed 's/^\.s3\/source-images\.phylopic\.org\/images\//.scratch\/vector\//' |
                 sed 's/\/source$/.source.svg/')
@@ -71,7 +72,7 @@ for file in .s3/source-images.phylopic.org/images/**/source; do
             sed 's/^\.s3\/source-images\.phylopic\.org\//.s3\/images.phylopic.org\//' |
             sed 's/source$/source.'$extension'/')
         changed=$(cmp --silent $file $comparison && echo 0 || echo 1)
-        if [[ $changed -eq 1 ]]; then
+        if [[ $changed -eq 1 ]] || [ ! -f $derivatives ]; then
             dest=$(echo $file |
                 sed 's/^\.s3\/source-images\.phylopic\.org\/images\//.scratch\/raster\//' |
                 sed 's/\/source$/.source.'$extension'/')

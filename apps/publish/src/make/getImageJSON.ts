@@ -9,11 +9,16 @@ import {
     type VectorMediaType,
 } from "@phylopic/utils"
 import { createReadStream } from "fs"
-import { join } from "path"
+import { join, posix } from "path"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir.js"
 import resolvePublishPath from "../fsutils/resolvePublishPath.js"
-import { getProcessedDerivativeFiles, readProcessManifest, type ProcessManifest } from "../process/processManifest.js"
+import {
+    type DerivativeFolder,
+    type DerivativesManifest,
+    DERIVATIVES_MANIFEST_FILENAME,
+    readDerivativesManifest,
+} from "../process/derivativesManifest.js"
 import { imagePublishMirrorPath } from "./imagesPublishMirror.js"
 import type { SourceData } from "./getSourceData.js"
 
@@ -43,32 +48,25 @@ const getMediaLinkArea = ({ sizes }: Pick<MediaLink, "sizes">) =>
 
 const sortMediaLinks = (a: MediaLink, b: MediaLink) => getMediaLinkArea(b) - getMediaLinkArea(a)
 
-let cachedProcessManifest: ProcessManifest | null | undefined
-
-const loadProcessManifest = async (): Promise<ProcessManifest | null> => {
-    if (cachedProcessManifest === undefined) {
-        cachedProcessManifest = await readProcessManifest()
+const getDerivativesManifest = async (uuid: UUID): Promise<DerivativesManifest> => {
+    const manifest = await readDerivativesManifest(uuid)
+    if (!manifest) {
+        throw new Error(`Missing ${DERIVATIVES_MANIFEST_FILENAME} for image <${uuid}>. Run \`yarn process\`.`)
     }
-    return cachedProcessManifest
+    return manifest
 }
 
-/** Lists PNG variants under the local publish mirror (not live S3 during cutover). */
-const getPngMediaLinksFromMirrorFolder = async (
+const getDerivativeLinks = async (
     uuid: UUID,
-    folderName: "raster" | "thumbnail" | "social",
-    manifest: ProcessManifest | null,
+    folderName: DerivativeFolder,
+    manifest: DerivativesManifest,
 ): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
     const folder = imagePublishMirrorPath(uuid, folderName)
-    const processed = getProcessedDerivativeFiles(manifest, uuid)
-    const files =
-        processed !== null
-            ? [...processed[folderName]]
-            : (await listDir(folder)).filter(file => file.endsWith(".png"))
     const links = await Promise.all(
-        files.map<Promise<MediaLink<string, RasterMediaType>>>(async file => {
+        manifest[folderName].map<Promise<MediaLink<string, RasterMediaType>>>(async file => {
             const { height, width } = await getFileMetadata(join(folder, file))
             return {
-                href: IMAGES_URL_BASE + join(uuid, folderName, file),
+                href: IMAGES_URL_BASE + posix.join(uuid, folderName, file),
                 sizes: `${width}x${height}`,
                 type: "image/png",
             }
@@ -77,16 +75,13 @@ const getPngMediaLinksFromMirrorFolder = async (
     return links.sort(sortMediaLinks)
 }
 
-const getRasterLinks = (uuid: UUID, manifest: ProcessManifest | null) =>
-    getPngMediaLinksFromMirrorFolder(uuid, "raster", manifest)
-
 const getSocialLink = async (
     uuid: UUID,
-    manifest: ProcessManifest | null,
+    manifest: DerivativesManifest,
 ): Promise<MediaLink<string, RasterMediaType>> => {
-    const links = await getPngMediaLinksFromMirrorFolder(uuid, "social", manifest)
-    if (links.length === 0) {
-        throw new Error(`Could not find social image for image <${uuid}>.`)
+    const links = await getDerivativeLinks(uuid, "social", manifest)
+    if (links.length !== 1) {
+        throw new Error(`Expected exactly one social image for image <${uuid}>; found ${links.length}.`)
     }
     return links[0]
 }
@@ -104,20 +99,17 @@ const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
         throw new Error(`Unrecognized MIME type (${mime}) for image. <${uuid}>`)
     }
     return {
-        href: IMAGES_URL_BASE + join(uuid, filename),
+        href: IMAGES_URL_BASE + posix.join(uuid, filename),
         sizes: `${width}x${height}`,
         type: mime,
     }
 }
 
-const getThumbnailLinks = (uuid: UUID, manifest: ProcessManifest | null) =>
-    getPngMediaLinksFromMirrorFolder(uuid, "thumbnail", manifest)
-
 const getVectorLink = async (uuid: UUID): Promise<MediaLink<string, VectorMediaType>> => {
     const path = imagePublishMirrorPath(uuid, "vector.svg")
     const { height, width } = await getFileMetadata(path)
     return {
-        href: IMAGES_URL_BASE + join(uuid, "vector.svg"),
+        href: IMAGES_URL_BASE + posix.join(uuid, "vector.svg"),
         sizes: `${width}x${height}`,
         type: "image/svg+xml",
     }
@@ -130,12 +122,12 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
         throw new Error(`Source image not found! <${uuid}>`)
     }
     const modifiedFile = data.filesModified.get(uuid) ?? sourceImage.modified
-    const processManifest = await loadProcessManifest()
+    const derivatives = await getDerivativesManifest(uuid)
     const [rasterFiles, socialFile, sourceFile, thumbnailFiles, vectorFile] = await Promise.all([
-        getRasterLinks(uuid, processManifest),
-        getSocialLink(uuid, processManifest),
+        getDerivativeLinks(uuid, "raster", derivatives),
+        getSocialLink(uuid, derivatives),
         getSourceLink(uuid),
-        getThumbnailLinks(uuid, processManifest),
+        getDerivativeLinks(uuid, "thumbnail", derivatives),
         getVectorLink(uuid),
     ])
     const specificTitle =

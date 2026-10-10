@@ -2,9 +2,9 @@
 
 echo "Postprocessing image files..."
 
-echo "Writing process manifest..."
-node --loader ts-node/esm ./src/process/writeProcessManifest.ts
-echo "Wrote process manifest."
+echo "Writing derivative manifests and pruning unlisted derivatives..."
+node --loader ts-node/esm ./src/process/finalizeDerivatives.ts || exit 1
+echo "Finalized derivatives."
 
 echo "Removing scratch..."
 rm -r .scratch

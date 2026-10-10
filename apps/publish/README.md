@@ -111,11 +111,16 @@ yarn make
    `apps/www/.env.local`
 6. `yarn sync:images` — final image sync with `--delete` (S3 matches the local publish mirror)
 
-During `yarn insert`, raster/thumbnail/social links in image entity JSON come from the local publish
-mirror. Images processed in the current `yarn process` run are listed from `.process-manifest.json`
-(derivative filenames recorded at the end of `process`, with stale PNGs pruned from the mirror).
-Unprocessed images fall back to scanning their mirror folders. The mirror is what `yarn sync:images`
-enforces on S3 after release—not the superset left on S3 during cutover `upload:images`.
+Each image folder in the publish mirror has a `derivatives.json` listing its raster, social, and
+thumbnail PNGs. `yarn process` writes it for every image it rebuilds, then deletes any derivative PNG
+in the mirror that its image's manifest doesn't list. `yarn insert` builds image entity JSON from
+these manifests, never from a folder scan, so orphans that `upload:images` leaves on S3 during
+cutover (and that `yarn download` copies back into the mirror) are never advertised, and the final
+`yarn sync:images` removes them from S3.
+
+`preprocess.sh` queues any image without a `derivatives.json` for reprocessing, so the first
+`yarn make` after this change reprocesses every image. Until that has run, `yarn make:data` fails
+for images that have no manifest.
 
 If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
 `NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
