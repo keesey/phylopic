@@ -103,12 +103,12 @@ yarn make
 2. `yarn download` — sync source images and source data from S3
 3. `yarn process` — rasterize/vectorize new silhouettes (`process.sh`)
 4. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
-   `yarn upload:images` (sync processed images to `images.phylopic.org`, with `--delete`)
+   `yarn sync:images` (sync processed images to `images.phylopic.org`, with `--delete`)
 5. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront, set
    `NEXT_PUBLIC_BUILD` on Vercel (production, preview, and development), redeploy the latest
    production `www` deployment (Git-connected; no local source upload), and update
    `apps/www/.env.local`
-6. `yarn sync:images` — repeat image sync (same as `upload:images`; removes S3 objects absent locally)
+6. `yarn sync:images` — repeat image sync (removes S3 objects absent locally)
 
 If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
 `NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
