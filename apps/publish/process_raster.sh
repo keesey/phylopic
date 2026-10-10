@@ -1,8 +1,15 @@
 #!/bin/zsh
 
+source ./inspect_png.sh || exit 1
+
 echo "[RASTER] Processing raster source files..."
 
-cd .scratch/raster
+cd .scratch/raster || exit 1
+sources=(*.source.(bmp|gif|jpeg|png)(N))
+if (( ${#sources} == 0 )); then
+	echo "[RASTER] No raster source files to process."
+	exit 0
+fi
 
 echo "[RASTER] Prepping raster files..."
 
@@ -192,20 +199,22 @@ for file in .scratch/raster/*.vector.svg; do
 		sed 's/\.vector\.svg$/\/vector.svg/')
 	mv -f $file $dest
 done &
-for file in .scratch/raster/*.source.raster.thumbnail.*.png; do
-	size=$(magick identify -format "%[fx:w]x%[fx:h]" $file)
+for file in .scratch/raster/*.source.raster.thumbnail.*.png(N); do
+	size=$(inspect_png "$file") || exit 1
 	dest=$(echo $file |
 		sed 's/^\.scratch\/raster\//.s3\/images.phylopic.org\/images\//' |
 		sed 's/\.source\.raster\.thumbnail\..*\.png$/\/thumbnail\/'$size'.png/')
 	mv -f $file $dest
 done &
-for file in .scratch/raster/*.variant.*.png; do
-	size=$(magick identify -format "%[fx:w]x%[fx:h]" $file)
+thumbnail_pid=$!
+for file in .scratch/raster/*.variant.*.png(N); do
+	size=$(inspect_png "$file") || exit 1
 	dest=$(echo $file |
 		sed 's/^\.scratch\/raster\//.s3\/images.phylopic.org\/images\//' |
 		sed 's/\.variant\..*\.png$/\/raster\/'$size'.png/')
 	mv -f $file $dest
 done &
+raster_pid=$!
 for file in .scratch/raster/*.social.png; do
 	size=$(magick identify -format "%[fx:w]x%[fx:h]" $file)
 	dest=$(echo $file |
@@ -213,7 +222,11 @@ for file in .scratch/raster/*.social.png; do
 		sed 's/\.social\.png$/\/social\/'$size'.png/')
 	mv -f $file $dest
 done &
+processing_status=0
+wait $thumbnail_pid || processing_status=1
+wait $raster_pid || processing_status=1
 wait
+(( processing_status == 0 )) || exit $processing_status
 
 echo "[RASTER] Moved files to S3 mirror."
 
