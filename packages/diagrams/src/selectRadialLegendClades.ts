@@ -19,9 +19,12 @@ export type SelectRadialLegendCladesOptions = Readonly<{
     legendRingRadius: number
     /** Silhouette slot width in px. Default {@link DEFAULT_RADIAL_LEGEND_SILHOUETTE_WIDTH}. */
     legendSilhouetteWidth?: number
-    /** Font for measuring clade labels when {@link longestLegendLabelWidth} is omitted. */
+    /** Font for {@link maxInternalCladeLabelWidth} when passing {@link longestLegendLabelWidth} manually. */
     labelFont?: SvgLabelFont
-    /** Widest labeled-internal clade name (px); measured from the tree when omitted. */
+    /**
+     * When set, minimum slot width is max({@link legendSilhouetteWidth}, this value) instead of
+     * silhouette width alone (legacy label-aware floor).
+     */
     longestLegendLabelWidth?: number
     /** Override minimum angular span (radians); default from slot width ÷ ring radius. */
     minLegendSpanRad?: number
@@ -48,7 +51,7 @@ export const radialLegendMinSpanRadFromSlotWidth = (
     legendRingRadiusPx: number,
 ): number => (legendRingRadiusPx > 0 ? slotWidthPx / legendRingRadiusPx : 0)
 
-/** Minimum rim slot width: the larger of silhouette and longest clade label. */
+/** Rim slot width when combining silhouette size with an explicit label width (legacy floor). */
 export const radialLegendMinSlotWidthPx = (
     silhouetteWidthPx: number,
     longestLabelWidthPx: number,
@@ -62,7 +65,7 @@ export const countTipsUnderLegendNode = (n: RadialLegendTreeNode): number => {
     return n.children.reduce((sum, c) => sum + countTipsUnderLegendNode(c), 0)
 }
 
-/** Widest clade label among labeled internal nodes (for legend slot sizing). */
+/** Widest clade label among labeled internal nodes (e.g. for {@link longestLegendLabelWidth}). */
 export const maxInternalCladeLabelWidth = (
     root: RadialLegendTreeNode,
     font: SvgLabelFont = DEFAULT_SVG_LABEL_FONT,
@@ -106,8 +109,8 @@ const isDescendantOf = <T>(ancestor: T, node: T, parentMap: Map<T, T | undefined
  * Greedy selection of **major** labeled clades for radial clade-key mode.
  *
  * Call after {@link assignRadialCladogramLayout} so each node has bearings. A clade qualifies when
- * its descendant tips span at least the angular width of one legend slot on the rim—slot width is
- * **max(silhouette width, longest internal clade label width)**, converted to radians at
+ * its descendant tips span at least the angular width of one rim silhouette slot—default slot width
+ * is {@link legendSilhouetteWidth} converted to radians at
  * {@link SelectRadialLegendCladesOptions.legendRingRadius}. Prefer **deeper** clades, exclude the
  * whole-tree root, avoid nested legend entries, and omit clades wider than
  * {@link DEFAULT_RADIAL_LEGEND_MAX_CLADE_SPAN_DEG} on the tip circle.
@@ -121,11 +124,11 @@ export const selectRadialLegendClades = <T extends MutableLegendNode & Pick<Radi
         throw new Error("selectRadialLegendClades requires legendRingRadius > 0")
     }
 
-    const font = options.labelFont ?? DEFAULT_SVG_LABEL_FONT
     const silhouetteWidth = options.legendSilhouetteWidth ?? DEFAULT_RADIAL_LEGEND_SILHOUETTE_WIDTH
-    const longestLabel =
-        options.longestLegendLabelWidth ?? maxInternalCladeLabelWidth(root, font)
-    const slotWidth = radialLegendMinSlotWidthPx(silhouetteWidth, longestLabel)
+    const slotWidth =
+        options.longestLegendLabelWidth !== undefined
+            ? radialLegendMinSlotWidthPx(silhouetteWidth, options.longestLegendLabelWidth)
+            : silhouetteWidth
     const minLegendSpanRad =
         options.minLegendSpanRad ?? radialLegendMinSpanRadFromSlotWidth(slotWidth, legendRingRadius)
     const maxLegendSpanRad =

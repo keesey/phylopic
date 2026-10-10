@@ -4,6 +4,7 @@
 
 import {
     assignRadialCladogramLayout,
+    cladeRimBearingRad,
     DEFAULT_RADIAL_CLADOGRAM_THEME,
     meanAngleRad,
     polarToCartesian,
@@ -310,9 +311,8 @@ export const buildRadialCladogramLayout = (
         const rimIdSet = new Set(rimIds)
         for (const n of all) {
             if (!rimIdSet.has(n.id)) continue
-            const tips = tipsUnder(n)
-            if (!tips.length) continue
-            const theta = meanAngleRad(tips.map(t => t.angle ?? 0))
+            if (!tipsUnder(n).length) continue
+            const theta = cladeRimBearingRad(n)
             const rim = polarToCartesian(silhouetteRadius, theta)
             tipSilhouettes.push({
                 nodeId: n.id,

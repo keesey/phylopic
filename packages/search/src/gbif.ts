@@ -31,6 +31,31 @@ const GBIF_RANK_KEYS: ReadonlyArray<keyof GBIFNameUsage> = [
     "kingdomKey",
 ]
 
+const isTransientGbifNetworkError = (error: unknown): boolean => {
+    const err = error as { code?: string; cause?: { code?: string } }
+    const code = err?.cause?.code ?? err?.code
+    return code === "ECONNRESET" || code === "ETIMEDOUT" || code === "UND_ERR_CONNECT_TIMEOUT"
+}
+
+const fetchGbifWithRetry = async <T>(
+    url: string,
+    config?: Parameters<typeof fetchDataAndCheck>[1],
+): Promise<Awaited<ReturnType<typeof fetchDataAndCheck<T>>>> => {
+    const attempts = 4
+    let last: unknown
+    for (let i = 0; i < attempts; i++) {
+        try {
+            return await fetchDataAndCheck<T>(url, config)
+        } catch (error) {
+            last = error
+            if (!isTransientGbifNetworkError(error) || i === attempts - 1) {
+                throw error
+            }
+        }
+    }
+    throw last
+}
+
 export const gbifObjectIDsFromNameUsage = (usage: GBIFNameUsage, fallbackKey: number): readonly string[] => {
     const ids = GBIF_RANK_KEYS.map(key => usage[key])
         .filter(value => isFiniteNumber(value))
@@ -43,7 +68,7 @@ export const suggestGbifSpecies = async (query: string, limit = 10): Promise<rea
     if (query.length < 2) {
         return []
     }
-    const response = await fetchDataAndCheck<readonly GBIFNameUsage[]>(
+    const response = await fetchGbifWithRetry<readonly GBIFNameUsage[]>(
         GBIF_API_URL + "species/suggest" + createSearch({ q: query, limit }),
         { headers: JSON_API_HEADERS },
     )
@@ -57,7 +82,7 @@ export const suggestGbifSpecies = async (query: string, limit = 10): Promise<rea
 }
 
 export const fetchGbifNameUsage = async (speciesKey: number): Promise<GBIFNameUsage | null> => {
-    const response = await fetchDataAndCheck<GBIFNameUsage>(
+    const response = await fetchGbifWithRetry<GBIFNameUsage>(
         `${GBIF_API_URL}species/${encodeURIComponent(speciesKey)}`,
         { headers: JSON_API_HEADERS },
     )

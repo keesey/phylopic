@@ -445,6 +445,31 @@ export const radialBranchSegment = (
     return { x1: p.x, y1: p.y, x2: c.x, y2: c.y }
 }
 
+export type RadialLayoutNodeWithParent = RadialLayoutNode & {
+    parent?: RadialLayoutNodeWithParent
+}
+
+/**
+ * Bearing for a clade rim silhouette: center of the full descendant wedge on the tip circle.
+ * When the rim node is an internal child that shares a parent with other tip branches (e.g.
+ * `(Akysidae,(Liobagrus,Glyptothorax))` with art on the pair node), use the parent bearing
+ * so sibling tips are included—not only the mean of tips under the rim node.
+ */
+export const cladeRimBearingRad = (n: RadialLayoutNodeWithParent): number => {
+    const tipsHere = radialTipsUnder(n)
+    let anchor: RadialLayoutNodeWithParent = n
+    if (n.parent) {
+        const parentTips = radialTipsUnder(n.parent)
+        if (parentTips.length > tipsHere.length) {
+            anchor = n.parent
+        }
+    }
+    if (isTipShape(anchor)) {
+        return anchor.angle ?? 0
+    }
+    return anchor.angle ?? meanAngleRad(radialTipsUnder(anchor).map(t => t.angle ?? 0))
+}
+
 /** Circular mean of bearings (radians), e.g. clade silhouette placement on the outer ring. */
 export const meanAngleRad = (angles: readonly number[]): number => {
     if (!angles.length) return 0

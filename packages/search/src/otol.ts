@@ -21,11 +21,36 @@ export type OTOLTaxonSuggestion = Readonly<{
 
 export const sanitizeOtolUniqueName = (name: string) => name.replace(/\s*\([a-z\s+(in|with)[^)]+\)/gi, "")
 
+const isTransientOtolNetworkError = (error: unknown): boolean => {
+    const err = error as { code?: string; cause?: { code?: string } }
+    const code = err?.cause?.code ?? err?.code
+    return code === "ECONNRESET" || code === "ETIMEDOUT" || code === "UND_ERR_CONNECT_TIMEOUT"
+}
+
+const fetchOtolWithRetry = async <T>(
+    url: string,
+    config: Parameters<typeof fetchDataAndCheck>[1],
+): Promise<Awaited<ReturnType<typeof fetchDataAndCheck<T>>>> => {
+    const attempts = 4
+    let last: unknown
+    for (let i = 0; i < attempts; i++) {
+        try {
+            return await fetchDataAndCheck<T>(url, config)
+        } catch (error) {
+            last = error
+            if (!isTransientOtolNetworkError(error) || i === attempts - 1) {
+                throw error
+            }
+        }
+    }
+    throw last
+}
+
 export const suggestOtolTaxa = async (query: string): Promise<readonly OTOLTaxonSuggestion[]> => {
     if (query.length < 2) {
         return []
     }
-    const response = await fetchDataAndCheck<readonly OTOLAutocompleteName[]>(
+    const response = await fetchOtolWithRetry<readonly OTOLAutocompleteName[]>(
         `${OTOL_API_URL}/tnrs/autocomplete_name`,
         {
             data: { name: query },
@@ -42,7 +67,7 @@ export const suggestOtolTaxa = async (query: string): Promise<readonly OTOLTaxon
 }
 
 export const otolResolveObjectIDs = async (ott_id: number): Promise<readonly string[]> => {
-    const response = await fetchDataAndCheck<OTOLTaxonInfo>(`${OTOL_API_URL}/taxonomy/taxon_info`, {
+    const response = await fetchOtolWithRetry<OTOLTaxonInfo>(`${OTOL_API_URL}/taxonomy/taxon_info`, {
         data: { include_lineage: true, ott_id },
         headers: { "content-type": "application/json" },
         method: "POST",

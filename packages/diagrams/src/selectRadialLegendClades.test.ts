@@ -95,7 +95,6 @@ describe("selectRadialLegendClades", () => {
         const legend = selectRadialLegendClades(big, {
             legendRingRadius: ringR,
             legendSilhouetteWidth: 44,
-            longestLegendLabelWidth: 0,
             minDepth: 1,
             maxLegendSpanDeg: 360,
         })
@@ -127,5 +126,41 @@ describe("selectRadialLegendClades", () => {
 
     it("counts tips under a node", () => {
         expect(countTipsUnderLegendNode(tree())).toBe(20)
+    })
+
+    it("qualifies narrow wedges by silhouette width even when a clade label is long", () => {
+        const longName = "Pseudopercisomus supercalifragilisticexpialidocious"
+        const narrow: ReturnType<typeof tree> = {
+            label: "Root",
+            children: [
+                {
+                    label: longName,
+                    children: tips(Array.from({ length: 8 }, (_, i) => `n${i}`)),
+                },
+                {
+                    label: "Other",
+                    children: tips(Array.from({ length: 92 }, (_, i) => `o${i}`)),
+                },
+            ],
+        }
+        const theme = { ...DEFAULT_RADIAL_CLADOGRAM_THEME, tipRadius: 280, silhouetteOutset: 52 }
+        assignRadialCladogramLayout(narrow, theme)
+        const ringR = radialLegendRingRadius(theme)
+        const legendDefault = selectRadialLegendClades(narrow, {
+            legendRingRadius: ringR,
+            legendSilhouetteWidth: 44,
+            minDepth: 1,
+            maxLegendSpanDeg: 45,
+        })
+        expect(legendDefault.some(n => n.label === longName)).toBe(true)
+
+        const legendLabelFloor = selectRadialLegendClades(narrow, {
+            legendRingRadius: ringR,
+            legendSilhouetteWidth: 44,
+            longestLegendLabelWidth: 400,
+            minDepth: 1,
+            maxLegendSpanDeg: 45,
+        })
+        expect(legendLabelFloor.some(n => n.label === longName)).toBe(false)
     })
 })

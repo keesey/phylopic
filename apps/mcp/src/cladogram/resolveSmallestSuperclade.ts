@@ -197,7 +197,12 @@ export const resolveSmallestSuperclade = async (
     }
 
     const resolve = createResolveToPhylopic(client)
-    const external = await searchExternalTaxa(query, { limitPerSource: 8, resolve })
+    let external: Awaited<ReturnType<typeof searchExternalTaxa>> = []
+    try {
+        external = await searchExternalTaxa(query, { limitPerSource: 8, resolve })
+    } catch {
+        /* OTL/GBIF/PBDB flakes should not abort the whole SRC pass */
+    }
     for (const hit of external) {
         const uuid = hit.phylopic?.uuid
         if (!uuid || isExternalPhylopicMismatch(query, hit.phylopic?.title)) continue
@@ -215,9 +220,13 @@ export const resolveSmallestSuperclade = async (
         }
     }
 
-    const gbifPick = await pickGbifSpecies(query)
-    if (gbifPick) {
-        candidates.push(...(await gbifRankCandidates(resolve, gbifPick.key, query)))
+    try {
+        const gbifPick = await pickGbifSpecies(query)
+        if (gbifPick) {
+            candidates.push(...(await gbifRankCandidates(resolve, gbifPick.key, query)))
+        }
+    } catch {
+        /* GBIF timeout during large catalog builds */
     }
 
     const scoped = await filterSupercladeCandidatesWithinTreeRoot(

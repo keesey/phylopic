@@ -10,6 +10,8 @@ import {
     radialNodeRadius,
     radialInnerRingLabelTextPlacement,
     radialInnerRingSilhouetteRotationDeg,
+    cladeRimBearingRad,
+    meanAngleRad,
     radialSilhouetteRotationDeg,
     radialSilhouetteOutwardOffset,
     radialLabelTextPlacement,
@@ -74,6 +76,34 @@ describe("assignRadialCladogramLayout", () => {
         const left = internal.children[0]!.angle!
         const left2 = internal.children[1]!.angle!
         expect(internal.angle).toBeCloseTo((left + left2) / 2)
+    })
+
+    it("cladeRimBearingRad includes sibling tip branches under the same parent", () => {
+        type N = ReturnType<typeof cloneRadialLayoutTree> & { parent?: N }
+        const root = cloneRadialLayoutTree({
+            children: [
+                { label: "Akysidae", children: [] },
+                {
+                    children: [
+                        { label: "Liobagrus geumgangensis", children: [] },
+                        { label: "Glyptothorax quadriocellatus", children: [] },
+                    ],
+                },
+            ],
+        }) as N
+        const pair = root.children[1] as N
+        root.children.forEach(c => {
+            ;(c as N).parent = root
+            c.children.forEach(g => {
+                ;(g as N).parent = c as N
+            })
+        })
+        const { root: laid } = assignRadialCladogramLayout(root)
+        const laidPair = laid.children[1]!
+        const laidRoot = laid
+        const twoTipMean = meanAngleRad(laidPair.children.map(c => c.angle ?? 0))
+        expect(cladeRimBearingRad(laidPair as N)).toBeCloseTo(laidRoot.angle!)
+        expect(cladeRimBearingRad(laidPair as N)).not.toBeCloseTo(twoTipMean)
     })
 
     it("scales branch radius by depth", () => {
