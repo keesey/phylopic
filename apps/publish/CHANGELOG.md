@@ -22,10 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Image entity JSON no longer advertises orphan derivative PNGs that remained on S3 (and were copied back into the publish mirror by `yarn download`) after an image was reprocessed ([#88](https://github.com/keesey/phylopic/issues/88)).
-- `preprocess.sh` now removes mirror folders for images that no longer have a source file; the cleanup loop previously never matched any folder.
+- `yarn insert` reports a missing image folder in the publish mirror separately from a missing `derivatives.json`.
 - Image `href`s are joined with POSIX separators regardless of the host OS.
 
 ### Removed
+
+- `preprocess.sh` no longer tries to remove mirror folders for images without a source file. The loop never matched any folder, and making it match would delete live images whose source files are missing from `source-images.phylopic.org`.
 
 ### Security
 
