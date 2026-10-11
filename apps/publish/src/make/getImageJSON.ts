@@ -9,9 +9,17 @@ import {
     type VectorMediaType,
 } from "@phylopic/utils"
 import { createReadStream } from "fs"
-import { join } from "path"
+import { join, posix } from "path"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir.js"
+import resolvePublishPath from "../fsutils/resolvePublishPath.js"
+import {
+    type DerivativeFolder,
+    type DerivativesManifest,
+    DERIVATIVES_MANIFEST_FILENAME,
+    readDerivativesManifest,
+} from "../process/derivativesManifest.js"
+import { imagePublishMirrorPath } from "./imagesPublishMirror.js"
 import type { SourceData } from "./getSourceData.js"
 
 const IMAGES_URL_BASE = "https://images.phylopic.org/images/"
@@ -27,8 +35,8 @@ const getNodes = (uuid: string, data: SourceData): readonly TitledLink[] => {
     }))
 }
 
-const getFileMetadata = (filename: string) => {
-    const stream = createReadStream(filename)
+const getFileMetadata = (relativePath: string) => {
+    const stream = createReadStream(resolvePublishPath(relativePath))
     return probeImageSize(stream)
 }
 
@@ -40,14 +48,25 @@ const getMediaLinkArea = ({ sizes }: Pick<MediaLink, "sizes">) =>
 
 const sortMediaLinks = (a: MediaLink, b: MediaLink) => getMediaLinkArea(b) - getMediaLinkArea(a)
 
-const getRasterLinks = async (uuid: UUID): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
-    const folder = join(".s3", "images.phylopic.org", "images", uuid, "raster")
-    const files = await listDir(folder)
+const getDerivativesManifest = async (uuid: UUID): Promise<DerivativesManifest> => {
+    const manifest = await readDerivativesManifest(uuid)
+    if (!manifest) {
+        throw new Error(`Missing ${DERIVATIVES_MANIFEST_FILENAME} for image <${uuid}>. Run \`yarn process\`.`)
+    }
+    return manifest
+}
+
+const getDerivativeLinks = async (
+    uuid: UUID,
+    folderName: DerivativeFolder,
+    manifest: DerivativesManifest,
+): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
+    const folder = imagePublishMirrorPath(uuid, folderName)
     const links = await Promise.all(
-        files.map<Promise<MediaLink<string, RasterMediaType>>>(async file => {
+        manifest[folderName].map<Promise<MediaLink<string, RasterMediaType>>>(async file => {
             const { height, width } = await getFileMetadata(join(folder, file))
             return {
-                href: IMAGES_URL_BASE + uuid + "/raster/" + file,
+                href: IMAGES_URL_BASE + posix.join(uuid, folderName, file),
                 sizes: `${width}x${height}`,
                 type: "image/png",
             }
@@ -56,60 +75,41 @@ const getRasterLinks = async (uuid: UUID): Promise<readonly MediaLink<string, Ra
     return links.sort(sortMediaLinks)
 }
 
-const getSocialLink = async (uuid: UUID): Promise<MediaLink<string, RasterMediaType>> => {
-    // :TODO: Check existence?
-    return {
-        href: IMAGES_URL_BASE + uuid + "/social/1200x628.png",
-        sizes: "1200x628",
-        type: "image/png",
+const getSocialLink = async (
+    uuid: UUID,
+    manifest: DerivativesManifest,
+): Promise<MediaLink<string, RasterMediaType>> => {
+    const links = await getDerivativeLinks(uuid, "social", manifest)
+    if (links.length !== 1) {
+        throw new Error(`Expected exactly one social image for image <${uuid}>; found ${links.length}.`)
     }
+    return links[0]
 }
 
 const getSourceLink = async (uuid: UUID): Promise<MediaLink> => {
-    const folder = join(".s3", "images.phylopic.org", "images", uuid)
+    const folder = imagePublishMirrorPath(uuid)
     const files = (await listDir(folder)).filter(file => /^source\.[^.]+$/.test(file))
     if (files.length !== 1) {
         throw new Error(`Could not find source for image <${uuid}>.`)
     }
     const filename = files[0]
-    const path = join(folder, filename)
-    const { height, mime, width } = await getFileMetadata(path)
+    const sourcePath = join(folder, filename)
+    const { height, mime, width } = await getFileMetadata(sourcePath)
     if (!isImageMediaType(mime)) {
         throw new Error(`Unrecognized MIME type (${mime}) for image. <${uuid}>`)
     }
     return {
-        href: IMAGES_URL_BASE + uuid + "/" + filename,
+        href: IMAGES_URL_BASE + posix.join(uuid, filename),
         sizes: `${width}x${height}`,
         type: mime,
     }
 }
 
-const getThumbnailLinks = async (uuid: UUID): Promise<readonly MediaLink<string, RasterMediaType>[]> => {
-    // :TODO: Check existence?
-    return [
-        {
-            href: IMAGES_URL_BASE + uuid + "/thumbnail/192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-        },
-        {
-            href: IMAGES_URL_BASE + uuid + "/thumbnail/128x128.png",
-            sizes: "128x128",
-            type: "image/png",
-        },
-        {
-            href: IMAGES_URL_BASE + uuid + "/thumbnail/64x64.png",
-            sizes: "64x64",
-            type: "image/png",
-        },
-    ]
-}
-
 const getVectorLink = async (uuid: UUID): Promise<MediaLink<string, VectorMediaType>> => {
-    const path = uuid + "/vector.svg"
-    const { height, width } = await getFileMetadata(".s3/images.phylopic.org/images/" + path)
+    const path = imagePublishMirrorPath(uuid, "vector.svg")
+    const { height, width } = await getFileMetadata(path)
     return {
-        href: IMAGES_URL_BASE + path,
+        href: IMAGES_URL_BASE + posix.join(uuid, "vector.svg"),
         sizes: `${width}x${height}`,
         type: "image/svg+xml",
     }
@@ -122,11 +122,12 @@ const getImageJSON = async (uuid: UUID, data: SourceData): Promise<Image> => {
         throw new Error(`Source image not found! <${uuid}>`)
     }
     const modifiedFile = data.filesModified.get(uuid) ?? sourceImage.modified
+    const derivatives = await getDerivativesManifest(uuid)
     const [rasterFiles, socialFile, sourceFile, thumbnailFiles, vectorFile] = await Promise.all([
-        getRasterLinks(uuid),
-        getSocialLink(uuid),
+        getDerivativeLinks(uuid, "raster", derivatives),
+        getSocialLink(uuid, derivatives),
         getSourceLink(uuid),
-        getThumbnailLinks(uuid),
+        getDerivativeLinks(uuid, "thumbnail", derivatives),
         getVectorLink(uuid),
     ])
     const specificTitle =
