@@ -8,7 +8,7 @@ import {
     type UUID,
     type VectorMediaType,
 } from "@phylopic/utils"
-import { createReadStream } from "fs"
+import { createReadStream, existsSync } from "fs"
 import { join, posix } from "path"
 import probeImageSize from "probe-image-size"
 import listDir from "../fsutils/listDir.js"
@@ -50,10 +50,16 @@ const sortMediaLinks = (a: MediaLink, b: MediaLink) => getMediaLinkArea(b) - get
 
 const getDerivativesManifest = async (uuid: UUID): Promise<DerivativesManifest> => {
     const manifest = await readDerivativesManifest(uuid)
-    if (!manifest) {
-        throw new Error(`Missing ${DERIVATIVES_MANIFEST_FILENAME} for image <${uuid}>. Run \`yarn process\`.`)
+    if (manifest) {
+        return manifest
     }
-    return manifest
+    const folder = imagePublishMirrorPath(uuid)
+    if (!existsSync(resolvePublishPath(folder))) {
+        throw new Error(
+            `Missing image folder ${folder} for image <${uuid}>. Restore it from \`images.phylopic.org\` with \`yarn download:images\`.`,
+        )
+    }
+    throw new Error(`Missing ${DERIVATIVES_MANIFEST_FILENAME} for image <${uuid}>. Run \`yarn process\`.`)
 }
 
 const getDerivativeLinks = async (

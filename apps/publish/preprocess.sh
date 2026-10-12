@@ -23,12 +23,6 @@ echo "Setting up scratch and destination..."
     fi
     if [ ! -d .s3/images.phylopic.org/images ]; then
         mkdir .s3/images.phylopic.org/images
-    else
-        for dir in .s3/images.phylopic.org/images/*(/N); do
-            if [ ! -d '.s3/source-images.phylopic.org/images/'${dir:t} ]; then
-                rm -rf $dir
-            fi
-        done
     fi
 }
 wait
