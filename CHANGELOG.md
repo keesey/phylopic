@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.78] - 2026-10-11
+
+### Changed
+
+- `@phylopic/publish` `1.17.0`: image entity JSON is built from a per-image `derivatives.json`, so stale derivative
+  PNGs left on `images.phylopic.org` after reprocessing are no longer advertised and are removed by the final image
+  sync ([#88](https://github.com/keesey/phylopic/issues/88)); adds `yarn backfill:derivatives`; upgrades
+  `probe-image-size` to 7.4.0.
+
 ## [2.0.77] - 2026-10-02
 
 ### Changed
