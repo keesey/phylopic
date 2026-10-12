@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Reject fully transparent generated rasters and thumbnails before moving them to the local image mirror; propagate validation failures through background workers to stop publication.
+
 ### Removed
 
 ### Security

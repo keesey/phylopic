@@ -87,6 +87,13 @@ host, port, user, and password to `ClientProvider` directly, and hardcodes the d
 
 ## Running scripts
 
+### PNG validation
+
+Newly generated rasters and thumbnails must contain at least one nontransparent pixel.
+The check shares the existing ImageMagick dimensions lookup. A failed check stops
+`yarn process`, so `yarn make` does not proceed to metadata insertion or image upload.
+See [PNG validation](PNG-VALIDATION.md) for failure recovery, tests, and benchmarks.
+
 ### Release a new build
 
 This builds and releases a new website build from files in the `source-images.phylopic.org`
