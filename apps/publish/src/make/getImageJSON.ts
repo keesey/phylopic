@@ -56,7 +56,7 @@ const getDerivativesManifest = async (uuid: UUID): Promise<DerivativesManifest> 
     const folder = imagePublishMirrorPath(uuid)
     if (!existsSync(resolvePublishPath(folder))) {
         throw new Error(
-            `Missing image folder ${folder} for image <${uuid}>. Restore it from images.phylopic.org with \`yarn download:images\`.`,
+            `Missing image folder ${folder} for image <${uuid}>. Restore it from \`images.phylopic.org\` with \`yarn download:images\`.`,
         )
     }
     throw new Error(`Missing ${DERIVATIVES_MANIFEST_FILENAME} for image <${uuid}>. Run \`yarn process\`.`)
