@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Upgraded `probe-image-size` from 7.3.0 to 7.4.0.
+
 ## [1.16.1] - 2026-10-02
 
 ### Fixed
