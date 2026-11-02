@@ -42,7 +42,7 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 | `PGHOST`                         | Postgres host                                                          | `process.env`  |
 | `PGPASSWORD`                     | Postgres password                                                      | `process.env`  |
 | `PGUSER`                         | Postgres login role (`phylopic_publish`)                               | `process.env`  |
-| `VERCEL_TOKEN`                   | Token for `vercel env` and `vercel deploy` during `yarn release`       | `process.env`  |
+| `VERCEL_TOKEN`                   | [Personal access token](https://vercel.com/account/tokens) for `yarn release` (use **Full Account** scope; team- or project-only tokens fail CLI auth with “User not found”) | `process.env`  |
 
 #### Optional (legacy S3 keys)
 
@@ -148,7 +148,7 @@ the live site. Run `yarn release` again or redeploy manually:
 ```sh
 cd apps/www
 vercel list phylopic-www --environment production --json --limit 1
-vercel redeploy <deployment-id> --yes --project phylopic-www
+vercel redeploy <deployment-id> --yes
 ```
 
 Do not use `vercel deploy --prod` from this monorepo; the CLI upload exceeds Vercel’s 10 MB request

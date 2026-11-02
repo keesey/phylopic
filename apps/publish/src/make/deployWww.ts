@@ -12,7 +12,7 @@ const getVercelProject = () => process.env.VERCEL_PROJECT_ID ?? DEFAULT_VERCEL_P
 
 const sanitizeArg = (arg: string) => (arg.startsWith("--token=") ? "--token=<redacted>" : arg)
 
-const buildVercelArgs = (args: readonly string[]) => {
+const buildVercelArgs = (args: readonly string[], options?: { readonly project?: boolean }) => {
     const token = process.env.VERCEL_TOKEN
     if (!token) {
         throw new Error("VERCEL_TOKEN is required to deploy www.")
@@ -20,16 +20,21 @@ const buildVercelArgs = (args: readonly string[]) => {
     const scope = process.env.VERCEL_SCOPE
     return [
         ...args,
-        "--project",
-        getVercelProject(),
+        "--non-interactive",
+        ...(options?.project ? (["--project", getVercelProject()] as const) : []),
         ...(scope ? (["--scope", scope] as const) : []),
         `--token=${token}`,
     ]
 }
 
-const runVercel = async (args: readonly string[], stdin?: string, captureStdout = false) => {
+const runVercel = async (
+    args: readonly string[],
+    stdin?: string,
+    captureStdout = false,
+    options?: { readonly project?: boolean },
+) => {
     const cwd = getWwwRoot()
-    const fullArgs = buildVercelArgs(args)
+    const fullArgs = buildVercelArgs(args, options)
     return await new Promise<string | void>((resolve, reject) => {
         const child = spawn("vercel", fullArgs, {
             cwd,
@@ -90,7 +95,12 @@ const getLatestProductionDeploymentId = async (): Promise<string> => {
 const deployWww = async (build: number) => {
     const buildValue = build.toString(10)
     console.info(`Setting Vercel env NEXT_PUBLIC_BUILD =`, buildValue, `(${VERCEL_ENVIRONMENTS})...`)
-    await runVercel(["env", "add", "NEXT_PUBLIC_BUILD", VERCEL_ENVIRONMENTS, "--force", "--yes"], buildValue)
+    await runVercel(
+        ["env", "add", "NEXT_PUBLIC_BUILD", VERCEL_ENVIRONMENTS, "--force", "--yes"],
+        buildValue,
+        false,
+        { project: true },
+    )
     const deploymentId = await getLatestProductionDeploymentId()
     console.info("Redeploying www production from", deploymentId, "...")
     await runVercel(["redeploy", deploymentId, "--yes"])

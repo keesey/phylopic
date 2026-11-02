@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `deployWww` passes `--project` only to `vercel env add`; `vercel list` and `vercel redeploy` take the project name positionally or infer it from the deployment id.
+
 ### Removed
 
 ### Security
