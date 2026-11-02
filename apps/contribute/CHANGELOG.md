@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.5.3] - 2026-11-02
+
+### Security
+
 - Next.js security patch.
 
 ## [2.5.2] - 2026-10-02

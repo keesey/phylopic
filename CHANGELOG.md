@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.80] - 2026-11-02
+
+### Fixed
+
+- `@phylopic/publish` `1.18.1`: `deployWww` passes `--project` only to `vercel env add`; `vercel list` and
+  `vercel redeploy` take the project name positionally or infer it from the deployment id.
+
+### Security
+
+- `@phylopic/www` `2.18.4`, `@phylopic/contribute` `2.5.3`, and `@phylopic/edit` `1.10.7`: patch bumps for Next.js
+  `15.5.28`.
+
 ## [2.0.79] - 2026-11-01
 
 ### Changed
