@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.79] - 2026-11-01
+
+### Changed
+
+- `@phylopic/publish` `1.18.0`: reject fully transparent generated rasters and thumbnails before they reach the local
+  image mirror; validation failures stop background workers instead of continuing publication.
+
 ## [2.0.78] - 2026-10-11
 
 ### Changed
