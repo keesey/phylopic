@@ -36,11 +36,13 @@ to configure.
 
 #### Notes
 
-**The `PG*` variables are read implicitly.** `src/source/SourceClient.ts` constructs
-`new Pool({ database: "phylopic-source" })`, supplying only the database name, so `pg` resolves
-host, port, user, and password from the environment itself. They therefore never appear as
-`process.env.PGHOST` in this codebase. Setting `PGDATABASE` has no effect here, because the
-explicit `database` option takes precedence over it.
+**Postgres credentials come from `.env.local`, not from your shell.** `src/source/SourceClient.ts`
+passes `PGHOST`, `PGUSER`, `PGPASSWORD`, and optional `PGPORT` from this app's `.env.local` into
+`createSourcePool()`. That avoids a common local setup footgun: if you export `PGUSER` (for example
+`phylopic_publish` while working in `apps/publish`), Next.js will not override it with
+`phylopic_source` from `.env.local`, and image updates will fail with `permission denied for table
+image` because the publish role is read-only on source images. Setting `PGDATABASE` has no effect
+here; the pool always uses `phylopic-source`.
 
 **There is no `AUTH_SECRET_KEY`, because this app has no authentication.** None of its API routes
 verify a caller, and several of them mutate state — publishing submissions, merging taxonomy
