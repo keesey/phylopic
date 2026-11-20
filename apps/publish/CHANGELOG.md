@@ -11,19 +11,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.19.0] - 2026-11-19
+
+### Changed
+
 - Log each entities table while deleting build-scoped rows during make and release cleanup, so a slow database step is visible after S3 prefix removal.
 - `yarn release`: deploy `www` before entities database cleanup (no longer interleaved with long-running deletes).
-
-### Deprecated
 
 ### Fixed
 
 - `yarn insert`: await PostgreSQL client shutdown in `finally` before exit.
 - `deployWww`: resolve production redeploy target from Vercel CLI 59 list JSON (`url` / `originalDeploymentId` when `uid` is absent) and list only `READY` deployments.
-
-### Removed
-
-### Security
 
 ## [1.18.1] - 2026-11-02
 

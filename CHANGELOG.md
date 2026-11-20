@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.81] - 2026-11-19
+
+### Changed
+
+- `@phylopic/publish` `1.19.0`: log each entities table during build-scoped deletes; `yarn release` deploys `www` before entities database cleanup.
+
+### Fixed
+
+- `@phylopic/publish` `1.19.0`: `yarn insert` awaits PostgreSQL client shutdown; `deployWww` supports Vercel CLI 59 deployment list JSON and `READY` deployments only.
+
 ## [2.0.80] - 2026-11-02
 
 ### Fixed

@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `phylopic-entities.sql`: indexes on `build` for `contributor`, `image`, `node`, `node_name`, `node_external`, and `image_node` to speed build-scoped deletes during make and release.
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Security
+
+## [2.5.0] - 2026-11-19
+
+### Added
+
+- `phylopic-entities.sql`: indexes on `build` for `contributor`, `image`, `node`, `node_name`, `node_external`, and `image_node` to speed build-scoped deletes during make and release.
 
 ## [2.4.1] - 2026-09-22
 
