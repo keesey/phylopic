@@ -1,15 +1,26 @@
 import type { ClientBase } from "pg"
 import { cleanEntitiesS3 } from "../entities/cleanEntitiesS3.js"
 
+const CLEAN_TABLES = [
+    "image_node",
+    "node_external",
+    "node_name",
+    "node",
+    "image",
+    "contributor",
+] as const
+
 export const cleanTables = async (client: ClientBase, build: number, operator: "=" | "<>") => {
+    const buildLabel = operator === "=" ? `${build}` : `builds other than ${build}`
+    console.info(`Removing entity rows for ${buildLabel}...`)
     await client.query("BEGIN")
-    await client.query(`DELETE FROM image_node WHERE build${operator}$1::bigint`, [build])
-    await client.query(`DELETE FROM node_external WHERE build${operator}$1::bigint`, [build])
-    await client.query(`DELETE FROM node_name WHERE build${operator}$1::bigint`, [build])
-    await client.query(`DELETE FROM node WHERE build${operator}$1::bigint`, [build])
-    await client.query(`DELETE FROM image WHERE build${operator}$1::bigint`, [build])
-    await client.query(`DELETE FROM contributor WHERE build${operator}$1::bigint`, [build])
+    for (const table of CLEAN_TABLES) {
+        console.info(`Deleting from ${table} (build${operator}${build})...`)
+        await client.query(`DELETE FROM ${table} WHERE build${operator}$1::bigint`, [build])
+    }
+    console.info(`Committing entity row deletes for ${buildLabel}...`)
     await client.query("COMMIT")
+    console.info(`Removed entity rows for ${buildLabel}.`)
 }
 
 const cleanEntities = async (client: ClientBase, build: number, isDryRun: boolean = false) => {

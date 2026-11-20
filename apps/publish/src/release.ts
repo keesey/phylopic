@@ -17,28 +17,22 @@ import updateWwwBuildEnv from "./make/updateWwwBuildEnv.js"
         console.info("Releasing build", build, "...")
         await updateParameters(build /*, source.root*/)
         console.info("Build", build, "released.")
-        await Promise.all([
-            (async () => {
-                try {
-                    console.info("Invalidating API cache...")
-                    await invalidateAPICache(build)
-                    console.info("Invalidated API cache.")
-                } catch (e) {
-                    console.error("Failed to invalidate API cache.")
-                    console.error(e)
-                    invalidationError = e
-                }
-                updateWwwBuildEnv(build)
-                console.info("Deploying `www`...")
-                await deployWww(build)
-                console.info("Deployed `www`.")
-            })(),
-            (async () => {
-                console.info("Cleaning up entities database...")
-                await cleanEntities(pgClient, build)
-                console.info("Cleaned up entities database.")
-            })(),
-        ])
+        try {
+            console.info("Invalidating API cache...")
+            await invalidateAPICache(build)
+            console.info("Invalidated API cache.")
+        } catch (e) {
+            console.error("Failed to invalidate API cache.")
+            console.error(e)
+            invalidationError = e
+        }
+        updateWwwBuildEnv(build)
+        console.info("Deploying `www`...")
+        await deployWww(build)
+        console.info("Deployed `www`.")
+        console.info("Cleaning up entities database...")
+        await cleanEntities(pgClient, build)
+        console.info("Cleaned up entities database.")
         if (invalidationError) {
             throw invalidationError
         }

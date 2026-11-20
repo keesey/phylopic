@@ -67,16 +67,36 @@ const runVercel = async (
 }
 
 type VercelDeploymentListItem = {
+    readonly id?: string
+    readonly meta?: {
+        readonly originalDeploymentId?: string
+    }
     readonly uid?: string
+    readonly url?: string
 }
 
 type VercelDeploymentListResponse = {
     readonly deployments?: readonly VercelDeploymentListItem[]
 }
 
+/** Vercel CLI 59+ list JSON omits `uid`; `redeploy` accepts id or deployment URL. */
+const getRedeployTarget = (deployment: VercelDeploymentListItem): string | undefined =>
+    deployment.uid ?? deployment.id ?? deployment.meta?.originalDeploymentId ?? deployment.url
+
 const getLatestProductionDeploymentId = async (): Promise<string> => {
     const output = await runVercel(
-        ["list", getVercelProject(), "--environment", "production", "--json", "--yes", "--limit", "1"],
+        [
+            "list",
+            getVercelProject(),
+            "--environment",
+            "production",
+            "--json",
+            "--yes",
+            "--limit",
+            "1",
+            "--status",
+            "READY",
+        ],
         undefined,
         true,
     )
@@ -85,9 +105,9 @@ const getLatestProductionDeploymentId = async (): Promise<string> => {
     }
     const parsed = JSON.parse(output) as VercelDeploymentListItem[] | VercelDeploymentListResponse
     const deployments = Array.isArray(parsed) ? parsed : parsed.deployments
-    const deploymentId = deployments?.[0]?.uid
+    const deploymentId = deployments?.[0] ? getRedeployTarget(deployments[0]) : undefined
     if (!deploymentId) {
-        throw new Error("No production deployment found to redeploy.")
+        throw new Error("No READY production deployment found to redeploy.")
     }
     return deploymentId
 }

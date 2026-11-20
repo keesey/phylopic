@@ -188,3 +188,11 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.image_node
     OWNER to master;
+
+-- Indexes for build-scoped cleanup (make/cleanEntities.ts, release.ts).
+CREATE INDEX IF NOT EXISTS contributor_build ON public.contributor (build);
+CREATE INDEX IF NOT EXISTS image_build ON public.image (build);
+CREATE INDEX IF NOT EXISTS node_build ON public.node (build);
+CREATE INDEX IF NOT EXISTS node_name_build ON public.node_name (build);
+CREATE INDEX IF NOT EXISTS node_external_build ON public.node_external (build);
+CREATE INDEX IF NOT EXISTS image_node_build ON public.image_node (build);
