@@ -19,6 +19,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [2.0.81] - 2026-11-19
+
+### Changed
+
+- `@phylopic/publish` `1.19.0`: log each entities table during build-scoped deletes; `yarn release` deploys `www` before entities database cleanup.
+
+### Fixed
+
+- `@phylopic/publish` `1.19.0`: `yarn insert` awaits PostgreSQL client shutdown; `deployWww` supports Vercel CLI 59 deployment list JSON and `READY` deployments only.
+
+## [2.0.80] - 2026-11-02
+
+### Fixed
+
+- `@phylopic/publish` `1.18.1`: `deployWww` passes `--project` only to `vercel env add`; `vercel list` and
+  `vercel redeploy` take the project name positionally or infer it from the deployment id.
+
+### Security
+
+- `@phylopic/www` `2.18.4`, `@phylopic/contribute` `2.5.3`, and `@phylopic/edit` `1.10.7`: patch bumps for Next.js
+  `15.5.28`.
+
+## [2.0.79] - 2026-11-01
+
+### Changed
+
+- `@phylopic/publish` `1.18.0`: reject fully transparent generated rasters and thumbnails before they reach the local
+  image mirror; validation failures stop background workers instead of continuing publication.
+
+## [2.0.78] - 2026-10-11
+
+### Changed
+
+- `@phylopic/publish` `1.17.0`: image entity JSON is built from a per-image `derivatives.json`, so stale derivative
+  PNGs left on `images.phylopic.org` after reprocessing are no longer advertised and are removed by the final image
+  sync ([#88](https://github.com/keesey/phylopic/issues/88)); adds `yarn backfill:derivatives`; upgrades
+  `probe-image-size` to 7.4.0.
+
 ## [2.0.77] - 2026-10-02
 
 ### Changed

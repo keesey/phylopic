@@ -21,7 +21,7 @@ import uploadEntities from "./uploadEntities.js"
                 await client.connect()
                 await putEntities(client, sourceData, isDryRun)
             } finally {
-                client.end()
+                await client.end()
             }
         })()
         if (!isDryRun) {

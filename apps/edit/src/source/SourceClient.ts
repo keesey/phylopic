@@ -1,6 +1,7 @@
-import BaseSourceClient, { createSourcePool, PoolClientProvider } from "@phylopic/source-client"
+import BaseSourceClient, { PoolClientProvider } from "@phylopic/source-client"
+import { createSourcePoolFromEnvLocal } from "./createSourcePoolFromEnvLocal"
 
-const POOL = createSourcePool()
+const POOL = createSourcePoolFromEnvLocal()
 
 export default class SourceClient extends BaseSourceClient {
     constructor() {

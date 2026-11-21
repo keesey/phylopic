@@ -17,7 +17,7 @@
         "dotenv": "^16.4.5",
         "parse-nomen": "^2.1.3",
         "pg": "^8.22.0",
-        "probe-image-size": "^7.3.0",
+        "probe-image-size": "^7.4.0",
         "simple-digraph": "^1.1.1",
         "ts-node": "^10.9.2"
     },
@@ -35,6 +35,7 @@
     "private": true,
     "scripts": {
         "autolink": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/autolink.ts",
+        "backfill:derivatives": "node --loader ts-node/esm ./src/process/backfillDerivatives.ts",
         "backup:source": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/backupSource.ts",
         "clean": "rm -rf .turbo && rm -rf node_modules",
         "coverage": "node --loader ts-node/esm ./src/coverage.ts",
@@ -50,6 +51,7 @@
         "release": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/release.ts 2> release-error.log",
         "sync": "yarn sync:images",
         "sync:images": "AWS_PROFILE=phylopic-publish aws s3 sync --acl public-read --delete ./.s3/images.phylopic.org s3://images.phylopic.org/",
+        "test:png": "node --test tests/png-validation.test.mjs",
         "upload:entities": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/uploadEntitiesCli.ts",
         "upload:images": "AWS_PROFILE=phylopic-publish aws s3 sync --acl public-read ./.s3/images.phylopic.org s3://images.phylopic.org/",
         "sanitize:local-svgs": "node --loader ts-node/esm ./src/svg/sanitizeLocalSVGs.ts",
@@ -58,5 +60,5 @@
         "verify:entities": "AWS_PROFILE=phylopic-publish node --loader ts-node/esm ./src/verifyEntitiesS3.ts"
     },
     "type": "module",
-    "version": "1.16.1"
+    "version": "1.19.0"
 }

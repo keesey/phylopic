@@ -42,7 +42,7 @@ Legacy: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_REGION` in `.env` st
 | `PGHOST`                         | Postgres host                                                          | `process.env`  |
 | `PGPASSWORD`                     | Postgres password                                                      | `process.env`  |
 | `PGUSER`                         | Postgres login role (`phylopic_publish`)                               | `process.env`  |
-| `VERCEL_TOKEN`                   | Token for `vercel env` and `vercel deploy` during `yarn release`       | `process.env`  |
+| `VERCEL_TOKEN`                   | [Personal access token](https://vercel.com/account/tokens) for `yarn release` (use **Full Account** scope; team- or project-only tokens fail CLI auth with “User not found”) | `process.env`  |
 
 #### Optional (legacy S3 keys)
 
@@ -87,6 +87,13 @@ host, port, user, and password to `ClientProvider` directly, and hardcodes the d
 
 ## Running scripts
 
+### PNG validation
+
+Newly generated rasters and thumbnails must contain at least one nontransparent pixel.
+The check shares the existing ImageMagick dimensions lookup. A failed check stops
+`yarn process`, so `yarn make` does not proceed to metadata insertion or image upload.
+See [PNG validation](PNG-VALIDATION.md) for failure recovery, tests, and benchmarks.
+
 ### Release a new build
 
 This builds and releases a new website build from files in the `source-images.phylopic.org`
@@ -103,12 +110,33 @@ yarn make
 2. `yarn download` — sync source images and source data from S3
 3. `yarn process` — rasterize/vectorize new silhouettes (`process.sh`)
 4. `concurrently` — `yarn insert` (Postgres + entity JSON staging/upload) and
-   `yarn upload:images` (sync processed images to `images.phylopic.org`)
+   `yarn upload:images` (sync processed images to `images.phylopic.org` without `--delete`, so
+   prior-build objects remain during cutover)
 5. `yarn release` — bump SSM build parameters, update API Lambdas, invalidate API CloudFront, set
    `NEXT_PUBLIC_BUILD` on Vercel (production, preview, and development), redeploy the latest
    production `www` deployment (Git-connected; no local source upload), and update
    `apps/www/.env.local`
-6. `yarn sync:images` — final public image bucket sync
+6. `yarn sync:images` — final image sync with `--delete` (S3 matches the local publish mirror)
+
+Each image folder in the publish mirror has a `derivatives.json` listing its raster, social, and
+thumbnail PNGs. `yarn process` writes it for every image it rebuilds, then deletes any derivative PNG
+in the mirror that its image's manifest doesn't list. `yarn insert` builds image entity JSON from
+these manifests, never from a folder scan, so orphans that `upload:images` leaves on S3 during
+cutover (and that `yarn download` copies back into the mirror) are never advertised, and the final
+`yarn sync:images` removes them from S3.
+
+`preprocess.sh` queues any image without a `derivatives.json` for reprocessing. To add manifests to
+existing images without reprocessing them all, run a one-time backfill after `yarn download`:
+
+```sh
+yarn backfill:derivatives          # dry run: report images with inconsistent derivative files
+yarn backfill:derivatives --write  # write derivatives.json for every consistent image
+yarn upload:images                 # push the manifests, or the next `yarn download` deletes them
+```
+
+The backfill checks the `{width}x{height}.png` filenames: the raster variants must share one aspect
+ratio and have the long sides `process` produces, and there must be one social image and the three
+thumbnails. Images that fail get no manifest, so the next `yarn make` reprocesses only those.
 
 If API cache invalidation fails, `yarn release` still updates `apps/www/.env.local`, sets
 `NEXT_PUBLIC_BUILD` on Vercel, and deploys `www`, but exits with an error afterward so the
@@ -120,7 +148,7 @@ the live site. Run `yarn release` again or redeploy manually:
 ```sh
 cd apps/www
 vercel list phylopic-www --environment production --json --limit 1
-vercel redeploy <deployment-id> --yes --project phylopic-www
+vercel redeploy <deployment-id> --yes
 ```
 
 Do not use `vercel deploy --prod` from this monorepo; the CLI upload exceeds Vercel’s 10 MB request
