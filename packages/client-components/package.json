@@ -9,6 +9,7 @@
     "description": "Client-side React components for *PhyloPic* web applications.",
     "dependencies": {
         "@phylopic/api-models": "*",
+        "@phylopic/search": "*",
         "@phylopic/ui": "*",
         "@phylopic/utils": "*",
         "@phylopic/utils-api": "*",

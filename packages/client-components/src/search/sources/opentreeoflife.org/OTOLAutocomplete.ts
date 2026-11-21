@@ -1,48 +1,31 @@
 "use client"
-import { fetchDataAndCheck, JSON_API_HEADERS } from "@phylopic/utils-api"
+import { suggestOtolTaxa } from "@phylopic/search"
 import React from "react"
 import type { Fetcher } from "swr"
 import useSWRImmutable from "swr/immutable"
 import { SearchContext } from "../../context"
-import { OTOL_URL } from "./OTOL_URL"
 
-interface OTOLAutocompleteName {
-    readonly is_higher: boolean
-    readonly is_suppressed: boolean
-    readonly ott_id: number
-    readonly unique_name: string
-}
-
-const fetcher: Fetcher<Readonly<[readonly OTOLAutocompleteName[], string]>, [string, string]> = async ([url, name]) => {
-    if (name.length < 2) {
-        return [[], name]
-    }
-    const response = await fetchDataAndCheck<readonly OTOLAutocompleteName[]>(url, {
-        data: { name },
-        headers: { "content-type": "application/json", ...JSON_API_HEADERS },
-        method: "POST",
-    })
-    return [response.data, name]
-}
-
-const sanitizeUniqueName = (name: string) => name.replace(/\s*\([a-z\s+(in|with)[^)]+\)/gi, "")
+const fetchOtolSuggestions: Fetcher<
+    Readonly<[Readonly<{ ott_id: number; title: string }[]>, string]>,
+    string
+> = async name => [await suggestOtolTaxa(name), name]
 
 export const OTOLAutocomplete: React.FC = () => {
     const [state, dispatch] = React.useContext(SearchContext) ?? []
-    const response = useSWRImmutable(state?.text ? [OTOL_URL + "/tnrs/autocomplete_name", state.text] : null, fetcher)
+    const response = useSWRImmutable(state?.text && state.text.length >= 2 ? state.text : null, fetchOtolSuggestions)
     React.useEffect(() => {
         if (dispatch && response.data) {
             dispatch({
                 type: "ADD_EXTERNAL_MATCHES",
-                payload: response.data[0].map(({ unique_name }) => unique_name),
+                payload: response.data[0].map(({ title }) => title),
                 meta: { basis: response.data[1] },
             })
             dispatch({
                 type: "ADD_EXTERNAL_RESULTS",
                 payload: response.data[0].reduce<Record<string, string>>(
-                    (prev, { ott_id, unique_name }) => ({
+                    (prev, { ott_id, title }) => ({
                         ...prev,
-                        [ott_id]: sanitizeUniqueName(unique_name),
+                        [String(ott_id)]: title,
                     }),
                     {},
                 ),

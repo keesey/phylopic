@@ -1,0 +1,9 @@
+{
+    "extends": "@phylopic/tsconfig/node20.json",
+    "compilerOptions": {
+        "lib": ["ESNext", "DOM"],
+        "outDir": "dist",
+        "rootDir": "src"
+    },
+    "include": ["src/**/*.ts"]
+}

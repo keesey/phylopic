@@ -78,6 +78,8 @@ even though the browser performs the fetch.
 
 ### `images.phylopic.org`, `entities.phylopic.org` — publication pipeline
 
+**CORS:** Browser code on www fetches `vector.svg` for cladogram layout. See [`IMAGES_CORS.md`](./IMAGES_CORS.md) and [`images-bucket-cors.json`](./images-bucket-cors.json).
+
 `apps/publish` `yarn make` syncs public silhouettes to `images.phylopic.org` (CLI `aws s3 sync`
 with `public-read` ACL), writes entity JSON under `{build}/` on `entities.phylopic.org`, reads
 and deletes old build prefixes, updates SSM build parameters, patches Lambda env on
